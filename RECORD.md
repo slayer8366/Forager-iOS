@@ -169,3 +169,41 @@ Amendment 1, the session reported it "stopped by the user". The time it stopped 
 **Decision:** the owner, verbatim: "Start a fresh Hazel on Phase 1". A fresh Hazel starts on the dispatch
 and Amendment 1 together. Same branch, scope, stops and finish line as -3.
 **Notes:** Written by the planner by hand. Next free ID -6.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-6
+**Timestamp:** 2026-10-28T20:29:25Z
+**Continues:** 2026-10-28-3, 2026-10-28-5
+**Title:** Phase 1, part 1: premises and item A done; Hazel stopped at the long-conversation limit
+**Observed:** Hazel (Opus), report `docs/audits/2026-10-28-brouter-port-verify.md` on `brouter-port`
+`433a8a8`, evidence in `4f54810` and `6c97d9f`. Filed unedited as
+`prompts/preserved/2026-10-28-01-phase1-report-part1.md`. Hazel stopped at about 340k tokens against the
+dispatch's "past about 200k tokens, push and hand off". The session reported 370,024 tokens.
+- **Item A, method-level reach from Forager's calls,** in four tiers of cuts:
+  - T0 14,700 lines, 640 methods;
+  - T1 11,759 lines, 515 methods;
+  - T2 11,218 lines, 481 methods;
+  - T3 10,014 lines, 450 methods.
+
+  The report recommends porting T2 and making T3's profile cuts named "unsupported" failures. The
+  class-level 76 classes and 16,296 lines are reproduced.
+- **Checked by the planner, not taken from the report:**
+  - only the two allowed paths changed (40 files);
+  - each tier's figures match its `summary.txt`;
+  - in every tier's `compare-with-jacoco.txt`, "ran but not statically reached (unsound if any): 0";
+  - the test tile covers 43.4% (T0) to 69.1% (T3) of the kept lines;
+  - the Forager clone is unchanged at `e2969abe4`.
+- **A wrong premise, the planner's:** dispatch premise 3 said Forager reads only the track's points. It
+  also reads `track.distance` (`BRouterTrailRouter.kt:115`), which `recalcTrack` sets
+  (`RoutingEngine.java:1565`); both read by the planner. The same claim stands in Forager's report
+  (`docs/audits/2026-10-26-ios-multiplatform-feasibility-report.md`, routing update, "Only the track's
+  points") and is corrected here, not there.
+- **For the owner, with the full Phase 1 report:** whether ruling b's "Forager-only" means the pinned
+  profile only (T3) or Forager's calls with any profile (T2).
+- **Not answered:** B to K.
+**Decision:** the planner continues Phase 1 with a fresh helper, as Forager's planner profile does past
+about 200k tokens. The remaining items are split so that no helper overruns: part 2 is B, C (with
+Amendment 1's Android questions), D, F, G and H; part 3 is E, I, J and K, which build on part 2.
+**Notes:** Written by the planner by hand. Next free ID -7.
