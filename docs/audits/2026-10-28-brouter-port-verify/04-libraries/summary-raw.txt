@@ -1,0 +1,8 @@
+org/jetbrains/kotlin/kotlin-stdlib: latest=2.5.0-Beta2 release=2.5.0-Beta2 lastUpdated=20261021085508
+com/squareup/okio/okio: latest=3.18.2 release=3.18.2 lastUpdated=20260904202127
+com/squareup/okio/okio-jvm: latest=3.18.2 release=3.18.2 lastUpdated=20260904202138
+com/squareup/okio/okio-iosarm64: latest=3.18.2 release=3.18.2 lastUpdated=20260904202136
+com/squareup/okio/okio-iossimulatorarm64: latest=3.18.2 release=3.18.2 lastUpdated=20260904202143
+org/jetbrains/kotlinx/kotlinx-io-core: latest=0.9.1 release=0.9.1 lastUpdated=20260626162533
+org/jetbrains/kotlinx/atomicfu: latest=0.33.0 release=0.33.0 lastUpdated=20260529184458
+org/jetbrains/kotlin/multiplatform/org.jetbrains.kotlin.multiplatform.gradle.plugin: latest=2.5.0-Beta2 lastUpdated=20261021085508

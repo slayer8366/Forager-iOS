@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises and item A)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A and B)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -7,6 +7,10 @@ second session on this dispatch, 2026-10-28.
 push and hand off", dispatch "Working here"), after the premises and item A. **Items B to K are not answered
 here.** What this session found that bears on them is under "Found on the way". It is input for the next
 session, not an answer to those items.
+
+**Part 2** (a third session, Hazel, 2026-10-28) answered **item B** only and stopped at its own token limit
+(about 150k, set by the planner for this helper). C, D, F, G and H, which were part 2's, are not answered; what
+part 2 found that bears on C and G is under "Handoff to the next session".
 
 **Marks.** **[R]** read, with file and line at the stated commit. **[C]** computed, with the evidence file under
 `2026-10-28-brouter-port-verify/`. **[I]** inferred. **[?]** could not determine.
@@ -274,8 +278,79 @@ scope" for the planner and owner, not decided here.
 
 ## B to K
 
-**Not answered.** Not started beyond the inventory above:
-- B, library versions and targets;
+### B. A replacement for each JDK API on the path
+
+Written by the third session on this dispatch (Hazel, part 2). The list is T2's 48 JDK classes
+**[C: `03-reach/out/T2/jdk-use.txt`]**; T3's list is the same 48 classes **[C: diff of the two files]**.
+
+**How the candidates were checked.**
+- **Maven metadata,** read from the Google mirror of Maven Central the dispatch names, saved under
+  `04-libraries/metadata/`, with `04-libraries/summary-raw.txt` **[C]**.
+- **A scratch Kotlin Multiplatform probe** (`04-libraries/probe-kmp/`, built outside the repository):
+  - Gradle 9.7.0, Kotlin 2.3.10, targets `jvm`, `iosArm64`, `iosSimulatorArm64`;
+  - common code using each candidate below;
+  - `jvmTest`, `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` all passed on this Ubuntu x86_64
+    container **[C: `probe-kmp/build.log`]**;
+  - the JVM test reads `W75_N40.rd5` at three offsets through okio and through `RandomAccessFile` and requires
+    the same bytes: 2 tests, 0 failures **[C: `probe-kmp/TEST-probe.ProbeTest.xml`]**;
+  - both iOS klibs carry `compiler_version=2.3.10`, `abi_version=2.3.0` **[C: `probe-kmp/klib-manifests.txt`]**.
+- **Not checked:** nothing in the probe ran on iOS. Compiling a klib proves the API exists for the target, not
+  that it behaves the same there. That needs the simulator (item G).
+
+**Libraries.** Two, at most. Each version is the newest release in its metadata.
+
+| Library | Version | Metadata `lastUpdated` | Publishes `jvm`, `iosArm64`, `iosSimulatorArm64` | Built against |
+|---|---|---|---|---|
+| `com.squareup.okio:okio` | **3.18.2** | 2026-09-04 | **Yes**: `jvmApiElements`, `iosArm64ApiElements`, `iosSimulatorArm64ApiElements` in `okio-3.18.2.module`; the three per-target artifacts' own metadata list 3.18.2 too; and the probe resolved and compiled against all three | `kotlin-stdlib` 2.1.21 (the module's common variant) |
+| `org.jetbrains.kotlinx:atomicfu` (only if a lock is kept, row 8) | **0.33.0** | 2026-05-29 | Resolved and compiled for all three in the probe | not read |
+
+**[C: `04-libraries/metadata/`, `04-libraries/module/okio-3.18.2.module`, `probe-kmp/build.log`]**
+
+`kotlinx-io-core` 0.9.1 was looked up **[C]** but not evaluated. Whether it has a positional read was not
+checked **[?]**.
+
+**Each JDK API, with its replacement.**
+
+| # | JDK use on the path | Where | Replacement in common code | Mark |
+|---|---|---|---|---|
+| 1 | **`RandomAccessFile`**: `seek`, `readFully(byte[],int,int)`, `length`, `close` | `PhysicalFile`, `OsmFile`, `NodesCache` | okio `FileSystem.SYSTEM.openReadOnly(path)` gives a `FileHandle`: `read(fileOffset, array, off, n)` in a loop for `readFully`; `size()`; `close()`. The read is positional, so there is no shared file pointer. The loop must throw an `IOException` on a short read, as `readFully` throws `EOFException`. `NodesCache.java:202` turns that into "error reading datafile ...", which Forager classifies (`BRouterFailures.kt:18-49`). | **[C]** probe, JVM bytes equal; iOS compile only |
+| 2 | **`File`**: `exists`, `isDirectory`, `getName`, `getParentFile`, `getAbsolutePath`, `lastModified`, `equals`, `separatorChar`, two constructors | 8 classes | okio `Path` and `FileSystem.SYSTEM.metadataOrNull(path)` (`isDirectory`, `lastModifiedAtMillis`); `Path.DIRECTORY_SEPARATOR` | **[C]** probe compiles `metadataOrNull`; the rest **[I]** |
+| 3 | **`BufferedReader`/`FileReader`**: `readLine`, `read`, `close` | `BExpressionContext`, `BExpressionMetaData`, `StorageConfigHelper` | okio `source(path).buffer()`: `readUtf8Line()`; `readUtf8CodePoint()` for `read()`. `FileReader` decodes with the platform charset and `read()` returns UTF-16 units. They differ only outside the Basic Multilingual Plane, which the pinned files would need to be checked for. | **[C]** `readUtf8Line` compiles; the charset point **[I]** |
+| 4 | `FileInputStream`, `BufferedInputStream`, `DataInputStream` | `OsmTrack.readBinary` | **Not ported.** The method is reached, but its body after `filename != null` never runs for Forager (`OsmTrack.java:235`, part 1). The port returns early, or fails "unsupported" if a filename arrives. | **[R]** part 1; **[I]** |
+| 5 | `FileWriter`, `PrintWriter`, `StringWriter`, `Writer`, `Date`, `PrintStream` (`System.out`/`err`), `StackTraceElement` | logging: `RoutingEngine.java:112-132`, `:146`, `:158-163` (`logThrowable` feeds `logInfo`) | **Not ported.** A logger interface whose default does nothing. Part 1's tier E shows logging is off for Forager. | **[R]** |
+| 6 | **`TreeSet`/`SortedSet`** | `RoutingEngine.recalcTrack`, `:1568`, over `directMap`'s keys, empty for Forager | `directMap.keys.sorted()` from the standard library. No library. | **[R]** part 1 |
+| 7 | **The `volatile` terminate flag** | `RoutingEngine.java:69`, read once per pass (`:1975-1977`) | `@kotlin.concurrent.Volatile` from the common standard library. It compiled for all three targets with no opt-in, and on the JVM the field carries `ACC_VOLATILE`. Its memory semantics on Kotlin/Native were not tested. | **[C: `probe-kmp/jvm-volatile-flag.txt`]**; Native **[I]** |
+| 8 | **`synchronized`**: 2 blocks in `_findTrack` (`:1965`, `:1986`); `ProfileCache`'s `static synchronized` methods | | **`_findTrack`: drop.** `openSet` is private, and every use is inside `RoutingEngine` (`:41`, `:341`, `:841`, `:1965-2014`), on the searching thread. **`ProfileCache`:** Forager runs one route at a time (`ONE_ROUTE_AT_A_TIME`, `BRouterTrailRouter.kt:201`, `:123`) on one thread (`:209`), so the lock does nothing for Forager today. Options: (a) keep it with atomicfu 0.33.0 `SynchronizedObject` (the probe compiled it, and its JVM test ran); (b) drop it and make one-at-a-time part of the port's contract. **Recommend (a):** a silent race on iOS would be worse than one small dependency. | **[R]** greps; **[C]** probe |
+| 9 | **`System.currentTimeMillis`** | the time limit (`:1979-1983`), the terminate message's seconds (`:1976`), timeout resets (`:1733`, `:1797`), the early exit (`:2047-2049`) | `kotlin.time.TimeSource.Monotonic.markNow()` / `elapsedNow()`, common standard library (compiled in the probe). Monotonic is stricter than wall-clock time, which a clock change would otherwise move. **Time decides an outcome only through the timeout:** which failure, and when. The early exit at `:2047` needs `fastPartialRecalc` with a `matchPath`, which comes from a reference track Forager never passes. | **[C]** compiles; `:2047` **[I]**, from part 1's `rawTrackPath` cut, not traced here |
+| 10 | `System.arraycopy`; `Arrays.equals`/`fill`/`hashCode(float[])`; `Collections.sort` | `DirectWeaver`, `MicroCache`, `CacheNode`, `VarWrapper`, `WaypointMatcherImpl.java:257` | `copyInto`; `contentEquals`/`fill`/`contentHashCode`; `sortWith`, which is stable, as `Collections.sort` is | **[I]** |
+| 11 | **Number parsing**: `Double.parseDouble`, `Float.parseFloat`, `Short.parseShort`, `Integer.parseInt`/`valueOf`; `Double.compare`, `Double.isNaN` | waypoints (`RoutingParamCollector.java:90`), profile constants (`BExpression.java:234`, `:401`; `BExpressionContext.java:267`) | `toDouble()`, `toFloat()`, `toShort()`, `toInt()`, `compareTo`, `isNaN()`. **Whether Kotlin/Native parses to the same bits as the JVM is item H's question.** | **[I]**; see H |
+| 12 | **`Float.toString`** | `BExpressionContext.getKeyValueDescription` (`:225`, `:241`), reached | `Float.toString()`. Its text feeds a cost only through `StdPath.java:98-130` (`estimated_crossing_class=`), which needs `consider_crossing`. That defaults to off (`RoutingContext.java:122`), and the pinned profile does not set it. Otherwise the text goes into messages Forager does not read. | **[R]** |
+| 13 | **Strings**: `split(regex)`, `matches`, `replaceAll`, `toLowerCase()`, `equalsIgnoreCase`, `StringTokenizer`, `Character.isWhitespace` | `RoutingParamCollector.java:26`, `BExpressionContext`, `BExpression` | `Regex`, with a small `javaSplit` that drops trailing empty strings as Java does; `lowercase()` (locale-free, where Java's uses the default locale; only `outputFormat` at `RoutingParamCollector.java:238-240`, which Forager never sets); `equals(ignoreCase = true)`; a small tokenizer. **`Character.isWhitespace` (`BExpressionContext.java:1031`, the profile tokenizer) needs its own function:** Kotlin's `Char.isWhitespace()` also counts no-break spaces, which Java's does not. | **[R]** sites; the semantics **[I]**, not tested |
+| 14 | `String.format(Locale.US, "%3.1f", ...)` | `BExpressionContext.addLookupValue`, unknown-value branch (`:572-696`), never run on the pinned `lookups.dat` (part 1) | There is no `String.format` in common code. **Recommend a named "unsupported" failure** in that branch, rather than porting Java's formatter rounding untested. | **[R]** part 1; recommendation **[I]** |
+| 15 | **`Math`**: `sqrt`, `sin`, `cos`, `atan2`, `exp`, `abs`, `min`, `max`, `round(double)`, `toDegrees` | 13 classes | `kotlin.math`, which compiled for all three targets. **Two do not map one to one:** `Math.round(NaN)` is 0 in Java, while `roundToLong()` throws for NaN in Kotlin; `Math.toDegrees` must be written as Java writes it, a multiply by a constant. Whether `sin`, `cos`, `atan2`, `exp` give the same bits on Native is item H's question. | **[C]** compiles; the rest **[I]** |
+| 16 | `Class.forName`, `getDeclaredConstructor`, `newInstance`; `Package.getImplementationVersion` | `RoutingContext.java:86-97`; `OsmTrack.java:26` | No reflection in common code. A fixed table: the default `StdModel`, and anything else is "unsupported" (part 1, premise 4). The version string becomes a constant. | **[R]** |
+| 17 | `System.getProperty`, `Boolean.getBoolean` | part 1's tier S | Constants, at the values Forager runs with | **[R]** part 1 |
+| 18 | **`HashMap`, `ArrayList`, `Iterator` and the rest of `java.util`** | throughout | Kotlin collections. **A risk this table does not settle:** on the JVM, Kotlin's `HashMap` is `java.util.HashMap`, but on Native it is another implementation, so its iteration order may differ. Reached code iterates hash maps at `BExpressionContext.java:453`, `:524`, `:863`; `BExpressionMetaData.java:67`; `RoutingContext.java:107`; `RoutingParamCollector.java:188`, `:260`; `NodesCache.java:393`; `OsmNodesMap.java:181`. Whether order changes a result at any of them was **not determined**. | **[R]** sites; effect **[?]** |
+
+**What B concludes.**
+- **Random-access reads and the file system** take one library, okio 3.18.2. An `expect`/`actual` over
+  `RandomAccessFile` and POSIX `pread` would also do, at roughly 50 lines with no dependency **[I]**. okio is
+  recommended because it also covers rows 2 and 3.
+- **The sorted maps and sets need no library** (row 6).
+- **The terminate flag and the clock** are in Kotlin's common standard library (rows 7, 9).
+- **Formatting:** none stays on a path Forager runs (rows 5, 12, 14).
+- **Against the planner's prediction** ("random-access file reads and the sorted maps are the only JDK pieces
+  needing a library or new code"):
+  - right about random access;
+  - wrong about the sorted maps;
+  - it misses the small pieces of new code in rows 13 to 16;
+  - it misses the lock (row 8);
+  - it misses the `HashMap` order question (row 18).
+
+  **[I]**
+
+### Not answered in part 2 (left for the next session)
+
 - C, layout and the Android questions of Amendment 1;
 - D, the oracle;
 - E, the differential tests;
@@ -303,9 +378,25 @@ scope" for the planner and owner, not decided here.
   - `downloads/jacoco`.
 
   It was not deleted because the task has not ended. Delete it when Phase 1 ends.
+- **Part 2** added item B and `04-libraries/` (one commit on `brouter-port`; its hash is in the final message).
+  - **Reproduce B's probe:** copy `04-libraries/probe-kmp/` to scratch and run `gradle jvmTest
+    compileKotlinIosArm64 compileKotlinIosSimulatorArm64` with Gradle 9.7.0. The test reads Forager's tile at the
+    path hard-coded in `build.gradle.kts`.
+  - **The container already holds** a Gradle 9.7.0 distribution (`~/.gradle/wrapper/dists/gradle-9.7.0-bin`) and
+    the Kotlin/Native 2.3.10 toolchain (`~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10`). Part 2 did not
+    download them and does not know who did **[?]**. The system `gradle` is 8.14.3.
+  - The probe is also left in scratch, at `hazel/probe-kmp/`.
+- **Found by part 2 that bears on C and G** (input, not answers):
+  - **iOS klibs compile on this Ubuntu x86_64 container** with Kotlin 2.3.10, for `iosArm64` and
+    `iosSimulatorArm64`, with no Mac **[C: `04-libraries/probe-kmp/build.log`, `klib-manifests.txt`]**. That is
+    the first half of G's "the iOS klib compile on `ubuntu`". Linking and running iOS tests were not tried.
+  - **Gradle 9.7.0 with Kotlin 2.3.10,** Forager's pair, builds a KMP module with these targets **[C]**.
+  - **Newest Kotlin:** 2.4.21 stable, 2.5.0-Beta2 newest overall; the newest 2.3.x is 2.3.21
+    **[C: `04-libraries/metadata/org_jetbrains_kotlin_kotlin-stdlib.xml`]**.
+  - **okio 3.18.2 is built against Kotlin 2.1.21,** older than Forager's 2.3.10 **[C: its `.module`]**. Forager
+    already has okio on its classpath through OkHttp 4.12.0 (`gradle/libs.versions.toml:21`, `:91`) **[R]**; which
+    okio version that brings was not read **[?]**.
 - **Next, in the dispatch's order:**
-  - B: Maven metadata for an `okio` `FileHandle` or an `expect`/`actual` random-access read, against the four
-    operations above;
   - C, including Amendment 1's three Android questions;
   - D (the release jar and `fetch-brouter.sh:12`'s SHA-256 are already confirmed);
   - E, built on the 47 methods the sample did not reach;
@@ -325,6 +416,10 @@ scope" for the planner and owner, not decided here.
   - the harness matching Forager's tests and the command-line router;
   - the JDK inventory.
 - **Confirmed by reading:** each cut's guard, with the line cited in `exclusions.txt`.
+- **Part 2 (item B):**
+  - confirmed by computation: the Maven metadata, okio's published targets, and the probe's JVM bytes and
+    three-target compile;
+  - inferred: every Kotlin/Native behaviour, and every semantic difference named in B's table.
 - **Inferred:**
   - that each tier's cuts are complete for Forager in general, not only on the sample;
   - that parse-time code is deterministic for the pinned files;
@@ -337,6 +432,11 @@ scope" for the planner and owner, not decided here.
   Which inputs reach them is item E's work.
 - **How much of each kept method is dead inside it** (branch level). The counts are per method.
 - **Whether `brouter.de` serves stable bytes.** Not checked.
+- **Part 2, item B:**
+  - whether any replacement behaves the same on iOS: nothing ran there;
+  - whether `HashMap` iteration order changes a result at any of the nine sites in B row 18;
+  - whether `kotlinx-io` has a positional read;
+  - the okio version Forager already gets through OkHttp.
 
 ### Premises that were wrong
 
@@ -348,6 +448,13 @@ scope" for the planner and owner, not decided here.
 - **The ~13,400 estimate (premise 5)** was marked unverified. Measured, it falls between T0 and T1.
 
 ### Decided beyond scope
+
+- **Part 2:**
+  - **atomicfu was added as a candidate** (B row 8). The dispatch did not name it; the lock question needed one.
+  - **The probe pins Gradle 9.7.0 and Kotlin 2.3.10,** matching Forager, for the probe only. That is not item C's
+    answer.
+  - **Part 2 stopped after one of its six items,** at the planner's token limit for this helper, rather than
+    choosing which of C to H to skip.
 
 - **The tiering itself,** and in particular tier P, which ties the port to the pinned profile. That is offered as
   an option, not decided; it needs the planner's or owner's word under ruling b.

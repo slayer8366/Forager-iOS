@@ -1,0 +1,22 @@
+== iosArm64
+abi_version=2.3.0
+builtins_platform=NATIVE
+compiler_version=2.3.10
+depends=stdlib com.squareup.okio\:okio org.jetbrains.kotlinx\:atomicfu-cinterop-interop org.jetbrains.kotlinx\:atomicfu
+ir_signature_versions=1,2
+language_features=+MultiPlatformProjects
+metadata_version=2.3.0
+native_targets=ios_arm64
+short_name=probe-kmp
+unique_name=probe-kmp
+== iosSimulatorArm64
+abi_version=2.3.0
+builtins_platform=NATIVE
+compiler_version=2.3.10
+depends=stdlib com.squareup.okio\:okio org.jetbrains.kotlinx\:atomicfu-cinterop-interop org.jetbrains.kotlinx\:atomicfu
+ir_signature_versions=1,2
+language_features=+MultiPlatformProjects
+metadata_version=2.3.0
+native_targets=ios_simulator_arm64
+short_name=probe-kmp
+unique_name=probe-kmp
