@@ -1,0 +1,290 @@
+reached methods: 515
+JDK classes used: 55
+java/io/BufferedInputStream  (used in 1 BRouter classes: OsmTrack)
+    (new)
+    <init>(Ljava/io/InputStream;)V
+java/io/BufferedReader  (used in 3 BRouter classes: BExpressionContext BExpressionMetaData StorageConfigHelper)
+    (new)
+    <init>(Ljava/io/Reader;)V
+    close()V
+    read()I
+    readLine()Ljava/lang/String;
+java/io/BufferedWriter  (used in 1 BRouter classes: StackSampler)
+    (new)
+    <init>(Ljava/io/Writer;)V
+    close()V
+    flush()V
+    write(Ljava/lang/String;)V
+java/io/DataInputStream  (used in 1 BRouter classes: OsmTrack)
+    (new)
+    <init>(Ljava/io/InputStream;)V
+    close()V
+    readBoolean()Z
+    readInt()I
+    readLong()J
+java/io/File  (used in 8 BRouter classes: BExpressionContext NodesCache OsmTrack PhysicalFile ProfileCache RoutingContext RoutingEngine StorageConfigHelper)
+    (new)
+    <init>(Ljava/io/File;Ljava/lang/String;)V
+    <init>(Ljava/lang/String;)V
+    equals(Ljava/lang/Object;)Z
+    exists()Z
+    field separatorChar
+    getAbsolutePath()Ljava/lang/String;
+    getName()Ljava/lang/String;
+    getParentFile()Ljava/io/File;
+    isDirectory()Z
+    lastModified()J
+java/io/FileInputStream  (used in 1 BRouter classes: OsmTrack)
+    (new)
+    <init>(Ljava/io/File;)V
+java/io/FileOutputStream  (used in 1 BRouter classes: StackSampler)
+    (new)
+    <init>(Ljava/io/File;Z)V
+java/io/FileReader  (used in 3 BRouter classes: BExpressionContext BExpressionMetaData StorageConfigHelper)
+    (new)
+    <init>(Ljava/io/File;)V
+java/io/FileWriter  (used in 1 BRouter classes: RoutingEngine)
+    (new)
+    <init>(Ljava/io/File;Z)V
+    <init>(Ljava/lang/String;)V
+    close()V
+    write(Ljava/lang/String;)V
+java/io/IOException  (used in 3 BRouter classes: NodesCache OsmFile PhysicalFile)
+    (new)
+    <init>(Ljava/lang/String;)V
+    getMessage()Ljava/lang/String;
+java/io/OutputStreamWriter  (used in 1 BRouter classes: StackSampler)
+    (new)
+    <init>(Ljava/io/OutputStream;)V
+java/io/PrintStream  (used in 6 BRouter classes: BExpressionContext MicroCache2 ProfileCache RoutingEngine RoutingParamCollector StackSampler)
+    println(Ljava/lang/String;)V
+java/io/PrintWriter  (used in 1 BRouter classes: RoutingEngine)
+    (new)
+    <init>(Ljava/io/Writer;)V
+java/io/RandomAccessFile  (used in 3 BRouter classes: NodesCache OsmFile PhysicalFile)
+    (new)
+    <init>(Ljava/io/File;Ljava/lang/String;)V
+    close()V
+    length()J
+    readFully([BII)V
+    seek(J)V
+java/io/StringWriter  (used in 1 BRouter classes: RoutingEngine)
+    (new)
+    <init>()V
+    toString()Ljava/lang/String;
+java/io/Writer  (used in 1 BRouter classes: RoutingEngine)
+    close()V
+    flush()V
+    write(I)V
+    write(Ljava/lang/String;)V
+java/lang/Boolean  (used in 5 BRouter classes: BExpressionContext CompactLongMap NodesCache ProfileCache RoutingEngine)
+    getBoolean(Ljava/lang/String;)Z
+java/lang/Character  (used in 1 BRouter classes: BExpressionContext)
+    isWhitespace(C)Z
+java/lang/Class  (used in 2 BRouter classes: OsmTrack RoutingContext)
+    (anewarray)
+    forName(Ljava/lang/String;)Ljava/lang/Class;
+    getDeclaredConstructor([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
+    getPackage()Ljava/lang/Package;
+java/lang/Double  (used in 5 BRouter classes: OsmNodeNamed RoutingContext RoutingEngine RoutingParamCollector WaypointMatcherImpl$1)
+    compare(DD)I
+    isNaN(D)Z
+    parseDouble(Ljava/lang/String;)D
+java/lang/Exception  (used in 3 BRouter classes: BExpressionContext RoutingParamCollector StackSampler)
+    getMessage()Ljava/lang/String;
+    getStackTrace()[Ljava/lang/StackTraceElement;
+java/lang/Float  (used in 2 BRouter classes: BExpression BExpressionContext)
+    parseFloat(Ljava/lang/String;)F
+    toString(F)Ljava/lang/String;
+    valueOf(F)Ljava/lang/Float;
+java/lang/IllegalArgumentException  (used in 13 BRouter classes: BExpression BExpressionContext ByteArrayUnifier CompactLongMap LinkedListContainer MicroCache NodesCache OsmLink OsmNode OsmTrack RoutingContext RoutingEngine RoutingParamCollector)
+    (new)
+    <init>(Ljava/lang/String;)V
+    getMessage()Ljava/lang/String;
+java/lang/Integer  (used in 4 BRouter classes: BExpressionContext OsmPath RoutingEngine RoutingParamCollector)
+    (checkcast)
+    intValue()I
+    parseInt(Ljava/lang/String;)I
+    valueOf(I)Ljava/lang/Integer;
+    valueOf(Ljava/lang/String;)Ljava/lang/Integer;
+java/lang/Math  (used in 13 BRouter classes: BExpressionContext CheapAngleMeter CheapRuler OsmNode OsmPath OsmPathElement OsmTrack RoutingContext RoutingEngine StdPath VoiceHint VoiceHintProcessor WaypointMatcherImpl)
+    abs(D)D
+    abs(F)F
+    abs(I)I
+    abs(J)J
+    atan2(DD)D
+    cos(D)D
+    exp(D)D
+    max(DD)D
+    max(FF)F
+    max(II)I
+    min(DD)D
+    min(FF)F
+    min(II)I
+    round(D)J
+    sin(D)D
+    sqrt(D)D
+    toDegrees(D)D
+java/lang/Object  (used in 45 BRouter classes: BExpression BExpressionContext BExpressionLookupValue BExpressionMetaData BitCoderContext ByteArrayUnifier ByteDataReader CheapAngleMeter CompactLongMap DataBuffers GeometryDecoder LinkedListContainer LruMap LruMapNode MatchedWaypoint MessageData NodesCache NoisyDiffCoder OsmFile OsmLink OsmNode OsmNodePairSet OsmNodePairSet$OsmNodePair OsmNodesMap OsmPath OsmPathElement OsmPathModel OsmTrack OsmTrack$OsmPathElementHolder OsmTransferNode PhysicalFile ProfileCache RoutingContext RoutingParamCollector SortedHeap SortedHeap$SortedBin TagValueCoder TagValueCoder$TreeNode TagValueWrapper TurnRestriction VoiceHint VoiceHintList VoiceHintProcessor WaypointMatcherImpl WaypointMatcherImpl$1)
+    (anewarray)
+    <init>()V
+    clone()Ljava/lang/Object;
+    equals(Ljava/lang/Object;)Z
+    getClass()Ljava/lang/Class;
+    hashCode()I
+java/lang/Package  (used in 1 BRouter classes: OsmTrack)
+    getImplementationVersion()Ljava/lang/String;
+java/lang/RuntimeException  (used in 8 BRouter classes: BExpressionContext BExpressionMetaData FrozenLongMap MessageData NodesCache RoutingContext RoutingEngine RoutingIslandException)
+    (instanceof)
+    (new)
+    <init>()V
+    <init>(Ljava/lang/String;)V
+    <init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+    <init>(Ljava/lang/Throwable;)V
+java/lang/Short  (used in 1 BRouter classes: BExpressionMetaData)
+    parseShort(Ljava/lang/String;)S
+java/lang/StackTraceElement  (used in 2 BRouter classes: RoutingParamCollector StackSampler)
+    (checkcast)
+    getLineNumber()I
+    toString()Ljava/lang/String;
+java/lang/String  (used in 18 BRouter classes: BExpression BExpressionContext BExpressionContextNode BExpressionContextWay BExpressionLookupValue BExpressionMetaData Formatter NodesCache OsmNode OsmTrack ProfileCache RoutingContext RoutingEngine RoutingParamCollector StackSampler StdPath StorageConfigHelper VoiceHint)
+    (anewarray)
+    (checkcast)
+    (instanceof)
+    charAt(I)C
+    contains(Ljava/lang/CharSequence;)Z
+    endsWith(Ljava/lang/String;)Z
+    equals(Ljava/lang/Object;)Z
+    equalsIgnoreCase(Ljava/lang/String;)Z
+    format(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    hashCode()I
+    indexOf(I)I
+    indexOf(Ljava/lang/String;)I
+    lastIndexOf(I)I
+    length()I
+    matches(Ljava/lang/String;)Z
+    replace(CC)Ljava/lang/String;
+    replaceAll(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    split(Ljava/lang/String;)[Ljava/lang/String;
+    startsWith(Ljava/lang/String;)Z
+    substring(I)Ljava/lang/String;
+    substring(II)Ljava/lang/String;
+    toLowerCase()Ljava/lang/String;
+    toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
+    trim()Ljava/lang/String;
+    valueOf(Ljava/lang/Object;)Ljava/lang/String;
+java/lang/StringBuilder  (used in 5 BRouter classes: BExpression BExpressionContext OsmTrack RoutingEngine StackSampler)
+    (new)
+    <init>()V
+    <init>(I)V
+    <init>(Ljava/lang/String;)V
+    append(C)Ljava/lang/StringBuilder;
+    append(J)Ljava/lang/StringBuilder;
+    append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+    append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    length()I
+    setLength(I)V
+    toString()Ljava/lang/String;
+java/lang/System  (used in 13 BRouter classes: BExpressionContext ByteArrayUnifier ByteDataReader ByteDataWriter DirectWeaver LinkedListContainer MicroCache MicroCache2 ProfileCache RoutingEngine RoutingParamCollector StackSampler TagValueCoder)
+    arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
+    currentTimeMillis()J
+    field err
+    field out
+    getProperty(Ljava/lang/String;)Ljava/lang/String;
+java/lang/Thread  (used in 2 BRouter classes: RoutingEngine StackSampler)
+    (checkcast)
+    <init>()V
+    getId()J
+    getName()Ljava/lang/String;
+    getState()Ljava/lang/Thread$State;
+java/lang/Throwable  (used in 1 BRouter classes: RoutingEngine)
+    getMessage()Ljava/lang/String;
+    printStackTrace(Ljava/io/PrintWriter;)V
+    toString()Ljava/lang/String;
+java/lang/reflect/Constructor  (used in 1 BRouter classes: RoutingContext)
+    newInstance([Ljava/lang/Object;)Ljava/lang/Object;
+java/text/DateFormat  (used in 1 BRouter classes: StackSampler)
+    format(Ljava/util/Date;)Ljava/lang/String;
+java/text/SimpleDateFormat  (used in 1 BRouter classes: StackSampler)
+    (new)
+    <init>(Ljava/lang/String;Ljava/util/Locale;)V
+java/util/ArrayList  (used in 12 BRouter classes: BExpressionContext BExpressionLookupValue FrozenLongMap MatchedWaypoint OsmNodesMap OsmTrack RoutingContext RoutingEngine RoutingParamCollector VoiceHint VoiceHintList VoiceHintProcessor)
+    (new)
+    <init>()V
+    <init>(I)V
+java/util/Arrays  (used in 3 BRouter classes: BExpressionContext CacheNode VarWrapper)
+    equals([B[B)Z
+    equals([F[F)Z
+    fill([II)V
+    hashCode([F)I
+java/util/Collection  (used in 3 BRouter classes: BExpressionMetaData NodesCache OsmNodesMap)
+    iterator()Ljava/util/Iterator;
+java/util/Collections  (used in 1 BRouter classes: WaypointMatcherImpl)
+    sort(Ljava/util/List;Ljava/util/Comparator;)V
+java/util/Date  (used in 2 BRouter classes: RoutingEngine StackSampler)
+    (new)
+    <init>()V
+java/util/HashMap  (used in 6 BRouter classes: BExpressionContext BExpressionMetaData NodesCache OsmNodesMap RoutingEngine RoutingParamCollector)
+    (new)
+    <init>()V
+    <init>(I)V
+java/util/Iterator  (used in 13 BRouter classes: BExpressionContext BExpressionLookupValue BExpressionMetaData NodesCache OsmNodesMap OsmTrack RoutingContext RoutingEngine RoutingParamCollector StackSampler VoiceHint VoiceHintProcessor WaypointMatcherImpl)
+    hasNext()Z
+    next()Ljava/lang/Object;
+java/util/List  (used in 14 BRouter classes: BExpression BExpressionContext BExpressionLookupValue CompactLongMap FrozenLongMap NodesCache OsmNodesMap OsmTrack RoutingContext RoutingEngine RoutingParamCollector VoiceHint VoiceHintProcessor WaypointMatcherImpl)
+    add(ILjava/lang/Object;)V
+    add(Ljava/lang/Object;)Z
+    addAll(Ljava/util/Collection;)Z
+    clear()V
+    get(I)Ljava/lang/Object;
+    isEmpty()Z
+    iterator()Ljava/util/Iterator;
+    remove(I)Ljava/lang/Object;
+    remove(Ljava/lang/Object;)Z
+    set(ILjava/lang/Object;)Ljava/lang/Object;
+    size()I
+java/util/Locale  (used in 1 BRouter classes: BExpressionContext)
+    field US
+java/util/Locale$Builder  (used in 1 BRouter classes: StackSampler)
+    (new)
+    <init>()V
+    build()Ljava/util/Locale;
+    setLanguage(Ljava/lang/String;)Ljava/util/Locale$Builder;
+    setRegion(Ljava/lang/String;)Ljava/util/Locale$Builder;
+java/util/Map  (used in 8 BRouter classes: BExpressionContext BExpressionMetaData NodesCache OsmNodesMap RoutingContext RoutingEngine RoutingParamCollector StackSampler)
+    containsKey(Ljava/lang/Object;)Z
+    entrySet()Ljava/util/Set;
+    get(Ljava/lang/Object;)Ljava/lang/Object;
+    keySet()Ljava/util/Set;
+    put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    remove(Ljava/lang/Object;)Ljava/lang/Object;
+    size()I
+    values()Ljava/util/Collection;
+java/util/Map$Entry  (used in 3 BRouter classes: RoutingContext RoutingParamCollector StackSampler)
+    (checkcast)
+    getKey()Ljava/lang/Object;
+    getValue()Ljava/lang/Object;
+java/util/Random  (used in 1 BRouter classes: StackSampler)
+    (new)
+    <init>()V
+    nextInt(I)I
+java/util/Set  (used in 4 BRouter classes: BExpressionContext RoutingContext RoutingParamCollector StackSampler)
+    iterator()Ljava/util/Iterator;
+java/util/SortedSet  (used in 1 BRouter classes: RoutingEngine)
+    iterator()Ljava/util/Iterator;
+java/util/StringTokenizer  (used in 2 BRouter classes: BExpression BExpressionContext)
+    (new)
+    <init>(Ljava/lang/String;Ljava/lang/String;)V
+    countTokens()I
+    hasMoreTokens()Z
+    nextToken()Ljava/lang/String;
+java/util/TreeSet  (used in 1 BRouter classes: RoutingEngine)
+    (new)
+    <init>(Ljava/util/Collection;)V
+
+synchronized blocks (monitorenter) in reached methods: 2
+  btools/router/RoutingEngine._findTrack(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack;: 2
+string concatenations (invokedynamic) in reached methods: 133
+volatile fields in all classes:
+  btools/router/RoutingEngine: private volatile boolean terminated;
+  btools/util/StackSampler: private volatile boolean stopped;

@@ -1,0 +1,20 @@
+across-the-degree-line | - | nodes=226 | distance=5047 | hash=476a3ac49cce7484 | terminated=false
+inside-long | - | nodes=306 | distance=6713 | hash=2416d7a7d748d732 | terminated=false
+across-again (profile cache warm) | - | nodes=226 | distance=5047 | hash=476a3ac49cce7484 | terminated=false
+snap-on-trail (point to itself) | - | nodes=1 | distance=0 | hash=f040000f8e0bd50 | terminated=false
+snap-off-trail (point to itself) | - | nodes=1 | distance=0 | hash=f040000f8e0ca10 | terminated=false
+full-route-snap (off trail toward across-to) | - | nodes=223 | distance=5014 | hash=2093d169c9444607 | terminated=false
+end-no-trail-near | to-position not mapped in existing datafile | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+start-no-trail-near | from-position not mapped in existing datafile | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+island | target island detected for section 0 | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+time-limit 1 ms | target-island-check timeout after 0 seconds | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+terminated before the search | operation killed by thread-priority-watchdog after 0 seconds | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=true
+no segment directory | segment directory /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/work/never-downloaded does not exist | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+header-check cut-100000: file of size 100000 too short, should be 152664
+engine on cut-100000 | file of size 100000 too short, should be 152664 | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+header-check cut-150: EOFException
+engine on cut-150 | - | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+header-check header-byte: top index checksum error
+engine on header-byte | top index checksum error | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false
+header-check tile-data: ok
+engine on tile-data | sub index checksum error | nodes=0 | distance=0 | hash=3ffffffffffe5 | terminated=false

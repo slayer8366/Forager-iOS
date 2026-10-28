@@ -1,0 +1,102 @@
+file	file_lines	kept_lines	methods_kept	methods_in_file	kept_methods
+btools/codec/DataBuffers.java	31	31	2	2	<init>() <init>(byte[])
+btools/codec/IntegerFifo3Pass.java	53	0	0	5	
+btools/codec/LinkedListContainer.java	78	0	0	5	
+btools/codec/MicroCache.java	342	186	10	21	<init>(byte[]) collect(int) emptyCache() getAndClear(long) getDataSize() getSize() init(int) shrinkId(long) startPos(int) unGhost()
+btools/codec/MicroCache2.java	476	24	0	7	
+btools/codec/NoisyDiffCoder.java	79	36	2	6	<init>(StatCoderContext) decodeSignedValue()
+btools/codec/StatCoderContext.java	254	120	5	11	<init>(byte[]) decodeNoisyDiff(int) decodeNoisyNumber(int) decodePredictedValue(int) decodeSortedArray(int[],int,int,int,int)
+btools/codec/TagValueCoder.java	247	109	3	11	<init>(BitCoderContext,DataBuffers,TagValueValidator) decodeTagValueSet() decodeTree(BitCoderContext,DataBuffers,TagValueValidator)
+btools/codec/TagValueValidator.java	18	17	4	5	accessType(byte[]) checkStartWay(byte[]) isLookupIdxUsed(int) unify(byte[],int,int)
+btools/codec/TagValueWrapper.java	11	11	0	0	
+btools/codec/WaypointMatcher.java	16	16	4	4	end() hasMatch(int,int) start(int,int,int,int,boolean) transferNode(int,int)
+btools/expressions/BExpression.java	406	406	14	14	addOp(StringBuilder,BExpression) checkExpectedToken(BExpressionContext,String) createAssignExpressionFromKeyValue(BExpressionContext,String,String) divide(float,float) evaluate(BExpressionContext) markLookupIdxUsed(BExpressionContext) max(float,float) min(float,float) parse(BExpressionContext,int) parse(BExpressionContext,int,String) parseRaw(BExpressionContext,int,String) toString() tryCollapse() tryEvaluateConstant()
+btools/expressions/BExpressionContext.java	1062	814	36	55	<init>(String,int,BExpressionMetaData) _parseFile(File,Map) _parseToken() addLookupValue(String,String,int[]) assign(int,float) checkStartWay(byte[]) decode(int[],boolean,byte[]) evaluate() evaluate(boolean,byte[]) evaluate(int[]) evaluateInto(float[],int) finishMetaParsing() freeNoWays() getBuildInVariable(int) getBuildInVariableNames() getForeignVariableIdx(String,String) getForeignVariableValue(int) getKeyValueDescription(boolean,byte[]) getLookupMatch(int,int[]) getLookupNameIdx(String) getLookupValue(int) getLookupValueIdx(int,String) getMinWriteIdx() getOutputVariableIndex(String,boolean) getVariableIdx(String,boolean) getVariableValue(String,float) getVariableValue(int) isLookupIdxUsed(int) markLookupIdxUsed(int) parseFile(File,String,Map) parseMetaLine(String) parseToken() setAllTagsUsed() setForeignContext(BExpressionContext) setInverseVars() unify(byte[],int,int)
+btools/expressions/BExpressionContextNode.java	35	32	3	4	<init>(int,BExpressionMetaData) getBuildInVariableNames() getInitialcost()
+btools/expressions/BExpressionContextWay.java	134	128	23	25	<init>(int,BExpressionMetaData) accessType(byte[]) getBuildInVariableNames() getClassifierMask() getCostfactor() getDownhillCostfactor() getDownhillcost() getDownhillcutoff() getDownhillmaxslope() getDownhillmaxslopecost() getInitialClassifier() getInitialcost() getIsTrafficBackbone() getMaxspeed() getNodeAccessGranted() getPriorityClassifier() getTurncost() getUphillCostfactor() getUphillcost() getUphillcutoff() getUphillmaxslope() getUphillmaxslopecost() setDecodeForbidden(boolean)
+btools/expressions/BExpressionLookupValue.java	57	57	5	5	<init>(String) addAlias(String) equals(Object) matches(String) toString()
+btools/expressions/BExpressionMetaData.java	75	75	2	2	readMetaData(File) registerListener(String,BExpressionContext)
+btools/expressions/CacheNode.java	27	27	2	2	equals(Object) hashCode()
+btools/expressions/IntegrityCheckProfile.java	49	0	0	2	
+btools/expressions/ProfileComparator.java	52	0	0	2	
+btools/expressions/VarWrapper.java	23	23	2	2	equals(Object) hashCode()
+btools/mapaccess/DirectWeaver.java	200	200	3	3	<init>(StatCoderContext,DataBuffers,int,int,int,TagValueValidator,WaypointMatcher,OsmNodesMap) _expandId(int) expandId(int)
+btools/mapaccess/GeometryDecoder.java	69	69	2	2	<init>() decodeGeometry(byte[],OsmNode,OsmNode,boolean)
+btools/mapaccess/MatchedWaypoint.java	74	37	0	2	
+btools/mapaccess/NodesCache.java	418	394	14	16	<init>(File,BExpressionContextWay,boolean,long,NodesCache,boolean) checkEnableCacheCleaning() clean(boolean) close() expandHollowLinkTargets(OsmNode) fileForSegment(int,int) getElevationType(int,int) getGraphNode(OsmNode) getSegmentFor(int,int) hasHollowLinkTargets(OsmNode) loadSegmentFor(int,int) matchWaypointsToNodes(List,double,OsmNodePairSet) obtainNonHollowNode(OsmNode) preloadPosition(OsmNode,int,int,boolean)
+btools/mapaccess/NodesList.java	12	0	0	0	
+btools/mapaccess/OsmFile.java	216	216	11	11	<init>(PhysicalFile,int,int,DataBuffers) clean(boolean) cleanGhosts() collectAll() createMicroCache(int,int,DataBuffers,TagValueValidator,WaypointMatcher,OsmNodesMap) createMicroCache(int,int,DataBuffers,TagValueValidator,WaypointMatcher,boolean,OsmNodesMap) getDataInputForSubIdx(int,byte[]) getMicroCache(int,int) getPosIdx(int) hasData() setGhostState()
+btools/mapaccess/OsmLink.java	155	155	11	11	<init>() <init>(OsmNode,OsmNode) addLinkHolder(OsmLinkHolder,OsmNode) clear(OsmNode) getFirstLinkHolder(OsmNode) getNext(OsmNode) getTarget(OsmNode) isBidirectional() isLinkUnused() isReverse(OsmNode) setFirstLinkHolder(OsmLinkHolder,OsmNode)
+btools/mapaccess/OsmLinkHolder.java	12	12	2	2	getNextForLink() setNextForLink(OsmLinkHolder)
+btools/mapaccess/OsmNode.java	262	252	18	21	<init>() <init>(int,int) addLink(OsmLink,boolean,OsmNode) addLink(int,int,byte[],byte[],OsmNodesMap,boolean) addTurnRestriction(TurnRestriction) calcDistance(OsmPos) equals(Object) getILat() getILon() getIdFromPos() getSElev() hashCode() isHollow() parseNodeBody(MicroCache,OsmNodesMap,IByteArrayUnifier) parseNodeBody2(MicroCache2,OsmNodesMap,IByteArrayUnifier) setHollow() unlinkLink(OsmLink) vanish()
+btools/mapaccess/OsmNodePairSet.java	104	98	9	11	<init>(int) addPair(long,long) addTempPair(long,long) clearTempPairs() freezeTempPairs() getElement(long,long) getFreezeCount() hasPair(long,long) size()
+btools/mapaccess/OsmNodesMap.java	291	246	13	15	addActiveNode(List,OsmNode) canEscape(OsmNode) cleanupAndCount(OsmNode[]) cleanupPeninsulas(OsmNode[]) clearTemp() collectOutreachers() get(int,int) getByteArrayUnifier() isInMemoryBounds(int,boolean) justCount(OsmNode[]) minVisitIdInSubtree(OsmNode,OsmNode) put(OsmNode) remove(OsmNode)
+btools/mapaccess/OsmPos.java	22	18	2	6	getILat() getILon()
+btools/mapaccess/OsmTransferNode.java	16	16	0	0	
+btools/mapaccess/PhysicalFile.java	156	96	2	5	<init>(File,DataBuffers,int,int) close()
+btools/mapaccess/Rd5DiffManager.java	115	0	0	4	
+btools/mapaccess/Rd5DiffTool.java	637	0	0	21	
+btools/mapaccess/Rd5DiffValidator.java	62	0	0	2	
+btools/mapaccess/StorageConfigHelper.java	49	46	2	3	getSecondarySegmentDir(File) getStorageLocation(File,String)
+btools/mapaccess/TurnRestriction.java	60	56	3	4	exceptBikes() exceptMotorcars() isTurnForbidden(TurnRestriction,int,int,int,int,boolean,boolean)
+btools/mapaccess/WaypointMatcherImpl.java	263	263	7	7	<init>(List,double,OsmNodePairSet) checkSegment(int,int,int,int) end() hasMatch(int,int) start(int,int,int,int,boolean) transferNode(int,int) updateWayList(List,MatchedWaypoint)
+btools/router/AreaInfo.java	71	28	0	6	
+btools/router/AreaReader.java	270	0	0	6	
+btools/router/FormatCsv.java	43	13	0	4	
+btools/router/FormatGpx.java	573	26	0	10	
+btools/router/FormatJson.java	261	22	0	7	
+btools/router/FormatKml.java	116	15	0	5	
+btools/router/Formatter.java	569	84	3	22	format1(double) getFormattedEnergy(int) getFormattedTime2(int)
+btools/router/KinematicModel.java	147	0	0	10	
+btools/router/KinematicNoCostModel.java	147	0	0	10	
+btools/router/KinematicNoCostPath.java	264	0	0	10	
+btools/router/KinematicPath.java	273	0	0	10	
+btools/router/KinematicPrePath.java	56	0	0	1	
+btools/router/MessageData.java	104	74	7	10	copy() getPrio() isBadOneway() isGoodForCars() isLinktType() isRoundabout() toString()
+btools/router/OsmNodeNamed.java	100	28	2	5	<init>() <init>(OsmNode)
+btools/router/OsmNogoPolygon.java	488	52	0	11	
+btools/router/OsmPath.java	434	426	18	21	addAddionalPenalty(OsmTrack,boolean,OsmPath,OsmLink,RoutingContext) definitlyWorseThan(OsmPath) didEnterDestinationArea() elevationCorrection() getBit(int) getLink() getNextForLink() getSourceNode() getTargetNode() init(OsmLink) init(OsmPath) init(OsmPath,OsmLink,OsmTrack,boolean,RoutingContext) interpolateEle(short,short,double) processTargetNode(RoutingContext) processWaySection(RoutingContext,double,double,double,double,double,boolean,int,int) resetState() setBit(int,boolean) setNextForLink(OsmLinkHolder)
+btools/router/OsmPathElement.java	127	108	16	19	<init>() calcDistance(OsmPos) create(OsmPath) create(int,int,short,OsmPathElement) getElev() getEnergy() getILat() getILon() getIdFromPos() getSElev() getTime() positionEquals(OsmPathElement) setEnergy(float) setSElev(short) setTime(float) toString()
+btools/router/OsmPathModel.java	20	20	3	3	createPath() createPrePath() init(BExpressionContextWay,BExpressionContextNode,Map)
+btools/router/OsmPrePath.java	26	19	0	2	
+btools/router/OsmTrack.java	587	444	16	27	addDetours(OsmTrack) addNode(OsmPathElement) appendTrack(OsmTrack) buildMap() copyDetours(OsmTrack) getFromDetourMap(long) getLink(long,long) getMatchedWaypoint(int) getMinDistance() getTotalSeconds() prepareSpeedProfile(RoutingContext) processVoiceHints(RoutingContext) readBinary(String,OsmNodeNamed,long[],long,StringBuilder) registerDetourForId(long,OsmPathElement) removeVoiceHint(int) startSection(OsmPathElement,OsmPathElement)
+btools/router/ProfileCache.java	142	139	2	3	parseProfile(RoutingContext) releaseProfile(RoutingContext)
+btools/router/RoutingContext.java	579	541	20	22	calcDistance(int,int,int,int) checkMatchedWaypointAgainstNogos(List) checkPendingEndpoint() cleanNogoList(List) createPath(OsmLink) createPath(OsmPath,OsmLink,OsmTrack,boolean) createPrePath(OsmPath,OsmLink) freeNoWays() getAlternativeIdx(int,int) getKeyValueChecksum() getNogoChecksums() getProfileName() initModel() readGlobalConfig() restoreNogoList() setAlternativeIdx(int) setModel(String) setWaypoint(OsmNodeNamed,OsmNodeNamed,boolean) setWaypoint(OsmNodeNamed,boolean) unsetWaypoint()
+btools/router/RoutingEngine.java	2443	2009	31	50	<init>(String,String,File,List,RoutingContext,int) _findTrack(String,MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack,boolean) addToOpenset(OsmPath) cleanOnOOM() compileTrack(OsmPath,boolean) doRouting(long) doRun(long) elevationFilter(OsmPos) findTrack(OsmTrack[],OsmTrack[]) findTrack(String,MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack,boolean) getErrorMessage() getExtraSegment(OsmPathElement,OsmPathElement) getFoundTrack() getStartPath(OsmNode,OsmNode,MatchedWaypoint,OsmNodeNamed,boolean) getStartPath(OsmNode,OsmNode,OsmNodeNamed,OsmNodeNamed,boolean) hasInfo() isTerminated() logException(Throwable) logInfo(String) logThrowable(Throwable) matchWaypointsToNodes(List) mergeTrack(OsmPathElement,OsmTrack) postElevationCheck(OsmTrack) recalcTrack(OsmTrack) resetCache(boolean) searchRoutedTrack(MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack) searchTrack(MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack) snapPathConnection(OsmTrack,OsmTrack,MatchedWaypoint) snapRoundaboutConnection(OsmTrack,OsmTrack,int,int,int,MatchedWaypoint) terminate() tryFindTrack(OsmTrack[],OsmTrack[])
+btools/router/RoutingHelper.java	41	0	0	4	
+btools/router/RoutingIslandException.java	4	4	0	0	
+btools/router/RoutingParamCollector.java	374	206	4	13	getWayPointList(String) readPosition(String,String,String) readPosition(double,double,String) setParams(RoutingContext,List,Map)
+btools/router/SearchBoundary.java	87	31	0	4	
+btools/router/StdModel.java	36	36	3	3	createPath() createPrePath() init(BExpressionContextWay,BExpressionContextNode,Map)
+btools/router/StdPath.java	356	356	11	11	calcIncline(double) computeKinematic(RoutingContext,double,double,boolean) definitlyWorseThan(OsmPath) elevationCorrection() getTotalEnergy() getTotalTime() init(OsmPath) processTargetNode(RoutingContext) processWaySection(RoutingContext,double,double,double,double,double,boolean,int,int) resetState() solveCubic(double,double,double)
+btools/router/SuspectInfo.java	59	0	0	4	
+btools/router/VoiceHint.java	223	201	5	9	addBadWay(MessageData) calcCommand() hasGiveWay() is180DegAngle(float) isRoundabout()
+btools/router/VoiceHintList.java	61	33	2	5	setTransportMode(boolean,boolean) transportMode()
+btools/router/VoiceHintProcessor.java	529	529	6	6	<init>(double,boolean,int) checkForNextNoneMotorway(List,int,int) checkStraightHold(VoiceHint,VoiceHint,double) postProcess(List,double,double) process(List) sumNonConsumedWithinCatchingRange(List,int,double)
+btools/util/BitCoderContext.java	320	290	18	20	<init>(byte[]) closeAndGetEncodedLength() decodeBit() decodeBits(int) decodeBitsReverse(int) decodeBounded(int) decodeVarBits() decodeVarBits2() encodeBit(boolean) encodeBounded(int,int) encodeVarBits(int) encodeVarBits2(int) fillBuffer() flushBuffer() getReadingBitPosition() getWritingBitPosition() reset() reset(byte[])
+btools/util/ByteArrayUnifier.java	54	15	1	3	<init>(int,boolean)
+btools/util/ByteDataReader.java	135	87	9	16	<init>(byte[]) <init>(byte[],int) hasMoreData() readByte() readInt() readLong() readVarLengthSigned() readVarLengthUnsigned() reset(byte[])
+btools/util/ByteDataWriter.java	150	65	3	16	<init>(byte[]) writeVarLengthSigned(int) writeVarLengthUnsigned(int)
+btools/util/CheapAngleMeter.java	75	75	6	6	calcAngle(int,int,int,int,int,int) getAngle(int,int,int,int) getCosAngle() getDifferenceFromDirection(double,double) getDirection(int,int,int,int) normalize(double)
+btools/util/CheapRuler.java	97	81	3	4	calcKxKyFromILat(int) distance(int,int,int,int) getLonLatToMeterScales(int)
+btools/util/CompactLongMap.java	286	286	10	10	<init>() _add(long) contains(int,long,boolean) contains(long) contains(long,boolean) fastPut(long,V) get(long) moveToFrozenArrays(long[],List) put(long,V) size()
+btools/util/CompactLongSet.java	183	0	0	8	
+btools/util/Crc32.java	53	53	1	1	crc(byte[],int,int)
+btools/util/DenseLongMap.java	203	0	0	6	
+btools/util/DiffCoderDataInputStream.java	43	0	0	4	
+btools/util/DiffCoderDataOutputStream.java	39	0	0	4	
+btools/util/FrozenLongMap.java	120	120	8	8	<init>(CompactLongMap) contains(long,boolean) fastPut(long,V) get(long) getKeyArray() getValueList() put(long,V) size()
+btools/util/FrozenLongSet.java	67	0	0	5	
+btools/util/IByteArrayUnifier.java	5	4	0	1	
+btools/util/LazyArrayOfLists.java	45	0	0	4	
+btools/util/LongList.java	36	0	0	4	
+btools/util/LruMap.java	100	100	5	5	<init>(int,int) get(LruMapNode) put(LruMapNode) removeLru() touch(LruMapNode)
+btools/util/LruMapNode.java	9	9	0	0	
+btools/util/MixCoderDataInputStream.java	125	0	0	7	
+btools/util/MixCoderDataOutputStream.java	106	0	0	7	
+btools/util/ProgressListener.java	8	0	0	2	
+btools/util/ReducedMedianFilter.java	82	0	0	5	
+btools/util/SortedHeap.java	310	273	12	15	<init>() <init>(int,SortedHeap) add(int,V) add4(int,Object) clear() dropLowest() getMinBin() getSize() next() popLowestKeyValue() sortUp() unlink()
+btools/util/StackSampler.java	120	30	0	7	
+btools/util/StringUtils.java	48	0	0	3	
+btools/util/TinyDenseLongMap.java	180	0	0	7	

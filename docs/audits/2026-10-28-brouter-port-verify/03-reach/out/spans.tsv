@@ -1,0 +1,1758 @@
+C	btools/codec/DataBuffers.java	btools.codec.DataBuffers	class		8	31	5
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	iobuffer	byte[]	9	9	9
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	tagbuf1	byte[]	10	10	10
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	bctx1	BitCoderContext	11	11	11
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	bbuf1	byte[]	12	12	12
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	ibuf1	int[]	13	13	13
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	ibuf2	int[]	14	14	14
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	ibuf3	int[]	15	15	15
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	alon	int[]	16	16	16
+F	btools/codec/DataBuffers.java	btools.codec.DataBuffers	alat	int[]	17	17	17
+M	btools/codec/DataBuffers.java	btools.codec.DataBuffers	<init>		19	21	19
+M	btools/codec/DataBuffers.java	btools.codec.DataBuffers	<init>	byte[]	27	29	23
+C	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	class		6	53	3
+F	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	a	int[]	7	7	7
+F	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	size	int	8	8	8
+F	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	pos	int	9	9	9
+F	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	pass	int	11	11	11
+M	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	<init>	int	13	15	13
+M	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	init		21	24	17
+M	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	add	int	29	38	26
+M	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	getNext		43	45	40
+M	btools/codec/IntegerFifo3Pass.java	btools.codec.IntegerFifo3Pass	get	int	47	52	47
+C	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	class		6	78	3
+F	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	ia	int[]	7	7	7
+F	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	size	int	8	8	8
+F	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	startpointer	int[]	9	9	9
+F	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	listpointer	int	10	10	10
+M	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	<init>	int,int[]	21	24	12
+M	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	addDataElement	int,int	32	39	26
+M	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	initList	int	47	55	41
+M	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	getDataElement		64	71	57
+M	btools/codec/LinkedListContainer.java	btools.codec.LinkedListContainer	resize		73	77	73
+C	btools/codec/MicroCache.java	btools.codec.MicroCache	class		21	342	5
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	faid	int[]	22	22	22
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	fapos	int[]	23	23	23
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	size	int	24	24	24
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	delcount	int	26	26	26
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	delbytes	int	27	27	27
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	p2size	int	28	28	28
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	virgin	boolean	32	32	30
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	ghost	boolean	33	33	33
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	debug	boolean	35	35	35
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	<init>	byte[]	37	39	37
+F	btools/codec/MicroCache.java	btools.codec.MicroCache	emptyNonVirgin	MicroCache	41	41	41
+I	btools/codec/MicroCache.java	btools.codec.MicroCache	<clinit>		43	45	43
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	emptyCache		47	49	47
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	init	int	51	58	51
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	finishNode	long	60	64	60
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	discardNode		66	68	66
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	getSize		70	72	70
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	getDataSize		74	76	74
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	getAndClear	long	92	122	78
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	startPos	int	124	126	124
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	collect	int	128	166	128
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	unGhost		168	175	168
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	getIdForIndex	int	180	183	177
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	expandId	int	190	192	185
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	shrinkId	long	199	201	194
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	isInternal	int,int	206	208	203
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	encodeMicroCache	byte[]	216	218	210
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	compareWith	MicroCache	225	234	220
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	summary		236	242	236
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	_compareWith	MicroCache	244	271	244
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	calcDelta	MicroCache,MicroCache	273	312	273
+M	btools/codec/MicroCache.java	btools.codec.MicroCache	addDelta	MicroCache,MicroCache,boolean	314	341	314
+C	btools/codec/MicroCache2.java	btools.codec.MicroCache2	class		13	476	9
+F	btools/codec/MicroCache2.java	btools.codec.MicroCache2	lonBase	int	14	14	14
+F	btools/codec/MicroCache2.java	btools.codec.MicroCache2	latBase	int	15	15	15
+F	btools/codec/MicroCache2.java	btools.codec.MicroCache2	cellsize	int	16	16	16
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	<init>	int,byte[],int,int,int	18	27	18
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	readUnified	int,IByteArrayUnifier	29	33	29
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	<init>	StatCoderContext,DataBuffers,int,int,int,TagValueValidator,WaypointMatcher	35	249	35
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	expandId	int	251	266	251
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	shrinkId	long	268	282	268
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	isInternal	int,int	284	288	284
+M	btools/codec/MicroCache2.java	btools.codec.MicroCache2	encodeMicroCache	byte[]	290	475	290
+C	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	class		11	79	3
+F	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	tot	int	12	12	12
+F	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	freqs	int[]	13	13	13
+F	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	noisybits	int	14	14	14
+F	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	bc	StatCoderContext	15	15	15
+F	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	pass	int	16	16	16
+M	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	<init>	StatCoderContext	21	24	18
+M	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	<init>		29	30	26
+M	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	encodeSignedValue	int	35	41	32
+M	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	decodeSignedValue		46	48	43
+M	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	encodeDictionary	StatCoderContext	54	64	50
+M	btools/codec/NoisyDiffCoder.java	btools.codec.NoisyDiffCoder	count	int	66	78	66
+C	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	class		8	254	8
+F	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	statsPerName	Map	9	9	9
+F	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	lastbitpos	long	10	10	10
+F	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	noisy_bits	int[]	13	13	13
+I	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	<clinit>		15	26	15
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	<init>	byte[]	29	31	29
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	assignBits	String	39	52	33
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	getBitReport		59	70	54
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	encodeNoisyNumber	int,int	78	88	72
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	decodeNoisyNumber	int	96	99	90
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	encodeNoisyDiff	int,int	107	118	101
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	decodeNoisyDiff	int	126	138	120
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	encodePredictedValue	int,int	146	155	140
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	decodePredictedValue	int	163	171	157
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	encodeSortedArray	int[],int,int,int,int	186	218	173
+M	btools/codec/StatCoderContext.java	btools.codec.StatCoderContext	decodeSortedArray	int[],int,int,int,int	228	252	220
+C	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	class		20	247	11
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	identityMap	Map	21	21	21
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	tree	Object	22	22	22
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	bc	BitCoderContext	23	23	23
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	pass	int	24	24	24
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	nextTagValueSetId	int	25	25	25
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	encodeTagValueSet	byte[]	27	44	27
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	decodeTagValueSet		46	54	46
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	encodeDictionary	BitCoderContext	56	75	56
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	<init>	BitCoderContext,DataBuffers,TagValueValidator	77	80	77
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	<init>		82	84	82
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder	decodeTree	BitCoderContext,DataBuffers,TagValueValidator	86	143	86
+C	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TreeNode	class		145	148	145
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TreeNode	child1	Object	146	146	146
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TreeNode	child2	Object	147	147	147
+C	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	class		150	246	150
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	data	byte[]	151	151	151
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	frequency	int	152	152	152
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	code	int	153	153	153
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	range	int	154	154	154
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	child1	TagValueSet	155	155	155
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	child2	TagValueSet	156	156	156
+F	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	id	int	157	157	157
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	<init>	int	159	161	159
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	encode	BitCoderContext,int,int	163	187	163
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	equals	Object	189	210	189
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet	hashCode		212	222	212
+C	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet$FrequencyComparator	class		224	244	224
+M	btools/codec/TagValueCoder.java	btools.codec.TagValueCoder$TagValueSet$FrequencyComparator	compare	TagValueSet,TagValueSet	226	243	226
+C	btools/codec/TagValueValidator.java	btools.codec.TagValueValidator	interface		4	18	4
+M	btools/codec/TagValueValidator.java	btools.codec.TagValueValidator	accessType	byte[]	9	9	5
+M	btools/codec/TagValueValidator.java	btools.codec.TagValueValidator	unify	byte[],int,int	11	11	11
+M	btools/codec/TagValueValidator.java	btools.codec.TagValueValidator	isLookupIdxUsed	int	13	13	13
+M	btools/codec/TagValueValidator.java	btools.codec.TagValueValidator	setDecodeForbidden	boolean	15	15	15
+M	btools/codec/TagValueValidator.java	btools.codec.TagValueValidator	checkStartWay	byte[]	17	17	17
+C	btools/codec/TagValueWrapper.java	btools.codec.TagValueWrapper	class		8	11	4
+F	btools/codec/TagValueWrapper.java	btools.codec.TagValueWrapper	data	byte[]	9	9	9
+F	btools/codec/TagValueWrapper.java	btools.codec.TagValueWrapper	accessType	int	10	10	10
+C	btools/codec/WaypointMatcher.java	btools.codec.WaypointMatcher	interface		8	16	3
+M	btools/codec/WaypointMatcher.java	btools.codec.WaypointMatcher	start	int,int,int,int,boolean	9	9	9
+M	btools/codec/WaypointMatcher.java	btools.codec.WaypointMatcher	transferNode	int,int	11	11	11
+M	btools/codec/WaypointMatcher.java	btools.codec.WaypointMatcher	end		13	13	13
+M	btools/codec/WaypointMatcher.java	btools.codec.WaypointMatcher	hasMatch	int,int	15	15	15
+C	btools/expressions/BExpression.java	btools.expressions.BExpression	class		5	406	5
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	OR_EXP	int	6	6	6
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	AND_EXP	int	7	7	7
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	NOT_EXP	int	8	8	8
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	ADD_EXP	int	10	10	10
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	MULTIPLY_EXP	int	11	11	11
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	DIVIDE_EXP	int	12	12	12
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	MAX_EXP	int	13	13	13
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	EQUAL_EXP	int	14	14	14
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	GREATER_EXP	int	15	15	15
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	MIN_EXP	int	16	16	16
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	SUB_EXP	int	18	18	18
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	LESSER_EXP	int	19	19	19
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	XOR_EXP	int	20	20	20
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	SWITCH_EXP	int	22	22	22
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	ASSIGN_EXP	int	23	23	23
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	LOOKUP_EXP	int	24	24	24
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	NUMBER_EXP	int	25	25	25
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	VARIABLE_EXP	int	26	26	26
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	FOREIGN_VARIABLE_EXP	int	27	27	27
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	VARIABLE_GET_EXP	int	28	28	28
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	typ	int	30	30	30
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	op1	BExpression	31	31	31
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	op2	BExpression	32	32	32
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	op3	BExpression	33	33	33
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	numberValue	float	34	34	34
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	variableIdx	int	35	35	35
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	lookupNameIdx	int	36	36	36
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	lookupValueIdxArray	int[]	37	37	37
+F	btools/expressions/BExpression.java	btools.expressions.BExpression	doNotChange	boolean	38	38	38
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	parse	BExpressionContext,int	41	43	40
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	parse	BExpressionContext,int,String	45	87	45
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	markLookupIdxUsed	BExpressionContext	89	104	89
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	parseRaw	BExpressionContext,int,String	106	259	106
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	checkExpectedToken	BExpressionContext,String	261	266	261
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	evaluate	BExpressionContext	269	314	268
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	tryCollapse		318	344	316
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	tryEvaluateConstant		348	358	346
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	max	float,float	360	362	360
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	min	float,float	364	366	364
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	divide	float,float	368	371	368
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	toString		373	387	373
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	addOp	StringBuilder,BExpression	389	393	389
+M	btools/expressions/BExpression.java	btools.expressions.BExpression	createAssignExpressionFromKeyValue	BExpressionContext,String,String	395	405	395
+C	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	class		29	1062	29
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	CONTEXT_TAG	String	30	30	30
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	MODEL_TAG	String	31	31	31
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	context	String	33	33	33
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	_inOurContext	boolean	34	34	34
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	_br	BufferedReader	35	35	35
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	_readerDone	boolean	36	36	36
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	_modelClass	String	38	38	38
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupNumbers	Map	40	40	40
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupValues	List	41	41	41
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupNames	List	42	42	42
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupHistograms	List	43	43	43
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupIdxUsed	boolean[]	44	44	44
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupDataFrozen	boolean	46	46	46
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupData	int[]	48	48	48
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	abBuf	byte[]	50	50	50
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	ctxEndode	BitCoderContext	51	51	51
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	ctxDecode	BitCoderContext	52	52	52
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	variableNumbers	Map	54	54	54
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lastAssignedExpression	List	56	56	56
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	skipConstantExpressionOptimizations	boolean	57	57	57
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	expressionNodeCount	int	58	58	58
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	variableData	float[]	60	60	60
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	probeCacheNode	CacheNode	64	64	63
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	cache	LruMap	65	65	65
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	probeVarSet	VarWrapper	67	67	67
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	resultVarCache	LruMap	68	68	68
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	expressionList	List	70	70	70
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	minWriteIdx	int	72	72	72
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	buildInVariableIdx	int[]	75	75	74
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	nBuildInVars	int	76	76	76
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	currentVars	float[]	78	78	78
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	currentVarOffset	int	79	79	79
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	foreignContext	BExpressionContext	81	81	81
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	noStartWays	int[]	83	83	83
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	showErrors	boolean	85	85	85
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	setInverseVars		87	89	87
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getBuildInVariableNames		91	91	91
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getBuildInVariable	int	93	95	93
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	linenr	int	97	97	97
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	meta	BExpressionMetaData	99	99	99
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lookupDataValid	boolean	100	100	100
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	<init>	String,BExpressionMetaData	102	104	102
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	<init>	String,int,BExpressionMetaData	112	125	106
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	encode		130	134	127
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	encode	int[]	136	179	136
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	decode	byte[]	185	188	182
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	decode	int[],boolean,byte[]	194	217	191
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getKeyValueDescription	boolean,byte[]	219	232	219
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getKeyValueList	boolean,byte[]	234	248	234
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getLookupKey	String	250	257	250
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getLookupValue	int	259	275	259
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getLookupValue	boolean,byte[],int	277	284	277
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	parsedLines	int	286	286	286
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	fixTagsWritten	boolean	287	287	287
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	parseMetaLine	String	289	308	289
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	finishMetaParsing		310	319	310
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	evaluate	int[]	321	324	321
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	evaluate		326	331	326
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	requests	long	333	333	333
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	requests2	long	334	334	334
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	cachemisses	long	335	335	335
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	cacheStats		337	339	337
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	lastCacheNode	CacheNode	341	341	341
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	unify	byte[],int,int	344	367	343
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	evaluate	boolean,byte[]	370	439	370
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	evaluateInto	float[],int	441	447	441
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	dumpStatistics		450	483	450
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	createNewLookupData		488	493	485
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	generateRandomValues	Random	498	509	495
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	assertAllVariablesEqual	BExpressionContext	511	521	511
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	variableName	int	523	530	523
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	addLookupValue	String,String,int[]	540	722	532
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	addLookupValue	String,int	728	739	724
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	addSmallestLookupValue	String,int	748	766	742
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getBooleanLookupValue	String	768	771	768
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getOutputVariableIndex	String,boolean	773	792	773
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	setForeignContext	BExpressionContext	794	796	794
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getForeignVariableValue	int	798	800	798
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getForeignVariableIdx	String,String	802	807	802
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	parseFile	File,String	809	811	809
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	parseFile	File,String,Map	813	854	813
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	_parseFile	File,Map	856	877	856
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	setVariableValue	String,float,boolean	879	893	879
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getVariableValue	String,float	895	898	895
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getVariableValue	int	900	902	900
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getVariableIdx	String,boolean	904	916	904
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getMinWriteIdx		918	920	918
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getLookupMatch	int,int[]	922	929	922
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getLookupNameIdx	String	931	934	931
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	markLookupIdxUsed	int	936	938	936
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	isLookupIdxUsed	int	940	942	940
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	setAllTagsUsed		944	948	944
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	usedTagList		950	961	950
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	getLookupValueIdx	int,String	963	969	963
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	parseToken		972	984	972
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	_parseToken		987	1038	987
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	assign	int,float	1040	1043	1040
+F	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	ld2	int[]	1045	1045	1045
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	checkStartWay	byte[]	1046	1056	1046
+M	btools/expressions/BExpressionContext.java	btools.expressions.BExpressionContext	freeNoWays		1058	1060	1058
+C	btools/expressions/BExpressionContextNode.java	btools.expressions.BExpressionContextNode	class		10	35	10
+F	btools/expressions/BExpressionContextNode.java	btools.expressions.BExpressionContextNode	buildInVariables	String[]	11	12	11
+M	btools/expressions/BExpressionContextNode.java	btools.expressions.BExpressionContextNode	getBuildInVariableNames		14	16	14
+M	btools/expressions/BExpressionContextNode.java	btools.expressions.BExpressionContextNode	getInitialcost		18	20	18
+M	btools/expressions/BExpressionContextNode.java	btools.expressions.BExpressionContextNode	<init>	BExpressionMetaData	23	25	23
+M	btools/expressions/BExpressionContextNode.java	btools.expressions.BExpressionContextNode	<init>	int,BExpressionMetaData	32	34	27
+C	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	class		11	134	11
+F	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	decodeForbidden	boolean	12	12	12
+F	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	buildInVariables	String[]	14	15	14
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getBuildInVariableNames		17	19	17
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getCostfactor		21	23	21
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getTurncost		25	27	25
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getUphillCostfactor		29	31	29
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getDownhillCostfactor		33	35	33
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getInitialcost		37	39	37
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getNodeAccessGranted		41	43	41
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getInitialClassifier		45	47	45
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getTrafficSourceDensity		49	51	49
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getIsTrafficBackbone		53	55	53
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getPriorityClassifier		57	59	57
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getClassifierMask		61	63	61
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getMaxspeed		65	67	65
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getUphillcost		69	71	69
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getDownhillcost		73	75	73
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getUphillcutoff		77	79	77
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getDownhillcutoff		81	83	81
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getUphillmaxslope		85	87	85
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getDownhillmaxslope		89	91	89
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getUphillmaxslopecost		93	95	93
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	getDownhillmaxslopecost		97	99	97
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	<init>	BExpressionMetaData	101	103	101
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	<init>	int,BExpressionMetaData	110	112	105
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	accessType	byte[]	114	126	114
+M	btools/expressions/BExpressionContextWay.java	btools.expressions.BExpressionContextWay	setDecodeForbidden	boolean	128	131	128
+C	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	class		15	57	15
+F	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	value	String	16	16	16
+F	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	aliases	List	17	17	17
+M	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	toString		19	22	19
+M	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	<init>	String	24	26	24
+M	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	addAlias	String	28	31	28
+M	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	equals	Object	33	45	33
+M	btools/expressions/BExpressionLookupValue.java	btools.expressions.BExpressionLookupValue	matches	String	47	55	47
+C	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	class		16	75	16
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	CONTEXT_TAG	String	17	17	17
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	VERSION_TAG	String	18	18	18
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	MINOR_VERSION_TAG	String	19	19	19
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	VARLENGTH_TAG	String	20	20	20
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	MIN_APP_VERSION_TAG	String	21	21	21
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	lookupVersion	short	23	23	23
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	lookupMinorVersion	short	24	24	24
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	minAppVersion	short	25	25	25
+F	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	listeners	Map	27	27	27
+M	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	registerListener	String,BExpressionContext	29	31	29
+M	btools/expressions/BExpressionMetaData.java	btools.expressions.BExpressionMetaData	readMetaData	File	33	74	33
+C	btools/expressions/CacheNode.java	btools.expressions.CacheNode	class		7	27	7
+F	btools/expressions/CacheNode.java	btools.expressions.CacheNode	ab	byte[]	8	8	8
+F	btools/expressions/CacheNode.java	btools.expressions.CacheNode	vars	float[]	9	9	9
+M	btools/expressions/CacheNode.java	btools.expressions.CacheNode	hashCode		11	14	11
+M	btools/expressions/CacheNode.java	btools.expressions.CacheNode	equals	Object	16	26	16
+C	btools/expressions/IntegrityCheckProfile.java	btools.expressions.IntegrityCheckProfile	class		5	49	5
+M	btools/expressions/IntegrityCheckProfile.java	btools.expressions.IntegrityCheckProfile	main	String[]	7	21	7
+M	btools/expressions/IntegrityCheckProfile.java	btools.expressions.IntegrityCheckProfile	integrityTestProfiles	File,File	23	47	23
+C	btools/expressions/ProfileComparator.java	btools.expressions.ProfileComparator	class		6	52	6
+M	btools/expressions/ProfileComparator.java	btools.expressions.ProfileComparator	main	String[]	7	20	7
+M	btools/expressions/ProfileComparator.java	btools.expressions.ProfileComparator	testContext	File,File,File,int,boolean	22	51	22
+C	btools/expressions/VarWrapper.java	btools.expressions.VarWrapper	class		7	23	7
+F	btools/expressions/VarWrapper.java	btools.expressions.VarWrapper	vars	float[]	8	8	8
+M	btools/expressions/VarWrapper.java	btools.expressions.VarWrapper	hashCode		10	13	10
+M	btools/expressions/VarWrapper.java	btools.expressions.VarWrapper	equals	Object	15	22	15
+C	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	class		16	200	12
+F	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	id64Base	long	17	17	17
+M	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	<init>	StatCoderContext,DataBuffers,int,int,int,TagValueValidator,WaypointMatcher,OsmNodesMap	19	171	19
+F	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	id32_00	long[]	173	173	173
+F	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	id32_10	long[]	174	174	174
+F	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	id32_20	long[]	175	175	175
+I	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	<clinit>		177	183	177
+M	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	_expandId	int	185	195	185
+M	btools/mapaccess/DirectWeaver.java	btools.mapaccess.DirectWeaver	expandId	int	197	199	197
+C	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	class		11	69	11
+F	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	r	ByteDataReader	12	12	12
+F	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	cachedNodes	OsmTransferNode[]	13	13	13
+F	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	nCachedNodes	int	14	14	14
+F	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	firstTransferNode	OsmTransferNode	17	17	16
+F	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	lastReverse	boolean	18	18	18
+F	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	lastGeometry	byte[]	19	19	19
+M	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	<init>		21	27	21
+M	btools/mapaccess/GeometryDecoder.java	btools.mapaccess.GeometryDecoder	decodeGeometry	byte[],OsmNode,OsmNode,boolean	29	68	29
+C	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	class		14	74	14
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	WAYPOINT_TYPE_SHAPING	byte	16	16	16
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	WAYPOINT_TYPE_MEETING	byte	17	17	17
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	WAYPOINT_TYPE_DIRECT	byte	18	18	18
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	node1	OsmNode	20	20	20
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	node2	OsmNode	21	21	21
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	crosspoint	OsmNode	22	22	22
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	waypoint	OsmNode	23	23	23
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	correctedpoint	OsmNode	24	24	24
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	name	String	25	25	25
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	radius	double	26	26	26
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	wpttype	byte	27	27	27
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	indexInTrack	int	28	28	28
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	directionToNext	double	29	29	29
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	directionDiff	double	30	30	30
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	wayNearest	List	32	32	32
+F	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	hasUpdate	boolean	33	33	33
+M	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	writeToStream	DataOutput	35	48	35
+M	btools/mapaccess/MatchedWaypoint.java	btools.mapaccess.MatchedWaypoint	readFromStream	DataInput	50	72	50
+C	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	class		19	418	19
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	RETRY_RANGE	int	21	21	21
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	MAX_DYNAMIC_CATCHES	int	23	23	23
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	segmentDir	File	26	26	26
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	secondarySegmentsDir	File	27	27	27
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	nodesMap	OsmNodesMap	29	29	29
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	expCtxWay	BExpressionContextWay	30	30	30
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	lookupVersion	int	31	31	31
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	lookupMinorVersion	int	32	32	32
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	forceSecondaryData	boolean	33	33	33
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	currentFileName	String	34	34	34
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	fileCache	Map	36	36	36
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	dataBuffers	DataBuffers	37	37	37
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	fileRows	OsmFile[][]	39	39	39
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	waypointMatcher	WaypointMatcher	41	41	41
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	first_file_access_failed	boolean	43	43	43
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	first_file_access_name	String	44	44	44
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	cacheSum	long	46	46	46
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	maxmemtiles	long	47	47	47
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	detailed	boolean	48	48	48
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	garbageCollectionEnabled	boolean	50	50	50
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	ghostCleaningDone	boolean	51	51	51
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	cacheSumClean	long	54	54	54
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	ghostSum	long	55	55	55
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	ghostWakeup	long	56	56	56
+F	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	directWeaving	boolean	58	58	58
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	formatStatus		60	62	60
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	<init>	File,BExpressionContextWay,boolean,long,NodesCache,boolean	64	110	64
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	clean	boolean	112	120	112
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	checkEnableCacheCleaning		124	150	122
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	loadSegmentFor	int,int	152	155	152
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	getSegmentFor	int,int	157	204	157
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	obtainNonHollowNode	OsmNode	213	235	206
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	expandHollowLinkTargets	OsmNode	241	245	238
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	hasHollowLinkTargets	OsmNode	250	257	247
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	getStartNode	long	269	279	259
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	getGraphNode	OsmNode	281	290	281
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	matchWaypointsToNodes	List,double,OsmNodePairSet	292	325	292
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	preloadPosition	OsmNode,int,int,boolean	327	345	327
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	fileForSegment	int,int	347	390	347
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	close		392	401	392
+M	btools/mapaccess/NodesCache.java	btools.mapaccess.NodesCache	getElevationType	int,int	403	416	403
+C	btools/mapaccess/NodesList.java	btools.mapaccess.NodesList	class		9	12	9
+F	btools/mapaccess/NodesList.java	btools.mapaccess.NodesList	node	OsmNode	10	10	10
+F	btools/mapaccess/NodesList.java	btools.mapaccess.NodesList	next	NodesList	11	11	11
+C	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	class		20	216	20
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	is	RandomAccessFile	21	21	21
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	fileOffset	long	22	22	22
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	posIdx	int[]	24	24	24
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	microCaches	MicroCache[]	25	25	25
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	lonDegree	int	27	27	27
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	latDegree	int	28	28	28
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	filename	String	30	30	30
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	divisor	int	32	32	32
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	cellsize	int	33	33	33
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	indexsize	int	34	34	34
+F	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	elevationType	byte	35	35	35
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	<init>	PhysicalFile,int,int,DataBuffers	37	78	37
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	hasData		80	82	80
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	getMicroCache	int,int	84	89	84
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	createMicroCache	int,int,DataBuffers,TagValueValidator,WaypointMatcher,OsmNodesMap	91	99	91
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	getPosIdx	int	101	103	101
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	getDataInputForSubIdx	int,byte[]	105	116	105
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	createMicroCache	int,int,DataBuffers,TagValueValidator,WaypointMatcher,boolean,OsmNodesMap	118	157	118
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	setGhostState		160	175	159
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	collectAll		177	189	177
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	cleanGhosts		191	203	191
+M	btools/mapaccess/OsmFile.java	btools.mapaccess.OsmFile	clean	boolean	205	215	205
+C	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	class		9	155	9
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	descriptionBitmap	byte[]	13	13	10
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	geometry	byte[]	18	18	15
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	n1	OsmNode	21	21	20
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	n2	OsmNode	22	22	22
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	previous	OsmLink	25	25	24
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	next	OsmLink	26	26	26
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	reverselinkholder	OsmLinkHolder	28	28	28
+F	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	firstlinkholder	OsmLinkHolder	29	29	29
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	<init>		31	32	31
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	<init>	OsmNode,OsmNode	34	37	34
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	getTarget	OsmNode	42	57	39
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	getNext	OsmNode	62	76	59
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	clear	OsmNode	81	101	78
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	setFirstLinkHolder	OsmLinkHolder,OsmNode	103	111	103
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	getFirstLinkHolder	OsmNode	113	121	113
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	isReverse	OsmNode	123	137	123
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	isBidirectional		139	141	139
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	isLinkUnused		143	145	143
+M	btools/mapaccess/OsmLink.java	btools.mapaccess.OsmLink	addLinkHolder	OsmLinkHolder,OsmNode	147	153	147
+C	btools/mapaccess/OsmLinkHolder.java	btools.mapaccess.OsmLinkHolder	interface		8	12	8
+M	btools/mapaccess/OsmLinkHolder.java	btools.mapaccess.OsmLinkHolder	setNextForLink	OsmLinkHolder	9	9	9
+M	btools/mapaccess/OsmLinkHolder.java	btools.mapaccess.OsmLinkHolder	getNextForLink		11	11	11
+C	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	class		14	262	14
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	ilat	int	18	18	15
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	ilon	int	23	23	20
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	selev	short	28	28	25
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	nodeDescription	byte[]	33	33	30
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	firstRestriction	TurnRestriction	35	35	35
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	visitID	int	37	37	37
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	addTurnRestriction	TurnRestriction	39	42	39
+F	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	firstlink	OsmLink	47	47	44
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	<init>		49	50	49
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	<init>	int,int	52	55	52
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	<init>	long	57	60	57
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	getILat		64	66	63
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	getILon		68	70	68
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	getSElev		72	74	72
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	getElev		76	78	76
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	addLink	OsmLink,boolean,OsmNode	80	100	80
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	calcDistance	OsmPos	102	104	102
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	toString		106	108	106
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	parseNodeBody	MicroCache,OsmNodesMap,IByteArrayUnifier	110	115	110
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	parseNodeBody2	MicroCache2,OsmNodesMap,IByteArrayUnifier	117	153	117
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	addLink	int,int,byte[],byte[],OsmNodesMap,boolean	155	190	155
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	isHollow		193	195	193
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	setHollow		197	199	197
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	getIdFromPos		201	203	201
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	vanish		205	220	205
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	unlinkLink	OsmLink	222	250	222
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	equals	Object	253	256	253
+M	btools/mapaccess/OsmNode.java	btools.mapaccess.OsmNode	hashCode		258	261	258
+C	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	class		10	104	10
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	n1a	long[]	11	11	11
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	n2a	long[]	12	12	12
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	tempNodes	int	13	13	13
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	maxTempNodes	int	14	14	14
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	npairs	int	15	15	15
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	freezecount	int	16	16	16
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	<init>	int	18	22	18
+C	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet$OsmNodePair	class		24	27	24
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet$OsmNodePair	node2	long	25	25	25
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet$OsmNodePair	next	OsmNodePair	26	26	26
+F	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	map	CompactLongMap	29	29	29
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	addTempPair	long,long	31	37	31
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	freezeTempPairs		39	45	39
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	clearTempPairs		47	49	47
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	addPair	long,long	51	72	51
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	size		74	76	74
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	tempSize		78	80	78
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	getMaxTmpNodes		82	84	82
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	getFreezeCount		86	88	86
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	hasPair	long,long	90	92	90
+M	btools/mapaccess/OsmNodePairSet.java	btools.mapaccess.OsmNodePairSet	getElement	long,long	94	103	94
+C	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	class		15	291	15
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	hmap	Map	16	16	16
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	abUnifier	ByteArrayUnifier	18	18	18
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	testKey	OsmNode	20	20	20
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	nodesCreated	int	22	22	22
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	maxmem	long	23	23	23
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	currentmaxmem	long	24	24	24
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	lastVisitID	int	25	25	25
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	baseID	int	26	26	26
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	destination	OsmNode	28	28	28
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	currentPathCost	int	29	29	29
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	currentMaxCost	int	30	30	30
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	endNode1	OsmNode	32	32	32
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	endNode2	OsmNode	33	33	33
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	cleanupMode	int	35	35	35
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	cleanupAndCount	OsmNode[]	37	43	37
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	justCount	OsmNode[]	45	52	45
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	cleanupPeninsulas	OsmNode[]	54	68	54
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	minVisitIdInSubtree	OsmNode,OsmNode	70	103	70
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	isInMemoryBounds	int,boolean	106	123	106
+F	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	nodes2check	List	125	125	125
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	canEscape	OsmNode	129	166	127
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	addActiveNode	List,OsmNode	168	172	168
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	clearTemp		174	176	174
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	collectOutreachers		178	208	178
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	getByteArrayUnifier		211	213	211
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	get	int,int	220	224	215
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	remove	OsmNode	227	231	227
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	put	OsmNode	238	240	233
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	addLinks	OsmNode[],int,boolean,int[]	244	256	244
+M	btools/mapaccess/OsmNodesMap.java	btools.mapaccess.OsmNodesMap	main	String[]	258	289	258
+C	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	interface		9	22	9
+M	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	getILat		10	10	10
+M	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	getILon		12	12	12
+M	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	getSElev		14	14	14
+M	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	getElev		16	16	16
+M	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	calcDistance	OsmPos	18	18	18
+M	btools/mapaccess/OsmPos.java	btools.mapaccess.OsmPos	getIdFromPos		20	20	20
+C	btools/mapaccess/OsmTransferNode.java	btools.mapaccess.OsmTransferNode	class		9	16	9
+F	btools/mapaccess/OsmTransferNode.java	btools.mapaccess.OsmTransferNode	next	OsmTransferNode	10	10	10
+F	btools/mapaccess/OsmTransferNode.java	btools.mapaccess.OsmTransferNode	ilon	int	12	12	12
+F	btools/mapaccess/OsmTransferNode.java	btools.mapaccess.OsmTransferNode	ilat	int	13	13	13
+F	btools/mapaccess/OsmTransferNode.java	btools.mapaccess.OsmTransferNode	selev	short	14	14	14
+C	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	class		17	156	17
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	ra	RandomAccessFile	18	18	18
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	fileIndex	long[]	19	19	19
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	fileHeaderCrcs	int[]	20	20	20
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	creationTime	long	22	22	22
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	fileName	String	24	24	24
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	divisor	int	26	26	26
+F	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	elevationType	byte	27	27	27
+M	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	main	String[]	29	39	29
+M	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	checkVersionIntegrity	File	41	60	41
+M	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	checkFileIntegrity	File	67	90	62
+M	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	<init>	File,DataBuffers,int,int	92	145	92
+M	btools/mapaccess/PhysicalFile.java	btools.mapaccess.PhysicalFile	close		147	154	147
+C	btools/mapaccess/Rd5DiffManager.java	btools.mapaccess.Rd5DiffManager	class		16	115	16
+M	btools/mapaccess/Rd5DiffManager.java	btools.mapaccess.Rd5DiffManager	main	String[]	17	19	17
+M	btools/mapaccess/Rd5DiffManager.java	btools.mapaccess.Rd5DiffManager	calcDiffs	File,File	24	84	21
+M	btools/mapaccess/Rd5DiffManager.java	btools.mapaccess.Rd5DiffManager	getMD5	File	86	110	86
+M	btools/mapaccess/Rd5DiffManager.java	btools.mapaccess.Rd5DiffManager	hexChar	int	112	114	112
+C	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	class		25	637	25
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	main	String[]	26	41	26
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	updateProgress	String,int	43	46	43
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	isCanceled		48	51	48
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	readFileIndex	DataInputStream,DataOutputStream	53	63	53
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	getTileStart	long[],int	65	67	65
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	getTileEnd	long[],int	69	71	69
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	readPosIndex	DataInputStream,DataOutputStream	73	83	73
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	getPosIdx	int[],int	85	87	85
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	createMicroCache	int[],int,DataInputStream,boolean	89	103	89
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	createMicroCache	byte[],DataBuffers	105	111	105
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	diff2files	File,File,File	117	238	113
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	recoverFromDelta	File,File,File,ProgressListener	241	391	241
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	copyFile	File,File,ProgressListener	393	436	393
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	addDeltas	File,File,File	438	511	438
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool	reEncode	File,File	514	569	514
+C	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	class		571	603	571
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	dos	DataOutputStream	572	572	572
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	buffer	byte[]	573	573	573
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	skips	short	574	574	574
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	<init>	DataOutputStream,byte[]	576	579	576
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	writeMC	MicroCache	581	595	581
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCOutputStream	finish		597	602	597
+C	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	class		605	635	605
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	skips	short	606	606	606
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	dis	DataInputStream	607	607	607
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	dataBuffers	DataBuffers	608	608	608
+F	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	empty	MicroCache	609	609	609
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	<init>	DataInputStream,DataBuffers	611	614	611
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	readMC		616	630	616
+M	btools/mapaccess/Rd5DiffTool.java	btools.mapaccess.Rd5DiffTool$MCInputStream	finish		632	634	632
+C	btools/mapaccess/Rd5DiffValidator.java	btools.mapaccess.Rd5DiffValidator	class		10	62	10
+M	btools/mapaccess/Rd5DiffValidator.java	btools.mapaccess.Rd5DiffValidator	main	String[]	11	13	11
+M	btools/mapaccess/Rd5DiffValidator.java	btools.mapaccess.Rd5DiffValidator	validateDiffs	File,File	18	60	15
+C	btools/mapaccess/StorageConfigHelper.java	btools.mapaccess.StorageConfigHelper	class		12	49	12
+M	btools/mapaccess/StorageConfigHelper.java	btools.mapaccess.StorageConfigHelper	getSecondarySegmentDir	File	13	15	13
+M	btools/mapaccess/StorageConfigHelper.java	btools.mapaccess.StorageConfigHelper	getAdditionalMaptoolDir	File	17	19	17
+M	btools/mapaccess/StorageConfigHelper.java	btools.mapaccess.StorageConfigHelper	getStorageLocation	File,String	21	47	21
+C	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	class		8	60	8
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	isPositive	boolean	9	9	9
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	exceptions	short	10	10	10
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	fromLon	int	12	12	12
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	fromLat	int	13	13	13
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	toLon	int	15	15	15
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	toLat	int	16	16	16
+F	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	next	TurnRestriction	18	18	18
+M	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	exceptBikes		20	22	20
+M	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	exceptMotorcars		24	26	24
+M	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	isTurnForbidden	TurnRestriction,int,int,int,int,boolean,boolean	28	53	28
+M	btools/mapaccess/TurnRestriction.java	btools.mapaccess.TurnRestriction	toString		55	58	55
+C	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	class		18	263	11
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	MAX_POINTS	int	19	19	19
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	waypoints	List	21	21	21
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	islandPairs	OsmNodePairSet	22	22	22
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	lonStart	int	24	24	24
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	latStart	int	25	25	25
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	lonTarget	int	26	26	26
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	latTarget	int	27	27	27
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	anyUpdate	boolean	28	28	28
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	lonLast	int	29	29	29
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	latLast	int	30	30	30
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	useAsStartWay	boolean	31	31	31
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	maxWptIdx	int	32	32	32
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	maxDistance	double	33	33	33
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	useDynamicRange	boolean	34	34	34
+F	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	comparator	Comparator	36	36	36
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	<init>	List,double,OsmNodePairSet	38	75	38
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	checkSegment	int,int,int,int	77	156	77
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	start	int,int,int,int,boolean	158	174	158
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	transferNode	int,int	176	181	176
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	end		183	240	183
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	hasMatch	int,int	242	251	242
+M	btools/mapaccess/WaypointMatcherImpl.java	btools.mapaccess.WaypointMatcherImpl	updateWayList	List,MatchedWaypoint	254	260	253
+C	btools/router/AreaInfo.java	btools.router.AreaInfo	class		5	71	5
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	RESULT_TYPE_NONE	int	6	6	6
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	RESULT_TYPE_ELEV50	int	7	7	7
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	RESULT_TYPE_GREEN	int	8	8	8
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	RESULT_TYPE_RIVER	int	9	9	9
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	direction	int	11	11	11
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	numForest	int	12	12	12
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	numRiver	int	13	13	13
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	polygon	OsmNogoPolygon	15	15	15
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	ways	int	17	17	17
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	greenWays	int	18	18	18
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	riverWays	int	19	19	19
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	elevStart	double	20	20	20
+F	btools/router/AreaInfo.java	btools.router.AreaInfo	elev50	int	21	21	21
+M	btools/router/AreaInfo.java	btools.router.AreaInfo	<init>	int	23	25	23
+M	btools/router/AreaInfo.java	btools.router.AreaInfo	checkAreaInfo	BExpressionContext,double,byte[]	27	44	27
+M	btools/router/AreaInfo.java	btools.router.AreaInfo	getElev50Weight		46	49	46
+M	btools/router/AreaInfo.java	btools.router.AreaInfo	getGreen		51	54	51
+M	btools/router/AreaInfo.java	btools.router.AreaInfo	getRiver		56	59	56
+M	btools/router/AreaInfo.java	btools.router.AreaInfo	toString		61	70	61
+C	btools/router/AreaReader.java	btools.router.AreaReader	class		29	270	29
+F	btools/router/AreaReader.java	btools.router.AreaReader	segmentFolder	File	31	31	31
+M	btools/router/AreaReader.java	btools.router.AreaReader	getDirectAllData	File,RoutingContext,OsmNodeNamed,int,BExpressionContextWay,OsmNogoPolygon,List	33	148	33
+M	btools/router/AreaReader.java	btools.router.AreaReader	getDirectData	PhysicalFile,DataBuffers,int,int,RoutingContext,BExpressionContextWay,List	150	203	150
+M	btools/router/AreaReader.java	btools.router.AreaReader	ignoreCenter	int,int,int	205	210	205
+M	btools/router/AreaReader.java	btools.router.AreaReader	containsRect	OsmNogoPolygon,int,int,int,int	215	218	212
+M	btools/router/AreaReader.java	btools.router.AreaReader	writeAreaInfo	String,MatchedWaypoint,List	220	233	220
+M	btools/router/AreaReader.java	btools.router.AreaReader	readAreaInfo	File,MatchedWaypoint,List	235	268	235
+C	btools/router/FormatCsv.java	btools.router.FormatCsv	class		6	43	6
+M	btools/router/FormatCsv.java	btools.router.FormatCsv	<init>	RoutingContext	9	11	9
+M	btools/router/FormatCsv.java	btools.router.FormatCsv	format	OsmTrack	13	23	13
+M	btools/router/FormatCsv.java	btools.router.FormatCsv	writeMessages	BufferedWriter,OsmTrack	25	32	25
+M	btools/router/FormatCsv.java	btools.router.FormatCsv	dumpLine	BufferedWriter,String	34	41	34
+C	btools/router/FormatGpx.java	btools.router.FormatGpx	class		15	573	15
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	<init>	RoutingContext	16	18	16
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	format	OsmTrack	20	31	20
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	formatAsGpx	BufferedWriter,OsmTrack	33	474	33
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	formatAsWaypoint	OsmNodeNamed	476	489	476
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	formatGpxHeader	BufferedWriter	491	498	491
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	formatGpxFooter	BufferedWriter	500	502	500
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	formatWaypointGpx	BufferedWriter,OsmNodeNamed,String	504	520	504
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	formatWaypointGpx	BufferedWriter,MatchedWaypoint,String	522	535	522
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	getWaypoint	int,int,String,String	537	539	537
+M	btools/router/FormatGpx.java	btools.router.FormatGpx	read	String	541	571	541
+C	btools/router/FormatJson.java	btools.router.FormatJson	class		13	261	13
+M	btools/router/FormatJson.java	btools.router.FormatJson	<init>	RoutingContext	15	17	15
+M	btools/router/FormatJson.java	btools.router.FormatJson	format	OsmTrack	19	180	19
+M	btools/router/FormatJson.java	btools.router.FormatJson	addFeature	StringBuilder,String,String,int,int,short	182	197	182
+M	btools/router/FormatJson.java	btools.router.FormatJson	formatAsWaypoint	OsmNodeNamed	199	212	199
+M	btools/router/FormatJson.java	btools.router.FormatJson	addJsonFeature	BufferedWriter,String,String,int,int,double,String	214	240	214
+M	btools/router/FormatJson.java	btools.router.FormatJson	addJsonHeader	BufferedWriter	242	250	242
+M	btools/router/FormatJson.java	btools.router.FormatJson	addJsonFooter	BufferedWriter	252	259	252
+C	btools/router/FormatKml.java	btools.router.FormatKml	class		9	116	9
+M	btools/router/FormatKml.java	btools.router.FormatKml	<init>	RoutingContext	10	12	10
+M	btools/router/FormatKml.java	btools.router.FormatKml	format	OsmTrack	14	84	14
+M	btools/router/FormatKml.java	btools.router.FormatKml	createFolder	StringBuilder,String,List	86	94	86
+M	btools/router/FormatKml.java	btools.router.FormatKml	createViaFolder	StringBuilder,String,List	96	105	96
+M	btools/router/FormatKml.java	btools.router.FormatKml	createPlaceMark	StringBuilder,String,int,int	107	114	107
+C	btools/router/Formatter.java	btools.router.Formatter	class		30	569	30
+F	btools/router/Formatter.java	btools.router.Formatter	MESSAGES_HEADER	String	32	32	32
+F	btools/router/Formatter.java	btools.router.Formatter	rc	RoutingContext	34	34	34
+M	btools/router/Formatter.java	btools.router.Formatter	<init>		36	37	36
+M	btools/router/Formatter.java	btools.router.Formatter	<init>	RoutingContext	39	41	39
+M	btools/router/Formatter.java	btools.router.Formatter	write	String,OsmTrack	49	53	43
+M	btools/router/Formatter.java	btools.router.Formatter	read	String	55	57	55
+M	btools/router/Formatter.java	btools.router.Formatter	format	OsmTrack	65	65	59
+M	btools/router/Formatter.java	btools.router.Formatter	formatILon	int	68	70	68
+M	btools/router/Formatter.java	btools.router.Formatter	formatILat	int	72	74	72
+M	btools/router/Formatter.java	btools.router.Formatter	formatPos	int	76	91	76
+M	btools/router/Formatter.java	btools.router.Formatter	getFormattedTime2	int	93	106	93
+M	btools/router/Formatter.java	btools.router.Formatter	getFormattedEnergy	int	108	110	108
+M	btools/router/Formatter.java	btools.router.Formatter	format1	double	112	116	112
+F	btools/router/Formatter.java	btools.router.Formatter	dateformat	String	119	119	119
+M	btools/router/Formatter.java	btools.router.Formatter	getFormattedTime3	float	121	127	121
+M	btools/router/Formatter.java	btools.router.Formatter	getJsonCommandIndex	int,int	129	170	129
+M	btools/router/Formatter.java	btools.router.Formatter	getCommandString	int,int,int	175	218	172
+M	btools/router/Formatter.java	btools.router.Formatter	getCommandStringXX	int,int,int	223	264	220
+M	btools/router/Formatter.java	btools.router.Formatter	getSymbolString	int,int,int	269	308	266
+M	btools/router/Formatter.java	btools.router.Formatter	getLocusSymbolString	int,int	313	352	310
+M	btools/router/Formatter.java	btools.router.Formatter	getMessageString	int,int,int	357	394	354
+M	btools/router/Formatter.java	btools.router.Formatter	getLocusAction	int,int	399	436	396
+M	btools/router/Formatter.java	btools.router.Formatter	getOruxAction	int,int	441	475	438
+M	btools/router/Formatter.java	btools.router.Formatter	getCruiserCommandString	int,int	480	521	477
+M	btools/router/Formatter.java	btools.router.Formatter	getCruiserMessageString	int,int	526	567	523
+C	btools/router/KinematicModel.java	btools.router.KinematicModel	class		14	147	14
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	createPrePath		15	17	15
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	createPath		19	21	19
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	turnAngleDecayTime	double	23	23	23
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	f_roll	double	24	24	24
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	f_air	double	25	25	25
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	f_recup	double	26	26	26
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	p_standby	double	27	27	27
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	outside_temp	double	28	28	28
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	recup_efficiency	double	29	29	29
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	totalweight	double	30	30	30
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	vmax	double	31	31	31
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	leftWaySpeed	double	32	32	32
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	rightWaySpeed	double	33	33	33
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	pw	double	36	36	35
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	cost0	double	37	37	37
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	wayIdxMaxspeed	int	39	39	39
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	wayIdxMaxspeedExplicit	int	40	40	40
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	wayIdxMinspeed	int	41	41	41
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	nodeIdxMaxspeed	int	43	43	43
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	ctxWay	BExpressionContextWay	45	45	45
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	ctxNode	BExpressionContextNode	46	46	46
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	params	Map	47	47	47
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	initDone	boolean	49	49	49
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	lastEffectiveLimit	double	51	51	51
+F	btools/router/KinematicModel.java	btools.router.KinematicModel	lastBreakingSpeed	double	52	52	52
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	init	BExpressionContextWay,BExpressionContextNode,Map	54	82	54
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getParam	String,float	84	94	84
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getWayMaxspeed		96	98	96
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getWayMaxspeedExplicit		100	102	100
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getWayMinspeed		104	106	104
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getNodeMaxspeed		108	110	108
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getEffectiveSpeedLimit		115	121	112
+M	btools/router/KinematicModel.java	btools.router.KinematicModel	getBreakingSpeed	double	126	145	123
+C	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	class		14	147	14
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	createPrePath		15	17	15
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	createPath		19	21	19
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	turnAngleDecayTime	double	23	23	23
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	f_roll	double	24	24	24
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	f_air	double	25	25	25
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	f_recup	double	26	26	26
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	p_standby	double	27	27	27
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	outside_temp	double	28	28	28
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	recup_efficiency	double	29	29	29
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	totalweight	double	30	30	30
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	vmax	double	31	31	31
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	leftWaySpeed	double	32	32	32
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	rightWaySpeed	double	33	33	33
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	pw	double	36	36	35
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	cost0	double	37	37	37
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	wayIdxMaxspeed	int	39	39	39
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	wayIdxMaxspeedExplicit	int	40	40	40
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	wayIdxMinspeed	int	41	41	41
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	nodeIdxMaxspeed	int	43	43	43
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	ctxWay	BExpressionContextWay	45	45	45
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	ctxNode	BExpressionContextNode	46	46	46
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	params	Map	47	47	47
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	initDone	boolean	49	49	49
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	lastEffectiveLimit	double	51	51	51
+F	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	lastBreakingSpeed	double	52	52	52
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	init	BExpressionContextWay,BExpressionContextNode,Map	54	82	54
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getParam	String,float	84	94	84
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getWayMaxspeed		96	98	96
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getWayMaxspeedExplicit		100	102	100
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getWayMinspeed		104	106	104
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getNodeMaxspeed		108	110	108
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getEffectiveSpeedLimit		115	121	112
+M	btools/router/KinematicNoCostModel.java	btools.router.KinematicNoCostModel	getBreakingSpeed	double	126	145	123
+C	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	class		8	264	8
+F	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	ekin	double	9	9	9
+F	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	totalTime	double	10	10	10
+F	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	totalEnergy	double	11	11	11
+F	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	floatingAngleLeft	float	12	12	12
+F	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	floatingAngleRight	float	13	13	13
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	init	OsmPath	15	23	15
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	resetState		25	32	25
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	processWaySection	RoutingContext,double,double,double,double,double,boolean,int,int	34	136	34
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	evolveDistance	KinematicNoCostModel,double,double,double	139	210	139
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	processTargetNode	RoutingContext	212	234	212
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	cutEkin	double,double	236	239	236
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	elevationCorrection		242	245	242
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	definitlyWorseThan	OsmPath	247	253	247
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	getTotalTime		255	258	255
+M	btools/router/KinematicNoCostPath.java	btools.router.KinematicNoCostPath	getTotalEnergy		260	263	260
+C	btools/router/KinematicPath.java	btools.router.KinematicPath	class		8	273	8
+F	btools/router/KinematicPath.java	btools.router.KinematicPath	ekin	double	9	9	9
+F	btools/router/KinematicPath.java	btools.router.KinematicPath	totalTime	double	10	10	10
+F	btools/router/KinematicPath.java	btools.router.KinematicPath	totalEnergy	double	11	11	11
+F	btools/router/KinematicPath.java	btools.router.KinematicPath	floatingAngleLeft	float	12	12	12
+F	btools/router/KinematicPath.java	btools.router.KinematicPath	floatingAngleRight	float	13	13	13
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	init	OsmPath	15	23	15
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	resetState		25	32	25
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	processWaySection	RoutingContext,double,double,double,double,double,boolean,int,int	34	145	34
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	evolveDistance	KinematicModel,double,double,double	148	219	148
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	processTargetNode	RoutingContext	221	243	221
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	cutEkin	double,double	245	248	245
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	elevationCorrection		251	254	251
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	definitlyWorseThan	OsmPath	256	262	256
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	getTotalTime		264	267	264
+M	btools/router/KinematicPath.java	btools.router.KinematicPath	getTotalEnergy		269	272	269
+C	btools/router/KinematicPrePath.java	btools.router.KinematicPrePath	class		11	56	11
+F	btools/router/KinematicPrePath.java	btools.router.KinematicPrePath	angle	double	12	12	12
+F	btools/router/KinematicPrePath.java	btools.router.KinematicPrePath	priorityclassifier	int	13	13	13
+F	btools/router/KinematicPrePath.java	btools.router.KinematicPrePath	classifiermask	int	14	14	14
+M	btools/router/KinematicPrePath.java	btools.router.KinematicPrePath	initPrePath	OsmPath,RoutingContext	16	55	16
+C	btools/router/MessageData.java	btools.router.MessageData	class		9	104	9
+F	btools/router/MessageData.java	btools.router.MessageData	linkdist	int	10	10	10
+F	btools/router/MessageData.java	btools.router.MessageData	linkelevationcost	int	11	11	11
+F	btools/router/MessageData.java	btools.router.MessageData	linkturncost	int	12	12	12
+F	btools/router/MessageData.java	btools.router.MessageData	linknodecost	int	13	13	13
+F	btools/router/MessageData.java	btools.router.MessageData	linkinitcost	int	14	14	14
+F	btools/router/MessageData.java	btools.router.MessageData	costfactor	float	16	16	16
+F	btools/router/MessageData.java	btools.router.MessageData	priorityclassifier	int	17	17	17
+F	btools/router/MessageData.java	btools.router.MessageData	classifiermask	int	18	18	18
+F	btools/router/MessageData.java	btools.router.MessageData	turnangle	float	19	19	19
+F	btools/router/MessageData.java	btools.router.MessageData	wayKeyValues	String	20	20	20
+F	btools/router/MessageData.java	btools.router.MessageData	nodeKeyValues	String	21	21	21
+F	btools/router/MessageData.java	btools.router.MessageData	lon	int	23	23	23
+F	btools/router/MessageData.java	btools.router.MessageData	lat	int	24	24	24
+F	btools/router/MessageData.java	btools.router.MessageData	ele	short	25	25	25
+F	btools/router/MessageData.java	btools.router.MessageData	time	float	27	27	27
+F	btools/router/MessageData.java	btools.router.MessageData	energy	float	28	28	28
+F	btools/router/MessageData.java	btools.router.MessageData	vmaxExplicit	int	31	31	30
+F	btools/router/MessageData.java	btools.router.MessageData	vmax	int	32	32	32
+F	btools/router/MessageData.java	btools.router.MessageData	vmin	int	33	33	33
+F	btools/router/MessageData.java	btools.router.MessageData	vnode0	int	34	34	34
+F	btools/router/MessageData.java	btools.router.MessageData	vnode1	int	35	35	35
+F	btools/router/MessageData.java	btools.router.MessageData	extraTime	int	36	36	36
+M	btools/router/MessageData.java	btools.router.MessageData	toMessage		38	57	38
+M	btools/router/MessageData.java	btools.router.MessageData	add	MessageData	59	65	59
+M	btools/router/MessageData.java	btools.router.MessageData	copy		67	73	67
+M	btools/router/MessageData.java	btools.router.MessageData	toString		75	78	75
+M	btools/router/MessageData.java	btools.router.MessageData	getPrio		80	82	80
+M	btools/router/MessageData.java	btools.router.MessageData	isBadOneway		84	86	84
+M	btools/router/MessageData.java	btools.router.MessageData	isGoodOneway		88	90	88
+M	btools/router/MessageData.java	btools.router.MessageData	isRoundabout		92	94	92
+M	btools/router/MessageData.java	btools.router.MessageData	isLinktType		96	98	96
+M	btools/router/MessageData.java	btools.router.MessageData	isGoodForCars		100	102	100
+C	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	class		12	100	12
+F	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	name	String	13	13	13
+F	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	radius	double	14	14	14
+F	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	nogoWeight	double	15	15	15
+F	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	isNogo	boolean	16	16	16
+F	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	wpttype	byte	17	17	17
+M	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	<init>		19	20	19
+M	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	<init>	OsmNode	22	24	22
+M	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	toString		26	33	26
+M	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	distanceWithinRadius	int,int,int,int,double	35	81	35
+M	btools/router/OsmNodeNamed.java	btools.router.OsmNodeNamed	decodeNogo	String	83	99	83
+C	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	class		16	488	16
+C	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon$Point	class		17	25	17
+F	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon$Point	y	int	18	18	18
+F	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon$Point	x	int	19	19	19
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon$Point	<init>	int,int	21	24	21
+F	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	points	List	27	27	27
+F	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	isClosed	boolean	29	29	29
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	<init>	boolean	31	35	31
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	addVertex	int,int	37	39	37
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	calcBoundingCircle		57	135	41
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	intersects	int,int,int,int	150	164	137
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	isOnPolyline	long,long	166	177	166
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	isOnLine	long,long,long,long,long,long	179	206	179
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	isWithin	long,long	222	259	215
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	distanceWithinPolygon	int,int,int,int	271	352	261
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	inSegment	Point,Point,Point	370	396	361
+M	btools/router/OsmNogoPolygon.java	btools.router.OsmNogoPolygon	intersect2D_2Segments	Point,Point,Point,Point	416	487	405
+C	btools/router/OsmPath.java	btools.router.OsmPath	class		15	434	15
+F	btools/router/OsmPath.java	btools.router.OsmPath	cost	int	19	19	16
+F	btools/router/OsmPath.java	btools.router.OsmPath	selev	short	23	23	21
+F	btools/router/OsmPath.java	btools.router.OsmPath	airdistance	int	25	25	25
+F	btools/router/OsmPath.java	btools.router.OsmPath	sourceNode	OsmNode	27	27	27
+F	btools/router/OsmPath.java	btools.router.OsmPath	targetNode	OsmNode	28	28	28
+F	btools/router/OsmPath.java	btools.router.OsmPath	link	OsmLink	30	30	30
+F	btools/router/OsmPath.java	btools.router.OsmPath	originElement	OsmPathElement	31	31	31
+F	btools/router/OsmPath.java	btools.router.OsmPath	myElement	OsmPathElement	32	32	32
+F	btools/router/OsmPath.java	btools.router.OsmPath	nextForLink	OsmLinkHolder	34	34	34
+F	btools/router/OsmPath.java	btools.router.OsmPath	treedepth	int	36	36	36
+F	btools/router/OsmPath.java	btools.router.OsmPath	originLon	int	40	40	38
+F	btools/router/OsmPath.java	btools.router.OsmPath	originLat	int	41	41	41
+F	btools/router/OsmPath.java	btools.router.OsmPath	lastClassifier	float	44	44	43
+F	btools/router/OsmPath.java	btools.router.OsmPath	lastInitialCost	float	45	45	45
+F	btools/router/OsmPath.java	btools.router.OsmPath	priorityclassifier	int	47	47	47
+F	btools/router/OsmPath.java	btools.router.OsmPath	PATH_START_BIT	int	49	49	49
+F	btools/router/OsmPath.java	btools.router.OsmPath	CAN_LEAVE_DESTINATION_BIT	int	50	50	50
+F	btools/router/OsmPath.java	btools.router.OsmPath	IS_ON_DESTINATION_BIT	int	51	51	51
+F	btools/router/OsmPath.java	btools.router.OsmPath	HAD_DESTINATION_START_BIT	int	52	52	52
+F	btools/router/OsmPath.java	btools.router.OsmPath	bitfield	int	53	53	53
+M	btools/router/OsmPath.java	btools.router.OsmPath	getBit	int	55	57	55
+M	btools/router/OsmPath.java	btools.router.OsmPath	setBit	int,boolean	59	63	59
+M	btools/router/OsmPath.java	btools.router.OsmPath	didEnterDestinationArea		65	67	65
+F	btools/router/OsmPath.java	btools.router.OsmPath	message	MessageData	69	69	69
+M	btools/router/OsmPath.java	btools.router.OsmPath	init	OsmLink	71	78	71
+M	btools/router/OsmPath.java	btools.router.OsmPath	init	OsmPath,OsmLink,OsmTrack,boolean,RoutingContext	80	95	80
+M	btools/router/OsmPath.java	btools.router.OsmPath	init	OsmPath	97	97	97
+M	btools/router/OsmPath.java	btools.router.OsmPath	resetState		99	99	99
+F	btools/router/OsmPath.java	btools.router.OsmPath	seg	int	101	101	101
+M	btools/router/OsmPath.java	btools.router.OsmPath	addAddionalPenalty	OsmTrack,boolean,OsmPath,OsmLink,RoutingContext	103	385	103
+M	btools/router/OsmPath.java	btools.router.OsmPath	interpolateEle	short,short,double	388	393	388
+M	btools/router/OsmPath.java	btools.router.OsmPath	processWaySection	RoutingContext,double,double,double,double,double,boolean,int,int	395	395	395
+M	btools/router/OsmPath.java	btools.router.OsmPath	processTargetNode	RoutingContext	397	397	397
+M	btools/router/OsmPath.java	btools.router.OsmPath	computeKinematic	RoutingContext,double,double,boolean	399	400	399
+M	btools/router/OsmPath.java	btools.router.OsmPath	elevationCorrection		402	402	402
+M	btools/router/OsmPath.java	btools.router.OsmPath	definitlyWorseThan	OsmPath	404	404	404
+M	btools/router/OsmPath.java	btools.router.OsmPath	getSourceNode		406	408	406
+M	btools/router/OsmPath.java	btools.router.OsmPath	getTargetNode		410	412	410
+M	btools/router/OsmPath.java	btools.router.OsmPath	getLink		414	416	414
+M	btools/router/OsmPath.java	btools.router.OsmPath	setNextForLink	OsmLinkHolder	419	421	419
+M	btools/router/OsmPath.java	btools.router.OsmPath	getNextForLink		423	425	423
+M	btools/router/OsmPath.java	btools.router.OsmPath	getTotalTime		427	429	427
+M	btools/router/OsmPath.java	btools.router.OsmPath	getTotalEnergy		431	433	431
+C	btools/router/OsmPathElement.java	btools.router.OsmPathElement	class		17	127	17
+F	btools/router/OsmPathElement.java	btools.router.OsmPathElement	ilat	int	18	18	18
+F	btools/router/OsmPathElement.java	btools.router.OsmPathElement	ilon	int	19	19	19
+F	btools/router/OsmPathElement.java	btools.router.OsmPathElement	selev	short	20	20	20
+F	btools/router/OsmPathElement.java	btools.router.OsmPathElement	message	MessageData	22	22	22
+F	btools/router/OsmPathElement.java	btools.router.OsmPathElement	cost	int	24	24	24
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getILat		27	29	26
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getILon		31	33	31
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getSElev		35	37	35
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	setSElev	short	39	41	39
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getElev		43	45	43
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getTime		47	49	47
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	setTime	float	51	55	51
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getEnergy		57	59	57
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	setEnergy	float	61	65	61
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	setAngle	float	67	71	67
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	getIdFromPos		73	75	73
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	calcDistance	OsmPos	77	79	77
+F	btools/router/OsmPathElement.java	btools.router.OsmPathElement	origin	OsmPathElement	81	81	81
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	create	OsmPath	84	90	83
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	create	int,int,short,OsmPathElement	92	99	92
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	<init>		101	102	101
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	toString		104	106	104
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	positionEquals	OsmPathElement	108	110	108
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	writeToStream	DataOutput	112	117	112
+M	btools/router/OsmPathElement.java	btools.router.OsmPathElement	readFromStream	DataInput	119	126	119
+C	btools/router/OsmPathModel.java	btools.router.OsmPathModel	class		14	20	14
+M	btools/router/OsmPathModel.java	btools.router.OsmPathModel	createPrePath		15	15	15
+M	btools/router/OsmPathModel.java	btools.router.OsmPathModel	createPath		17	17	17
+M	btools/router/OsmPathModel.java	btools.router.OsmPathModel	init	BExpressionContextWay,BExpressionContextNode,Map	19	19	19
+C	btools/router/OsmPrePath.java	btools.router.OsmPrePath	class		11	26	11
+F	btools/router/OsmPrePath.java	btools.router.OsmPrePath	sourceNode	OsmNode	12	12	12
+F	btools/router/OsmPrePath.java	btools.router.OsmPrePath	targetNode	OsmNode	13	13	13
+F	btools/router/OsmPrePath.java	btools.router.OsmPrePath	link	OsmLink	14	14	14
+F	btools/router/OsmPrePath.java	btools.router.OsmPrePath	next	OsmPrePath	16	16	16
+M	btools/router/OsmPrePath.java	btools.router.OsmPrePath	init	OsmPath,OsmLink,RoutingContext	18	23	18
+M	btools/router/OsmPrePath.java	btools.router.OsmPrePath	initPrePath	OsmPath,RoutingContext	25	25	25
+C	btools/router/OsmTrack.java	btools.router.OsmTrack	class		25	587	25
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	version	String	26	26	26
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	MESSAGES_HEADER	String	29	29	28
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	endPoint	MatchedWaypoint	31	31	31
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	nogoChecksums	long[]	32	32	32
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	profileTimestamp	long	33	33	33
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	isDirty	boolean	34	34	34
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	showspeed	boolean	36	36	36
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	showSpeedProfile	boolean	37	37	37
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	showTime	boolean	38	38	38
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	params	Map	40	40	40
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	pois	List	42	42	42
+C	btools/router/OsmTrack.java	btools.router.OsmTrack$OsmPathElementHolder	class		44	47	44
+F	btools/router/OsmTrack.java	btools.router.OsmTrack$OsmPathElementHolder	node	OsmPathElement	45	45	45
+F	btools/router/OsmTrack.java	btools.router.OsmTrack$OsmPathElementHolder	nextHolder	OsmPathElementHolder	46	46	46
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	nodes	List	49	49	49
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	nodesMap	CompactLongMap	51	51	51
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	detourMap	CompactLongMap	53	53	53
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	voiceHints	VoiceHintList	55	55	55
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	message	String	57	57	57
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	messageList	List	58	58	58
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	name	String	60	60	60
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	matchedWaypoints	List	62	62	62
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	exportWaypoints	boolean	63	63	63
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	exportCorrectedWaypoints	boolean	64	64	64
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	addNode	OsmPathElement	66	68	66
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	registerDetourForId	long,OsmPathElement	70	85	70
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	copyDetours	OsmTrack	87	89	87
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	addDetours	OsmTrack	91	116	91
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	lastorigin	OsmPathElement	118	118	118
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	appendDetours	OsmTrack	120	147	120
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	buildMap		149	166	149
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	aggregateMessages		168	188	168
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	aggregateSpeedProfile		190	209	190
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	writeBinary	String	217	231	212
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	readBinary	String,OsmNodeNamed,long[],long,StringBuilder	233	295	233
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	formatLongs	long[]	297	306	297
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	addNodes	OsmTrack	309	313	309
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	containsNode	OsmPos	315	317	315
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getLink	long,long	319	329	319
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	appendTrack	OsmTrack	331	388	331
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	distance	int	390	390	390
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	ascend	int	391	391	391
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	plainAscend	int	392	392	392
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	cost	int	393	393	393
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	energy	int	394	394	394
+F	btools/router/OsmTrack.java	btools.router.OsmTrack	iternity	List	395	395	395
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getVoiceHint	int	397	405	397
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getMatchedWaypoint	int	407	415	407
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getVNode	int	417	423	417
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getTotalSeconds		425	428	425
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	equalsTrack	OsmTrack	430	440	430
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getFromDetourMap	long	442	446	442
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	prepareSpeedProfile	RoutingContext	448	450	448
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	processVoiceHints	RoutingContext	452	534	452
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getMinDistance		536	549	536
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	getVoiceHintTime	int	551	559	551
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	removeVoiceHint	int	561	571	561
+M	btools/router/OsmTrack.java	btools.router.OsmTrack	startSection	OsmPathElement,OsmPathElement	573	586	573
+C	btools/router/ProfileCache.java	btools.router.ProfileCache	class		14	142	14
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	lastLookupFile	File	16	16	16
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	lastLookupTimestamp	long	17	17	17
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	expctxWay	BExpressionContextWay	19	19	19
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	expctxNode	BExpressionContextNode	20	20	20
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	lastProfileFile	File	21	21	21
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	lastProfileTimestamp	long	22	22	22
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	profilesBusy	boolean	23	23	23
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	lastUseTime	long	24	24	24
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	apc	ProfileCache[]	26	26	26
+F	btools/router/ProfileCache.java	btools.router.ProfileCache	debug	boolean	27	27	27
+M	btools/router/ProfileCache.java	btools.router.ProfileCache	setSize	int	29	31	29
+M	btools/router/ProfileCache.java	btools.router.ProfileCache	parseProfile	RoutingContext	33	124	33
+M	btools/router/ProfileCache.java	btools.router.ProfileCache	releaseProfile	RoutingContext	126	140	126
+C	btools/router/RoutingContext.java	btools.router.RoutingContext	class		23	579	23
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	setAlternativeIdx	int	24	26	24
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	getAlternativeIdx	int,int	28	30	28
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	alternativeIdx	int	32	32	32
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	localFunction	String	33	33	33
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	profileTimestamp	long	34	34	34
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	keyValues	Map	36	36	36
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	rawTrackPath	String	38	38	38
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	rawAreaPath	String	39	39	39
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	getProfileName		41	47	41
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	expctxWay	BExpressionContextWay	49	49	49
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	expctxNode	BExpressionContextNode	50	50	50
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	geometryDecoder	GeometryDecoder	52	52	52
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	memoryclass	int	54	54	54
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	carMode	boolean	56	56	56
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	bikeMode	boolean	57	57	57
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	footMode	boolean	58	58	58
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	considerTurnRestrictions	boolean	59	59	59
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	processUnusedTags	boolean	60	60	60
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	forceSecondaryData	boolean	61	61	61
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	pass1coefficient	double	62	62	62
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	pass2coefficient	double	63	63	63
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	elevationpenaltybuffer	int	64	64	64
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	elevationmaxbuffer	int	65	65	65
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	elevationbufferreduce	int	66	66	66
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost1speed	double	68	68	68
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	additionalcostfactor	double	69	69	69
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	changetime	double	70	70	70
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	buffertime	double	71	71	71
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	waittimeadjustment	double	72	72	72
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	inittimeadjustment	double	73	73	73
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	starttimeoffset	double	74	74	74
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	transitonly	boolean	75	75	75
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	waypointCatchingRange	double	77	77	77
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	correctMisplacedViaPoints	boolean	78	78	78
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	correctMisplacedViaPointsDistance	double	79	79	79
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	continueStraight	boolean	80	80	80
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	useDynamicDistance	boolean	81	81	81
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	buildBeelineOnRange	boolean	82	82	82
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	ai	AreaInfo	84	84	84
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	setModel	String	86	98	86
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	initModel		100	102	100
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	getKeyValueChecksum		104	112	104
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	readGlobalConfig		114	206	114
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	freeNoWays		208	211	208
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	poipoints	List	213	213	213
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	nogopoints	List	215	215	215
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	nogopoints_all	List	216	216	216
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	keepnogopoints	List	217	217	217
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	pendingEndpoint	OsmNodeNamed	218	218	218
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	startDirection	Integer	220	220	220
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	startDirectionValid	boolean	221	221	221
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	forceUseStartDirection	boolean	222	222	222
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	roundTripDistance	Integer	223	223	223
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	roundTripDirectionAdd	Integer	224	224	224
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	roundTripPoints	Integer	225	225	225
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	allowSamewayback	boolean	226	226	226
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	anglemeter	CheapAngleMeter	228	228	228
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	nogoCost	double	230	230	230
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	isEndpoint	boolean	231	231	231
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	shortestmatch	boolean	233	233	233
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	wayfraction	double	234	234	234
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	ilatshortest	int	235	235	235
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	ilonshortest	int	236	236	236
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	inverseDirection	boolean	238	238	238
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	showspeed	boolean	240	240	240
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	showSpeedProfile	boolean	241	241	241
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	inverseRouting	boolean	242	242	242
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	showTime	boolean	243	243	243
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	hasDirectRouting	boolean	244	244	244
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	outputFormat	String	246	246	246
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	exportWaypoints	boolean	247	247	247
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	exportCorrectedWaypoints	boolean	248	248	248
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	firstPrePath	OsmPrePath	250	250	250
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	turnInstructionMode	int	252	252	252
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	turnInstructionCatchingRange	double	253	253	253
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	turnInstructionRoundabouts	boolean	254	254	254
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	totalMass	double	257	257	256
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	maxSpeed	double	258	258	258
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	S_C_x	double	259	259	259
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	defaultC_r	double	260	260	260
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	bikerPower	double	261	261	261
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	consider_crossing	boolean	264	264	263
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	crossing_Prio_H	int	266	266	266
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	crossing_Prio_L	int	267	267	267
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToLeft_from_H_class1	int	270	270	269
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToLeft_from_H_class2	int	271	271	271
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToLeft_from_H_class3	int	272	272	272
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToLeft_from_H_class4	int	273	273	273
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToLeft_from_H_class5	int	274	274	274
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToLeft_from_H_class6	int	275	275	275
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToRight_from_H_class1	int	278	278	277
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToRight_from_H_class2	int	279	279	279
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToRight_from_H_class3	int	280	280	280
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToRight_from_H_class4	int	281	281	281
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToRight_from_H_class5	int	282	282	282
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	cost_ToRight_from_H_class6	int	283	283	283
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	prepareNogoPoints	List	285	302	285
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	restoreNogoList		307	309	304
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	cleanNogoList	List	317	335	311
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	checkMatchedWaypointAgainstNogos	List	337	390	337
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	allInOneNogo	List	392	411	392
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	getNogoChecksums		413	424	413
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	setWaypoint	OsmNodeNamed,boolean	426	428	426
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	setWaypoint	OsmNodeNamed,OsmNodeNamed,boolean	430	437	430
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	checkPendingEndpoint		439	447	439
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	unsetWaypoint		449	453	449
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	calcDistance	int,int,int,int	455	555	455
+F	btools/router/RoutingContext.java	btools.router.RoutingContext	pm	OsmPathModel	557	557	557
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	createPrePath	OsmPath,OsmLink	559	565	559
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	createPath	OsmLink	567	571	567
+M	btools/router/RoutingContext.java	btools.router.RoutingContext	createPath	OsmPath,OsmLink,OsmTrack,boolean	573	577	573
+C	btools/router/RoutingEngine.java	btools.router.RoutingEngine	class		32	2443	32
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	BROUTER_ENGINEMODE_ROUTING	int	34	34	34
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	BROUTER_ENGINEMODE_SEED	int	35	35	35
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	BROUTER_ENGINEMODE_GETELEV	int	36	36	36
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	BROUTER_ENGINEMODE_GETINFO	int	37	37	37
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	BROUTER_ENGINEMODE_ROUNDTRIP	int	38	38	38
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	nodesCache	NodesCache	40	40	40
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	openSet	SortedHeap	41	41	41
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	finished	boolean	42	42	42
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	waypoints	List	44	44	44
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	extraWaypoints	List	45	45	45
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	matchedWaypoints	List	46	46	46
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	linksProcessed	int	47	47	47
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	nodeLimit	int	49	49	49
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	MAXNODES_ISLAND_CHECK	int	50	50	50
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	islandNodePairs	OsmNodePairSet	51	51	51
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	useNodePoints	boolean	52	52	52
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	engineMode	int	54	54	54
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	MAX_STEPS_CHECK	int	56	56	56
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	ROUNDTRIP_DEFAULT_DIRECTIONADD	int	58	58	58
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	MAX_DYNAMIC_RANGE	int	60	60	60
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	foundTrack	OsmTrack	62	62	62
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	foundRawTrack	OsmTrack	63	63	63
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	alternativeIndex	int	64	64	64
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	outputMessage	String	66	66	66
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	errorMessage	String	67	67	67
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	terminated	boolean	69	69	69
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	segmentDir	File	71	71	71
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	outfileBase	String	72	72	72
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	logfileBase	String	73	73	73
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	infoLogEnabled	boolean	74	74	74
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	infoLogWriter	Writer	75	75	75
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	stackSampler	StackSampler	76	76	76
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	routingContext	RoutingContext	77	77	77
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	airDistanceCostFactor	double	79	79	79
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	lastAirDistanceCostFactor	double	80	80	80
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	guideTrack	OsmTrack	82	82	82
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	matchPath	OsmPathElement	84	84	84
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	startTime	long	86	86	86
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	maxRunningTime	long	87	87	87
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	boundary	SearchBoundary	88	88	88
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	quite	boolean	90	90	90
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	extract	Object[]	92	92	92
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	directWeaving	boolean	94	94	94
+F	btools/router/RoutingEngine.java	btools.router.RoutingEngine	outfile	String	95	95	95
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	<init>	String,String,File,List,RoutingContext	97	100	97
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	<init>	String,String,File,List,RoutingContext,int	102	138	102
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	hasInfo		140	142	140
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	logInfo	String	144	157	144
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	logThrowable	Throwable	159	164	159
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	run		166	168	166
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	doRun	long	170	196	170
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	doRouting	long	199	361	199
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	doGetInfo		363	485	363
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	doRoundTrip		487	521	487
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	buildPointsFromCircle	List,double,double,int	523	536	523
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getRandomDirectionFromData	OsmNodeNamed,double	538	692	538
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	postElevationCheck	OsmTrack	696	809	696
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	logException	Throwable	811	814	811
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	doSearch		817	852	817
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	cleanOnOOM		854	856	854
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	findTrack	OsmTrack[],OsmTrack[]	858	877	858
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	tryFindTrack	OsmTrack[],OsmTrack[]	879	1052	879
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getExtraSegment	OsmPathElement,OsmPathElement	1054	1092	1054
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	snapRoundaboutConnection	OsmTrack,OsmTrack,int,int,int,MatchedWaypoint	1094	1262	1094
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	snapPathConnection	OsmTrack,OsmTrack,MatchedWaypoint	1265	1480	1264
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	recalcTrack	OsmTrack	1482	1591	1482
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	elevationFilter	OsmPos	1600	1606	1593
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	matchWaypointsToNodes	List	1609	1689	1608
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	searchTrack	MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack	1691	1706	1691
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	searchRoutedTrack	MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack	1708	1805	1708
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	resetCache	boolean	1808	1816	1808
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getStartPath	OsmNode,OsmNode,MatchedWaypoint,OsmNodeNamed,boolean	1818	1829	1818
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getStartPath	OsmNode,OsmNode,OsmNodeNamed,OsmNodeNamed,boolean	1832	1870	1832
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	findTrack	String,MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack,boolean	1872	1887	1872
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	_findTrack	String,MatchedWaypoint,MatchedWaypoint,OsmTrack,OsmTrack,boolean	1890	2261	1890
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	addToOpenset	OsmPath	2263	2267	2263
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	compileTrack	OsmPath,boolean	2269	2319	2269
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	mergeTrack	OsmPathElement,OsmTrack	2321	2350	2321
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getPathPeak		2352	2356	2352
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getOpenSet		2358	2386	2358
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	isFinished		2388	2390	2388
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getLinksProcessed		2392	2394	2392
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getDistance		2396	2398	2396
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getAscend		2400	2402	2400
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getPlainAscend		2404	2406	2404
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getTime		2408	2410	2408
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getFoundTrack		2412	2414	2412
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getFoundInfo		2416	2418	2416
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getAlternativeIndex		2420	2422	2420
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getFoundRawTrack		2424	2426	2424
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getErrorMessage		2428	2430	2428
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	terminate		2432	2434	2432
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	isTerminated		2436	2438	2436
+M	btools/router/RoutingEngine.java	btools.router.RoutingEngine	getOutfile		2440	2442	2440
+C	btools/router/RoutingHelper.java	btools.router.RoutingHelper	class		12	41	12
+M	btools/router/RoutingHelper.java	btools.router.RoutingHelper	getAdditionalMaptoolDir	File	13	15	13
+M	btools/router/RoutingHelper.java	btools.router.RoutingHelper	getSecondarySegmentDir	File	17	19	17
+M	btools/router/RoutingHelper.java	btools.router.RoutingHelper	hasDirectoryAnyDatafiles	File	22	32	22
+M	btools/router/RoutingHelper.java	btools.router.RoutingHelper	hasAnyDatafiles	File	34	40	34
+C	btools/router/RoutingIslandException.java	btools.router.RoutingIslandException	class		3	4	3
+C	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	class		13	374	13
+F	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	DEBUG	boolean	15	15	15
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	getWayPointList	String	23	54	17
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readPositions	double[],double[]	63	84	56
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readPosition	String,String,String	86	91	86
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readPosition	double,double,String	93	99	93
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	getUrlParams	String	108	124	101
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	setParams	RoutingContext,List,Map	133	248	126
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	setProfileParams	RoutingContext,Map	256	267	250
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	parseNogoPolygons	String,List,boolean	269	297	269
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readPoisList	String	299	320	299
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readNogoList	String	322	340	322
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readNogos	String,String,String	342	355	342
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readNogo	String,String,String,String	358	361	358
+M	btools/router/RoutingParamCollector.java	btools.router.RoutingParamCollector	readNogo	double,double,int,double	363	371	363
+C	btools/router/SearchBoundary.java	btools.router.SearchBoundary	class		11	87	11
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	minlon0	int	13	13	13
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	minlat0	int	14	14	14
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	maxlon0	int	15	15	15
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	maxlat0	int	16	16	16
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	minlon	int	18	18	18
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	minlat	int	19	19	19
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	maxlon	int	20	20	20
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	maxlat	int	21	21	21
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	radius	int	22	22	22
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	p	OsmNode	23	23	23
+F	btools/router/SearchBoundary.java	btools.router.SearchBoundary	direction	int	25	25	25
+M	btools/router/SearchBoundary.java	btools.router.SearchBoundary	<init>	OsmNode,int,int	30	48	27
+M	btools/router/SearchBoundary.java	btools.router.SearchBoundary	getFileName	OsmNode	50	60	50
+M	btools/router/SearchBoundary.java	btools.router.SearchBoundary	isInBoundary	OsmNode,int	62	70	62
+M	btools/router/SearchBoundary.java	btools.router.SearchBoundary	getBoundaryDistance	OsmNode	72	85	72
+C	btools/router/StdModel.java	btools.router.StdModel	class		15	36	15
+M	btools/router/StdModel.java	btools.router.StdModel	createPrePath		16	18	16
+M	btools/router/StdModel.java	btools.router.StdModel	createPath		20	22	20
+F	btools/router/StdModel.java	btools.router.StdModel	ctxWay	BExpressionContextWay	24	24	24
+F	btools/router/StdModel.java	btools.router.StdModel	ctxNode	BExpressionContextNode	25	25	25
+M	btools/router/StdModel.java	btools.router.StdModel	init	BExpressionContextWay,BExpressionContextNode,Map	28	35	28
+C	btools/router/StdPath.java	btools.router.StdPath	class		8	356	8
+F	btools/router/StdPath.java	btools.router.StdPath	ehbd	int	12	12	9
+F	btools/router/StdPath.java	btools.router.StdPath	ehbu	int	13	13	13
+F	btools/router/StdPath.java	btools.router.StdPath	totalTime	float	15	15	15
+F	btools/router/StdPath.java	btools.router.StdPath	totalEnergy	float	16	16	16
+F	btools/router/StdPath.java	btools.router.StdPath	elevation_buffer	float	17	17	17
+F	btools/router/StdPath.java	btools.router.StdPath	uphillcostdiv	int	19	19	19
+F	btools/router/StdPath.java	btools.router.StdPath	downhillcostdiv	int	20	20	20
+F	btools/router/StdPath.java	btools.router.StdPath	GRAVITY	double	23	23	22
+M	btools/router/StdPath.java	btools.router.StdPath	init	OsmPath	25	33	25
+M	btools/router/StdPath.java	btools.router.StdPath	resetState		35	44	35
+M	btools/router/StdPath.java	btools.router.StdPath	processWaySection	RoutingContext,double,double,double,double,double,boolean,int,int	46	231	46
+M	btools/router/StdPath.java	btools.router.StdPath	processTargetNode	RoutingContext	233	250	233
+M	btools/router/StdPath.java	btools.router.StdPath	elevationCorrection		252	256	252
+M	btools/router/StdPath.java	btools.router.StdPath	definitlyWorseThan	OsmPath	258	273	258
+M	btools/router/StdPath.java	btools.router.StdPath	calcIncline	double	275	288	275
+M	btools/router/StdPath.java	btools.router.StdPath	computeKinematic	RoutingContext,double,double,boolean	290	323	290
+M	btools/router/StdPath.java	btools.router.StdPath	solveCubic	double,double,double	325	345	325
+M	btools/router/StdPath.java	btools.router.StdPath	getTotalTime		347	350	347
+M	btools/router/StdPath.java	btools.router.StdPath	getTotalEnergy		352	355	352
+C	btools/router/SuspectInfo.java	btools.router.SuspectInfo	class		5	59	5
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_DEAD_END	int	6	6	6
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_DEAD_START	int	7	7	7
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_NODE_BLOCK	int	8	8	8
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_BAD_ACCESS	int	9	9	9
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_UNK_ACCESS	int	10	10	10
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_SHARP_EXIT	int	11	11	11
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_SHARP_ENTRY	int	12	12	12
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_SHARP_LINK	int	13	13	13
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	TRIGGER_BAD_TR	int	14	14	14
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	prio	int	16	16	16
+F	btools/router/SuspectInfo.java	btools.router.SuspectInfo	triggers	int	17	17	17
+M	btools/router/SuspectInfo.java	btools.router.SuspectInfo	addSuspect	Map,long,int,int	19	28	19
+M	btools/router/SuspectInfo.java	btools.router.SuspectInfo	addTrigger	SuspectInfo,int,int	30	37	30
+M	btools/router/SuspectInfo.java	btools.router.SuspectInfo	getTriggerText	int	39	51	39
+M	btools/router/SuspectInfo.java	btools.router.SuspectInfo	addText	StringBuilder,String,int,int	53	57	53
+C	btools/router/VoiceHint.java	btools.router.VoiceHint	class		12	223	12
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	C	int	13	13	13
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TL	int	14	14	14
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TSLL	int	15	15	15
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TSHL	int	16	16	16
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TR	int	17	17	17
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TSLR	int	18	18	18
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TSHR	int	19	19	19
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	KL	int	20	20	20
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	KR	int	21	21	21
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TLU	int	22	22	22
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TRU	int	23	23	23
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	OFFR	int	24	24	24
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	RNDB	int	25	25	25
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	RNLB	int	26	26	26
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	TU	int	27	27	27
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	BL	int	28	28	28
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	EL	int	29	29	29
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	ER	int	30	30	30
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	END	int	32	32	32
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	ilon	int	34	34	34
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	ilat	int	35	35	35
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	selev	short	36	36	36
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	cmd	int	37	37	37
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	oldWay	MessageData	38	38	38
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	goodWay	MessageData	39	39	39
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	badWays	List	40	40	40
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	distanceToNext	double	41	41	41
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	indexInTrack	int	42	42	42
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	getTime		44	46	44
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	angle	float	48	48	48
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	lowerBadWayAngle	float	49	49	49
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	higherBadWayAngle	float	50	50	50
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	turnAngleConsumed	boolean	52	52	52
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	needsRealTurn	boolean	53	53	53
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	maxBadPrio	int	54	54	54
+F	btools/router/VoiceHint.java	btools.router.VoiceHint	roundaboutExit	int	56	56	56
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	isRoundabout		58	60	58
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	addBadWay	MessageData	62	70	62
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	getExitNumber		72	74	72
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	calcCommand		76	188	76
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	is180DegAngle	float	190	192	190
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	formatGeometry		194	206	194
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	appendTurnGeometry	StringBuilder,MessageData	208	210	208
+M	btools/router/VoiceHint.java	btools.router.VoiceHint	hasGiveWay		212	222	212
+C	btools/router/VoiceHintList.java	btools.router.VoiceHintList	class		12	61	12
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	TRANS_MODE_NONE	int	14	14	14
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	TRANS_MODE_FOOT	int	15	15	15
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	TRANS_MODE_BIKE	int	16	16	16
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	TRANS_MODE_CAR	int	17	17	17
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	transportMode	int	19	19	19
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	turnInstructionMode	int	20	20	20
+F	btools/router/VoiceHintList.java	btools.router.VoiceHintList	list	List	21	21	21
+M	btools/router/VoiceHintList.java	btools.router.VoiceHintList	setTransportMode	boolean,boolean	23	25	23
+M	btools/router/VoiceHintList.java	btools.router.VoiceHintList	setTransportMode	int	27	29	27
+M	btools/router/VoiceHintList.java	btools.router.VoiceHintList	getTransportMode		31	46	31
+M	btools/router/VoiceHintList.java	btools.router.VoiceHintList	transportMode		48	50	48
+M	btools/router/VoiceHintList.java	btools.router.VoiceHintList	getLocusRouteType		52	60	52
+C	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	class		11	529	11
+F	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	SIGNIFICANT_ANGLE	double	13	13	13
+F	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	INTERNAL_CATCHING_RANGE_NEAR	double	14	14	14
+F	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	INTERNAL_CATCHING_RANGE_WIDE	double	15	15	15
+F	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	explicitRoundabouts	boolean	18	18	17
+F	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	transportMode	int	19	19	19
+M	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	<init>	double,boolean,int	21	25	21
+M	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	sumNonConsumedWithinCatchingRange	List,int,double	27	40	27
+M	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	process	List	60	329	43
+M	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	postProcess	List,double,double	331	495	331
+M	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	checkForNextNoneMotorway	List,int,int	497	504	497
+M	btools/router/VoiceHintProcessor.java	btools.router.VoiceHintProcessor	checkStraightHold	VoiceHint,VoiceHint,double	506	526	506
+C	btools/util/BitCoderContext.java	btools.util.BitCoderContext	class		4	320	4
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	ab	byte[]	5	5	5
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	idxMax	int	6	6	6
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	idx	int	7	7	7
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	bits	int	8	8	8
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	b	int	9	9	9
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	vl_values	int[]	11	11	11
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	vl_length	int[]	12	12	12
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	vc_values	int[]	14	14	14
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	vc_length	int[]	15	15	15
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	reverse_byte	int[]	17	17	17
+F	btools/util/BitCoderContext.java	btools.util.BitCoderContext	bm2bits	int[]	19	19	19
+I	btools/util/BitCoderContext.java	btools.util.BitCoderContext	<clinit>		21	60	21
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	<init>	byte[]	63	66	63
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	reset	byte[]	68	72	68
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	reset		74	78	74
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	encodeVarBits2	int	90	99	80
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	encodeVarBits	int	101	109	101
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	decodeVarBits2		114	120	111
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	decodeVarBits		122	156	122
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	encodeBit	boolean	159	169	159
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	decodeBit		171	180	171
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	encodeBounded	int,int	188	199	182
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	decodeBounded	int	206	221	201
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	decodeBits	int	223	230	223
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	decodeBitsReverse	int	232	246	232
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	fillBuffer		248	255	248
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	flushBuffer		257	263	257
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	closeAndGetEncodedLength		270	276	265
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	getWritingBitPosition		281	283	278
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	getReadingBitPosition		285	287	285
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	setReadingBitPosition	int	289	294	289
+M	btools/util/BitCoderContext.java	btools.util.BitCoderContext	main	String[]	296	319	296
+C	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	class		3	54	3
+F	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	byteArrayCache	byte[][]	4	4	4
+F	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	crcCrosscheck	int[]	5	5	5
+F	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	size	int	6	6	6
+M	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	<init>	int,boolean	8	12	8
+M	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	unify	byte[]	22	24	14
+M	btools/util/ByteArrayUnifier.java	btools.util.ByteArrayUnifier	unify	byte[],int,int	26	53	26
+C	btools/util/ByteDataReader.java	btools.util.ByteDataReader	class		9	135	9
+F	btools/util/ByteDataReader.java	btools.util.ByteDataReader	ab	byte[]	10	10	10
+F	btools/util/ByteDataReader.java	btools.util.ByteDataReader	aboffset	int	11	11	11
+F	btools/util/ByteDataReader.java	btools.util.ByteDataReader	aboffsetEnd	int	12	12	12
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	<init>	byte[]	14	17	14
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	<init>	byte[],int	19	23	19
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	reset	byte[]	25	29	25
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readInt		32	38	32
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readLong		40	50	40
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readBoolean		52	55	52
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readByte		57	60	57
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readShort		62	66	62
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	getEndPointer		73	76	68
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readDataUntil	int	78	86	78
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readVarBytes		88	96	88
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readVarLengthSigned		98	101	98
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readVarLengthUnsigned		103	115	103
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	readFully	byte[]	117	120	117
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	hasMoreData		122	124	122
+M	btools/util/ByteDataReader.java	btools.util.ByteDataReader	toString		126	133	126
+C	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	class		9	150	9
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	<init>	byte[]	10	12	10
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeInt	int	14	19	14
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeLong	long	21	30	21
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeBoolean	boolean	32	34	32
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeByte	int	36	38	36
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeShort	int	40	43	40
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	write	byte[]	45	48	45
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	write	byte[],int,int	50	53	50
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeVarBytes	byte[]	55	63	55
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeModeAndDesc	boolean,byte[]	65	72	65
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	toByteArray		75	79	75
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeSizePlaceHolder		89	91	82
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	injectSize	int	93	108	93
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeVarLengthSigned	int	110	112	110
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	writeVarLengthUnsigned	int	114	144	114
+M	btools/util/ByteDataWriter.java	btools.util.ByteDataWriter	size		146	148	146
+C	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	class		7	75	7
+F	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	cosangle	double	8	8	8
+M	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	getCosAngle		10	12	10
+M	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	calcAngle	int,int,int,int,int,int	14	48	14
+M	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	getAngle	int,int,int,int	50	56	50
+M	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	getDirection	int,int,int,int	58	61	58
+M	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	normalize	double	63	66	63
+M	btools/util/CheapAngleMeter.java	btools.util.CheapAngleMeter	getDifferenceFromDirection	double,double	68	73	68
+C	btools/util/CheapRuler.java	btools.util.CheapRuler	class		3	97	3
+F	btools/util/CheapRuler.java	btools.util.CheapRuler	ILATLNG_TO_LATLNG	double	16	16	4
+F	btools/util/CheapRuler.java	btools.util.CheapRuler	KILOMETERS_TO_METERS	int	17	17	17
+F	btools/util/CheapRuler.java	btools.util.CheapRuler	DEG_TO_RAD	double	18	18	18
+F	btools/util/CheapRuler.java	btools.util.CheapRuler	SCALE_CACHE_LENGTH	int	21	21	20
+F	btools/util/CheapRuler.java	btools.util.CheapRuler	SCALE_CACHE_INCREMENT	int	22	22	22
+F	btools/util/CheapRuler.java	btools.util.CheapRuler	SCALE_CACHE	double[][]	24	24	23
+I	btools/util/CheapRuler.java	btools.util.CheapRuler	<clinit>		29	33	26
+M	btools/util/CheapRuler.java	btools.util.CheapRuler	calcKxKyFromILat	int	35	49	35
+M	btools/util/CheapRuler.java	btools.util.CheapRuler	getLonLatToMeterScales	int	56	58	51
+M	btools/util/CheapRuler.java	btools.util.CheapRuler	distance	int,int,int,int	74	79	60
+M	btools/util/CheapRuler.java	btools.util.CheapRuler	destination	int,int,double,double	81	96	81
+C	btools/util/CompactLongMap.java	btools.util.CompactLongMap	class		17	286	5
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	al	long[][]	18	18	18
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	pa	int[]	19	19	19
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	size	int	20	20	20
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	_maxKeepExponent	int	21	21	21
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	value_in	V	23	23	23
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	value_out	V	24	24	24
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	MAXLISTS	int	26	26	26
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	earlyDuplicateCheck	boolean	27	27	27
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	<init>		29	42	29
+F	btools/util/CompactLongMap.java	btools.util.CompactLongMap	vla	Object[][]	68	68	68
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	put	long,V	71	84	71
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	fastPut	long,V	98	104	86
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	get	long	112	121	106
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	size		127	129	124
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	_add	long	132	194	132
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	contains	long	199	205	196
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	contains	long,boolean	207	223	207
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	contains	int,long,boolean	227	245	226
+M	btools/util/CompactLongMap.java	btools.util.CompactLongMap	moveToFrozenArrays	long[],List	247	284	247
+C	btools/util/CompactLongSet.java	btools.util.CompactLongSet	class		8	183	3
+F	btools/util/CompactLongSet.java	btools.util.CompactLongSet	al	long[][]	9	9	9
+F	btools/util/CompactLongSet.java	btools.util.CompactLongSet	pa	int[]	10	10	10
+F	btools/util/CompactLongSet.java	btools.util.CompactLongSet	size	int	11	11	11
+F	btools/util/CompactLongSet.java	btools.util.CompactLongSet	_maxKeepExponent	int	12	12	12
+F	btools/util/CompactLongSet.java	btools.util.CompactLongSet	MAXLISTS	int	14	14	14
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	<init>		16	23	16
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	size		29	31	26
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	add	long	39	45	33
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	fastAdd	long	47	49	47
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	_add	long	51	108	51
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	contains	long	113	129	110
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	contains	int,long	133	145	132
+M	btools/util/CompactLongSet.java	btools.util.CompactLongSet	moveToFrozenArray	long[]	147	181	147
+C	btools/util/Crc32.java	btools.util.Crc32	class		8	53	3
+M	btools/util/Crc32.java	btools.util.Crc32	crc	byte[],int,int	9	16	9
+F	btools/util/Crc32.java	btools.util.Crc32	crctable	int[]	18	51	18
+C	btools/util/DenseLongMap.java	btools.util.DenseLongMap	class		19	203	6
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	blocklist	List	20	20	20
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	blocksize	int	22	22	22
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	blocksizeBits	int	23	23	23
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	blocksizeBitsMask	long	24	24	24
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	maxvalue	int	25	25	25
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	bitplaneCount	int[]	26	26	26
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	putCount	long	27	27	27
+F	btools/util/DenseLongMap.java	btools.util.DenseLongMap	getCount	long	28	28	28
+M	btools/util/DenseLongMap.java	btools.util.DenseLongMap	<init>		35	37	30
+M	btools/util/DenseLongMap.java	btools.util.DenseLongMap	<init>	int	44	55	39
+M	btools/util/DenseLongMap.java	btools.util.DenseLongMap	put	long,int	58	122	58
+M	btools/util/DenseLongMap.java	btools.util.DenseLongMap	sizeForBits	int	125	128	125
+M	btools/util/DenseLongMap.java	btools.util.DenseLongMap	expandBlock	byte[],int	130	137	130
+M	btools/util/DenseLongMap.java	btools.util.DenseLongMap	getInt	long	139	201	139
+C	btools/util/DiffCoderDataInputStream.java	btools.util.DiffCoderDataInputStream	class		13	43	13
+F	btools/util/DiffCoderDataInputStream.java	btools.util.DiffCoderDataInputStream	lastValues	long[]	14	14	14
+M	btools/util/DiffCoderDataInputStream.java	btools.util.DiffCoderDataInputStream	<init>	InputStream	16	18	16
+M	btools/util/DiffCoderDataInputStream.java	btools.util.DiffCoderDataInputStream	readDiffed	int	20	25	20
+M	btools/util/DiffCoderDataInputStream.java	btools.util.DiffCoderDataInputStream	readSigned		27	30	27
+M	btools/util/DiffCoderDataInputStream.java	btools.util.DiffCoderDataInputStream	readUnsigned		32	42	32
+C	btools/util/DiffCoderDataOutputStream.java	btools.util.DiffCoderDataOutputStream	class		13	39	13
+F	btools/util/DiffCoderDataOutputStream.java	btools.util.DiffCoderDataOutputStream	lastValues	long[]	14	14	14
+M	btools/util/DiffCoderDataOutputStream.java	btools.util.DiffCoderDataOutputStream	<init>	OutputStream	16	18	16
+M	btools/util/DiffCoderDataOutputStream.java	btools.util.DiffCoderDataOutputStream	writeDiffed	long,int	20	24	20
+M	btools/util/DiffCoderDataOutputStream.java	btools.util.DiffCoderDataOutputStream	writeSigned	long	26	28	26
+M	btools/util/DiffCoderDataOutputStream.java	btools.util.DiffCoderDataOutputStream	writeUnsigned	long	30	38	30
+C	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	class		13	120	6
+F	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	faid	long[]	14	14	14
+F	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	flv	List	15	15	15
+F	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	size	int	16	16	16
+F	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	p2size	int	17	17	17
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	<init>	CompactLongMap	19	29	19
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	put	long,V	31	43	31
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	fastPut	long,V	45	48	45
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	size		53	56	50
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	contains	long,boolean	62	86	59
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	get	long	91	111	88
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	getValueList		113	115	113
+M	btools/util/FrozenLongMap.java	btools.util.FrozenLongMap	getKeyArray		117	119	117
+C	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	class		10	67	3
+F	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	faid	long[]	11	11	11
+F	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	size	int	12	12	12
+F	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	p2size	int	13	13	13
+M	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	<init>	CompactLongSet	15	24	15
+M	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	add	long	26	29	26
+M	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	fastAdd	long	31	34	31
+M	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	size		39	42	36
+M	btools/util/FrozenLongSet.java	btools.util.FrozenLongSet	contains	long	48	65	45
+C	btools/util/IByteArrayUnifier.java	btools.util.IByteArrayUnifier	interface		3	5	3
+M	btools/util/IByteArrayUnifier.java	btools.util.IByteArrayUnifier	unify	byte[],int,int	4	4	4
+C	btools/util/LazyArrayOfLists.java	btools.util.LazyArrayOfLists	class		12	45	6
+F	btools/util/LazyArrayOfLists.java	btools.util.LazyArrayOfLists	lists	List	14	14	14
+M	btools/util/LazyArrayOfLists.java	btools.util.LazyArrayOfLists	<init>	int	16	21	16
+M	btools/util/LazyArrayOfLists.java	btools.util.LazyArrayOfLists	getList	int	23	30	23
+M	btools/util/LazyArrayOfLists.java	btools.util.LazyArrayOfLists	getSize	int	32	35	32
+M	btools/util/LazyArrayOfLists.java	btools.util.LazyArrayOfLists	trimAll		37	44	37
+C	btools/util/LongList.java	btools.util.LongList	class		8	36	3
+F	btools/util/LongList.java	btools.util.LongList	a	long[]	9	9	9
+F	btools/util/LongList.java	btools.util.LongList	size	int	10	10	10
+M	btools/util/LongList.java	btools.util.LongList	<init>	int	12	14	12
+M	btools/util/LongList.java	btools.util.LongList	add	long	16	23	16
+M	btools/util/LongList.java	btools.util.LongList	get	int	25	30	25
+M	btools/util/LongList.java	btools.util.LongList	size		32	34	32
+C	btools/util/LruMap.java	btools.util.LruMap	class		8	100	3
+F	btools/util/LruMap.java	btools.util.LruMap	hashbins	int	9	9	9
+F	btools/util/LruMap.java	btools.util.LruMap	maxsize	int	10	10	10
+F	btools/util/LruMap.java	btools.util.LruMap	size	int	11	11	11
+F	btools/util/LruMap.java	btools.util.LruMap	lru	LruMapNode	13	13	13
+F	btools/util/LruMap.java	btools.util.LruMap	mru	LruMapNode	14	14	14
+F	btools/util/LruMap.java	btools.util.LruMap	binArray	LruMapNode[]	16	16	16
+M	btools/util/LruMap.java	btools.util.LruMap	<init>	int,int	18	22	18
+M	btools/util/LruMap.java	btools.util.LruMap	get	LruMapNode	24	35	24
+M	btools/util/LruMap.java	btools.util.LruMap	touch	LruMapNode	38	56	37
+M	btools/util/LruMap.java	btools.util.LruMap	removeLru		58	83	58
+M	btools/util/LruMap.java	btools.util.LruMap	put	LruMapNode	85	99	85
+C	btools/util/LruMapNode.java	btools.util.LruMapNode	class		3	9	3
+F	btools/util/LruMapNode.java	btools.util.LruMapNode	nextInBin	LruMapNode	4	4	4
+F	btools/util/LruMapNode.java	btools.util.LruMapNode	next	LruMapNode	5	5	5
+F	btools/util/LruMapNode.java	btools.util.LruMapNode	previous	LruMapNode	6	6	6
+F	btools/util/LruMapNode.java	btools.util.LruMapNode	hash	int	8	8	8
+C	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	class		13	125	13
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	lastValue	int	14	14	14
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	repCount	int	15	15	15
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	diffshift	int	16	16	16
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	bits	int	18	18	18
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	b	int	19	19	19
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	vl_values	int[]	21	21	21
+F	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	vl_length	int[]	22	22	22
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	<init>	InputStream	24	26	24
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	readMixed		28	38	28
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	decodeBit		40	46	40
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	decodeVarBits2		48	54	48
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	decodeBounded	int	61	71	56
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	decodeVarBits		78	112	78
+M	btools/util/MixCoderDataInputStream.java	btools.util.MixCoderDataInputStream	fillBuffer		114	123	114
+C	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	class		13	106	13
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	lastValue	int	14	14	14
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	lastLastValue	int	15	15	15
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	repCount	int	16	16	16
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	diffshift	int	17	17	17
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	bm	int	19	19	19
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	b	int	20	20	20
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	diffs	int[]	22	22	22
+F	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	counts	int[]	23	23	23
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	<init>	OutputStream	25	27	25
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	writeMixed	int	29	49	29
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	flush		51	60	51
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	encodeBit	boolean	62	72	62
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	encodeVarBits	int	74	83	74
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	encodeBounded	int,int	85	100	85
+M	btools/util/MixCoderDataOutputStream.java	btools.util.MixCoderDataOutputStream	stats		102	105	102
+C	btools/util/ProgressListener.java	btools.util.ProgressListener	interface		4	8	4
+M	btools/util/ProgressListener.java	btools.util.ProgressListener	updateProgress	String,int	5	5	5
+M	btools/util/ProgressListener.java	btools.util.ProgressListener	isCanceled		7	7	7
+C	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	class		6	82	3
+F	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	nsamples	int	7	7	7
+F	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	weights	double[]	8	8	8
+F	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	values	int[]	9	9	9
+M	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	<init>	int	11	14	11
+M	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	reset		16	18	16
+M	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	addSample	double,int	20	32	20
+M	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	calcEdgeReducedMedian	double	34	46	34
+M	btools/util/ReducedMedianFilter.java	btools.util.ReducedMedianFilter	removeEdgeWeight	double,boolean	49	81	49
+C	btools/util/SortedHeap.java	btools.util.SortedHeap	class		8	310	3
+F	btools/util/SortedHeap.java	btools.util.SortedHeap	size	int	9	9	9
+F	btools/util/SortedHeap.java	btools.util.SortedHeap	peaksize	int	10	10	10
+F	btools/util/SortedHeap.java	btools.util.SortedHeap	first	SortedBin	11	11	11
+F	btools/util/SortedHeap.java	btools.util.SortedHeap	second	SortedBin	12	12	12
+F	btools/util/SortedHeap.java	btools.util.SortedHeap	firstNonEmpty	SortedBin	13	13	13
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	<init>		15	17	15
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	popLowestKeyValue		22	31	19
+C	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	class		33	202	33
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	parent	SortedHeap	34	34	34
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	next	SortedBin	35	35	35
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	nextNonEmpty	SortedBin	36	36	36
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	binsize	int	37	37	37
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	al	int[]	38	38	38
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	vla	Object[]	39	39	39
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	lv	int	40	40	40
+F	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	lp	int	41	41	41
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	<init>	int,SortedHeap	43	49	43
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	next		51	56	51
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	dropLowest		58	68	58
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	unlink		70	84	70
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	add	int,Object	86	99	86
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	add4	int,Object	102	132	101
+M	btools/util/SortedHeap.java	btools.util.SortedHeap$SortedBin	getMinBin		135	201	134
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	add	int,V	210	231	204
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	sortUp		233	273	233
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	clear		275	280	275
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	getSize		282	284	282
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	getPeakSize		286	288	286
+M	btools/util/SortedHeap.java	btools.util.SortedHeap	getExtract	Object[]	290	309	290
+C	btools/util/StackSampler.java	btools.util.StackSampler	class		14	120	14
+F	btools/util/StackSampler.java	btools.util.StackSampler	df	DateFormat	15	15	15
+F	btools/util/StackSampler.java	btools.util.StackSampler	bw	BufferedWriter	16	16	16
+F	btools/util/StackSampler.java	btools.util.StackSampler	rand	Random	17	17	17
+F	btools/util/StackSampler.java	btools.util.StackSampler	interval	int	19	19	19
+F	btools/util/StackSampler.java	btools.util.StackSampler	flushCnt	int	20	20	20
+F	btools/util/StackSampler.java	btools.util.StackSampler	stopped	boolean	22	22	22
+M	btools/util/StackSampler.java	btools.util.StackSampler	<init>	File,int	24	31	24
+M	btools/util/StackSampler.java	btools.util.StackSampler	printError	String	33	35	33
+M	btools/util/StackSampler.java	btools.util.StackSampler	run		37	48	37
+M	btools/util/StackSampler.java	btools.util.StackSampler	dumpThreads		50	84	50
+M	btools/util/StackSampler.java	btools.util.StackSampler	close		86	89	86
+M	btools/util/StackSampler.java	btools.util.StackSampler	matchesFilter	StackTraceElement[]	91	103	91
+M	btools/util/StackSampler.java	btools.util.StackSampler	main	String[]	105	119	105
+C	btools/util/StringUtils.java	btools.util.StringUtils	class		6	48	3
+F	btools/util/StringUtils.java	btools.util.StringUtils	xmlChr	char[]	7	7	7
+F	btools/util/StringUtils.java	btools.util.StringUtils	xmlEsc	String[]	8	8	8
+F	btools/util/StringUtils.java	btools.util.StringUtils	jsnChr	char[]	10	10	10
+F	btools/util/StringUtils.java	btools.util.StringUtils	jsnEsc	String[]	11	11	11
+M	btools/util/StringUtils.java	btools.util.StringUtils	escapeJson	String	16	18	13
+M	btools/util/StringUtils.java	btools.util.StringUtils	escapeXml10	String	23	25	20
+M	btools/util/StringUtils.java	btools.util.StringUtils	escape	String,char[],String[]	27	47	27
+C	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	class		12	180	3
+F	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	al	long[][]	13	13	13
+F	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	pa	int[]	14	14	14
+F	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	size	int	15	15	15
+F	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	_maxKeepExponent	int	16	16	16
+F	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	MAXLISTS	int	18	18	18
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	<init>		20	33	20
+F	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	vla	byte[][]	36	36	36
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	fillReturnValue	byte[],int,int	38	43	38
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	put	long,int	45	55	45
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	getInt	long	65	72	58
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	_add	long	75	137	75
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	contains	long,byte[]	140	156	140
+M	btools/util/TinyDenseLongMap.java	btools.util.TinyDenseLongMap	contains	int,long,byte[]	160	178	159

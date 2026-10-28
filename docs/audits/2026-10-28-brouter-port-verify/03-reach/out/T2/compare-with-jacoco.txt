@@ -1,0 +1,105 @@
+methods JaCoCo instruments: 884; ran: 379
+methods in the static reach: 481 (of which JaCoCo instruments 457)
+ran but not statically reached (unsound if any): 0
+statically reached, instrumented, but did not run on this sample: 78
+     8 btools/router/OsmTrack
+     7 btools/router/MessageData
+     6 btools/codec/MicroCache
+     6 btools/expressions/BExpressionContext
+     6 btools/router/VoiceHint
+     6 btools/router/VoiceHintProcessor
+     6 btools/util/FrozenLongMap
+     5 btools/mapaccess/OsmNodesMap
+     5 btools/router/RoutingEngine
+     4 btools/expressions/BExpression
+     4 btools/mapaccess/OsmNode
+     4 btools/mapaccess/TurnRestriction
+     2 btools/mapaccess/OsmFile
+     2 btools/router/OsmPathElement
+     2 btools/util/CompactLongMap
+     1 btools/mapaccess/WaypointMatcherImpl
+     1 btools/router/RoutingContext
+     1 btools/router/StdPath
+     1 btools/router/VoiceHintList
+     1 btools/util/ByteDataReader
+lines (JaCoCo executable lines) in statically reached methods: 5674; covered on this sample: 3389 (59.7%)
+
+statically reached, did not run (full list):
+  btools/codec/MicroCache.collect(I)I  lines 0/29
+  btools/codec/MicroCache.getAndClear(J)Z  lines 0/21
+  btools/codec/MicroCache.init(I)V  lines 0/7
+  btools/codec/MicroCache.shrinkId(J)I  lines 0/1
+  btools/codec/MicroCache.startPos(I)I  lines 0/1
+  btools/codec/MicroCache.unGhost()V  lines 0/6
+  btools/expressions/BExpression.addOp(Ljava/lang/StringBuilder;Lbtools/expressions/BExpression;)V  lines 0/3
+  btools/expressions/BExpression.divide(FF)F  lines 0/2
+  btools/expressions/BExpression.min(FF)F  lines 0/1
+  btools/expressions/BExpression.toString()Ljava/lang/String;  lines 0/10
+  btools/expressions/BExpressionContext.freeNoWays()V  lines 0/2
+  btools/expressions/BExpressionContext.getForeignVariableIdx(Ljava/lang/String;Ljava/lang/String;)I  lines 0/3
+  btools/expressions/BExpressionContext.getForeignVariableValue(I)F  lines 0/1
+  btools/expressions/BExpressionContext.getLookupValue(I)F  lines 0/12
+  btools/expressions/BExpressionContext.getOutputVariableIndex(Ljava/lang/String;Z)I  lines 0/14
+  btools/expressions/BExpressionContext.setAllTagsUsed()V  lines 0/3
+  btools/mapaccess/OsmFile.cleanGhosts()J  lines 0/9
+  btools/mapaccess/OsmFile.collectAll()J  lines 0/9
+  btools/mapaccess/OsmNode.addTurnRestriction(Lbtools/mapaccess/TurnRestriction;)V  lines 0/3
+  btools/mapaccess/OsmNode.parseNodeBody(Lbtools/codec/MicroCache;Lbtools/mapaccess/OsmNodesMap;Lbtools/util/IByteArrayUnifier;)V  lines 0/4
+  btools/mapaccess/OsmNode.parseNodeBody2(Lbtools/codec/MicroCache2;Lbtools/mapaccess/OsmNodesMap;Lbtools/util/IByteArrayUnifier;)V  lines 0/29
+  btools/mapaccess/OsmNode.vanish()V  lines 0/12
+  btools/mapaccess/OsmNodesMap.addActiveNode(Ljava/util/List;Lbtools/mapaccess/OsmNode;)V  lines 0/4
+  btools/mapaccess/OsmNodesMap.canEscape(Lbtools/mapaccess/OsmNode;)Z  lines 0/29
+  btools/mapaccess/OsmNodesMap.clearTemp()V  lines 0/2
+  btools/mapaccess/OsmNodesMap.collectOutreachers()V  lines 0/22
+  btools/mapaccess/OsmNodesMap.getByteArrayUnifier()Lbtools/util/ByteArrayUnifier;  lines 0/1
+  btools/mapaccess/TurnRestriction.<init>()V  lines 0/1
+  btools/mapaccess/TurnRestriction.exceptBikes()Z  lines 0/1
+  btools/mapaccess/TurnRestriction.exceptMotorcars()Z  lines 0/1
+  btools/mapaccess/TurnRestriction.isTurnForbidden(Lbtools/mapaccess/TurnRestriction;IIIIZZ)Z  lines 0/17
+  btools/mapaccess/WaypointMatcherImpl.hasMatch(II)Z  lines 0/5
+  btools/router/MessageData.copy()Lbtools/router/MessageData;  lines 0/3
+  btools/router/MessageData.getPrio()I  lines 0/1
+  btools/router/MessageData.isBadOneway()Z  lines 0/1
+  btools/router/MessageData.isGoodForCars()Z  lines 0/1
+  btools/router/MessageData.isLinktType()Z  lines 0/1
+  btools/router/MessageData.isRoundabout()Z  lines 0/1
+  btools/router/MessageData.toString()Ljava/lang/String;  lines 0/1
+  btools/router/OsmPathElement.getElev()D  lines 0/1
+  btools/router/OsmPathElement.toString()Ljava/lang/String;  lines 0/1
+  btools/router/OsmTrack.addDetours(Lbtools/router/OsmTrack;)V  lines 0/17
+  btools/router/OsmTrack.addNode(Lbtools/router/OsmPathElement;)V  lines 0/2
+  btools/router/OsmTrack.getFromDetourMap(J)Lbtools/router/OsmTrack$OsmPathElementHolder;  lines 0/3
+  btools/router/OsmTrack.getMatchedWaypoint(I)Lbtools/mapaccess/MatchedWaypoint;  lines 0/6
+  btools/router/OsmTrack.getMinDistance()I  lines 0/6
+  btools/router/OsmTrack.registerDetourForId(JLbtools/router/OsmPathElement;)V  lines 0/11
+  btools/router/OsmTrack.removeVoiceHint(I)V  lines 0/9
+  btools/router/OsmTrack.startSection(Lbtools/router/OsmPathElement;Lbtools/router/OsmPathElement;)Lbtools/router/MessageData;  lines 0/9
+  btools/router/RoutingContext.freeNoWays()V  lines 0/3
+  btools/router/RoutingEngine.cleanOnOOM()V  lines 0/2
+  btools/router/RoutingEngine.getExtraSegment(Lbtools/router/OsmPathElement;Lbtools/router/OsmPathElement;)Lbtools/router/OsmTrack;  lines 0/28
+  btools/router/RoutingEngine.mergeTrack(Lbtools/router/OsmPathElement;Lbtools/router/OsmTrack;)Lbtools/router/OsmTrack;  lines 0/21
+  btools/router/RoutingEngine.snapPathConnection(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Lbtools/mapaccess/MatchedWaypoint;)Z  lines 0/162
+  btools/router/RoutingEngine.snapRoundaboutConnection(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;IIILbtools/mapaccess/MatchedWaypoint;)I  lines 0/113
+  btools/router/StdPath.solveCubic(DDD)D  lines 0/12
+  btools/router/VoiceHint.<init>()V  lines 0/5
+  btools/router/VoiceHint.addBadWay(Lbtools/router/MessageData;)V  lines 0/6
+  btools/router/VoiceHint.calcCommand()V  lines 0/76
+  btools/router/VoiceHint.hasGiveWay()Z  lines 0/5
+  btools/router/VoiceHint.is180DegAngle(F)Z  lines 0/1
+  btools/router/VoiceHint.isRoundabout()Z  lines 0/1
+  btools/router/VoiceHintList.transportMode()I  lines 0/1
+  btools/router/VoiceHintProcessor.<init>(DZI)V  lines 0/7
+  btools/router/VoiceHintProcessor.checkForNextNoneMotorway(Ljava/util/List;II)Z  lines 0/5
+  btools/router/VoiceHintProcessor.checkStraightHold(Lbtools/router/VoiceHint;Lbtools/router/VoiceHint;D)Z  lines 0/13
+  btools/router/VoiceHintProcessor.postProcess(Ljava/util/List;DD)Ljava/util/List;  lines 0/98
+  btools/router/VoiceHintProcessor.process(Ljava/util/List;)Ljava/util/List;  lines 0/158
+  btools/router/VoiceHintProcessor.sumNonConsumedWithinCatchingRange(Ljava/util/List;ID)F  lines 0/11
+  btools/util/ByteDataReader.<init>([BI)V  lines 0/5
+  btools/util/CompactLongMap.contains(J)Z  lines 0/2
+  btools/util/CompactLongMap.put(JLjava/lang/Object;)Z  lines 0/8
+  btools/util/FrozenLongMap.contains(JZ)Z  lines 0/17
+  btools/util/FrozenLongMap.fastPut(JLjava/lang/Object;)V  lines 0/1
+  btools/util/FrozenLongMap.getKeyArray()[J  lines 0/1
+  btools/util/FrozenLongMap.getValueList()Ljava/util/List;  lines 0/1
+  btools/util/FrozenLongMap.put(JLjava/lang/Object;)Z  lines 0/6
+  btools/util/FrozenLongMap.size()I  lines 0/1

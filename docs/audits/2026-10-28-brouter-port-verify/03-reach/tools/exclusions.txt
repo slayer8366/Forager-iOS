@@ -1,0 +1,84 @@
+# Edges and methods cut from BRouter v1.7.10's static reach, for Forager's calls only (dispatch 2026-10-28-01, item A).
+# Format: TIER | caller -> callee | reason   or   TIER | method | reason (every edge into it, and as a JDK callback).
+# Paths: J = third_party/brouter/src/main/java/btools/, K = app/src/main/java/com/zynergylabs/forager/app/routing/
+# at Forager pre-main e2969abe4. Profile = app/src/main/assets/routing/profiles2/hiking-mountain.brf (pinned blob f2bed1a5).
+#
+# Tiers:
+#   F  Forager's own call: its arguments (K/BRouterTrailRouter.kt:147-162, :213) and what it never calls.
+#   E  The environment Forager never creates: no debug.txt or stacks.txt beside the profile folder (no file in Forager
+#      writes either name; RegionRouteFetchTest.kt:197-206 asserts neither is written under the route folders).
+#   S  JVM system properties Forager never sets (git grep: no System.setProperty outside third_party/).
+#   P  The pinned profile's settings. Cutting these ties the port to that profile.
+
+# ---- F: engine mode ROUTING (K/BRouterTrailRouter.kt:213), so doRun's switch (J/router/RoutingEngine.java:172-195) never takes these
+F | btools/router/RoutingEngine.doRun(J)V -> btools/router/RoutingEngine.doGetInfo()V | engineMode BROUTER_ENGINEMODE_ROUTING (kt:213; java:181-187)
+F | btools/router/RoutingEngine.doRun(J)V -> btools/router/RoutingEngine.doRoundTrip()V | engineMode BROUTER_ENGINEMODE_ROUTING (kt:213; java:188-192)
+
+# ---- F: no output file, quite, no log file (kt:213 passes outfileBase=null, logfileBase=null; kt:161 sets quite=true)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatGpx.<init>(Lbtools/router/RoutingContext;)V | outfileBase null (java:244-294); quite (java:301-303)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatGpx.read(Ljava/lang/String;)Lbtools/router/OsmTrack; | outfileBase null (java:244-249)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatGpx.format(Lbtools/router/OsmTrack;)Ljava/lang/String; | outfileBase null (java:270); quite (java:301-302)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatJson.<init>(Lbtools/router/RoutingContext;)V | outfileBase null (java:274)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatJson.format(Lbtools/router/OsmTrack;)Ljava/lang/String; | outfileBase null (java:274)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatKml.<init>(Lbtools/router/RoutingContext;)V | outfileBase null (java:277)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatKml.format(Lbtools/router/OsmTrack;)Ljava/lang/String; | outfileBase null (java:277)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/OsmTrack.equalsTrack(Lbtools/router/OsmTrack;)Z | outfileBase null (java:261)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/FormatCsv.<init>(Lbtools/router/RoutingContext;)V | logfileBase null (java:310-312); reportFormat property unset (java:297-299, tier S too)
+F | btools/router/RoutingEngine.doRouting(J)V -> btools/router/Formatter.write(Ljava/lang/String;Lbtools/router/OsmTrack;)V | logfileBase null (java:310-312); reportFormat unset (java:297-299)
+
+# ---- F: Forager's request map holds only profile, alternativeidx=0, profile:use_dynamic_range=0 (kt:154-158)
+F | btools/router/RoutingParamCollector.setParams(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V -> btools/router/RoutingParamCollector.readNogos(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List; | no nogoLats key (java/router/RoutingParamCollector.java:141)
+F | btools/router/RoutingParamCollector.setParams(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V -> btools/router/RoutingParamCollector.readNogoList(Ljava/lang/String;)Ljava/util/List; | no nogos key (RoutingParamCollector.java:155)
+F | btools/router/RoutingParamCollector.setParams(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V -> btools/router/RoutingParamCollector.parseNogoPolygons(Ljava/lang/String;Ljava/util/List;Z)V | no polylines/polygons keys (RoutingParamCollector.java:167-186)
+F | btools/router/RoutingParamCollector.setParams(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V -> btools/router/RoutingParamCollector.readPoisList(Ljava/lang/String;)Ljava/util/List; | no pois key (RoutingParamCollector.java:203)
+F | btools/router/RoutingParamCollector.setParams(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V -> btools/router/RoutingContext.prepareNogoPoints(Ljava/util/List;)V | only inside the nogo branches (RoutingParamCollector.java:144,158)
+
+# ---- F: never started as a thread: Forager calls doRun (kt:170); nothing in BRouter calls start() on a RoutingEngine (grep: only StackSampler.java:113 and RoutingEngine.java:129, a StackSampler)
+F | btools/router/RoutingEngine.run()V | Thread.run, only via start(), which nothing calls on an engine
+
+# ---- F: fields Forager never sets and BRouter never assigns
+F | btools/router/RoutingEngine._findTrack(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack; -> btools/router/SearchBoundary.isInBoundary(Lbtools/mapaccess/OsmNode;I)Z | boundary is public and never assigned in BRouter (only RoutingEngine.java:88); java:2232
+F | btools/router/OsmTrack.readBinary(Ljava/lang/String;Lbtools/router/OsmNodeNamed;[JJLjava/lang/StringBuilder;)Lbtools/router/OsmTrack; -> btools/mapaccess/MatchedWaypoint.readFromStream(Ljava/io/DataInput;)Lbtools/mapaccess/MatchedWaypoint; | rawTrackPath never set (RoutingContext.java:38 default null; Forager git grep 0); readBinary returns at OsmTrack.java:235
+F | btools/router/OsmTrack.readBinary(Ljava/lang/String;Lbtools/router/OsmNodeNamed;[JJLjava/lang/StringBuilder;)Lbtools/router/OsmTrack; -> btools/router/OsmPathElement.readFromStream(Ljava/io/DataInput;)Lbtools/router/OsmPathElement; | as above
+F | btools/router/OsmTrack.readBinary(Ljava/lang/String;Lbtools/router/OsmNodeNamed;[JJLjava/lang/StringBuilder;)Lbtools/router/OsmTrack; -> btools/router/OsmTrack.formatLongs([J)Ljava/lang/String; | as above
+F | btools/router/OsmTrack.readBinary(Ljava/lang/String;Lbtools/router/OsmNodeNamed;[JJLjava/lang/StringBuilder;)Lbtools/router/OsmTrack; -> btools/router/OsmTrack.<init>()V | as above
+F | btools/router/OsmTrack.readBinary(Ljava/lang/String;Lbtools/router/OsmNodeNamed;[JJLjava/lang/StringBuilder;)Lbtools/router/OsmTrack; -> btools/router/OsmTrack.buildMap()V | as above
+
+# ---- F: two waypoints, alternative 0, no real nogos
+F | btools/router/RoutingEngine.tryFindTrack([Lbtools/router/OsmTrack;[Lbtools/router/OsmTrack;)Lbtools/router/OsmTrack; -> btools/router/OsmTrack.addNodes(Lbtools/router/OsmTrack;)V | lastTracks[i] is null on the one pass alternativeidx=0 makes (kt:156; doRouting java:296 breaks at i=0; java:989-991)
+F | btools/router/RoutingEngine.tryFindTrack([Lbtools/router/OsmTrack;[Lbtools/router/OsmTrack;)Lbtools/router/OsmTrack; -> btools/router/OsmTrack.containsNode(Lbtools/mapaccess/OsmPos;)Z | java:1004-1006 needs a third waypoint (i < size-2); Forager sends two (kt:149)
+F | btools/router/OsmPath.addAddionalPenalty(Lbtools/router/OsmTrack;ZLbtools/router/OsmPath;Lbtools/mapaccess/OsmLink;Lbtools/router/RoutingContext;)V -> btools/router/OsmTrack.containsNode(Lbtools/mapaccess/OsmPos;)Z | refTrack is refTracks[i], null when lastTracks[i] is (java:989-990, OsmPath.java:350)
+F | btools/router/RoutingContext.calcDistance(IIII)I -> btools/router/OsmNodeNamed.distanceWithinRadius(IIIID)D | needs nogo.isNogo (RoutingContext.java:489); set only by readNogo (RoutingParamCollector.java:368), decodeNogo (no caller), continueStraight with 3+ waypoints (RoutingEngine.java:1011), OsmNogoPolygon (instantiated only on cut paths)
+
+# ---- F: never converted to a string by reached code (the Object-to-string sites are listed in summary.txt)
+F | btools/mapaccess/TurnRestriction.toString()Ljava/lang/String; | no reached Object-to-string site takes a TurnRestriction
+F | btools/util/ByteDataReader.toString()Ljava/lang/String; | no reached Object-to-string site takes a ByteDataReader
+F | btools/router/AreaInfo.toString()Ljava/lang/String; | no reached Object-to-string site takes an AreaInfo
+
+# ---- E: logging, which runs only when hasInfo() (RoutingEngine.java:139-141): infoLogEnabled = outfileBase != null (java:108, false here), or debug.txt exists (java:116-120)
+E | btools/router/RoutingEngine.doRouting(J)V -> btools/expressions/BExpressionContext.cacheStats()Ljava/lang/String; | hasInfo() (java:328-329)
+E | btools/router/RoutingEngine.doRouting(J)V -> btools/mapaccess/NodesCache.formatStatus()Ljava/lang/String; | hasInfo() (java:335-336)
+E | btools/router/RoutingEngine.resetCache(Z)V -> btools/mapaccess/NodesCache.formatStatus()Ljava/lang/String; | hasInfo() (java:1809-1810)
+E | btools/router/OsmNodeNamed.toString()Ljava/lang/String; | only stringified by hasInfo() logging (java:906, :944)
+E | btools/mapaccess/OsmNode.toString()Ljava/lang/String; | only stringified by hasInfo() logging (java:944, crosspoint)
+E | btools/router/RoutingEngine.<init>(Ljava/lang/String;Ljava/lang/String;Ljava/io/File;Ljava/util/List;Lbtools/router/RoutingContext;I)V -> btools/util/StackSampler.<init>(Ljava/io/File;I)V | stacks.txt beside the profile folder (java:126-131)
+E | btools/router/RoutingEngine.doRouting(J)V -> btools/util/StackSampler.close()V | stackSampler null without stacks.txt
+
+# ---- S: system properties
+S | btools/mapaccess/OsmFile.createMicroCache(IILbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;ZLbtools/mapaccess/OsmNodesMap;)Lbtools/codec/MicroCache; -> btools/codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V | hollowNodes null only when disableDirectWeaving is set (NodesCache.java:58, :189; OsmFile.java:138-140)
+S | btools/util/CompactLongMap.fastPut(JLjava/lang/Object;)V -> btools/util/CompactLongMap.contains(J)Z | earlyDuplicateCheck property (CompactLongMap.java:41, :99)
+
+# ---- P: the pinned profile
+P | btools/router/OsmPath.addAddionalPenalty(Lbtools/router/OsmTrack;ZLbtools/router/OsmPath;Lbtools/mapaccess/OsmLink;Lbtools/router/RoutingContext;)V -> btools/mapaccess/TurnRestriction.isTurnForbidden(Lbtools/mapaccess/TurnRestriction;IIIIZZ)Z | considerTurnRestrictions defaults off for foot profiles (RoutingContext.java:146); profile line 84 validForFoot 1, no considerTurnRestrictions; OsmPath.java:223
+P | btools/router/RoutingEngine.tryFindTrack([Lbtools/router/OsmTrack;[Lbtools/router/OsmTrack;)Lbtools/router/OsmTrack; -> btools/router/RoutingEngine.snapPathConnection(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Lbtools/mapaccess/MatchedWaypoint;)Z | correctMisplacedViaPoints defaults 0 (RoutingContext.java:148), not in the profile; java:1023-1027
+P | btools/router/RoutingEngine._findTrack(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack; -> btools/router/OsmTrack.registerDetourForId(JLbtools/router/OsmPathElement;)V | turnInstructionMode stays 0: profile line 57 sets 1, which RoutingContext.java:177-180 does not assign; java:2191
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/VoiceHint.<init>()V | returns at OsmTrack.java:457-459: detourMap null (no registerDetourForId: rows above) and hasDirectRouting false (tier F: no 'd' waypoints, use_dynamic_range=0 and profile add_beeline false, RoutingEngine.java:900-939)
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/VoiceHint.addBadWay(Lbtools/router/MessageData;)V | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/VoiceHintList.transportMode()I | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/VoiceHintProcessor.<init>(DZI)V | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/VoiceHintProcessor.process(Ljava/util/List;)Ljava/util/List; | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/VoiceHintProcessor.postProcess(Ljava/util/List;DD)Ljava/util/List; | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/OsmTrack.getMinDistance()I | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/OsmTrack.getMatchedWaypoint(I)Lbtools/mapaccess/MatchedWaypoint; | as above
+P | btools/router/OsmTrack.processVoiceHints(Lbtools/router/RoutingContext;)V -> btools/router/OsmTrack.startSection(Lbtools/router/OsmPathElement;Lbtools/router/OsmPathElement;)Lbtools/router/MessageData; | as above
+P | btools/router/StdPath.computeKinematic(Lbtools/router/RoutingContext;DDZ)V -> btools/router/StdPath.solveCubic(DDD)D | bikeMode only; the profile is footMode (line 84; StdPath.java:308-314)

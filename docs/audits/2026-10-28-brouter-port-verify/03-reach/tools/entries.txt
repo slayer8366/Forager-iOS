@@ -1,0 +1,27 @@
+# Forager's calls into BRouter at Forager pre-main e2969abe4 (dispatch 2026-10-28-01, item A).
+# "new C": Forager constructs C. "call owner.name:desc": Forager calls it. "field owner.name": Forager reads or writes it.
+# A = app/src/main/java/com/zynergylabs/forager/app/
+new btools/router/RoutingParamCollector                      # A/routing/BRouterTrailRouter.kt:147
+call btools/router/RoutingParamCollector.<init>:()V          # :147
+call btools/router/RoutingParamCollector.getWayPointList:(Ljava/lang/String;)Ljava/util/List;   # :149
+new btools/router/RoutingContext                             # :150
+call btools/router/RoutingContext.<init>:()V                 # :150
+call btools/router/RoutingParamCollector.setParams:(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V  # :151-159
+new btools/router/RoutingEngine                              # :213
+call btools/router/RoutingEngine.<init>:(Ljava/lang/String;Ljava/lang/String;Ljava/io/File;Ljava/util/List;Lbtools/router/RoutingContext;I)V  # :213
+field btools/router/RoutingEngine.quite                      # :161 (written true)
+call btools/router/RoutingEngine.doRun:(J)V                  # :170
+call btools/router/RoutingEngine.terminate:()V               # :174
+call btools/router/RoutingEngine.getErrorMessage:()Ljava/lang/String;   # :136
+call btools/router/RoutingEngine.getFoundTrack:()Lbtools/router/OsmTrack;  # :142
+field btools/router/OsmTrack.nodes                           # :93, :105, :108, :114
+field btools/router/OsmTrack.distance                        # :115
+call btools/router/OsmPathElement.getILat:()I                # :99, :114
+call btools/router/OsmPathElement.getILon:()I                # :99, :114
+new btools/codec/DataBuffers                                 # A/routing/RoutingDataFolder.kt:49
+call btools/codec/DataBuffers.<init>:()V                     # :49
+new btools/mapaccess/PhysicalFile                            # :49
+call btools/mapaccess/PhysicalFile.<init>:(Ljava/io/File;Lbtools/codec/DataBuffers;II)V  # :49
+call btools/mapaccess/PhysicalFile.close:()V                 # :49
+# test only: app/src/test/java/com/zynergylabs/forager/app/routing/BRouterTrailRouterCancelTest.kt
+call btools/router/RoutingEngine.isTerminated:()Z            # :63, :64, :81
