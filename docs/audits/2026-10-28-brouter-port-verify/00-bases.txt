@@ -1,0 +1,23 @@
+# Base checks, 2026-10-28T20:05:52Z
+git ls-remote https://github.com/slayer8366/Forager pre-main:
+e2969abe4f98674c24ce3913ce97be568184a4de	refs/heads/pre-main
+local Forager clone HEAD: e2969abe4f98674c24ce3913ce97be568184a4de
+
+git ls-remote https://github.com/slayer8366/forager-ios:
+507dbfbb5e6c756de5a3fc6a4916438ada7f1709	HEAD
+0bfbad9e964b7f833f82d54c8bdc195b56e98fe7	refs/heads/brouter-port
+507dbfbb5e6c756de5a3fc6a4916438ada7f1709	refs/heads/main
+commit adding the dispatch: 0bfbad9e964b7f833f82d54c8bdc195b56e98fe7
+commits on main after it (git log 0bfbad9..origin/main):
+507dbfbb5e6c756de5a3fc6a4916438ada7f1709 RECORD -5: Phase 1 restarted with a fresh Hazel (owner)
+d02932bd05ed301d68ddf21387b9f405cc68b796 RECORD -4 and dispatch 2026-10-28-01 Amendment 1: timing in Phase 2, the port for Android too (owner)
+files they change (git diff --stat 0bfbad9 origin/main):
+ RECORD.md                                          | 46 +++++++++++++++++
+ .../2026-10-28-01-brouter-port-amendment-1.md      | 57 ++++++++++++++++++++++
+ 2 files changed, 103 insertions(+)
+
+upstream BRouter scratch clone (left by the earlier Hazel):
+HEAD 4d2639af77ea5ed9c30d3e400764eb6f9e8522da, tag v1.7.10
+remote tag: 4d2639af77ea5ed9c30d3e400764eb6f9e8522da	refs/tags/v1.7.10
+local changes (git status --porcelain --ignored, empty if none):
+

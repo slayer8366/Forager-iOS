@@ -1,0 +1,10 @@
+# Vendored-vs-upstream check, run 2026-10-28T20:04:07Z
+# Forager: e2969abe4f98674c24ce3913ce97be568184a4de; upstream clone: 4d2639af77ea5ed9c30d3e400764eb6f9e8522da (v1.7.10)
+brouter-util: 27 files
+brouter-codec: 11 files
+brouter-expressions: 10 files
+brouter-mapaccess: 20 files
+brouter-core: 33 files
+upstream files compared: 101; differing: 0
+vendored files: 101
+LICENSE identical

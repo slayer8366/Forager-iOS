@@ -1,0 +1,145 @@
+# Premise reads at Forager e2969abe4f98674c24ce3913ce97be568184a4de, 2026-10-28T20:06:04Z. Each block is 'git show HEAD:<file> | sed -n <lines>' with line numbers.
+
+### Premise 1
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:3,7
+     3	import btools.router.OsmNodeNamed
+     4	import btools.router.OsmTrack
+     5	import btools.router.RoutingContext
+     6	import btools.router.RoutingEngine
+     7	import btools.router.RoutingParamCollector
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/RoutingDataFolder.kt:3,4
+     3	import btools.codec.DataBuffers
+     4	import btools.mapaccess.PhysicalFile
+-- every btools import in Forager outside third_party (git grep -n '^import btools'):
+app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:3:import btools.router.OsmNodeNamed
+app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:4:import btools.router.OsmTrack
+app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:5:import btools.router.RoutingContext
+app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:6:import btools.router.RoutingEngine
+app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:7:import btools.router.RoutingParamCollector
+app/src/main/java/com/zynergylabs/forager/app/routing/RoutingDataFolder.kt:3:import btools.codec.DataBuffers
+app/src/main/java/com/zynergylabs/forager/app/routing/RoutingDataFolder.kt:4:import btools.mapaccess.PhysicalFile
+app/src/test/java/com/zynergylabs/forager/app/routing/BRouterTrailRouterCancelTest.kt:3:import btools.router.RoutingEngine
+
+### Premise 2
+
+== third_party/brouter/src/main/java/btools/router/RoutingEngine.java:32,32
+    32	public class RoutingEngine extends Thread {
+
+== third_party/brouter/src/main/java/btools/router/RoutingEngine.java:69,69
+    69	  private volatile boolean terminated;
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:170,170
+   170	        val run = ENGINE_RUNS.async { engine.doRun(maxRunningTimeMillis) }
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:174,174
+   174	            engine.terminate()
+
+### Premise 3 (what Forager reads from the result)
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:93,99
+    93	                val first = outcome.track.nodes.firstOrNull()
+    94	                if (first == null) {
+    95	                    val detail = "no error reported and no route points"
+    96	                    errorLog.w(TAG, "BRouter failed", BRouterFailure(detail))
+    97	                    TrailSnapResult.Failed(TrailRouteFailure.EngineFailed(detail))
+    98	                } else {
+    99	                    TrailSnapResult.OnNetwork(latLngOf(first.getILat(), first.getILon()))
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:104,117
+   104	    private fun foundRoute(track: OsmTrack): TrailRouteResult {
+   105	        if (track.nodes.size < 2) {
+   106	            // No error and no route: how BRouter reports an exception with no message (RoutingDataFolder's note).
+   107	            // Never handed on as a route.
+   108	            val detail = "no error reported and ${track.nodes.size} route points"
+   109	            errorLog.w(TAG, "BRouter failed", BRouterFailure(detail))
+   110	            return TrailRouteResult.Failed(TrailRouteFailure.EngineFailed(detail))
+   111	        }
+   112	        return TrailRouteResult.Found(
+   113	            TrailRoute(
+   114	                points = track.nodes.map { latLngOf(it.getILat(), it.getILon()) },
+   115	                lengthMetres = track.distance,
+   116	            ),
+   117	        )
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:136,142
+   136	                val message: String? = engine.getErrorMessage()
+   137	                if (message != null) {
+   138	                    val failure = BRouterFailures.classify(message)
+   139	                    if (failure is TrailRouteFailure.EngineFailed) errorLog.w(TAG, "BRouter failed", BRouterFailure(message))
+   140	                    return@withLock EngineOutcome.Failed(failure)
+   141	                }
+   142	                EngineOutcome.Ran(engine.getFoundTrack())
+
+== app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt:160,162
+   160	        return newEngine(routeData, waypoints, context).apply {
+   161	            quite = true // BRouter's spelling: with no output file it would otherwise print the route as GPX to stdout
+   162	        }
+
+### Premise 4
+
+== third_party/brouter/src/main/java/btools/router/RoutingContext.java:86,97
+    86	  private void setModel(String className) {
+    87	    if (className == null) {
+    88	      pm = new StdModel();
+    89	    } else {
+    90	      try {
+    91	        Class<?> clazz = Class.forName(className);
+    92	        pm = (OsmPathModel) clazz.getDeclaredConstructor().newInstance();
+    93	      } catch (Exception e) {
+    94	        throw new RuntimeException("Cannot create path-model: " + e);
+    95	      }
+    96	    }
+    97	    initModel();
+
+== third_party/brouter/src/main/java/btools/expressions/BExpressionContext.java:31,31
+    31	  private static final String MODEL_TAG = "---model:";
+
+== third_party/brouter/src/main/java/btools/expressions/BExpressionContext.java:979,979
+   979	        _modelClass = token.substring(MODEL_TAG.length()).trim();
+-- '---model:' lines in the pinned profile (grep -c):
+0
+-- profile pins (git hash-object):
+f2bed1a5c21895195d6fe47c4b1982b5f0a0d4c5
+60e59d083bfff198e27e14aae6a3d4ed44e1cb2b
+
+### Premise 7
+152665 bytes app/src/test/resources/routing/segments/W75_N40.rd5
+ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990  app/src/test/resources/routing/segments/W75_N40.rd5
+inside-across-the-degree-line.geojson
+inside-long.geojson
+
+### Premise 8
+
+== server/pmtiles-worker/test/rd5/fetch-brouter.sh:11,13
+    11	url=https://github.com/abrensch/brouter/releases/download/v1.7.10/brouter-1.7.10.zip
+    12	sha256=023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532
+    13	size=6724983
+
+== server/pmtiles-worker/test/rd5/fetch-brouter.sh:28,28
+    28	echo "$sha256  $work/brouter.zip" | sha256sum --check --quiet
+
+### Premise 9
+https://brouter.de/brouter/segments4/ (rd5 files dated 2026-10-03) 
+
+### Amendment 1, item C (Forager's build)
+
+== gradle/libs.versions.toml:2,2
+     2	agp = "9.3.1"
+
+== gradle/libs.versions.toml:7,7
+     7	kotlin = "2.3.10"
+
+== gradle/libs.versions.toml:48,48
+    48	ksp = "2.3.10"
+
+== gradle.properties:9,9
+     9	android.builtInKotlin=false
+
+== gradle/wrapper/gradle-wrapper.properties:3,3
+     3	distributionUrl=https\://services.gradle.org/distributions/gradle-9.7.0-bin.zip
+
+== settings.gradle.kts:21,22
+    21	include(":brouter")
+    22	project(":brouter").projectDir = file("third_party/brouter")
