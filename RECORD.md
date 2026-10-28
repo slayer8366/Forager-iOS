@@ -207,3 +207,38 @@ dispatch's "past about 200k tokens, push and hand off". The session reported 370
 about 200k tokens. The remaining items are split so that no helper overruns: part 2 is B, C (with
 Amendment 1's Android questions), D, F, G and H; part 3 is E, I, J and K, which build on part 2.
 **Notes:** Written by the planner by hand. Next free ID -7.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-7
+**Timestamp:** 2026-10-28T20:40:59Z
+**Continues:** 2026-10-28-3, 2026-10-28-6
+**Title:** Phase 1, part 2: item B done; Hazel stopped early at the planner's 150k limit
+**Observed:** Hazel (Opus), report updated on `brouter-port` `5577491`. Filed unedited as
+`prompts/preserved/2026-10-28-01-phase1-report-part2.md`. The session reported 147,607 tokens.
+- **Item B:** every one of T2's 48 JDK classes has a common-Kotlin replacement:
+  - okio 3.18.2 for files and random-access reads;
+  - optionally atomicfu 0.33.0 for one lock;
+  - the standard library for the volatile flag and the clock;
+  - no sorted-collection library (one `TreeSet` becomes `sorted()`);
+  - no formatting on Forager's path.
+
+  A scratch KMP build (Gradle 9.7.0, Kotlin 2.3.10) compiled for the JVM, `iosArm64` and
+  `iosSimulatorArm64`, and read the fixture tile identically through okio and `RandomAccessFile`.
+  The report also lists semantic gaps to carry into tests: `split`, whitespace, `Math.round(NaN)`,
+  `toDegrees`, short reads. Open: whether `HashMap` iteration order on Kotlin/Native changes a result
+  at nine sites.
+- **Checked by the planner:**
+  - only the two allowed paths changed (19 files);
+  - the probe's JUnit XML reads tests 2, failures 0;
+  - Maven Central's okio release is 3.18.2, and its `iosarm64` module exists.
+- **Provenance resolved:** the Gradle 9.7.0 and Kotlin/Native 2.3.10 caches Hazel found unexplained were
+  downloaded by the planner's own compiler probes earlier in this session.
+- **The planner's prediction against B:** right on random-access reads; wrong on the sorted maps; missed
+  the lock, the small new functions and the hash-map order question.
+- **Not answered:** C, D, E, F, G, H, I, J, K.
+**Cost so far:** part 1 370,024 tokens and part 2 147,607, each re-reading the dispatch, the report and
+CLAUDE.md before working. At that rate the nine items left would take several more helpers. The pace is
+put to the owner.
+**Notes:** Written by the planner by hand. Next free ID -8.
