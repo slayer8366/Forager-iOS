@@ -123,3 +123,32 @@ report beside the dispatch and brings its choices (F among them) to the owner. P
 - Planner's call: Gradle may run in the cloud container. Forager's "CI only" rule exists for the laptop's
   memory, which does not apply there.
 - Next free ID -4.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-4
+**Timestamp:** 2026-10-28T20:00:11Z
+**Continues:** 2026-10-28-1, 2026-10-28-3
+**Title:** Timing in Phase 2; the Kotlin port is for Android too (owner); dispatch 2026-10-28-01
+Amendment 1
+**Decision:** the owner was told:
+- the port will not route better than Java (same algorithm, identical routes by design);
+- on Android, Kotlin and Java should run at about the same speed, inferred and not measured;
+- on iOS the speed is unknown;
+- without an iPhone, phone speed cannot be measured.
+
+The owner, verbatim: "Yes, add timing to Phase 2. But let's do kotlin for Android also".
+- **Timing:** Phase 2 times the Kotlin port against the Java engine on the same routes on the JVM, and on
+  the iOS simulator in CI, with the plan written in Phase 1 before any timing runs (Amendment 1, item K).
+  No pass mark for speed is fixed; identical routes stay the bar.
+- **Android:** Forager's Android app will use the Kotlin port instead of the Java engine once it is proven
+  identical. This confirms ruling a's last step (-2), and it answers one half of -1's open reading: "the
+  Android version stays separate" did not mean Android keeps the Java engine. The switch is Forager's
+  work, for Forager's record and planner. Phase 1's item C now also says how Forager's Android build takes
+  the port in, which Kotlin version it may compile with (Forager is on 2.3.10), and what it exposes.
+- **Still open from -1:** whether iOS reuses Android's Kotlin code beyond the router (Option B's sharing),
+  now that the two apps live in separate repositories.
+**Dispatch-file:** prompts/preserved/2026-10-28-01-brouter-port-amendment-1.md
+**Notes:** Written by the planner by hand. Hazel, mid-Phase 1, is told by message to read the amendment
+file itself. Next free ID -5.
