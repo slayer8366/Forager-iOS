@@ -152,3 +152,20 @@ The owner, verbatim: "Yes, add timing to Phase 2. But let's do kotlin for Androi
 **Dispatch-file:** prompts/preserved/2026-10-28-01-brouter-port-amendment-1.md
 **Notes:** Written by the planner by hand. Hazel, mid-Phase 1, is told by message to read the amendment
 file itself. Next free ID -5.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-5
+**Timestamp:** 2026-10-28T20:01:37Z
+**Continues:** 2026-10-28-3, 2026-10-28-4
+**Title:** Phase 1 restarted with a fresh Hazel after the first was stopped (owner)
+**Observed:** the first Hazel, started at -3, was stopped before it pushed anything. When the planner sent it
+Amendment 1, the session reported it "stopped by the user". The time it stopped is not known. It left:
+- no commit; `brouter-port` stays at `0bfbad9e`;
+- no report;
+- a scratch clone of upstream BRouter, `scratchpad/hazel/upstream/brouter`, at `v1.7.10`
+  (`4d2639af77ea5ed9c30d3e400764eb6f9e8522da`, origin `github.com/abrensch/brouter`, no local changes).
+**Decision:** the owner, verbatim: "Start a fresh Hazel on Phase 1". A fresh Hazel starts on the dispatch
+and Amendment 1 together. Same branch, scope, stops and finish line as -3.
+**Notes:** Written by the planner by hand. Next free ID -6.
