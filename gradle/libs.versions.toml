@@ -1,0 +1,12 @@
+# Exact versions only (Forager's CLAUDE.md, "Pin dependency versions").
+[versions]
+# Kotlin 2.3.10 exactly, Forager's pin, moved only together with Forager (Phase 1 report, item C, Amendment 1).
+kotlin = "2.3.10"
+# okio carries the file reads in common code (Phase 1 report, item B rows 1 to 3); item I's version.
+okio = "3.18.2"
+
+[libraries]
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

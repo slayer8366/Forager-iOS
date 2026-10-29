@@ -1,0 +1,69 @@
+# The BRouter port's CI (dispatch 2026-10-28-01; Phase 1 report, item G, from its sketch 08-ci/workflow-sketch.yml.txt).
+# Standard runner labels only (Forager-iOS is public; larger runners are billed). Actions are pinned by commit SHA,
+# read with `git ls-remote` on 2026-10-29. Every iOS result here is "simulator-checked".
+name: brouter
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # From Phase 2's first commit: the JVM tests (the differential tests against the oracle, item D) and both iOS klib
+  # compiles, which catch a JVM-only API in commonMain the day it is written. No iOS link on Linux.
+  jvm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          # The oracle's JDK, pinned exactly (item E2: one HotSpot build, on x86_64).
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: JVM tests (the oracle is fetched and checked by the build, tools/fetch-oracle.sh)
+        run: ./gradlew --no-daemon :brouter:jvmTest
+      - name: iOS klibs
+        run: ./gradlew --no-daemon :brouter:compileKotlinIosArm64 :brouter:compileKotlinIosSimulatorArm64
+      - name: Counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/jvmTest
+          for f in brouter/build/test-results/jvmTest/*.xml; do echo "== $f"; cat "$f"; done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: jvm-test-results
+          path: brouter/build/test-results/
+
+  # Amendment 2's smoke job, ahead of item G's full simulator job (step 2b): one commonTest test on the iOS simulator,
+  # to answer whether Kotlin 2.3.10 links and runs there with Xcode 26.0.1 before the port starts.
+  ios-smoke:
+    runs-on: macos-26 # arm64; not macos-latest, which moves
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: Select Xcode 26.0.1 (Kotlin 2.3.10's published Xcode is 26.0)
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app
+          xcodebuild -version
+          xcrun simctl list runtimes
+          xcrun simctl list devices available
+      - name: commonTest on the iOS simulator
+        run: ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
+      - name: Counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: ios-smoke-test-results
+          path: brouter/build/test-results/

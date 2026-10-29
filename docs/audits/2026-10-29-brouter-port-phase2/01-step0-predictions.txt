@@ -1,0 +1,23 @@
+# Step 0: predictions for the JVM tests, written 2026-10-29T20:02:52Z, before any test has run.
+
+FK 6, oracle half (a folder that exists and holds no tile; Forager's calls as part 1's ForagerCalls.java makes them;
+Forager's 'inside-across-the-degree-line' points; hiking-mountain.brf from the pinned zip; maxRunningTime 0, E4):
+- errorMessage: "from-position not mapped in existing datafile"
+  Basis [R, Forager e2969abe4]: RoutingEngine.java:1626-1629 throws "<name>-position not mapped in existing datafile" for the
+  first unmatched waypoint; RoutingParamCollector.java:48 names the first waypoint "from". With no tile, no waypoint matches.
+  NodesCache.java:83's "segment directory ... does not exist" is not expected, because the folder exists.
+- found track: not null, 0 nodes (as part 1's harness printed for 'no segment directory', 06-oracle/logs/harness-jar.log:12).
+
+Oracle pin test: RoutingEngine's code source is brouter-1.7.10-ro.jar, SHA-256 598b647f...dbd972, manifest
+Implementation-Version 1.7.10 (06-oracle/logs/jars.txt).
+
+Smoke test (commonTest): passes on jvm. It is "not shown to bite" by design: its evidence on macos-26 is that it ran,
+read as a count from the iosSimulatorArm64 JUnit XML.
+
+# Result, local run 1 (2026-10-29T20:07Z; log scratch phase2/logs/step0-jvmTest-run1.log; XML step0/run1-local-OracleFailureKindsTest.xml)
+FK 6's prediction was WRONG. The oracle's message is "datafile W75_N40.rd5 not found", not "from-position not mapped ...".
+Why: NodesCache.preloadPosition (NodesCache.java:326-332 at Forager e2969abe4) throws "datafile <name> not found" when the
+first tile access fails, before waypoint matching can report "not mapped". My reading stopped at RoutingEngine.java:1629.
+The test's expected value was mine, not the oracle's, so the test was wrong; it now asserts the oracle's message, with that
+source line. It is still FK 6's family (data missing), and it names the missing tile.
+Oracle pin test: as predicted (passed). Smoke test: passed on jvm.
