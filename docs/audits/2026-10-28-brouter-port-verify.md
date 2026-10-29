@@ -1879,6 +1879,97 @@ commit (not over stubs).
 - E3: 0 unstable.
 - First failures: integer and byte transliteration in steps 2a and 3, not floating point.
 
+### K. The timing plan for Phase 2
+
+Written by part 10 (Hazel, 2026-10-29), **before any timing is run** (Amendment 1, K). Phase 2 runs it as I's step 11, after the
+simulator run (step 10). Part 9's ideas (under "Handoff") are kept where they appear here. Every choice below is **[I]** unless
+marked. **No pass mark for speed is set: identical routes remain the bar** (Amendment 1).
+
+#### K1. What is timed
+
+- **Each case of E's sample, on the JVM, for the Java engine and the Kotlin port, on the same inputs, in the same JVM process.**
+- **The timed region is one route as Forager makes it:** for the oracle, from constructing `RoutingEngine` through `doRun(0)`
+  to reading `track.nodes`; for the port, the entry point's `route()` call to its return. Case generation, digests and comparison
+  are outside it. `doRun` runs on the calling thread (premise 2, and `BRouterTrailRouter.kt:170` calls it inside Forager's own
+  coroutine), so the timing thread is the routing thread **[R]**.
+- **Settings as in E** (time limit off, `memoryclass` 64 except ML5 and PM5), so a time is never cut by the limit.
+- **Which cases enter the ratio:** cases whose outcomes are identical and stable (E3), taking at least 1 ms on the oracle.
+  - **Left out, and counted:** cases with a recorded difference (they did different work); E3's unstable cases; cases under 1 ms.
+  - **Left out by design:** FK 9 to 11, whose time is set by the limit or the cancel.
+  - **Reported separately:** FK 1 to 8 (failures are fast and would crowd the ratio's lower end).
+- **The default oracle only.** Under (c) the no-intrinsic oracle is not timed: it is the comparison oracle, not the engine
+  Forager ships.
+- **Memory on the JVM: bytes allocated per route,** read with `com.sun.management.ThreadMXBean.getThreadAllocatedBytes` on the
+  calling thread before and after the call, and the GC count and time over the timed region from the
+  `GarbageCollectorMXBean`s. Allocation is close to deterministic, so one repetition's figure is reported, and the ratio port to
+  Java is summarised as for time.
+  - **Peak or retained heap is not measured** on the JVM: with a shared heap and a collector running, a per-route peak is not
+    readable without a separate process per case. Said, not estimated.
+  - **BRouter's own estimate** (`nodesCreated × 95 + npaths × 200`, part 7) is equal by construction on both engines, so it is
+    not a measurement of either.
+
+#### K2. How
+
+- **One Gradle test task of its own** (`jvmTiming`), not `jvmTest`, so a timing figure is never read as a test result. No
+  coverage agent (E's JaCoCo is off in it), no debugger, no `-Xint`.
+- **JVM flags, fixed and printed:** a fixed heap (`-Xms` equal to `-Xmx`, 4 GB on a 16 GB runner), the default collector, the
+  same JDK as E's oracle (E2).
+- **Warm-up:** one full untimed pass of every case in the timed set, both engines. It compiles both engines' hot paths, fills
+  both profile caches, and puts every tile in the OS page cache, so neither engine pays a first-read cost the other avoids.
+- **Repetitions:** `k = 5` per case per engine. If `12 × ΣR1` (step 1b's logged oracle times, I's step 1b) exceeds 4 hours, `k`
+  drops to 3, and if that still exceeds it, the timed set becomes E5's iOS fallback (312 plus every targeted case). `k` and the set
+  are fixed from step 1b's R1 times **before any port time is read**, and recorded with the reason.
+- **Run order:** cases in a seeded random order, a new order per repetition (seeds written in the plan file). Within each case
+  and repetition, the engines alternate which goes first (ABBA across repetitions), so drift and cache warmth do not favour one.
+  `System.gc()` runs before each timed call, outside the region.
+- **The A/A control:** the oracle timed against itself as a third, interleaved engine label, on the same cases. Its ratio
+  distribution is the noise floor, measured on the same runner in the same run.
+- **The statistics:**
+  - per case: the median of the `k` repetitions, for each engine;
+  - per case: the ratio port ÷ Java of those medians;
+  - **reported: the median of the per-case ratios with a 95% bootstrap interval** (10,000 resamples over cases, seeded), the
+    10th and 90th percentiles, and the same for the A/A control beside it;
+  - also: the ratio of total times (sum of port medians ÷ sum of Java medians), which weights long routes as a user waits on them;
+  - by stratum, and by the oracle's time in deciles, so a slowdown in one kind of route is not averaged away;
+  - within-case spread for each engine: the interquartile range of the `k` repetitions over their median, as noise.
+- **The machine, printed by the run itself:** the runner label `ubuntu-24.04` (4 CPUs, 16 GB, x64 for a public repository: part 5's
+  `runners.md`, as quoted in part 9's handoff, not re-read here); the CPU model (`/proc/cpuinfo`), core count and memory; the
+  runner image (`ImageOS`, `ImageVersion`); `java -version` in full, the JVM's input arguments; Kotlin and Gradle versions.
+  A shared runner's noise is what the A/A control measures; the figures are one run on one machine.
+
+#### K3. iOS, on the simulator
+
+- **The same timed set, the port only**, in the simulator test binary on `macos-26` (3 CPUs, Apple M1, 7 GB, arm64: the same
+  source as above). There is no Java engine on iOS to time against.
+- **Its comparison is the same Mac.** The same job first runs `jvmTiming` on HotSpot arm64 on that runner (the oracle, the port
+  and the A/A control, as on `ubuntu`), then the simulator timing. So the report gives the port on Native against the Java
+  engine on the same processor, and a second JVM ratio on arm64 to set beside the `ubuntu` one.
+- **Clock:** `kotlin.time.TimeSource.Monotonic` in common test code, on both platforms. `k = 3`, the same seeds and order rule.
+- **Memory on iOS:** the process's peak resident size at the end of the run (Mach `task_info`) is reported, marked indicative.
+  Per-route memory on Native is reported "unsupported" unless Kotlin/Native's GC statistics prove usable in the step (not checked
+  **[?]**).
+- **An optimised binary first [?].** Whether Kotlin/Native builds test binaries unoptimised by default, and whether KGP 2.3.10
+  can build and run a release test binary on the simulator, was not checked. Step 11 settles it before timing. If only a debug
+  binary runs, its times are reported as a debug build and no flag is applied to them.
+- **Simulator speed is not phone speed.** The simulator runs arm64 code on the Mac's own processor, with a Mac's memory, cooling
+  and power, and without a phone's per-app memory limit. The owner has no iPhone ("3 no iPhone", RECORD -2), so **the port's
+  speed on an iPhone stays unmeasured**, and nothing in this plan stands in for it.
+- **Also unmeasured: Android.** Amendment 1 makes the port Android's too, but no step times either engine on ART or on an Android
+  phone. The only phone figure in the record is Forager's own note for the Java engine: its slowest spike route took 1.2 s on the
+  S22 (`BRouterTrailRouter.kt:195`) **[R]**.
+
+#### K4. What the report flags, for the owner to rule on
+
+No margin is fixed here. Proposed:
+- **Flag S, speed on the JVM:** the port is flagged slower when the 95% interval of the median per-case ratio lies wholly above
+  **1 + m**, on `ubuntu`. The owner sets **m**. A margin narrower than the A/A control's own interval cannot be read, so the
+  report states that interval beside the flag.
+- **Flag L, a route a user would lose (optional, no margin to set):** any case the oracle finds within Forager's 30,000 ms
+  (`BRouterTrailRouter.kt:199`) **[R]** that the port, on the JVM, takes longer than 30,000 ms to find. On the simulator the same
+  count is reported, not flagged, since simulator speed is not phone speed.
+- **Memory:** flagged by the same rule as S, with its own margin **m′**, on allocated bytes per route.
+- Whatever the owner rules, a flag is a finding to report, never a test failure: the timing task does not fail the build.
+
 ### Not answered yet (parts 6 to 9, in RECORD -11's order)
 
 - ~~H's step 3, hash order~~: written by part 7, above;
@@ -1887,7 +1978,7 @@ commit (not over stubs).
 - ~~E, the differential tests~~: designed by part 8, above (not built or run);
 - ~~I, the Phase 2 order~~: written by part 9, above;
 - ~~J, the mechanism prediction~~: written by part 10, above;
-- K, the timing plan.
+- ~~K, the timing plan~~: written by part 10, above.
 
 ## Handoff to the next session
 
