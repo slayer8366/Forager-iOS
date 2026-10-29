@@ -1,0 +1,79 @@
+# HEAD 073851b
+# the edit:
+24c24
+<     private val table: Array<DoubleArray> = CheapRuler.buildScaleTable(::msunCos)
+---
+>     private val table: Array<DoubleArray> = CheapRuler.buildScaleTable { x -> msunCos(x).let { c -> if (x.toRawBits() == 0x3fe2ae97d5ad8ebdL) Double.fromBits(c.toRawBits() + 1) else c } } // REVERT CHECK
+# lines differing: 1
+# Step 2b second part revert check, local, 2026-10-29T23:44:30Z: row 1234's cos one ulp up in MsunLibm; all of jvmTest
+# JDK: openjdk version "21.0.12.1" 2026-08-18; Gradle run with a local-only mirror init script (never committed)
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAgainstCTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAgainstCTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: tests 2, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionRecordTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml)
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml)
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+TOTAL: tests 54, failures 4, errors 0, skipped 0 in 22 files
+
+# Each util test case: outcome | failure type | message (first line) | first frame in the port's main code
+PASS BitCoderContextTest.rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm]
+PASS BitCoderContextTest.varBitsLookupTablesEqualTheOracles[jvm]
+PASS BitCoderContextTest.encodedStreamsAreByteIdenticalAndDecodeIdenticallyBothWays[jvm]
+PASS BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle[jvm]
+PASS ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported[jvm]
+PASS ByteDataTest.aNullArrayHasNoDataOnBoth[jvm]
+PASS ByteDataTest.fixedWidthReadsOnRandomBytesMatchTheOracle[jvm]
+PASS ByteDataTest.varLengthStreamsAreByteIdenticalAndReadIdenticallyBothWays[jvm]
+PASS CheapLogicRunTest.calcAngleEqualsTheOraclesWithItsTable[jvm]
+PASS CheapLogicRunTest.portTableArithmeticGivesTheOraclesTableFromTheOraclesCos[jvm]
+PASS CheapLogicRunTest.theJvmRunsWithLibmIntrinsicsOff[jvm]
+PASS CheapLogicRunTest.distanceEqualsTheOraclesWithItsTable[jvm]
+PASS CheapLogicRunTest.angleFunctionsEqualTheOracles[jvm]
+PASS CheapProductionRecordTest.productionAnglesEqualTheOraclesAtEveryPair[jvm]
+FAIL CheapProductionRecordTest.productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm] | java.lang.AssertionError | java.lang.AssertionError: table rows differing outside the 13: [1234] | 
+PASS CheapProductionTableTest.scalesAreLookedUpByIlatOver100000AsJavaDoes[jvm]
+FAIL CheapProductionTableTest.productionTableIsMsunsAtEveryRow[jvm] | java.lang.AssertionError | java.lang.AssertionError: expected:<[]> but was:<[row 1234: kx 3fb7cd67ea04bfbc ky 3fbc648b380e3c90, msun's 3fb7cd67ea04bfbb 3fbc648b380e3c90]> | 
+PASS Crc32Test.crcOfSeededSlicesEqualsTheOracles[jvm]
+PASS JavaLangCommonTest.javaRoundGivesJavasAnswers[jvm]
+PASS JavaLangCommonTest.javaIsWhitespaceGivesJavasAnswers[jvm]
+PASS JavaLangCommonTest.javaSplitGivesJavasAnswers[jvm]
+PASS JavaLangTest.javaIsWhitespaceEqualsCharacterIsWhitespaceOnEveryChar[jvm]
+PASS JavaLangTest.javaSplitEqualsStringSplitForEveryRegexTheReachedCodePasses[jvm]
+PASS JavaLangTest.theCommonCasesExpectedValuesAreTheJdks[jvm]
+PASS JavaLangTest.javaRoundEqualsMathRound[jvm]
+PASS LongMapTest.duplicateKeysFailAsTheOracleFails[jvm]
+PASS LongMapTest.compactAndFrozenMapsAnswerAsTheOracleDoes[jvm]
+PASS LruMapTest.cacheTrafficHitsAndEvictsAsTheOracleDoes[jvm]
+PASS PlatformInvariantsExpectedTest.tableConstantsAreMsunsCosThroughTheOraclesArithmetic[jvm]
+PASS PlatformInvariantsExpectedTest.angleConstantsAreTheOraclesOwn[jvm]
+PASS PlatformInvariantsTest.remainderIsJavas[jvm]
+PASS PlatformInvariantsTest.doubleToIntIsJavas[jvm]
+PASS PlatformInvariantsTest.productionAnglesMatchTheJvmDigests[jvm]
+PASS PlatformInvariantsTest.multiplyThenAddIsNeverFused[jvm]
+FAIL PlatformInvariantsTest.oneUlpInOneRowChangesItsChunksDigest[jvm] | java.lang.AssertionError | java.lang.AssertionError: the other chunks expected:<[ea4210e831972a74, daf50cffc1163a72, 4d8db266992ec9c0, 08d2b644a387ce5a, 3e8a28495737234f, f6f06909e13a8363, 2376e0e833ce758a, 2e6d23ce0cd4a60d, 33d899c52a32b689, a415bd6caf03de51, 0d47a4aacf924679, 1fb130b5d3d95d40, cbf66173f950da2d, 45b319af5e2d | 
+FAIL PlatformInvariantsTest.productionTableMatchesTheJvmDigests[jvm] | java.lang.AssertionError | java.lang.AssertionError: table chunks (of 100 rows) whose digest differs from the CI JVM's expected:<[]> but was:<[12]> | 
+PASS SortedHeapTest.fewDistinctKeysPopInTheOraclesOrder[jvm]
+PASS SortedHeapTest.allKeysEqualPopInTheOraclesOrder[jvm]
+PASS SortedHeapTest.aLargeHeapThroughManyBinsPopsInTheOraclesOrder[jvm]
+PASS SortedHeapTest.clearAndEmptyPopsMatchTheOracle[jvm]
+
+# run-jvmtest exit: 0
+# restored from the saved copy: identical
+# file vs HEAD (forward change committed): identical

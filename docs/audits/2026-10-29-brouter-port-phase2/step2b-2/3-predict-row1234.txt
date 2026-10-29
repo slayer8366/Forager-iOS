@@ -1,0 +1,12 @@
+# row 1234 lat 3fe2ae97d5ad8ebd cos 3feab322c2547b9f moved cos 3feab322c2547ba0
+# kx 3fb7cd67ea04bfbb -> 3fb7cd67ea04bfbc changes
+# ky 3fbc648b380e3c90 -> 3fbc648b380e3c90 same
+# Prediction, written before the run: MsunLibm's table builder (LibmSeam.kt) moves row 1234's cos up one ulp, one line.
+# kx changes, ky does not (above). msunCos itself is untouched. Exactly 3 tests fail, each naming row 1234 or chunk 12:
+#   PlatformInvariantsTest.productionTableMatchesTheJvmDigests (chunk 12 only);
+#   CheapProductionTableTest.productionTableIsMsunsAtEveryRow (row 1234 only);
+#   CheapProductionRecordTest.productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows (1234 outside the 13).
+# Everything else passes: the logic run (oracle's table), the expected-digest test, the in-test control, the msun classes.
+# Result (4-revert-row1234.txt): 4 failures, not the predicted 3. The fourth, PlatformInvariantsTest.oneUlpInOneRowChangesItsChunksDigest,
+# also asserts the other 17 chunks equal the constants, so it sees chunk 12 move: a test this edit can fail, missed by the
+# prediction, not a stale result (0 compile errors; every message names row 1234 or chunk 12). kx and ky at row 1234 are the values above.

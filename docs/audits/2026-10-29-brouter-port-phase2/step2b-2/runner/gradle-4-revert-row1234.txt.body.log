@@ -1,0 +1,349 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:msunReference UP-TO-DATE
+> Task :brouter:compileKotlinJvm
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:jvmMainClasses
+> Task :brouter:jvmJar
+
+> Task :brouter:compileTestKotlinJvm
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/util/JavaLangTest.kt:18:41 This class is not recommended for use in Kotlin. Use 'kotlin.String' instead.
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/util/JavaLangTest.kt:55:32 This class is not recommended for use in Kotlin. Use 'kotlin.String' instead.
+
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+
+> Task :brouter:jvmTest
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+ToolchainSmokeTest[jvm] > okioSplitsATilePathOnThisTarget[jvm] PASSED
+
+MsunAgainstCTest[jvm] > atan2EqualsTheCBuildAndStrictMathPairByPair[jvm] PASSED
+
+MsunAgainstCTest[jvm] > cosEqualsTheCBuildRowByRow[jvm] PASSED
+
+MsunAgainstCTest[jvm] > cosDiffersFromStrictMathAtTheResearchsThirteenRows[jvm] PASSED
+
+MsunAtan2PairsTest[jvm] > atan2OverThePairsHashesAsBionicsDoes[jvm] PASSED
+
+MsunCosTableTest[jvm] > latitudesAreTheTables[jvm] PASSED
+
+MsunCosTableTest[jvm] > cosEqualsBionicAtEveryTableRow[jvm] PASSED
+
+MsunEdgesTest[jvm] > theRefusalIsNamedAndCarriesItsArgument[jvm] PASSED
+
+MsunEdgesTest[jvm] > cosEdges[jvm] PASSED
+
+MsunEdgesTest[jvm] > atan2Edges[jvm] PASSED
+
+MsunReferenceCommittedTest[jvm] > committedEdgesAreTheCBuilds[jvm] PASSED
+
+MsunReferenceCommittedTest[jvm] > committedCosRowsAreTheCBuilds[jvm] PASSED
+
+OracleFailureKindsTest[jvm] > fk6DataMissingAFolderWithoutTheTile[jvm] PASSED
+
+OraclePinTest[jvm] > routingEngineLoadsFromThePinnedReadOnlyJar[jvm] STANDARD_OUT
+    oracle JVM: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; jar /home/user/forager-ios/brouter/build/oracle/brouter-1.7.10-ro.jar
+
+OraclePinTest[jvm] > routingEngineLoadsFromThePinnedReadOnlyJar[jvm] PASSED
+
+BitCoderContextTest[jvm] > rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm] STANDARD_OUT
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 1: 4125 ops, reading position 32645
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 2: 4013 ops, reading position 32647
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 3: 4097 ops, reading position 32655
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 4: 3976 ops, reading position 32659
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 5: 4142 ops, reading position 32642
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 6: 4224 ops, reading position 32641
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 7: 4079 ops, reading position 32644
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 8: 4080 ops, reading position 32644
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 9: 4066 ops, reading position 32643
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 10: 4076 ops, reading position 32645
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 11: 4250 ops, reading position 32648
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 12: 4061 ops, reading position 32644
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 13: 4076 ops, reading position 32658
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 14: 4191 ops, reading position 32652
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 15: 4118 ops, reading position 32641
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 16: 4100 ops, reading position 32663
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 17: 3976 ops, reading position 32643
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 18: 4041 ops, reading position 32649
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 19: 4188 ops, reading position 32642
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 20: 4090 ops, reading position 32650
+
+BitCoderContextTest[jvm] > rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm] PASSED
+
+BitCoderContextTest[jvm] > varBitsLookupTablesEqualTheOracles[jvm] PASSED
+
+BitCoderContextTest[jvm] > encodedStreamsAreByteIdenticalAndDecodeIdenticallyBothWays[jvm] PASSED
+
+BitCoderContextTest[jvm] > rawBitReadsOnRandomBytesMatchTheOracle[jvm] STANDARD_OUT
+    rawBitReadsOnRandomBytesMatchTheOracle seed 1: 1000000 ops, reading position 1101
+    rawBitReadsOnRandomBytesMatchTheOracle seed 2: 1000000 ops, reading position 836
+    rawBitReadsOnRandomBytesMatchTheOracle seed 3: 1000000 ops, reading position 179
+    rawBitReadsOnRandomBytesMatchTheOracle seed 4: 1000000 ops, reading position 283
+    rawBitReadsOnRandomBytesMatchTheOracle seed 5: 1000000 ops, reading position 9135
+    rawBitReadsOnRandomBytesMatchTheOracle seed 6: 1000000 ops, reading position 4094
+    rawBitReadsOnRandomBytesMatchTheOracle seed 7: 1000000 ops, reading position 3631
+    rawBitReadsOnRandomBytesMatchTheOracle seed 8: 1000000 ops, reading position 343
+    rawBitReadsOnRandomBytesMatchTheOracle seed 9: 1000000 ops, reading position 504
+    rawBitReadsOnRandomBytesMatchTheOracle seed 10: 1000000 ops, reading position 907
+    rawBitReadsOnRandomBytesMatchTheOracle seed 11: 1000000 ops, reading position 800
+    rawBitReadsOnRandomBytesMatchTheOracle seed 12: 1000000 ops, reading position 498
+    rawBitReadsOnRandomBytesMatchTheOracle seed 13: 1000000 ops, reading position 2414
+    rawBitReadsOnRandomBytesMatchTheOracle seed 14: 1000000 ops, reading position 542
+    rawBitReadsOnRandomBytesMatchTheOracle seed 15: 1000000 ops, reading position 1487
+    rawBitReadsOnRandomBytesMatchTheOracle seed 16: 1000000 ops, reading position 3750
+    rawBitReadsOnRandomBytesMatchTheOracle seed 17: 1000000 ops, reading position 8644
+    rawBitReadsOnRandomBytesMatchTheOracle seed 18: 1000000 ops, reading position 868
+    rawBitReadsOnRandomBytesMatchTheOracle seed 19: 1000000 ops, reading position 481
+    rawBitReadsOnRandomBytesMatchTheOracle seed 20: 1000000 ops, reading position 420
+
+BitCoderContextTest[jvm] > rawBitReadsOnRandomBytesMatchTheOracle[jvm] PASSED
+
+ByteArrayUnifierTest[jvm] > constructsAndRefusesUnifyAsUnsupported[jvm] PASSED
+
+ByteDataTest[jvm] > aNullArrayHasNoDataOnBoth[jvm] PASSED
+
+ByteDataTest[jvm] > fixedWidthReadsOnRandomBytesMatchTheOracle[jvm] PASSED
+
+ByteDataTest[jvm] > varLengthStreamsAreByteIdenticalAndReadIdenticallyBothWays[jvm] PASSED
+
+CheapLogicRunTest[jvm] > calcAngleEqualsTheOraclesWithItsTable[jvm] STANDARD_OUT
+    calcAngle branches (dd==0, +90, -90, cosp<0, plain): [20166, 39680, 39456, 50453, 50245]
+
+CheapLogicRunTest[jvm] > calcAngleEqualsTheOraclesWithItsTable[jvm] PASSED
+
+CheapLogicRunTest[jvm] > portTableArithmeticGivesTheOraclesTableFromTheOraclesCos[jvm] PASSED
+
+CheapLogicRunTest[jvm] > theJvmRunsWithLibmIntrinsicsOff[jvm] STANDARD_OUT
+    JVM: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; [-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts, -Djavax.net.ssl.trustStoreType=JKS, -Dhttps.proxyHost=127.0.0.1, -Dhttps.proxyPort=46617, -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local, -Djdk.http.auth.tunneling.disabledSchemes=, -Djdk.http.auth.proxying.disabledSchemes=, -Dbrouter.msunref.dir=/home/user/forager-ios/brouter/build/msun-ref, -Dbrouter.oracle.dir=/home/user/forager-ios/brouter/build/oracle, -Dorg.gradle.internal.worker.tmpdir=/home/user/forager-ios/brouter/build/tmp/jvmTest/work, -XX:+UnlockDiagnosticVMOptions, -XX:-UseLibmIntrinsic, -Xmx512m, -Dfile.encoding=UTF-8, -Duser.country=US, -Duser.language=en, -Duser.variant, -ea]
+
+CheapLogicRunTest[jvm] > theJvmRunsWithLibmIntrinsicsOff[jvm] PASSED
+
+CheapLogicRunTest[jvm] > distanceEqualsTheOraclesWithItsTable[jvm] PASSED
+
+CheapLogicRunTest[jvm] > angleFunctionsEqualTheOracles[jvm] PASSED
+
+CheapProductionRecordTest[jvm] > productionAnglesEqualTheOraclesAtEveryPair[jvm] STANDARD_OUT
+    record: production getDirection differs from the oracle's at 0 of 1199896
+
+CheapProductionRecordTest[jvm] > productionAnglesEqualTheOraclesAtEveryPair[jvm] PASSED
+
+CheapProductionRecordTest[jvm] > productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm] STANDARD_OUT
+    # production vs oracle: row, cos (msun, oracle, ulps), kx (msun, oracle, ulps), ky (msun, oracle, ulps)
+    record 474 3fe792f1a5f1a301 3fe792f1a5f1a302 -1 3fb506d9d464f388 3fb506d9d464f389 -1 3fbc6fe80e97c2ba 3fbc6fe80e97c2ba 0
+    record 488 3fe8187d4df026e7 3fe8187d4df026e6 1 3fb57d834d0d241c 3fb57d834d0d241b 1 3fbc6e1b3c7c650d 3fbc6e1b3c7c650d 0
+    record 502 3fe89a5a2f91abe3 3fe89a5a2f91abe4 -1 3fb5f0dfc9b78999 3fb5f0dfc9b7899a -1 3fbc6c51a397a2ad 3fbc6c51a397a2ad 0
+    record 663 3fed4ffa843680f9 3fed4ffa843680f8 1 3fba1e6d8426d0e1 3fba1e6d8426d0e0 1 3fbc59fd27d9c980 3fbc59fd27d9c980 0
+    record 675 3fed93276ca82f5f 3fed93276ca82f5e 1 3fba59f08baa7fdd 3fba59f08baa7fdc 1 3fbc58e03a2da9db 3fbc58e03a2da9db 0
+    record 1046 3feef5ab2285fb8b 3feef5ab2285fb8c -1 3fbb93db33dd6d36 3fbb93db33dd6d37 -1 3fbc52d7bffa21b1 3fbc52d7bffa21b1 0
+    record 1053 3feedbc3d50ec941 3feedbc3d50ec940 1 3fbb7ced92cef1e7 3fbb7ced92cef1e6 1 3fbc534aeb6ed1dc 3fbc534aeb6ed1dc 0
+    record 1079 3fee7142d9d7473f 3fee7142d9d74740 -1 3fbb1ea472a72d6a 3fbb1ea472a72d6b -1 3fbc55209bf5e309 3fbc55209bf5e309 0
+    record 1234 3feab322c2547b9f 3feab322c2547b9f 0 3fb7cd67ea04bfbc 3fb7cd67ea04bfbb 1 3fbc648b380e3c90 3fbc648b380e3c90 0
+    record 1295 3fe8ac99543503a1 3fe8ac99543503a0 1 3fb60114bab6e1fe 3fb60114bab6e1fd 1 3fbc6c10983ff7f4 3fbc6c10983ff7f4 0
+    record 1297 3fe89a5a2f91abe3 3fe89a5a2f91abe4 -1 3fb5f0dfc9b78999 3fb5f0dfc9b7899a -1 3fbc6c51a397a2ad 3fbc6c51a397a2ad 0
+    record 1310 3fe821e371511239 3fe821e37151123a -1 3fb585dcfe3549c8 3fb585dcfe3549c9 -1 3fbc6dfa6e4ffc42 3fbc6dfa6e4ffc42 0
+    record 1311 3fe8187d4df026e7 3fe8187d4df026e6 1 3fb57d834d0d241c 3fb57d834d0d241b 1 3fbc6e1b3c7c650d 3fbc6e1b3c7c650d 0
+    record 1318 3fe7d62c0f81771d 3fe7d62c0f81771e -1 3fb54297186f120a 3fb54297186f120b -1 3fbc6f014fe5ad29 3fbc6f014fe5ad29 0
+    record: cos differs at 13 rows, kx or ky at 14: [474, 488, 502, 663, 675, 1046, 1053, 1079, 1234, 1295, 1297, 1310, 1311, 1318]
+
+CheapProductionRecordTest[jvm] > productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm] FAILED
+    java.lang.AssertionError at CheapProductionRecordTest.kt:34
+
+CheapProductionTableTest[jvm] > scalesAreLookedUpByIlatOver100000AsJavaDoes[jvm] PASSED
+
+CheapProductionTableTest[jvm] > productionTableIsMsunsAtEveryRow[jvm] FAILED
+    java.lang.AssertionError at CheapProductionTableTest.kt:32
+
+Crc32Test[jvm] > crcOfSeededSlicesEqualsTheOracles[jvm] PASSED
+
+JavaLangCommonTest[jvm] > javaRoundGivesJavasAnswers[jvm] PASSED
+
+JavaLangCommonTest[jvm] > javaIsWhitespaceGivesJavasAnswers[jvm] PASSED
+
+JavaLangCommonTest[jvm] > javaSplitGivesJavasAnswers[jvm] PASSED
+
+JavaLangTest[jvm] > javaIsWhitespaceEqualsCharacterIsWhitespaceOnEveryChar[jvm] PASSED
+
+JavaLangTest[jvm] > javaSplitEqualsStringSplitForEveryRegexTheReachedCodePasses[jvm] PASSED
+
+JavaLangTest[jvm] > theCommonCasesExpectedValuesAreTheJdks[jvm] PASSED
+
+JavaLangTest[jvm] > javaRoundEqualsMathRound[jvm] PASSED
+
+LongMapTest[jvm] > duplicateKeysFailAsTheOracleFails[jvm] PASSED
+
+LongMapTest[jvm] > compactAndFrozenMapsAnswerAsTheOracleDoes[jvm] PASSED
+
+LruMapTest[jvm] > cacheTrafficHitsAndEvictsAsTheOracleDoes[jvm] PASSED
+
+PlatformInvariantsExpectedTest[jvm] > tableConstantsAreMsunsCosThroughTheOraclesArithmetic[jvm] STANDARD_OUT
+    internal val EXPECTED_TABLE_CHUNKS: List<String> = listOf(
+        "ea4210e831972a74", "daf50cffc1163a72", "4d8db266992ec9c0", "08d2b644a387ce5a",
+        "3e8a28495737234f", "8dc9c2991cebf9e8", "f6f06909e13a8363", "2376e0e833ce758a",
+        "2e6d23ce0cd4a60d", "33d899c52a32b689", "a415bd6caf03de51", "0d47a4aacf924679",
+        "1fb130b5d3d95d40", "cbf66173f950da2d", "45b319af5e2d51d8", "98f14df8061117d7",
+        "09c804733ff1e5e8", "2d49237ccc68520d",
+    )
+
+PlatformInvariantsExpectedTest[jvm] > tableConstantsAreMsunsCosThroughTheOraclesArithmetic[jvm] PASSED
+
+PlatformInvariantsExpectedTest[jvm] > angleConstantsAreTheOraclesOwn[jvm] STANDARD_OUT
+    internal val EXPECTED_ANGLE_CHUNKS: List<String> = listOf(
+        "97891f18c709d33c", "c5b083337e7bda1c", "97e823e03d0a770c", "1d2d159102d15cd5",
+        "8c7267420d8cd1a6", "bc9123ef7f85be55", "4dddf67c81a43c1c", "4f25f73f5f8deeb3",
+        "b010fa208317b1f9", "1dc3820d0ad353cb", "22885ad1432321f4", "8ec7b9af3182f1fb",
+        "544f01e5f7e34943", "d261ccb31e136089", "077760113e0535d2", "55522d437d05db70",
+        "fd5aee52b40b4110", "880cf56bf6072bb1", "780064a5c33275e3", "a70708ca159aed93",
+        "37a6fc5c0860583f", "e49ec9771f676c3e", "1346e5f2b4520ada", "c6f60f7885b04c16",
+        "2a0ba60fa62b7d51", "5a5ee2b367bf6a47", "e3cc80e436c97474", "e2dd80bca492bdd1",
+        "d082b71a5442b107", "a410b7aaa9df8ba1",
+    )
+
+PlatformInvariantsExpectedTest[jvm] > angleConstantsAreTheOraclesOwn[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > remainderIsJavas[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > doubleToIntIsJavas[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > productionAnglesMatchTheJvmDigests[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > multiplyThenAddIsNeverFused[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > oneUlpInOneRowChangesItsChunksDigest[jvm] FAILED
+    java.lang.AssertionError at PlatformInvariantsTest.kt:109
+
+PlatformInvariantsTest[jvm] > productionTableMatchesTheJvmDigests[jvm] STANDARD_OUT
+    table row 1200: 3fe0c878546e613d 3febb2e72935d9cd 3fb8b047c8b7991d 3fbc609ef0fa6931
+    table row 1201: 3fe0d6c48cf03cee 3febabbb856e433c 3fb8a9ebefcbf59a 3fbc60bb961ea369
+    table row 1202: 3fe0e510c57218a0 3feba48a5b7f3fa1 3fb8a38b2a5b9b49 3fbc60d84a10e785
+    table row 1203: 3fe0f35cfdf3f450 3feb9d53acd85e14 3fb89d25799f45e7 3fbc60f50cba93f5
+    table row 1204: 3fe101a93675d000 3feb96177aea47b0 3fb896baded0acab 3fbc6111de04fb1e
+    table row 1205: 3fe10ff56ef7abb2 3feb8ed5c726bf4f 3fb8904b5b2a8215 3fbc612ebdd96360
+    table row 1206: 3fe11e41a7798762 3feb878e9300a141 3fb889d6efe873d8 3fbc614bac210733
+    table row 1207: 3fe12c8ddffb6315 3feb8041dfebe2fb 3fb8835d9e472aa1 3fbc6168a8c51531
+    table row 1208: 3fe13ada187d3ec5 3feb78efaf5d92d5 3fb87cdf678449fc 3fbc6185b3aeb029
+    table row 1209: 3fe1492650ff1a75 3feb719802cbd7b9 3fb8765c4cde7023 3fbc61a2ccc6ef32
+    table row 1210: 3fe157728980f627 3feb6a3adbadf0db 3fb86fd44f9535df 3fbc61bff3f6ddb6
+    table row 1211: 3fe165bec202d1d7 3feb62d83b7c3571 3fb8694770e92e59 3fbc61dd29277b8f
+    table row 1212: 3fe1740afa84ad8a 3feb5b7023b01460 3fb862b5b21be6f1 3fbc61fa6c41bd0f
+    table row 1213: 3fe182573306893a 3feb540295c413fb 3fb85c1f146fe722 3fbc6217bd2e8b15
+    table row 1214: 3fe190a36b8864ea 3feb4c8f9333d1ae 3fb855839928b042 3fbc62351bd6c31a
+    table row 1215: 3fe19eefa40a409c 3feb45171d7c01b6 3fb84ee3418abd73 3fbc62528823374e
+    table row 1216: 3fe1ad3bdc8c1c4c 3feb3d99361a6ed9 3fb8483e0edb8364 3fbc627001fcae9e
+    table row 1217: 3fe1bb88150df7ff 3feb3615de8dfa12 3fb8419402617037 3fbc628d894be4c9
+    table row 1218: 3fe1c9d44d8fd3af 3feb2e8d18569a4c 3fb83ae51d63eb50 3fbc62ab1df98a73
+    table row 1219: 3fe1d8208611af5f 3feb26fee4f55c10 3fb83431612b552c 3fbc62c8bfee4538
+    table row 1220: 3fe1e66cbe938b11 3feb1f6b45ec6137 3fb82d78cf010738 3fbc62e66f12afbd
+    table row 1221: 3fe1f4b8f71566c1 3feb17d23cbee0a6 3fb826bb682f53a5 3fbc63042b4f59bd
+    table row 1222: 3fe203052f974273 3feb1033caf125f7 3fb81ff92e018543 3fbc6321f48cc822
+    table row 1223: 3fe2115168191e24 3feb088ff208912f 3fb8193221c3df4e 3fbc633fcab37512
+    table row 1224: 3fe21f9da09af9d4 3feb00e6b38b9673 3fb8126644c39d4b 3fbc635dadabd006
+    table row 1225: 3fe22de9d91cd586 3feaf9381101bdb3 3fb80b95984ef2d7 3fbc637b9d5e3dd3
+    table row 1226: 3fe23c36119eb136 3feaf1840bf3a266 3fb804c01db50b86 3fbc639999b318c6
+    table row 1227: 3fe24a824a208ce8 3feae9caa5eaf330 3fb7fde5d6460aa3 3fbc63b7a292b0b2
+    table row 1228: 3fe258ce82a26898 3feae20be072719e 3fb7f706c3530b1d 3fbc63d5b7e54b01
+    table row 1229: 3fe2671abb244449 3feada47bd15f1cf 3fb7f022e62e1f4c 3fbc63f3d99322c4
+    table row 1230: 3fe27566f3a61ffb 3fead27e3d625a2a 3fb7e93a402a50c5 3fbc6412078468cc
+    table row 1231: 3fe283b32c27fbab 3feacaaf62e5a311 3fb7e24cd29ba03b 3fbc643041a143b7
+    table row 1232: 3fe291ff64a9d75d 3feac2db2f2ed685 3fb7db5a9ed7053c 3fbc644e87d1d004
+    table row 1233: 3fe2a04b9d2bb30d 3feabb01a3ce0fe8 3fb7d463a6326e1d 3fbc646cd9fe2025
+    table row 1234: 3fe2ae97d5ad8ebd 3feab322c2547b9f 3fb7cd67ea04bfbc 3fbc648b380e3c90
+    table row 1235: 3fe2bce40e2f6a70 3feaab3e8c5456c7 3fb7c6676ba5d556 3fbc64a9a1ea23d3
+    table row 1236: 3fe2cb3046b14620 3feaa3550360eeea 3fb7bf622c6e8063 3fbc64c81779caa7
+    table row 1237: 3fe2d97c7f3321d2 3fea9b66290ea1a3 3fb7b8582db8885b 3fbc64e698a51c02
+    table row 1238: 3fe2e7c8b7b4fd82 3fea9371fef2dc59 3fb7b14970deaa94 3fbc65052553f926
+    table row 1239: 3fe2f614f036d932 3fea8b7886a41be5 3fb7aa35f73c9a0d 3fbc6523bd6e39b9
+    table row 1240: 3fe3046128b8b4e5 3fea8379c1b9ec44 3fb7a31dc22eff40 3fbc654260dbabd4
+    table row 1241: 3fe312ad613a9095 3fea7b75b1cce84c 3fb79c00d31377f9 3fbc65610f841413
+    table row 1242: 3fe320f999bc6c47 3fea736c5876b94d 3fb794df2b489722 3fbc657fc94f2db2
+    table row 1243: 3fe32f45d23e47f7 3fea6b5db75216cd 3fb78db8cc2de495 3fbc659e8e24aa93
+    table row 1244: 3fe33d920ac023a7 3fea6349cffac62b 3fb7868db723dcf1 3fbc65bd5dec335b
+    table row 1245: 3fe34bde4341ff59 3fea5b30a40d9a55 3fb77f5ded8bf168 3fbc65dc388d6779
+    table row 1246: 3fe35a2a7bc3db0a 3fea531235287370 3fb7782970c8878b 3fbc65fb1defdd4b
+    table row 1247: 3fe36876b445b6bc 3fea4aee84ea3e8b 3fb770f0423cf925 3fbc661a0dfb2217
+    table row 1248: 3fe376c2ecc7926c 3fea42c594f2f545 3fb769b2634d9404 3fbc66390896ba39
+    table row 1249: 3fe3850f25496e1c 3fea3a9766e39d7f 3fb7626fd55f99c4 3fbc66580daa2125
+    table row 1250: 3fe3935b5dcb49ce 3fea3263fc5e4908 3fb75b2899d93fad 3fbc66771d1cc97c
+    table row 1251: 3fe3a1a7964d257e 3fea2a2b57061549 3fb753dcb221ae75 3fbc669636d61d21
+    table row 1252: 3fe3aff3cecf0131 3fea21ed787f2aef 3fb74c8c1fa10217 3fbc66b55abd7d50
+    table row 1253: 3fe3be400750dce1 3fea19aa626ebd9f 3fb74536e3c049a0 3fbc66d488ba42ab
+    table row 1254: 3fe3cc8c3fd2b891 3fea1162167b0b97 3fb73ddcffe986fb 3fbc66f3c0b3bd4c
+    table row 1255: 3fe3dad878549443 3fea0914964b5d5f 3fb7367e7587aec4 3fbc6713029134de
+    table row 1256: 3fe3e924b0d66ff3 3fea00c1e388057b 3fb72f1b4606a816 3fbc67324e39e8af
+    table row 1257: 3fe3f770e9584ba6 3fe9f869ffda6006 3fb727b372d34c52 3fbc6751a3950fbd
+    table row 1258: 3fe405bd21da2756 3fe9f00cececd271 3fb72046fd5b66fa 3fbc67710289d8cd
+    table row 1259: 3fe414095a5c0306 3fe9e7aaac6acb1d 3fb718d5e70db571 3fbc67906aff6a84
+    table row 1260: 3fe4225592dddeb8 3fe9df434000c10e 3fb711603159e6d5 3fbc67afdcdce36f
+    table row 1261: 3fe430a1cb5fba68 3fe9d6d6a95c3397 3fb709e5ddb09bc1 3fbc67cf58095a1e
+    table row 1262: 3fe43eee03e1961b 3fe9ce64ea2ba9fb 3fb70266ed836622 3fbc67eedc6bdd34
+    table row 1263: 3fe44d3a3c6371cb 3fe9c5ee041eb326 3fb6fae36244c902 3fbc680e69eb7380
+    table row 1264: 3fe45b8674e54d7b 3fe9bd71f8e5e546 3fb6f35b3d683851 3fbc682e006f1c04
+    table row 1265: 3fe469d2ad67292d 3fe9b4f0ca32dd80 3fb6ebce806218b5 3fbc684d9fddce18
+    table row 1266: 3fe4781ee5e904dd 3fe9ac6a79b83f98 3fb6e43d2ca7bf58 3fbc686d481e7972
+    table row 1267: 3fe4866b1e6ae08f 3fe9a3df0929b594 3fb6dca743af71af 3fbc688cf918063a
+    table row 1268: 3fe494b756ecbc40 3fe99b4e7a3bef6f 3fb6d50cc6f06546 3fbc68acb2b15525
+    table row 1269: 3fe4a3038f6e97f0 3fe992b8cea4a2b8 3fb6cd6db7e2bf95 3fbc68cc74d13f80
+    table row 1270: 3fe4b14fc7f073a2 3fe98a1e081a8a40 3fb6c5ca17ff95ba 3fbc68ec3f5e974b
+    table row 1271: 3fe4bf9c00724f52 3fe9817e285565c2 3fb6be21e8c0ec56 3fbc690c1240274a
+    table row 1272: 3fe4cde838f42b04 3fe978d9310df989 3fb6b6752ba1b749 3fbc692bed5cb310
+    table row 1273: 3fe4dc34717606b4 3fe9702f23fe0e1d 3fb6aec3e21dd98c 3fbc694bd09af721
+    table row 1274: 3fe4ea80a9f7e265 3fe9678002e06fe3 3fb6a70e0db224ea 3fbc696bbbe1a8fb
+    table row 1275: 3fe4f8cce279be17 3fe95ecbcf70eecb 3fb69f53afdc59d7 3fbc698baf177731
+    table row 1276: 3fe507191afb99c7 3fe956128b6c5df6 3fb69794ca1b2734 3fbc69abaa230974
+    table row 1277: 3fe51565537d7579 3fe94d543890935b 3fb68fd15dee2a1d 3fbc69cbaceb00b8
+    table row 1278: 3fe523b18bff5129 3fe94490d89c6771 3fb688096cd5edaf 3fbc69ebb755f733
+    table row 1279: 3fe531fdc4812cd9 3fe93bc86d4fb4d4 3fb6803cf853ead0 3fbc6a0bc94a807f
+    table row 1280: 3fe54049fd030889 3fe932faf86b57eb 3fb6786c01ea87fc 3fbc6a2be2af29b1
+    table row 1281: 3fe54e963584e43e 3fe92a287bb12e8c 3fb670968b1d1907 3fbc6a4c036a7957
+    table row 1282: 3fe55ce26e06bfee 3fe92150f8e417b1 3fb668bc956fdef8 3fbc6a6c2b62efaa
+    table row 1283: 3fe56b2ea6889b9e 3fe9187471c7f306 3fb660de226807b2 3fbc6a8c5a7f0685
+    table row 1284: 3fe5797adf0a774e 3fe90f92e821a0a2 3fb658fb338baddb 3fbc6aac90a53190
+    table row 1285: 3fe587c7178c52fe 3fe906ac5db700a2 3fb65113ca61d88c 3fbc6acccdbbde46
+    table row 1286: 3fe59613500e2eb3 3fe8fdc0d44ef2d3 3fb64927e8727b2b 3fbc6aed11a9740f
+    table row 1287: 3fe5a45f88900a63 3fe8f4d04db1565d 3fb641378f46752a 3fbc6b0d5c545450
+    table row 1288: 3fe5b2abc111e613 3fe8ebdacba70959 3fb63942c06791ca 3fbc6b2dada2da82
+    table row 1289: 3fe5c0f7f993c1c3 3fe8e2e04ff9e881 3fb631497d6087e9 3fbc6b4e057b5c47
+    table row 1290: 3fe5cf4432159d73 3fe8d9e0dc74ced4 3fb6294bc7bcf9c8 3fbc6b6e63c42979
+    table row 1291: 3fe5dd906a977928 3fe8d0dc72e39531 3fb62149a10974c7 3fbc6b8ec8638c44
+    table row 1292: 3fe5ebdca31954d8 3fe8c7d315131211 3fb619430ad37143 3fbc6baf333fc934
+    table row 1293: 3fe5fa28db9b3088 3fe8bec4c4d1190d 3fb6113806a9523f 3fbc6bcfa43f1f52
+    table row 1294: 3fe60875141d0c38 3fe8b5b183ec7a9a 3fb60928961a653d 3fbc6bf01b47c82a
+    table row 1295: 3fe616c14c9ee7e8 3fe8ac99543503a1 3fb60114bab6e1fe 3fbc6c10983ff7f4
+    table row 1296: 3fe6250d8520c39d 3fe8a37c377b7d21 3fb5f8fc760fea40 3fbc6c311b0ddd90
+    table row 1297: 3fe63359bda29f4d 3fe89a5a2f91abe3 3fb5f0dfc9b78999 3fbc6c51a397a2ad
+    table row 1298: 3fe641a5f6247afd 3fe891333e4a5006 3fb5e8beb740b51e 3fbc6c7231c36bd5
+    table row 1299: 3fe64ff22ea656ad 3fe88807657924ae 3fb5e099403f4b3f 3fbc6c92c5775883
+
+PlatformInvariantsTest[jvm] > productionTableMatchesTheJvmDigests[jvm] FAILED
+    java.lang.AssertionError at PlatformInvariantsTest.kt:79
+
+SortedHeapTest[jvm] > fewDistinctKeysPopInTheOraclesOrder[jvm] PASSED
+
+SortedHeapTest[jvm] > allKeysEqualPopInTheOraclesOrder[jvm] PASSED
+
+SortedHeapTest[jvm] > aLargeHeapThroughManyBinsPopsInTheOraclesOrder[jvm] PASSED
+
+SortedHeapTest[jvm] > clearAndEmptyPopsMatchTheOracle[jvm] PASSED
+
+54 tests completed, 4 failed
+
+> Task :brouter:jvmTest FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 16s
+7 actionable tasks: 5 executed, 2 up-to-date
+gradle exit: 1
