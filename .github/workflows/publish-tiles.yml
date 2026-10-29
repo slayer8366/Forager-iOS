@@ -18,7 +18,7 @@ env:
   # F0, Forager's test fixture, refused unless it matches these pins (Phase 2, step 1).
   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
   F0_BYTES: '152665'
-  F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+  F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5991
 
 jobs:
   capture:
