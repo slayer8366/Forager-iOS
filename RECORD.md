@@ -1366,3 +1366,44 @@ The watcher read 185,584 tokens at 22:55:08Z. The harness's final count was 200,
 - **Why this is not a weakened test:** the test never finished, so it never asserted anything. Capping it makes it
   assert on 1 million ops per seed, and the second case adds coverage it never had.
 **Notes:** Written by Cedar Datum by hand. Next free ID -34.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-34
+**Timestamp:** 2026-10-29T23:10:55Z
+**Continues:** 2026-10-28-3, 2026-10-28-33
+**Title:** Phase 2, step 2a closed: `util` green, 26 tests on the JVM, iOS klibs compiled, simulator 4 of 4; the
+end-of-array branch is left to step 5b
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `d5371c7`: the ruling applied;
+- `316ac1f` and `9ce54ee`: the bite runs;
+- `5676f99` and `c225648`: the report and CI.
+
+The watcher read 185,285 tokens at 23:08:51Z. The harness's count at the report was 199,537.
+- **CI, run 40970686102 on `9ce54ee`: success.**
+  - `jvm`: 26 tests, 0 failures; both iOS klibs compiled, with no `e:` lines.
+  - `ios-smoke`: 4 tests, 0 failures. **Simulator-checked.**
+  - The planner read the run's conclusion through the GitHub API.
+- **The two cases:**
+  - **Case 1,** capped at 1,000,000 ops per seed with resets kept: 20 seeds end at the cap.
+  - **Case 2,** no reset, to the position bound: 20 seeds end after 3,976 to 4,250 ops each.
+  - The test's printed counts equal the oracle-alone counts on all 40 seed-cases.
+- **Each case bites on its own flip:** bit 0 of byte 100 failed only case 1, at op 206, and only case 2, at op 108.
+  Each op is the first read covering that bit, worked out on the oracle before the run.
+- **The coder's own wrong prediction** (op 1,775 for run A) came from a committed log missing its first three lines.
+  The harness was re-run and the log replaced.
+- **The planner's ruling (-33) rested on a wrong premise.** Case 2 does not reach `fillBuffer`'s end-of-array branch:
+  - `idx` peaks at 4,079 to 4,084, below `idxMax` 4,095;
+  - past the bound, Java's unguarded `ab[++idx]` throws within 15 ops;
+  - a control without the bound reaches the branch on 19 of 20 seeds, so the detector works.
+
+**The planner's ruling on that branch (technical):** option (i). Case 2 stays as built.
+- Making the port reproduce Java's `ArrayIndexOutOfBoundsException` (option (ii)) would test a failure Forager never
+  relies on.
+- Whether production reaches the branch is a question for real tiles. **Step 5b decodes every micro-cache of each
+  captured tile through both engines.** It is to report whether `fillBuffer`'s end-of-array branch runs there, or
+  record it as unreached.
+- **Step 2a is closed.** The two earlier runs, 40969246695 and 40969414415, were left to their 30-minute timeout and
+  were not read.
+**Notes:** Written by Cedar Datum by hand. Next: step 2b. Next free ID -35.
