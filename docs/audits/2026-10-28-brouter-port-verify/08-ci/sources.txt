@@ -1,0 +1,76 @@
+Item G sources (part 5, Hazel). Fetched 2026-10-29T04:11:28Z with curl; quoted lines only. SHA-256 of each saved page:
+fdd4cda3f1e4eafa20ffb758c03a6988f83a27091d4c45318bf5948a494bc2a3  runners.md
+6361d85c8d14d486842c5f0b6be2eb4b04e396177d6ceaf6cf605109258f0612  macos-14-arm64-Readme.md
+a7d3d1445a726faf0ad548ff7906f6cb49df7ad29144666f9c27d79450079c03  macos-15-arm64-Readme.md
+ec3c1870a9ea28249557f40fd751cacba720dcf16d2ef2c016e39d68f2610a47  macos-26-arm64-Readme.md
+6a4c243c1922768f9c4e449e67cc73a6db35e567363be67f12c1cf6a432ce318  billing.md
+1c4708ec3c12739fe47a1e6dd482582419a97f36b312d5a6b2cae8afa05f8a84  kmp-compat.html
+
+== https://docs.github.com/en/actions/reference/runners/github-hosted-runners (via docs.github.com/api/article/body), read 2026-10-29
+Heading at runners.md:22: ### Standard GitHub-hosted runners for public repositories
+ windows-11-arm,  windows-11-vs2026-arm  macOS  4  14 GB  14 GB  Intel   macos-15-intel,  macos-26-intel  macOS  3 (M1)  7 GB  14 GB  arm64   macos-latest,  macos-14,  macos-15,  macos-26,  xcode-27
+
+== https://docs.github.com/en/billing/concepts/product-billing/github-actions, read 2026-10-29
+The following usage remains free independently and does not reduce the included compute usage:
+
+* Standard GitHub-hosted runners in public repositories. See [Choosing the runner for a job](/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job#standard-github-hosted-runners-for-public-repositories).
+* Self-hosted runners.
+
+Larger runners are billed for public repositories.
+
+== https://github.com/actions/runner-images/blob/main/images/macos/macos-14-arm64-Readme.md, read 2026-10-29
+- OS Version: macOS 14.8.9 (23J631)
+- Image Version: 20260831.0302.1
+ 16.2           | 16C5032a 
+ 16.1           | 16B40    
+ 15.4 (default) | 15F31d   
+ 15.3           | 15E204a  
+ 15.2           | 15C500b  
+ 15.1           | 15C65    
+ 15.0.1         | 15A507   
+== https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md, read 2026-10-29
+- OS Version: macOS 15.7.9 (24G830)
+- Image Version: 20260907.0337.1
+ 26.3           | 17C529   
+ 26.2           | 17C52    
+ 26.1.1         | 17B100   
+ 26.0.1         | 17A400   
+ 16.4 (default) | 16F6     
+ 16.3           | 16E140   
+ 16.2           | 16C5032a 
+ 16.1           | 16B40    
+ 16.0           | 16A242d  
+== https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md, read 2026-10-29
+- OS Version: macOS 26.6.2 (25G83)
+- Image Version: 20261013.0424.1
+ 26.6 (default) | 17F113 
+ 26.5           | 17F42  
+ 26.4.1         | 17E202 
+ 26.3           | 17C529 
+ 26.2           | 17C52  
+ 26.1.1         | 17B100 
+ 26.0.1         | 17A400 
+
+== https://kotlinlang.org/docs/multiplatform/multiplatform-compatibility-guide.html, 'Version compatibility', read 2026-10-29
+Kotlin Multiplatform plugin version | Gradle | Android Gradle plugin | Xcode
+2.4.20-2.4.21 | 7.6.3-9.7.0 | 8.5.2-9.3.1 | 26.4
+2.4.0-2.4.10 | 7.6.3-9.5.0 | 8.5.2-9.1.0 | 26.4
+2.3.20-2.3.21 | 7.6.3-9.3.0 | 8.2.2-9.0.0 | 26.0
+2.3.10 | 7.6.3-9.0.0 | 8.2.2-9.0.0 | 26.0
+2.3.0 | 7.6.3-9.0.0 | 8.2.2-8.13.0 | 26.0
+(transcribed from the page's table text; the page's own words: 'check the compatibility of a particular version of the Kotlin Multiplatform Gradle plugin (same as the Kotlin version in your project) with Gradle, Xcode, and Android Gradle plugin versions')
+
+== JetBrains' published artifacts, read with javap 2026-10-29
+kotlin-native-utils-2.3.10.jar sha256 9200d16967b221aaf6014e4eb0257316798a47bb2816723d3d9c646853d72e13 (Maven Central coordinates org.jetbrains.kotlin:kotlin-native-utils:2.3.10, from ~/.gradle)
+  XcodeVersion.<clinit>: maxTested = new XcodeVersion(16, 0)  [bipush 16; iconst_0; invokespecial <init>(II)V; putstatic maxTested]
+  XcodeVersion.compareTo: by major, then minor
+kotlin-gradle-plugin-2.3.10-gradle813.jar sha256 b8160f458f50923df03fd01b204d95e80f63c4adb140f8949ce50b43d794bde3
+  XcodeVersionService.checkVersionCompatibility: if (!ignoreVersionCompatibilityCheck && xcode.compareTo(XcodeVersion.maxTested) > 0) report XcodeVersionTooHighWarning(xcode, maxTested)
+  warning text fragments: 'Xcode Version Too High for Kotlin Gradle Plugin', 'Kotlin <-> Xcode compatibility issue: The selected Xcode version (', 'To suppress this message add ... =true to your gradle.properties'
+Kotlin/Native 2.3.10 distribution (~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10/konan/konan.properties):
+  # if true, ignores Xcode version check.
+  ignoreXcodeVersionCheck = false
+  
+  minimalXcodeVersion=12.5
+  targetToolchain.macos_x64 = target-toolchain-xcode_26.0.1_17A400
+  additionalToolsDir.macos_x64 = xcode-addon-xcode_26.0.1_17A400

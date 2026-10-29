@@ -1,0 +1,33 @@
+# Item G: a SKETCH, not a workflow. Phase 1 writes nothing under .github/ and runs no CI.
+# Nothing here has run. Labels and Xcode paths are read from sources.txt (2026-10-29).
+# Tile fetch follows F's ruling (owner, relayed by the planner 2026-10-29): a release on
+# Forager-iOS, fetched by URL with size and SHA-256 checks, as fetch-brouter.sh:23-28 does.
+# The release does not exist yet; <...> marks values Phase 2 fills in.
+
+on: [push, pull_request]
+
+jobs:
+  jvm:                                   # from Phase 2's first commit
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@<pinned sha>
+      - uses: actions/setup-java@<pinned sha>   # JDK 21 runs Gradle; the module targets JVM 17
+      - name: Fetch the oracle (item D)
+        run: tools/fetch-pinned.sh brouter-1.7.10.zip <url> <size> <sha256>
+      - name: Fetch the test tiles (item F, ruled: Forager-iOS release)
+        run: tools/fetch-pinned.sh <tile>.rd5 https://github.com/slayer8366/Forager-iOS/releases/download/<tag>/<tile>.rd5 <size> <sha256>
+      - run: ./gradlew :brouter:jvmTest
+      - run: ./gradlew :brouter:compileKotlinIosArm64 :brouter:compileKotlinIosSimulatorArm64   # klibs only; no link on Linux
+      - uses: actions/upload-artifact@<pinned sha>   # JUnit XML, read for counts
+        with: { path: brouter/build/test-results/ }
+
+  ios-simulator:                         # once commonTest holds a test whose answer can differ on iOS (item H)
+    runs-on: macos-26                    # arm64 (M1); not macos-latest, which moves
+    steps:
+      - uses: actions/checkout@<pinned sha>
+      - run: sudo xcode-select -s /Applications/Xcode_26.0.1.app   # Kotlin 2.3.10's published Xcode is 26.0
+      - name: Fetch the test tiles (same pins as the jvm job)
+        run: tools/fetch-pinned.sh ...
+      - run: ./gradlew :brouter:iosSimulatorArm64Test
+      - uses: actions/upload-artifact@<pinned sha>
+        with: { path: brouter/build/test-results/ }

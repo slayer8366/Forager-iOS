@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D and F)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D, F and G; H in part)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -21,6 +21,15 @@ the options and a recommendation are written, and nothing was chosen or created.
 after F at the planner's handoff limit ("when your own estimate passes about 110k, finish the item you are on, push, and
 hand off"). The reading the planner listed had already brought the harness count to about 110k before F began, and F
 ended at about 175k. Of G, only the repository's visibility was checked, because F's recommendation depends on it.
+
+**Part 5** (a sixth session, Hazel, 2026-10-29) answered **G**, written for F's ruling (below), and **part of H**: the hash-order
+question B left open, and the inventory of floating-point sites. **H's floating-point classification and its simulator test
+plan are not answered.** Part 5 stopped at the planner's handoff limit (about 200k by the harness's count); the required
+reading took about 145k of it. **G carries a finding against C** (JetBrains' published Gradle range for Kotlin 2.3.10 ends at
+9.0.0), for the planner; it is not a stop.
+
+**F is ruled.** The owner chose "Forager-iOS release (Recommended)", relayed by the planner to part 5 on 2026-10-29, to be
+recorded as RECORD -12. It was not yet on `main` when part 5 read `main` at `7043843`.
 
 **Marks.** **[R]** read, with file and line at the stated commit. **[C]** computed, with the evidence file under
 `2026-10-28-brouter-port-verify/`. **[I]** inferred. **[?]** could not determine.
@@ -780,11 +789,131 @@ SHA-256, as Forager fetches BRouter itself. This is recommended: no account, no 
 committed'. (2) Git LFS in Forager-iOS, which counts each CI download against your 10 GiB monthly LFS bandwidth and
 reopens ruling c. (3) A storage bucket on another service, which needs an account."
 
-### Not answered yet (parts 4 to 6, in RECORD -8's order)
+### G. CI: what runs where, and when each job is worth adding
 
+Written by the sixth session on this dispatch (Hazel, part 5, 2026-10-29). **Nothing was written under `.github/` and no
+CI ran.** The sketch is text, in `08-ci/workflow-sketch.yml.txt`. Sources are quoted, with URL, date and SHA-256, in
+`08-ci/sources.txt`.
+
+**Bases [C].** Forager `pre-main` is still `d100a4776` (`git ls-remote`, 04:05Z), so no premise check is needed. Forager-iOS
+`main` is `7043843`; `brouter-port` was `eee9a20` when this part started.
+
+**Forager-iOS is public** (part 4, `07-tiles/logs/forager-ios-visibility.txt`) **[C]**. GitHub's billing page: "The following
+usage remains free ...: Standard GitHub-hosted runners in public repositories", and "Larger runners are billed for public
+repositories" **[R: `08-ci/sources.txt`]**. So both jobs below use standard labels only.
+
+**What runs where.**
+
+| Job | Runner label | Runs | Worth adding when |
+|---|---|---|---|
+| `jvm` | `ubuntu-24.04` (pinned, not `-latest`) | `jvmTest`: the port's unit tests and the differential tests against the oracle; then `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` | **From Phase 2's first commit.** Tests over stubs need a runner to be seen failing, and the klib compile catches a JVM-only API in `commonMain` the day it is written. Part 2 compiled both iOS klibs on this Ubuntu x86_64 container with Kotlin 2.3.10 **[C: `04-libraries/probe-kmp/build.log`]**. Linking iOS binaries was not tried on Linux and is not expected there **[I]**. |
+| `ios-simulator` | **`macos-26`** (pinned by name) with **Xcode 26.0.1** selected | `iosSimulatorArm64Test`: `commonTest` on the simulator | **Once `commonTest` holds a test whose answer can differ on iOS:** H's checks (hash order, floating point) and routes whose expected output was written on the JVM. Before that it would only re-run what the JVM job proves. |
+
+**The macOS label [R: `08-ci/sources.txt`].**
+- **Apple silicon.** GitHub's table for public repositories lists `macos-latest`, `macos-14`, `macos-15`, `macos-26` and
+  `xcode-27` as "3 (M1)", "arm64". Only `macos-15-intel` and `macos-26-intel` are Intel. **C's dropping `iosX64` holds**
+  for the recommended label.
+- **`macos-latest` now points to the `macos-26` image** (its link in that table), so it is not used: it moves.
+- **Xcode on the images:**
+  - `macos-26` (image `20261013.0424.1`): 26.0.1, 26.1.1, 26.2, 26.3, 26.4.1, 26.5, 26.6 (default);
+  - `macos-15` (image `20260907.0337.1`): 16.0 to 16.4 (default 16.4), 26.0.1, 26.1.1, 26.2, 26.3;
+  - `macos-14`: 15.0.1 to 16.2 (default 15.4).
+
+**Does Kotlin/Native 2.3.10 support that Xcode?** Three JetBrains sources, which do not agree:
+- **The published table** (kotlinlang.org, "Version compatibility", read 2026-10-29) gives **Kotlin 2.3.10 with Xcode 26.0**
+  **[R]**. `Xcode_26.0.1` is installed on `macos-26` and `macos-15`, so **either label supports C's "2.3.10 exactly"**, with
+  26.0.1 selected explicitly. `macos-26` is recommended as the newer image; the choice between the two is mine **[I]**.
+- **The Kotlin/Native 2.3.10 distribution** builds Apple targets with an Xcode 26.0.1 toolchain
+  (`targetToolchain.macos_x64 = target-toolchain-xcode_26.0.1_17A400`, `konan.properties:92`), and sets
+  `minimalXcodeVersion=12.5` (`:29`) **[C: read from the distribution in `~/.konan`]**. 17A400 is the build of
+  `Xcode_26.0.1` on both images **[R]**.
+- **The Gradle plugin's own warning threshold is lower.** `kotlin-native-utils` 2.3.10 sets `XcodeVersion.maxTested` to
+  **16.0**, and KGP 2.3.10's `XcodeVersionService` reports "Xcode Version Too High for Kotlin Gradle Plugin" whenever the
+  selected Xcode compares above it, by major then minor **[C: `javap` of both jars, SHA-256s in `08-ci/sources.txt`]**. So
+  **every Xcode on either image would print that warning,** 26.0.1 included **[I, from the bytecode; not run on a Mac]**. It is a
+  warning, suppressible by a `gradle.properties` flag, not an error.
+- **Not tested [?]:** whether 2.3.10 links and runs `iosSimulatorArm64Test` with Xcode 26.0.1 on that runner, and which iOS
+  simulator runtimes the image holds for 26.0.1. The first CI run in Phase 2 is that test. Every iOS result is to be reported as
+  "simulator-checked" (`CLAUDE.md` of this repository).
+
+**A finding against C, for the planner [R].** The same table gives Kotlin 2.3.10 with **Gradle 7.6.3–9.0.0** and **Android Gradle
+plugin 8.2.2–9.0.0**. C recommends Gradle 9.7.0 with Kotlin 2.3.10, Forager's own pair, and Forager builds with AGP 9.3.1. Both
+are **outside JetBrains' published range**. The first Kotlin line whose range covers Gradle 9.7.0 and AGP 9.3.1 is 2.4.20–2.4.21
+(Xcode 26.4). Parts 2 and 3 built with Gradle 9.7.0 and Kotlin 2.3.10 without error **[C]**, so the pair works for what was
+built; it is not a supported pair. This does not change Forager and is not a stop in the dispatch. Whether the port keeps C's
+Gradle 9.7.0, drops to 9.0.0 for the port alone, or waits for Forager to move Kotlin is for the planner and owner.
+
+**Where G depended on F, written for the ruling [I].**
+- **Tiles reach CI by URL from a Forager-iOS release,** each checked for size and SHA-256 before use, as `fetch-brouter.sh:23-28`
+  checks BRouter's zip, and as D's oracle is fetched. One small script serves both (`tools/fetch-pinned.sh` in the sketch).
+- **No secret and no token.** A public release asset is fetched anonymously. That is inferred, not tested (F's disclosure stands).
+- **Both jobs fetch the tiles.** The simulator test reads them from the runner's disk; that a simulator test process can read a
+  host path was not checked **[?]**.
+- **Caching is optional.** An `actions/cache` entry keyed by the tiles' SHA-256s saves downloads. A miss refetches from the
+  release and re-checks the pin, so the cache never becomes the pinned copy (F's option 5).
+- **The jobs that read tiles wait for the release,** which the owner creates in Phase 2. Until then the `jvm` job runs tests that
+  need no tile.
+
+### H. Floating point, and hash order (part 5: answered in part)
+
+Written by the sixth session (Hazel, part 5, 2026-10-29). **The hash-order question is answered. The floating-point list is
+computed but not yet classified, and the simulator test plan is not written.** Both are for the next session.
+
+**Method [C: `09-float/`].** `09-float/tools/fp_sites.py` reads part 1's `javap` dump of the vendored classes and T2's 481
+reached methods, and lists every floating-point and hash-iteration instruction by source line (`09-float/out/T2/sites.tsv`).
+Checked against things outside it: 481 of 481 methods found; 923 methods parsed against 923 `descriptor: (` lines in the dump.
+Its first run reported no float printed into a string, which was the script's blind spot (Java 11 bytecode concatenates with
+`invokedynamic`), not the code's; fixed, it finds 4 (`09-float/README.txt`).
+
+**Hash order: B's nine sites, re-checked [C][R].**
+- **Three of B's nine are not on the reached path at any tier** (T0 to T3 list 0 of each):
+  `BExpressionContext.java:453` (`dumpStatistics`), `:524` (`variableName`) and `RoutingParamCollector.java:260`
+  (`setProfileParams`). Nothing in BRouter or Forager main sources calls `setProfileParams` or `dumpStatistics`;
+  `variableName`'s one caller builds an error message at `BExpressionContext.java:517`, in an unreached method. B row 18 named
+  them from source, not from the reached set. **Correction to B.**
+- **The scan finds seven reached sites,** six of B's and `RoutingEngine.java:1568`, which B listed as a sorted set (row 6).
+  A wider pass over every `java.util` iteration call in the reached methods found no other map or set iteration.
+
+| Site | What is iterated | Can order change a result? |
+|---|---|---|
+| `RoutingParamCollector.java:188`, `setParams` | the caller's params map | **Not for Forager's calls [R].** Order matters only where two keys write one field: `heading`/`direction`; `turnInstructionMode`/`timode`/`turnInstructionFormat`; `format`/`trackFormat`; and the order `profile:` keys enter `keyValues`. Forager passes three keys, none in conflict (`BRouterTrailRouter.kt:151-158`). The order is the caller's map's, so the port's entry point fixes it. |
+| `BExpressionContext.java:863`, `_parseFile` | `keyValues` (the `profile:` params) | **Not for Forager's calls [R]:** one key, `use_dynamic_range`. With more, each key becomes a constant assignment to its own variable (`BExpression.java:395-404`); order changes only the variable numbering. **Whether numbering can change a result was not read [?].** |
+| `RoutingContext.java:107`, `getKeyValueChecksum` | `keyValues` | **No [R]:** a sum of hash codes, which does not depend on order. Its value feeds the profile cache key (`ProfileCache.java:45`), so it needs `String.hashCode` to be consistent on one platform, not equal across two [I]. |
+| `BExpressionMetaData.java:67`, `readMetaData` | the contexts (`way`, `node`) | **Only a failure's message [R]:** `finishMetaParsing` touches its own context (`BExpressionContext.java:310-319`). With two contexts missing data, order picks which one the exception names. A valid `lookups.dat` throws nothing. |
+| `NodesCache.java:393`, `close` | open files | **No [R]:** closes each, ignoring `IOException`. |
+| `RoutingEngine.java:1568`, `recalcTrack` | `directMap.keySet()` into a `TreeSet` | **No [R]:** sorted. |
+| `OsmNodesMap.java:181`, `collectOutreachers` | all nodes in `hmap` | **Possibly, not determined [?].** Every node in `hmap` is visited, and whether it vanishes depends on its own distance only (`:198-203`), so the vanished set does not depend on order **[I]**. The re-visits, and so `nodesCreated`, do, because `vanish()` unlinks neighbours as it goes (`OsmNode.java:205-217`) **[I]**. `nodesCreated` feeds the memory-pressure decisions. This is the memory-pressure path, which never ran on the sample (A); **E has to reach it** for the port to be compared there. |
+
+- **For Forager's calls, at the sites read, hash order changes no route [R][I].** Two sites are open: variable numbering under
+  more `profile:` keys, and `collectOutreachers`.
+- **What the port does about it [I]:** keep `HashMap` where order cannot matter; at `collectOutreachers`, either show by test
+  that order cannot change the route, or iterate in an order both platforms share. Kotlin/Native's `HashMap` iteration order
+  itself was **not read or tested** in this part; the answer above needs it only for `collectOutreachers`.
+- **Hash codes on the path [C], for the next session:** `String.hashCode` (`RoutingContext.getKeyValueChecksum`,
+  `RoutingEngine.doRouting`), `Arrays.hashCode` (`BExpressionContext.evaluate`, a cache key), `OsmNode.hashCode`
+  (`ilon + ilat`, `OsmNode.java:259-261`; used in `WaypointMatcherImpl.end`), and `Object.hashCode` through `LruMap.put` and
+  `removeLru`. Whether any feeds a choice rather than a cache was not read.
+
+**Floating point: the computed list, not yet classified [C: `09-float/out/T2/`].**
+- **68 of T2's 481 reached methods** hold a floating-point instruction: 383 arithmetic instructions in 39 methods, 226
+  comparisons in 38, 239 conversions in 45, 63 `Math` calls in 21, 35 `Float`/`Double` calls in 10, 4 floats printed into
+  strings.
+- **The library functions whose last bit is not fixed by IEEE 754** are the next session's first reading: `Math.cos` in
+  `CheapRuler.calcKxKyFromILat` (`:37`, the latitude scale table built at class load); `Math.sin`/`cos` in
+  `OsmPath.addAddionalPenalty` (`:282-283`); `Math.exp` in `StdPath.calcIncline` (`:283`) and `computeKinematic` (`:310`);
+  `Math.atan2` with `toDegrees` in `CheapAngleMeter.getAngle` (`:54`). `sqrt` (correctly rounded on both) appears in
+  `CheapRuler.distance`, `WaypointMatcherImpl.checkSegment`, `RoutingContext.calcDistance` and `CheapAngleMeter.calcAngle`.
+- **Parsing and printing:** `Float.parseFloat` (profile numbers, `BExpression.java:234`, `:401`; `getLookupValue` `:267`),
+  `Double.parseDouble` (waypoints, `RoutingParamCollector.java:90`; `RoutingEngine.postElevationCheck` `:760`),
+  `Float.toString` (`BExpressionContext.java:225`).
+- **Not done:** which of these choose between routes, whether the JVM and Kotlin/Native can differ at each, and the simulator
+  test. One cheap test the list suggests, not designed or run: the latitude scale table has 1,800 entries computed from fixed
+  inputs, so its bits can be written on the JVM and compared in full on the simulator.
+
+### Not answered yet (parts 6 and 7, in RECORD -11's order)
+
+- H's floating-point classification and its simulator test plan (above);
 - E, the differential tests;
-- G, CI;
-- H, floating point;
 - I, the Phase 2 order;
 - J, the mechanism prediction;
 - K, the timing plan.
@@ -884,6 +1013,33 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
     - **One square's tile is today's file only;** no earlier version can be fetched (F).
   - **Nothing found by part 4 bears on H.**
 
+- **Part 5** added G and part of H, with `08-ci/` and `09-float/` (commits `8adb3da` for H's evidence; G and this text in the
+  final message's commit).
+  - **Reproduce H's scan:** `python3 -I 09-float/tools/fp_sites.py <javap dump> 03-reach/out/T2/reached-methods.tsv <out>`. The
+    dump is part 1's `hazel/build/javap.txt` in scratch (rebuild: `javap -v -c -p` over the vendored classes compiled with
+    `-g`).
+  - **Reproduce G's reads:** the URLs in `08-ci/sources.txt` (GitHub's pages through `docs.github.com/api/article/body`), and
+    `javap -c -p -constants` on `XcodeVersion` in `kotlin-native-utils-2.3.10.jar` and `XcodeVersionService` in
+    `kotlin-gradle-plugin-2.3.10-gradle813.jar`, both in `~/.gradle`.
+  - **Scratch** for part 5 is `hazel/part5/`: the six fetched pages and the extracted classes. Left in place until Phase 1 ends.
+  - **H is not finished. What remains, in order:**
+    1. classify the floating-point sites in `09-float/out/T2/sites.tsv` by whether they can choose between routes (cost
+       comparisons, the open set's ordering, waypoint matching, pruning bounds) or only shape output (`track.distance`) or
+       messages; start from the library functions listed under H;
+    2. for each, whether the JVM and Kotlin/Native can differ: IEEE basic operations against library functions, parsing and
+       printing, float-to-int conversion, and whether Kotlin/Native fuses multiply-add on arm64. Run what can be run here: this
+       container can build and run Kotlin/Native `linuxX64` tests, which exercise the same native stdlib code (parsing,
+       printing, `HashMap` order, hash codes) but not Apple's `libm`;
+    3. Kotlin/Native's `HashMap` iteration order, needed for `collectOutreachers`;
+    4. the simulator test: JVM-written expected bits for the latitude table and the other library-function sites, compared in
+       `commonTest` on `iosSimulatorArm64` in G's `ios-simulator` job.
+  - **E depends on H** (RECORD -11), so the planner decides whether H's remainder goes before E or with it.
+  - **Found by part 5 that bears on later items** (input, not answers):
+    - **For C, and the owner:** JetBrains' table puts Gradle 9.7.0 and AGP 9.3.1 outside Kotlin 2.3.10's range (G).
+    - **For E:** `collectOutreachers`'s order question is one more reason the sample must reach the memory-pressure path; and
+      the profile-parameter conflicts at `setParams` matter only if the port's entry point takes a general params map.
+    - **For K:** the macOS standard runner is 3 M1 cores and 7 GB; the Ubuntu runner's figures were not read.
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -939,6 +1095,14 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
     - that a public release asset downloads without a token;
     - the recommendation itself.
 
+- **Part 5 (G, part of H):**
+  - **Confirmed by computation:** the bases; the scan's counts against the dump; three of B's sites unreached at every tier; KGP
+    2.3.10's `maxTested` of 16.0 and the comparison that uses it; the Kotlin/Native distribution's Xcode 26.0.1 toolchain.
+  - **Confirmed by reading:** GitHub's runner table, billing lines and image Xcode lists; JetBrains' compatibility table; each
+    hash-iteration site's code.
+  - **Inferred:** that every Xcode 26 prints KGP's warning; that iOS linking needs a Mac; that a public asset fetches without a
+    token; the effect of order at `collectOutreachers`; every recommendation in G.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -965,6 +1129,14 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
   - the owner's GitHub plan, and so the LFS quota that applies (Free and Pro are the same, 10 GiB);
   - option 6's limits, which were not read.
 
+- **Part 5:**
+  - whether Kotlin 2.3.10 links and runs simulator tests with Xcode 26.0.1 on `macos-26` (Phase 1 runs no CI);
+  - which simulator runtimes the images hold;
+  - whether a simulator test process can read a path on the runner's disk;
+  - whether variable numbering can change a result at `_parseFile`, and whether order changes a route at `collectOutreachers`;
+  - Kotlin/Native's `HashMap` iteration order (not read or tested);
+  - H's floating-point questions, all of them (not reached).
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -983,6 +1155,11 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
   - **Premise 9's open question is answered.** brouter.de does not keep a tile's bytes stable at one URL: the files
     listed as dated 2026-10-03 are dated 2026-10-29, and `W75_N40` had 10 earlier contents in 10 days. The citation
     itself stands.
+
+- **Part 5:**
+  - **B row 18, in part:** three of its nine "reached" hash-iteration sites are not reached at any tier (H).
+  - **C's Gradle 9.7.0 with Kotlin 2.3.10** sits outside JetBrains' published range (G). C's own claim, that the pair builds,
+    stands; "supported" does not.
 
 ### Decided beyond scope
 
@@ -1031,3 +1208,13 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
     left, at the planner's handoff limit.
   - **Part 4 stopped after F** rather than starting G, by the planner's handoff limit. That limit was set for this part;
     it is not a stop in the dispatch.
+- **Part 5:**
+  - **G was answered before H,** against the order H, G in the prompt's "G and H": with about 55k tokens left after the reading,
+    G could be finished and H could not. H's evidence was pushed first (`8adb3da`).
+  - **The label `macos-26` over `macos-15`,** both carrying Xcode 26.0.1, and `ubuntu-24.04` pinned over `ubuntu-latest`.
+  - **JetBrains' jars were read with `javap`** from `~/.gradle`, beyond the documentation page, because the page and the tooling
+    disagree.
+  - **Six documentation pages were fetched** to scratch: GitHub's runners and billing pages, three runner-image readmes, and
+    kotlinlang.org's compatibility guide.
+  - **The finding against C is reported, not acted on.** C's text is unchanged; G states the conflict.
+
