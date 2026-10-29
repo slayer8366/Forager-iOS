@@ -1,0 +1,8 @@
+# The four brouter.de tiles the release captures, and each one's route ends for the check (tab-separated), from step 1
+# (docs/audits/2026-10-29-brouter-port-phase2/step1/check-*.log). W75_N40's ends are Forager's inside-across-the-degree-line
+# ends; the others are town points (Atlantic City, Bangor, Dunedin). F0, Forager's fixture, is routed between W75_N40's ends.
+tile	lat1	lon1	lat2	lon2
+W75_N40	41.2742564	-73.9978932	41.3036912	-74.0159457
+W75_N35	39.3600	-74.4400	39.3800	-74.4100
+W70_N40	44.8012	-68.7778	44.8200	-68.7500
+E170_S50	-45.8788	170.5028	-45.8650	170.5150

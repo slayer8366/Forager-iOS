@@ -1,0 +1,55 @@
+# 2026-10-29T22:09:11Z harness bite check: step 1's TileCheck (step1/TileCheck.java.txt) against tools/tile-check/TileCheck.java, both compiled from the files as they stand, on copies of step 1's E170_S50 (20:09Z)
+598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972
+== javac old
+javac exit=0
+== javac new
+javac exit=0
+## case 1: good tile, route ends at sea (-49.5,174.5 -> -49.4,174.6), where no road exists [the case the new checks add]
+== old
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | ok (null)
+E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
+E170_S50 | route -49.5,174.5 -> -49.4,174.6 | error=from-position not mapped in existing datafile | nodes=0 | distance=0
+exit=0
+== new
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | ok (null)
+E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
+E170_S50 | route -49.5,174.5 -> -49.4,174.6 | error=from-position not mapped in existing datafile | nodes=0 | distance=0
+E170_S50 | FAIL: no route
+exit=1
+## case 2: good tile, step 1's ends (control)
+== old
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | ok (null)
+E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
+E170_S50 | route -45.8788,170.5028 -> -45.8650,170.5150 | error=null | nodes=115 | distance=2003
+exit=0
+== new
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | ok (null)
+E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
+E170_S50 | route -45.8788,170.5028 -> -45.8650,170.5150 | error=null | nodes=115 | distance=2003
+E170_S50 | PASS
+exit=0
+## case 3: byte 530794 xor 0x01 (step 1's mid case)
+== old
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | FAILED java.io.IOException: checkum error
+Exception in thread "main" java.io.IOException: checkum error
+	at btools.mapaccess.OsmFile.createMicroCache(OsmFile.java:153)
+	at TileCheck.main(TileCheck.java:54)
+exit=1
+== new
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | FAILED java.io.IOException: checkum error
+Exception in thread "main" java.io.IOException: checkum error
+	at btools.mapaccess.OsmFile.createMicroCache(OsmFile.java:153)
+	at TileCheck.main(TileCheck.java:61)
+exit=1

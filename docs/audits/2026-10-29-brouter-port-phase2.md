@@ -11,6 +11,10 @@ below. **No release exists:** the release waits for the owner's word, and steps 
 the draft release with a 403. **No release, draft or tag exists.** Steps 3 to 7 were not run, and the release waits for the
 planner (section "Amendment 3, Part A" below).
 
+**Status (2026-10-29, fourth session, Linden Caliper, Amendment 4):** in progress. The workflow that captures, checks and
+publishes the tile release, `.github/workflows/publish-tiles.yml`, is being written on `brouter-port` (section
+"Amendment 4" below). Nothing is published from a session or a push.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -312,6 +316,35 @@ below keeps that, and only the first keeps today's bytes.
 - **The staged files are still in scratch,** unchanged, so a later route A can reuse them while the container lasts. They
   are 5 of the 6 assets' only copies outside brouter.de, which rewrites its tiles daily. F0's copy has its source in
   Forager.
+
+## Amendment 4: the publishing workflow (fourth session, Linden Caliper)
+
+`prompts/preserved/2026-10-28-01-brouter-port-amendment-4.md` on `main` at `f036b94`. Base: `brouter-port` at `469b33b`,
+equal to the remote [C].
+
+**Mechanism prediction (written before building).**
+- **`capture`** checks out the tools at the commit written into the file (never the triggering commit's tree), sets up
+  Temurin 21.0.13+9, and runs one script, `tools/tile-check/capture.sh`. That script:
+  - fetches the oracle with `tools/fetch-oracle.sh`;
+  - fetches F0 from `raw.githubusercontent.com` at Forager `e2969abe4` through `tools/fetch-pinned.sh`, which refuses it
+    unless size and SHA-256 equal the pins the workflow passes. This comes first, so a bad pin fails before any big
+    download;
+  - downloads each brouter.de tile once with `curl -D`, keeping its headers;
+  - runs step 1's harness on each tile in a folder of its own. The harness now **exits non-zero** on any failed check (lookup
+    version, version-checked open, `checkFileIntegrity`, zero cells or nodes decoded, a route that errs or is empty). Step
+    1's version only printed;
+  - writes the pins file and fills the README's table and the notes' date from it, then reads the five data files back
+    through `tools/fetch-tiles.sh` against the new pins. So the dry run exercises the checker the publish job uses.
+- **`publish`** runs only when `capture` succeeded and the event is `workflow_dispatch` on `refs/heads/main`. A push never
+  satisfies the first half, on any branch. It refuses an existing tag or release of that name, creates a draft targeting the
+  tools commit, uploads seven assets, downloads them back and checks them, and only then publishes.
+- **The green dry run will show** four tiles at lookup version 11, open ok, integrity ok, nodes above zero, and a route with
+  `error=null`. The bytes will differ from 20:09Z's, since brouter.de rewrites them [I].
+- **The failing dry run,** with one character of F0's pinned SHA-256 changed, will stop in `capture` at F0 with
+  "REFUSED forager-fixture-W75_N40.rd5 ... has SHA-256 ff6d9d8e…, pinned <the changed value>", before any brouter.de
+  download. `publish` will be skipped.
+- **Unknown until a run:** whether Forager's raw file is served anonymously to a runner (predicted yes, the repository is
+  public [I]).
 
 ## Confirmed vs inferred
 
