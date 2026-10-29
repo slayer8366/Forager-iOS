@@ -746,3 +746,53 @@ push I and not start J or K. The harness's final count was 230,100.
 - **The planner writes the list of owner choices itself,** from this record and the report, rather than giving a
   helper another long read.
 **Notes:** Written by Cedar Datum by hand. Next free ID -21.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-21
+**Timestamp:** 2026-10-29T10:57:52Z
+**Continues:** 2026-10-28-19
+**Title:** Research 2026-10-29-01, run 1: Android's cosine and atan2 come from FreeBSD's maths library; the measurement
+not reached
+**Observed:** the researcher (Fable), branch `research/android-math` at `634abf7` (method and predictions, before any
+source was read) and `0e37ccb` (the report, partial). Filed unedited as
+`prompts/preserved/2026-10-29-01-android-math-report-run1.md` (SHA-256 equal to the branch's file). The planner's
+watcher read 186,680 tokens at 10:50:52Z with only the method pushed; the planner told the researcher to write up and
+hand off. The harness's final count was 240,287.
+- **ART (answered):** the interpreter, the JIT and ahead-of-time code all end in the C library's `cos` and `atan2`.
+- **bionic (answered):** at API 37 both are FreeBSD msun C, of the fdlibm family, on every architecture, built
+  without fused multiply-add. At API 26, x86_64 used Intel assembly, and arm64 the same C.
+- **API 26 to 37 (partial):** on arm64, the sources change nothing on the table's path. x86_64 dropped the
+  assembly at API 34.
+- **HotSpot (answered, except the aarch64 stub's bits):**
+  - x86_64's default `Math.cos` is Intel's library, under `UseLibmIntrinsic`, an x86-only diagnostic flag;
+  - aarch64's is a fused-multiply variant of fdlibm, switched off by `-XX:DisableIntrinsic=_dcos`;
+  - **`Math.atan2` is never intrinsified:** it is Java's fdlibm on every CPU.
+- **Kotlin (answered):** `kotlin.math.cos` and `atan2` on the JVM are `java.lang.Math`'s. The premise is confirmed.
+- **Apple:** could not determine. The source page is gone, and the GitHub API was refused by this session's
+  access policy.
+- **Measurement:** not reached; the method is committed.
+- **Conclusion, as far as read:** Android arm64 phones can differ from the default x86_64 HotSpot oracle on `cos`.
+  Whether Android equals `StrictMath` (fdlibm) at all 1,800 rows, and on `atan2`, is the measurement.
+- **Correction to the Phase 1 report:** `-XX:-UseLibmIntrinsic` exists only on x86. E2, H's step 4 and K assume it,
+  or HotSpot's default `cos`, for the `macos-26` job, where HotSpot uses the aarch64 stub instead.
+- **The planner's prediction (-19), scored:**
+  - right: ART ends in bionic; `kotlin.math` is `java.lang.Math`;
+  - right on mechanism, unmeasured on rows: bionic's `cos` is not HotSpot's default algorithm;
+  - wrong for arm64: "changed at least once between API 26 and 37". Only x86_64 changed; on arm64 the table's
+    path did not.
+  - right, for a weaker reason than predicted: Apple's source could not be read.
+- **Checked by the planner, at source:**
+  - OpenJDK `jdk21u` `jdk-21.0.12.1-ga`: `library_call.cpp:1874-1876` returns false for `_datan2` ("not yet
+    correctly implemented"); `UseLibmIntrinsic` is declared in `globals_x86.hpp:214` and absent from
+    `globals_aarch64.hpp`; `macroAssembler_aarch64_trig.cpp` holds 19 `fmaddd`.
+  - bionic `android-17.0.0_r1` `libm/Android.bp:34`, `:68`, `:79`, `:98` list msun's `e_atan2.c`, `k_cos.c`,
+    `s_atan.c` and `s_cos.c`.
+  - Only the research files changed (12 files since `490b0e3`).
+- **Three names proposed:** Larch Plumbline, Alder Benchmark, Madrone Gauge. Two repeat a Forager name: "Plumbline"
+  is Thistle Plumbline's surname, and "Alder" is a member of Forager's forecast team.
+**The planner's call:** run 2 of the same dispatch, on the measurement and the read of `k_cos.c` and `s_atan.c`
+against fdlibm first; the handoff's smaller reads after, if they fit. The answer decides which of (a) to (c) the
+planner recommends.
+**Notes:** Written by Cedar Datum by hand. Next free ID -22.
