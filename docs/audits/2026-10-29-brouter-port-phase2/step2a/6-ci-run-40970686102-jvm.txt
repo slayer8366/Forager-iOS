@@ -1,0 +1,103 @@
+# CI run 40970686102 (https://github.com/slayer8366/Forager-iOS/actions/runs/40970686102), commit 9ce54ee, job jvm 123786360238: lines read from the job log, downloaded 2026-10-29 through get_job_logs' logs_url.
+# Compile-error lines ('Z e: '): 0. Each per-seed line appears twice: Gradle's stdout, then the XML's system-out (the 40 unique lines equal the local run's, by diff).
+2026-10-29T23:05:40.1081307Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9ce54eec38673eca28b5eed5c270be3e0e79a8fe:refs/remotes/origin/brouter-port
+2026-10-29T23:06:42.9958369Z > Task :brouter:jvmTest
+2026-10-29T23:06:42.9976816Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 1: 4125 ops, reading position 32645
+2026-10-29T23:06:42.9978202Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 2: 4013 ops, reading position 32647
+2026-10-29T23:06:42.9978991Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 3: 4097 ops, reading position 32655
+2026-10-29T23:06:42.9979749Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 4: 3976 ops, reading position 32659
+2026-10-29T23:06:42.9980484Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 5: 4142 ops, reading position 32642
+2026-10-29T23:06:42.9981227Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 6: 4224 ops, reading position 32641
+2026-10-29T23:06:42.9981957Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 7: 4079 ops, reading position 32644
+2026-10-29T23:06:42.9982687Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 8: 4080 ops, reading position 32644
+2026-10-29T23:06:42.9983451Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 9: 4066 ops, reading position 32643
+2026-10-29T23:06:42.9984625Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 10: 4076 ops, reading position 32645
+2026-10-29T23:06:42.9985415Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 11: 4250 ops, reading position 32648
+2026-10-29T23:06:42.9986179Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 12: 4061 ops, reading position 32644
+2026-10-29T23:06:42.9986930Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 13: 4076 ops, reading position 32658
+2026-10-29T23:06:42.9987685Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 14: 4191 ops, reading position 32652
+2026-10-29T23:06:42.9988430Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 15: 4118 ops, reading position 32641
+2026-10-29T23:06:42.9989171Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 16: 4100 ops, reading position 32663
+2026-10-29T23:06:42.9989940Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 17: 3976 ops, reading position 32643
+2026-10-29T23:06:42.9990695Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 18: 4041 ops, reading position 32649
+2026-10-29T23:06:42.9991441Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 19: 4188 ops, reading position 32642
+2026-10-29T23:06:42.9992190Z     rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 20: 4090 ops, reading position 32650
+2026-10-29T23:06:42.9995882Z     rawBitReadsOnRandomBytesMatchTheOracle seed 1: 1000000 ops, reading position 1101
+2026-10-29T23:06:42.9996483Z     rawBitReadsOnRandomBytesMatchTheOracle seed 2: 1000000 ops, reading position 836
+2026-10-29T23:06:42.9997058Z     rawBitReadsOnRandomBytesMatchTheOracle seed 3: 1000000 ops, reading position 179
+2026-10-29T23:06:42.9997624Z     rawBitReadsOnRandomBytesMatchTheOracle seed 4: 1000000 ops, reading position 283
+2026-10-29T23:06:43.0950130Z     rawBitReadsOnRandomBytesMatchTheOracle seed 5: 1000000 ops, reading position 9135
+2026-10-29T23:06:43.1949937Z     rawBitReadsOnRandomBytesMatchTheOracle seed 6: 1000000 ops, reading position 4094
+2026-10-29T23:06:43.2951197Z     rawBitReadsOnRandomBytesMatchTheOracle seed 7: 1000000 ops, reading position 3631
+2026-10-29T23:06:43.3949756Z     rawBitReadsOnRandomBytesMatchTheOracle seed 8: 1000000 ops, reading position 343
+2026-10-29T23:06:43.3951266Z     rawBitReadsOnRandomBytesMatchTheOracle seed 9: 1000000 ops, reading position 504
+2026-10-29T23:06:43.4949134Z     rawBitReadsOnRandomBytesMatchTheOracle seed 10: 1000000 ops, reading position 907
+2026-10-29T23:06:43.5948791Z     rawBitReadsOnRandomBytesMatchTheOracle seed 11: 1000000 ops, reading position 800
+2026-10-29T23:06:43.6949265Z     rawBitReadsOnRandomBytesMatchTheOracle seed 12: 1000000 ops, reading position 498
+2026-10-29T23:06:43.7949540Z     rawBitReadsOnRandomBytesMatchTheOracle seed 13: 1000000 ops, reading position 2414
+2026-10-29T23:06:43.7950480Z     rawBitReadsOnRandomBytesMatchTheOracle seed 14: 1000000 ops, reading position 542
+2026-10-29T23:06:43.8949427Z     rawBitReadsOnRandomBytesMatchTheOracle seed 15: 1000000 ops, reading position 1487
+2026-10-29T23:06:43.9949643Z     rawBitReadsOnRandomBytesMatchTheOracle seed 16: 1000000 ops, reading position 3750
+2026-10-29T23:06:44.0949876Z     rawBitReadsOnRandomBytesMatchTheOracle seed 17: 1000000 ops, reading position 8644
+2026-10-29T23:06:44.0950942Z     rawBitReadsOnRandomBytesMatchTheOracle seed 18: 1000000 ops, reading position 868
+2026-10-29T23:06:44.1949277Z     rawBitReadsOnRandomBytesMatchTheOracle seed 19: 1000000 ops, reading position 481
+2026-10-29T23:06:44.2949723Z     rawBitReadsOnRandomBytesMatchTheOracle seed 20: 1000000 ops, reading position 420
+2026-10-29T23:06:48.4634754Z BUILD SUCCESSFUL in 1m 6s
+2026-10-29T23:07:21.4420168Z > Task :brouter:compileKotlinIosArm64
+2026-10-29T23:07:23.8397214Z > Task :brouter:compileKotlinIosSimulatorArm64
+2026-10-29T23:07:23.9404812Z BUILD SUCCESSFUL in 35s
+2026-10-29T23:07:24.1332643Z com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+2026-10-29T23:07:24.1335465Z com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+2026-10-29T23:07:24.1337531Z com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+2026-10-29T23:07:24.1339251Z com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+2026-10-29T23:07:24.1341364Z com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+2026-10-29T23:07:24.1343069Z com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+2026-10-29T23:07:24.1344868Z com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+2026-10-29T23:07:24.1346504Z com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+2026-10-29T23:07:24.1348137Z com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+2026-10-29T23:07:24.1349531Z com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+2026-10-29T23:07:24.1350875Z com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+2026-10-29T23:07:24.1352254Z com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+2026-10-29T23:07:24.1353161Z TOTAL: tests 26, failures 0, errors 0, skipped 0 in 12 files
+2026-10-29T23:07:24.1451500Z   <testcase name="rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm]" classname="com.zynergylabs.forager.brouter.util.BitCoderContextTest" time="0.107"
+2026-10-29T23:07:24.1456163Z   <testcase name="rawBitReadsOnRandomBytesMatchTheOracle[jvm]" classname="com.zynergylabs.forager.brouter.util.BitCoderContextTest" time="2.041"
+2026-10-29T23:07:24.1457515Z   <system-out><![CDATA[rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 1: 4125 ops, reading position 32645
+2026-10-29T23:07:24.1458695Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 2: 4013 ops, reading position 32647
+2026-10-29T23:07:24.1459437Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 3: 4097 ops, reading position 32655
+2026-10-29T23:07:24.1460170Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 4: 3976 ops, reading position 32659
+2026-10-29T23:07:24.1460892Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 5: 4142 ops, reading position 32642
+2026-10-29T23:07:24.1461604Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 6: 4224 ops, reading position 32641
+2026-10-29T23:07:24.1462537Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 7: 4079 ops, reading position 32644
+2026-10-29T23:07:24.1463274Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 8: 4080 ops, reading position 32644
+2026-10-29T23:07:24.1464292Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 9: 4066 ops, reading position 32643
+2026-10-29T23:07:24.1465021Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 10: 4076 ops, reading position 32645
+2026-10-29T23:07:24.1465755Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 11: 4250 ops, reading position 32648
+2026-10-29T23:07:24.1467015Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 12: 4061 ops, reading position 32644
+2026-10-29T23:07:24.1468357Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 13: 4076 ops, reading position 32658
+2026-10-29T23:07:24.1469910Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 14: 4191 ops, reading position 32652
+2026-10-29T23:07:24.1471253Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 15: 4118 ops, reading position 32641
+2026-10-29T23:07:24.1472606Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 16: 4100 ops, reading position 32663
+2026-10-29T23:07:24.1474139Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 17: 3976 ops, reading position 32643
+2026-10-29T23:07:24.1475579Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 18: 4041 ops, reading position 32649
+2026-10-29T23:07:24.1477066Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 19: 4188 ops, reading position 32642
+2026-10-29T23:07:24.1478770Z rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 20: 4090 ops, reading position 32650
+2026-10-29T23:07:24.1480055Z rawBitReadsOnRandomBytesMatchTheOracle seed 1: 1000000 ops, reading position 1101
+2026-10-29T23:07:24.1481363Z rawBitReadsOnRandomBytesMatchTheOracle seed 2: 1000000 ops, reading position 836
+2026-10-29T23:07:24.1482441Z rawBitReadsOnRandomBytesMatchTheOracle seed 3: 1000000 ops, reading position 179
+2026-10-29T23:07:24.1483280Z rawBitReadsOnRandomBytesMatchTheOracle seed 4: 1000000 ops, reading position 283
+2026-10-29T23:07:24.1484391Z rawBitReadsOnRandomBytesMatchTheOracle seed 5: 1000000 ops, reading position 9135
+2026-10-29T23:07:24.1485040Z rawBitReadsOnRandomBytesMatchTheOracle seed 6: 1000000 ops, reading position 4094
+2026-10-29T23:07:24.1485668Z rawBitReadsOnRandomBytesMatchTheOracle seed 7: 1000000 ops, reading position 3631
+2026-10-29T23:07:24.1486283Z rawBitReadsOnRandomBytesMatchTheOracle seed 8: 1000000 ops, reading position 343
+2026-10-29T23:07:24.1486899Z rawBitReadsOnRandomBytesMatchTheOracle seed 9: 1000000 ops, reading position 504
+2026-10-29T23:07:24.1487512Z rawBitReadsOnRandomBytesMatchTheOracle seed 10: 1000000 ops, reading position 907
+2026-10-29T23:07:24.1488116Z rawBitReadsOnRandomBytesMatchTheOracle seed 11: 1000000 ops, reading position 800
+2026-10-29T23:07:24.1489193Z rawBitReadsOnRandomBytesMatchTheOracle seed 12: 1000000 ops, reading position 498
+2026-10-29T23:07:24.1489955Z rawBitReadsOnRandomBytesMatchTheOracle seed 13: 1000000 ops, reading position 2414
+2026-10-29T23:07:24.1490857Z rawBitReadsOnRandomBytesMatchTheOracle seed 14: 1000000 ops, reading position 542
+2026-10-29T23:07:24.1491886Z rawBitReadsOnRandomBytesMatchTheOracle seed 15: 1000000 ops, reading position 1487
+2026-10-29T23:07:24.1492506Z rawBitReadsOnRandomBytesMatchTheOracle seed 16: 1000000 ops, reading position 3750
+2026-10-29T23:07:24.1493119Z rawBitReadsOnRandomBytesMatchTheOracle seed 17: 1000000 ops, reading position 8644
+2026-10-29T23:07:24.1493980Z rawBitReadsOnRandomBytesMatchTheOracle seed 18: 1000000 ops, reading position 868
+2026-10-29T23:07:24.1494594Z rawBitReadsOnRandomBytesMatchTheOracle seed 19: 1000000 ops, reading position 481
+2026-10-29T23:07:24.1495196Z rawBitReadsOnRandomBytesMatchTheOracle seed 20: 1000000 ops, reading position 420

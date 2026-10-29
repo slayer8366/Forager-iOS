@@ -29,7 +29,8 @@ oracle alone. Changing it is the planner's call (section "Step 2a, sub-step 2" b
 25th test (RECORD -33) is applied (`d5371c7`): case 1 capped at 1,000,000 ops per seed, a second case with no reset to the
 position bound. Locally, with no filter: 26 tests, 0 failures. Each case bites on its own one-flipped-bit edit (`9ce54ee`).
 **One premise in the ruling is wrong:** the second case never reaches `fillBuffer`'s end-of-array branch (section "Step 2a
-close" below). CI: see that section.
+close" below). CI run 40970686102 on `9ce54ee` succeeded: `jvm` 26 tests, 0 failures, with the iOS klibs compiled;
+`ios-smoke` 4 tests, 0 failures (simulator-checked).
 
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
@@ -633,7 +634,22 @@ from a scratch copy that is byte-identical (`cmp`) and finds the mirror init scr
     result. The first log is kept as `5-bite-A-case1-run1.txt`.
   - Run B's "NO" is run A's output, untracked at the time; it is the only path B's `git status after` names.
 
-**CI:** see the next commit's addition below.
+**CI, run 40970686102 on `9ce54ee`: `success`** [R: the job logs; extracts `step2a/6-ci-run-40970686102-jvm.txt`,
+`-ios-smoke.txt`]:
+- **`jvm`:** JVM tests and **iOS klibs** both `BUILD SUCCESSFUL` (`compileKotlinIosArm64`, `compileKotlinIosSimulatorArm64`),
+  with 0 `e: ` lines. The JUnit XML reads **26 tests, 0 failures, 0 errors, 0 skipped, in 12 files**. Case 1 took 2.0 s
+  and case 2 0.1 s. CI's 40 per-seed lines equal the local run's (diff).
+- **`ios-smoke`:** `BUILD SUCCESSFUL`; **4 tests, 0 failures in 2 files** (`ToolchainSmokeTest` 1, `JavaLangCommonTest` 3).
+  This is simulator-checked.
+- `d5371c7` and `316ac1f` went up in the same push as `9ce54ee`, so they have no runs of their own. Run 40970872936 is on
+  `5676f99`, which changes only the report: not read.
+- **Runs 40969246695 (`612bb0d`) and 40969414415 (`87e7fc9`):** both were still `in_progress` at 23:09:09Z [R]. In
+  40969246695, `ios-smoke` finished `success`, and `jvm` was still in its JVM-tests step, which started at 22:53:39Z. That
+  puts its 30-minute limit at about 23:23Z [I]. Whether they timed out: not read, because the planner asked for the report
+  first [?].
+
+**Status: step 2a's finish line is met** (26 tests, 0 failures, locally and in CI, with the klibs compiled). Whether the
+step closes with case 2 short of the branch is the planner's call.
 
 ## Confirmed vs inferred
 
