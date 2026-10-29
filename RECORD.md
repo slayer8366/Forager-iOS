@@ -908,3 +908,51 @@ The harness's final count was 221,913.
 - **The dispatch's finish line is met:** the report and evidence are pushed, and the three names came in run 1
   (-21).
 **Notes:** Written by Cedar Datum by hand. Next free ID -24.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-24
+**Timestamp:** 2026-10-29T17:25:28Z
+**Continues:** 2026-10-28-3, 2026-10-28-17, 2026-10-28-21, 2026-10-28-22, 2026-10-28-23
+**Title:** Phase 1's owner choices: the port copies Android's maths; via points left out; a 25% flag; the researcher
+is Madrone Gauge (owner)
+**Decision:** the owner chose, from four questions asked together after Phase 1's report and the research closed:
+- **Same route on iPhone and Android:** "Copy Android's maths (Recommended)". The option read: "The port carries its
+  own copy of the cosine code Android phones use today, plus a copy of Java's map ordering for very long searches.
+  iPhone and Android then compute the same thing, and Android's routes don't change when it switches. The
+  desktop-Java tests still prove the port's logic exactly, and separately record whether the 13 rows ever change a
+  route. About 700 lines of maths code, plus the map ordering, which isn't sized yet."
+  - Rejected: "Copy Java's reference maths" (H's option (c)) and "Each phone uses its own" (H's (b)).
+  - **Read as:**
+    - `cos` from bionic's FreeBSD msun, ported to common Kotlin. This is a fourth option beside H's (a) to (c),
+      offered from -23's measurement.
+    - `atan2` from the same source. It equals HotSpot's on all 299,974 pairs, so the oracle covers it exactly.
+    - `hmap` in `java.util.HashMap`'s order, part 7's option (i).
+- **Via points:** "Leave it out (Recommended)". The option read: "429 lines that can't run through Forager's call
+  aren't ported, so nothing untested ships. If Forager ever adds routes with stops along the way, it gets ported
+  then, with tests." Rejected: "Port it untested"; "Port it and allow stops".
+  - This corrects -8's scope: the port is tier T2 less the four via-point methods, 10,759 lines (-20).
+- **Speed flag:** "25% slower (Recommended)". The option read: "The port copies Java line for line, so on the same
+  machine it should land close to Java. 25% sits above ordinary timing wobble while still catching a real
+  slowdown." Rejected: 10%, 50%.
+  - The question covered speed and memory together, so the margin m is 0.25 for flag S and for the memory flag
+    (K).
+- **The researcher's name:** "Madrone Gauge (Recommended)". Rejected: Larch Plumbline, Alder Benchmark.
+  - Profile: `docs/process/researcher-profile.md`, added to the planner profile's team table.
+
+**The planner's calls that follow (technical; the owner may overrule):**
+- **The oracle** runs on `ubuntu-24.04` (x86_64) with `-XX:-UseLibmIntrinsic`: fdlibm, 13 rows from Android rather
+  than 59.
+- **Two kinds of run:**
+  - E's logic runs inject the oracle's own table through the test seam, so the port's logic is proven exactly;
+  - production runs use the msun table and record any route difference.
+- **The port's own build** uses Gradle 9.0.0, inside JetBrains' tested range for Kotlin 2.3.10, rather than
+  Forager's 9.7.0 (-14). Forager takes the port as source, so the port's Gradle does not reach Forager. Step 0 checks
+  it, along with Kotlin 2.3.10 against `macos-26`'s Xcode 26.0.1.
+- **Package prefix** `com.zynergylabs.forager.brouter`; the `-ro` jar as oracle; runner labels `ubuntu-24.04` and
+  `macos-26`; E's thresholds.
+- **The intake route for Forager's Android app** (vendored source) stays C's recommendation, for Forager's planner
+  at the switch.
+**Notes:** Written by Cedar Datum by hand. The answers came after the planner's worker restarted; the time is the
+recording time. Next free ID -25.
