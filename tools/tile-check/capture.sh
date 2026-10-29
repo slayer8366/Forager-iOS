@@ -23,7 +23,8 @@ out=$(cd "$out" && pwd)
 if [ -n "$(ls -A "$out")" ]; then echo "REFUSED: $out is not empty" >&2; exit 1; fi
 assets="$out/assets"
 mkdir -p "$assets" "$out/headers"
-work=$(mktemp -d)
+# Beside <out>, so each checked tile can be hard-linked into assets/ (same filesystem): the asset is the checked inode.
+work=$(mktemp -d "$(dirname "$out")/tile-check-work.XXXXXX")
 trap 'rm -rf "$work"' EXIT
 
 sha256_of() {

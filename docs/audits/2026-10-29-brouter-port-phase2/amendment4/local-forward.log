@@ -1,36 +1,37 @@
-# 2026-10-29T22:08:28Z local forward run of tools/tile-check/capture.sh (working tree on 469b33b), over file:// copies of step 1's 20:09Z tiles and F0's staged copy
+# 2026-10-29T22:10:30Z local forward run of tools/tile-check/capture.sh (working tree on aa144a0, the work folder moved beside <out>), over file:// copies of step 1's 20:09Z tiles and F0's staged copy
 brouter-1.7.10.zip: fetched from https://github.com/abrensch/brouter/releases/download/v1.7.10/brouter-1.7.10.zip, matches its pins (6724983 bytes, SHA-256 023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532)
-brouter-1.7.10-ro.jar: fetched from file://<scratch>/a4/tmp/tmp.4RT4wCWevb/oracle/unzipped/brouter-1.7.10/brouter-1.7.10-ro.jar, matches its pins (345776 bytes, SHA-256 598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972)
-oracle ready in <scratch>/a4/tmp/tmp.4RT4wCWevb/oracle
+brouter-1.7.10-ro.jar: fetched from file://<scratch>/a4/tile-check-work.WoiA9Y/oracle/unzipped/brouter-1.7.10/brouter-1.7.10-ro.jar, matches its pins (345776 bytes, SHA-256 598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972)
+oracle ready in <scratch>/a4/tile-check-work.WoiA9Y/oracle
 forager-fixture-W75_N40.rd5: fetched from file://<scratch>/phase2/release-staging/forager-fixture-W75_N40.rd5, matches its pins (152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990)
-W75_N40.rd5: downloaded from file://<scratch>/phase2/tiles/W75_N40.rd5 at 2026-10-29T22:08:31Z
+W75_N40.rd5: downloaded from file://<scratch>/phase2/tiles/W75_N40.rd5 at 2026-10-29T22:10:32Z
 W75_N40 | bytes=119750873 | tile lookupversion=11 | lookups.dat=11.2
 W75_N40 | engine open (version-checked) | ok
 W75_N40 | checkFileIntegrity | ok (null)
 W75_N40 | decoded | 1-degree squares with data=23/25 | micro-caches=23552 | non-empty=19671 | nodes=8136499
 W75_N40 | route 41.2742564,-73.9978932 -> 41.3036912,-74.0159457 | error=null | nodes=226 | distance=5047
 W75_N40 | PASS
-W75_N35.rd5: downloaded from file://<scratch>/phase2/tiles/W75_N35.rd5 at 2026-10-29T22:08:40Z
+W75_N35.rd5: downloaded from file://<scratch>/phase2/tiles/W75_N35.rd5 at 2026-10-29T22:10:41Z
 W75_N35 | bytes=3571019 | tile lookupversion=11 | lookups.dat=11.2
 W75_N35 | engine open (version-checked) | ok
 W75_N35 | checkFileIntegrity | ok (null)
 W75_N35 | decoded | 1-degree squares with data=2/25 | micro-caches=2048 | non-empty=683 | nodes=260055
 W75_N35 | route 39.3600,-74.4400 -> 39.3800,-74.4100 | error=null | nodes=322 | distance=9471
 W75_N35 | PASS
-W70_N40.rd5: downloaded from file://<scratch>/phase2/tiles/W70_N40.rd5 at 2026-10-29T22:08:41Z
+W70_N40.rd5: downloaded from file://<scratch>/phase2/tiles/W70_N40.rd5 at 2026-10-29T22:10:42Z
 W70_N40 | bytes=5292557 | tile lookupversion=11 | lookups.dat=11.2
 W70_N40 | engine open (version-checked) | ok
 W70_N40 | checkFileIntegrity | ok (null)
 W70_N40 | decoded | 1-degree squares with data=10/25 | micro-caches=10240 | non-empty=3904 | nodes=233163
 W70_N40 | route 44.8012,-68.7778 -> 44.8200,-68.7500 | error=null | nodes=104 | distance=3949
 W70_N40 | PASS
-E170_S50.rd5: downloaded from file://<scratch>/phase2/tiles/E170_S50.rd5 at 2026-10-29T22:08:42Z
+E170_S50.rd5: downloaded from file://<scratch>/phase2/tiles/E170_S50.rd5 at 2026-10-29T22:10:43Z
 E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
 E170_S50 | engine open (version-checked) | ok
 E170_S50 | checkFileIntegrity | ok (null)
 E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
 E170_S50 | route -45.8788,170.5028 -> -45.8650,170.5150 | error=null | nodes=115 | distance=2003
 E170_S50 | PASS
+F0 (forager-fixture-W75_N40.rd5), the control, saved as W75_N40.rd5 in a folder of its own:
 W75_N40 | bytes=152665 | tile lookupversion=11 | lookups.dat=11.2
 W75_N40 | engine open (version-checked) | ok
 W75_N40 | checkFileIntegrity | ok (null)
@@ -42,23 +43,29 @@ W75_N35.rd5: fetched from file://<scratch>/a4/out1/assets/W75_N35.rd5, matches i
 W70_N40.rd5: fetched from file://<scratch>/a4/out1/assets/W70_N40.rd5, matches its pins (5292557 bytes, SHA-256 c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c)
 E170_S50.rd5: fetched from file://<scratch>/a4/out1/assets/E170_S50.rd5, matches its pins (1061589 bytes, SHA-256 878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584)
 W75_N40.rd5: fetched from file://<scratch>/a4/out1/assets/forager-fixture-W75_N40.rd5, matches its pins (152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990)
-5 tiles ready in <scratch>/a4/tmp/tmp.4RT4wCWevb/readback
+5 tiles ready in <scratch>/a4/tile-check-work.WoiA9Y/readback
 == tag brouter-tiles-2026-10-29
-# Tile pins written by tools/tile-check/capture.sh at tools commit 469b33b9d43049768692094f1471ddbbeaa97fcd,
+# Tile pins written by tools/tile-check/capture.sh at tools commit aa144a04773d500061c94bead54b2e1250cf2c1f,
 # in run (none: not in Actions).
 # Each brouter.de tile was checked in BRouter 1.7.10 before its row was written. Columns as tools/tile-pins.tsv.
 asset	path	bytes	sha256	source	last_modified	etag	captured
-W75_N40.rd5	segments/W75_N40.rd5	119750873	dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6	file://<scratch>/phase2/tiles/W75_N40.rd5	Thu, 29 Oct 2026 20:09:54 GMT	-	2026-10-29T22:08:31Z
-W75_N35.rd5	segments/W75_N35.rd5	3571019	73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721	file://<scratch>/phase2/tiles/W75_N35.rd5	Thu, 29 Oct 2026 20:09:55 GMT	-	2026-10-29T22:08:40Z
-W70_N40.rd5	segments/W70_N40.rd5	5292557	c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c	file://<scratch>/phase2/tiles/W70_N40.rd5	Thu, 29 Oct 2026 20:09:57 GMT	-	2026-10-29T22:08:41Z
-E170_S50.rd5	segments/E170_S50.rd5	1061589	878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584	file://<scratch>/phase2/tiles/E170_S50.rd5	Thu, 29 Oct 2026 20:09:58 GMT	-	2026-10-29T22:08:42Z
-forager-fixture-W75_N40.rd5	f0/W75_N40.rd5	152665	ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990	file://<scratch>/phase2/release-staging/forager-fixture-W75_N40.rd5	-	-	2026-10-29T22:08:29Z
+W75_N40.rd5	segments/W75_N40.rd5	119750873	dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6	file://<scratch>/phase2/tiles/W75_N40.rd5	Thu, 29 Oct 2026 20:09:54 GMT	-	2026-10-29T22:10:32Z
+W75_N35.rd5	segments/W75_N35.rd5	3571019	73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721	file://<scratch>/phase2/tiles/W75_N35.rd5	Thu, 29 Oct 2026 20:09:55 GMT	-	2026-10-29T22:10:41Z
+W70_N40.rd5	segments/W70_N40.rd5	5292557	c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c	file://<scratch>/phase2/tiles/W70_N40.rd5	Thu, 29 Oct 2026 20:09:57 GMT	-	2026-10-29T22:10:42Z
+E170_S50.rd5	segments/E170_S50.rd5	1061589	878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584	file://<scratch>/phase2/tiles/E170_S50.rd5	Thu, 29 Oct 2026 20:09:58 GMT	-	2026-10-29T22:10:43Z
+forager-fixture-W75_N40.rd5	f0/W75_N40.rd5	152665	ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990	file://<scratch>/phase2/release-staging/forager-fixture-W75_N40.rd5	-	-	2026-10-29T22:10:31Z
 total 126808
--rw-r--r-- 2 root root   1061589 Oct 29 22:08 E170_S50.rd5
--rw-r--r-- 1 root root      2802 Oct 29 22:08 README.md
--rw-r--r-- 2 root root   5292557 Oct 29 22:08 W70_N40.rd5
--rw-r--r-- 2 root root   3571019 Oct 29 22:08 W75_N35.rd5
--rw-r--r-- 2 root root 119750873 Oct 29 22:08 W75_N40.rd5
--rw-r--r-- 1 root root    152665 Oct 29 22:08 forager-fixture-W75_N40.rd5
--rw-r--r-- 1 root root      1646 Oct 29 22:08 tile-pins.tsv
+-rw-r--r-- 2 root root   1061589 Oct 29 22:10 E170_S50.rd5
+-rw-r--r-- 1 root root      2802 Oct 29 22:10 README.md
+-rw-r--r-- 2 root root   5292557 Oct 29 22:10 W70_N40.rd5
+-rw-r--r-- 2 root root   3571019 Oct 29 22:10 W75_N35.rd5
+-rw-r--r-- 2 root root 119750873 Oct 29 22:10 W75_N40.rd5
+-rw-r--r-- 1 root root    152665 Oct 29 22:10 forager-fixture-W75_N40.rd5
+-rw-r--r-- 1 root root      1646 Oct 29 22:10 tile-pins.tsv
 exit=0
+# leftover work folders: 0
+1 links <scratch>/a4/out1/assets/E170_S50.rd5
+1 links <scratch>/a4/out1/assets/W70_N40.rd5
+1 links <scratch>/a4/out1/assets/W75_N35.rd5
+1 links <scratch>/a4/out1/assets/W75_N40.rd5
+1 links <scratch>/a4/out1/assets/forager-fixture-W75_N40.rd5
