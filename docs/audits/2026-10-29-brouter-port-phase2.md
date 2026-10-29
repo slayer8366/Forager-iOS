@@ -15,6 +15,8 @@ planner (section "Amendment 3, Part A" below).
 green twice, and refused once by a one-character change (section "Amendment 4" below). It waits for the planner's copy to
 `main` and the owner's "Run workflow". Nothing was published, tagged or uploaded.
 
+**Status (2026-10-29, fifth session, Linden Caliper, Amendment 3 Part B, step 2a):** in progress; see "Step 2a" below.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -402,6 +404,31 @@ the read-back and the publish have never run. What I read for them:
 - Whether the repository lets `GITHUB_TOKEN` create releases is the owner's question (RECORD -30) [?].
 - Each failure there stops before publishing. One before the draft leaves nothing behind. One after it leaves a draft,
   which is not public [I, as in step 1], for the owner or a session to delete.
+
+## Amendment 3, Part B, step 2a: `util` (fifth session, Linden Caliper)
+
+Base: `brouter-port` at `f57b003`, equal to `origin/brouter-port` after `git pull` [R]. The Java ported is Forager's read-only
+clone at `994b4384`, `third_party/brouter/src/main/java/btools/util/`; the oracle is the `-ro` jar's own `btools.util`
+classes [R: `unzip -l`]. Scope is T2's port list for `btools/util/` less `CheapRuler`, `CheapAngleMeter` (2b) and
+`StackSampler` (B row 5): 11 files, 1,302 kept Java lines [C: the `kept_lines` column of `03-reach/out/T2/port-list.tsv` at
+`20e1f92`, 1,332 less `StackSampler`'s 30], ported method by method from `reached-methods.tsv`. Plus the three helpers item
+I's 2a row names: Java's `Math.round`, `Character.isWhitespace`, Java's `split`.
+
+**Mechanism prediction (written before the port, after the stubs' run):**
+1. The port, line for line with Java's `int`/`long` arithmetic, equals the oracle on every 2a test on the JVM: the 22 new
+   test cases (21 port-facing plus one check of the common cases' expected values) all pass, 0 failures.
+2. `javaRound`, written as the JDK's bit-level `Math.round`, equals `Math.round` on all ~3.07 million inputs, and the
+   common cases pass on the iOS simulator, where Native's `roundToLong` would fail 2 of them (item H).
+3. `Character.isWhitespace` is true for exactly 25 `char`s on JDK 21: 9 to 13, 28 to 31, U+0020, U+1680, U+2000 to U+2006,
+   U+2008 to U+200A, U+2028, U+2029, U+205F, U+3000.
+4. **The revert check** (item I: one `<` to `<=` in `SortedHeap`; the one chosen is `getMinBin`'s first comparison,
+   `SortedHeap.java:139`) fails all four `SortedHeapTest` cases, each on a pop-sequence mismatch, and no other test.
+
+**Sub-step 1, tests over stubs** [C: `2026-10-29-brouter-port-phase2/step2a/1-stubs-jvmTest.txt`]: the build log has no
+compile errors; the JUnit XML reads 25 tests, 21 failures. Every failure is `kotlin.NotImplementedError` thrown in the stub
+its test targets (the first port frame of each is in the log). The one pass is
+`JavaLangTest.theCommonCasesExpectedValuesAreTheJdks`, which reads only the JDK: **not shown to bite**, by design, since it
+checks the expected values `JavaLangCommonTest` asserts, so none of them is from memory.
 
 ## Confirmed vs inferred
 

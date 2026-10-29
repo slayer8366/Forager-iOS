@@ -1,0 +1,41 @@
+# Step 2a, sub-step 1: jvmTest over stubs, local, 2026-10-29T22:29:09Z, base f57b003 plus the stubs and tests
+# JDK: openjdk version "21.0.12.1" 2026-08-18; Gradle run with a local-only mirror init script (never committed)
+# compile errors in the build log (grep -c 'e: '): 0
+
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 4, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+TOTAL: tests 25, failures 21, errors 0, skipped 0 in 12 files
+
+# Each util test case: outcome | failure type | first frame in the port's main code
+FAIL BitCoderContextTest.varBitsLookupTablesEqualTheOracles[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.BitCoderContext$Companion.getVl_values(BitCoderContext.kt:22)
+FAIL BitCoderContextTest.encodedStreamsAreByteIdenticalAndDecodeIdenticallyBothWays[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.BitCoderContext.encodeVarBits(BitCoderContext.kt:8)
+FAIL BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.BitCoderContext.decodeBits(BitCoderContext.kt:15)
+FAIL ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.ByteArrayUnifier.<init>(ByteArrayUnifier.kt:6)
+FAIL ByteDataTest.aNullArrayHasNoDataOnBoth[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.ByteDataReader.hasMoreData(ByteDataReader.kt:14)
+FAIL ByteDataTest.fixedWidthReadsOnRandomBytesMatchTheOracle[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.ByteDataReader.readLong(ByteDataReader.kt:10)
+FAIL ByteDataTest.varLengthStreamsAreByteIdenticalAndReadIdenticallyBothWays[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.ByteDataWriter.writeVarLengthUnsigned(ByteDataWriter.kt:6)
+FAIL Crc32Test.crcOfSeededSlicesEqualsTheOracles[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.Crc32.crc(Crc32.kt:5)
+FAIL JavaLangCommonTest.javaRoundGivesJavasAnswers[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.JavaLangKt.javaRound(JavaLang.kt:6)
+FAIL JavaLangCommonTest.javaIsWhitespaceGivesJavasAnswers[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.JavaLangKt.javaIsWhitespace(JavaLang.kt:9)
+FAIL JavaLangCommonTest.javaSplitGivesJavasAnswers[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.JavaLangKt.javaSplit(JavaLang.kt:12)
+FAIL JavaLangTest.javaIsWhitespaceEqualsCharacterIsWhitespaceOnEveryChar[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.JavaLangKt.javaIsWhitespace(JavaLang.kt:9)
+FAIL JavaLangTest.javaSplitEqualsStringSplitForEveryRegexTheReachedCodePasses[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.JavaLangKt.javaSplit(JavaLang.kt:12)
+PASS JavaLangTest.theCommonCasesExpectedValuesAreTheJdks[jvm]
+FAIL JavaLangTest.javaRoundEqualsMathRound[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.JavaLangKt.javaRound(JavaLang.kt:6)
+FAIL LongMapTest.duplicateKeysFailAsTheOracleFails[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.CompactLongMap.fastPut(CompactLongMap.kt:6)
+FAIL LongMapTest.compactAndFrozenMapsAnswerAsTheOracleDoes[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.FrozenLongMap.<init>(FrozenLongMap.kt:6)
+FAIL LruMapTest.cacheTrafficHitsAndEvictsAsTheOracleDoes[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.LruMap.get(LruMap.kt:5)
+FAIL SortedHeapTest.fewDistinctKeysPopInTheOraclesOrder[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.SortedHeap.popLowestKeyValue(SortedHeap.kt:5)
+FAIL SortedHeapTest.allKeysEqualPopInTheOraclesOrder[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.SortedHeap.popLowestKeyValue(SortedHeap.kt:5)
+FAIL SortedHeapTest.aLargeHeapThroughManyBinsPopsInTheOraclesOrder[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.SortedHeap.add(SortedHeap.kt:6)
+FAIL SortedHeapTest.clearAndEmptyPopsMatchTheOracle[jvm] | kotlin.NotImplementedError | at com.zynergylabs.forager.brouter.util.SortedHeap.popLowestKeyValue(SortedHeap.kt:5)
