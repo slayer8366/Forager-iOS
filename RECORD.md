@@ -796,3 +796,67 @@ hand off. The harness's final count was 240,287.
 against fdlibm first; the handoff's smaller reads after, if they fit. The answer decides which of (a) to (c) the
 planner recommends.
 **Notes:** Written by Cedar Datum by hand. Next free ID -22.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-22
+**Timestamp:** 2026-10-29T11:01:45Z
+**Continues:** 2026-10-28-3, 2026-10-28-4, 2026-10-28-20
+**Title:** Phase 1, part 10: items J and K done; Phase 1's report complete apart from the Android measurement; the
+coder's mechanism prediction
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `08fea32` (J), `6b73fa4` (K) and `20e1f92`. Filed
+unedited as `prompts/preserved/2026-10-28-01-phase1-report-part10.md` (SHA-256 equal to the branch's file). The
+harness counted 172,818 tokens: the first part under its limit since -11, with a reading list of named line
+ranges.
+
+**Prediction (mechanism, coder), continuing -3** (the report's J, lines 1755 to 1881 at `20e1f92`):
+- **How:** each reached Java method becomes one Kotlin function, with the same statements in the same order on
+  the same primitive types. That gives the same bits for integer arithmetic, basic IEEE operations, conversions,
+  parsing and printing. The search turns doubles into `int` costs before choosing (`OsmNode.java:103`;
+  `OsmPath.java:166`, `:315`, `:384`).
+- **Only four sites fall outside that:** the scale table (`cos`), `atan2` in the waypoint tie-break, `hmap`'s
+  order, and `roundToLong`. Step 2a writes `roundToLong` out as Java's.
+- **A one-ulp table difference moves no route:** at most 2.2e-5 per route, 0.047 over all 2,118 cases.
+  Predicted: 0 route differences from the table, anywhere.
+- **Recorded differences predicted, by option:**
+  - (a) with `atan2` by (c): 0 everywhere.
+  - (a) with `atan2` by (b), or (b): 0 on the JVM; on iOS, NT about 6 of 59 (1 to 14), at the route's start
+    only. Under (b), LB 0 of 59.
+  - (c): 0 on the JVM, even against the default oracle; 0 on iOS.
+  - `hmap` (i): 0 on both. (ii): 0 on the JVM; on iOS MP64 about 3 of 59, ML5 0, PM5 about 1. (iii): those
+    counts on both platforms, in the same set of cases.
+  - E3: 0 unstable cases.
+  - On iOS, FK 7 and 8 (20 cases) fail message equality on the first run, because `NodesCache.java:202` puts
+    the exception's text into the message.
+- **Where Phase 2's first failures come from, ranked:** integer, bit and byte transliteration in `util` and
+  `codec`; text handling in `expressions`; decoding order in `DirectWeaver`; ties and overflow near the
+  1e9 sentinel in the search; on iOS, the harness before any route runs. At least 80% of defects changing an
+  asserted value on the JVM will be integer, bit or text slips, none a floating-point library difference; 10
+  to 30 such defects (low confidence).
+
+**K, the timing plan:**
+- **What is timed:** each stable, identical case of at least 1 ms, oracle and port in one JVM, in its own task,
+  on `ubuntu-24.04`.
+- **How:** one untimed warm-up pass; k = 5 (3 if over 4 hours), fixed from step 1b's oracle times; a seeded
+  random order with the engines alternating; an A/A control for noise.
+- **Reported:** the median per-case port/Java ratio with a 95% bootstrap interval, the 10th and 90th
+  percentiles, and the total ratio, by stratum and by time decile.
+- **Memory:** allocated bytes per route, and GC counts and time.
+- **iOS:** the port on the simulator against HotSpot arm64 on the same `macos-26` runner. The report says
+  simulator speed is not phone speed, and that Android's runtime is not timed either.
+- **Proposed flag S:** the port is slower when the median ratio's 95% interval lies wholly above 1 + m. The
+  margin m is the owner's to set.
+- **Optional flags:** L, a route found within Forager's 30,000 ms by the oracle but not by the port; and a
+  memory flag with its own margin. No flag fails the build.
+
+- **Checked by the planner:**
+  - only the report and `12-prediction/j-figures.txt` changed since `7b2b403`;
+  - `j-figures.txt` lists the 12 in-tile rows of 54, the glibc in-tile row 431, and the bound's arithmetic;
+  - read at Forager `e2969abe4`: `OsmNode.java:103`, the `(int) Math.max(1.0, Math.round(...))`;
+    `WaypointMatcherImpl.java:69-71`, the radius-then-`directionDiff` comparator; `:189-190`; and
+    `NodesCache.java:202`, `"error reading datafile " + currentFileName + ": " + e`.
+- **Not settled by J:** whether `HotSpot`'s `-XX:-UseLibmIntrinsic` holds on the `macos-26` job. It does not exist
+  on aarch64 (-21), and K times HotSpot arm64 there.
+- **Phase 1's items:** A to K are answered. The Android measurement is the researcher's run 2 (-21).
+**Notes:** Written by Cedar Datum by hand. Next free ID -23.
