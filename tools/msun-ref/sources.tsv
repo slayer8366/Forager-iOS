@@ -1,0 +1,11 @@
+# bionic android-17.0.0_r1 (06356e41), the files research/android-math built (sources.tsv rows, 2026-10-29). Columns: name, size, sha256, path. Fetched with ?format=TEXT (base64) and decoded.
+s_cos.c	2167	b9ebcab1e4d5813404d61f8d2f563e1d3a1793d45d481a064762aa19c4ddd818	libm/upstream-freebsd/lib/msun/src/s_cos.c
+e_rem_pio2.c	4733	279da18436f04c773b200a5eaa9fd2facf83b8a0e3873afe754f24f484a0d627	libm/upstream-freebsd/lib/msun/src/e_rem_pio2.c
+k_cos.c	2733	e1d3c819b635a744fcf09d082ebffc26a8464474ce4da567cd36464bc8772ddf	libm/upstream-freebsd/lib/msun/src/k_cos.c
+k_sin.c	2243	28388c44b0b3f59c72948452b45c8c60aded8d658be27bf1a9568c09ba63de09	libm/upstream-freebsd/lib/msun/src/k_sin.c
+k_rem_pio2.c	15799	1ce6c260dd5327b96fdc8dc211a41651fbb71e36fa6e529170ab4da258d1b910	libm/upstream-freebsd/lib/msun/src/k_rem_pio2.c
+e_atan2.c	3725	cae6f5c5ddf95616c4d6bbfdcc081ac5898d18c3e79ed944a777c8a687540c1d	libm/upstream-freebsd/lib/msun/src/e_atan2.c
+s_atan.c	4099	562febb0fe60383526f7fda1a668f1186b2dcd2e0773b738d57f2ed30bdb6ebb	libm/upstream-freebsd/lib/msun/src/s_atan.c
+math_private.h	22474	c33130c3a7ecd511074a8b5a7ca3e403661717dbd28c2080771ae13683ba0f2f	libm/upstream-freebsd/lib/msun/src/math_private.h
+freebsd-compat.h	1414	2b31832650266a59230b532a2e87f3ad12ef191ebe9d4b4c6d65a47339caab4c	libm/freebsd-compat.h
+fpmath.h	2847	9ea58637b8c69206a0eff2c20beffa9344de9d37b4c3f319b66b18a668c1f3f3	libm/fpmath.h

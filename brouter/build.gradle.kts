@@ -19,6 +19,20 @@ val fetchOracle by tasks.registering(Exec::class) {
     commandLine("bash", scripts.file("fetch-oracle.sh").asFile.absolutePath, oracleDir.get().asFile.absolutePath)
 }
 
+// Step 2b (Amendment 3, Part B): bionic's msun cos and atan2 built from their pinned C sources with Android's flags, the
+// reference the port is compared against. tools/msun-ref/build-ref.sh fails unless the sources match their pins, clang
+// and gcc agree, and the outputs carry the research's SHA-256. Only jvmTest reads it; commonTest reads the committed
+// copy (MsunReference.kt), which jvmTest checks against this build line for line.
+val msunRefDir = layout.buildDirectory.dir("msun-ref")
+val msunReference by tasks.registering(Exec::class) {
+    description = "Builds bionic's msun cos and atan2 from pinned sources and runs them over the step 2b inputs."
+    val refTools = rootProject.layout.projectDirectory.dir("tools/msun-ref")
+    inputs.dir(refTools)
+    inputs.file(rootProject.layout.projectDirectory.file("tools/fetch-pinned.sh"))
+    outputs.dir(msunRefDir)
+    commandLine("bash", refTools.file("build-ref.sh").asFile.absolutePath, msunRefDir.get().asFile.absolutePath)
+}
+
 kotlin {
     jvm {
         compilerOptions {
@@ -43,8 +57,9 @@ kotlin {
 }
 
 tasks.named<Test>("jvmTest") {
-    dependsOn(fetchOracle)
+    dependsOn(fetchOracle, msunReference)
     systemProperty("brouter.oracle.dir", oracleDir.get().asFile.absolutePath)
+    systemProperty("brouter.msunref.dir", msunRefDir.get().asFile.absolutePath)
     // The planner's call (RECORD -24): the oracle runs with libm's intrinsics off, so HotSpot's Math.cos is fdlibm's.
     jvmArgs("-XX:+UnlockDiagnosticVMOptions", "-XX:-UseLibmIntrinsic")
     testLogging {

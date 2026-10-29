@@ -1,0 +1,92 @@
+## 2026-10-29, step 2b sub-step 1: stubs and tests. HEAD c225648 plus the uncommitted tests-first tree.
+## ./gradlew --no-daemon -q --init-script <scratch>/mirror.init.gradle.kts :brouter:jvmTest  (the init script points Gradle at Google's mirror of Maven Central, which answered 429 twice; local only, not committed)
+s_cos.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/s_cos.c, matches its pins (2167 bytes, SHA-256 b9ebcab1e4d5813404d61f8d2f563e1d3a1793d45d481a064762aa19c4ddd818)
+e_rem_pio2.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/e_rem_pio2.c, matches its pins (4733 bytes, SHA-256 279da18436f04c773b200a5eaa9fd2facf83b8a0e3873afe754f24f484a0d627)
+k_cos.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/k_cos.c, matches its pins (2733 bytes, SHA-256 e1d3c819b635a744fcf09d082ebffc26a8464474ce4da567cd36464bc8772ddf)
+k_sin.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/k_sin.c, matches its pins (2243 bytes, SHA-256 28388c44b0b3f59c72948452b45c8c60aded8d658be27bf1a9568c09ba63de09)
+k_rem_pio2.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/k_rem_pio2.c, matches its pins (15799 bytes, SHA-256 1ce6c260dd5327b96fdc8dc211a41651fbb71e36fa6e529170ab4da258d1b910)
+e_atan2.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/e_atan2.c, matches its pins (3725 bytes, SHA-256 cae6f5c5ddf95616c4d6bbfdcc081ac5898d18c3e79ed944a777c8a687540c1d)
+s_atan.c: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/s_atan.c, matches its pins (4099 bytes, SHA-256 562febb0fe60383526f7fda1a668f1186b2dcd2e0773b738d57f2ed30bdb6ebb)
+math_private.h: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/math_private.h, matches its pins (22474 bytes, SHA-256 c33130c3a7ecd511074a8b5a7ca3e403661717dbd28c2080771ae13683ba0f2f)
+freebsd-compat.h: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/freebsd-compat.h, matches its pins (1414 bytes, SHA-256 2b31832650266a59230b532a2e87f3ad12ef191ebe9d4b4c6d65a47339caab4c)
+fpmath.h: fetched from file:///home/user/forager-ios/brouter/build/msun-ref/work/dl/fpmath.h, matches its pins (2847 bytes, SHA-256 9ea58637b8c69206a0eff2c20beffa9344de9d37b4c3f319b66b18a668c1f3f3)
+rows written 1800 java.version 21.0.12.1 vm OpenJDK 64-Bit Server VM 21.0.12.1+1-1-24.04.4-Ubuntu arch amd64
+pairs 299974 Math!=StrictMath 0 java.version 21.0.12.1 arch amd64
+## clang: Ubuntu clang version 18.1.3 (1ubuntu1)
+00000000000017c0 T __kernel_cos
+0000000000001910 T __kernel_rem_pio2
+0000000000001860 T __kernel_sin
+00000000000013e0 T cos
+0000000000002910 T atan
+00000000000026c0 T atan2
+rows 1800 lat-recompute-mismatch 0
+pairs 299974
+edges 104
+## gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+0000000000001930 T __kernel_cos
+0000000000001a90 T __kernel_rem_pio2
+00000000000019e0 T __kernel_sin
+0000000000001430 T cos
+00000000000027a0 T atan
+00000000000024c0 T atan2
+rows 1800 lat-recompute-mismatch 0
+pairs 299974
+edges 104
+clang and gcc outputs equal
+ 299974 /home/user/forager-ios/brouter/build/msun-ref/work/b-clang/msun-atan2.txt
+   1801 /home/user/forager-ios/brouter/build/msun-ref/work/b-clang/msun-cos.txt
+    104 /home/user/forager-ios/brouter/build/msun-ref/work/b-clang/msun-edges.txt
+ 301879 total
+msun-cos.txt and msun-atan2.txt equal the research's SHA-256
+
+37 tests completed, 8 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 1m 1s
+## junit-counts
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAgainstCTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAgainstCTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+TOTAL: tests 37, failures 8, errors 0, skipped 0 in 17 files
+## msun failure messages
+<testcase name="atan2EqualsTheCBuildAndStrictMathPairByPair[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunAgainstCTest"
+<failure message="kotlin.NotImplementedError: msunAtan2: stub, step 2b's port is not written yet
+<testcase name="cosEqualsTheCBuildRowByRow[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunAgainstCTest"
+<failure message="kotlin.NotImplementedError: msunCos: stub, step 2b's port is not written yet
+<testcase name="cosDiffersFromStrictMathAtTheResearchsThirteenRows[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunAgainstCTest"
+<failure message="kotlin.NotImplementedError: msunCos: stub, step 2b's port is not written yet
+<testcase name="atan2OverThePairsHashesAsBionicsDoes[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest"
+<failure message="kotlin.NotImplementedError: msunAtan2: stub, step 2b's port is not written yet
+<testcase name="latitudesAreTheTables[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunCosTableTest"
+<testcase name="cosEqualsBionicAtEveryTableRow[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunCosTableTest"
+<failure message="kotlin.NotImplementedError: msunCos: stub, step 2b's port is not written yet
+<testcase name="theRefusalIsNamedAndCarriesItsArgument[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunEdgesTest"
+<failure message="java.lang.AssertionError: msunCos(-1,647,099.0) threw NotImplementedError
+<testcase name="cosEdges[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunEdgesTest"
+<failure message="kotlin.NotImplementedError: msunCos: stub, step 2b's port is not written yet
+<testcase name="atan2Edges[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunEdgesTest"
+<failure message="kotlin.NotImplementedError: msunAtan2: stub, step 2b's port is not written yet
+<testcase name="committedEdgesAreTheCBuilds[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest"
+<testcase name="committedCosRowsAreTheCBuilds[jvm]" classname="com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest"
