@@ -25,6 +25,12 @@ prediction. The 25th,
 `BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle`, cannot finish under any port: its loop does not end on the
 oracle alone. Changing it is the planner's call (section "Step 2a, sub-step 2" below).
 
+**Status (2026-10-29, seventh session, Linden Caliper, Amendment 3 Part B, step 2a close):** the planner's ruling on the
+25th test (RECORD -33) is applied (`d5371c7`): case 1 capped at 1,000,000 ops per seed, a second case with no reset to the
+position bound. Locally, with no filter: 26 tests, 0 failures. Each case bites on its own one-flipped-bit edit (`9ce54ee`).
+**One premise in the ruling is wrong:** the second case never reaches `fillBuffer`'s end-of-array branch (section "Step 2a
+close" below). CI: see that section.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -540,6 +546,95 @@ checks the expected values `JavaLangCommonTest` asserts, so none of them is from
 - **After:** the file is restored from the saved copy, not from git. It is identical to the saved copy and to `612bb0d`'s
   file, the tree is clean, and line 112 reads `<` again.
 
+## Amendment 3, Part B, step 2a close: the ruling on the 25th test (seventh session, Linden Caliper)
+
+Base: `brouter-port` at `87e7fc9`, equal to `origin/brouter-port` after `git fetch` [R]. The ruling is RECORD -33, read at
+`origin/main` `45df5f3` [R]. Logs are in `2026-10-29-brouter-port-phase2/step2a/`; the runners are `step2a/runner/`, run
+from a scratch copy that is byte-identical (`cmp`) and finds the mirror init script, which is never committed.
+
+**Mechanism prediction, written before building** [C: `step2a/4-close-prediction.txt`, 23:00:36Z]:
+- **P1:** case 1 ends at the cap on all 20 seeds, 20,000,000 ops.
+- **P2:** case 2 ends at the position bound on all 20 seeds, in about 4,100 ops each.
+- **P3:** case 2 does not reach `fillBuffer`'s end-of-array branch.
+- **P4:** both pass over the port: 26 tests, 0 failures.
+- **P5:** each case fails alone on its own flipped bit, on seed 1. For case 1 the prediction was op 1,775; for case 2,
+  the first op that reads bit 800.
+
+**The change** (`d5371c7`, `BitCoderContextTest.kt`):
+- **Case 1, `rawBitReadsOnRandomBytesMatchTheOracle`:** the loop condition gains `&& i < 1_000_000`. The position bound,
+  the draws, the reset and both equalities are unchanged.
+- **Case 2, `rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle`:** case 1's loop without the reset, and so
+  without its `nextInt(50)` draw. It keeps the same seeds and bytes, the same bound and both equalities, and has no cap.
+- **Both cases** print each seed's op count and final reading position after the loop.
+
+**Termination on the oracle alone** [C: `2-loop/LoopCheck2.java`, `LoopCheck2-case1-out.txt`, `LoopCheck2-case2-out.txt`]:
+- **Case 1:** all 20 seeds end at the cap, at 1,000,000 ops each, 20,000,000 in all. There are 80,247 resets, and the
+  furthest reading position is 21,994 (seed 19). Both figures equal what PortLoopCheck reported on these draws. **P1 held.**
+- **Case 2:** all 20 seeds end at the position bound, after 3,976 to 4,250 ops, 81,969 in all. The final positions are
+  32,641 to 32,663. **P2 held.**
+
+**A wrong premise in the ruling: case 2 does not reach `fillBuffer`'s end-of-array branch** (P3 held).
+- **The branch:** `if (idx++ < idxMax)` is false (`BitCoderContext.java:250`), and the call leaves `idx` above `idxMax`
+  (4,095) [R].
+- **What case 2 reaches:** read by reflection after every op, the oracle's `idx` peaks at 4,079 to 4,084 per seed and is
+  never above 4,095 [C]. The loop stops at reading position 32,640 (byte 4,080), and the buffer looks ahead at most 31
+  bits. Firing the branch needs a reading position past about bit 32,744 [I, from the source].
+- **Positive control** [C: `2-loop/BranchControl.java`, `-out.txt`]: case 2's draws with no bound, run until the oracle
+  throws.
+  - The detector reads `idx` above 4,095 on 19 of 20 seeds. On seed 9, `decodeBounded`'s unguarded `ab[++idx]` throws at
+    index 4,096 before any `fillBuffer` passes the end.
+  - Every seed then throws `ArrayIndexOutOfBoundsException` within 0 to 15 ops: 17 in `decodeVarBits` and 3 in
+    `decodeBounded`.
+  - So the "not reached" above can read "reached".
+- **What follows:** the branch is reachable only past the bound, and past it, Java's unguarded reads throw within a few ops.
+  The ruling's "runs to the position bound, so the reads reach the end of the byte array and `fillBuffer`'s
+  end-of-array branch" cannot hold for this bound.
+- **What I did:** I built case 2 as the ruling words it. It reads bits 21,994 to about 32,660, which case 1 never reaches.
+  Its comment says it stops short of the branch.
+- **Options for the planner (none applied):**
+  - **(i)** Keep case 2 as it is (the current state).
+  - **(ii)** Add a third case with no bound that runs until the oracle throws. It would assert that the port throws the
+    same exception class at the same op, with values and positions equal until then. It reaches the branch on 19 of 20
+    seeds, for 0 to 15 ops each. It makes Java's out-of-bounds failure part of what the port must match, which is a
+    contract choice. It is JVM-only, and whether Native's exception class matches was not checked [?].
+  - **(iii)** Past the bound, issue only the reads that go through `fillBuffer` (`decodeBits`, `decodeBitsReverse`). On
+    the zero padding, `decodeVarBits` falls to `decodeVarBits2` and throws [I, from the source, not run].
+  - My default would be (ii), as a separate case, if the branch is wanted at all.
+
+**Over the port** [C: `step2a/4-close-jvmTest-full.txt`]:
+- **The run:** full, with no filter. 0 compile errors; **26 tests, 0 failures**. Case 1 took 3.4 s and case 2 0.2 s
+  [C: the XML's `time`]. **P4 held.**
+- **The test's own counts:** its per-seed op counts and final positions equal the oracle-alone log on all 40
+  seed-cases [C: `2-loop/test-per-seed-ops-local.txt`, diffed against `LoopCheck2`'s output].
+
+**The bite** [C: `step2a/5-bite-A-case1.txt`, `5-bite-B-case2.txt`; runner `step2a/runner/bite-check.sh`]
+- **The edit, one line per run:** bit 0 of byte 100 is flipped in one case's port input,
+  `BitCoderContext(bytes.copyOf().also { it[100] = (it[100].toInt() xor 1).toByte() })`, as PortLoopCheckBite did.
+- **The runner rules:** the file is saved before the edit; the old XML is deleted; results are refused on any `e: ` line.
+  Afterwards, the file is restored from the saved copy and compared with the saved copy and with HEAD.
+- **Run A** (`:97`, case 1): 0 compile errors; 26 tests, **1 failure, case 1 only**: "seed 1 op 206: value
+  expected:<43660> but was:<43661>".
+- **Run B** (`:131`, case 2): 0 compile errors; 26 tests, **1 failure, case 2 only**: "seed 1 op 108: value
+  expected:<113712> but was:<113714>".
+- **Can each edit produce its failure?** Yes. On the oracle, case 1's op 206 is `decodeBits(16)` from bit 800 exactly, so
+  the flipped bit is the value's bit 0 (+1) [C: `2-loop/Op206.java`]. Case 2's op 108 is the first read covering bit 800,
+  `decodeBitsReverse(24)` over bits 778 to 802, where bit 800 carries weight 2 (+2) [C: `2-loop/FirstRead800.java`, run
+  before B]. Each run's other case passes.
+- **After each run:** the file equals the saved copy and HEAD, and the cap and case 2 are present.
+- **P5 for run A was wrong, and the source was a truncated log.** I took op 1,775 from
+  `2-loop/PortLoopCheckBite-out.txt` as that harness's first mismatch.
+  - That file holds 2 mismatch lines, but the harness prints the first 5.
+  - Re-run from the same source on the same port, it prints five, the first at op 206 [C:
+    `2-loop/PortLoopCheckBite-rerun-out.txt`]. The totals are equal: 2,000,000 ops and 56,167 mismatches.
+  - How the three lines were lost: could not determine [?].
+- **Runner notes:**
+  - Run A's first log reads "tree clean before: NO". The cause was the runner's own temp parts, written beside its
+    output inside the repository. The runner now writes them to its own folder, and run A was run again with the same
+    result. The first log is kept as `5-bite-A-case1-run1.txt`.
+  - Run B's "NO" is run A's output, untracked at the time; it is the only path B's `git status after` names.
+
+**CI:** see the next commit's addition below.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
@@ -577,6 +672,9 @@ checks the expected values `JavaLangCommonTest` asserts, so none of them is from
   - whether any session type may create a release through the proxy, and which;
   - whether the proxy would refuse an asset upload to a draft the owner made (not tried);
   - what kind of credential the proxy supplies (inferred to be a GitHub App user token from the response headers).
+- Step 2a close:
+  - how `PortLoopCheckBite-out.txt` lost its first three mismatch lines;
+  - which exception Kotlin/Native throws on the port's out-of-bounds reads (option (ii) would depend on it).
 
 ## Premises that were wrong
 
@@ -594,6 +692,11 @@ checks the expected values `JavaLangCommonTest` asserts, so none of them is from
   refuses release creation for this session type. A check that never sent a write could not have failed on one. Step 1
   listed the 114 MiB upload as unknown, but not the create.
 - **My own:** the first create request lacked `Content-Type: application/json` (the 415).
+- **Step 2a close, the ruling (RECORD -33):** "a second case ... runs to the position bound. This reaches the end of the
+  byte array and `fillBuffer`'s end-of-array branch." At that bound, the oracle's `idx` peaks at 4,084 of 4,095, and the
+  branch is never reached. Past the bound, Java's unguarded reads throw within 0 to 15 ops. Built as worded, and reported.
+- **Step 2a close, my own P5:** run A's predicted failure (op 1,775) came from a log that lacked its first three lines.
+  The real first mismatch is op 206, on the oracle and in the re-run harness alike.
 
 ## Decided beyond scope
 
@@ -646,3 +749,9 @@ checks the expected values `JavaLangCommonTest` asserts, so none of them is from
     - `persist-credentials: false` on both checkouts;
     - no `--retry` on the brouter.de downloads, so each is fetched once;
     - download-artifact `v8.0.2`, `9000827c`, read with `git ls-remote` on 2026-10-29.
+- **Step 2a close:**
+  - each case prints its per-seed op count and final position, so CI's log carries the counts;
+  - the bite was run once per case, each on its own line, rather than once on both;
+  - `runner/bite-check.sh` is new; `revert-check.sh` is unchanged;
+  - case 2's name, and its comment saying it stops short of the branch;
+  - case 2 was built as the ruling words it, although its stated purpose does not hold (see that section).
