@@ -433,3 +433,15 @@ proposals.
   - Added to the team table in `docs/process/planner-profile.md`. Fable is the planner's call, as for
     Forager's designer.
 **Notes:** Written by Cedar Datum by hand. Next free ID -13.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-13
+**Timestamp:** 2026-10-29T04:09:51Z
+**Continues:** 2026-10-28-12
+**Title:** The iOS designer starts after Phase 1 of the BRouter port (owner)
+**Decision:** told the designer would start once Phase 1 ends, with its first job deciding where the iOS app
+follows iPhone habits and where it matches Android, the owner said "Yes on the designer role". Asked whether
+that meant starting it now instead, the owner, verbatim: "After Phase 1 is fine".
+**Notes:** Written by Cedar Datum by hand. Next free ID -14.
