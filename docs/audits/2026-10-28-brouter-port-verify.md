@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to H; H's Android question in part)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to I; H's Android question in part)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -45,6 +45,13 @@ read. Nothing was routed and no tile was downloaded. E's facts were computed in 
 are part 9's (RECORD -16). New in E: no shipped profile switches on `consider_crossing` or `correctMisplacedViaPoints`; the
 latter's body cannot be reached through Forager's two-waypoint call; and HotSpot builds `StrictMath`'s table when its libm
 intrinsic is switched off.
+
+**Part 9** (a tenth session, Hazel, 2026-10-29) wrote **I**, the Phase 2 order, with each branch on the rulings still to come.
+**J and K are not answered**, and the single list of the owner's choices is not written: the planner asked for a handoff after I
+(its message, 10:43Z: the harness count had passed 180k). What part 9 found for J and K is under "Handoff", as input. New in I:
+the packages layer cleanly bottom-up once interface callbacks are set aside; the oracle's own runs (capture, E3, expected values)
+come before the router, so E3's stop is met early; the via-point code is 429 lines; fdlibm under (c) is 726 lines, and `atan2`
+alone 314, which (b) also needs in test code.
 
 **F is ruled.** The owner chose "Forager-iOS release (Recommended)", relayed by the planner to part 5 on 2026-10-29, to be
 recorded as RECORD -12. It was not yet on `main` when part 5 read `main` at `7043843`.
@@ -2025,6 +2032,53 @@ ruling, not on the order.
   - **Still open from earlier parts, touching E:** whether 1.7.10 reads today's brouter.de tiles (part 4); whether a simulator
     test can read the runner's disk (part 5); the rest of the Android question (part 7, the planner's choice of who).
 
+- **Part 9** wrote I, with `11-plan/` (commit `775f122`, then this handoff). **J and K are not answered, and the list of the
+  owner's choices near the top is not written,** at the planner's handoff (10:43Z).
+  - **Reproduce I's layering:** `python3 -I 11-plan/tools/layers.py <T2 port-list.tsv> <scratch build/reach-T2/edges.tsv>
+    <scratch build/jdeps-class.txt> calls`. The two inputs in scratch are part 1's. `package-edges.txt` was written by an inline
+    script over the same `edges.tsv`; its output is committed, the script is not.
+  - **Scratch** for part 9 is `hazel/part9/`: the layering script, OpenJDK's `FdLibm.java` and `StrictMath.java` (SHA-256s in
+    `11-plan/fdlibm-spans.txt`), and I's draft.
+  - **For J, part 9's working, not an answer** (the next part writes J, and may discard all of this):
+    - *The mechanism as part 9 saw it [I]:* every reached Java method becomes one Kotlin function with the same statements in
+      the same order on the same primitive types, so each value is the same bits wherever the operation is integer arithmetic,
+      IEEE basic arithmetic, a conversion or a parse (part 6: equal on the JVM and Native, no fusion). The search's choices are
+      `int` costs in BRouter's own `SortedHeap`, whose tie order is fixed by insertion order, so equal values give an equal
+      route. Only the scale table, `atan2`, `hmap` order and `Math.round` sit outside that, and I's step 2a writes `Math.round`
+      out as Java does.
+    - *Why a one-ulp table difference should almost never move a route [I, an estimate, not measured]:* it changes an `int` only
+      where a cost or distance lies within about 1e-13 of a rounding boundary. At about 1e5 casts per route that is of the
+      order of 1e-8 per route, so 0 expected in 2,118 cases. If (c)'s JVM run or (b)'s iOS run records any difference in R or LB,
+      this estimate is wrong.
+    - *Where recorded differences should appear if any do [I]:* under `atan2` by (b) on iOS, in NT only, at the matched waypoint
+      (the first or last part of the node list), not mid-route; part 9's rough figure was 0 to 8 of 59, about 2. Under (ii) or
+      (iii), in MP64, ML5 and PM5 only. A second collection's timing follows `nodesCreated`, so `SortedHeap`'s rebuild after it can
+      break ties between equal-cost paths differently: differences there should be **equal-cost** node lists, rarely a different
+      kind. Part 9's rough figures: 0 to 10 of 59 in MP64; 0 to 3 of 59 in each of ML5 and PM5.
+    - *E3 [I]:* tree buckets need nine entries in one bucket, under 1e-7 per bucket at a load of 0.76 by a Poisson tail, and
+      `ilon + ilat` keys spread over consecutive buckets. Part 9 expected 0 unstable cases in every stratum.
+    - *Where Phase 2's first discrepancies will come from [I]:* transliteration slips (sign extension of bytes, `>>` against `>>>`,
+      `int` and `long` mixing), not floating point outside the four sites. Scorable from the commits that fix them.
+  - **For K, part 9's working, not an answer:**
+    - *Machines [R: part 5's `runners.md`, read 04:11Z]:* `ubuntu-24.04` for public repositories is 4 CPUs, 16 GB, x64; `macos-26`
+      is 3 (M1), 7 GB, arm64. The CPU model is not in the table, so the run should print it (`/proc/cpuinfo`; on macOS
+      `sysctl machdep.cpu.brand_string`).
+    - *Ideas, not chosen:* time each case around the call only, in one JVM, engines alternating which goes first per case, a
+      `System.gc()` outside the timed region between cases; per case the median of the repetitions, then the per-case ratio
+      port/Java, summarised by its median with a bootstrap interval and the 10th and 90th percentiles; cases under 1 ms and
+      cases whose outcomes differ kept out of the ratio and counted. Repetitions fixed from step 1b's logged R1 times before any
+      port time is read. An A/A control (the oracle timed against itself) to measure the noise before any margin is applied.
+      Memory on the JVM as allocated bytes per route (`ThreadMXBean.getThreadAllocatedBytes`, since `doRun` runs on the
+      caller's thread, premise 2). On `macos-26`, the port on HotSpot arm64 and on the simulator in the same job, so the
+      simulator is compared with the same machine. **Not checked [?]:** whether Kotlin/Native test binaries are built
+      unoptimised by default (timing a debug binary would mislead) and whether KGP 2.3.10 can run an optimised one on the
+      simulator.
+    - *A flag that ties speed to something the user sees [I]:* any route the JVM finds within Forager's 30,000 ms
+      (`BRouterTrailRouter.kt:199`) that the simulator takes longer than 30,000 ms to find. The margin itself is the owner's.
+    - *Not measured anywhere in the plan:* ART on Android phones (Amendment 1 makes the port Android's too), and phones.
+  - **For the owner-choices list (not written):** I's "Rulings and inputs the order waits on" names every ruling the order
+    needs. With C's and B's recommendations, D's, G's label and finding, E's calls beyond, and K's margin, that is the list.
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -2151,6 +2205,15 @@ ruling, not on the order.
     - that `memoryclass` 5 decides the limit or panic mode at the first collection;
     - that digests in the repository add no OpenStreetMap data.
 
+- **Part 9 (I):**
+  - **Confirmed by computation:** the bases; T2's per-file lines summing to 11,218 by package; the package edges and that every
+    upward one is a callback; the via-point methods' 429 lines; fdlibm's line spans.
+  - **Confirmed by reading:** the four interfaces and the abstract class behind the upward edges; the via-point call sites; the
+    memory branch at `RoutingEngine.java:2026`; `StrictMath.cos` and `atan2` calling `FdLibm`; `RemPio2`'s argument ranges;
+    the public-repository runner sizes (part 5's saved page).
+  - **Inferred:** the order itself, every step's tests and candidate revert, the push count, and that a test class in the oracle's
+    package can reach its package-private classes.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -2211,6 +2274,12 @@ ruling, not on the order.
   - how long one route takes on the JVM or the simulator;
   - still open from earlier parts: whether 1.7.10 reads today's tiles; whether a simulator test can read the runner's disk.
 
+- **Part 9:**
+  - whether the `-ro` jar carries BRouter's encoder classes (step 3's synthetic streams);
+  - how much of OpenJDK's `HashMap` option (i) needs;
+  - whether GitHub Actions is enabled on Forager-iOS (step 0);
+  - J and K: not reached.
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -2267,6 +2336,12 @@ ruling, not on the order.
     - a `grep` cut short by `head` read as `estimated_crossing_class` being absent from `lookups.dat`; a full count showed it at
       `:862-868`;
     - `TableRows.java`'s header cited the wrong `CheapRuler` lines; fixed, and rerun so the committed source made the logs.
+
+- **Part 9:**
+  - **Tier T2's file list shows the format classes with declarations kept** (`Formatter`, `FormatGpx` and the rest, 160 lines
+    with at most 3 methods). Step 7 ports them only as far as A found methods reached; A's figures count the declarations.
+  - **Part 9's own slip:** the first layering run parsed method names wrongly on descriptors holding `/` and failed; fixed before
+    any output was used.
 
 ### Decided beyond scope
 
@@ -2361,3 +2436,13 @@ ruling, not on the order.
     FK 9; 10,000 and 100,000 links for FK 11.
   - **JaCoCo's agent on the oracle jar** for reach, a new test dependency.
   - **Stored digests, not coordinates,** for the expected values.
+
+- **Part 9:**
+  - **The tile capture and the oracle's own runs are placed before the router** (I's steps 1 and 1b), so E3's stop is met early.
+    The dispatch asked for packages bottom-up; this puts oracle-only steps among them.
+  - **Leaving the via-point code out is written with a named "unsupported" past the name guard,** and **`KernelRemPio2` under (c)
+    as "unsupported"** for arguments a latitude never reaches. Both are offered within their branches, not chosen.
+  - **OpenJDK's `FdLibm.java` and `StrictMath.java`** were fetched from `openjdk/jdk21u` at `jdk-21.0.12.1-ga` to size (c), as part 7
+    fetched `HashMap.java`. The local `src.zip` is a dangling link.
+  - **A candidate revert per step,** and step 0's check that Actions is enabled, are named here; neither was asked for.
+  - **Part 9 stopped after I at the planner's message;** J, K and the owner-choices list are left with notes in "Handoff".
