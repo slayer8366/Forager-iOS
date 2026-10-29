@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D, F, G and H; H's Android question in part)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to H; H's Android question in part)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -39,6 +39,12 @@ test, not built or run). It answered **the planner's Android question in part**:
 rest is listed as not read. It stopped at the planner's handoff message (05:01Z, past 180k by the harness's count). **E, I, J and
 K are not answered.** New in step 3: the oracle's own `HashMap` order is not a function of the input where a bucket holds nine
 or more nodes with equal `ilon + ilat`.
+
+**Part 8** (a ninth session, Hazel, 2026-10-29) designed **E**, the differential tests, as a design fixed before any result is
+read. Nothing was routed and no tile was downloaded. E's facts were computed in `10-tests/`. **I, J and K are not answered**: they
+are part 9's (RECORD -16). New in E: no shipped profile switches on `consider_crossing` or `correctMisplacedViaPoints`; the
+latter's body cannot be reached through Forager's two-waypoint call; and HotSpot builds `StrictMath`'s table when its libm
+intrinsic is switched off.
 
 **F is ruled.** The owner chose "Forager-iOS release (Recommended)", relayed by the planner to part 5 on 2026-10-29, to be
 recorded as RECORD -12. It was not yet on `main` when part 5 read `main` at `7043843`.
@@ -802,7 +808,8 @@ Two things can make the oracle's answer depend on more than its input:
 - **A sixth run under JaCoCo's agent** on the jar records which lines each case reached: the reach evidence in E4. It too must give
   R1's tuple.
 
-**A case is stable** when all six runs agree on the tuple, and R1 to R4 on the collection counts.
+**A case is stable** when all six runs agree on the tuple, and the logged runs agree on the collection counts. R2 to R4 run
+with `debug.txt`, so the logged runs are those three and the fifth.
 - **Unstable cases** are counted per stratum and named. They are kept out of every exact assertion, and compared on kind only
   where all six runs agree on the kind.
 - **A stop for Phase 2 [FBD]:** if more than 5% of any stratum is unstable, stop and report. The comparison is not shrunk to fit.
@@ -1627,12 +1634,12 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
   today's Android app. That would take the Java engine run on Android's runtime, on an emulator or a device, which nothing
   in G or the step 4 design provides.
 
-### Not answered yet (parts 6 and 7, in RECORD -11's order)
+### Not answered yet (parts 6 to 8, in RECORD -11's order)
 
 - ~~H's step 3, hash order~~: written by part 7, above;
 - ~~H's step 4, the simulator test~~: designed by part 7, above (not built or run);
 - H's Android question: in part (part 7, above). ART's intrinsics and bionic's `cos` and `atan2` were not read;
-- E, the differential tests;
+- ~~E, the differential tests~~: designed by part 8, above (not built or run);
 - I, the Phase 2 order;
 - J, the mechanism prediction;
 - K, the timing plan.
@@ -1878,6 +1885,35 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
     - **If Android's `cos` differs from HotSpot's** (not yet determined), a HotSpot oracle does not stand for today's
       Android app. E may need a case run on Android's runtime, or a statement that it compares against HotSpot only.
 
+- **Part 8** designed E, with `10-tests/` (commits `18c4a0f` for the evidence, `358cbc3` for E, then this handoff). **I, J and
+  K are not answered.**
+  - **Reproduce part 8:** `10-tests/README.txt`. It needs the release zip (Forager's `fetch-brouter.sh:11-13` pin), part 6's
+    scratch outputs for the native tables, and JDK 21.
+  - **Scratch** for part 8 is `hazel/part8/`: the zip's profiles re-extracted, the six tables, and drafts. Left in place until
+    Phase 1 ends.
+  - **For I, the Phase 2 order** (input, not answers). E asks the port for things the port list does not name:
+    - **an `internal` cost accessor** for the tests, since C's sketched `RouteOutcome.Found` carries none;
+    - **a test seam for the scale table and `atan2`,** and **`hmap`'s map type as a constructor parameter**, needed for the
+      logic runs under (b), (c) and (iii) (E6). Under (a) with fdlibm `atan2` and under (i), neither is needed;
+    - **`memoryclass` kept as a field,** for ML5 and PM5 (E4). If I hard-codes 64, those strata go, and the memory limit and
+      panic mode are reached only if 64-class searches happen to reach them;
+    - **a progress count** that a second thread can read, for FK 11;
+    - **the capture, as one Phase 2 step before any differential test:** the four tiles and F0's fixture, each loaded in the
+      oracle, hashed, and handed to the owner for the release; then the expected-value task (E3's six runs, 2,118 cases).
+  - **For I, an open choice found by E (not decided):** `correctMisplacedViaPoints` is ported by RECORD -8 but its body cannot
+    run through Forager's two-waypoint call (`RoutingEngine.java:1265-1266`). Port it untested, or give the entry point named
+    waypoints. That is the planner's or the owner's.
+  - **For J, what E fixes that J predicts against:** a port with Java's types and evaluation order differs from the oracle only
+    through the scale table, `atan2`, `hmap` order and `roundToLong` (parts 6 and 7). E6's table says, for each of (a) to (c) and
+    (i) to (iii), which differences are assertion failures and which are recorded. J can predict the recorded counts.
+  - **For K, the run counts [computed from E's figures]:**
+    - writing expected values: 6 oracle runs × 2,118 cases = 12,708, plus a second oracle JVM under (c);
+    - each push, on the `jvm` job: the port and the live oracle on 2,118 cases, plus logic runs where E6 needs them;
+    - each push, on the simulator: 2,118 cases, or E5's fallback of 312 random plus every targeted, FK and F0 case.
+    - How long one route takes on either platform was not measured **[?]**.
+  - **Still open from earlier parts, touching E:** whether 1.7.10 reads today's brouter.de tiles (part 4); whether a simulator
+    test can read the runner's disk (part 5); the rest of the Android question (part 7, the planner's choice of who).
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -1982,6 +2018,28 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
     - what each of (a) to (c) means at the switch;
     - every choice in the step 4 design.
 
+- **Part 8 (E):**
+  - **Confirmed by computation:**
+    - the bases, and part 3's scratch zip against its pin;
+    - the scale table copied from `CheapRuler` equals part 6's JVM table at 1,800 of 1,800 rows;
+    - `Math.cos` against `StrictMath.cos` on this HotSpot: 60 rows differ in `cos`, 54 in `kx` or `ky`, 8 of those in the N40 tile
+      row; glibc 2.39 (part 6's outputs): 8 in `cos`, 6 in `kx` or `ky`;
+    - with `-XX:-UseLibmIntrinsic`, `Math.cos`'s table equals `StrictMath`'s; with `-Xint`, it equals the default;
+    - the 26 profiles' switches, with the turn-instruction and bike counts matching `grep` (24, 16);
+    - `estimated_crossing_class` in the pinned `lookups.dat`;
+    - every sample-size figure, each checked by its defining inequality;
+    - the tiles' sizes, read from part 4's listing.
+  - **Confirmed by reading:** the failure families' throw sites; the `debug.txt` switch and what its log lines build;
+    `terminated`'s one write and `getLinksProcessed`; `snapPathConnection`'s guard; `memoryclass`'s three uses; the profile
+    cache's clock reads; the tile-name rule; the crossing guard; Forager's call lines.
+  - **Inferred:**
+    - every **[FBD]** choice in E;
+    - the tiles' geography (New Jersey, Maine, Cape Cod, Dunedin), not read from any tile;
+    - that `kotlin.math` on the JVM calls `java.lang.Math`;
+    - that the info log changes nothing but strings (read at the lines named; E3 checks it by running);
+    - that `memoryclass` 5 decides the limit or panic mode at the first collection;
+    - that digests in the repository add no OpenStreetMap data.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -2033,6 +2091,15 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
   - whether Android's `Math.cos` and `Math.atan2` give HotSpot's bits;
   - whether a simulator test process can read the runner's disk (still open; step 4 avoids it).
 
+- **Part 8:**
+  - whether each stratum can be filled from the captured tiles: in particular ML5, PM5, NT within 4 ulps, and the island
+    kinds (the reports will say);
+  - whether any captured tile carries `estimated_crossing_class`;
+  - what `-XX:-UseLibmIntrinsic` changes beyond the scale table;
+  - whether a reparsed profile can route differently from a cached one (E3 is built to find out);
+  - how long one route takes on the JVM or the simulator;
+  - still open from earlier parts: whether 1.7.10 reads today's tiles; whether a simulator test can read the runner's disk.
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -2073,6 +2140,22 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
     bucket holds nine or more nodes with equal hashes, the oracle's own order follows identity hashes.
   - **Part 6's step 3 list said `_parseFile` was settled by reading `:439-446` and `:512-524`.** Part 7 re-read only
     `:818-840`, `:855-868` and `BExpression.java:393-405`, which agree. The rest is part 6's reading, not repeated.
+
+- **Part 8:**
+  - **Parts 6 and 7's handoff named "a profile with `bikeMode` and `consider_crossing`" as a case from the 26.** None of the
+    26 switches on `consider_crossing` **[C]**. E writes its own profile.
+  - **Part 6's handoff listed "rows 128, 253, 261, 431 and four more" as bands whose table rows differ.** For routing only 6 of
+    the 8 matter: rows 128 and 1671 differ in `cos` and in neither `kx` nor `ky` **[C]**.
+  - **RECORD -8's option text, "Those four features are ported too, so other BRouter profiles would work",** does not hold for
+    `correctMisplacedViaPoints` on Forager's call. A profile that switches it on reaches only the early return
+    (`RoutingEngine.java:1265-1266`) **[R]**.
+  - **The dispatch's "identical" includes the cost, which C's sketched surface does not return.** The tests read it internally.
+  - **My own slips, caught before they reached the report:**
+    - the profile parser missed `mtb.brf`'s indented context line; the count against `grep` caught it, and the script now fails
+      on a profile with no global section;
+    - a `grep` cut short by `head` read as `estimated_crossing_class` being absent from `lookups.dat`; a full count showed it at
+      `:862-868`;
+    - `TableRows.java`'s header cited the wrong `CheapRuler` lines; fixed, and rerun so the committed source made the logs.
 
 ### Decided beyond scope
 
@@ -2152,3 +2235,18 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
   - **The Android question was cut short at the planner's handoff,** after two files. It is marked partial, and the reads
     that remain are listed in the handoff.
 
+- **Part 8:**
+  - **The distance joins "identical"** beside the node list, cost and failure kind, because Forager reads it.
+  - **Values Forager does not read are recorded, not asserted:** elevations, ascent, time, energy, voice hints.
+  - **One scratch run beyond the dispatch's evidence:** the table under `-XX:-UseLibmIntrinsic` and `-Xint`, which E6 uses
+    under (c).
+  - **Strata outside Forager's calls:** `memoryclass` 5 (ML5, PM5); the time limit off (`maxRunningTime = 0`) in every case but
+    FK 9; E's own crossing profile.
+  - **F0's fixture as a release asset,** so Forager's own two routes are E's first cases.
+  - **What E asks of the port** (for I): an internal cost accessor, the table and `atan2` seam, `hmap`'s map type as a
+    parameter, `memoryclass` as a field, a progress count.
+  - **Thresholds chosen here:** β = 0.05; p = 5% per profile and per stratum; the 5% instability stop; 20 times a stratum's size
+    in candidates; the tile-replacement rule; the 312-case fallback on iOS; 997 objects in R4; 4 ulps for NT; 50 ms and 1 s for
+    FK 9; 10,000 and 100,000 links for FK 11.
+  - **JaCoCo's agent on the oracle jar** for reach, a new test dependency.
+  - **Stored digests, not coordinates,** for the expected values.
