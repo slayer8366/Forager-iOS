@@ -1,0 +1,4 @@
+# A=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/out/b4-gcc/msun-atan2.txt col 2; B=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/out/jvm-pairs.txt col 3; keys 2
+lines A 299974 B 299974
+key mismatches 0
+differing 0 of 299974

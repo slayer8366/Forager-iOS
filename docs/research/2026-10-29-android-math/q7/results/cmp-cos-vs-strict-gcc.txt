@@ -1,0 +1,17 @@
+# A=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/out/b4-gcc/msun-cos.txt col 2; B=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/out/jvm-strict.txt col 2; keys 1
+lines A 1800 B 1800
+DIFF 474 3fe792f1a5f1a301 3fe792f1a5f1a302
+DIFF 488 3fe8187d4df026e7 3fe8187d4df026e6
+DIFF 502 3fe89a5a2f91abe3 3fe89a5a2f91abe4
+DIFF 663 3fed4ffa843680f9 3fed4ffa843680f8
+DIFF 675 3fed93276ca82f5f 3fed93276ca82f5e
+DIFF 1046 3feef5ab2285fb8b 3feef5ab2285fb8c
+DIFF 1053 3feedbc3d50ec941 3feedbc3d50ec940
+DIFF 1079 3fee7142d9d7473f 3fee7142d9d74740
+DIFF 1295 3fe8ac99543503a1 3fe8ac99543503a0
+DIFF 1297 3fe89a5a2f91abe3 3fe89a5a2f91abe4
+DIFF 1310 3fe821e371511239 3fe821e37151123a
+DIFF 1311 3fe8187d4df026e7 3fe8187d4df026e6
+DIFF 1318 3fe7d62c0f81771d 3fe7d62c0f81771e
+key mismatches 0
+differing 13 of 1800

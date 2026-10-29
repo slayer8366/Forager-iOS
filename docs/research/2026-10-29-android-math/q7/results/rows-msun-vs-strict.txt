@@ -1,0 +1,13 @@
+474 -42.55deg kernel-only msun 3fe792f1a5f1a301 strict 3fe792f1a5f1a302
+488 -41.15deg kernel-only msun 3fe8187d4df026e7 strict 3fe8187d4df026e6
+502 -39.75deg kernel-only msun 3fe89a5a2f91abe3 strict 3fe89a5a2f91abe4
+663 -23.65deg kernel-only msun 3fed4ffa843680f9 strict 3fed4ffa843680f8
+675 -22.45deg kernel-only msun 3fed93276ca82f5f strict 3fed93276ca82f5e
+1046 14.65deg kernel-only msun 3feef5ab2285fb8b strict 3feef5ab2285fb8c
+1053 15.35deg kernel-only msun 3feedbc3d50ec941 strict 3feedbc3d50ec940
+1079 17.95deg kernel-only msun 3fee7142d9d7473f strict 3fee7142d9d74740
+1295 39.55deg kernel-only msun 3fe8ac99543503a1 strict 3fe8ac99543503a0
+1297 39.75deg kernel-only msun 3fe89a5a2f91abe3 strict 3fe89a5a2f91abe4
+1310 41.05deg kernel-only msun 3fe821e371511239 strict 3fe821e37151123a
+1311 41.15deg kernel-only msun 3fe8187d4df026e7 strict 3fe8187d4df026e6
+1318 41.85deg kernel-only msun 3fe7d62c0f81771d strict 3fe7d62c0f81771e

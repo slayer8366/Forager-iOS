@@ -1,0 +1,26 @@
+## gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+## flags: -O2 -ffp-contract=off -fno-builtin -fno-math-errno -I/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/inc -I/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17 -include /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/inc/bionic-shim.h -include /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/freebsd-compat.h -include /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/build/inc/bionic-shim2.h
+## sources: /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/s_cos.c /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/k_cos.c /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/k_sin.c /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/k_rem_pio2.c /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/e_atan2.c /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/research/downloads/bionic-17/s_atan.c
+## link: -lm (for glibc's floor and fabs, exact IEEE operations; the executable's own cos/atan2/atan take precedence)
+## compile rc=0
+## harness rc=0
+## link tab rc=0
+## link at2 rc=0
+## nm tab (cos symbols):
+0000000000001910 T __kernel_cos
+0000000000001a70 T __kernel_rem_pio2
+00000000000019c0 T __kernel_sin
+0000000000001410 T cos
+                 U floor@GLIBC_2.2.5
+## nm at2 (atan symbols):
+0000000000001650 T atan
+0000000000001370 T atan2
+                 U fabs@GLIBC_2.2.5
+## run tab:
+rows 1800 lat-recompute-mismatch 0
+# FLT_EVAL_METHOD=0 sizeof(double_t)=8 amd64_defined=0
+## run at2:
+pairs 299974
+## wc:
+   1801 msun-cos.txt
+ 299974 msun-atan2.txt
