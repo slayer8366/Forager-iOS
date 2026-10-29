@@ -15,7 +15,9 @@ planner (section "Amendment 3, Part A" below).
 green twice, and refused once by a one-character change (section "Amendment 4" below). It waits for the planner's copy to
 `main` and the owner's "Run workflow". Nothing was published, tagged or uploaded.
 
-**Status (2026-10-29, fifth session, Linden Caliper, Amendment 3 Part B, step 2a):** in progress; see "Step 2a" below.
+**Status (2026-10-29, fifth session, Linden Caliper, Amendment 3 Part B, step 2a):** **partial, handed off on the planner's
+word** after sub-step 1. The stubs and tests are pushed (`3cd61ad`) and seen failing for their reason; the port (sub-step 2) and
+the revert check (sub-step 3) are not started. See "Step 2a" below, and its handoff.
 
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
@@ -429,6 +431,43 @@ compile errors; the JUnit XML reads 25 tests, 21 failures. Every failure is `kot
 its test targets (the first port frame of each is in the log). The one pass is
 `JavaLangTest.theCommonCasesExpectedValuesAreTheJdks`, which reads only the JDK: **not shown to bite**, by design, since it
 checks the expected values `JavaLangCommonTest` asserts, so none of them is from memory.
+
+**Step 2a: the handoff to the port session** (the planner's message at 22:29Z: hand off after the tests-first push).
+- **Done:** sub-step 1 only, at `3cd61ad`: 12 stub files under `brouter/src/commonMain/.../brouter/util/` (package
+  `com.zynergylabs.forager.brouter.util`, all `internal`), 8 jvmTest classes and 2 commonTest files. Not done: the port, the
+  revert check, any CI read of `3cd61ad` (the jvm job will be red by design, 21 failures; the macOS smoke job now also runs
+  `JavaLangCommonTest` over stubs, so it will be red with 3 failures by design, not a regression).
+- **Port into the stubs, keeping their signatures;** the tests call these exactly. `LruMapNode` and `IByteArrayUnifier` are
+  already complete (fields and a declaration only).
+- **Calls I made in the stubs, for the next session to keep or report:**
+  - `CompactLongMap.moveToFrozenArrays` is `internal`, not `protected`: Java's `protected` includes package access, which
+    `FrozenLongMap`'s call on another instance (`FrozenLongMap.java:25`) uses [R].
+  - `ByteArrayUnifier.unify` is not on T2's port list (only the constructor is), but the class implements the interface, so
+    the stub's `unify` must become a named failure: `UnsupportedOperationException` with a message starting "unsupported",
+    which `ByteArrayUnifierTest` asserts. **A reach question for step 5b, not settled here:** `OsmNode.parseNodeBody2`
+    (reached) calls `mc.readUnified(nodeDescSize, abUnifier)` at `OsmNode.java:134`, which calls `u.unify` with that
+    `ByteArrayUnifier` (`MicroCache2.java:30`) [R], yet neither `readUnified` nor `ByteArrayUnifier.unify` is on the port
+    list. Whether that line runs for Forager's tiles: could not determine [?].
+  - `ByteDataReader.ab` should be `ByteArray?`: Java's constructors and `reset` accept null (`ByteDataReader.java:16`) [R].
+- **Notes for the port, from reading the Java** [R unless marked]:
+  - `SortedHeap.getMinBin` assigns inside its conditions; `bin = bin.nextNonEmpty ?: return minBin` keeps the order. Keep
+    all 30 unrolled comparisons; the revert check edits the first, `:139`.
+  - Kotlin masks `shl`/`shr`/`ushr` counts to 5 bits on every target, as Java does [I, from memory; the tests' counts 0 and
+    32 to `decodeBits` exercise it on the JVM only]. `decodeBitsReverse` uses `>>` (arithmetic), the rest `>>>`.
+  - `BitCoderContext`'s static block builds a `BitCoderContext` and runs its third loop over the first 1,024 entries again;
+    port it as is in the companion's `init`, after the arrays.
+  - `Crc32`'s table has literals above `Int.MAX_VALUE`; Kotlin needs `.toInt()` on those. `Boolean.getBoolean
+    ("earlyDuplicateCheck")` is `false` (B row 17).
+  - Two oracle behaviours the tests steer around, read from the Java: `encodeBounded` never ends for `max >= 2^30`
+    (`BitCoderContext.java:190-197`), and `LruMap.removeLru` dereferences a null `lru` at `maxSize` 1 (`LruMap.java:80-81`).
+  - `javaRound`: the JDK's `Math.round(double)` bit algorithm (shift from the biased exponent; `(long) a` outside it), not
+    `roundToLong`. The JDK's `src.zip` in this container is a dangling link, so it is written from memory and the 3.07 million
+    inputs in `JavaLangTest` are its check [I]. `javaSplit`: `Regex(regex).split(this)` with trailing empty strings dropped
+    (B row 13). `javaIsWhitespace`: the 25 `char`s of prediction 3; `JavaLangTest` compares all 65,536.
+- **Local build:** Maven Central answered 429 here; `-I .../scratchpad/phase2/mirror.init.gradle.kts` (never committed)
+  worked. The iOS klib compile was not run locally; CI's `jvm` job runs it.
+- **Then:** sub-step 2 is pushed when `jvmTest` reads 25 tests, 0 failures from the XML (prediction 1), with CI read for
+  that commit; sub-step 3 is the revert at `SortedHeap.kt`'s line for `SortedHeap.java:139` under the runner rules.
 
 ## Confirmed vs inferred
 
