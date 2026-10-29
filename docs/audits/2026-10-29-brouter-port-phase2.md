@@ -20,7 +20,8 @@ word** after sub-step 1. The stubs and tests are pushed (`3cd61ad`) and seen fai
 the revert check (sub-step 3) are not started. See "Step 2a" below, and its handoff.
 
 **Status (2026-10-29, sixth session, Linden Caliper, Amendment 3 Part B, step 2a):** **partial, stopped on a wrong
-premise.** The port is written and pushed. 24 of the 25 tests pass locally. The 25th,
+premise.** The port is written and pushed (`612bb0d`). 24 of the 25 tests pass locally, and the revert check held its
+prediction. The 25th,
 `BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle`, cannot finish under any port: its loop does not end on the
 oracle alone. Changing it is the planner's call (section "Step 2a, sub-step 2" below).
 
@@ -524,6 +525,20 @@ checks the expected values `JavaLangCommonTest` asserts, so none of them is from
   `JavaLangCommonTest` there. CI's `jvm` job will reach the 25th test and be stopped by its 30-minute timeout
   (`.github/workflows/brouter.yml:18`). Its `iOS klibs` step comes after `jvmTest`, so it is expected not to run on this
   commit [I, from the workflow's step order].
+
+**Step 2a, sub-step 3: the revert check** [C: `step2a/3-revert-SortedHeap139.txt`; runner `step2a/runner/revert-check.sh`]
+- **The edit:** one line, `SortedHeap.kt:112`, the port of `SortedHeap.java:139` (`getMinBin`'s first comparison):
+  `<` to `<=`. The runner confirmed exactly 1 line differs from a copy saved before the edit.
+- **The run:** the 24 tests that can finish. The 25th cannot reach `SortedHeap`: only `SortedHeapTest` names it
+  [C: `grep -rl SortedHeap brouter/src`]. The old XML is deleted before the run, and the build log has 0 compile errors,
+  so the results are this build's.
+- **Result:** 24 tests, 4 failures: `fewDistinctKeysPopInTheOraclesOrder`, `allKeysEqualPopInTheOraclesOrder`,
+  `aLargeHeapThroughManyBinsPopsInTheOraclesOrder` and `clearAndEmptyPopsMatchTheOracle`. Each is an `AssertionError`
+  on the pop-sequence list, seed 1. The other 20 tests pass.
+- **Can this revert produce each failure?** Yes. All four are pop-order mismatches in the one class that reaches the
+  edited line, and a tie that now goes to the later bin changes pop order. **Prediction 4 held.**
+- **After:** the file is restored from the saved copy, not from git. It is identical to the saved copy and to `612bb0d`'s
+  file, the tree is clean, and line 112 reads `<` again.
 
 ## Confirmed vs inferred
 

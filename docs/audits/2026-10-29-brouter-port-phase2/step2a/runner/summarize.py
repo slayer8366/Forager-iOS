@@ -5,7 +5,7 @@ rdir, log, title = sys.argv[1], sys.argv[2], sys.argv[3]
 text = open(log, errors='replace').read()
 errs = [l for l in text.splitlines() if l.startswith('e: ')]
 print(title)
-print("# JDK: " + os.popen('java -version 2>&1 | head -1').read().strip() + "; Gradle run with a local-only mirror init script (never committed)")
+print("# JDK: " + os.popen('java -version 2>&1 | grep -v "^Picked up" | head -1').read().strip() + "; Gradle run with a local-only mirror init script (never committed)")
 print("# compile errors in the build log (lines starting 'e: '): %d" % len(errs))
 for l in errs[:20]: print("#   " + l)
 files = sorted(glob.glob(os.path.join(rdir, 'TEST-*.xml')))
