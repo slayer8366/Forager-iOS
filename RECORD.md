@@ -1407,3 +1407,49 @@ The watcher read 185,285 tokens at 23:08:51Z. The harness's count at the report 
 - **Step 2a is closed.** The two earlier runs, 40969246695 and 40969414415, were left to their 30-minute timeout and
   were not read.
 **Notes:** Written by Cedar Datum by hand. Next: step 2b. Next free ID -35.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-35
+**Timestamp:** 2026-10-29T23:30:35Z
+**Continues:** 2026-10-28-3, 2026-10-28-24, 2026-10-28-34
+**Title:** Phase 2, step 2b, first part: Android's `cos` and `atan2` ported to common Kotlin, bit for bit with bionic's C,
+on the JVM and on the simulator
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `4bc9e7b`: tests first;
+- `6c3de2d`: the port;
+- `e7dafe5`: the revert check;
+- `b7543f3`: the report.
+
+The watcher read 180,358 tokens at 23:25:49Z. The harness's final count was 211,307. This is the first session to fit
+tests-first and the port in one session.
+- **Failing first:** run 40972738575 failed as intended. `jvm` read 37 tests, 8 failures; `ios-smoke` read 10 tests, 5
+  failures. Every failure was a stub's `NotImplementedError` or the refusal test's type check.
+- **The port:**
+  - `cos` from `s_cos.c` (with `e_rem_pio2.c` inline), `k_cos.c` and `k_sin.c`; `atan2` from `e_atan2.c` and
+    `s_atan.c`;
+  - in `brouter/.../msun/`, from bionic `06356e41`, all ten sources matching the research's SHA-256s, with Sun's
+    notice kept;
+  - finite |x| >= 1,647,099.0 throws a named `MsunUnsupportedException`.
+- **CI, run 40973074241 on `6c3de2d`: success** (the planner read the conclusion through the GitHub API).
+  - `jvm`: 37 tests, 0 failures; iOS klibs compiled.
+  - `ios-smoke`: 10 tests, 0 failures. **Simulator-checked,** with the msun comparison over all 1,800 table rows and the
+    299,974 `atan2` pairs.
+- **The reference:** bionic's C, built in the `ubuntu-24.04` job on every run, with clang and gcc.
+  - It is refused unless the two compilers agree and both outputs equal the research's SHA-256s.
+  - Against `StrictMath`: `atan2` differs at 0 pairs; `cos` differs at exactly the research's 13 rows.
+- **Revert check:** `k_cos`'s `C1` raised by one ulp. Predicted from the same edit in bionic's C: rows 502, 1297 and
+  1318, and exactly 3 tests failing. **The result was exactly that.** Restored from a saved copy.
+- **Calls beyond the amendment:**
+  - NaN results compared as NaN, not by payload;
+  - the package `…brouter.msun`;
+  - **a new CI dependency on `android.googlesource.com` on every run.** An outage there fails `jvm`. The planner
+    accepts it for now and will revisit it if it flakes.
+- **Checked by the planner:**
+  - the commits touch only `brouter/`, `tools/msun-ref/` and the report's folder;
+  - the tree is clean at `b7543f3`;
+  - **no mirror in the build:** a grep of the Gradle files, `gradle.properties` and `brouter.yml` finds no mirror or
+    `googleapis` entry. The mirror script exists only as evidence.
+  - `brouter/build.gradle.kts:22-33` registers the C reference task.
+**Notes:** Written by Cedar Datum by hand. Next: step 2b's second part. Next free ID -36.
