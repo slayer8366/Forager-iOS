@@ -1160,3 +1160,37 @@ Linden Caliper (owner); Amendment 3
   OpenJDK 21.0.12.1 measurement. A difference is a stop.
 **Notes:** Written by Cedar Datum by hand. The answers came after a worker restart; the time is the recording time.
 Next free ID -29.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-29
+**Timestamp:** 2026-10-29T21:26:14Z
+**Continues:** 2026-10-28-3, 2026-10-28-28
+**Title:** Amendment 3 Part A stopped at step 2: the session's proxy refuses to create releases; nothing public exists
+**Observed:** Linden Caliper (Opus), on `brouter-port` at `6e56d2f` and `469b33b`. The Phase 2 report is filed unedited as
+`prompts/preserved/2026-10-28-01-phase2-report-partA.md` (SHA-256 equal). The harness counted 125,723 tokens at its
+first stop.
+- **Step 1:** the six staged files equal their pins, and the README equals `91754bc`'s.
+- **The route used:** the session's agent proxy, with the container's placeholder token. GitHub authenticated it as
+  `slayer8366`, admin. No token was made.
+- **Step 2:**
+  - Attempt 1: `POST /releases` drew a 415 from the proxy, for a missing `Content-Type`.
+  - Attempt 2, with the header, drew a 403 from the proxy: **"Creating, editing, or deleting releases is not
+    permitted for this session type."**
+- **Afterwards:** 0 releases, drafts included, and 0 tags. Steps 3 to 7 were not run.
+- **Checked by the planner:**
+  - the release list through the GitHub tools is empty;
+  - the report's account of both attempts was read at `469b33b`;
+  - the part's commits touch only the Phase 2 report and its folder.
+- **A wrong premise, the planner's:** step 1's read-only checks (admin permission, `uploads.github.com` reachable) were
+  taken as pricing route A, and the planner offered it to the owner as feasible. A write policy at the proxy was
+  invisible to those checks. The owner's "Yes, upload these" was given on that premise, so a new route goes back to
+  the owner.
+- **Read at source for the new routes:** GitHub's "Events that trigger workflows", `workflow_dispatch`, fetched
+  2026-10-29 through `docs.github.com/api/article/body`. "This event will only trigger a workflow run if the workflow
+  file exists on the default branch"; the "Run workflow" button needs it there too.
+
+**The planner's call (technical):** step 2a starts now. Item I lets steps 2 to 4 run while the release waits (line
+1692), and they need no tile. Step 1b and steps 5 on wait for the release.
+**Notes:** Written by Cedar Datum by hand. Next free ID -30.
