@@ -496,3 +496,62 @@ harness counted 194,805 tokens. Nothing under `.github/`, no CI run, and no rele
 - **The Gradle and AGP finding** goes into the batch for the owner at Phase 1's end, with C's other
   recommendations.
 **Notes:** Written by Cedar Datum by hand. Next free ID -15.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-15
+**Timestamp:** 2026-10-29T04:48:20Z
+**Continues:** 2026-10-28-3, 2026-10-28-14
+**Title:** Phase 1, part 6: item H steps 1 and 2 done; steps 3 and 4 not written; the helper ran far past its
+limit
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `5b8936f` (step 1), `906a878` (step 2) and
+`ae5260b`. Filed unedited as `prompts/preserved/2026-10-28-01-phase1-report-part6.md` (SHA-256 equal to the
+branch's file). **The harness counted 312,645 tokens against a 200k limit;** Hazel noticed late, finished step 2,
+pushed and handed off.
+- **Step 1, which floating-point sites can choose a route:** all 72 methods classified by hand, with lines.
+  - 30 can change a route, cost, node list or failure kind on Forager's calls with some profile; 5 more only
+    with a parameter Forager never passes.
+  - Only two library functions reach a route on Forager's calls: `cos`, which builds CheapRuler's 1,800-row
+    scale table (`CheapRuler.java:37`, `Math.cos`), and `atan2`, a tie-break in waypoint matching.
+- **Step 2, JVM against Kotlin/Native** (scratch probe on the JVM, `linuxX64` and `linuxArm64` under qemu, 10 of
+  10 tests each):
+  - same results for IEEE arithmetic, number parsing and number printing;
+  - different results from the C maths library: against the JVM, `cos` differs at 8 of 1,800 table rows and
+    `atan2` at 50,215 of 299,974 inputs (glibc 2.39);
+  - the JVM is not one answer either: `Math.cos` and `StrictMath.cos` differ at 60 of 1,800 rows on one
+    HotSpot;
+  - no fused multiply-add in Kotlin code on arm64 (disassembly, with a positive control);
+  - `roundToLong` on Native is `floor(x + 0.5)`; argued equal to `Math.round` at BRouter's clamped distance
+    sites (inferred).
+
+  Linux runs stand for iOS in arithmetic, fusion, parsing, printing and `HashMap` order, not in Apple's
+  `cos` or `atan2`. Three options for the table and for `atan2`, not chosen: (a) constants written on the CI
+  JVM; (b) compute per platform and accept differences; (c) port fdlibm.
+- **Step 3, `HashMap` order: evidence committed, not written into H.** Kotlin/Native's `HashMap` iterates in
+  insertion order. In a simplified copy of `collectOutreachers`, `nodesCreated` differed in 14 of 20 graphs; it
+  feeds the memory-limit failure (`RoutingEngine.java:2026-2031`), so order can change the failure kind there
+  (inferred). `_parseFile` cannot change a result (read, inferred).
+- **Step 4, the simulator test:** not started; a draft probe is in `09-float/probe/`.
+- **Checked by the planner:**
+  - only the report and its evidence folder changed (47 files since `d24259e`);
+  - `classification-summary.txt` reads 72 classified of 72, none missing. `sites.tsv` holds 74
+    method-and-signature entries, 68 with floating point and 6 with hash iteration only. The classification
+    keys by name, so two overloaded pairs (`readPosition`, `getStartPath`) share a verdict; both are classed
+    as able to change a route.
+  - the compare logs read: 8 differing table rows and 50,215 differing `atan2` lines (JVM against `linuxX64`);
+    the Math-against-StrictMath log reads 60 of 1,800; `libm-check-x64` and `-arm64` agree with those counts.
+- **A question the report does not ask, for part 7:** Forager's app runs the Java engine on Android's runtime,
+  not on HotSpot. Whether Android's `Math.cos` and `Math.atan2` give HotSpot's bits decides whether option (a)
+  would change routes on Android phones at the switch. Not checked.
+- **Not answered:** H steps 3 (written) and 4, E, I, J, K.
+
+**The planner's calls (technical; the owner may overrule):**
+- **Part 7:** H step 3 written from part 6's evidence, step 4 designed, and the Android question above. Then
+  part 8, E; part 9, I, J and K.
+- **The token limit is watched from outside.** The helpers cannot see the harness's count, and three of six
+  parts overran it. The planner reads the helper's transcript usage with a background script and messages it
+  to hand off past about 180k.
+- **Options (a) to (c) go to the owner at Phase 1's end,** since (b) lets iOS routes differ from Android's. With
+  a recommendation once E and the Android question are in.
+**Notes:** Written by Cedar Datum by hand. Next free ID -16.
