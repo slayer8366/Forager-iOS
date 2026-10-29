@@ -11,9 +11,9 @@ below. **No release exists:** the release waits for the owner's word, and steps 
 the draft release with a 403. **No release, draft or tag exists.** Steps 3 to 7 were not run, and the release waits for the
 planner (section "Amendment 3, Part A" below).
 
-**Status (2026-10-29, fourth session, Linden Caliper, Amendment 4):** in progress. The workflow that captures, checks and
-publishes the tile release, `.github/workflows/publish-tiles.yml`, is being written on `brouter-port` (section
-"Amendment 4" below). Nothing is published from a session or a push.
+**Status (2026-10-29, fourth session, Linden Caliper, Amendment 4):** the workflow is written and dry-run on `brouter-port`:
+green twice, and refused once by a one-character change (section "Amendment 4" below). It waits for the planner's copy to
+`main` and the owner's "Run workflow". Nothing was published, tagged or uploaded.
 
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
@@ -346,6 +346,63 @@ equal to the remote [C].
 - **Unknown until a run:** whether Forager's raw file is served anonymously to a runner (predicted yes, the repository is
   public [I]).
 
+**What was built.** Commits `aa144a0` and `5d00761` (tools), `d54b95c` (the workflow), `4d667f4` (the failing variant),
+`41be45e` (restored).
+- `tools/tile-check/TileCheck.java`: step 1's harness, which now ends `PASS` or `FAIL: <reasons>` and exits 1 on any failed
+  check. `tiles.tsv` holds step 1's route ends. `capture.sh` does the capture in the order predicted.
+- `tools/tile-release/README.md` and `release-notes.md` became templates. The 20:09Z table, capture times and date are
+  placeholders that `capture.sh` fills from the pins it writes. It refuses a placeholder left unfilled.
+- `.github/workflows/publish-tiles.yml`, 94 lines, `TOOLS_SHA` = `5d00761`.
+
+**Before CI [C]:**
+- **The harness change bites** (`amendment4/harness-bite.log`). On a good `E170_S50` with route ends at sea, step 1's
+  harness printed "from-position not mapped in existing datafile" and **exited 0**. The new one prints `FAIL: no route` and
+  exits 1. On step 1's ends both exit 0. On step 1's mid-file damage both exit 1, from the decode's exception.
+- **A local capture over `file://`** copies of the 20:09Z tiles: four `PASS`, F0 `PASS`, every check line equal to
+  step 1's logs, and the read-back 5 of 5 (`amendment4/local-forward.log`).
+- **The stale check bites:** run on real commit pairs, it exits 1 for `aa144a0`→`5d00761`, which differ in `capture.sh`,
+  and 0 for `5d00761`→`d54b95c` (`amendment4/stale-check-local.log`).
+- Each `run:` block passed `bash -n`. **actionlint was not run:** the session's permission check refused downloading it.
+
+**The dry runs [R: the runs, through the GitHub API; logs in `amendment4/`]:**
+
+| Run | Commit | `capture` | `publish` | What it shows |
+|---|---|---|---|---|
+| 40963971506 | `d54b95c` | success | skipped | Checked out `5d00761`. Stale check empty. F0 fetched anonymously from `raw.githubusercontent.com` and matched. Four tiles and F0 `PASS` on Temurin 21.0.13+9. Read-back 5 of 5. Tag `brouter-tiles-2026-10-29`. Artifact `tile-release`, 129,538,814 bytes |
+| 40964144495 | `4d667f4` | **failure** | skipped | "REFUSED forager-fixture-W75_N40.rd5 … has SHA-256 ff6d…5990, pinned ff6d…5991". It stopped before any brouter.de download, and no artifact was made |
+| 40964254673 | `41be45e` | success | skipped | The restored file. The same five `PASS` lines and the same five SHA-256s as run 40963971506. Artifact 129,538,814 bytes |
+
+- **The refusal belongs to this edit.** It names the one changed character. The edit was to the workflow's data, so there is
+  no build to fail to compile, and GitHub parsed and ran the file. The restore came from a copy saved before the edit. Its
+  SHA-256 equals the saved file's, and the file equals `d54b95c`'s by `git diff --quiet`.
+- **CI's check lines equal step 1's** for all five files: lookup version 11, open ok, integrity ok, the same cell and node
+  counts, and the same routes (W75_N40 226 nodes / 5,047 m; F0 the same) [C: compared with `step1/check-*.log`]. So
+  Temurin 21.0.13+9 on the runner routes these ends as the container's OpenJDK 21.0.12.1 did.
+- **A prediction that failed:** I predicted new bytes. brouter.de's four tiles at 22:12Z have the 20:09Z SHA-256s and
+  sizes, still `Last-Modified: Thu, 29 Oct 2026 01:03:01 GMT`. The site had not regenerated them since 01:03Z. Nothing
+  depends on this. The owner's run will pin whatever it captures.
+
+- **`brouter.yml` on these commits:** `aa144a0` and `5d00761` succeeded. `d54b95c`, `4d667f4` and `41be45e` were in
+  progress when this was written (runs 40963971437, 40964144506, 40964254682). They are not evidence here: no Gradle input
+  changed.
+
+**The guard.** `publish` carries:
+`if: success() && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'`. A push-triggered run has
+`event_name` `push`, so `publish` is skipped on every branch. Both push runs show `publish` skipped. The `push` trigger is
+limited to `brouter-port` in any case. A `workflow_dispatch` on another branch, possible only through the API, also skips
+it. `success()` with `needs: capture` means a failed capture never reaches it.
+
+**Not exercised by any run: the whole `publish` job.** The artifact download, the tag check, `gh release create --draft`,
+the read-back and the publish have never run. What I read for them:
+- `gh`'s trunk source on 2026-10-29: `FetchRelease` finds a draft by its pending tag (`pkg/cmd/release/shared/fetch.go:182`),
+  and `gh release download` fetches through the asset's API URL (`download/download.go:243`) [R]. The runner's `gh` version
+  was not read [?].
+- The download-artifact README at `v8.0.2` pairs it with upload-artifact `v7` [R].
+- That a same-run artifact download needs no `actions: read` is from memory [I].
+- Whether the repository lets `GITHUB_TOKEN` create releases is the owner's question (RECORD -30) [?].
+- Each failure there stops before publishing. One before the draft leaves nothing behind. One after it leaves a draft,
+  which is not public [I, as in step 1], for the owner or a session to delete.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
@@ -432,3 +489,23 @@ equal to the remote [C].
     existed before the resend.
   - **`curl` against the REST API, not `gh release create`:** each call and its reply are logged on its own.
   - **The Part A logs' folder,** `2026-10-29-brouter-port-phase2/partA/`.
+- **Amendment 4:**
+  - **`tools/tile-release/` made into templates,** a write outside the amendment's list. The README's table has to be
+    written by the run, and the notes' "2026-10-29" would be wrong on another day.
+  - **`TileCheck` exits 1 on a failed check.** Step 1's copy only printed, and "any failure fails the run" needs an exit
+    code.
+  - **F0 run as the control,** as in step 1. The amendment names only the four tiles.
+  - **A stale check on push:** the dry run fails if the branch's tools differ from `TOOLS_SHA`'s. Otherwise a harness push
+    would dry-run the old tools and pass. The trigger paths are the workflow and `tools/tile-check/**`, the amendment's
+    "check harness".
+  - **A read-back of the five data files at the end of `capture`,** through `tools/fetch-tiles.sh`, so the dry run
+    exercises the checker `publish` uses.
+  - **The tag check covers drafts:** it refuses a tag ref or any release, drafts included, of that name.
+  - **Also chosen:**
+    - `concurrency: publish-tiles` on `publish`;
+    - the artifact kept 7 days;
+    - each tile's headers kept in the artifact, not the release;
+    - the release title "BRouter test tiles, <date>";
+    - `persist-credentials: false` on both checkouts;
+    - no `--retry` on the brouter.de downloads, so each is fetched once;
+    - download-artifact `v8.0.2`, `9000827c`, read with `git ls-remote` on 2026-10-29.

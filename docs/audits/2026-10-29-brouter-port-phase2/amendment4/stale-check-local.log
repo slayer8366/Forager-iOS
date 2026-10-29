@@ -1,0 +1,7 @@
+# 2026-10-29T22:13:27Z the capture job's stale check, run locally on real commit pairs: the same git diff command and paths as publish-tiles.yml
+== TOOLS_SHA=aa144a0 pushed=5d00761
+ tools/tile-check/capture.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+exit=1
+== TOOLS_SHA=5d00761 pushed=d54b95c
+exit=0

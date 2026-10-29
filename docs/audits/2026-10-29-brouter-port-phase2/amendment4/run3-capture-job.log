@@ -1,0 +1,357 @@
+﻿2026-10-29T22:14:03.4047492Z Current runner version: '2.338.0'
+2026-10-29T22:14:03.4067848Z ##[group]Runner Image Provisioner
+2026-10-29T22:14:03.4068454Z Hosted Compute Agent
+2026-10-29T22:14:03.4068905Z Version: 20261021.618
+2026-10-29T22:14:03.4069303Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-29T22:14:03.4069740Z Build Date: 2026-10-21T00:45:21Z
+2026-10-29T22:14:03.4070245Z Worker ID: {4197249b-685e-48bb-9b0e-5a322948e593}
+2026-10-29T22:14:03.4070720Z Region: southcentralus
+2026-10-29T22:14:03.4071117Z Cloud: Azure
+2026-10-29T22:14:03.4071488Z ##[endgroup]
+2026-10-29T22:14:03.4072593Z ##[group]Operating System
+2026-10-29T22:14:03.4073033Z Ubuntu
+2026-10-29T22:14:03.4073406Z 24.04.5
+2026-10-29T22:14:03.4073753Z LTS
+2026-10-29T22:14:03.4074101Z ##[endgroup]
+2026-10-29T22:14:03.4074454Z ##[group]Runner Image
+2026-10-29T22:14:03.4074901Z Image: ubuntu-24.04
+2026-10-29T22:14:03.4075300Z Version: 20261025.353.1
+2026-10-29T22:14:03.4076625Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-29T22:14:03.4077515Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-29T22:14:03.4078206Z ##[endgroup]
+2026-10-29T22:14:03.4078886Z ##[group]GITHUB_TOKEN Permissions
+2026-10-29T22:14:03.4080403Z Contents: read
+2026-10-29T22:14:03.4080772Z Metadata: read
+2026-10-29T22:14:03.4081159Z ##[endgroup]
+2026-10-29T22:14:03.4082682Z Secret source: Actions
+2026-10-29T22:14:03.4083316Z Cache mode: write
+2026-10-29T22:14:03.4083917Z Prepare workflow directory
+2026-10-29T22:14:03.4381670Z Prepare all required actions
+2026-10-29T22:14:03.4421394Z Getting action download info
+2026-10-29T22:14:03.6835207Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-29T22:14:03.7716964Z Download action repository 'actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad' (SHA:b843ebf9b913146b38da2eaa7aeddf76074ae1ad)
+2026-10-29T22:14:04.4687841Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-29T22:14:04.6560049Z Complete job name: capture
+2026-10-29T22:14:04.7228456Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-29T22:14:04.7229442Z with:
+2026-10-29T22:14:04.7230087Z   ref: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:04.7231016Z   persist-credentials: false
+2026-10-29T22:14:04.7231619Z   repository: slayer8366/Forager-iOS
+2026-10-29T22:14:04.7237338Z   token: ***
+2026-10-29T22:14:04.7237813Z   ssh-strict: true
+2026-10-29T22:14:04.7238302Z   ssh-user: git
+2026-10-29T22:14:04.7238772Z   clean: true
+2026-10-29T22:14:04.7239277Z   sparse-checkout-cone-mode: true
+2026-10-29T22:14:04.7239872Z   fetch-depth: 1
+2026-10-29T22:14:04.7240357Z   fetch-tags: false
+2026-10-29T22:14:04.7240854Z   show-progress: true
+2026-10-29T22:14:04.7241373Z   lfs: false
+2026-10-29T22:14:04.7241844Z   submodules: false
+2026-10-29T22:14:04.7242381Z   set-safe-directory: true
+2026-10-29T22:14:04.7242959Z   allow-unsafe-pr-checkout: false
+2026-10-29T22:14:04.7243662Z env:
+2026-10-29T22:14:04.7244237Z   TOOLS_SHA: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:04.7245892Z   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
+2026-10-29T22:14:04.7247328Z   F0_BYTES: 152665
+2026-10-29T22:14:04.7248071Z   F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+2026-10-29T22:14:04.7248935Z ##[endgroup]
+2026-10-29T22:14:04.9333038Z Syncing repository: slayer8366/Forager-iOS
+2026-10-29T22:14:04.9335762Z ##[group]Getting Git version info
+2026-10-29T22:14:04.9337073Z Working directory is '/home/runner/work/Forager-iOS/Forager-iOS'
+2026-10-29T22:14:04.9338990Z [command]/usr/bin/git version
+2026-10-29T22:14:04.9394227Z git version 2.56.0
+2026-10-29T22:14:04.9410519Z ##[endgroup]
+2026-10-29T22:14:04.9419693Z Temporarily overriding HOME='/home/runner/work/_temp/0fbffec9-af76-4d53-9e3d-7ab25c81338e' before making global git config changes
+2026-10-29T22:14:04.9422888Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T22:14:04.9425582Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Forager-iOS/Forager-iOS
+2026-10-29T22:14:04.9478623Z Deleting the contents of '/home/runner/work/Forager-iOS/Forager-iOS'
+2026-10-29T22:14:04.9482650Z ##[group]Determining repository object format
+2026-10-29T22:14:04.9484199Z ##[endgroup]
+2026-10-29T22:14:04.9485585Z ##[group]Initializing the repository
+2026-10-29T22:14:04.9488964Z [command]/usr/bin/git init /home/runner/work/Forager-iOS/Forager-iOS
+2026-10-29T22:14:04.9582036Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-29T22:14:04.9584486Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-29T22:14:04.9586277Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-29T22:14:04.9588000Z hint: call:
+2026-10-29T22:14:04.9588865Z hint:
+2026-10-29T22:14:04.9589976Z hint: 	git config --global init.defaultBranch <name>
+2026-10-29T22:14:04.9591182Z hint:
+2026-10-29T22:14:04.9592300Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-29T22:14:04.9594122Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-29T22:14:04.9595263Z hint:
+2026-10-29T22:14:04.9596331Z hint: 	git branch -m <name>
+2026-10-29T22:14:04.9597305Z hint:
+2026-10-29T22:14:04.9598529Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-29T22:14:04.9600455Z Initialized empty Git repository in /home/runner/work/Forager-iOS/Forager-iOS/.git/
+2026-10-29T22:14:04.9603944Z [command]/usr/bin/git remote add origin https://github.com/slayer8366/Forager-iOS
+2026-10-29T22:14:04.9661204Z ##[endgroup]
+2026-10-29T22:14:04.9662512Z ##[group]Disabling automatic garbage collection
+2026-10-29T22:14:04.9663999Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-29T22:14:04.9706361Z ##[endgroup]
+2026-10-29T22:14:04.9708162Z ##[group]Setting up auth
+2026-10-29T22:14:04.9709772Z Removing SSH command configuration
+2026-10-29T22:14:04.9711386Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T22:14:04.9758420Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T22:14:05.0079338Z Removing HTTP extra header
+2026-10-29T22:14:05.0084560Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T22:14:05.0130365Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T22:14:05.0339330Z Removing includeIf entries pointing to credentials config files
+2026-10-29T22:14:05.0343069Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T22:14:05.0399785Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T22:14:05.0617618Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-29T22:14:05.0667729Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git.path /home/runner/work/_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.0708819Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.0749516Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.0791988Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.0830675Z ##[endgroup]
+2026-10-29T22:14:05.0831777Z ##[group]Fetching the repository
+2026-10-29T22:14:05.0836305Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:05.5967930Z From https://github.com/slayer8366/Forager-iOS
+2026-10-29T22:14:05.5969023Z  * branch            5d0076179af84f0dd88b57ae83898ee6db86f1b9 -> FETCH_HEAD
+2026-10-29T22:14:05.5977434Z [command]/usr/bin/git rev-parse --verify --quiet 5d0076179af84f0dd88b57ae83898ee6db86f1b9^{object}
+2026-10-29T22:14:05.6015523Z 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:05.6020191Z ##[endgroup]
+2026-10-29T22:14:05.6020957Z ##[group]Determining the checkout info
+2026-10-29T22:14:05.6021818Z ##[endgroup]
+2026-10-29T22:14:05.6024051Z [command]/usr/bin/git sparse-checkout disable
+2026-10-29T22:14:05.6085722Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-29T22:14:05.6129187Z ##[group]Checking out the ref
+2026-10-29T22:14:05.6133105Z [command]/usr/bin/git checkout --progress --force 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:05.6368736Z Note: switching to '5d0076179af84f0dd88b57ae83898ee6db86f1b9'.
+2026-10-29T22:14:05.6369189Z 
+2026-10-29T22:14:05.6369485Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-29T22:14:05.6370065Z changes and commit them, and you can discard any commits you make in this
+2026-10-29T22:14:05.6370658Z state without impacting any branches by switching back to a branch.
+2026-10-29T22:14:05.6370966Z 
+2026-10-29T22:14:05.6371228Z If you want to create a new branch to retain commits you create, you may
+2026-10-29T22:14:05.6371840Z do so (now or later) by using -c with the switch command. Example:
+2026-10-29T22:14:05.6372098Z 
+2026-10-29T22:14:05.6372619Z   git switch -c <new-branch-name>
+2026-10-29T22:14:05.6372888Z 
+2026-10-29T22:14:05.6373052Z Or undo this operation with:
+2026-10-29T22:14:05.6373322Z 
+2026-10-29T22:14:05.6373478Z   git switch -
+2026-10-29T22:14:05.6373685Z 
+2026-10-29T22:14:05.6373924Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-29T22:14:05.6374221Z 
+2026-10-29T22:14:05.6374809Z HEAD is now at 5d00761 BRouter port, Amendment 4: the capture's work folder beside its output, so each checked tile is hard-linked into assets/ on one filesystem; F0's control run labelled (dispatch 2026-10-28-01)
+2026-10-29T22:14:05.6387846Z ##[endgroup]
+2026-10-29T22:14:05.6446076Z [command]/usr/bin/git log -1 --format=%H
+2026-10-29T22:14:05.6487641Z 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:05.6497693Z ##[group]Removing auth
+2026-10-29T22:14:05.6498327Z Removing SSH command configuration
+2026-10-29T22:14:05.6501917Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T22:14:05.6550642Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T22:14:05.6780669Z Removing HTTP extra header
+2026-10-29T22:14:05.6783880Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T22:14:05.6831941Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T22:14:05.7057763Z Removing includeIf entries pointing to credentials config files
+2026-10-29T22:14:05.7058523Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T22:14:05.7099759Z includeif.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git.path
+2026-10-29T22:14:05.7100684Z includeif.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path
+2026-10-29T22:14:05.7101311Z includeif.gitdir:/github/workspace/.git.path
+2026-10-29T22:14:05.7102005Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-29T22:14:05.7111656Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git.path
+2026-10-29T22:14:05.7153257Z /home/runner/work/_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.7181512Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-8d69d91a\-46fb\-4bf0\-919d\-d9c46efbcb4e\.config
+2026-10-29T22:14:05.7221530Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path
+2026-10-29T22:14:05.7327303Z /home/runner/work/_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.7330625Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-8d69d91a\-46fb\-4bf0\-919d\-d9c46efbcb4e\.config
+2026-10-29T22:14:05.7331701Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-29T22:14:05.7371406Z /github/runner_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.7395061Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-8d69d91a\-46fb\-4bf0\-919d\-d9c46efbcb4e\.config
+2026-10-29T22:14:05.7451609Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-29T22:14:05.7476935Z /github/runner_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config
+2026-10-29T22:14:05.7487194Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-8d69d91a\-46fb\-4bf0\-919d\-d9c46efbcb4e\.config
+2026-10-29T22:14:05.7535853Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T22:14:05.7764544Z Removing credentials config '/home/runner/work/_temp/git-credentials-8d69d91a-46fb-4bf0-919d-d9c46efbcb4e.config'
+2026-10-29T22:14:05.7765778Z ##[endgroup]
+2026-10-29T22:14:05.7975661Z ##[group]Run git fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+2026-10-29T22:14:05.7976142Z [36;1mgit fetch --no-tags --depth=1 origin "$GITHUB_SHA"[0m
+2026-10-29T22:14:05.7976580Z [36;1mgit diff --stat --exit-code "$TOOLS_SHA" "$GITHUB_SHA" -- tools/tile-check tools/tile-release \[0m
+2026-10-29T22:14:05.7977037Z [36;1m  tools/fetch-oracle.sh tools/fetch-pinned.sh tools/fetch-tiles.sh[0m
+2026-10-29T22:14:05.7996593Z shell: /usr/bin/bash -e {0}
+2026-10-29T22:14:05.7996858Z env:
+2026-10-29T22:14:05.7997114Z   TOOLS_SHA: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:05.7997657Z   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
+2026-10-29T22:14:05.7998131Z   F0_BYTES: 152665
+2026-10-29T22:14:05.7998430Z   F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+2026-10-29T22:14:05.7998753Z ##[endgroup]
+2026-10-29T22:14:06.2472935Z From https://github.com/slayer8366/Forager-iOS
+2026-10-29T22:14:06.2473484Z  * branch            41be45e05921b50605664336d2551c5a01ab4fae -> FETCH_HEAD
+2026-10-29T22:14:06.2613973Z ##[group]Run actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+2026-10-29T22:14:06.2614307Z with:
+2026-10-29T22:14:06.2614510Z   distribution: temurin
+2026-10-29T22:14:06.2614725Z   java-version: 21.0.13+9
+2026-10-29T22:14:06.2614939Z   java-package: jdk
+2026-10-29T22:14:06.2615469Z   check-latest: false
+2026-10-29T22:14:06.2615678Z   force-download: false
+2026-10-29T22:14:06.2615883Z   set-default: true
+2026-10-29T22:14:06.2616085Z   server-id: github
+2026-10-29T22:14:06.2616309Z   mvn-repositories-include-central: true
+2026-10-29T22:14:06.2616575Z   mvn-repositories-prioritize-central: true
+2026-10-29T22:14:06.2616826Z   overwrite-settings: true
+2026-10-29T22:14:06.2617047Z   cache-read-only: false
+2026-10-29T22:14:06.2617259Z   job-status: success
+2026-10-29T22:14:06.2618832Z   token: ***
+2026-10-29T22:14:06.2619040Z   show-download-progress: false
+2026-10-29T22:14:06.2619272Z   problem-matcher: true
+2026-10-29T22:14:06.2619480Z env:
+2026-10-29T22:14:06.2619734Z   TOOLS_SHA: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:06.2620217Z   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
+2026-10-29T22:14:06.2620672Z   F0_BYTES: 152665
+2026-10-29T22:14:06.2620942Z   F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+2026-10-29T22:14:06.2621240Z ##[endgroup]
+2026-10-29T22:14:06.3164758Z ##[group]Installed distributions
+2026-10-29T22:14:06.3222814Z Resolved Java 21.0.13+9 from tool-cache
+2026-10-29T22:14:06.3223242Z Setting Java 21.0.13+9 as the default
+2026-10-29T22:14:06.3227858Z 
+2026-10-29T22:14:06.3228018Z Java configuration:
+2026-10-29T22:14:06.3228336Z   Distribution: temurin
+2026-10-29T22:14:06.3228657Z   Version: 21.0.13+9
+2026-10-29T22:14:06.3229069Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+2026-10-29T22:14:06.3229399Z 
+2026-10-29T22:14:06.3229718Z ##[endgroup]
+2026-10-29T22:14:06.3255192Z Creating settings.xml with server-id: github
+2026-10-29T22:14:06.3255883Z Creating toolchains.xml for JDK version 21.0.13+9 from temurin
+2026-10-29T22:14:06.3256357Z Writing to /home/runner/.m2/settings.xml
+2026-10-29T22:14:06.3260185Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-29T22:14:06.3266048Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-29T22:14:06.3392001Z ##[group]Run tools/tile-check/capture.sh out https://brouter.de/brouter/segments4 "$F0_URL" "$F0_BYTES" "$F0_SHA256"
+2026-10-29T22:14:06.3392881Z [36;1mtools/tile-check/capture.sh out https://brouter.de/brouter/segments4 "$F0_URL" "$F0_BYTES" "$F0_SHA256"[0m
+2026-10-29T22:14:06.3418000Z shell: /usr/bin/bash -e {0}
+2026-10-29T22:14:06.3418373Z env:
+2026-10-29T22:14:06.3418710Z   TOOLS_SHA: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:06.3419496Z   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
+2026-10-29T22:14:06.3420228Z   F0_BYTES: 152665
+2026-10-29T22:14:06.3420651Z   F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+2026-10-29T22:14:06.3421220Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+2026-10-29T22:14:06.3421793Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+2026-10-29T22:14:06.3422315Z   MAVEN_ARGS: -ntp
+2026-10-29T22:14:06.3422612Z ##[endgroup]
+2026-10-29T22:14:06.7159874Z brouter-1.7.10.zip: fetched from https://github.com/abrensch/brouter/releases/download/v1.7.10/brouter-1.7.10.zip, matches its pins (6724983 bytes, SHA-256 023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532)
+2026-10-29T22:14:06.7415064Z brouter-1.7.10-ro.jar: fetched from file:///home/runner/work/Forager-iOS/Forager-iOS/tile-check-work.lDRxgf/oracle/unzipped/brouter-1.7.10/brouter-1.7.10-ro.jar, matches its pins (345776 bytes, SHA-256 598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972)
+2026-10-29T22:14:06.7438055Z oracle ready in /home/runner/work/Forager-iOS/Forager-iOS/tile-check-work.lDRxgf/oracle
+2026-10-29T22:14:06.8946863Z forager-fixture-W75_N40.rd5: fetched from https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5, matches its pins (152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990)
+2026-10-29T22:14:15.2876997Z W75_N40.rd5: downloaded from https://brouter.de/brouter/segments4/W75_N40.rd5 at 2026-10-29T22:14:08Z
+2026-10-29T22:14:15.3455964Z W75_N40 | bytes=119750873 | tile lookupversion=11 | lookups.dat=11.2
+2026-10-29T22:14:15.3584158Z W75_N40 | engine open (version-checked) | ok
+2026-10-29T22:14:15.6289483Z W75_N40 | checkFileIntegrity | ok (null)
+2026-10-29T22:14:19.0429246Z W75_N40 | decoded | 1-degree squares with data=23/25 | micro-caches=23552 | non-empty=19671 | nodes=8136499
+2026-10-29T22:14:19.1457408Z W75_N40 | route 41.2742564,-73.9978932 -> 41.3036912,-74.0159457 | error=null | nodes=226 | distance=5047
+2026-10-29T22:14:19.1458319Z W75_N40 | PASS
+2026-10-29T22:14:20.8294839Z W75_N35.rd5: downloaded from https://brouter.de/brouter/segments4/W75_N35.rd5 at 2026-10-29T22:14:19Z
+2026-10-29T22:14:20.8943148Z W75_N35 | bytes=3571019 | tile lookupversion=11 | lookups.dat=11.2
+2026-10-29T22:14:20.9091593Z W75_N35 | engine open (version-checked) | ok
+2026-10-29T22:14:20.9242213Z W75_N35 | checkFileIntegrity | ok (null)
+2026-10-29T22:14:21.1140741Z W75_N35 | decoded | 1-degree squares with data=2/25 | micro-caches=2048 | non-empty=683 | nodes=260055
+2026-10-29T22:14:21.3149476Z W75_N35 | route 39.3600,-74.4400 -> 39.3800,-74.4100 | error=null | nodes=322 | distance=9471
+2026-10-29T22:14:21.3157070Z W75_N35 | PASS
+2026-10-29T22:14:22.7516977Z W70_N40.rd5: downloaded from https://brouter.de/brouter/segments4/W70_N40.rd5 at 2026-10-29T22:14:21Z
+2026-10-29T22:14:22.8104277Z W70_N40 | bytes=5292557 | tile lookupversion=11 | lookups.dat=11.2
+2026-10-29T22:14:22.8246707Z W70_N40 | engine open (version-checked) | ok
+2026-10-29T22:14:22.8484736Z W70_N40 | checkFileIntegrity | ok (null)
+2026-10-29T22:14:23.0744588Z W70_N40 | decoded | 1-degree squares with data=10/25 | micro-caches=10240 | non-empty=3904 | nodes=233163
+2026-10-29T22:14:23.2536066Z W70_N40 | route 44.8012,-68.7778 -> 44.8200,-68.7500 | error=null | nodes=104 | distance=3949
+2026-10-29T22:14:23.2537145Z W70_N40 | PASS
+2026-10-29T22:14:24.4472877Z E170_S50.rd5: downloaded from https://brouter.de/brouter/segments4/E170_S50.rd5 at 2026-10-29T22:14:23Z
+2026-10-29T22:14:24.5045923Z E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+2026-10-29T22:14:24.5189360Z E170_S50 | engine open (version-checked) | ok
+2026-10-29T22:14:24.5269243Z E170_S50 | checkFileIntegrity | ok (null)
+2026-10-29T22:14:24.5908324Z E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
+2026-10-29T22:14:24.8114641Z E170_S50 | route -45.8788,170.5028 -> -45.8650,170.5150 | error=null | nodes=115 | distance=2003
+2026-10-29T22:14:24.8116114Z E170_S50 | PASS
+2026-10-29T22:14:24.8432357Z F0 (forager-fixture-W75_N40.rd5), the control, saved as W75_N40.rd5 in a folder of its own:
+2026-10-29T22:14:24.9022981Z W75_N40 | bytes=152665 | tile lookupversion=11 | lookups.dat=11.2
+2026-10-29T22:14:24.9162914Z W75_N40 | engine open (version-checked) | ok
+2026-10-29T22:14:24.9215492Z W75_N40 | checkFileIntegrity | ok (null)
+2026-10-29T22:14:24.9517120Z W75_N40 | decoded | 1-degree squares with data=2/25 | micro-caches=2048 | non-empty=47 | nodes=7191
+2026-10-29T22:14:25.0471040Z W75_N40 | route 41.2742564,-73.9978932 -> 41.3036912,-74.0159457 | error=null | nodes=226 | distance=5047
+2026-10-29T22:14:25.0475655Z W75_N40 | PASS
+2026-10-29T22:14:25.2314314Z W75_N40.rd5: fetched from file:///home/runner/work/Forager-iOS/Forager-iOS/out/assets/W75_N40.rd5, matches its pins (119750873 bytes, SHA-256 dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6)
+2026-10-29T22:14:25.2513492Z W75_N35.rd5: fetched from file:///home/runner/work/Forager-iOS/Forager-iOS/out/assets/W75_N35.rd5, matches its pins (3571019 bytes, SHA-256 73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721)
+2026-10-29T22:14:25.2726968Z W70_N40.rd5: fetched from file:///home/runner/work/Forager-iOS/Forager-iOS/out/assets/W70_N40.rd5, matches its pins (5292557 bytes, SHA-256 c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c)
+2026-10-29T22:14:25.2890655Z E170_S50.rd5: fetched from file:///home/runner/work/Forager-iOS/Forager-iOS/out/assets/E170_S50.rd5, matches its pins (1061589 bytes, SHA-256 878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584)
+2026-10-29T22:14:25.3042359Z W75_N40.rd5: fetched from file:///home/runner/work/Forager-iOS/Forager-iOS/out/assets/forager-fixture-W75_N40.rd5, matches its pins (152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990)
+2026-10-29T22:14:25.3043929Z 5 tiles ready in /home/runner/work/Forager-iOS/Forager-iOS/tile-check-work.lDRxgf/readback
+2026-10-29T22:14:25.3057982Z == tag brouter-tiles-2026-10-29
+2026-10-29T22:14:25.3065230Z # Tile pins written by tools/tile-check/capture.sh at tools commit 5d0076179af84f0dd88b57ae83898ee6db86f1b9,
+2026-10-29T22:14:25.3065980Z # in run https://github.com/slayer8366/Forager-iOS/actions/runs/40964254673.
+2026-10-29T22:14:25.3066512Z # Each brouter.de tile was checked in BRouter 1.7.10 before its row was written. Columns as tools/tile-pins.tsv.
+2026-10-29T22:14:25.3067016Z asset	path	bytes	sha256	source	last_modified	etag	captured
+2026-10-29T22:14:25.3068143Z W75_N40.rd5	segments/W75_N40.rd5	119750873	dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6	https://brouter.de/brouter/segments4/W75_N40.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-72340d9"	2026-10-29T22:14:08Z
+2026-10-29T22:14:25.3069065Z W75_N35.rd5	segments/W75_N35.rd5	3571019	73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721	https://brouter.de/brouter/segments4/W75_N35.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-367d4b"	2026-10-29T22:14:19Z
+2026-10-29T22:14:25.3069811Z W70_N40.rd5	segments/W70_N40.rd5	5292557	c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c	https://brouter.de/brouter/segments4/W70_N40.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-50c20d"	2026-10-29T22:14:21Z
+2026-10-29T22:14:25.3070806Z E170_S50.rd5	segments/E170_S50.rd5	1061589	878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584	https://brouter.de/brouter/segments4/E170_S50.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-1032d5"	2026-10-29T22:14:23Z
+2026-10-29T22:14:25.3071721Z forager-fixture-W75_N40.rd5	f0/W75_N40.rd5	152665	ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990	https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5	-	-	2026-10-29T22:14:06Z
+2026-10-29T22:14:25.3080046Z total 126808
+2026-10-29T22:14:25.3080294Z -rw-r--r-- 2 runner runner   1061589 Oct 29 22:14 E170_S50.rd5
+2026-10-29T22:14:25.3080631Z -rw-r--r-- 1 runner runner      2802 Oct 29 22:14 README.md
+2026-10-29T22:14:25.3080911Z -rw-r--r-- 2 runner runner   5292557 Oct 29 22:14 W70_N40.rd5
+2026-10-29T22:14:25.3081113Z -rw-r--r-- 2 runner runner   3571019 Oct 29 22:14 W75_N35.rd5
+2026-10-29T22:14:25.3081389Z -rw-r--r-- 2 runner runner 119750873 Oct 29 22:14 W75_N40.rd5
+2026-10-29T22:14:25.3081757Z -rw-r--r-- 1 runner runner    152665 Oct 29 22:14 forager-fixture-W75_N40.rd5
+2026-10-29T22:14:25.3082141Z -rw-r--r-- 1 runner runner      1546 Oct 29 22:14 tile-pins.tsv
+2026-10-29T22:14:25.3344157Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-10-29T22:14:25.3344388Z with:
+2026-10-29T22:14:25.3344502Z   name: tile-release
+2026-10-29T22:14:25.3344620Z   path: out/
+2026-10-29T22:14:25.3344734Z   if-no-files-found: error
+2026-10-29T22:14:25.3344866Z   retention-days: 7
+2026-10-29T22:14:25.3344984Z   compression-level: 6
+2026-10-29T22:14:25.3345103Z   overwrite: false
+2026-10-29T22:14:25.3345225Z   include-hidden-files: false
+2026-10-29T22:14:25.3345525Z   archive: true
+2026-10-29T22:14:25.3345644Z env:
+2026-10-29T22:14:25.3345774Z   TOOLS_SHA: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
+2026-10-29T22:14:25.3346173Z   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
+2026-10-29T22:14:25.3346661Z   F0_BYTES: 152665
+2026-10-29T22:14:25.3346843Z   F0_SHA256: ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+2026-10-29T22:14:25.3347135Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+2026-10-29T22:14:25.3347395Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+2026-10-29T22:14:25.3347604Z   MAVEN_ARGS: -ntp
+2026-10-29T22:14:25.3347717Z ##[endgroup]
+2026-10-29T22:14:25.4430083Z With the provided path, there will be 13 files uploaded
+2026-10-29T22:14:25.4430568Z Artifact name is valid!
+2026-10-29T22:14:25.4430794Z Root directory input is valid!
+2026-10-29T22:14:25.7562719Z Uploading artifact: tile-release.zip
+2026-10-29T22:14:25.7588616Z Beginning upload of artifact content to blob storage
+2026-10-29T22:14:26.5416684Z Uploaded bytes 8388608
+2026-10-29T22:14:26.6374288Z Uploaded bytes 16777216
+2026-10-29T22:14:26.8259880Z Uploaded bytes 25165824
+2026-10-29T22:14:26.9220572Z Uploaded bytes 33554432
+2026-10-29T22:14:27.0683907Z Uploaded bytes 41943040
+2026-10-29T22:14:27.1364643Z Uploaded bytes 50331648
+2026-10-29T22:14:27.3963653Z Uploaded bytes 58720256
+2026-10-29T22:14:27.5207818Z Uploaded bytes 67108864
+2026-10-29T22:14:27.6742409Z Uploaded bytes 75497472
+2026-10-29T22:14:27.8061871Z Uploaded bytes 83886080
+2026-10-29T22:14:28.0756642Z Uploaded bytes 92274688
+2026-10-29T22:14:28.2711629Z Uploaded bytes 100663296
+2026-10-29T22:14:28.4756650Z Uploaded bytes 109051904
+2026-10-29T22:14:28.6656818Z Uploaded bytes 117440512
+2026-10-29T22:14:28.7891220Z Uploaded bytes 125829120
+2026-10-29T22:14:28.8925439Z Uploaded bytes 129538814
+2026-10-29T22:14:28.9320659Z Finished uploading artifact content to blob storage!
+2026-10-29T22:14:28.9323194Z SHA256 digest of uploaded artifact is 1d417d43d06de601a4d9971a62269c104eaa532d5417c98cf51bd4098ddd33c9
+2026-10-29T22:14:28.9324624Z Finalizing artifact upload
+2026-10-29T22:14:29.4561104Z Artifact tile-release successfully finalized. Artifact ID 12937346266
+2026-10-29T22:14:29.4561820Z Artifact tile-release has been successfully uploaded! Final size is 129538814 bytes. Artifact ID is 12937346266
+2026-10-29T22:14:29.4565474Z Artifact download URL: https://github.com/slayer8366/Forager-iOS/actions/runs/40964254673/artifacts/12937346266
+2026-10-29T22:14:29.4820830Z Post job cleanup.
+2026-10-29T22:14:29.5516563Z Post job cleanup.
+2026-10-29T22:14:29.6225171Z [command]/usr/bin/git version
+2026-10-29T22:14:29.6280559Z git version 2.56.0
+2026-10-29T22:14:29.6332491Z Temporarily overriding HOME='/home/runner/work/_temp/1801f344-fb52-4f32-9952-48f76ffefa0a' before making global git config changes
+2026-10-29T22:14:29.6333328Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T22:14:29.6334070Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Forager-iOS/Forager-iOS
+2026-10-29T22:14:29.6380074Z Removing SSH command configuration
+2026-10-29T22:14:29.6380733Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T22:14:29.6415462Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T22:14:29.6684593Z Removing HTTP extra header
+2026-10-29T22:14:29.6691838Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T22:14:29.6823957Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T22:14:29.7187746Z Removing includeIf entries pointing to credentials config files
+2026-10-29T22:14:29.7196864Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T22:14:29.7254716Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T22:14:29.7710687Z Cleaning up orphan processes
