@@ -246,7 +246,116 @@ nativeMath`; `:57` `public actual inline fun cos(x: Double): Double = nativeMath
 fun atan2(y: Double, x: Double): Double = nativeMath.atan2(y, x)` **[R]**. Both are `inline`, so a Kotlin call site on
 Android holds a direct `java.lang.Math.cos` invocation and takes Q1's path **[I: the bytecode was not inspected]**.
 
-### Q6. Apple, bounded. **Could not determine.** The commit that removed bionic's x86_64 assembly (HTTP 401 on the `+log` query; see the next
+### Q6. Apple, bounded. **Could not determine.**
+
+- `https://opensource.apple.com/source/Libm/` returned HTTP 404 on 2026-10-29 (`sources.tsv`) **[R]**.
+- `https://api.github.com/repos/apple-oss-distributions/Libm` returned HTTP 403 from this session's proxy with "GitHub
+  access to this repository is not enabled for this session" **[R]**: an access policy of this container, not an answer
+  from GitHub. Whether Apple publishes any Libm source, and for which OS or CPU, is therefore **[?]** here.
+- What is read: Kotlin/Native's `cos` and `atan2` are direct calls to the C library's (part 6,
+  `09-float/part6/kn-reads.txt` 3: `Kotlin_math_cos -> tail call double @cos`), so on iOS they are Apple's system
+  library's, and nothing about its algorithm or bits was determined **[I][?]**.
+
+### Q7. The measurement. **Done, run 2.** Evidence: `q7/` (`README.txt` is the full account).
+
+- **What ran [C].** bionic's msun `cos` and `atan2` at `android-17.0.0_r1` (bionic `06356e41`: `s_cos.c` with
+  `e_rem_pio2.c` inlined, `k_cos.c`, `k_sin.c`, `k_rem_pio2.c`, `e_atan2.c`, `s_atan.c`), compiled on this x86_64 host
+  with clang 18.1.3 and with gcc 13.3.0, `-O2 -ffp-contract=off -fno-builtin -fno-math-errno -include
+  freebsd-compat.h`, over the table's 1,800 inputs and the 299,974 `atan2` pairs. HotSpot's values from this
+  container's JDK 21.0.12.1 (x86_64) by part 8's `TableRows.java` unchanged, and by `q7/tools/Gen.java`, which
+  regenerates the pairs from `ProbeTest.kt`'s LCG because part 6's `atan2.txt` result file is not in the brouter-port
+  evidence. The two compilers' outputs are byte for byte identical.
+- **Checks from outside the scripts, all passed [C]:** HotSpot's `Math.cos` table equals
+  `09-float/part6/results/jvm-amd64/scale-table.txt` byte for byte; `Math.cos` vs `StrictMath.cos` differs at 60 of
+  1,800 (part 8's 54 kx/ky rows plus its 6 cos-only rows); 299,974 pairs with `Math.atan2 == StrictMath.atan2` at every
+  one and glibc 2.39 equal to HotSpot at 249,759, both the figures part 6 recorded; each row's `lat` recomputed from
+  its index matches the input file at 1,800 of 1,800; `nm` shows `cos`, `__kernel_cos`, `atan2` and `atan` defined in
+  the executables (`q7/logs/build-*.log`).
+- **`cos`: bionic msun vs `StrictMath.cos`: 13 of 1,800 rows differ, each by 1 ulp [C].** Rows 474, 488, 502, 663,
+  675, 1046, 1053, 1079, 1295, 1297, 1310, 1311, 1318 (`q7/results/rows-msun-vs-strict.txt`; 488/1311 and 502/1297 are
+  the same |lat|). Every one has |lat| <= pi/4, where `s_cos.c` calls `__kernel_cos(x, 0)` with no argument reduction;
+  the roughly 900 rows that go through `__ieee754_rem_pio2` all agree. **vs HotSpot's default `Math.cos` (Intel): 59
+  of 1,800 [C]** (one of Intel's 60 rows coincides with msun). Context only: this host's glibc 2.39 `cos` equals msun
+  at 1,745 of 1,800.
+- **`atan2`: bionic msun vs `StrictMath.atan2`: 0 of 299,974; vs `Math.atan2`: 0 of 299,974 [C].**
+- **Limits.** This is bionic's C built by this host's compilers for x86_64, not a phone's `libm.so`. The preprocessor
+  branches taken are arm64's (`FLT_EVAL_METHOD=0`, `sizeof(double_t)=8`, `amd64` undefined, printed by the harness),
+  and the 13-row result is a property of the source (Q2, run 2), so it is expected on arm64 as well **[I]**; it was
+  not run there. Three shim lines stand in for bionic's own libc headers, each read from bionic at the same commit
+  (`q7/README.txt`). Whether the 13 cos differences reach `kx`/`ky` was not computed **[?]** (part 8 found 6 of
+  Intel's 60 did not).
+
+## Conclusion
+
+**Can Android's results for these two functions differ from HotSpot's, for BRouter's inputs?**
+
+**Run 2's measurement settles the lines below that run 1 left conditional.** Android's bionic `cos` is not
+`StrictMath.cos`: it differs at 13 of the 1,800 rows (1 ulp each, Q7) and at 59 from the default x86_64 oracle.
+Android's bionic `atan2` equals `StrictMath.atan2` and `Math.atan2` at every one of the 299,974 pairs. So **no HotSpot
+configuration reproduces today's Android `cos` table exactly: the no-intrinsic (fdlibm) oracle is the nearest, at 13
+rows; the default is at 59** **[C, inferred to arm64]**. For the options as H and E state them, not choosing: **(a)**
+constants written on the no-intrinsic JVM change phones' table at 13 rows at the switch, on the default JVM at 59;
+**(b)** leaves Android's bits as today; **(c)** fdlibm ported differs from today's phones at those 13 rows and from the
+no-intrinsic oracle at none. Whether a 1-ulp change in 13 cos rows changes any route is not this dispatch's question.
+Run 1's bullets follow, unchanged, with their conditionals now resolved as above.
+
+- **`cos`, arm64 phones: yes, from the oracle's default `Math.cos` [R][I].** Today's Android app computes CheapRuler's
+  table with bionic's `cos`: FreeBSD msun, fdlibm's family, compiled without contraction, the same arithmetic at every
+  API level 26 to 37 at the table's inputs (Q2, Q3). HotSpot x86_64's default `Math.cos` is Intel's libm (Q4), which
+  differs from fdlibm at 60 of the 1,800 rows (part 8). Unless msun happens to reproduce Intel's bits, which nothing in
+  the code arranges, Android phones differ from the default oracle on about those rows. **Whether Android equals
+  `StrictMath.cos` (fdlibm) at all 1,800 rows is the measurement, not reached:** it turns on whether FreeBSD's `k_cos.c`
+  body is fdlibm 5.3's, which was not read **[?]**.
+- **`cos`, x86_64 Android (emulators, Chromebooks): API 26 to 33 Intel assembly, API 34 on msun [R].** Whether the
+  Intel assembly's bits equal HotSpot x86_64's Intel stub was not measured **[?]**.
+- **`atan2`: HotSpot is fdlibm 5.3 in Java everywhere (Q4); Android arm64 is FreeBSD's `e_atan2.c`/`s_atan.c`,
+  fdlibm-derived, unfused.** Expected equal; not measured, and `s_atan.c`'s body against fdlibm's not read **[?]**.
+- **HotSpot aarch64 is a third thing:** its `cos` stub uses fused multiply-add (Q4), so a HotSpot on an arm64 runner is
+  not expected to reproduce either x86_64's or Android's table **[I]**.
+
+**What it means for the oracle and the options, as H and E state them (not choosing):**
+
+- **The oracle.** A HotSpot x86_64 oracle run with the default `Math.cos` does not stand for today's Android app on
+  `cos`; the no-intrinsic oracle (`-XX:-UseLibmIntrinsic`, fdlibm) is the one that can, if Q7 shows msun equals
+  `StrictMath` on the table. For `atan2` the two oracles are the same thing (Java fdlibm), and the question is only
+  whether msun's `atan2` equals it. On an arm64 runner the switch is `-XX:DisableIntrinsic=_dcos`, not
+  `-XX:-UseLibmIntrinsic`, and the default stub there is a fourth implementation.
+- **(a) constants written on the CI JVM.** With the default JVM, the constants are Intel's bits: Android phones' table
+  changes at the switch on the rows where Intel and msun differ (about 60 if msun is fdlibm). With the no-intrinsic
+  JVM, the constants are fdlibm's: phones' table is unchanged at the switch if Q7 shows msun equals fdlibm.
+- **(b) each platform's `cos`/`atan2`.** On Android the port calls `kotlin.math.cos` → `java.lang.Math.cos` → bionic's
+  `cos` (Q5, Q1): the same bits as today, so Android routes do not change at the switch. iOS is Apple's library, unread.
+- **(c) fdlibm ported.** The same everywhere; equal to today's Android phones on `cos` and `atan2` if Q7 shows msun
+  equals fdlibm at the inputs, and equal to the no-intrinsic oracle on the JVM (part 8). Differs from the default
+  x86_64 oracle at 60 rows and from the aarch64 stub at an unmeasured count.
+
+## Sources read (commit and date; the full log with SHA-256 is `sources.tsv`)
+
+| Repository | Pin | Files |
+|---|---|---|
+| `platform/art` | `android-17.0.0_r1` = `b753cf97923c3695338d21466fa14c57b480a59a`, read 2026-10-29 | `compiler/optimizing/intrinsics_arm64.cc`, `intrinsics_x86_64.cc`, `runtime/intrinsics_list.h`, `runtime/entrypoints/quick/quick_entrypoints_list.h`, `quick_entrypoints.h`, `quick_default_init_entrypoints.h`, `runtime/arch/arm64/entrypoints_init_arm64.cc`, `runtime/arch/x86_64/entrypoints_init_x86_64.cc`, `runtime/interpreter/` (listing), `interpreter_switch_impl-inl.h`, `interpreter_common.cc`, `interpreter_common.h`, `mterp/nterp.cc` |
+| `platform/art` | `android-8.0.0_r1` = `699cb9a11b1dce1515a4f591274b90269962cfec` | `compiler/optimizing/intrinsics_arm64.cc`, `intrinsics_x86_64.cc`, `compiler/intrinsics_list.h`, `runtime/arch/arm64/entrypoints_init_arm64.cc`, `runtime/arch/x86_64/entrypoints_init_x86_64.cc`, `runtime/interpreter/interpreter_intrinsics.cc`, `runtime/entrypoints/quick/quick_entrypoints_list.h` |
+| `platform/bionic` | `android-17.0.0_r1` = `06356e41c5ed7b12220b24c05ba4fdb873b126a7` | `libm/Android.bp`, `libm/` listings, `libm/upstream-freebsd/lib/msun/src/{s_cos,k_cos,k_sin,e_rem_pio2,k_rem_pio2,e_atan2,s_atan}.c`, `math_private.h`, `libm/freebsd-compat.h`, `libm/fpmath.h` |
+| `platform/bionic` | `android-8.0.0_r1` = `f711b078b9656f7dbb52a046a7f992a450e8fa13` | `libm/Android.bp`, `libm/`, `libm/x86_64/`, `libm/arm64/` listings, the same seven msun files and `math_private.h`, `libm/x86_64/{s_cos,e_atan2,s_atan}.S`, `libc/private/bionic_asm.h` |
+| `platform/bionic` | `android-9.0.0_r1` … `android-16.0.0_r1` (`tags/bionic-bisect-commits.txt`) | `libm/Android.bp` at each |
+| `platform/build/soong` | `android-17.0.0_r1` = `6722dd8833db7482df1a2543ca3fcf67ddf0f7b1`; `android-8.0.0_r1` = `23b35797`; 12, 13, 14 (`tags/soong-bisect-commits.txt`) | `cc/config/global.go`; at 17 also `arm64_device.go`, `x86_64_device.go` |
+| `platform/libcore` | `android-17.0.0_r1` = `4ebfb391ee0109d16abe6e2bc965724b940928c5`; `android-8.0.0_r1` = `8924c3d52f89a77d8f1067b85be8e69230638e3a` | `ojluni/src/main/native/Math.c`, `ojluni/src/main/java/java/lang/Math.java` |
+| `openjdk/jdk21u` | `jdk-21.0.12.1-ga` = `eac07229cf6cacc8a22eb79f4929e7fed61338b7` | `opto/library_call.cpp`, `cpu/x86/stubGenerator_x86_64.cpp`, `stubGenerator_x86_64_cos.cpp`, `globals_x86.hpp`, `templateInterpreterGenerator_x86_64.cpp`, `c1_LIRGenerator_x86.cpp`, `vm_version_x86.cpp`, `cpu/aarch64/stubGenerator_aarch64.cpp`, `macroAssembler_aarch64_trig.cpp`, `globals_aarch64.hpp`, `templateInterpreterGenerator_aarch64.cpp`, `c1_LIRGenerator_aarch64.cpp`, `vm_version_aarch64.cpp`, `stubRoutines_aarch64.cpp`, `share/runtime/globals.hpp`, `sharedRuntime.hpp`, `sharedRuntime.cpp`, `sharedRuntimeTrans.cpp`, `sharedRuntimeTrig.cpp`, `stubRoutines.hpp`, `share/classfile/vmIntrinsics.cpp`, `vmIntrinsics.hpp`, `java/lang/Math.java`, `StrictMath.java`, `FdLibm.java`, `make/autoconf/flags-cflags.m4`, `make/hotspot/lib/CompileJvm.gmk` |
+| `JetBrains/kotlin` | `v2.3.10` = `679366a83f99851b42f64795f10ed803ff011c73` | `libraries/stdlib/jvm/src/kotlin/util/MathJVM.kt` |
+| `llvm/llvm-project` | `llvmorg-14.0.0` | `clang/docs/ReleaseNotes.rst` |
+| Apple | 2026-10-29 | `opensource.apple.com/source/Libm/` (404); `api.github.com/repos/apple-oss-distributions/Libm` (403, session policy) |
+
+Tag-to-commit maps: `tags/tag-commits.txt`, `tags/jdk21u-pinned.txt`, `tags/kotlin-pinned.txt`,
+`tags/*-bisect-commits.txt` (all `git ls-remote`, `tags/ls-remote-date.txt`).
+
+## Disclosures
+
+**Confirmed vs inferred.** Marked inline. The inferences that carry weight: the intermediate ART releases route as both
+ends do; Android 12 and earlier were compiled with a pre-clang-14 default; soong's `-ffp-contract=off` list is the
+all-targets list; the aarch64 HotSpot stub's fused operations change bits; Kotlin's inline call compiles to a direct
+`Math.cos` invocation.
+
+**Could not determine.** The commit that removed bionic's x86_64 assembly (HTTP 401 on the `+log` query; see the next
 paragraph); who consumes `FDLIBM_CFLAGS` (defined at `flags-cflags.m4:985-998`; no reference in `CompileJvm.gmk`,
 `make/hotspot/lib/JvmFlags.gmk` or `make/modules/java.base/lib/CoreLibraries.gmk`, all grepped at `eac07229`), so
 whether `sharedRuntimeTrig.cpp` is built without contraction is unread; on x86_64 without `-mfma` no contraction
