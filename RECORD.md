@@ -333,3 +333,31 @@ The harness counted 212,857 tokens; the session's own estimate was about 150k.
 - **The planner's prediction against D:** right; the release jar serves as the oracle.
 - **Not answered:** E, F, G, H, I, J, K.
 **Notes:** Written by the planner by hand. Part 4 (F and G) starts next, per -8. Next free ID -10.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-10
+**Timestamp:** 2026-10-29T04:03:19Z
+**Title:** A team for the iOS project; the planner is Cedar Datum (owner)
+**Decision:** the owner, verbatim, 2026-10-29: "We need a development team for the iOS project. You're the
+planner so you need a name. Two coders, one primary and the other secondary when the primary is busy. One
+researcher. One independent reviewer, one UX auditor." Asked whether anything else needs a role, and offered
+three names for the planner (Yarrow Meridian, Linden Bearing, Cedar Datum), the owner: "Cedar Datum is the
+iOS planner".
+- **The planner of -1 to -9** ("a cloud session; not Rowan Waymark") is the same role, now Cedar Datum.
+- **Profile:** `docs/process/planner-profile.md`, which works from Forager's planner profile and lists what
+  differs here. The other roles propose their own names on their first run, as in Forager, and get a profile
+  here when named.
+- **Calls by the planner (the owner may overrule):**
+  - coders on Opus; researcher, reviewer and UX auditor on Fable, following Forager's -1134;
+  - the secondary coder works from the same profile, on separate tasks;
+  - Hazel Cairnwright finishes Phase 1 of the BRouter port; the primary coder takes over from Phase 2;
+  - keeping iOS level with Android is the planner's duty, checked at the start of each phase, not a role;
+  - token counts are kept in the record's outcome entries, since Forager's accountant counts only the
+    laptop's logs.
+- **Proposed, not ruled:**
+  - a designer, since deciding where iOS follows iOS habits and where it matches Android is design work;
+  - a person with an iPhone, which no agent can be. It needs TestFlight and so a paid Apple developer
+    account, not needed until there is an app to test.
+**Notes:** Written by Cedar Datum by hand. Next free ID -11.
