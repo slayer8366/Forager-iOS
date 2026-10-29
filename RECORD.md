@@ -599,3 +599,112 @@ harness's final count was 196,186.
   with part 8, or Hazel in part 9. Starting a role that has not run before is the owner's word to give.
 - **The `hmap` options (i) to (iii)** join (a) to (c) in the batch for the owner at Phase 1's end.
 **Notes:** Written by Cedar Datum by hand. Next free ID -17.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-17
+**Timestamp:** 2026-10-29T10:32:31Z
+**Continues:** 2026-10-28-3, 2026-10-28-16
+**Title:** Phase 1, part 8: item E designed, fixed before data; the helper overran because the planner's
+session restarted
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `18c4a0f` (evidence), `358cbc3` (E) and `529cea9`.
+Filed unedited as `prompts/preserved/2026-10-28-01-phase1-report-part8.md` (SHA-256 equal to the branch's
+file). Nothing was routed and no tile was downloaded.
+- **The overrun, the planner's slip:** the watcher read 187,780 tokens at 05:12:43Z, but the planner's worker
+  process was restarted around then and the handoff message was never sent. The helper's transcript ends at
+  277,941. Its final message was lost in the restart and was read back from that transcript at 10:31Z.
+- **E, in brief:**
+  - **Strata** with fixed seeds: random (R), Forager's two routes (F0), the 5-degree lines at 40N and at
+    70W (two strata), the memory-collection path (MP64), "memory limit reached" (ML5), memory panic mode
+    (PM5), waypoint near-ties (NT), latitude bands (LB), the crossing case (CR), and 11 failure kinds.
+  - **Tiles for the release:** `W75_N40`, `W75_N35`, `W70_N40` and `E170_S50`, plus Forager's sparse
+    fixture; about 129.8 MB.
+  - **Profiles:** all 26 in the zip, plus one of E's own for the crossing case.
+  - **"Identical":** failure kind, exact node list, cost and distance. Messages are exact, except timeout
+    and cancel, which are compared by family. Expected values are stored as digests.
+  - **The oracle is checked against itself** under four regimes, with a positive control. More than 5%
+    unstable in any stratum stops Phase 2.
+  - **The oracle is one pinned HotSpot on x86_64,** and E says it cannot speak for Forager's Android app.
+  - **Sample:** exact n, 59 for a 5% rate and 299 for 1%, at 95%. 2,118 cases; the iOS fallback is 312
+    plus every targeted case.
+- **Findings that correct earlier text:**
+  - **`correctMisplacedViaPoints` cannot run through Forager's two-waypoint call.** This corrects the
+    planner's option text quoted in -8, which listed it among the four features to be ported. Porting it
+    untested, leaving it out, or widening the entry point to take via points is a choice for the owner.
+  - part 6's "8 glibc rows": only 6 change `kx` or `ky`;
+  - C's sketched API carries no cost, though "identical" includes it;
+  - with HotSpot's `cos` intrinsic switched off (`-XX:-UseLibmIntrinsic`), its table equals `StrictMath`'s,
+    so option (c) would have an exact oracle on the JVM.
+- **Checked by the planner:**
+  - only the report and `10-tests/` changed (17 files since `6736856`);
+  - `sample-size.txt`: 59 and 299 with both inequalities shown; 26 × 59 = 1,534, pooled bound 0.001951;
+    eight targeted strata of 59, plus 110 and 2, total 2,118;
+  - the five tile sizes sum to 129,828,703 bytes;
+  - `rows-math-vs-strict.txt`: cos differs 60, `kx` or `ky` 54; `rows-nointrinsic-vs-strict.txt`: 0 of
+    1,800 on every count;
+  - the via-point claim, read at source: `RoutingEngine.java:1023` calls `snapPathConnection` only when
+    the flag is set, `:1265-1266` returns at once unless the waypoint's name starts with "via" or "rt",
+    and `RoutingParamCollector.java:48-50` renames the first and last waypoints "from" and "to". Forager
+    passes two (`BRouterTrailRouter.kt:149`).
+- **Not answered:** the rest of the Android question, I, J, K.
+**Notes:** Written by Cedar Datum by hand. Next free ID -18.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-18
+**Timestamp:** 2026-10-29T10:32:31Z
+**Continues:** 2026-10-28-10, 2026-10-28-16
+**Title:** The rest of the Android question goes to the researcher, now (owner)
+**Decision:** asked who should finish the Android maths question, the owner chose "Researcher, now
+(Recommended)". The option read: "The iOS team's researcher runs for the first time, read-only, alongside
+part 8. That saves time, and it keeps Hazel's last part to its three items. On this first run it proposes
+three names for you to pick from, as Forager's roles did." Rejected: "Hazel, in part 9".
+- Part 8 had finished by the time the answer was read, so the researcher runs alongside part 9 instead.
+**Notes:** Written by Cedar Datum by hand. Next free ID -19.
+
+---
+
+**Kind:** intent
+**ID:** 2026-10-28-19
+**Timestamp:** 2026-10-29T10:33:29Z
+**Continues:** 2026-10-28-15, 2026-10-28-16, 2026-10-28-18
+**Title:** Do Android phones compute BRouter's cosine and atan2 as the test Java does? (dispatch 2026-10-29-01, the
+researcher's first run)
+**Change:** nothing in any app. One report, `docs/research/2026-10-29-android-math.md` with an evidence folder, on
+branch `research/android-math`, answering:
+- what ART does with `Math.cos` and `Math.atan2`;
+- which implementation bionic supplies, and whether it changed across API 26 to 37;
+- what HotSpot computes, on x86_64 and aarch64;
+- whether `kotlin.math` on the JVM calls `java.lang.Math`;
+- what can be read about Apple's;
+- a bounded measurement on the table's 1,800 inputs, if the sources allow it.
+**Scope boundary:** writes only `research/android-math` in slayer8366/Forager-iOS, cut from `main` at the commit
+adding this entry. Reads published source at named commits. Does not touch slayer8366/Forager, Forager-iOS `main`,
+`RECORD.md`, `prompts/` or `brouter-port`, any account, phone or emulator image.
+**Baseline:** Forager `pre-main` `d100a4776` (10:33Z); Forager-iOS `brouter-port` `529cea9`.
+**Prediction (outcome, planner):**
+- every path in ART, interpreted or compiled, ends in bionic's C library for both functions;
+- bionic's `cos` is not HotSpot's default algorithm, so some of the 1,800 table rows differ between Android and
+  HotSpot's default `Math.cos`;
+- the implementation changed at least once between API 26 and 37, so phones on different Android versions can
+  disagree with each other;
+- `kotlin.math.cos` on the JVM is `java.lang.Math.cos`;
+- Apple's implementation cannot be read at source.
+**Finish line:** the report and evidence pushed on `research/android-math`, every claim marked, and the final message
+with three proposed names; the researcher stops. The planner records the outcome and brings the answer and the names
+to the owner.
+**Abort conditions:**
+- an owner-level choice;
+- anything that would change slayer8366/Forager;
+- an account or agreement;
+- a licence question;
+- two failed attempts at one symptom.
+**Dispatch-file:** prompts/preserved/2026-10-29-01-android-math.md
+**Notes:**
+- Written by Cedar Datum by hand.
+- Runs on Fable (-10).
+- Part 9 of dispatch 2026-10-28-01 (I, J and K, continuing -3) starts alongside it, on `brouter-port`; the two
+  write different branches.
+- Next free ID -20.
