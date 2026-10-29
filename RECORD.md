@@ -956,3 +956,38 @@ is Madrone Gauge (owner)
   at the switch.
 **Notes:** Written by Cedar Datum by hand. The answers came after the planner's worker restarted; the time is the
 recording time. Next free ID -25.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-25
+**Timestamp:** 2026-10-29T19:54:10Z
+**Continues:** 2026-10-28-3, 2026-10-28-24
+**Title:** Phase 2 starts with steps 0 and 1 only, then pauses (owner); Amendment 2
+**Decision:** asked whether to start Phase 2, the owner chose "Start, pause after checks (Recommended)". The option
+read: "Run the first steps only: set up the project and CI, then download and check the test tiles. Two big unknowns
+get answered cheaply before the 11,000-line port starts: whether Kotlin 2.3.10 builds on GitHub's Mac runners, and
+whether BRouter 1.7.10 can still read today's brouter.de tiles. Then you'll be asked to create the tile release, and
+for the go on the rest."
+- **Rejected:** "Start the whole port"; "Not yet".
+- **The question stated the cost** as "4 to 8 million tokens over several days (Phase 1's helpers used about 2.8
+  million)", marked as an estimate from Phase 1's rate.
+- **Phase 1's helper total, summed from the counts in -7 to -23:** 2,761,254 tokens, about 2.76 million, over ten
+  coder parts and two research runs (part 8's figure is its transcript's last context, the harness count having been
+  lost in the restart).
+
+**Change, scope, stops and finish line:** `prompts/preserved/2026-10-28-01-brouter-port-amendment-2.md`.
+- **Step 0:** the scaffold, with Gradle 9.0.0 and a `macos-26` smoke job added now.
+- **Step 1:** the four tiles captured into scratch, each checked in the oracle and pinned. Then the routes to a
+  release are reported, and the coder stops.
+- **Nothing public is created.** The release and the go on step 1b onward come back to the owner.
+
+**Prediction (outcome, planner):**
+- Actions is on, and `ubuntu-24.04` is green within two pushes;
+- Kotlin 2.3.10 links and runs the smoke test on `macos-26` with an Xcode warning;
+- BRouter 1.7.10 reads all four tiles.
+
+**Who builds:** the team's primary coder (Opus), on its first run, proposing three names.
+**Dispatch-file:** prompts/preserved/2026-10-28-01-brouter-port-amendment-2.md
+**Notes:** Written by Cedar Datum by hand. The go was answered after a worker restart; the time is the recording
+time. Next free ID -26.
