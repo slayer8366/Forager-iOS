@@ -272,3 +272,64 @@ put to the owner.
 
 F stays a stop for an owner ruling.
 **Notes:** Written by the planner by hand. Next free ID -9.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-9
+**Timestamp:** 2026-10-29T03:51:13Z
+**Continues:** 2026-10-28-3, 2026-10-28-4, 2026-10-28-8
+**Title:** Phase 1, part 3: items C and D done, with Amendment 1's three Android questions; no stop hit
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `28c9d65` (C) and `956f694` (D). Filed
+unedited as `prompts/preserved/2026-10-28-01-phase1-report-part3.md` (SHA-256 equal to the branch's file).
+The harness counted 212,857 tokens; the session's own estimate was about 150k.
+- **C, layout (all inferred, each backed by a probe or a read):**
+  - Gradle 9.7.0, Forager's version;
+  - Kotlin 2.3.10 exactly;
+  - one KMP module `:brouter`, `commonMain` only, differential tests in `jvmTest`;
+  - targets `jvm` (JVM 17), `iosArm64`, `iosSimulatorArm64`; no `androidTarget`, no `iosX64`;
+  - packages renamed to `com.zynergylabs.forager.brouter.<sub-package>`, class and file names kept, so the
+    oracle and the port share one test JVM;
+  - upstream's `LICENSE` unchanged, with a provenance README.
+- **C, how Forager takes the port in:** vendored Kotlin source at a pinned Forager-iOS commit, as
+  `third_party/brouter/` is today. No account, no secret, and Forager's own compiler builds it. Maven
+  Central would need an account (a stop if chosen); the composite build is second.
+- **C, Kotlin version (computed):**
+  - a 2.3.10 consumer read 2.4.21 output, and a 2.2.21 consumer refused it with 35 errors;
+  - an unpinned newer compiler moved the consumer's stdlib upward;
+  - pinning `languageVersion`/`apiVersion` 2.3 and `coreLibrariesVersion` 2.3.10 held both at 2.3.
+  - An Android build at Forager's settings agreed (compileSdk 35, not Forager's 37) and took the `jvm`
+    variant. Neither side has to move.
+- **C, what the port exposes:** a small entry point that Forager wraps behind its `TrailRouter`; the engine
+  stays `internal`. Today's shapes (`java.io.File`, `quite`, the Java getters, the cancel test's subclass)
+  cannot be kept in common Kotlin, so Forager's adapter changes at the switch either way.
+- **D, oracle:** the release jar `brouter-1.7.10-ro.jar`, fetched and checked in a `jvmTest`-only task.
+  - The zip matches `fetch-brouter.sh`'s size and SHA-256.
+  - Its 115 router classes give identical `javap -c -p` to the vendored source built fresh; a negative
+    control differs in 43, so the comparison can fail.
+  - Part 1's harness printed identical output on the jar and on the source.
+- **Checked by the planner:**
+  - only the report and its evidence folder changed (51 files since `5577491`);
+  - Forager's clone still at `e2969abe4` with a clean tree;
+  - `fetch-brouter.sh:12-13`, `app/build.gradle.kts:243, 316-317, 529`, `libs.versions.toml:129-134`, the
+    credits entry, `BRouterTrailRouter.kt:135-136, 142, 161, 212-213` and `TrailRouter.kt:15-28` read as
+    cited;
+  - the probe's control log holds 35 `e:` lines naming metadata 2.4.0;
+  - `ro-vs-fresh-build.txt` reads identical 115, the negative control identical 72, different 43;
+  - the two harness logs are byte-identical.
+- **Moved base:** Forager `pre-main` is now `d100a4776` (32 commits after `e2969abe4`). Checked
+  independently: 153 files changed, none on a premise path, and no changed line mentions `btools`,
+  BRouter or `TrailRouter`. The only routing-named file is a 6-line change to
+  `AvailabilityViewModelOfflineRoutesTest.kt`. No premise moved, so it is not a stop; reads stay at
+  `e2969abe4`.
+- **Calls beyond the dispatch, by Hazel:**
+  - the package prefix;
+  - the `-ro` jar rather than Forager's `-all`;
+  - the Android consumer probe, using the container's Android SDK;
+  - compiler downloads to `~/.gradle`;
+  - a blob-less fetch of Forager into scratch.
+- **For the owner at Phase 1's end, batched:** the intake route (vendored source), the Kotlin pin, the
+  package prefix and the entry-point shape. Each is a recommendation, not yet a ruling.
+- **The planner's prediction against D:** right; the release jar serves as the oracle.
+- **Not answered:** E, F, G, H, I, J, K.
+**Notes:** Written by the planner by hand. Part 4 (F and G) starts next, per -8. Next free ID -10.
