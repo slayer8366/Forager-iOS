@@ -4,6 +4,9 @@ Written by the team's primary coder (first run, not yet named), 2026-10-29, for 
 `prompts/preserved/2026-10-28-01-brouter-port-amendment-2.md` on `main` at `c5c9411`. Phase 1's report,
 `docs/audits/2026-10-28-brouter-port-verify.md` at `20e1f92`, is the plan; "item I" below is its Phase 2 order.
 
+**Status (2026-10-29, second session):** steps 0 and 1 done. The tiles are checked and pinned, and the release routes are
+below. **No release exists:** the release waits for the owner's word, and steps 1b onward wait for the go.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -131,7 +134,7 @@ restored from the saved copy, `cmp` identical [C: `step0/revert0b-reverted.log`]
 simulator runtime is: the runtimes are iOS 26.2, 26.4.1 and 26.5. The test still linked and ran; on which device and runtime
 the log does not say [?].
 
-## Step 1: handed off, not started
+## Step 1: the handoff (first session)
 
 The planner's message at 20:12Z (context past 180k tokens) ended my run after step 0. Before it arrived, step 1's first
 action had run; nothing after it did.
@@ -145,9 +148,116 @@ action had run; nothing after it did.
   because `PhysicalFile.ra` is package-private. It prints each tile's lookup version against `lookups.dat` (11.2), opens it
   as the engine does, runs `checkFileIntegrity`, counts the micro-caches and nodes it decodes, and routes once.
 
+## Step 1: results (second session)
+
+**Done up to the release, which does not exist.** Commits `4da988d` (oracle load), `1df847c` (pin file, reader, F0),
+`91754bc` (ODbL notices), and the one carrying this section. Logs are in `2026-10-29-brouter-port-phase2/step1/`.
+
+- **The bytes are the handoff's.** The four scratch tiles, re-hashed at 20:17:42Z before anything else, equal
+  `step1-handoff/tiles-downloaded.txt` in size and SHA-256 [C: `step1/tiles-recheck.log`]. Nothing was downloaded again.
+- **The oracle.** The release zip and `brouter-1.7.10-ro.jar` were re-checked against their pins by `tools/fetch-oracle.sh`
+  [C: `step1/oracle-recheck.log`]. The JDK was the container's OpenJDK 21.0.12.1 (Phase 1's), run with
+  `-XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic`, not CI's Temurin.
+- **The harness** (`step1/TileCheck.java.txt`, run by `step1/run-check.sh.txt`) is the handoff's draft with two fixes:
+  - `PhysicalFile.ra` is closed by reflection.
+  - **Its count now decodes.** The draft copied `checkFileIntegrity`'s call, which passes `MicroCache.debug` (false) as
+    `reallyDecode`. That checks each cell's CRC without decoding and returns `null` for every non-empty cell
+    (`OsmFile.java:133-148`, `PhysicalFile.java:79` at v1.7.10) [R]. So the draft read `non-empty=0, nodes=0` on every tile.
+    That includes F0's fixture, which routes, and that is what exposed it. The superseded runs are kept, with a note
+    [C: `step1/superseded/`].
+- **Each tile was run alone,** in a folder holding only that tile, so a route can only have read it.
+
+| Tile | Bytes | SHA-256 | Lookup version | Version-checked open | `checkFileIntegrity` | Cells with data / read; nodes decoded | Route (hiking-mountain) | Read |
+|---|---:|---|---|---|---|---|---|---|
+| `W75_N40` | 119,750,873 | `dd141c3e…d29e6` | 11 (`lookups.dat` 11.2) | ok | ok | 19,671 / 23,552; 8,136,499 | 41.27426,−73.99789 → 41.30369,−74.01595: 226 nodes, 5,047 m | **yes** |
+| `W75_N35` | 3,571,019 | `73d58fa5…6a721` | 11 | ok | ok | 683 / 2,048; 260,055 | 39.36,−74.44 → 39.38,−74.41: 322 nodes, 9,471 m | **yes** |
+| `W70_N40` | 5,292,557 | `c35113bb…e0521c` | 11 | ok | ok | 3,904 / 10,240; 233,163 | 44.8012,−68.7778 → 44.82,−68.75: 104 nodes, 3,949 m | **yes** |
+| `E170_S50` | 1,061,589 | `878455e2…acd584` | 11 | ok | ok | 767 / 3,072; 50,074 | −45.8788,170.5028 → −45.865,170.515: 115 nodes, 2,003 m | **yes** |
+| F0, Forager's fixture (control) | 152,665 | `ff6d9d8e…5ec5990` | 11 | ok | ok | 47 / 2,048; 7,191 | the same ends as `W75_N40`: 226 nodes, 5,047 m | yes |
+
+[C: `step1/check-*.log`; full hashes in `tools/tile-pins.tsv`.] Every route's error is `null`. All four tiles carry
+`Last-Modified: Thu, 29 Oct 2026 01:03:01 GMT` [C: the handoff's headers].
+- **The routes' ends.** `W75_N40`'s are Forager's `inside-across-the-degree-line` ends (`make-expected.sh`). The others are
+  town points (Atlantic City, Bangor, Dunedin), chosen from geography, not from the tiles' nodes [I]. Each found a route.
+- **The F0 control agrees with Forager's own record.** The harness's route on F0 equals Forager's committed command-line
+  result, `brouter-cli/inside-across-the-degree-line.geojson`: `track-length` 5047 and 226 points [C]. So the harness routes
+  as the oracle's own command line does on these ends.
+- **The bite check.** Four damaged copies of `E170_S50` were each refused for their own reason [C: `step1/bite-harness.log`]:
+  - lookup version 11 → 10: "lookup version mismatch (old rd5?) lookups.dat=11 E170_S50.rd5=10";
+  - one top-index byte flipped: "top index checksum error";
+  - cut to half: "file of size 530794 too short";
+  - one mid-file byte flipped: **the open passes and `checkFileIntegrity` alone refuses it** ("checkum error", upstream's
+    spelling). So the integrity check bites on cell data that the open never reads.
+- **Prediction (-25) "BRouter 1.7.10 reads all four tiles, so none is replaced": held** [C]. E4's replacement rule was not
+  needed.
+- **Not read in step 1:** whether any tile carries `estimated_crossing_class` (E4's [?], "read from the coverage run at
+  capture"). That run is E3's, and I read it as step 1b's. The tiles' internal `creationTime` was not read either.
+
+**The pin file, `tools/tile-pins.tsv`.** One tab-separated row per release asset: asset name, the path the fetch writes, bytes,
+SHA-256, source, `Last-Modified`, `ETag`, and capture time. It was generated from the saved headers and fresh hashes, not typed.
+- **F0's fixture is pinned as `forager-fixture-W75_N40.rd5`,** fetched to `f0/W75_N40.rd5`. A release cannot hold two
+  assets named `W75_N40.rd5` [I: GitHub's asset names are unique within a release, from memory], and the engine finds a tile by its file name, so the asset is renamed and the folder keeps
+  the name.
+- **`tools/fetch-tiles.sh <dir> <base url>`** reads the pin file and fetches each asset through `tools/fetch-pinned.sh`. It is
+  not wired into CI or Gradle: there is no release URL yet.
+  - Forward, against the scratch copies over `file://`: 5 of 5 match [C: `step1/fetch-forward.log`].
+  - **Revert (item I's step 1 row):** `E170_S50`'s pinned size changed from 1,061,589 to 1,061,590. The fetch refused it with
+    "E170_S50.rd5 is 1061589 bytes, pinned 1061590", exit 1. The edit was to data, so there is no compile log; the reader's
+    `bash -n` passed. The pin file was restored from a copy saved before the edit, its SHA-256 equals the forward file's, and
+    the forward row is present [C: `step1/revert1.log`].
+
+**F0's fixture** was copied read-only from Forager's clone (`e2969abe4`,
+`app/src/test/resources/routing/segments/W75_N40.rd5`, blob `434697225fed`) into scratch: 152,665 bytes, SHA-256
+`ff6d9d8e…5ec5990`, equal to its pin. Forager's `git status` was empty afterwards [C: `step1/f0-copy.log`]. It is not
+committed here (ruling c).
+
+**The ODbL 4.2 notices,** `tools/tile-release/`:
+- `README.md` is the release's README asset. It holds OpenStreetMap's attribution, the ODbL 1.0 URI, each asset with its
+  size, SHA-256 and source, and F0's notice from Forager's README, kept intact as 4.2(c) asks. The quote was checked word
+  for word against the source [C].
+- `release-notes.md` is the release body.
+- Both rely on 4.2(d), since an `.rd5` file has no place for a notice. Sections beyond 4.2 were not examined, as in Phase 1.
+
+**Staged for the release, in scratch only:** `<scratch>/phase2/release-staging/` holds the six assets, 129,831,426 bytes in all
+[C]: the four tiles (hard links to the downloaded files, the same inodes), F0's copy, and `README.md`.
+
 ## How the captured bytes can reach a release
 
-Not written: step 1's, handed off.
+**What was checked, read only, to price these.** Nothing was created.
+- Through this session's proxy, the GitHub API reports `admin: true` on Forager-iOS, which is public with 0 releases. This is
+  despite `gh auth status` calling the container's token invalid [C].
+- `uploads.github.com`, where release assets go, answers a GET (`400` from GitHub, not a proxy refusal) [C].
+- The proxy runs an "upload gate" [C: its status endpoint]. **Whether a 114 MiB asset upload passes it could not be
+  determined** without uploading [?].
+- The workflow token's default permissions could not be read: the proxy refuses that API path [C].
+- slayer8366/Forager is public, so CI can fetch F0 by URL without a secret [C].
+- The GitHub tools loaded in this session list and read releases but have no tool to create one [R: the tool list].
+
+**Why losing these bytes is cheap:** nothing yet depends on them. Step 1b writes the expected digests, and only after the
+release. Recapturing means:
+- downloading again;
+- running the committed harness, about 11 s for all four tiles here [C: the logs' wall times, 8 s of it `W75_N40`];
+- rewriting `tools/tile-pins.tsv` and the README table in one commit.
+
+What must hold is one invariant: **the release's bytes equal the pin file's, and the oracle read those bytes.** Every route
+below keeps that, and only the first keeps today's bytes.
+
+| | Route | What it asks of the owner | Keeps the oracle-checked bytes | Weak point |
+|---|---|---|---|---|
+| **A** | **Upload from this container, on the owner's word.** A session holding `release-staging/` creates the release as a **draft** with `gh release create --draft`, the six assets, and `release-notes.md`, under a tag such as `brouter-tiles-2026-10-29` on `brouter-port`. Then `tools/fetch-tiles.sh` reads every asset back through the API and checks it against the pins. **Only then is the draft published.** | **One word:** yes, and the tag's name. Nothing to download, click or check. | **Yes,** and the read-back proves it | **The container may end before the word.** The proxy may refuse a 114 MiB upload [?]. Under a draft, a failed or partial upload is never public. |
+| **B** | **Recapture in a fresh session, then A.** Download anew, run the committed harness, re-pin in one commit, then upload as in A. | The same word, if it was given for "the tiles a session has checked", not for these hashes | No: new bytes, checked the same way | The same proxy question as A. Costs a short session. |
+| **C** | **A CI job that captures, checks and publishes.** A new workflow downloads the four tiles and F0 (Forager is public), runs the harness against the pinned oracle, uploads with `permissions: contents: write`, and prints the pins for a follow-up commit | The word, and a trigger: a click in Actions, or a push to a marker file | No: new bytes. The pin commit follows the release, so for a while the repository pins nothing that exists | A new workflow of about 100 lines. Whether `workflow_dispatch` can run a workflow that is only on `brouter-port` is from memory, not checked: I believe it must be on the default branch, and `main` is the owner's [I]. The token's default permission could not be read. A capture that is published with no person between |
+| **D** | **Files handed to the owner,** who creates the release in a browser | Create the release, drag in six files, type a tag, paste the notes, and **check six SHA-256s**, or trust the transfer | Yes, if the transfer is exact | **No channel from this container to the owner carries 114 MiB.** An artifact's binary file is capped at 15 MB [R: the Artifact tool's limits], and no file-sharing connector is attached. Unusable unless the owner names one. |
+| **E** | **Chunks on a temporary branch,** reassembled and published by CI | The word, and that ruling c bends | Yes | It puts 130 MB into the repository's objects: ruling c's rejected form, and an upload now. Listed only to rule it out. |
+
+**Recommendation: A, with B as its fallback [I].**
+- A is the only route that asks the owner for nothing but a yes, and the only one that publishes the bytes checked here.
+- The draft-then-verify-then-publish order means a failure leaves nothing public.
+- If the container is gone, or the proxy refuses the upload, B costs one short session and the same yes.
+- **So the word is best asked in this form:** "create the tile release from tiles a session has checked in the 1.7.10 oracle
+  and pinned in `tools/tile-pins.tsv`, under tag `<name>`". Then it survives a recapture.
+- C asks for a new workflow and a trigger, and it publishes before the pins land. That makes it the most to build, and it is
+  the only route where something public can exist that the repository does not pin.
 
 ## Confirmed vs inferred
 
@@ -156,12 +266,32 @@ Not written: step 1's, handed off.
 - **Confirmed by reading:** Gradle's checksums; the action SHAs; the licence against upstream; the FK 6 message's source line.
 - **Inferred:** that the smoke test, being trivial, would fail if the toolchain could not link or run (its value is the
   count, and the count is 1).
+- **Step 1, confirmed by running:**
+  - the scratch tiles against the handoff's hashes;
+  - the four tiles and F0 in the 1.7.10 oracle;
+  - the harness refusing four damaged copies;
+  - F0's route against Forager's committed result;
+  - the pin file through `tools/fetch-tiles.sh`, and its refusal of a size off by one.
+- **Step 1, confirmed by reading:** where the engine checks the lookup version (`PhysicalFile.java:102-105`,
+  `NodesCache.java:70-71,377`), and why the draft's count read zero (`OsmFile.java:133-148`).
+- **Step 1, inferred:**
+  - the geography of three routes' ends;
+  - that GitHub refuses two assets of one name in a release;
+  - that `workflow_dispatch` needs the workflow on the default branch;
+  - that a draft release is not public. That last one is GitHub's documented behaviour as I remember it, and was not
+    read this session.
 
 ## Could not determine
 
 - Whether Actions was enabled before the first push (the settings path is closed to this session); the run answered it.
 - Why KGP 2.3.10 printed no Xcode-version warning with Xcode 26.0.1.
 - Which simulator device and runtime ran the smoke test.
+- Step 1:
+  - whether the proxy's upload gate passes a 114 MiB asset upload to `uploads.github.com`, and whether credentials are
+    supplied there;
+  - the workflow token's default permissions on Forager-iOS (the proxy refuses the path);
+  - what ODbL asks beyond 4.2 of a re-host (not examined, as in Phase 1);
+  - whether any captured tile carries `estimated_crossing_class` (step 1b's coverage run).
 
 ## Premises that were wrong
 
@@ -170,6 +300,10 @@ Not written: step 1's, handed off.
   listing's bytes, and `Last-Modified` (01:03:01Z) is earlier than the listing. Not a stop; it means the captured files are
   the ones part 4 sized.
 - My own: FK 6's oracle message (above).
+- **My own, from the first session: the handoff harness's decode count** read zero on every tile, because it copied
+  `checkFileIntegrity`'s `reallyDecode = false` (step 1, above). Its draft also did not compile. Neither would have
+  passed off a bad tile as good, since the open, the integrity check and the route did not depend on the count. But the
+  count was written as the evidence that a pass was "not a pass on no data", and it could not have shown that.
 
 ## Decided beyond scope
 
@@ -185,3 +319,14 @@ Not written: step 1's, handed off.
 - **The JVM tests run with `-XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic`** from step 0 (RECORD -24); the unlock flag is
   required (HotSpot refuses the flag alone).
 - **okio is an `api` dependency,** because `okio.Path` is in the entry point's signatures.
+- **Step 1:**
+  - **The pin file's place and form:** `tools/tile-pins.tsv`, tab-separated. Item I names no path.
+  - **F0's asset name** `forager-fixture-W75_N40.rd5`, and its fetch path `f0/W75_N40.rd5`.
+  - **`tools/fetch-tiles.sh`,** a reader of the pin file. It is not wired into CI or Gradle until a release URL exists.
+  - **The notices' place,** `tools/tile-release/`: the README asset and the release body.
+  - **F0 run through the harness** as a control; E4 names only the four tiles.
+  - **A fourth bite case** (mid-file), so the check covers what `checkFileIntegrity` adds beyond the open.
+  - **Three routes' ends chosen from geography,** not from the tiles' nodes.
+  - **Read-only GitHub API queries** to price the routes: the repository's permissions and release count, and Forager's
+    visibility. A fourth, on the workflow token, was refused by the proxy.
+  - **A release-staging folder in scratch,** with the tiles hard-linked, so the six assets sit in one place for route A.
