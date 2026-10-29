@@ -1,0 +1,12 @@
+reached methods in list: 481
+reached methods found in javap: 481
+reached methods not found in javap: 0
+methods parsed from javap: 923
+arith: 383 instructions in 39 methods
+cmp: 226 instructions in 38 methods
+conv: 239 instructions in 45 methods
+math: 63 instructions in 21 methods
+boxed: 35 instructions in 10 methods
+fstr: 4 instructions in 4 methods
+hashit: 10 instructions in 7 methods
+methods with any floating-point site: 68

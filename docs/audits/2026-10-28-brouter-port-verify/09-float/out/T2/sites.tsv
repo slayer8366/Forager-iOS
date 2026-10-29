@@ -1,0 +1,165 @@
+class	method	descriptor	category	count	lines
+btools/expressions/BExpression	createAssignExpressionFromKeyValue	(Lbtools/expressions/BExpressionContext;Ljava/lang/String;Ljava/lang/String;)Lbtools/expressions/BExpression;	boxed	1	401:Float.parseFloat(Ljava/lang/String;)F
+btools/expressions/BExpression	divide	(FF)F	cmp	1	369:fcmpl
+btools/expressions/BExpression	divide	(FF)F	arith	1	370:fdiv
+btools/expressions/BExpression	evaluate	(Lbtools/expressions/BExpressionContext;)F	cmp	11	272:fcmplx2; 274:fcmplx2; 276:fcmplx2; 290:fcmpl; 292:fcmpl; 294:fcmpg; 296:fcmpl; 310:fcmpl
+btools/expressions/BExpression	evaluate	(Lbtools/expressions/BExpressionContext;)F	arith	3	278:fadd; 280:fsub; 282:fmul
+btools/expressions/BExpression	max	(FF)F	cmp	1	361:fcmpl
+btools/expressions/BExpression	min	(FF)F	cmp	1	365:fcmpg
+btools/expressions/BExpression	parseRaw	(Lbtools/expressions/BExpressionContext;ILjava/lang/String;)Lbtools/expressions/BExpression;	boxed	1	234:Float.parseFloat(Ljava/lang/String;)F
+btools/expressions/BExpression	toString	()Ljava/lang/String;	fstr	1	376:concat(F)
+btools/expressions/BExpression	tryCollapse	()Lbtools/expressions/BExpression;	cmp	7	322:fcmpl; 324:fcmpl; 328:fcmpl; 330:fcmpl; 334:fcmpl; 336:fcmpl; 340:fcmpl
+btools/expressions/BExpressionContext	_parseFile	(Ljava/io/File;Ljava/util/Map;)Ljava/util/List;	hashit	2	863:Map.keySet()Ljava/util/Set;,Set.iterator()Ljava/util/Iterator;
+btools/expressions/BExpressionContext	addLookupValue	(Ljava/lang/String;Ljava/lang/String;[I)Lbtools/expressions/BExpressionLookupValue;	boxed	23	605:Float.parseFloat(Ljava/lang/String;)F; 612:Float.valueOf(F)Ljava/lang/Float;; 617:Float.parseFloat(Ljava/lang/String;)F; 625:Float.valueOf(F)Ljava/lang/Float;; 630:Float.parseFloat(Ljava/lang/String;)F; 631:Float.valueOf(F)Ljava/lang/Float;; 635:Float.parseFloat(Ljava/lang/String;)F; 636:Float.valueOf(F)Ljava/lang/Float;; 639:Float.parseFloat(Ljava/lang/String;)F; 640:Float.valueOf(F)Ljava/lang/Float;; 644:Float.parseFloat(Ljava/lang/String;)F; 645:Float.valueOf(F)Ljava/lang/Float;; 651:Float.parseFloat(Ljava/lang/String;)F; 652:Float.valueOf(F)Ljava/lang/Float;; 656:Float.parseFloat(Ljava/lang/String;)F; 657:Float.valueOf(F)Ljava/lang/Float;; 668:Float.parseFloat(Ljava/lang/String;)F; 669:Float.valueOf(F)Ljava/lang/Float;; 673:Float.parseFloat(Ljava/lang/String;)F; 674:Float.valueOf(F)Ljava/lang/Float;; 678:Float.parseFloat(Ljava/lang/String;)F; 679:Float.valueOf(F)Ljava/lang/Float;; 687:Float.parseFloat(Ljava/lang/String;)F
+btools/expressions/BExpressionContext	addLookupValue	(Ljava/lang/String;Ljava/lang/String;[I)Lbtools/expressions/BExpressionLookupValue;	conv	3	610:i2f; 623:i2f; 687:f2i
+btools/expressions/BExpressionContext	addLookupValue	(Ljava/lang/String;Ljava/lang/String;[I)Lbtools/expressions/BExpressionLookupValue;	arith	16	610:fdiv,fadd; 612:fmul; 623:fdiv,fadd; 625:fmul; 631:fmul; 636:fmul; 640:fmul; 645:fdiv; 652:fmul; 657:fmul; 669:fmul; 674:fdiv; 679:fdiv; 687:fmul
+btools/expressions/BExpressionContext	addLookupValue	(Ljava/lang/String;Ljava/lang/String;[I)Lbtools/expressions/BExpressionLookupValue;	math	1	687:Math.abs(F)F
+btools/expressions/BExpressionContext	getKeyValueDescription	(Z[B)Ljava/lang/String;	conv	1	225:i2f
+btools/expressions/BExpressionContext	getKeyValueDescription	(Z[B)Ljava/lang/String;	arith	1	225:fdiv
+btools/expressions/BExpressionContext	getKeyValueDescription	(Z[B)Ljava/lang/String;	boxed	1	225:Float.toString(F)Ljava/lang/String;
+btools/expressions/BExpressionContext	getLookupValue	(I)F	boxed	1	267:Float.parseFloat(Ljava/lang/String;)F
+btools/expressions/BExpressionContext	getLookupValue	(I)F	conv	1	272:i2f
+btools/expressions/BExpressionContext	getLookupValue	(I)F	arith	1	272:fdiv
+btools/expressions/BExpressionContextWay	accessType	([B)I	cmp	4	118:fcmpl; 121:fcmpg; 125:fcmpgx2
+btools/expressions/BExpressionMetaData	readMetaData	(Ljava/io/File;)V	hashit	1	67:Map.values()Ljava/util/Collection;
+btools/mapaccess/NodesCache	close	()V	hashit	1	393:Map.values()Ljava/util/Collection;
+btools/mapaccess/NodesCache	matchWaypointsToNodes	(Ljava/util/List;DLbtools/mapaccess/OsmNodePairSet;)Z	cmp	3	298:dcmpl; 300:dcmpgx2
+btools/mapaccess/OsmNode	calcDistance	(Lbtools/mapaccess/OsmPos;)I	math	2	103:Math.round(D)J,Math.max(DD)D
+btools/mapaccess/OsmNode	calcDistance	(Lbtools/mapaccess/OsmPos;)I	conv	2	103:l2d,d2i
+btools/mapaccess/OsmNodesMap	collectOutreachers	()V	hashit	1	181:Map.values()Ljava/util/Collection;
+btools/mapaccess/WaypointMatcherImpl	<init>	(Ljava/util/List;DLbtools/mapaccess/OsmNodePairSet;)V	cmp	2	43:dcmpg; 51:dcmpl
+btools/mapaccess/WaypointMatcherImpl	<init>	(Ljava/util/List;DLbtools/mapaccess/OsmNodePairSet;)V	arith	2	44:dmul; 45:dmul
+btools/mapaccess/WaypointMatcherImpl	checkSegment	(IIII)V	conv	10	84:i2d; 85:i2d; 111:i2d; 112:i2d; 113:i2d; 114:i2d; 145:i2d,d2i; 146:i2d,d2i
+btools/mapaccess/WaypointMatcherImpl	checkSegment	(IIII)V	arith	41	84:dmul; 85:dmul; 86:dmulx2,dadd; 111:dmul; 112:dmul; 113:dmul; 114:dmul; 115:dmulx2,dadd; 116:dmulx2,dadd; 117:dmulx4,dsubx2,ddiv; 120:dmulx2,dadd; 121:dmulx2,dadd; 124:dneg; 125:dneg; 142:dneg,dmul,ddiv; 143:dmul,dsub; 144:dmul,dsub; 145:ddiv,dadd; 146:ddiv,dadd
+btools/mapaccess/WaypointMatcherImpl	checkSegment	(IIII)V	math	3	86:Math.sqrt(D)D; 117:Math.abs(D)D; 128:Math.sqrt(D)D
+btools/mapaccess/WaypointMatcherImpl	checkSegment	(IIII)V	cmp	9	88:dcmpl; 117:dcmpg; 119:dcmpg; 123:dcmpg; 127:dcmpl; 128:dcmpg; 130:dcmpl; 141:dcmpg; 147:dcmpl
+btools/mapaccess/WaypointMatcherImpl	hasMatch	(II)Z	cmp	1	245:dcmpg
+btools/mapaccess/WaypointMatcherImpl$1	compare	(Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;)I	boxed	2	69:Double.compare(DD)I; 71:Double.compare(DD)I
+btools/router/Formatter	format1	(D)Ljava/lang/String;	arith	2	113:dmul,dadd
+btools/router/Formatter	format1	(D)Ljava/lang/String;	conv	1	113:d2l
+btools/router/Formatter	getFormattedEnergy	(I)Ljava/lang/String;	conv	1	109:i2d
+btools/router/Formatter	getFormattedEnergy	(I)Ljava/lang/String;	arith	1	109:ddiv
+btools/router/Formatter	getFormattedTime2	(I)Ljava/lang/String;	conv	2	94:i2d,d2i
+btools/router/Formatter	getFormattedTime2	(I)Ljava/lang/String;	arith	1	94:dadd
+btools/router/MessageData	toString	()Ljava/lang/String;	fstr	1	77:concat(IIF)
+btools/router/OsmPath	addAddionalPenalty	(Lbtools/router/OsmTrack;ZLbtools/router/OsmPath;Lbtools/mapaccess/OsmLink;Lbtools/router/RoutingContext;)V	conv	28	146:i2d; 153:f2i; 159:f2dx4; 161:f2d; 166:f2i; 176:f2i; 280:i2d; 282:d2i; 283:d2i; 296:i2d; 303:i2d; 305:i2d; 306:f2d,i2d; 315:d2i; 318:i2d; 321:d2f; 322:d2f; 323:d2f; 343:i2d,d2i; 375:i2d,d2i; 380:i2d; 384:d2i
+btools/router/OsmPath	addAddionalPenalty	(Lbtools/router/OsmTrack;ZLbtools/router/OsmPath;Lbtools/mapaccess/OsmLink;Lbtools/router/RoutingContext;)V	arith	15	146:ddiv; 158:fsub; 255:dsub; 280:dmul; 282:dmul,ddiv; 283:dmul,ddiv; 296:ddiv; 298:dneg; 303:ddiv; 306:dadd; 343:dadd; 375:dadd; 380:dadd
+btools/router/OsmPath	addAddionalPenalty	(Lbtools/router/OsmTrack;ZLbtools/router/OsmPath;Lbtools/mapaccess/OsmLink;Lbtools/router/RoutingContext;)V	cmp	14	151:fcmpl; 159:dcmplx3,dcmpg; 161:dcmpl; 254:dcmpl; 306:dcmpg,dcmplx2; 340:dcmpg; 371:dcmpg; 380:dcmpg,dcmpl
+btools/router/OsmPath	addAddionalPenalty	(Lbtools/router/OsmTrack;ZLbtools/router/OsmPath;Lbtools/mapaccess/OsmLink;Lbtools/router/RoutingContext;)V	math	2	282:Math.sin(D)D; 283:Math.cos(D)D
+btools/router/OsmPath	interpolateEle	(SSD)S	conv	3	392:i2dx2,d2i
+btools/router/OsmPath	interpolateEle	(SSD)S	arith	4	392:dsub,dmulx2,dadd
+btools/router/OsmPathElement	calcDistance	(Lbtools/mapaccess/OsmPos;)I	math	2	78:Math.round(D)J,Math.max(DD)D
+btools/router/OsmPathElement	calcDistance	(Lbtools/mapaccess/OsmPos;)I	conv	2	78:l2d,d2i
+btools/router/OsmPathElement	getElev	()D	conv	1	44:i2d
+btools/router/OsmPathElement	getElev	()D	arith	1	44:ddiv
+btools/router/OsmTrack	appendTrack	(Lbtools/router/OsmTrack;)V	arith	2	347:fadd; 348:fadd
+btools/router/OsmTrack	appendTrack	(Lbtools/router/OsmTrack;)V	conv	1	384:f2i
+btools/router/OsmTrack	getTotalSeconds	()I	arith	2	426:fsub; 427:dadd
+btools/router/OsmTrack	getTotalSeconds	()I	conv	2	427:f2d,d2i
+btools/router/OsmTrack	processVoiceHints	(Lbtools/router/RoutingContext;)V	conv	2	501:i2d; 528:i2d
+btools/router/OsmTrack	readBinary	(Ljava/lang/String;Lbtools/router/OsmNodeNamed;[JJLjava/lang/StringBuilder;)Lbtools/router/OsmTrack;	math	3	275:Math.abs(J)J; 276:Math.abs(J)J; 277:Math.abs(J)J
+btools/router/RoutingContext	calcDistance	(IIII)I	conv	14	459:i2d; 460:i2d; 468:i2d; 469:i2d; 470:i2d; 471:i2d; 522:i2d,d2i; 523:i2d,d2i; 547:i2d; 548:i2d; 554:l2d,d2i
+btools/router/RoutingContext	calcDistance	(IIII)I	arith	49	459:dmul; 460:dmul; 461:dmulx2,dadd; 468:dmul; 469:dmul; 470:dmul; 471:dmul; 472:dmulx2,dadd; 473:dmulx2,dadd; 474:dmulx4,dsubx2,ddiv; 477:dmulx2,dadd; 478:dmulx2,dadd; 482:dneg; 483:dneg; 496:dmul; 507:dmul; 519:dneg,dmul,ddiv; 520:dmul,dsub; 521:dmul,dsub; 522:ddiv,dadd; 523:ddiv,dadd; 539:dsub; 547:dmul; 548:dmul; 549:dmulx2,dadd
+btools/router/RoutingContext	calcDistance	(IIII)I	math	6	461:Math.sqrt(D)D; 474:Math.abs(D)D; 486:Math.sqrt(D)D; 549:Math.sqrt(D)D; 554:Math.round(D)J,Math.max(DD)D
+btools/router/RoutingContext	calcDistance	(IIII)I	cmp	9	465:dcmpl; 474:dcmpg; 476:dcmpg; 481:dcmpg; 485:dcmpl; 486:dcmpg; 487:dcmpl; 518:dcmpg; 524:dcmpl
+btools/router/RoutingContext	calcDistance	(IIII)I	boxed	2	491:Double.isNaN(D)Z; 501:Double.isNaN(D)Z
+btools/router/RoutingContext	checkMatchedWaypointAgainstNogos	(Ljava/util/List;)V	boxed	1	350:Double.isNaN(D)Z
+btools/router/RoutingContext	checkMatchedWaypointAgainstNogos	(Ljava/util/List;)V	conv	1	351:i2d
+btools/router/RoutingContext	checkMatchedWaypointAgainstNogos	(Ljava/util/List;)V	cmp	1	351:dcmpg
+btools/router/RoutingContext	cleanNogoList	(Ljava/util/List;)V	conv	1	324:i2d
+btools/router/RoutingContext	cleanNogoList	(Ljava/util/List;)V	cmp	1	324:dcmpg
+btools/router/RoutingContext	getKeyValueChecksum	()J	hashit	2	107:Map.entrySet()Ljava/util/Set;,Set.iterator()Ljava/util/Iterator;
+btools/router/RoutingContext	getNogoChecksums	()[J	arith	1	421:dmul
+btools/router/RoutingContext	getNogoChecksums	()[J	conv	1	421:d2l
+btools/router/RoutingContext	readGlobalConfig	()V	cmp	18	118:fcmpl; 119:fcmpl; 120:fcmpl; 122:fcmpl; 146:fcmpl; 148:fcmpl; 151:fcmpl; 154:fcmpl; 156:fcmpl; 170:fcmpl; 172:fcmpl; 173:fcmpl; 174:fcmpl; 175:fcmpl; 182:fcmpl; 200:fcmpl; 201:fcmpl; 203:fcmpl
+btools/router/RoutingContext	readGlobalConfig	()V	conv	36	124:f2i; 125:f2i; 127:f2i; 128:f2i; 129:f2i; 130:f2i; 131:f2i; 132:f2i; 135:f2i; 136:f2i; 137:f2i; 138:f2i; 139:f2i; 140:f2i; 143:f2d; 149:f2d; 157:f2d; 158:f2d; 159:f2i; 160:f2i; 161:f2i; 163:f2d; 164:f2d; 165:f2d; 166:f2d; 167:f2d; 168:f2d; 169:f2d; 177:f2i; 181:f2d; 186:f2d; 189:f2d; 191:f2d; 194:f2d; 196:f2d; 198:f2d
+btools/router/RoutingContext	readGlobalConfig	()V	arith	5	159:fmul; 160:fmul; 161:fmul; 189:ddiv; 191:ddiv
+btools/router/RoutingEngine	_findTrack	(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack;	fstr	1	1896:concat(D)
+btools/router/RoutingEngine	_findTrack	(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack;	conv	9	1994:i2d,d2i; 2022:i2d,d2i; 2193:i2d; 2234:i2dx4
+btools/router/RoutingEngine	_findTrack	(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack;	arith	4	1994:dmul; 2022:dmul; 2234:dmul,dadd
+btools/router/RoutingEngine	_findTrack	(Ljava/lang/String;Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Z)Lbtools/router/OsmTrack;	cmp	3	2193:dcmpl; 2234:dcmpl,dcmpg
+btools/router/RoutingEngine	addToOpenset	(Lbtools/router/OsmPath;)V	conv	2	2265:i2d,d2i
+btools/router/RoutingEngine	addToOpenset	(Lbtools/router/OsmPath;)V	arith	1	2265:dmul
+btools/router/RoutingEngine	compileTrack	(Lbtools/router/OsmPath;Z)Lbtools/router/OsmTrack;	conv	1	2282:d2i
+btools/router/RoutingEngine	compileTrack	(Lbtools/router/OsmPath;Z)Lbtools/router/OsmTrack;	arith	2	2298:fsub; 2299:fsub
+btools/router/RoutingEngine	doRouting	(J)V	conv	1	317:l2d
+btools/router/RoutingEngine	doRouting	(J)V	arith	1	317:ddiv
+btools/router/RoutingEngine	doRouting	(J)V	fstr	1	317:concat(D)
+btools/router/RoutingEngine	getStartPath	(Lbtools/mapaccess/OsmNode;Lbtools/mapaccess/OsmNode;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmNodeNamed;Z)Lbtools/router/OsmPath;	cmp	1	1825:dcmpg
+btools/router/RoutingEngine	getStartPath	(Lbtools/mapaccess/OsmNode;Lbtools/mapaccess/OsmNode;Lbtools/router/OsmNodeNamed;Lbtools/router/OsmNodeNamed;Z)Lbtools/router/OsmPath;	cmp	1	1855:dcmpg
+btools/router/RoutingEngine	matchWaypointsToNodes	(Ljava/util/List;)V	conv	2	1618:i2d; 1637:i2d
+btools/router/RoutingEngine	matchWaypointsToNodes	(Ljava/util/List;)V	cmp	2	1621:dcmpl; 1637:dcmpl
+btools/router/RoutingEngine	postElevationCheck	(Lbtools/router/OsmTrack;)V	conv	8	731:i2dx2; 735:i2d; 774:i2d; 775:i2d; 784:i2d; 785:d2i; 786:d2i
+btools/router/RoutingEngine	postElevationCheck	(Lbtools/router/OsmTrack;)V	arith	9	731:ddivx2; 762:dmul; 774:dsub; 775:ddivx2; 784:ddiv,dmul,dadd
+btools/router/RoutingEngine	postElevationCheck	(Lbtools/router/OsmTrack;)V	boxed	1	760:Double.parseDouble(Ljava/lang/String;)D
+btools/router/RoutingEngine	postElevationCheck	(Lbtools/router/OsmTrack;)V	cmp	3	770:dcmpl; 772:dcmpg,dcmpl
+btools/router/RoutingEngine	recalcTrack	(Lbtools/router/OsmTrack;)V	conv	14	1525:d2f; 1527:i2f,f2i; 1530:i2f; 1549:i2d; 1562:d2i; 1563:i2d,d2i; 1571:i2f; 1576:i2d; 1578:f2d; 1579:i2d; 1584:d2f; 1587:f2i
+btools/router/RoutingEngine	recalcTrack	(Lbtools/router/OsmTrack;)V	arith	23	1527:fadd; 1528:fsub; 1530:fdiv,fmul; 1549:dmul,dadd; 1553:dadd; 1563:dmul,dadd; 1571:fdivx2; 1576:dsub,ddiv; 1577:dmulx2,dadd; 1578:ddiv; 1579:dmulx3,dadd; 1583:fadd; 1584:fadd
+btools/router/RoutingEngine	recalcTrack	(Lbtools/router/OsmTrack;)V	math	1	1531:Math.min(FF)F
+btools/router/RoutingEngine	recalcTrack	(Lbtools/router/OsmTrack;)V	cmp	3	1533:fcmpl; 1552:dcmpl; 1555:dcmpg
+btools/router/RoutingEngine	recalcTrack	(Lbtools/router/OsmTrack;)V	hashit	1	1568:Map.keySet()Ljava/util/Set;
+btools/router/RoutingEngine	searchRoutedTrack	(Lbtools/mapaccess/MatchedWaypoint;Lbtools/mapaccess/MatchedWaypoint;Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;)Lbtools/router/OsmTrack;	cmp	1	1743:dcmpg
+btools/router/RoutingEngine	snapPathConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Lbtools/mapaccess/MatchedWaypoint;)Z	conv	2	1283:i2d; 1400:i2d
+btools/router/RoutingEngine	snapPathConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Lbtools/mapaccess/MatchedWaypoint;)Z	cmp	5	1283:dcmpg; 1330:dcmpl; 1417:dcmplx2; 1451:fcmpl
+btools/router/RoutingEngine	snapPathConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Lbtools/mapaccess/MatchedWaypoint;)Z	math	1	1333:Math.abs(I)I
+btools/router/RoutingEngine	snapPathConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;Lbtools/mapaccess/MatchedWaypoint;)Z	arith	3	1401:dadd; 1453:fsub; 1454:fsub
+btools/router/RoutingEngine	snapRoundaboutConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;IIILbtools/mapaccess/MatchedWaypoint;)I	cmp	3	1126:dcmplx2; 1204:fcmpl
+btools/router/RoutingEngine	snapRoundaboutConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;IIILbtools/mapaccess/MatchedWaypoint;)I	conv	1	1126:i2d
+btools/router/RoutingEngine	snapRoundaboutConnection	(Lbtools/router/OsmTrack;Lbtools/router/OsmTrack;IIILbtools/mapaccess/MatchedWaypoint;)I	arith	6	1206:fsub; 1207:fsub; 1240:fadd; 1241:fadd; 1248:fadd; 1249:fadd
+btools/router/RoutingParamCollector	readPosition	(DDLjava/lang/String;)Lbtools/router/OsmNodeNamed;	arith	6	96:daddx2,dmul; 97:daddx2,dmul
+btools/router/RoutingParamCollector	readPosition	(DDLjava/lang/String;)Lbtools/router/OsmNodeNamed;	conv	2	96:d2i; 97:d2i
+btools/router/RoutingParamCollector	readPosition	(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lbtools/router/OsmNodeNamed;	boxed	2	90:Double.parseDouble(Ljava/lang/String;)Dx2
+btools/router/RoutingParamCollector	setParams	(Lbtools/router/RoutingContext;Ljava/util/List;Ljava/util/Map;)V	hashit	2	188:Map.entrySet()Ljava/util/Set;,Set.iterator()Ljava/util/Iterator;
+btools/router/StdPath	calcIncline	(D)D	conv	5	278:f2d; 280:f2d; 284:f2d,d2f; 285:f2d
+btools/router/StdPath	calcIncline	(D)D	cmp	2	278:dcmpl; 280:dcmpg
+btools/router/StdPath	calcIncline	(D)D	arith	9	279:dneg; 280:dneg; 283:dneg,ddiv; 284:dadd,dmul,dsub; 285:fsub,ddiv
+btools/router/StdPath	calcIncline	(D)D	math	1	283:Math.exp(D)D
+btools/router/StdPath	computeKinematic	(Lbtools/router/RoutingContext;DDZ)V	conv	6	297:f2d,d2f; 301:f2d; 315:d2f; 321:f2d,d2f
+btools/router/StdPath	computeKinematic	(Lbtools/router/RoutingContext;DDZ)V	arith	15	297:dadd; 301:fdiv; 307:dmulx2,dadd; 310:dadd,dmulx2; 315:ddiv; 316:fadd; 319:dmulx3,dadd; 321:dadd
+btools/router/StdPath	computeKinematic	(Lbtools/router/RoutingContext;DDZ)V	cmp	2	302:dcmpl; 320:dcmpl
+btools/router/StdPath	computeKinematic	(Lbtools/router/RoutingContext;DDZ)V	math	4	303:Math.min(DD)D; 310:Math.abs(D)D,Math.exp(D)D; 313:Math.min(DD)D
+btools/router/StdPath	getTotalEnergy	()D	conv	1	354:f2d
+btools/router/StdPath	getTotalTime	()D	conv	1	349:f2d
+btools/router/StdPath	processTargetNode	(Lbtools/router/RoutingContext;)D	conv	4	237:f2d; 240:f2d; 244:f2i; 247:f2d
+btools/router/StdPath	processTargetNode	(Lbtools/router/RoutingContext;)D	cmp	2	237:dcmpl; 240:dcmpl
+btools/router/StdPath	processWaySection	(Lbtools/router/RoutingContext;DDDDDZII)D	arith	44	50:fmul; 51:fmul; 52:fmul; 53:fmul; 89:dsub,dmul,dadd; 153:dmul; 154:fmul,fsub,fadd; 155:fmul,fsub,fadd; 164:fdiv; 174:fmul,fdiv,fadd; 177:fmul,fsub,fdiv,fadd; 180:dadd; 182:fadd; 196:fdiv; 206:fmul,fdiv,fadd; 209:fmul,fsub,fdiv,fadd; 212:dadd; 214:fadd; 222:fmulx3,fsubx2,faddx2; 228:fmul,fadd,dadd
+btools/router/StdPath	processWaySection	(Lbtools/router/RoutingContext;DDDDDZII)D	cmp	8	57:fcmpl; 58:fcmpl; 98:dcmpg; 101:dcmpl; 121:dcmpl; 124:dcmpl; 179:fcmpl; 211:fcmpl
+btools/router/StdPath	processWaySection	(Lbtools/router/RoutingContext;DDDDDZII)D	conv	45	60:f2i; 65:f2i; 73:f2i; 78:f2i; 86:d2i; 89:f2d,d2i; 91:f2i; 101:f2d; 124:f2d; 144:d2f; 147:i2d; 153:d2i; 154:i2fx3,f2i; 155:i2fx3,f2i; 164:i2fx2; 174:i2fx3; 177:i2fx3; 180:f2d; 182:i2f,f2i; 196:i2fx2; 206:i2fx3; 209:i2fx3; 212:f2d; 214:i2f,f2i; 228:i2f,f2d
+btools/router/StdPath	processWaySection	(Lbtools/router/RoutingContext;DDDDDZII)D	math	4	174:Math.min(FF)F; 177:Math.max(FF)F; 206:Math.min(FF)F; 209:Math.max(FF)F
+btools/router/StdPath	solveCubic	(DDD)D	arith	12	332:dmulx3,dadd,dsub; 335:dmul; 341:dmulx3,dadd; 342:ddiv,dsub
+btools/router/StdPath	solveCubic	(DDD)D	cmp	1	333:dcmpg
+btools/router/VoiceHint	calcCommand	()V	cmp	51	82:fcmpgx2; 85:fcmplx2; 98:fcmpl; 107:fcmpg,fcmplx2; 109:fcmpg; 111:fcmpg; 113:fcmpg; 115:fcmpgx3; 117:fcmplx3; 120:fcmpg; 122:fcmpl; 128:fcmpg; 132:fcmpg; 133:fcmpgx2; 135:fcmpl,fcmpg; 138:fcmplx2; 144:fcmpg; 145:fcmpl; 147:fcmpg; 152:fcmpg; 154:fcmplx2; 156:fcmpl,fcmpg; 159:fcmpgx2; 165:fcmpg; 167:fcmpg; 168:fcmpgx3; 170:fcmplx3; 173:dcmpl; 175:dcmpg; 181:fcmpg; 183:fcmplx3
+btools/router/VoiceHint	calcCommand	()V	conv	2	173:f2d; 175:f2d
+btools/router/VoiceHint	is180DegAngle	(F)Z	math	2	191:Math.abs(F)Fx2
+btools/router/VoiceHint	is180DegAngle	(F)Z	cmp	2	191:fcmpg,fcmpl
+btools/router/VoiceHintProcessor	checkStraightHold	(Lbtools/router/VoiceHint;Lbtools/router/VoiceHint;D)Z	cmp	12	515:fcmplx2; 516:fcmplx5; 517:fcmpl; 520:fcmpgx2; 522:dcmplx2
+btools/router/VoiceHintProcessor	checkStraightHold	(Lbtools/router/VoiceHint;Lbtools/router/VoiceHint;D)Z	math	4	516:Math.abs(F)Fx2; 517:Math.abs(F)F; 520:Math.abs(F)F
+btools/router/VoiceHintProcessor	postProcess	(Ljava/util/List;DD)Ljava/util/List;	arith	12	358:dadd; 377:dadd; 399:fsub; 404:dadd; 413:dadd; 414:fadd; 431:dadd; 438:dadd; 452:dsub; 456:dadd; 462:dadd; 474:dadd
+btools/router/VoiceHintProcessor	postProcess	(Ljava/util/List;DD)Ljava/util/List;	cmp	11	366:dcmplx2; 398:fcmpl; 399:fcmpg; 408:dcmpg; 421:dcmpl; 452:dcmpl; 459:dcmpgx2; 465:dcmpl; 468:dcmpg
+btools/router/VoiceHintProcessor	postProcess	(Ljava/util/List;DD)Ljava/util/List;	math	6	398:Math.abs(F)F; 399:Math.abs(F)F; 452:Math.abs(F)F; 459:Math.abs(F)F; 465:Math.abs(F)F; 468:Math.abs(F)F
+btools/router/VoiceHintProcessor	postProcess	(Ljava/util/List;DD)Ljava/util/List;	conv	4	452:f2d; 459:f2d; 465:f2d; 468:f2d
+btools/router/VoiceHintProcessor	process	(Ljava/util/List;)Ljava/util/List;	conv	2	77:i2d; 263:f2d
+btools/router/VoiceHintProcessor	process	(Ljava/util/List;)Ljava/util/List;	arith	14	77:dadd; 88:fadd; 92:fsub; 95:fadd; 126:fadd; 181:fsub; 264:fsubx2; 267:fadd,fsub; 282:fadd; 306:dadd; 307:fadd; 325:dadd
+btools/router/VoiceHintProcessor	process	(Ljava/util/List;)Ljava/util/List;	math	15	81:Math.min(II)I; 172:Math.max(II)I; 177:Math.abs(F)F; 181:Math.abs(F)Fx2; 183:Math.abs(F)F; 187:Math.abs(F)F; 188:Math.abs(F)F; 193:Math.max(II)I; 206:Math.abs(F)F; 222:Math.abs(F)F; 226:Math.abs(F)F; 263:Math.abs(F)F; 264:Math.max(FF)F; 267:Math.min(FF)F
+btools/router/VoiceHintProcessor	process	(Ljava/util/List;)Ljava/util/List;	cmp	20	120:fcmpg; 176:fcmpl; 181:fcmpl; 182:fcmpl; 187:fcmpgx2; 195:fcmpl; 198:fcmpg; 206:fcmpl; 222:fcmpl; 226:fcmpg; 231:fcmpl,fcmpg; 263:dcmpl; 264:fcmpg,fcmpl; 267:fcmpl,fcmpg; 281:dcmpg; 303:dcmpg
+btools/router/VoiceHintProcessor	sumNonConsumedWithinCatchingRange	(Ljava/util/List;ID)F	cmp	1	30:dcmpg
+btools/router/VoiceHintProcessor	sumNonConsumedWithinCatchingRange	(Ljava/util/List;ID)F	arith	2	35:fadd; 36:dadd
+btools/router/VoiceHintProcessor	sumNonConsumedWithinCatchingRange	(Ljava/util/List;ID)F	conv	1	36:i2d
+btools/util/CheapAngleMeter	calcAngle	(IIIIII)D	conv	4	18:i2d; 19:i2d; 20:i2d; 21:i2d
+btools/util/CheapAngleMeter	calcAngle	(IIIIII)D	arith	31	18:dmul; 19:dmul; 20:dmul; 21:dmul; 23:dmulx5,daddx2; 28:dmulx2,dsub,ddiv; 29:dmulx2,dadd,ddiv; 33:dmul; 37:dneg; 42:dmul; 44:dneg; 47:dmulx4,daddx4
+btools/util/CheapAngleMeter	calcAngle	(IIIIII)D	math	1	23:Math.sqrt(D)D
+btools/util/CheapAngleMeter	calcAngle	(IIIIII)D	cmp	5	24:dcmpl; 34:dcmpl; 35:dcmpl; 43:dcmpg; 45:dcmpl
+btools/util/CheapAngleMeter	getAngle	(IIII)D	conv	2	52:i2d; 53:i2d
+btools/util/CheapAngleMeter	getAngle	(IIII)D	math	2	54:Math.atan2(DD)D,Math.toDegrees(D)D
+btools/util/CheapAngleMeter	getDifferenceFromDirection	(DD)D	arith	4	69:dsub,drem; 70:dadd; 71:dsub
+btools/util/CheapAngleMeter	getDifferenceFromDirection	(DD)D	cmp	2	70:dcmpg; 71:dcmpl
+btools/util/CheapAngleMeter	getDifferenceFromDirection	(DD)D	math	1	72:Math.abs(D)D
+btools/util/CheapAngleMeter	normalize	(D)D	cmp	2	64:dcmpl; 65:dcmpg
+btools/util/CheapAngleMeter	normalize	(D)D	arith	4	64:ddiv,dsub; 65:ddiv,dsub
+btools/util/CheapAngleMeter	normalize	(D)D	conv	4	64:d2i,i2d; 65:d2i,i2d
+btools/util/CheapRuler	calcKxKyFromILat	(I)[D	conv	1	36:i2d
+btools/util/CheapRuler	calcKxKyFromILat	(I)[D	arith	28	36:dmulx2,dsub; 38:dmulx2,dsub; 39:dmulx2,dsub; 40:dmulx2,dsub; 41:dmulx2,dsub; 46:dmulx5,dsub,dadd; 47:dmulx4,dsub,dadd
+btools/util/CheapRuler	calcKxKyFromILat	(I)[D	math	1	37:Math.cos(D)D
+btools/util/CheapRuler	distance	(IIII)D	conv	2	76:i2d; 77:i2d
+btools/util/CheapRuler	distance	(IIII)D	arith	5	76:dmul; 77:dmul; 78:dmulx2,dadd
+btools/util/CheapRuler	distance	(IIII)D	math	1	78:Math.sqrt(D)D
