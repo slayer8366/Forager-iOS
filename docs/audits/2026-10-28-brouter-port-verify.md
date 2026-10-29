@@ -1203,10 +1203,86 @@ choose.
 - **For Forager's calls, the routes found below about 42,100 nodes cannot depend on hash order at any reached site [R][I].**
   Above it, the failure kind can **[I]**, and the route is undetermined **[?]**.
 
+#### Part 7, step 4: the simulator test (design only)
+
+Written by the eighth session (Hazel, part 7, 2026-10-29). **A design, not built or run:** no workflow file, no CI run, and
+nothing under `.github/`. It is G's `ios-simulator` job (`08-ci/workflow-sketch.yml.txt`) running one `commonTest` class, a
+**platform-invariants test**, beside the route tests E will define. Every choice below is **[I]** unless marked.
+
+**It needs no file on the simulator.** Whether a simulator test process can read a path on the runner's disk is still
+**[?]** (part 5). Part 6's draft writes its results to files (`probe/src/commonTest/kotlin/probe/ProbeTest.kt:9`). The
+design does without files:
+- **the inputs are generated in common code** with integer arithmetic only. That covers the 1,800 table rows at
+  `ilat = i * 100000 + 50000` (as `ProbeTest.kt:35-36`), and the `atan2` pairs from the same 64-bit LCG as `ProbeTest.kt:5`
+  and `:43-50`;
+- **the expected values are constants in the test source.** They are digests (FNV-1a, 64-bit, over each result's raw bits,
+  integer-only so the same on every platform), one per chunk of 100 table rows and one per 10,000 `atan2` pairs. A chunk
+  digest says where a mismatch is without a file or a log. The full lines go to standard output only on a mismatch.
+- **Why digests and not the values:** the table alone is 7,200 doubles. A `longArrayOf` that size sits near the JVM's 64 KB
+  method limit, and `commonTest` compiles for the JVM too. The `atan2` corpus is 4.8 MB as hex.
+
+**Where the expected values come from: the oracle's JVM, pinned.**
+- A `jvmTest` in the same class computes the same digests with `java.lang.Math` (`Math.cos`, `Math.atan2`) and fails if they
+  differ from the constants. It prints the new values, so the constants change only by a deliberate commit.
+- That test runs in the `jvm` job on `ubuntu-24.04`, x86_64, with the JDK pinned to an exact version. The constants'
+  comment names the JDK's vendor, version and CPU.
+- Part 6 found the JVM is not one answer: `Math.cos` and `StrictMath.cos` differ at 60 of 1,800 rows on one HotSpot
+  **[C: part 6]**. So a JDK update can move the oracle, and this test is where that shows.
+- **The `macos-26` job runs the same `jvmTest` as well,** on HotSpot for arm64. It is recorded and does not fail the
+  build. It answers part 6's open question, whether HotSpot on arm64 builds the same table.
+
+**What is compared.**
+
+| Check | Compared how | Expected from |
+|---|---|---|
+| fused-multiply detectors (`Probe.kt:8-11`, double and float) | exact value | constants (0 unfused) |
+| `toInt`, `min`/`max` with `-0.0` and NaN, `%`, the port's `Math.round` replacement at the three distance sites | exact value | constants |
+| number parsing (the 27 profiles' tokens, `lookups.dat`'s values, stress decimals) | bits, by digest | the JVM, `Float.parseFloat`/`Double.parseDouble` |
+| number printing (`Float.toString` where a cost reads it, `BExpressionContext.java:225`) | string, by digest | the JVM |
+| the scale table: `lat`, `cos`, `kx`, `ky` for 1,800 rows | bits, by chunk digest | the JVM, `Math.cos` |
+| `atan2` through `getAngle` and `normalize` | bits, by chunk digest | the JVM, `Math.atan2` |
+| `hmap` iteration order (step 3) | sequence, by digest | depends on step 3's (i) to (iii), below |
+
+**Checks on the check,** under CLAUDE.md's "a check that passes because it never saw the data that could fail it".
+- **The counts.** Each loop counts what it computed: 1,800 rows, and the `atan2` total. The test fails on a short count.
+- **It must hold the inputs that can fail it.** The table check covers all 1,800 rows, so it holds the 60 rows where
+  `Math.cos` and `StrictMath.cos` differ, and the 8 where glibc 2.39 differs from the JVM (part 6). The `atan2` corpus has to
+  hold the 50,215 pairs where glibc differs from the JVM: part 6's generator, reused.
+- **A positive control, on every platform:** one row's `cos` moved by one ulp has to change its chunk's digest.
+
+**What a mismatch would mean, under each of part 6's options.** The options are part 6's, for the table and for `atan2`.
+None is chosen here.
+
+| Mismatch on the simulator in | (a) constants written on the CI JVM | (b) each platform's `cos`/`atan2` | (c) fdlibm ported to Kotlin |
+|---|---|---|---|
+| the scale table | **a port bug**: the constants were built or loaded wrongly. Apple's C library is not on the path. | **expected:** Apple's C library. The test records which rows differ and does not fail. The route tests decide. | **a port or compiler bug.** The fdlibm port is IEEE operations only. |
+| `atan2` | **(a) cannot cover `atan2`:** its inputs are any pair of integer differences. Under (a), `atan2` takes (b) or (c). | as for the table | as for the table |
+| what the expected values are | the CI JVM's `Math.cos`, which the constants copy | the CI JVM's `Math`, which iOS is not expected to match | `StrictMath` on the CI JVM, which the port has to equal at every input |
+| the same check in the `jvm` job | **the oracle's JDK moved.** Pin the JDK back, or rewrite the constants on purpose. | the oracle's JDK moved | the port's fdlibm against `StrictMath`: a port bug. Against `Math.cos` it differs at 60 rows **[C: part 6]**: the oracle's own table, not a failure |
+| parsing, printing, fusion, `toInt`, rounding | **a compiler or runtime change**, under every option. These have no platform library under them. | | |
+
+**What a pass would license [I].**
+- **Under (a) and (c), a pass on the simulator stands for phones too.** No C library is on the path, and `iosArm64` uses the
+  same backend as `iosSimulatorArm64`.
+- **Under (b), a pass or a mismatch says only what the simulator's C library does.** Whether a phone's equals it was not
+  determined **[?]**.
+- **Under (c), the JVM port differs from the oracle at the table's 60 rows.** The oracle is the unmodified Java engine, which
+  calls `Math.cos`. So E's differential tests on the JVM would meet that difference too, not only iOS.
+
+**`hmap` order, by step 3's options.**
+- **(i):** the expected order is `java.util.HashMap`'s, written on the CI JVM, and a mismatch is a port bug. The test's keys
+  must not put nine or more nodes in one bucket with equal `ilon + ilat`. There the JVM's own order is not fixed (step 3), so
+  the generator checks that it has not built such a bucket.
+- **(ii):** iOS is expected to differ from the JVM. The check only records it, and E has to allow for it.
+- **(iii):** the expected order is insertion order on every platform, and a mismatch is a bug.
+
+**When it is added (G's rule, "once `commonTest` holds a test whose answer can differ on iOS"):** with the Phase 2 step that
+ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, in part 9.
+
 ### Not answered yet (parts 6 and 7, in RECORD -11's order)
 
 - ~~H's step 3, hash order~~: written by part 7, above;
-- H's step 4, the simulator test (not started);
+- ~~H's step 4, the simulator test~~: designed by part 7, above (not built or run);
 - E, the differential tests;
 - I, the Phase 2 order;
 - J, the mechanism prediction;
