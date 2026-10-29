@@ -1,0 +1,56 @@
+# HEAD d5371c7; tree clean before: NO
+# saved copy: 853f7e29e56440f8
+# line 97 before:             val k = BitCoderContext(bytes)
+# the edit (diff saved -> bitten):
+97c97
+<             val k = BitCoderContext(bytes)
+---
+>             val k = BitCoderContext(bytes.copyOf().also { it[100] = (it[100].toInt() xor 1).toByte() })
+# lines differing: 1
+# Step 2a close: bite check A (case 1, rawBitReadsOnRandomBytesMatchTheOracle), local, 2026-10-29T23:03:15Z: BitCoderContextTest.kt:97, bit 0 of byte 100 flipped in the port's copy of the input; full run, no filter
+# JDK: openjdk version "21.0.12.1" 2026-08-18; Gradle run with a local-only mirror init script (never committed)
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 4, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+TOTAL: tests 26, failures 1, errors 0, skipped 0 in 12 files
+
+# Each util test case: outcome | failure type | message (first line) | first frame in the port's main code
+PASS BitCoderContextTest.rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm]
+PASS BitCoderContextTest.varBitsLookupTablesEqualTheOracles[jvm]
+PASS BitCoderContextTest.encodedStreamsAreByteIdenticalAndDecodeIdenticallyBothWays[jvm]
+FAIL BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle[jvm] | java.lang.AssertionError | java.lang.AssertionError: seed 1 op 206: value expected:<43660> but was:<43661> | 
+PASS ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported[jvm]
+PASS ByteDataTest.aNullArrayHasNoDataOnBoth[jvm]
+PASS ByteDataTest.fixedWidthReadsOnRandomBytesMatchTheOracle[jvm]
+PASS ByteDataTest.varLengthStreamsAreByteIdenticalAndReadIdenticallyBothWays[jvm]
+PASS Crc32Test.crcOfSeededSlicesEqualsTheOracles[jvm]
+PASS JavaLangCommonTest.javaRoundGivesJavasAnswers[jvm]
+PASS JavaLangCommonTest.javaIsWhitespaceGivesJavasAnswers[jvm]
+PASS JavaLangCommonTest.javaSplitGivesJavasAnswers[jvm]
+PASS JavaLangTest.javaIsWhitespaceEqualsCharacterIsWhitespaceOnEveryChar[jvm]
+PASS JavaLangTest.javaSplitEqualsStringSplitForEveryRegexTheReachedCodePasses[jvm]
+PASS JavaLangTest.theCommonCasesExpectedValuesAreTheJdks[jvm]
+PASS JavaLangTest.javaRoundEqualsMathRound[jvm]
+PASS LongMapTest.duplicateKeysFailAsTheOracleFails[jvm]
+PASS LongMapTest.compactAndFrozenMapsAnswerAsTheOracleDoes[jvm]
+PASS LruMapTest.cacheTrafficHitsAndEvictsAsTheOracleDoes[jvm]
+PASS SortedHeapTest.fewDistinctKeysPopInTheOraclesOrder[jvm]
+PASS SortedHeapTest.allKeysEqualPopInTheOraclesOrder[jvm]
+PASS SortedHeapTest.aLargeHeapThroughManyBinsPopsInTheOraclesOrder[jvm]
+PASS SortedHeapTest.clearAndEmptyPopsMatchTheOracle[jvm]
+
+# summarize exit: 0 (2 = refused: compile errors or no XML)
+# restored from the saved copy; cmp saved vs file: identical
+# file vs HEAD (the forward change is committed): identical
+# git status after: ?? docs/audits/2026-10-29-brouter-port-phase2/step2a/5-bite-A-case1.txt.body ?? docs/audits/2026-10-29-brouter-port-phase2/step2a/5-bite-A-case1.txt.head ?? docs/audits/2026-10-29-brouter-port-phase2/step2a/5-bite-A-case1.txt.tail 
+# forward change present after: op cap line 1, second case 1
