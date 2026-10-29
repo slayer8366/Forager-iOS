@@ -1752,6 +1752,133 @@ below; **10,759** if the via-point code is left out. **About 25 to 30 pushes** a
 (steps 5b, 8b); the via-point choice (step 8); K's flag margin (step 11). The researcher's Android answer bears on (a) to (c)'s
 ruling, not on the order.
 
+### J. The mechanism prediction
+
+Written by the eleventh session on this dispatch (Hazel, part 10, 2026-10-29), **before anything is built or routed.** It is a
+prediction, to be scored in the Phase 2 report (I's step 12); the planner adds it to the record. Bases: Forager `pre-main` is still
+`d100a4776` (`git ls-remote`, part 10's start), so no premise check is needed; `brouter-port` was at `7b2b403`. Part 9's working
+(under "Handoff") was read and is partly kept, partly revised; where this differs from it, it says so. Every figure below is **[I]**
+unless marked. The figures assume a port with no slips of its own; slips are the last subsection.
+
+#### J1. How the port makes routes identical
+
+- **One mechanism: the same operations on the same bits.** Each reached Java method becomes one Kotlin function with the same
+  statements, in the same order, on the same primitive types. Integer arithmetic, IEEE basic operations, conversions, parsing and
+  number printing then give the same bits on the JVM and on Kotlin/Native: part 6 measured 0 differences in each of those
+  (report, part 6 step 2's table) **[C]**, and Native does not fuse multiply-adds (the same table) **[C]**.
+- **The search turns doubles into ints before it chooses.** Every distance is `(int) Math.max(1.0, Math.round(...))`
+  (`J/mapaccess/OsmNode.java:103`) **[R]**; costs are cast at `OsmPath.java:166`, `:315`, `:384` (part 6) **[R]**; the open set
+  is keyed by `int` in BRouter's own `SortedHeap`, whose tie order is code the port carries (I's step 2a, pop sequence exact).
+  So two engines that agree on the ints choose the same path, and a double that differs by an ulp changes a route only where it
+  sits within that ulp of a rounding boundary or of another double it is compared with.
+- **Four sites stay outside that mechanism** (part 6 step 1; E6) **[R]**: the scale table (`cos`), `atan2` in the waypoint
+  tie-break, `hmap`'s iteration order, and Kotlin's `roundToLong` (written out as Java's in I's step 2a, so it leaves the list).
+  The options (a) to (c) and (i) to (iii) decide whether the first three are equal by construction or recorded.
+- **Why a table that differs by an ulp should not move a route** [C: `12-prediction/j-figures.txt`, on stated assumptions]. A
+  one-ulp change in `kx` moves a distance `d` by at most `d · 2^-52`. `Math.round` changes only if the value sat within that of a
+  half-metre boundary, so with probability about `d · 2^-52` per call. The largest distances on the path are air distances to the
+  target, at most 100 km in E; at no more than 10^6 such calls per route, that is at most 2.2e-5 per route and 0.047 over all
+  2,118 cases. A changed air distance moves only an open-set key, which changes the route only through a tie, so the true rate
+  is lower still. Link distances (tens of metres) contribute about 1e-8 per route. **Prediction: 0 route differences from the
+  table, anywhere.** This keeps part 9's conclusion with a re-derived bound (part 9 wrote 1e-8, which is the link term alone).
+- **Where the table differs, inside E's tiles** [C: `12-prediction/j-figures.txt`]:
+  - HotSpot `Math.cos` against `StrictMath` (option (c) on the JVM): **12 of the 54 differing rows** lie in the tiles' bands:
+    2 in `S50`, 2 in `N35`, **8 of the 50 rows in `N40`**. So under (c) most of R's routes in `W75_N40` and `W70_N40` cross a
+    differing row, not only LB's;
+  - glibc against HotSpot, on both `linuxX64` and `linuxArm64`: one in-tile row, **row 431** (46.9°S to 46.8°S, in `E170_S50`).
+    Row 431 is also a `StrictMath` row. HotSpot's intrinsic disagrees there with two other libraries, so a correctly rounded
+    `cos` probably differs from HotSpot at row 431 too.
+
+#### J2. Recorded differences, by option and stratum (production runs; stable cases only)
+
+A **recorded difference** is a case whose failure kind, node list, cost or distance differs from the oracle's (E1). Logic runs
+(E6) are predicted exact everywhere: that is their purpose, and a difference there is a port slip, not a platform effect.
+
+**The table and `atan2`, options (a) to (c)** (strata R 1,534, F0 2, DL-lat 59, DL-lon 59, NT 59, LB 59, CR 59, FK 110):
+
+| Option | JVM | iOS simulator |
+|---|---|---|
+| **(a)** constants, with `atan2` by (c) | 0 in every stratum (asserted) | 0 in every stratum (asserted) |
+| **(a)** constants, with `atan2` by (b) | 0 in every stratum | **NT: about 6 of 59** (80% range 1 to 14); 0 in every other stratum |
+| **(b)** each platform's `cos` and `atan2` | 0 in every stratum: on the JVM it is the oracle's own `Math` | **NT: about 6 of 59** (1 to 14). **LB: 0 of 59**, generated in Apple's rows; I expect row 431 to be among them (about 70%), and if no Apple row falls in the tiles LB reports that instead (E6). 0 in R, DL, CR, F0, FK |
+| **(c)** fdlibm | against the default oracle: **0 in every stratum, LB and R included**, although 12 in-tile rows differ. Against the no-intrinsic oracle: 0 (asserted) | 0 (asserted, against the no-intrinsic digests) |
+
+- **Why NT, and only NT, under `atan2` by (b) on iOS.** `directionDiff` is the difference of two `atan2` results, the link's
+  direction and `directionToNext` (`J/mapaccess/WaypointMatcherImpl.java:189-190`), and the comparator falls to it only when the
+  radii are exactly equal (`:69-71`) **[R]**. Random endpoints give gaps of many ulps, so R cannot flip. NT's gaps are at most
+  4 ulps by construction (E4). glibc's `atan2` differs from HotSpot's at **16.7%** of part 6's pairs [C: 50,215 / 299,974];
+  Apple's rate is assumed similar **[I, not measured]**. With three `atan2` results per case able to move, about 42% of NT cases
+  see one move, and about half of those move the gap the way that flips the order: **about 21% flip** [C on that assumption].
+  A flip changes the matched way, not the crosspoint (both ways meet at the junction); I expect about half of flips to change the
+  node list's first nodes or the start cost. 59 × 0.21 × 0.5 ≈ 6. Part 9 wrote about 2 (0 to 8); this revises it upward,
+  because a moved `directionToNext` shifts the two diffs in opposite directions and the diffs are smaller than the directions,
+  so one ulp of a direction is several ulps of a diff **[I]**.
+- **Where an NT difference shows:** at the start only. The node list differs in its first link's nodes at most, and the rest of
+  the route is the same nodes in the same order. A difference mid-route, or one at the end, is not this mechanism.
+- **Under (c), a nonzero count in LB or R falsifies J1's bound,** which would mean a site where a double is compared or cut at
+  a scale the bound does not cover.
+
+**`hmap` order, options (i) to (iii)** (MP64, ML5, PM5, 59 each; every other stratum is below about 42,100 nodes, where order
+cannot change a route (part 7) **[R][I]**, so it is 0 there under every option):
+
+| Option | JVM | iOS simulator |
+|---|---|---|
+| **(i)** `java.util.HashMap`'s order in common code | 0 | 0 |
+| **(ii)** each platform's `HashMap` | 0 (the oracle's own map) | **MP64 about 3 of 59** (0 to 10); **ML5 0** (0 to 1); **PM5 about 1** (0 to 4) |
+| **(iii)** insertion order everywhere | the same counts as (ii) on iOS | the same counts, and exact against the JVM port |
+
+- **The mechanism.** Hash order changes only `nodesCreated` after a collection, by about one (part 7, 14 of 20 on a reduction)
+  **[C on a reduction]**. The first collection's trigger is order-free, because nothing decrements `nodesCreated` before it
+  **[I]**. A count one lower moves `currentmaxmem` by 95 bytes, so the *next* collection runs one node-creation step apart. At a
+  collection the open set is drained in key order and the paths that can escape are re-added (`RoutingEngine.java:2013-2023`)
+  **[R]**, and the vanish threshold uses the path in hand (part 7). So a route can differ only in a case with two or more
+  collections, through a tie between equal keys across the rebuild, or through a path one threshold keeps and the other drops.
+- **What the differences look like:** in MP64, mostly an **equal-cost** node list (cost and distance equal, nodes different);
+  at most one case in all three strata with a different cost or failure kind.
+- **ML5 is 0** because its outcome is a fixed message, decided against the cap; a 95-byte shift changes the kind only when the
+  total sits within 95 bytes of it (part 7). **PM5 is low** because collections stop once panic mode is on (`:2007`) **[R]**;
+  only a case whose panic starts at a second or later collection is exposed.
+- **A scorable claim of a different kind:** under (iii) on the JVM and under (ii) or (iii) on iOS, **the set of differing cases is
+  the same set**, case for case, because Kotlin/Native's `HashMap` iterates in insertion order (part 7) **[R]** and so does (iii)'s
+  map. If they disagree, something besides iteration order differs between the platforms.
+
+**E3, the oracle against itself:** 0 unstable cases in every stratum (part 9's Poisson argument, kept). If any appear, they are in
+MP64, ML5 or PM5 only; one anywhere else means a non-determinism other than hash order.
+
+**Failure kinds (FK, 110):** 0 differences in kind or family on the JVM. **On iOS, FK 7 and FK 8 (20 cases) will fail message
+equality on the first run** unless the port avoids it: `NodesCache.java:202` builds its message with `+ e` **[R]**, so the
+exception's class name is part of the text. That FK 7 and 8 reach `:202` rather than another throw is **not traced [I]**. On the JVM okio's `IOException` is `java.io.IOException` **[I, not read]**, so the
+text matches; on Native it cannot print `java.io.IOException`. FK 1 to 6 and 9 to 11: 0.
+
+#### J3. Where Phase 2's first failures will come from
+
+Ranked. Scorable from the Phase 2 commits that fix a red test and from the step at which each test first goes red after its port
+commit (not over stubs).
+1. **Integer, bit and byte transliteration in `util` and `codec` (steps 2a and 3):** `>>>` as `shr` instead of `ushr`; a `byte`
+   read without `and 0xff`; a shift or product done in `Int` where Java promoted to `long`, or the reverse; `char` arithmetic.
+   The first red differential test after a port commit will be in step 2a or 3 and of this kind.
+2. **Text handling in `expressions` (step 4):** Java's `split` (trailing empty strings dropped, regex), `Character.isWhitespace`
+   against Kotlin's `isWhitespace` (no-break spaces, B row 15), number parsing at the profile's edges.
+3. **Decoding order in `DirectWeaver` (step 5b)** and the turn-restriction flags.
+4. **Ties in the search (step 8a),** if step 2a's pop-sequence test missed a case; then `int` overflow near the `1000000000`
+   sentinel (`:2027`).
+5. **On iOS, the harness before any route:** reading tiles from the runner's disk (part 5's open question, I's step 10), test
+   resource paths, Kotlin/Native's stack on recursive decoding, the 7 GB runner's memory, and FK 7 and 8's message (above).
+
+- **Not a source on the JVM:** floating point. Under (a) and (b) the JVM port calls the oracle's own `Math`, and under (c) it is
+  compared against the no-intrinsic oracle. **Of the defects fixed in Phase 2 that change an asserted value on the JVM, at least
+  80% will be transliteration slips of integer, bit or text semantics, and none a floating-point library difference.**
+- **How many:** 10 to 30 such defects over 11,188 lines, about one to three per thousand **[I, low confidence]**.
+
+#### J4. Summary, for scoring
+
+- On the JVM, under (a) or (b) with (i) or (ii): **all 2,118 cases less E3's unstable ones identical, 0 recorded.**
+- Under (c) on the JVM: **0 recorded**, though 12 in-tile table rows differ from the default oracle.
+- On iOS: recorded differences only in **NT under `atan2` by (b)** (about 6) and in **MP64 and PM5 under (ii) or (iii)** (about
+  3 and 1); **FK 7 and 8's messages** unless handled; nothing else.
+- E3: 0 unstable.
+- First failures: integer and byte transliteration in steps 2a and 3, not floating point.
+
 ### Not answered yet (parts 6 to 9, in RECORD -11's order)
 
 - ~~H's step 3, hash order~~: written by part 7, above;
@@ -1759,7 +1886,7 @@ ruling, not on the order.
 - H's Android question: in part (part 7, above). ART's intrinsics and bionic's `cos` and `atan2` were not read;
 - ~~E, the differential tests~~: designed by part 8, above (not built or run);
 - ~~I, the Phase 2 order~~: written by part 9, above;
-- J, the mechanism prediction;
+- ~~J, the mechanism prediction~~: written by part 10, above;
 - K, the timing plan.
 
 ## Handoff to the next session

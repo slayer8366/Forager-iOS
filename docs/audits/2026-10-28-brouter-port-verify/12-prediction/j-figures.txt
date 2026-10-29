@@ -1,0 +1,30 @@
+# Part 10 (Hazel, 2026-10-29), for item J. Computed from part 8's committed row lists; no new run.
+# Command: awk over each file's data rows, counting rows whose tile_row is N35, N40 or S50 (the captured tiles' latitude bands).
+== 10-tests/logs/rows-math-vs-strict.txt
+  in-tile: 431	-46.9	-46.8	S50	True	False
+  in-tile: 441	-45.9	-45.8	S50	True	False
+  in-tile: 1292	39.2	39.3	N35	True	False
+  in-tile: 1297	39.7	39.8	N35	True	False
+  in-tile: 1306	40.6	40.7	N40	True	False
+  in-tile: 1307	40.7	40.8	N40	True	False
+  in-tile: 1310	41.0	41.1	N40	True	False
+  in-tile: 1316	41.6	41.7	N40	True	False
+  in-tile: 1318	41.8	41.9	N40	True	False
+  in-tile: 1338	43.8	43.9	N40	True	False
+  in-tile: 1345	44.5	44.6	N40	True	False
+  in-tile: 1347	44.7	44.8	N40	True	False
+  rows with kx or ky different: 54 ; inside N35/N40/S50: 12
+== 10-tests/logs/rows-math-vs-native-x64.txt
+  in-tile: 431	-46.9	-46.8	S50	True	False
+  rows with kx or ky different: 6 ; inside N35/N40/S50: 1
+== 10-tests/logs/rows-math-vs-native-arm64.txt
+  in-tile: 431	-46.9	-46.8	S50	True	False
+  rows with kx or ky different: 3 ; inside N35/N40/S50: 1
+
+== atan2 difference rate, JVM vs glibc (part 6, report's step 2 table)
+  linuxX64  50215/299974 = 0.1674
+  linuxArm64 50150/299974 = 0.16718
+  1-(1-q)^3 = 0.4228 ; half of it = 0.2114
+
+== Table rounding-boundary bound (assumptions in the report's J): per call d*2^-52; per route <= 1e6 calls at d <= 1e5 m
+  per air-distance call <= 2.22e-11 ; per route <= 2.22e-05 ; 59 cases <= 1.31e-03 ; 2,118 cases <= 4.70e-02
