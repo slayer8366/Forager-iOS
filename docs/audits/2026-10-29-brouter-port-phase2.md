@@ -32,6 +32,12 @@ position bound. Locally, with no filter: 26 tests, 0 failures. Each case bites o
 close" below). CI run 40970686102 on `9ce54ee` succeeded: `jvm` 26 tests, 0 failures, with the iOS klibs compiled;
 `ios-smoke` 4 tests, 0 failures (simulator-checked).
 
+**Status (2026-10-29, eighth session, Linden Caliper, Amendment 3 Part B, step 2b, first part):** bionic's msun `cos` and
+`atan2` ported to common Kotlin (`6c3de2d`), proven bit for bit against bionic's C built in CI from pinned sources. CI run
+40973074241 on `6c3de2d` succeeded: `jvm` 37 tests, 0 failures, klibs compiled with 0 `e:` lines; `ios-smoke` 10 tests,
+0 failures (simulator-checked). The revert check failed the three predicted tests at the predicted rows (`e7dafe5`).
+`CheapRuler`, `CheapAngleMeter`, the seam and the simulator job are the next session's.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -650,6 +656,56 @@ from a scratch copy that is byte-identical (`cmp`) and finds the mirror init scr
 
 **Status: step 2a's finish line is met** (26 tests, 0 failures, locally and in CI, with the klibs compiled). Whether the
 step closes with case 2 short of the branch is the planner's call.
+
+## Amendment 3, Part B, step 2b, first part: msun `cos` and `atan2` (eighth session, Linden Caliper)
+
+Base: `brouter-port` at `c225648`, equal to the remote at the start [R: `git status`]. Evidence in
+`2026-10-29-brouter-port-phase2/step2b/`.
+
+- **The port [R: the C at bionic `06356e41`, sizes and SHA-256 equal to research/android-math's `sources.tsv`]:**
+  `msun/MsunCos.kt` (`s_cos.c`, `e_rem_pio2.c` inlined, `k_cos.c`, `k_sin.c`), `msun/MsunAtan2.kt` (`e_atan2.c`,
+  `s_atan.c`), `msun/MsunBits.kt` (GET_HIGH_WORD, GET_LOW_WORD), `msun/MsunUnsupportedException.kt`. Same expressions and
+  parenthesisation as the C; Sun's notice kept. C's `goto medium` is a flag; `nan_mix` is `x + y`.
+- **The unsupported threshold [R: `e_rem_pio2.c`, `if(ix<0x413921fb)`]:** finite |x| >= 1,647,099.0 exactly (high word
+  `0x413921fb`, low word 0) throws `MsunUnsupportedException("cos", x)`. `atan2` has no unsupported range.
+- **The C reference's route into CI: built in the `ubuntu-24.04` job, every run** (`tools/msun-ref/build-ref.sh`, a
+  Gradle task `jvmTest` depends on). It fetches the ten files, refuses any that miss its pin, compiles with
+  `-O2 -ffp-contract=off -fno-builtin -fno-math-errno` by clang and by gcc, requires their outputs equal, and requires
+  `msun-cos.txt` and `msun-atan2.txt` to carry the research's SHA-256 (`068e61eb…`, `466fb82d…`). The research's harness
+  files are copied unchanged. **Why built rather than digests alone:** a committed digest's generator would never run in
+  CI, so nothing would show it still reproduces; the build is ten seconds. The iOS simulator cannot build the C, so
+  commonTest reads a generated copy (`MsunReference.kt`, by `gen-kotlin.py`), and `MsunReferenceCommittedTest` fails
+  unless it equals the fresh build line for line. [C: CI log, "clang and gcc outputs equal", "equal the research's SHA-256"]
+- **Tests:** commonTest (JVM and simulator): the 1,800 table rows (latitudes as CheapRuler computes them, then `cos`); the
+  299,974 regenerated pairs hashed in at2.c's form against the research's SHA-256; 45 `cos` and 59 `atan2` edge lines
+  (signed zeros, NaNs, infinities, subnormals, every reduction boundary, all three medium iterations, the threshold);
+  the refusal. jvmTest adds row-by-row comparison with the C build, `atan2` against `StrictMath.atan2` at every pair
+  (0 differ), and `cos` against `StrictMath.cos`, which differs at exactly the research's 13 rows.
+- **Failing first [C]:** locally 37 tests, 8 failures (`step2b/1-stubs-jvmTest.log`); CI run 40972738575 on `4bc9e7b`:
+  `jvm` 37 and 8, `ios-smoke` 10 and 5, every failure the stub's `NotImplementedError` or the refusal test's type check.
+- **The port [C]:** 37 tests, 0 failures locally on the first run (`step2b/2-port-jvmTest.log`), then CI as above.
+- **The revert check [C: `step2b/3-revert-C1.txt`, `step2b/predict-C1.txt`]:** `C1` in `k_cos` one ulp up (`…554C` to
+  `…554D`), one line. **Predicted before the run** by building the same edit in bionic's C: rows 502, 1297 and 1318
+  change; no edge line; the StrictMath rows become the other 10. **The run:** 0 compile errors; 11 msun tests,
+  3 failures, the three predicted; both `cos` tests name rows 502, 1297 and 1318, and the StrictMath list is the 10.
+  Restored from the saved copy; the file equals HEAD's afterwards.
+- **Calls beyond the amendment:**
+  - NaN results are checked as NaN, not by bits. The x86_64 reference returns `fff8…` for `cos(Inf)`, which arm64 does not
+    [C: `MsunReference.kt`; arm64's default NaN is [I]].
+  - The package is `com.zynergylabs.forager.brouter.msun`; the functions are `msunCos` and `msunAtan2`.
+  - Maven Central answered 429 twice in this container, so local Gradle used a mirror init script (`step2b/
+    mirror.init.gradle.kts`, never in the build). CI does not use it.
+  - The C reference is fetched from android.googlesource.com in every CI run; an outage there fails `jvm`.
+- **Unverified:**
+  - a phone's own `libm.so` (the research's limit, carried);
+  - which iOS simulator runtime ran the tests [?];
+  - NaN payloads on arm64 [?];
+  - that Kotlin/Native never fuses multiply-add. The 13 rows and the digest passing on the simulator are evidence it
+    did not here [I].
+- **Handoff to step 2b's second part:** `CheapRuler` and `CheapAngleMeter` call `msunCos` and `msunAtan2`; then the seam
+  for logic runs and the simulator job. Before writing any loop, check that it terminates. The runner is
+  `step2b/runner/revert-check.sh`. Give it an absolute out-path; a relative one landed beside the repository once and was
+  moved.
 
 ## Confirmed vs inferred
 
