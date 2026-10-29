@@ -38,6 +38,11 @@ close" below). CI run 40970686102 on `9ce54ee` succeeded: `jvm` 26 tests, 0 fail
 0 failures (simulator-checked). The revert check failed the three predicted tests at the predicted rows (`e7dafe5`).
 `CheapRuler`, `CheapAngleMeter`, the seam and the simulator job are the next session's.
 
+**Status (2026-10-29, ninth session, Linden Caliper, Amendment 3 Part B, step 2b, second part):** `CheapRuler`,
+`CheapAngleMeter` and the seam are ported and pushed (`35a1fb6` tests first, `073851b` the port, `c4e2eac` the revert).
+Locally, jvmTest gives 54 tests and 0 failures. CI on `073851b`: CI_PLACEHOLDER. Wrapped up on the planner's word, at about
+180k tokens.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -706,6 +711,68 @@ Base: `brouter-port` at `c225648`, equal to the remote at the start [R: `git sta
   for logic runs and the simulator job. Before writing any loop, check that it terminates. The runner is
   `step2b/runner/revert-check.sh`. Give it an absolute out-path; a relative one landed beside the repository once and was
   moved.
+
+## Amendment 3, Part B, step 2b, second part: `CheapRuler`, `CheapAngleMeter`, the seam (ninth session, Linden Caliper)
+
+Base: `brouter-port` at `b7543f3`, equal to the remote at the start [R: `git status -sb`]. Evidence in
+`2026-10-29-brouter-port-phase2/step2b-2/`. The prediction was written before any code (`0-prediction.txt`).
+
+- **The port [R: `CheapRuler.java`, `CheapAngleMeter.java` at 1.7.10; reached methods from T2's `reached-methods.tsv`]:**
+  `util/CheapRuler.kt` (the table, `getLonLatToMeterScales`, `distance`) and `util/CheapAngleMeter.kt` (`calcAngle`,
+  `cosAngle`, `getAngle`, `getDirection`, `normalize`, `getDifferenceFromDirection`). Java's order is kept, and so is its
+  int arithmetic: `normalize`'s `360 * (int) (...)` wraps, as Java's does. `destination` is not reached and is not ported.
+  `Math.toDegrees` is `x * 57.29577951308232` [R: `javap -c` of OpenJDK 21.0.12.1's `java.lang.Math`].
+- **The seam, in two lines:** `LibmSeam` (`scales(row)`, `atan2`) is a parameter of every `CheapRuler` and `CheapAngleMeter`
+  call. Production passes `MsunLibm`, whose table is built once from `msunCos`, with `msunAtan2`. jvmTest's logic run passes
+  `OracleLibm`, which holds the oracle's own `SCALE_CACHE` (read from its `btools.util.CheapRuler`) and this JVM's
+  `Math.atan2`.
+- **The flag [C]:** `CheapLogicRunTest.theJvmRunsWithLibmIntrinsicsOff` reads the JVM's arguments and HotSpot's
+  `UseLibmIntrinsic` (`false`). It also requires `Math.cos` to equal `StrictMath.cos` at all 1,800 rows. That half can
+  fail: in a scratch run (`0-flag-scratch.txt`), the default flags gave 60 of 1,800 rows differing, and the flag gave 0.
+- **Logic run [C, local; CI below]:** the port's table arithmetic, fed the oracle's `Math.cos`, equals the oracle's table
+  at all 1,800 rows. With `OracleLibm`, the port is bit for bit with the oracle at all of these: `distance` at 200,000
+  cases (50,000 zero); `calcAngle` and `cosAngle` at 200,000, with each branch counted (dd==0 20,166; +90 39,680; -90 39,456;
+  cosp<0 50,453; plain 50,245); `getAngle` and `getDirection` at 2,399,792 evaluations (each pair in four signs); and
+  `normalize` and `getDifferenceFromDirection` over 20,021 values, 20,000 pairs and 441 edge pairs.
+- **Production run [C]:** the production table is msun's at all 1,800 rows (`CheapProductionTableTest`, commonTest). Against
+  the oracle (`CheapProductionRecordTest`), `cos` differs at exactly the 13 known rows, each by one ulp. `kx` differs by one
+  ulp, in the same direction, at all 13 rows, and `ky` at none of them. Each row is printed in the test's output
+  (`2-port-record.xml`). Production `getDirection` differs at 0 of 1,199,896.
+- **H step 4's platform-invariants test, as far as step 2b reaches (commonTest, so on the JVM and the simulator):** fused
+  multiply-add never formed (double, float, and the table's `2 * c * c - 1` shape); Java's double-to-int and `%`; and
+  the production table (18 chunk digests) and angles (30 chunk digests), against constants. A one-ulp positive control runs
+  on every platform. **The constants were written from outside the port, before it existed**
+  (`PlatformInvariantsExpectedTest`): the table is bionic's C `cos` through a copy of the Java arithmetic, which is first
+  pinned to the oracle's table; the angles are the oracle's own `getAngle`/`getDirection`. Locally they came from OpenJDK
+  21.0.12.1. On CI's Temurin 21.0.13+9 they passed unchanged in run 40974977957. Not covered yet: parsing, printing,
+  min/max, the rounding sites, `hmap`.
+- **Failing first [C]:** locally, 17 new tests had 13 failures, every one the stubs' `NotImplementedError`
+  (`1b-stubs-with-constants.txt`). The flag test, the fused-multiply test and the two expected-digest tests passed on the
+  stubs, as they should, because none of them reaches the port. CI run 40974977957 on `35a1fb6`: `jvm` failed as intended.
+- **The revert check [C: `3-predict-row1234.txt`, `4-revert-row1234.txt`]:** one line in `MsunLibm` moves row 1234's `cos`
+  up one ulp. Predicted first: `kx` changes (`…bfbb` to `…bfbc`), `ky` does not, and 3 tests fail. **The run:** 0 compile
+  errors; **4 failures**, each naming row 1234 or chunk 12; `kx` as predicted. The fourth,
+  `oneUlpInOneRowChangesItsChunksDigest`, also asserts the other 17 chunks against the constants, so it sees chunk 12 move.
+  **The prediction missed it**; this edit can cause that failure, so it is not a stale run. The file was restored from the
+  saved copy and equals HEAD.
+- **The simulator job:** `ios-smoke` is now G's simulator job; its id is kept so earlier runs read the same. It runs all of
+  commonTest, then H step 4's JVM half on arm64 HotSpot, which is **recorded and does not gate the job**
+  (`continue-on-error`).
+- **Calls beyond the amendment:**
+  - the seam is a parameter (`LibmSeam`), not a global, following item I's step 8 ("the table and atan2 seam ... as a
+    parameter");
+  - Java's static methods take the seam as their first argument;
+  - the revert edits the production table's builder, not `msunCos`, so that the msun classes stay out of it;
+  - an out-of-range `ilat` throws Kotlin's `IndexOutOfBoundsException` where Java throws `ArrayIndexOutOfBoundsException`.
+- **Unverified:**
+  - which simulator runtime ran the tests [?];
+  - "by stratum" in the production record: strata are route-level, and they arrive with E's steps;
+  - the revert check ran on the JVM only, not on the simulator;
+  - the arm64 HotSpot step's outcome: CI_ARM64_PLACEHOLDER.
+- **Handoff to step 3 (`codec`):** `codec` calls neither `CheapRuler` nor `CheapAngleMeter` [R: grep of `btools/codec`].
+  The first callers are in `mapaccess`: `OsmNode.calcDistance` (`OsmNode.java:103`, which needs `javaRound`) and
+  `WaypointMatcherImpl` (`:52`, `:61`, `:80`, `:189-212`). Each will need a `LibmSeam` passed in. Runners are in
+  `step2b-2/runner/`. Give them absolute out-paths.
 
 ## Confirmed vs inferred
 
