@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D, F and G; H in part)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D, F and G; H in part, steps 1 and 2 of 4)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -27,6 +27,12 @@ question B left open, and the inventory of floating-point sites. **H's floating-
 plan are not answered.** Part 5 stopped at the planner's handoff limit (about 200k by the harness's count); the required
 reading took about 145k of it. **G carries a finding against C** (JetBrains' published Gradle range for Kotlin 2.3.10 ends at
 9.0.0), for the planner; it is not a stop.
+
+**Part 6** (a seventh session, Hazel, 2026-10-29) answered **H's steps 1 and 2**: which floating-point sites can choose a route,
+and whether the JVM and Kotlin/Native can differ there, with scratch runs on the JVM, `linuxX64` and `linuxArm64` under qemu.
+**H's steps 3 (hash order) and 4 (the simulator test) are not answered.** Step 3's evidence was gathered in the same runs and is
+committed; its findings are under "Handoff", as input. Part 6 stopped at the planner's handoff limit: the harness count had
+passed it during step 2 (about 290k when step 2 was pushed), which this session noticed late. E is not started.
 
 **F is ruled.** The owner chose "Forager-iOS release (Recommended)", relayed by the planner to part 5 on 2026-10-29, to be
 recorded as RECORD -12. It was not yet on `main` when part 5 read `main` at `7043843`.
@@ -854,7 +860,7 @@ Gradle 9.7.0, drops to 9.0.0 for the port alone, or waits for Forager to move Ko
 - **The jobs that read tiles wait for the release,** which the owner creates in Phase 2. Until then the `jvm` job runs tests that
   need no tile.
 
-### H. Floating point, and hash order (part 5: answered in part)
+### H. Floating point, and hash order (parts 5 and 6: answered in part)
 
 Written by the sixth session (Hazel, part 5, 2026-10-29). **The hash-order question is answered. The floating-point list is
 computed but not yet classified, and the simulator test plan is not written.** Both are for the next session.
@@ -1088,7 +1094,9 @@ and 1 prints a float. They form five chains:
 
 ### Not answered yet (parts 6 and 7, in RECORD -11's order)
 
-- H's floating-point classification and its simulator test plan (above);
+- H's step 3, hash order: Kotlin/Native's `HashMap` order, `collectOutreachers` and `_parseFile` (evidence gathered; see
+  "Handoff", part 6);
+- H's step 4, the simulator test (not started);
 - E, the differential tests;
 - I, the Phase 2 order;
 - J, the mechanism prediction;
@@ -1216,6 +1224,93 @@ and 1 prints a float. They form five chains:
       the profile-parameter conflicts at `setParams` matter only if the port's entry point takes a general params map.
     - **For K:** the macOS standard runner is 3 M1 cores and 7 GB; the Ubuntu runner's figures were not read.
 
+- **Part 6** added H's steps 1 and 2: `09-float/tools/classify.py`, `out/T2/classification.tsv`, `09-float/probe/` and
+  `09-float/part6/` (commits `5b8936f` for step 1, `906a878` for step 2, then this handoff). **H is not finished; E is not
+  started.** The planner decides whether H's steps 3 and 4 go to part 7 before E, or with it.
+  - **Reproduce step 1:** `python3 -I 09-float/tools/classify.py 09-float/out/T2/sites.tsv <out>`. The reasons in its table
+    were read by hand and are the evidence; the script only checks coverage.
+  - **Reproduce step 2:** `09-float/part6/README.txt`. It needs:
+    - Gradle 9.7.0 and Kotlin/Native 2.3.10, already in `~/.gradle` and `~/.konan`;
+    - for `linuxArm64`, JetBrains' aarch64 toolchain and `qemu-aarch64` 5.1.0, which part 6 let Kotlin/Native download into
+      `~/.konan/dependencies`.
+  - **Scratch** for part 6 is `hazel/part6/`:
+    - the probe and its build;
+    - the full outputs (their SHA-256s are in `part6/io-sha256.txt`);
+    - the unpacked compiler classes, the stdlib sources and the disassembled runtime.
+
+    Left in place until Phase 1 ends.
+  - **H step 3, hash order: evidence gathered, not written up** (input, not the answer):
+    - **Kotlin/Native's `HashMap` iterates in insertion order [R][C].**
+      - It appends at `length++` (`nativeWasmMain/kotlin/collections/HashMap.kt:361`), marks removals with a tombstone
+        (`:395`), iterates by index (`:576`) and compacts in order (`:270-285`).
+      - The probe's 3,000 `OsmNode`-shaped keys came back as 0, 1, 2, … on both native targets, and in bucket order on the JVM
+        (`part6/results/*/hash.txt`).
+      - The code is Kotlin with no platform calls, so `linuxX64` stands for iOS here **[I]**.
+      - `String.hashCode` was equal on all three for the 6 strings tried.
+    - **`collectOutreachers` [C, on a reduction].** The probe ports its loop (`Probe.kt`, `OutreachSim`), with `vanish` reduced
+      to unlinking both ends, and runs it on 20 random 400-node graphs:
+      - `nodesCreated` differs between the JVM and native in **14 of 20**;
+      - the set of nodes left with no links is equal in 20 of 20.
+
+      So which nodes vanish does not depend on order; the count does. My reading of why **[I]**: each component's search
+      starts at the last of its nodes in iteration order, and a node's `firstlink == null` test (`OsmNodesMap.java:204`)
+      depends on whether a vanishing neighbour was popped first.
+
+      `nodesCreated` feeds `isInMemoryBounds` (`OsmNodesMap.java:106-120`). After a collection, that decides three ways
+      (`RoutingEngine.java:2026-2031`):
+      - a "memory limit reached" failure;
+      - memory panic mode;
+      - carrying on.
+
+      It also moves `currentmaxmem` for later collections. **So hash order can change the failure kind on the
+      memory-pressure path [I].** Whether it can change a route was not traced.
+    - **A design consequence for the port [I]:** "identical" is measured against the Java engine, whose order is
+      `java.util.HashMap`'s. To match on iOS, this one map has to iterate in `java.util.HashMap`'s order in common code. A
+      `LinkedHashMap` on every platform would make the platforms agree with each other, but not with the oracle. This is a
+      Phase 2 choice for the planner.
+    - **`_parseFile` with more than one `profile:` key [R], my reading:**
+      - the injected keys are distinct, each becomes a constant assignment, and all run before the profile's own expressions
+        (`BExpressionContext.java:860-865`, `BExpression.java:395-404`);
+      - their indices all fall below `minWriteIdx` (`BExpressionContext.java:820-828`);
+      - results are read by name through `buildInVariableIdx` (`:836-838`, `:439-446`);
+      - the one index-order loop, `:512-524`, is in methods no tier reaches (part 5).
+
+      So numbering cannot change a result **[I]**. Forager passes one key anyway.
+    - **Still to do for step 3:** write the above into H, and say for each of the two sites whether the port must replicate
+      the JVM's order.
+  - **H step 4, the simulator test: not started.** Part 6's findings that bear on it (input):
+    - **A platform-invariants test in `commonTest`** would compare, on `iosSimulatorArm64`, against expected files written on
+      the CI JVM:
+      - the fused-multiply detectors (an exact expected value; a mismatch means the compiler changed);
+      - the 1,800-row scale table and a fixed `atan2` corpus, bit for bit;
+      - the parse and print corpora;
+      - an order-dependent `HashMap` output.
+
+      `09-float/probe/` is a working draft of all of these except the expected-file comparison.
+    - **What a table or `atan2` mismatch means depends on the planner's choice in step 2's options:**
+      - under (a) or (c), a mismatch is a port bug;
+      - under (b), it is Apple's C library, expected, and the routes have to be compared instead.
+    - **Still open from part 5:** whether a simulator test process can read a file from the runner's disk, and whether the
+      simulator's C library equals a phone's.
+  - **For part 7 (E), from H so far** (input):
+    - **The oracle's JVM must be pinned.** On one HotSpot, `Math.cos` differs from `StrictMath.cos` at 60 of the 1,800 table
+      rows. Expected routes written on one JVM, CPU or OS may not hold on another **[C][I]**. Whether HotSpot on arm64 (the
+      `macos-26` runner) builds the same table as on x86_64 was not checked **[?]**.
+    - **Cases that can tell the platforms apart,** for E's sample:
+      - a waypoint whose nearest point is a junction, where the two ways' `directionDiff` nearly tie (`atan2`);
+      - routes in latitude bands whose table rows differ. Against glibc 2.39 these are rows 128, 253, 261, 431 and four more
+        (`part6/compare-jvm-amd64-vs-native-x64.txt`); Apple's rows are unknown until the simulator runs;
+      - the memory-pressure path with a small memory limit, where hash order changes `nodesCreated`;
+      - a profile with `bikeMode` and `consider_crossing`, for the one printed float. Which of the 26 profiles set them was
+        not checked.
+    - **`track.distance` (D)** depends on the table too, so a distance comparison on iOS shares its fate.
+    - **For the comparison itself:**
+      - IEEE arithmetic, parsing, printing and `toInt` agreed on every value tried;
+      - Kotlin/Native does not fuse.
+
+      A port that keeps Java's types and evaluation order can only differ from the oracle through the table, `atan2`,
+      `HashMap` order and `roundToLong`. The last has a fix (`floor(x + 0.5)`, step 2) **[C][I]**.
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -1279,6 +1374,26 @@ and 1 prints a float. They form five chains:
   - **Inferred:** that every Xcode 26 prints KGP's warning; that iOS linking needs a Mac; that a public asset fetches without a
     token; the effect of order at `collectOutreachers`; every recommendation in G.
 
+- **Part 6 (H, steps 1 and 2):**
+  - **Confirmed by computation:**
+    - the classification's coverage of `sites.tsv` (72 of 72);
+    - the probe's results on the JVM, `linuxX64` and `linuxArm64` (qemu), and `linuxX64`'s libm values against the host C
+      library;
+    - no fused multiply-add in Kotlin code on arm64, by detectors and disassembly, with a positive control;
+    - `roundToLong` differing between the JVM and Native;
+    - `Math.cos` against `StrictMath.cos` on one JVM.
+  - **Confirmed by reading:**
+    - each site's class and reason;
+    - Kotlin/Native's code-generation flags, the libm calls in its runtime, and its `roundToLong`, `round` and `HashMap`
+      source.
+  - **Inferred:**
+    - that iOS does not fuse either (same backend and flags, not run);
+    - that parsing, printing and `HashMap` order on iOS match the Linux runs;
+    - how often a one-ulp table difference changes an int;
+    - that a flip between one way's two directions leaves the route alone;
+    - `floor(x + 0.5)` matching `Math.round` at BRouter's distance sites;
+    - the options (a) to (c).
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -1313,6 +1428,14 @@ and 1 prints a float. They form five chains:
   - Kotlin/Native's `HashMap` iteration order (not read or tested);
   - H's floating-point questions, all of them (not reached).
 
+- **Part 6:**
+  - Apple's `cos`, `sin`, `exp` and `atan2` results: no Apple platform here. Linux results do not stand for them.
+  - Whether the simulator's C library equals a phone's.
+  - Whether a scale-table difference changes a route on real tiles, and whether the `atan2` tie-break between two different
+    ways ever flips (no near-tie was constructed).
+  - Whether HotSpot on arm64 builds the same table as HotSpot on x86_64.
+  - Kotlin/Native's code generation for iOS, run rather than read.
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -1336,6 +1459,17 @@ and 1 prints a float. They form five chains:
   - **B row 18, in part:** three of its nine "reached" hash-iteration sites are not reached at any tier (H).
   - **C's Gradle 9.7.0 with Kotlin 2.3.10** sits outside JetBrains' published range (G). C's own claim, that the pair builds,
     stands; "supported" does not.
+
+- **Part 6:**
+  - **B row 15, in part:** it names `Math.round(NaN)` as the one difference from `roundToLong`. On Native, `roundToLong` also
+    differs for ordinary values (`0.49999999999999994`, `2^52+1`), because it is `floor(x + 0.5)` there. B row 15's open
+    question (do `sin`, `cos`, `atan2`, `exp` give the same bits on Native?) is answered for Linux: they do not.
+  - **The planner's prediction "float differences are the main risk on iOS"** holds in part. Basic arithmetic does not differ,
+    and Kotlin/Native does not fuse. The risk is two library functions (`cos` for the table, `atan2` for the tie-break), plus
+    two things that are not floating point: `HashMap` order and `roundToLong`.
+  - **The part 6 prompt's "Include whether multiply-add can be fused on arm64":** it cannot be in Kotlin code on
+    `linuxArm64`, but it is in Kotlin/Native's own C++ runtime (the number printer). Its output still matched the JVM on all
+    220,001 values printed.
 
 ### Decided beyond scope
 
@@ -1393,4 +1527,15 @@ and 1 prints a float. They form five chains:
   - **Six documentation pages were fetched** to scratch: GitHub's runners and billing pages, three runner-image readmes, and
     kotlinlang.org's compatibility guide.
   - **The finding against C is reported, not acted on.** C's text is unchanged; G states the conflict.
+- **Part 6:**
+  - **`linuxArm64` under qemu** was run as well as `linuxX64`. The prompt named `linuxX64`; arm64 was the only way to run
+    Kotlin/Native's arm64 code generation here. For it, Kotlin/Native downloaded JetBrains' aarch64 toolchain (90,283,015
+    bytes) and `qemu-aarch64` 5.1.0 (2,401,518 bytes) from `download.jetbrains.com` into `~/.konan/dependencies`.
+  - **Kotlin/Native's compiler jar, runtime bitcode and stdlib sources were read,** unpacked into scratch, to answer from code
+    rather than from what the platform is said to do.
+  - **Step 3's evidence was gathered before step 2 was pushed,** in the same probe runs, and is committed with step 2.
+  - **The options (a) to (c) for the table and `atan2`** are offered, not chosen. The choice decides what the simulator test
+    compares.
+  - **The handoff limit was passed** during step 2 (about 290k when step 2 was pushed, against about 200k). This session read
+    the count late. It finished step 2, pushed, and handed off without writing steps 3 and 4.
 
