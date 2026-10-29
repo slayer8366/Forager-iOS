@@ -1,0 +1,43 @@
+# profiles read: 26 (.brf files in folder: 26)
+profile	validForCars	validForBikes	validForFoot	consider_crossing	considerTurnRestrictions	correctMisplacedViaPoints	continueStraight	turnInstructionMode	use_dynamic_range	add_beeline	processUnusedTags	pass2coefficient	footMode	duplicates
+car-eco-nocost.brf	1	(0)	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+car-eco.brf	1	(0)	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+car-fast-nocost.brf	1	(0)	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+car-fast.brf	1	(0)	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+car-vario-nocost.brf	1	(0)	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+car-vario.brf	1	(0)	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+fastbike-asia-pacific.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	(0)	0	(0)	0	downhillcost,uphillcost
+fastbike-lowtraffic.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	(0)	0	(0)	0	downhillcost,uphillcost
+fastbike-verylowtraffic.brf	(0)	1	(0)	(0)	1	(0)	(0)	1	(1)	(0)	0	(0)	0	downhillcost,uphillcost
+fastbike.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	(0)	0	(0)	0	downhillcost,uphillcost
+gravel.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	(0)	(0)	0	
+hiking-mountain.brf	(0)	(0)	1	(0)	(0)	(0)	(0)	1	(1)	0	(0)	(0)	1	
+moped.brf	1	1	(0)	(0)	(1)	(0)	(0)	1	(1)	0	(0)	(0)	0	
+mtb.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	0	0	
+rail.brf	(0)	(0)	(0)	(0)	(1)	(0)	(0)	(0)	(1)	(0)	(0)	(0)	0	
+river.brf	(0)	(0)	(0)	(0)	(1)	(0)	(0)	(0)	(1)	0	(0)	(0)	0	
+safety.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+shortest.brf	(0)	(0)	1	(0)	(0)	(0)	(0)	1	(1)	(0)	(0)	(0)	1	
+skating.brf	(0)	1	(0)	(0)	1	(0)	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+trekking-ignore-cr.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+trekking-noferries.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+trekking-nosteps.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+trekking-steep.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+trekking.brf	(0)	1	(0)	(0)	1	0	(0)	1	(1)	0	0	(0)	0	downhillcost,uphillcost
+vm-forum-liegerad-schnell.brf	(0)	1	(0)	(0)	1	(0)	(0)	1	(1)	(0)	(0)	0	0	
+vm-forum-velomobil-schnell.brf	(0)	1	(0)	(0)	1	(0)	(0)	1	(1)	(0)	(0)	0	0	
+# values in parentheses are RoutingContext defaults (the profile does not assign the name)
+# summary: profiles where the effective value is on (1 or a non-zero literal)
+validForCars: on in 7: car-eco-nocost.brf, car-eco.brf, car-fast-nocost.brf, car-fast.brf, car-vario-nocost.brf, car-vario.brf, moped.brf
+validForBikes: on in 16: fastbike-asia-pacific.brf, fastbike-lowtraffic.brf, fastbike-verylowtraffic.brf, fastbike.brf, gravel.brf, moped.brf, mtb.brf, safety.brf, skating.brf, trekking-ignore-cr.brf, trekking-noferries.brf, trekking-nosteps.brf, trekking-steep.brf, trekking.brf, vm-forum-liegerad-schnell.brf, vm-forum-velomobil-schnell.brf
+validForFoot: on in 2: hiking-mountain.brf, shortest.brf
+consider_crossing: on in 0: -
+considerTurnRestrictions: on in 24: car-eco-nocost.brf, car-eco.brf, car-fast-nocost.brf, car-fast.brf, car-vario-nocost.brf, car-vario.brf, fastbike-asia-pacific.brf, fastbike-lowtraffic.brf, fastbike-verylowtraffic.brf, fastbike.brf, gravel.brf, moped.brf, mtb.brf, rail.brf, river.brf, safety.brf, skating.brf, trekking-ignore-cr.brf, trekking-noferries.brf, trekking-nosteps.brf, trekking-steep.brf, trekking.brf, vm-forum-liegerad-schnell.brf, vm-forum-velomobil-schnell.brf
+correctMisplacedViaPoints: on in 0: -
+continueStraight: on in 0: -
+turnInstructionMode: on in 24: car-eco-nocost.brf, car-eco.brf, car-fast-nocost.brf, car-fast.brf, car-vario-nocost.brf, car-vario.brf, fastbike-asia-pacific.brf, fastbike-lowtraffic.brf, fastbike-verylowtraffic.brf, fastbike.brf, gravel.brf, hiking-mountain.brf, moped.brf, mtb.brf, safety.brf, shortest.brf, skating.brf, trekking-ignore-cr.brf, trekking-noferries.brf, trekking-nosteps.brf, trekking-steep.brf, trekking.brf, vm-forum-liegerad-schnell.brf, vm-forum-velomobil-schnell.brf
+use_dynamic_range: on in 26: car-eco-nocost.brf, car-eco.brf, car-fast-nocost.brf, car-fast.brf, car-vario-nocost.brf, car-vario.brf, fastbike-asia-pacific.brf, fastbike-lowtraffic.brf, fastbike-verylowtraffic.brf, fastbike.brf, gravel.brf, hiking-mountain.brf, moped.brf, mtb.brf, rail.brf, river.brf, safety.brf, shortest.brf, skating.brf, trekking-ignore-cr.brf, trekking-noferries.brf, trekking-nosteps.brf, trekking-steep.brf, trekking.brf, vm-forum-liegerad-schnell.brf, vm-forum-velomobil-schnell.brf
+add_beeline: on in 0: -
+processUnusedTags: on in 0: -
+pass2coefficient: on in 0: -
+bikeMode and consider_crossing both on: 0: -

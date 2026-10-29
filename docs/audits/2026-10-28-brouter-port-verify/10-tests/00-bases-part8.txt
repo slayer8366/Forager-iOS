@@ -1,0 +1,15 @@
+# Part 8 bases, 2026-10-29T05:10:11Z
+forager pre-main (remote, git ls-remote):
+d100a4776055d922b74e2fb4e9d23fb2ad6895cc	refs/heads/pre-main
+forager local clone HEAD (read-only, premise commit):
+e2969abe4f98674c24ce3913ce97be568184a4de
+forager local clone status (porcelain lines):
+0
+forager-ios origin/main:
+87d925071223dfc571f316dc45582331f535df0e
+forager-ios brouter-port HEAD at start:
+6736856805276207a8711e2c11daa7e48be2d609
+brouter-1.7.10.zip in part 3 scratch, sha256 and size (fetch-brouter.sh:12-13 pin 023fec3b...ad01532, 6724983):
+023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532
+6724983
+# pre-main is still d100a4776 (the head RECORD -9 checked, and the dispatch-to-part-8 message's 04:5xZ read), so no new premise check is needed.

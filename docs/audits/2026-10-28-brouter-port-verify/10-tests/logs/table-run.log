@@ -1,0 +1,13 @@
+# 2026-10-29T05:19:20Z default flags
+rows written 1800 java.version 21.0.12.1 vm OpenJDK 64-Bit Server VM 21.0.12.1+1-1-24.04.4-Ubuntu arch amd64
+# -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic
+rows written 1800 java.version 21.0.12.1 vm OpenJDK 64-Bit Server VM 21.0.12.1+1-1-24.04.4-Ubuntu arch amd64
+# -Xint (interpreter only)
+rows written 1800 java.version 21.0.12.1 vm OpenJDK 64-Bit Server VM 21.0.12.1+1-1-24.04.4-Ubuntu arch amd64
+# output sha256
+ee004dc088a12bfa64fdba242a02f12f138bb994d86a73a846d97c22da87b379  math-nointrinsic.txt
+4ab07de64a89ad90d491fed6f0336d5f21b768758c1009942ae69906196cf85a  math-xint.txt
+4ab07de64a89ad90d491fed6f0336d5f21b768758c1009942ae69906196cf85a  math.txt
+ee004dc088a12bfa64fdba242a02f12f138bb994d86a73a846d97c22da87b379  strict-nointrinsic.txt
+ee004dc088a12bfa64fdba242a02f12f138bb994d86a73a846d97c22da87b379  strict-xint.txt
+ee004dc088a12bfa64fdba242a02f12f138bb994d86a73a846d97c22da87b379  strict.txt

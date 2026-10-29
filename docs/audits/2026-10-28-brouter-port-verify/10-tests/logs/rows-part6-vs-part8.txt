@@ -1,0 +1,10 @@
+# part 6 JVM table vs this program's Math table
+# A = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe-io/out/jvm-amd64/scale-table.txt
+# B = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part8/table/out/math.txt
+rows compared: 1800 of 1800
+lat differs: 0
+cos differs: 0
+kx or ky differs: 0
+cos differs but kx and ky equal: 0
+kx or ky differs but cos equal: 0
+row	lat_from	lat_to	tile_row	kx_differs	ky_differs

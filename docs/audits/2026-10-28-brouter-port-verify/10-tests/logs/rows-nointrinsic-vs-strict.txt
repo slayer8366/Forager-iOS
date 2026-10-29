@@ -1,0 +1,10 @@
+# HotSpot Math.cos with -XX:-UseLibmIntrinsic vs StrictMath.cos
+# A = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part8/table/out/math-nointrinsic.txt
+# B = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part8/table/out/strict.txt
+rows compared: 1800 of 1800
+lat differs: 0
+cos differs: 0
+kx or ky differs: 0
+cos differs but kx and ky equal: 0
+kx or ky differs but cos equal: 0
+row	lat_from	lat_to	tile_row	kx_differs	ky_differs

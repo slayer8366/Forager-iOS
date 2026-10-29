@@ -1,0 +1,43 @@
+# beta = 0.05 (detection probability 95%)
+p	exact_n	(1-p)^n	(1-p)^(n-1)	rule_of_three_3/p	9/p
+0.050	59	0.048495	0.051047	60.0	180.0
+0.010	299	0.049536	0.050037	300.0	900.0
+0.005	598	0.049912	0.050163	600.0	1800.0
+0.001	2995	0.049962	0.050012	3000.0	9000.0
+
+# random stratum R: 26 profiles x 59 cases = 1534
+per-profile clean-run bound (n=59): p < 0.049508
+pooled clean-run bound (n=1534): p < 0.001951
+pooled: detection probability at p = 0.01: 1.000000
+pooled: detection probability at p = 0.001: 0.784494
+a defect in one profile hitting 100% of its routes: detection probability 1.000000
+a defect in one profile hitting 10% of its routes: detection probability 0.998003
+a defect in one profile hitting 5% of its routes: detection probability 0.951505
+
+# iOS fallback subset, if K finds the full list too slow: 26 profiles x 12 = 312
+exact n for p = 0.01 is 299; the subset has 312 >= it: True
+subset clean-run bound: p < 0.009556
+
+# targeted strata, each n = 59: detects a rate >= 5% with probability >= 95%
+MP64 collecting routes, memoryclass 64	59	clean-run bound p < 0.049508
+ML5 'memory limit reached', memoryclass 5	59	clean-run bound p < 0.049508
+PM5 memory panic mode, memoryclass 5	59	clean-run bound p < 0.049508
+NT waypoint near-ties	59	clean-run bound p < 0.049508
+LB latitude bands	59	clean-run bound p < 0.049508
+CR crossing profile	59	clean-run bound p < 0.049508
+DL-lat 5-degree line at 40N	59	clean-run bound p < 0.049508
+DL-lon 5-degree line at 70W	59	clean-run bound p < 0.049508
+FK failure kinds: 11 kinds x 10 constructed cases = 110 (not a sampling claim)
+F0 Forager's own fixture routes: 2
+TOTAL cases: 2118
+
+# measuring a rate: exact 95% Clopper-Pearson intervals
+x=0 of n=1534: 0.000000 to 0.002402
+x=1 of n=1534: 0.000017 to 0.003627
+x=5 of n=1534: 0.001059 to 0.007590
+x=15 of n=1534: 0.005483 to 0.016077
+x=0 of n=59: 0.000000 to 0.060609
+x=1 of n=59: 0.000429 to 0.090856
+x=5 of n=59: 0.028091 to 0.186794
+x=15 of n=59: 0.149821 to 0.384424
+check: x=0 upper bound by bisection 0.002401856 equals closed form 0.002401856

@@ -1,0 +1,33 @@
+# lookups.dat from the release zip (git blob, fetch-brouter.sh:14 pins 60e59d08...):
+60e59d083bfff198e27e14aae6a3d4ed44e1cb2b
+lines: 1082
+lines containing 'estimated': 38
+lines containing 'crossing_class': 7
+first line (version):
+---lookupversion:11
+---minorversion:2
+# profiles assigning priorityclassifier in their way context:
+car-eco-nocost.brf
+car-eco.brf
+car-fast-nocost.brf
+car-fast.brf
+car-vario-nocost.brf
+car-vario.brf
+fastbike-asia-pacific.brf
+fastbike-lowtraffic.brf
+fastbike-verylowtraffic.brf
+fastbike.brf
+gravel.brf
+hiking-mountain.brf
+moped.brf
+mtb.brf
+safety.brf
+shortest.brf
+skating.brf
+trekking-ignore-cr.brf
+trekking-noferries.brf
+trekking-nosteps.brf
+trekking-steep.brf
+trekking.brf
+vm-forum-liegerad-schnell.brf
+vm-forum-velomobil-schnell.brf

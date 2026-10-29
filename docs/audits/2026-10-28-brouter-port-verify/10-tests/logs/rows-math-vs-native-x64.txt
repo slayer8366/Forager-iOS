@@ -1,0 +1,16 @@
+# HotSpot Math.cos vs Kotlin/Native linuxX64 (glibc 2.39), part 6 outputs
+# A = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part8/table/out/math.txt
+# B = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe-io/out/native-x64/scale-table.txt
+rows compared: 1800 of 1800
+lat differs: 0
+cos differs: 8
+kx or ky differs: 6
+cos differs but kx and ky equal: 2
+kx or ky differs but cos equal: 0
+row	lat_from	lat_to	tile_row	kx_differs	ky_differs
+253	-64.7	-64.6	S65	True	False
+261	-63.9	-63.8	S65	True	False
+431	-46.9	-46.8	S50	True	False
+1063	16.3	16.4	N15	True	False
+1538	63.8	63.9	N60	True	False
+1546	64.6	64.7	N60	True	False
