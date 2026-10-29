@@ -1,0 +1,23 @@
+# java TreeBinOrder 5, three separate JVMs; HotSpot 21.0.12.1+1-1-24.04.4-Ubuntu, amd64
+# classes: the vendored BRouter tree (Forager e2969abe4 third_party/brouter) compiled with javac into scratch, 0 errors
+== JVM run 1 (2026-10-29T04:54:48Z)
+rep 0 group-order 2,0,9,1,3,11,4,10,5,6,7,8,
+rep 1 group-order 1,0,2,11,3,4,5,10,6,7,9,8,
+rep 2 group-order 2,0,11,1,3,4,5,6,9,10,7,8,
+rep 3 group-order 0,1,2,9,10,11,3,4,5,6,7,8,
+rep 4 group-order 2,0,1,10,3,4,5,11,6,7,8,9,
+control (2000 distinct-sum keys) order identical in 5 of 5 reps
+== JVM run 2 (2026-10-29T04:54:48Z)
+rep 0 group-order 2,0,9,1,3,11,4,10,5,6,7,8,
+rep 1 group-order 1,0,2,11,3,4,5,10,6,7,9,8,
+rep 2 group-order 2,0,11,1,3,4,5,6,9,10,7,8,
+rep 3 group-order 0,1,2,9,10,11,3,4,5,6,7,8,
+rep 4 group-order 2,0,1,10,3,4,5,11,6,7,8,9,
+control (2000 distinct-sum keys) order identical in 5 of 5 reps
+== JVM run 3 (2026-10-29T04:54:48Z)
+rep 0 group-order 2,0,9,1,3,11,4,10,5,6,7,8,
+rep 1 group-order 1,0,2,11,3,4,5,10,6,7,9,8,
+rep 2 group-order 2,0,11,1,3,4,5,6,9,10,7,8,
+rep 3 group-order 0,1,2,9,10,11,3,4,5,6,7,8,
+rep 4 group-order 2,0,1,10,3,4,5,11,6,7,8,9,
+control (2000 distinct-sum keys) order identical in 5 of 5 reps

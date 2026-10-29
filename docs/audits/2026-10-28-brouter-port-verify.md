@@ -1092,10 +1092,120 @@ and 1 prints a float. They form five chains:
   `atan2` has the same three options. For (a) the domain is every integer pair, so a ported fdlibm `atan2` is the
   constant-free form. The JVM's `Math.atan2` equals `StrictMath.atan2` on all 299,974 pairs tried.
 
+#### Part 7, step 3: hash order
+
+Written by the eighth session (Hazel, part 7, 2026-10-29), from part 6's committed evidence and one new run
+(`09-float/part7/`). Bases re-checked: Forager `pre-main` is still `d100a4776` **[C: `part7/00-bases-part7.txt`]**.
+
+**Kotlin/Native's `HashMap` iterates in insertion order [R][C].** It appends at `length++`
+(`nativeWasmMain/kotlin/collections/HashMap.kt:361`), marks a removal with a tombstone (`:395`) and iterates by index
+(`:576`); re-read in part 7 from part 6's unpacked 2.3.10 stdlib sources. The probe's 3,000 `OsmNode`-shaped keys came back
+as 0, 1, 2, … on both native targets and in bucket order on the JVM (`part6/results/*/hash.txt`). The code is Kotlin with no
+platform call, so `linuxX64` stands for iOS here **[I]**. The JVM's order is `java.util.HashMap`'s, which the oracle uses.
+
+**`_parseFile` with more than one `profile:` key: the port need not copy the JVM's order [R][I].** The injected keys are
+assigned in `keyValues.keySet()` order (`BExpressionContext.java:860-865`), each to its own index as a constant
+(`BExpression.java:395-404`), before the profile's own expressions. Order changes only which index each key gets, and every
+later read goes by name (`BExpressionContext.java:836-838`). Re-read in part 7 at those lines; part 6's further reading
+(`:439-446`, `:512-524`) was not repeated. Forager passes one key, `use_dynamic_range`, so its calls have no order to
+choose.
+
+**`OsmNodesMap.collectOutreachers`: order changes a count, and the count can change the failure kind [R][C][I].**
+- **Where order enters, read in the real loop** (`OsmNodesMap.java:178-208`) **[R]:**
+  - every node in `hmap` is pushed in `hmap.values()` order (`:181-183`);
+  - a popped node pushes each neighbour again unless that neighbour was already popped or re-pushed (`:192-197`);
+  - each pop of a node with no links left takes one off `nodesCreated` (`:204-205`), and `vanish()` removes links as it
+    goes (`OsmNode.java:205-217`).
+
+  So `nodesCreated` depends on the pop order.
+- **What does not depend on order [I], argued from the same lines:**
+  - a node is pushed by the first of its neighbours to be popped, because a link is removed only when one of its own ends
+    vanishes, and an end vanishes only after it has pushed its neighbours (`:188-203`). So every node reachable from `hmap`
+    is visited in any order;
+  - whether a node vanishes depends on its own distance and on three fields fixed for the call (`:198-202`);
+  - so the set of vanished nodes, the links left and the visit IDs are the same in any order. `canEscape`, which runs next
+    (`RoutingEngine.java:2013-2019`), reads only those. Only the count differs.
+- **The count, measured on a simplified copy of the loop [C, on a reduction].** This result is not from BRouter's code. It
+  is from `OutreachSim` (`09-float/probe/src/commonMain/kotlin/probe/Probe.kt:44-71`), part 6's Kotlin copy of the loop. It
+  differs from the real one in six ways:
+  - links are a `List` of neighbours, not `OsmLink` chains;
+  - `vanish` is reduced to unlinking both ends;
+  - every node is in `hmap`;
+  - the distance is Manhattan, not CheapRuler's;
+  - the guard at `:198` is taken as true;
+  - the graphs are 20 random ones of 400 nodes, not tiles.
+
+  On those graphs, `nodesCreated` differs between the JVM and native in **14 of 20**, by exactly one each time, the JVM higher.
+  The set of nodes left with no links is equal in 20 of 20, and `linuxX64` equals `linuxArm64` in 20 of 20 (recounted from
+  the committed files: `part7/outreach-recount.txt`).
+- **What the count decides [R].**
+  - **Whether this path runs on Forager's calls.** A collection starts when `nodesCreated * 95 + npaths * 200` passes
+    `currentmaxmem` (`OsmNodesMap.java:107-122`; `RoutingEngine.java:2006-2012`). `currentmaxmem` starts at 4,000,000
+    (`OsmNodesMap.java:24`). Forager never sets `memoryclass`: no match under `app/src/main`, so it keeps 64
+    (`RoutingContext.java:54`). The cap is then `2 * 64 MiB / 3` = 44,739,242 bytes (`RoutingEngine.java:1812`,
+    `NodesCache.java:68`). **So a search holding about 42,100 nodes reaches `collectOutreachers` on Forager's calls
+    [computed: 4,000,000 / 95].** A's sample never reached it.
+  - **What happens after a collection** (`RoutingEngine.java:2024-2031`, `OsmNodesMap.java:110-122`):
+    - with `extend`, `currentmaxmem` rises to `total + 1,900,000`, capped at the 44,739,242;
+    - the check fails only when `total` passes that cap. The engine then throws "memory limit reached", or, with no cost
+      bound yet, turns on memory panic mode.
+  - **So a count one node apart moves `total` by 95 bytes [computed].** It changes the failure kind only when `total` sits
+    within 95 bytes of the cap **[I]**. It also moves `currentmaxmem` by 95 bytes whenever the cap is not reached, and so
+    the step at which the next collection starts **[I]**. Each collection's vanish threshold uses the cost of the path in
+    hand (`RoutingEngine.java:2143-2144`).
+  - **Whether a moved collection changes a route was not traced [?].**
+- **New in part 7: the oracle's own order is not a function of the input in one case [R][C].**
+  - **What the source says [R].** `java.util.HashMap` turns a bucket into a tree once it holds more than eight keys, in a
+    table of at least 64 (`HashMap.java:260`, `:275`, `:646-649`, `:763`; `OsmNodesMap`'s table starts at 4,096, `OsmNodesMap.java:16`).
+    - Iteration follows the bucket's `next` links (`:1601-1612`).
+    - In a tree bucket, a new key is linked in after its tree parent (`:2161-2173`), and the root is moved to the front
+      (`:1990-2010`).
+    - Between two keys with equal hashes whose class is not `Comparable`, the tree picks a side by
+      `System.identityHashCode` (`tieBreakOrder`, `:2058-2066`). `OsmNode` is not `Comparable` (`OsmNode.java:14`), and
+      its hash is `ilon + ilat` (`:259-261`), so every node on one anti-diagonal shares a hash.
+    - Source: OpenJDK `jdk21u` at tag `jdk-21.0.12.1-ga`, `src/java.base/share/classes/java/util/HashMap.java`, read
+      2026-10-29 (`part7/sources.txt`). It is the version of this container's HotSpot, 21.0.12.1 (Ubuntu build); whether
+      Ubuntu patches it was not checked.
+  - **What it does [C: `part7/treebin-order.txt`, `part7/TreeBinOrder.java`].** The program uses BRouter's own `OsmNode`,
+    compiled from the vendored tree with no error. Twelve nodes share one `ilon + ilat`, and 2,000 others are spread out.
+    Each map is a `new HashMap<>(4096)` built from fresh objects with the same coordinates, in the same order.
+    - **Within one JVM, five builds put the twelve in five different orders.** The 2,000 spread keys came back in the same
+      order in 5 of 5 builds, the control.
+    - **Three separate JVMs repeated the same five orders,** so the order follows the process's history of identity hashes,
+      not the coordinates **[C][I]**.
+  - **What it means [I].** Where a real `hmap` bucket holds nine or more nodes and some share `ilon + ilat`, the oracle's
+    `collectOutreachers` count depends on what the process did before. No port can reproduce that, and two oracle runs in
+    different test orders may disagree with each other. **Whether real tiles fill a bucket that far was not determined
+    [?].** At a load of at most 0.75 it is rare under even hashing. Nodes bunched along one anti-diagonal make it likelier.
+- **What the port can do at `hmap`, offered and not chosen (the planner's call, Phase 2) [I]:**
+  - **(i) Copy `java.util.HashMap`'s order for this one map in common code:** the table size, the hash spread, the resize
+    split and the tree buckets. Tree buckets need `TreeNode`'s list handling, and its balancing too, because the
+    balancing decides which node goes to the front. It matches the oracle except at equal-hash keys in a tree bucket, where
+    nothing can.
+  - **(ii) Use each platform's `HashMap`.** On the JVM this is `java.util.HashMap`, so the JVM port equals the oracle with
+    the same exception. On iOS the order is insertion order, which differs from the oracle **[C, on the reduction]**.
+  - **(iii) An insertion-ordered map on every platform.** The platforms agree with each other, and both can differ from the
+    oracle at this count.
+- **Is running the real code needed before Phase 2? Not to start Phase 2; yes before E's expected results on this path
+  are fixed [I].**
+  - **What is settled without it:**
+    - the dependence on order is read in the real loop above;
+    - the simplified copy shows only that it is not zero on toy graphs;
+    - the tree-bucket finding shows that matching the oracle exactly is impossible in one case, whichever of (i) to (iii)
+      is taken.
+  - **What only the real code can show:** how often the count differs on real tiles, and whether that ever moves a
+    decision. One cheap form needs no port: run the Java engine twice in one JVM on a route long enough to collect, and
+    compare its own log line, "collected, nodes/paths before=… after=…" (`RoutingEngine.java:2025`).
+    - If the oracle agrees with itself, it shows the count is stable on that route.
+    - If it does not, exact comparison on this path is off for any port, and E compares something coarser there.
+
+    It belongs to E (part 8) or to Phase 2's first step; the planner decides which.
+- **For Forager's calls, the routes found below about 42,100 nodes cannot depend on hash order at any reached site [R][I].**
+  Above it, the failure kind can **[I]**, and the route is undetermined **[?]**.
+
 ### Not answered yet (parts 6 and 7, in RECORD -11's order)
 
-- H's step 3, hash order: Kotlin/Native's `HashMap` order, `collectOutreachers` and `_parseFile` (evidence gathered; see
-  "Handoff", part 6);
+- ~~H's step 3, hash order~~: written by part 7, above;
 - H's step 4, the simulator test (not started);
 - E, the differential tests;
 - I, the Phase 2 order;

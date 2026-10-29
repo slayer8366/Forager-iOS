@@ -1,0 +1,8 @@
+# Sources read in part 7 (URL, date read, SHA-256 of the bytes fetched; the files are in scratch, not committed)
+
+## Step 3
+https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.12.1-ga/src/java.base/share/classes/java/util/HashMap.java
+  read 2026-10-29 (04:53Z); tag jdk-21.0.12.1-ga -> commit eac07229cf6cacc8a22eb79f4929e7fed61338b7 (git ls-remote)
+  sha256 71c8d82247c2736e9fbe3769f366e9bd250bc73ecf390749998e830201aaabf2
+  identical to the jdk-21.0.12-ga copy (cmp)
+  local JVM: java.runtime.version 21.0.12.1+1-1-24.04.4-Ubuntu (its src.zip is a dangling link, so upstream was read)

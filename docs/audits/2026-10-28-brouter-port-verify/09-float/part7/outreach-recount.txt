@@ -1,0 +1,21 @@
+# Recount of part 6's collectOutreachers reduction (OutreachSim), from the committed hash.txt files, part 7
+seed=1 jvm 596 x64 595 arm64 595 jvm-x64 1 linkless-set equal
+seed=2 jvm 578 x64 577 arm64 577 jvm-x64 1 linkless-set equal
+seed=3 jvm 598 x64 597 arm64 597 jvm-x64 1 linkless-set equal
+seed=4 jvm 608 x64 607 arm64 607 jvm-x64 1 linkless-set equal
+seed=5 jvm 616 x64 615 arm64 615 jvm-x64 1 linkless-set equal
+seed=6 jvm 561 x64 561 arm64 561 jvm-x64 0 linkless-set equal
+seed=7 jvm 576 x64 575 arm64 575 jvm-x64 1 linkless-set equal
+seed=8 jvm 633 x64 633 arm64 633 jvm-x64 0 linkless-set equal
+seed=9 jvm 599 x64 599 arm64 599 jvm-x64 0 linkless-set equal
+seed=10 jvm 580 x64 579 arm64 579 jvm-x64 1 linkless-set equal
+seed=11 jvm 600 x64 599 arm64 599 jvm-x64 1 linkless-set equal
+seed=12 jvm 592 x64 591 arm64 591 jvm-x64 1 linkless-set equal
+seed=13 jvm 580 x64 579 arm64 579 jvm-x64 1 linkless-set equal
+seed=14 jvm 593 x64 593 arm64 593 jvm-x64 0 linkless-set equal
+seed=15 jvm 564 x64 563 arm64 563 jvm-x64 1 linkless-set equal
+seed=16 jvm 554 x64 553 arm64 553 jvm-x64 1 linkless-set equal
+seed=17 jvm 598 x64 597 arm64 597 jvm-x64 1 linkless-set equal
+seed=18 jvm 625 x64 625 arm64 625 jvm-x64 0 linkless-set equal
+seed=19 jvm 608 x64 607 arm64 607 jvm-x64 1 linkless-set equal
+seed=20 jvm 623 x64 623 arm64 623 jvm-x64 0 linkless-set equal

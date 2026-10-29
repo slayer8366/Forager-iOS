@@ -1,0 +1,14 @@
+# Part 7 bases, 2026-10-29T04:55:50Z
+forager pre-main (remote, git ls-remote):
+d100a4776055d922b74e2fb4e9d23fb2ad6895cc	refs/heads/pre-main
+forager local clone HEAD (read-only, premise commit):
+e2969abe4f98674c24ce3913ce97be568184a4de
+forager-ios origin/main:
+3f34eacbc91b12a68523cd31b1f20848a0207088
+forager-ios main changes since part 6 read it (c6bbe49..origin/main):
+ RECORD.md                                          |   59 +
+ .../preserved/2026-10-28-01-phase1-report-part6.md | 1541 ++++++++++++++++++++
+ 2 files changed, 1600 insertions(+)
+forager-ios brouter-port HEAD at start:
+ae5260bf79c9f39d8abb5d1963b84b85557d1bb2
+# pre-main is still d100a4776 (RECORD -9's head, the planner's 04:18Z read), so no new premise check is needed.
