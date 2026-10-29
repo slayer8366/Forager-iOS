@@ -1,0 +1,40 @@
+# run at 2026-10-29T04:00:35Z, curl --head (HEAD method), no redirects followed
+## W75_N40.rd5
+HTTP/1.1 200 Connection Established
+
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Thu, 29 Oct 2026 04:00:36 GMT
+Content-Type: application/octet-stream
+Content-Length: 119750873
+Last-Modified: Thu, 29 Oct 2026 01:03:01 GMT
+Connection: keep-alive
+ETag: "6ae29b45-72340d9"
+Accept-Ranges: bytes
+
+## E5_N45.rd5
+HTTP/1.1 200 Connection Established
+
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Thu, 29 Oct 2026 04:00:36 GMT
+Content-Type: application/octet-stream
+Content-Length: 252948700
+Last-Modified: Thu, 29 Oct 2026 01:03:01 GMT
+Connection: keep-alive
+ETag: "6ae29b45-f13b0dc"
+Accept-Ranges: bytes
+
+## W15_S45.rd5
+HTTP/1.1 200 Connection Established
+
+HTTP/1.1 200 OK
+Server: nginx/1.18.0 (Ubuntu)
+Date: Thu, 29 Oct 2026 04:00:37 GMT
+Content-Type: application/octet-stream
+Content-Length: 4433
+Last-Modified: Thu, 29 Oct 2026 01:03:01 GMT
+Connection: keep-alive
+ETag: "6ae29b45-1151"
+Accept-Ranges: bytes
+

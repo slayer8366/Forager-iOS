@@ -17,7 +17,10 @@ the items RECORD -8 gave it. E to K are not answered here: F and G are part 4's;
 part 6's.
 
 **Part 4** (a fifth session, Hazel, 2026-10-29) answered **F**, the test tiles in CI. **F is a stop for the owner's ruling**:
-the options and a recommendation are written, and nothing was chosen or created. G is part 4's and follows.
+the options and a recommendation are written, and nothing was chosen or created. **G is not answered.** Part 4 stopped
+after F at the planner's handoff limit ("when your own estimate passes about 110k, finish the item you are on, push, and
+hand off"). The reading the planner listed had already brought the harness count to about 110k before F began, and F
+ended at about 175k. Of G, only the repository's visibility was checked, because F's recommendation depends on it.
 
 **Marks.** **[R]** read, with file and line at the stated commit. **[C]** computed, with the evidence file under
 `2026-10-28-brouter-port-verify/`. **[I]** inferred. **[?]** could not determine.
@@ -717,7 +720,9 @@ Below are the options and a recommendation. Nothing was chosen, hosted, uploaded
   Both attempts were reset by the far end **[C: `logs/wayback-cdx-W75_N40.txt`]**, so this **could not be determined**.
 - **v1.7.10 is still upstream's newest tag** **[C: `00-bases-part4.txt`]**. Which map creator brouter.de runs, and so
   whether the 1.7.10 engine reads today's tiles, cannot be told without a download **[?]**.
-- **A second `HEAD` later in this session** is under G's closing check (`logs/head-run2.txt`).
+- **A second `HEAD`, 5.5 minutes after the first (04:00:35Z), returned the same headers apart from `Date`**
+  **[C: `logs/head-run2.txt`]**. That shows only that nothing changed within those minutes. The daily rewrite is shown
+  by `diff/`, not by the two runs.
 
 **Conclusion: a SHA-256 pin on a brouter.de URL would break within about a day [I, from the computed listings].** The
 planner's prediction holds: "brouter.de regenerates tiles in place, so a pinned copy has to be hosted elsewhere".
@@ -731,7 +736,7 @@ in `07-tiles/sources.txt` **[R]**.
 | | Where the pinned copy lives | What it needs | Size limits | Fits ruling c |
 |---|---|---|---|---|
 | 1 | **brouter.de itself,** pinned by SHA-256 | nothing | none | **Fails:** the bytes change daily (above) |
-| 2 | **A release on Forager-iOS** holding the tiles, captured once from brouter.de in Phase 2. CI fetches each by URL and checks its size and SHA-256, as `fetch-brouter.sh:23-28` does. | **One repository action, by the owner or on the owner's word: create the release and upload the assets.** No account, setting or secret. Anonymous download from a public repository is inferred, not tested **[I]**. | Each file "under 2 GiB". "There is no limit on the total size of a release, nor bandwidth usage." | **Yes** |
+| 2 | **A release on Forager-iOS** holding the tiles, captured once from brouter.de in Phase 2. CI fetches each by URL and checks its size and SHA-256, as `fetch-brouter.sh:23-28` does. | **One repository action, by the owner or on the owner's word: create the release and upload the assets.** No account, setting or secret. **Forager-iOS is public** **[C: `logs/forager-ios-visibility.txt`]**. That a public release asset downloads with no token is inferred, not tested **[I]**. | Each file "under 2 GiB". "There is no limit on the total size of a release, nor bandwidth usage." | **Yes** |
 | 3 | **Git LFS in Forager-iOS** | **The owner's LFS quota.** Every CI download counts against the owner's bandwidth. Past the quota, a $0 budget blocks LFS for the rest of the month; otherwise it is billed, which is an account matter and a stop. | GitHub Free and Pro: 10 GiB storage and 10 GiB bandwidth a month | **No in effect:** the tiles are tracked in the repository **[I]**. Needs ruling c reopened. |
 | 4 | **Plain git in Forager-iOS** | a commit | Files over 100 MiB are blocked (`W75_N40` in full is 114.2 MiB), with a warning over 50 MiB. Repositories "ideally less than 1 GB". History keeps every byte. | **No:** this is the rejected "more fixtures in the repository" |
 | 5 | **The GitHub Actions cache** | nothing | 10 GB per repository; entries unused for 7 days are removed | **Not a pinned copy:** a refill from brouter.de gets new bytes and fails the pin |
@@ -852,6 +857,33 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
     difference the port shows is the port's.
 - **Next:** part 4, F (`HEAD` requests only; a stop for the owner's ruling) and G.
 
+- **Part 4** added F, with `07-tiles/` (commit `858187a`, then this handoff commit). **G was not started**, at the
+  planner's handoff limit. The planner decides which part takes G.
+  - **Reproduce F:**
+    - list `https://brouter.de/brouter/segments4/`, `diff/` and `diff/W75_N40/`, each parsed with `07-tiles/tools/parse-index.py`;
+    - run `07-tiles/tools/head-tiles.sh <out> <tile>...`, which sends `HEAD` only.
+
+    The listings change daily, so a rerun will give other dates and MD5s, but the same pattern.
+  - **Scratch** for part 4 is `hazel/part4/`: the raw listings (SHA-256s in `07-tiles/sources.txt`), and the five
+    GitHub documentation pages as markdown, under `part4/docs/`. **`part4/docs/runners.md` (GitHub-hosted runners) was
+    fetched but not read.** G should fetch it again rather than rely on it. Left in place until Phase 1 ends.
+  - **Done towards G, for whoever takes it:** Forager-iOS is public, by GitHub's API read with no credentials at
+    2026-10-29T04:00:37Z (`"visibility": "public"`) **[C: `07-tiles/logs/forager-ios-visibility.txt`]**. Nothing else
+    of G was checked:
+    - the macOS runner label, and whether it is Apple silicon;
+    - the Xcode installed on it;
+    - whether Kotlin/Native 2.3.10 supports that Xcode, on which C's "2.3.10 exactly" depends;
+    - when each job is worth adding.
+  - **Found by part 4 that bears on E (part 5)** (input, not answers):
+    - **Tile sizes, if E uses full brouter.de squares:** median 1,226,172 bytes; `W75_N40` 119,750,873 bytes; the
+      largest 252,948,700. A sparse square like Forager's fixture is 152,665 bytes (`07-tiles/logs/segments4-index-0354Z.tsv`).
+    - **Whether BRouter 1.7.10 reads today's brouter.de tiles is unknown.** The first step of any capture is to load each
+      tile in the oracle.
+    - **The pin cannot be to brouter.de,** so E's tiles depend on F's ruling for where they live. Their SHA-256s are
+      written when they are captured, which is Phase 2.
+    - **One square's tile is today's file only;** no earlier version can be fetched (F).
+  - **Nothing found by part 4 bears on H.**
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -896,7 +928,8 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
     - the `HEAD` headers, and the `ETag` decoding to modification time and length;
     - the `diff/` layout matching upstream's naming rule (585 = 585);
     - `W75_N40`'s 10 distinct earlier MD5s in 10 days;
-    - v1.7.10 as upstream's newest tag.
+    - v1.7.10 as upstream's newest tag;
+    - Forager-iOS's visibility, public (the one piece of G done).
   - **Confirmed by reading:** ruling c's wording, GitHub's published limits, and ODbL 4.2.
   - **Inferred:**
     - that brouter.de runs upstream's diff code;
@@ -994,3 +1027,7 @@ reopens ruling c. (3) A storage bucket on another service, which needs an accoun
     GitHub documentation pages through GitHub's article API.
   - **Option 6 names Cloudflare R2 as an example** of an external bucket. Its limits were not read.
   - **The listings were kept in scratch,** not committed, at 133 KB. Their parsed form and SHA-256s are committed.
+  - **One piece of G was done:** whether Forager-iOS is public, because option 2 depends on it. Everything else of G was
+    left, at the planner's handoff limit.
+  - **Part 4 stopped after F** rather than starting G, by the planner's handoff limit. That limit was set for this part;
+    it is not a stop in the dispatch.

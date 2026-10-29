@@ -1,0 +1,3 @@
+# Anonymous read of the repository's public metadata, 2026-10-29T04:00:37Z: curl with no credentials, GitHub REST API
+http_status=200
+{'full_name': 'slayer8366/Forager-iOS', 'private': False, 'visibility': 'public', 'default_branch': 'main'}
