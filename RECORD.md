@@ -404,3 +404,32 @@ planner's limit before starting G.
 that, of the planner; the planner answered with the designer and the person with an iPhone, both still
 proposals.
 **Notes:** Written by Cedar Datum by hand. Next free ID -12.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-12
+**Timestamp:** 2026-10-29T04:07:06Z
+**Continues:** 2026-10-28-3, 2026-10-28-10, 2026-10-28-11
+**Title:** F ruled: the pinned test tiles live in a release on Forager-iOS; the team adds an iOS designer
+(owner)
+**Decision:** the owner chose, from two questions asked together:
+- **F, where the pinned test tiles live:** "Forager-iOS release (Recommended)". The option read: "The chosen
+  tiles are copied from brouter.de once and attached to a release on the Forager-iOS GitHub page. Tests
+  download each one and check its fingerprint, the way Forager already checks BRouter itself. No account
+  and no cost, and nothing is committed to the repository, which matches your earlier ruling ('download in
+  CI'). It needs one action on your word: creating the release. GitHub allows files up to 2 GiB each, with
+  no download limit."
+  - Rejected: "Git LFS in Forager-iOS" (the owner's 10 GiB a month, and reopening ruling c); "Storage on
+    another service" (an account, and probably a CI secret).
+  - **When the release is made:** in Phase 2, once E has chosen the tiles and they are captured. Creating it
+    is a public action, so the planner brings it with the Phase 2 go rather than reading this ruling as that
+    word. Part 4's handoff stands: each captured tile is first loaded in the 1.7.10 oracle, and ODbL 4.2's
+    notices go with the release.
+  - Part 5, running G, was told of the ruling by message at 04:06Z, with no release, tag or upload to make.
+- **A designer:** "Add an iOS designer (Recommended)". The option read: "Its own role in Forager-iOS,
+  proposing its own name like the others. Keeps the iOS record separate from Android's, as you ruled."
+  - Rejected: "Borrow Sage Wayfinder" (crosses the records' separation); "Not yet".
+  - Added to the team table in `docs/process/planner-profile.md`. Fable is the planner's call, as for
+    Forager's designer.
+**Notes:** Written by Cedar Datum by hand. Next free ID -13.

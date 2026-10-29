@@ -56,6 +56,7 @@ profile is written here when it is named. Every helper's prompt opens with its n
 | (named on first run) | researcher: read-only, licences quoted at source | Fable | to follow |
 | (named on first run) | independent reviewer | Fable | to follow |
 | (named on first run) | UX auditor | Fable | to follow |
+| (named on first run) | designer: designs and proposes what a person sees; a coder builds | Fable | to follow |
 
 - **Models are the planner's call,** following Forager's rule that the review and the audit never run on the
   coder's model (Forager RECORD -1134). The owner, there: "It's useful because the same model shares blind
@@ -64,4 +65,6 @@ profile is written here when it is named. Every helper's prompt opens with its n
   coder per file at a time, so the two never split one task.
 - **Hazel Cairnwright, Forager's coder, finishes Phase 1 of the BRouter port** under that name, since the
   dispatch and RECORD -5 to -9 carry it. The primary coder takes over from Phase 2. The planner's call.
-- **Open, asked 2026-10-29:** whether the team adds a designer. Not yet ruled.
+- **The designer** was added by the owner on 2026-10-29: "Add an iOS designer (Recommended)", whose option
+  read "Its own role in Forager-iOS, proposing its own name like the others. Keeps the iOS record separate
+  from Android's, as you ruled." (RECORD -12). Fable is the planner's call, as for Forager's designer.
