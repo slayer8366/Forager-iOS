@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zynergylabs.forager.brouter.util.CheapProductionRecordTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:43:28.946Z" hostname="vm" time="0.145">
+  <properties/>
+  <testcase name="productionAnglesEqualTheOraclesAtEveryPair[jvm]" classname="com.zynergylabs.forager.brouter.util.CheapProductionRecordTest" time="0.127"/>
+  <testcase name="productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm]" classname="com.zynergylabs.forager.brouter.util.CheapProductionRecordTest" time="0.018"/>
+  <system-out><![CDATA[record: production getDirection differs from the oracle's at 0 of 1199896
+# production vs oracle: row, cos (msun, oracle, ulps), kx (msun, oracle, ulps), ky (msun, oracle, ulps)
+record 474 3fe792f1a5f1a301 3fe792f1a5f1a302 -1 3fb506d9d464f388 3fb506d9d464f389 -1 3fbc6fe80e97c2ba 3fbc6fe80e97c2ba 0
+record 488 3fe8187d4df026e7 3fe8187d4df026e6 1 3fb57d834d0d241c 3fb57d834d0d241b 1 3fbc6e1b3c7c650d 3fbc6e1b3c7c650d 0
+record 502 3fe89a5a2f91abe3 3fe89a5a2f91abe4 -1 3fb5f0dfc9b78999 3fb5f0dfc9b7899a -1 3fbc6c51a397a2ad 3fbc6c51a397a2ad 0
+record 663 3fed4ffa843680f9 3fed4ffa843680f8 1 3fba1e6d8426d0e1 3fba1e6d8426d0e0 1 3fbc59fd27d9c980 3fbc59fd27d9c980 0
+record 675 3fed93276ca82f5f 3fed93276ca82f5e 1 3fba59f08baa7fdd 3fba59f08baa7fdc 1 3fbc58e03a2da9db 3fbc58e03a2da9db 0
+record 1046 3feef5ab2285fb8b 3feef5ab2285fb8c -1 3fbb93db33dd6d36 3fbb93db33dd6d37 -1 3fbc52d7bffa21b1 3fbc52d7bffa21b1 0
+record 1053 3feedbc3d50ec941 3feedbc3d50ec940 1 3fbb7ced92cef1e7 3fbb7ced92cef1e6 1 3fbc534aeb6ed1dc 3fbc534aeb6ed1dc 0
+record 1079 3fee7142d9d7473f 3fee7142d9d74740 -1 3fbb1ea472a72d6a 3fbb1ea472a72d6b -1 3fbc55209bf5e309 3fbc55209bf5e309 0
+record 1295 3fe8ac99543503a1 3fe8ac99543503a0 1 3fb60114bab6e1fe 3fb60114bab6e1fd 1 3fbc6c10983ff7f4 3fbc6c10983ff7f4 0
+record 1297 3fe89a5a2f91abe3 3fe89a5a2f91abe4 -1 3fb5f0dfc9b78999 3fb5f0dfc9b7899a -1 3fbc6c51a397a2ad 3fbc6c51a397a2ad 0
+record 1310 3fe821e371511239 3fe821e37151123a -1 3fb585dcfe3549c8 3fb585dcfe3549c9 -1 3fbc6dfa6e4ffc42 3fbc6dfa6e4ffc42 0
+record 1311 3fe8187d4df026e7 3fe8187d4df026e6 1 3fb57d834d0d241c 3fb57d834d0d241b 1 3fbc6e1b3c7c650d 3fbc6e1b3c7c650d 0
+record 1318 3fe7d62c0f81771d 3fe7d62c0f81771e -1 3fb54297186f120a 3fb54297186f120b -1 3fbc6f014fe5ad29 3fbc6f014fe5ad29 0
+record: cos differs at 13 rows, kx or ky at 13: [474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297, 1310, 1311, 1318]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

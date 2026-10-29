@@ -21,7 +21,9 @@ internal interface LibmSeam {
 
 /** Production: the table built once from [msunCos], and [msunAtan2]. */
 internal object MsunLibm : LibmSeam {
-    override fun scales(row: Int): DoubleArray = TODO("step 2b: the table from msunCos")
+    private val table: Array<DoubleArray> = CheapRuler.buildScaleTable(::msunCos)
 
-    override fun atan2(y: Double, x: Double): Double = TODO("step 2b: msunAtan2")
+    override fun scales(row: Int): DoubleArray = table[row]
+
+    override fun atan2(y: Double, x: Double): Double = msunAtan2(y, x)
 }
