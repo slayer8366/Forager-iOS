@@ -445,3 +445,54 @@ proposals.
 follows iPhone habits and where it matches Android, the owner said "Yes on the designer role". Asked whether
 that meant starting it now instead, the owner, verbatim: "After Phase 1 is fine".
 **Notes:** Written by Cedar Datum by hand. Next free ID -14.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-14
+**Timestamp:** 2026-10-29T04:17:02Z
+**Continues:** 2026-10-28-3, 2026-10-28-11, 2026-10-28-12
+**Title:** Phase 1, part 5: item G done, written for F's ruling; item H in part
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `8adb3da` (H's evidence) and `d24259e`. Filed
+unedited as `prompts/preserved/2026-10-28-01-phase1-report-part5.md` (SHA-256 equal to the branch's file). The
+harness counted 194,805 tokens. Nothing under `.github/`, no CI run, and no release, tag or upload.
+- **G:**
+  - `ubuntu-24.04` runs `jvmTest` and the iOS klib compiles from Phase 2's first commit;
+  - `macos-26` with Xcode 26.0.1 runs the simulator tests, added once `commonTest` holds a test whose answer
+    can differ on iOS;
+  - `macos-26` is Apple silicon ("3 (M1)", arm64), so dropping `iosX64` holds;
+  - the tiles come from the Forager-iOS release with size and SHA-256 checks, no secret;
+  - a workflow sketch as text, `08-ci/workflow-sketch.yml.txt`.
+- **G, Kotlin 2.3.10 against the runner's Xcode:** JetBrains' table pairs 2.3.10 with Xcode 26.0, and the
+  images carry 26.0.1. But KGP 2.3.10's `XcodeVersion.maxTested` is 16.0, so a warning ("Xcode Version Too
+  High") is expected on every Xcode 26 (inferred). Whether 2.3.10 links and runs simulator tests there is
+  unverified.
+- **H, hash order:** three of B's nine `HashMap` sites are in methods no tier reaches, which corrects B row 18
+  and -7's "nine sites". Of 7 reached sites, 5 cannot change a route (read). Open: variable numbering in
+  `_parseFile` with more than one `profile:` key, and `OsmNodesMap.collectOutreachers` on the memory-pressure
+  path.
+- **H, floating point:** 68 of T2's 481 methods use double arithmetic or library maths (computed, listed in
+  `09-float/out/T2/`). Not done: which choose between routes, whether the JVM and Kotlin/Native can differ at
+  each, and the simulator test.
+- **A finding against C, not a stop:** JetBrains' table gives Kotlin 2.3.10 with Gradle 7.6.3 to 9.0.0 and AGP
+  8.2.2 to 9.0.0. C's Gradle 9.7.0 and Forager's AGP 9.3.1 are outside it; they built without error in parts 2
+  and 3. C's text is unchanged.
+- **Checked by the planner:**
+  - only the report and its evidence folder changed (7 files since `eee9a20`);
+  - KGP 2.3.10's bytecode sets `maxTested` to `XcodeVersion(16, 0)` (`javap -c -p` on
+    `kotlin-native-utils-2.3.10.jar`);
+  - the live kotlinlang.org table at 04:15Z reads "2.3.10 7.6.3–9.0.0 8.2.2–9.0.0". The same table pairs
+    2.4.20 to 2.4.21 with Gradle 7.6.3 to 9.7.0 and AGP 8.5.2 to 9.3.1, which contains Forager's versions.
+- **Correction, from the helper's own transcript:** Hazel reported "the required reading took about 145k".
+  The transcript's per-call context reads 60,723 tokens before the first tool call (the prompt, tools and
+  injected `CLAUDE.md` files), about 106k once the reading was done, and 192,120 at the end. So reading took
+  about 45k, and about 61k is fixed before any reading. -11's "about 110k of required reading" came from a
+  helper's estimate and is wrong the same way.
+- **Not answered:** E, the rest of H, I, J, K.
+
+**The planner's calls (technical; the owner may overrule):**
+- **New order:** part 6 finishes H; part 7, E; part 8, I, J and K. E's failure cases depend on H.
+- **Hazel's handoff list for H stands as part 6's scope.**
+- **The Gradle and AGP finding** goes into the batch for the owner at Phase 1's end, with C's other
+  recommendations.
+**Notes:** Written by Cedar Datum by hand. Next free ID -15.
