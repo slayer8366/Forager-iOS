@@ -1060,3 +1060,61 @@ The Phase 2 report, `docs/audits/2026-10-29-brouter-port-phase2.md`, is filed un
 - **Three names proposed:** Linden Caliper, Aspen Tally, Rowan Tracewell. Two repeat Forager names: "Aspen" is on
   Forager's Pi team and "Tally" is Sorrel Tally's surname; "Rowan" is Forager's planner.
 **Notes:** Written by Cedar Datum by hand. Next free ID -27.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-27
+**Timestamp:** 2026-10-29T20:33:36Z
+**Continues:** 2026-10-28-3, 2026-10-28-25, 2026-10-28-26
+**Title:** Phase 2, step 1 done up to the release: all four tiles load in the 1.7.10 oracle and are pinned; nothing
+public created
+**Observed:** the primary coder (Opus, second session), on `brouter-port`:
+- `4da988d`: the tiles in the oracle;
+- `1df847c`: `tools/tile-pins.tsv`, `tools/fetch-tiles.sh`, F0 staged;
+- `91754bc`: the ODbL notices in `tools/tile-release/`;
+- `4fd1ed9` and `0a9999a`: results and the release routes.
+
+The Phase 2 report is filed unedited as `prompts/preserved/2026-10-28-01-phase2-report-step1.md` (SHA-256 equal). The
+watcher read 183,613 tokens at 20:28:38Z, after the last push. The harness's final count was 194,134. Phase 2 so far:
+428,167 tokens over two sessions.
+- **The tiles (computed):** the scratch bytes were re-hashed against step 0's record first; nothing was downloaded
+  again.
+  - Each tile, in a folder holding only itself, passed the lookup version (11), the version-checked open and
+    `checkFileIntegrity`; every cell decoded; and one `hiking-mountain` route was found.
+  - Nodes decoded: `W75_N40` 8,136,499; `W75_N35` 260,055; `W70_N40` 233,163; `E170_S50` 50,074. None was
+    replaced.
+  - **The planner's prediction "BRouter 1.7.10 reads all four tiles" held.**
+- **F0's fixture:** copied read-only at its pinned SHA-256. Run as a control, its route equals Forager's recorded
+  1.7.10 route (5,047 m, 226 points).
+- **A defect found in step 0's draft harness:** it passed `MicroCache.debug` (false) as `reallyDecode`, so its node
+  count could only read zero. It did, on every tile and on F0, which is how it was caught.
+- **Bite and revert checks:**
+  - four damaged copies of `E170_S50` were each refused for their own reason;
+  - item I's revert, `E170_S50`'s pinned size one byte high, was refused by the fetch ("is 1061589 bytes, pinned
+    1061590"). Restored from a saved copy.
+- **CI:** runs on all five commits `success`. On `0a9999a` (run 40949273886), `jvm` read 3 of 3 and `ios-smoke` 1 of 1.
+  Neither job reads the tiles yet, so step 1's evidence is the local logs.
+- **The release routes, recommending A:**
+  - **A:** a session holding the staged files creates a draft release, uploads the six assets, reads each back
+    against the pins, then publishes. One yes and a tag name from the owner; keeps the checked bytes.
+  - **B:** recapture and re-pin first, then A.
+  - **C:** a CI job downloads, checks and publishes. New bytes, pinned only after.
+  - **D:** the owner uploads by browser. Six uploads, and no route carries 114 MiB to the owner.
+  - **E:** chunks on a temporary branch, which bends ruling c.
+
+  Read-only checks found admin permission through the session's proxy, 0 releases, and `uploads.github.com`
+  reachable. Whether the proxy passes a 114 MiB upload is unverified.
+- **Calls beyond the amendment:**
+  - the pin file's path and form;
+  - F0's asset name `forager-fixture-W75_N40.rd5`;
+  - `fetch-tiles.sh`, not yet wired into CI;
+  - route endpoints chosen from geography;
+  - the check run on the container's OpenJDK 21.0.12.1, not CI's Temurin.
+- **Checked by the planner:**
+  - the tree is clean at `0a9999a`, and step 1 wrote only `tools/` and the Phase 2 report folder;
+  - `tools/tile-pins.tsv` read: the five rows' sizes and SHA-256s equal `sha256sum` of the six staged files in
+    scratch, F0 included;
+  - the README and release notes in `tools/tile-release/` read in full: OpenStreetMap attribution, the ODbL 1.0 URI
+    and the copyright page, and each file's source. The staged README is byte-identical to the committed one.
+**Notes:** Written by Cedar Datum by hand. Next free ID -28.
