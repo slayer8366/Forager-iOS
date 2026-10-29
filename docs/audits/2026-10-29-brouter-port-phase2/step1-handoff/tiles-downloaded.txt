@@ -1,0 +1,20 @@
+# Step 1 handoff: tiles downloaded once each into <scratch>/phase2/tiles/ (/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/tiles) before the planner's hand-off message.
+# NOT a pin file, and NOT checked in the oracle: nothing below has been loaded by BRouter 1.7.10.
+# capture.log's curl_exit field is NOT curl's exit code (a bug: $? there is date's). Read success from the HTTP status and size instead.
+
+W75_N40 url=https://brouter.de/brouter/segments4/W75_N40.rd5 start=2026-10-29T20:09:48Z end=2026-10-29T20:09:54Z curl_exit=0
+W75_N35 url=https://brouter.de/brouter/segments4/W75_N35.rd5 start=2026-10-29T20:09:54Z end=2026-10-29T20:09:55Z curl_exit=0
+W70_N40 url=https://brouter.de/brouter/segments4/W70_N40.rd5 start=2026-10-29T20:09:55Z end=2026-10-29T20:09:57Z curl_exit=0
+E170_S50 url=https://brouter.de/brouter/segments4/E170_S50.rd5 start=2026-10-29T20:09:57Z end=2026-10-29T20:09:58Z curl_exit=0
+
+# sha256sum, computed 2026-10-29T20:13:45Z
+878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584  E170_S50.rd5
+c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c  W70_N40.rd5
+73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721  W75_N35.rd5
+dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6  W75_N40.rd5
+
+# sizes (wc -c) against the response's Content-Length
+W75_N40 wc=119750873 content-length=119750873 last-modified="Thu, 29 Oct 2026 01:03:01 GMT" etag="6ae29b45-72340d9" status="HTTP/1.1 200 OK"
+W75_N35 wc=3571019 content-length=3571019 last-modified="Thu, 29 Oct 2026 01:03:01 GMT" etag="6ae29b45-367d4b" status="HTTP/1.1 200 OK"
+W70_N40 wc=5292557 content-length=5292557 last-modified="Thu, 29 Oct 2026 01:03:01 GMT" etag="6ae29b45-50c20d" status="HTTP/1.1 200 OK"
+E170_S50 wc=1061589 content-length=1061589 last-modified="Thu, 29 Oct 2026 01:03:01 GMT" etag="6ae29b45-1032d5" status="HTTP/1.1 200 OK"

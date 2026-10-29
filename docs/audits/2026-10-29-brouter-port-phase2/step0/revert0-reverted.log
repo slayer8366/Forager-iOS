@@ -1,0 +1,26 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+
+> Task :brouter:fetchOracle FAILED
+brouter-1.7.10.zip: present but refused (brouter-1.7.10.zip has SHA-256 023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532, pinned 123fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532); fetching again
+REFUSED brouter-1.7.10.zip from https://github.com/abrensch/brouter/releases/download/v1.7.10/brouter-1.7.10.zip: brouter-1.7.10.zip has SHA-256 023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532, pinned 123fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:fetchOracle'.
+> Process 'command 'bash'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 15s
+3 actionable tasks: 2 executed, 1 up-to-date
+exit 1

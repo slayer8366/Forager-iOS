@@ -1,0 +1,32 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:compileTestKotlinJvm
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+
+> Task :brouter:jvmTest
+
+OracleFailureKindsTest[jvm] > fk6DataMissingAFolderWithoutTheTile[jvm] PASSED
+
+ToolchainSmokeTest[jvm] > okioSplitsATilePathOnThisTarget[jvm] PASSED
+
+OraclePinTest[jvm] > routingEngineLoadsFromThePinnedReadOnlyJar[jvm] STANDARD_OUT
+    oracle JVM: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; jar /home/user/forager-ios/brouter/build/oracle/brouter-1.7.10-ro.jar
+
+OraclePinTest[jvm] > routingEngineLoadsFromThePinnedReadOnlyJar[jvm] PASSED
+
+BUILD SUCCESSFUL in 25s
+6 actionable tasks: 3 executed, 3 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html
+exit 0

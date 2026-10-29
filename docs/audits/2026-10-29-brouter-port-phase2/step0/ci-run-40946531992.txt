@@ -1,0 +1,42 @@
+# CI run 40946531992 (workflow "brouter", run 1, attempt 1), push of fea07f8df75f01592b6244c1303c56b8af11d3d2 on brouter-port.
+# Read with the GitHub MCP tools (list_workflow_jobs, get_job_logs) on 2026-10-29, ~20:14-20:16Z. Lines quoted from the logs.
+# https://github.com/slayer8366/Forager-iOS/actions/runs/40946531992
+
+## jvm, job 123703250941, ubuntu-24.04: completed, success (20:09:48Z to 20:11:19Z)
+JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9/x64
+steps: JVM tests success (20:09:51-20:10:46); iOS klibs success (20:10:46-20:11:16)
+> Task :brouter:compileKotlinIosArm64
+> Task :brouter:compileKotlinIosSimulatorArm64
+BUILD SUCCESSFUL in 29s
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0
+TOTAL: tests 3, failures 0, errors 0, skipped 0 in 3 files
+XML testcases: okioSplitsATilePathOnThisTarget[jvm]; fk6DataMissingAFolderWithoutTheTile[jvm]; routingEngineLoadsFromThePinnedReadOnlyJar[jvm]
+OraclePinTest system-out: oracle JVM: Eclipse Adoptium 21.0.13+9-LTS amd64; jar /home/runner/work/Forager-iOS/Forager-iOS/brouter/build/oracle/brouter-1.7.10-ro.jar
+artifact jvm-test-results, ID 12928783275, 7 files
+(The log tail read began inside the iOS klibs step; the JVM test step's own lines, including the fetch-oracle output, were
+not in the 120 lines read. The XML above is the run's own, printed by the counts step.)
+
+## ios-smoke, job 123703250817, macos-26: completed, success (20:09:49Z to 20:13:36Z)
+Runner Image: macos-26-arm64, Version: 20261021.0445.8; macOS 26.6.2 (25G83)
+Java 21.0.13+9.0.LTS (Temurin-Hotspot), aarch64
+Xcode 26.0.1 / Build version 17A400   (after sudo xcode-select -s /Applications/Xcode_26.0.1.app)
+== Runtimes == iOS 26.2 (23C54), iOS 26.4 (26.4.1 - 23E254a), iOS 26.5 (23F77)  [no iOS 26.0 runtime is installed]
+Devices listed: iPhone 17 Pro, 17 Pro Max, Air, 17, 16e (26.2); 17 Pro, 17 Pro Max, 17e, Air, 17 (26.4, 26.5); iPads; others
+Welcome to Gradle 9.0.0!
+> Task :brouter:downloadKotlinNativeDistribution   (kotlin-native-prebuilt-macos-aarch64-2.3.10)
+Downloading native dependencies (LLVM, sysroot etc) ... llvm-19-aarch64-macos-essentials-79, libffi-3.3-1-macos-arm64
+> Task :brouter:compileKotlinIosSimulatorArm64
+> Task :brouter:iosSimulatorArm64MainKlibrary
+> Task :brouter:compileTestKotlinIosSimulatorArm64
+> Task :brouter:linkDebugTestIosSimulatorArm64
+> Task :brouter:iosSimulatorArm64Test
+BUILD SUCCESSFUL in 3m 11s
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0
+TOTAL: tests 1, failures 0, errors 0, skipped 0 in 1 files
+XML testcase: okioSplitsATilePathOnThisTarget[iosSimulatorArm64], time 0.013
+artifact ios-smoke-test-results, ID 12929551718, 5 files
+NOT in the log: any line about the Xcode version being too high, or any other warning, between "Welcome to Gradle 9.0.0!"
+and "BUILD SUCCESSFUL". The log read was whole: it begins at "Current runner version: '2.338.0'".
+NOT in the log: which simulator device or iOS runtime the test ran on.
