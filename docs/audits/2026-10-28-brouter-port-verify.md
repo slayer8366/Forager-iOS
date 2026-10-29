@@ -1,9 +1,13 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to I; H's Android question in part)
+# BRouter port, Phase 1: verify and plan (complete apart from H's Android question, which is with the researcher)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
 
-**Status: partial.** This session stopped at the dispatch's long-conversation limit ("past about 200k tokens,
+**Status, at part 10 (2026-10-29): Phase 1 is complete apart from H's Android question,** which is with the team's
+researcher (RECORD -19). Items A to K are answered, F is ruled, and the list of the owner's choices is the planner's (RECORD
+-20). The parts' own notes follow as each wrote them.
+
+**Part 1's status: partial.** This session stopped at the dispatch's long-conversation limit ("past about 200k tokens,
 push and hand off", dispatch "Working here"), after the premises and item A. **Items B to K are not answered
 here.** What this session found that bears on them is under "Found on the way". It is input for the next
 session, not an answer to those items.
@@ -52,6 +56,13 @@ intrinsic is switched off.
 the packages layer cleanly bottom-up once interface callbacks are set aside; the oracle's own runs (capture, E3, expected values)
 come before the router, so E3's stop is met early; the via-point code is 429 lines; fdlibm under (c) is 726 lines, and `atan2`
 alone 314, which (b) also needs in test code.
+
+**Part 10** (an eleventh session, Hazel, 2026-10-29) wrote **J**, the mechanism prediction, and **K**, the timing plan, both
+before anything is built, routed or timed. That completes Phase 1 apart from H's Android question. New in J: under (c), 12 of
+the 54 differing table rows lie inside the captured tiles, 8 of them in `N40`; glibc's one in-tile row (431) is also a
+`StrictMath` row; on iOS, recorded differences are predicted only in NT under `atan2` by (b), in MP64 and PM5 under (ii) or
+(iii), and in FK 7 and 8's message text. New in K: an A/A control (the oracle timed against itself) sets the noise floor, and
+the speed flag's margin is left to the owner.
 
 **F is ruled.** The owner chose "Forager-iOS release (Recommended)", relayed by the planner to part 5 on 2026-10-29, to be
 recorded as RECORD -12. It was not yet on `main` when part 5 read `main` at `7043843`.
@@ -2297,6 +2308,15 @@ No margin is fixed here. Proposed:
   - **For the owner-choices list (not written):** I's "Rulings and inputs the order waits on" names every ruling the order
     needs. With C's and B's recommendations, D's, G's label and finding, E's calls beyond, and K's margin, that is the list.
 
+- **Part 10** wrote J and K (commits `08fea32` for J with `12-prediction/`, `6b73fa4` for K, then this status, handoff and
+  disclosures commit).
+  - **Reproduce J's figures:** the method is described in `12-prediction/j-figures.txt`'s header (an `awk` count by `tile_row`,
+    and Python arithmetic); it reads only part 8's committed row lists in `10-tests/logs/` and part 6's published counts.
+  - **Scratch:** `hazel/part10/` holds J's and K's drafts, the same text as the report. It is left with the rest of `hazel/`
+    (below, "Decided beyond scope").
+  - **Still open:** H's Android question (the researcher, RECORD -19); the list of the owner's choices (the planner, RECORD
+    -20), to which K adds the margins m and m′ and whether flag L is wanted.
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -2432,6 +2452,18 @@ No margin is fixed here. Proposed:
   - **Inferred:** the order itself, every step's tests and candidate revert, the push count, and that a test class in the oracle's
     package can reach its package-private classes.
 
+- **Part 10 (J and K):**
+  - **Confirmed by computation:** the bases; 12 of the 54 `StrictMath` rows inside the tiles' bands, and row 431 as glibc's
+    only in-tile row on both targets, checked against each file's own header count and against the row indices
+    (`12-prediction/j-figures.txt`); the `atan2` rate, 50,215 of 299,974; the arithmetic of J1's bound.
+  - **Confirmed by reading:** the distance rounding (`OsmNode.java:103`); the comparator and `directionDiff`
+    (`WaypointMatcherImpl.java:69-71`, `:189-190`); the collection, its drain and re-add, the memory-limit throw and panic mode
+    (`RoutingEngine.java:2006-2031`); `NodesCache.java:202`'s `+ e`; Forager's 30,000 ms, the S22 note and the `doRun` call
+    (`BRouterTrailRouter.kt:170`, `:195-199`).
+  - **Inferred:** every count J predicts; that Apple's `atan2` differs from fdlibm about as often as glibc's; that Apple's `cos`
+    differs from HotSpot at row 431; that the first collection is order-free; the share of flips that change a route; every
+    choice in K.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -2498,6 +2530,15 @@ No margin is fixed here. Proposed:
   - whether GitHub Actions is enabled on Forager-iOS (step 0);
   - J and K: not reached.
 
+- **Part 10:**
+  - Apple's `cos` and `atan2` on the simulator: J's iOS figures use glibc's as a stand-in;
+  - how NT's gaps spread over 0 to 4 ulps, which J's flip rate depends on;
+  - whether FK 7 and 8 reach `NodesCache.java:202` or another throw;
+  - whether okio's `IOException` is `java.io.IOException` on the JVM (not read);
+  - whether Kotlin/Native test binaries are unoptimised by default, and whether KGP 2.3.10 runs a release test binary on the
+    simulator;
+  - whether Kotlin/Native's GC statistics can give memory per route.
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -2560,6 +2601,13 @@ No margin is fixed here. Proposed:
     with at most 3 methods). Step 7 ports them only as far as A found methods reached; A's figures count the declarations.
   - **Part 9's own slip:** the first layering run parsed method names wrongly on descriptors holding `/` and failed; fixed before
     any output was used.
+
+- **Part 10:** none of the dispatch's or Amendment 1's premises. Two figures in part 9's working ("Handoff"), which was marked
+  input only, are revised in J:
+  - the table's effect, "of the order of 1e-8 per route", is the link-distance term alone; air distances to the target give up
+    to 2.2e-5 per route. The conclusion, 0 expected, stands;
+  - NT under `atan2` by (b), "about 2", becomes about 6, because a moved `directionToNext` shifts the two diffs in opposite
+    directions.
 
 ### Decided beyond scope
 
@@ -2664,3 +2712,13 @@ No margin is fixed here. Proposed:
     fetched `HashMap.java`. The local `src.zip` is a dangling link.
   - **A candidate revert per step,** and step 0's check that Actions is enabled, are named here; neither was asked for.
   - **Part 9 stopped after I at the planner's message;** J, K and the owner-choices list are left with notes in "Handoff".
+
+- **Part 10:**
+  - **A new evidence folder,** `12-prediction/`, with one computed file; no new run.
+  - **J predicts more than strata and first failures:** the number of defects (10 to 30) and their share (at least 80% integer,
+    bit or text), and the claim that (iii) on the JVM and (ii) or (iii) on iOS differ in the same cases.
+  - **K's choices:** a timing task of its own (`jvmTiming`); the A/A control; `k` and the 4-hour budget rule; a 4 GB fixed heap;
+    HotSpot arm64 timed on the macOS runner beside the simulator; flag L and a memory flag beside the speed flag.
+  - **Scratch is left in place** (`hazel/`, all parts). The dispatch says to delete it when the task ends; Phase 1 still waits on
+    the researcher's answer, and earlier parts' reproductions read from it, so deleting it is left to the planner.
+  - **The owner-choices list is not written,** per the planner's call at RECORD -20.
