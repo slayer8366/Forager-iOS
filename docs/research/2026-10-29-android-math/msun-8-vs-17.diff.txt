@@ -1,0 +1,61 @@
+# msun sources, bionic android-8.0.0_r1 (f711b078) vs android-17.0.0_r1 (06356e41): diff -u, header lines dropped
+=== s_cos.c
+-/* @(#)s_cos.c 5.1 93/09/24 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+=== k_cos.c
+-/* @(#)k_cos.c 1.3 95/01/18 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+=== k_sin.c
+-/* @(#)k_sin.c 1.3 95/01/18 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+=== e_rem_pio2.c
+-/* @(#)e_rem_pio2.c 1.4 95/01/18 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+-static __inline __always_inline
++static __always_inline
+-	    /* Use a specialized rint() to get fn.  Assume round-to-nearest. */
+-	    STRICT_ASSIGN(double,fn,x*invpio2+0x1.8p52);
+-	    fn = fn-0x1.8p52;
+-#ifdef HAVE_EFFICIENT_IRINT
++	    fn = rnint((double_t)x*invpio2);
+-#else
+-	    n  = (int32_t)fn;
+-#endif
+-	INSERT_WORDS(z, ix - ((int32_t)(e0<<20)), low);
++	INSERT_WORDS(z, ix - ((int32_t)((u_int32_t)e0<<20)), low);
+=== k_rem_pio2.c
+-/* @(#)k_rem_pio2.c 1.3 95/01/18 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+- *		precison, one may have to do something like:
++ *		precision, one may have to do something like:
+- *		the fraction part may be lost to cancelation before we
++ *		the fraction part may be lost to cancellation before we
+=== e_atan2.c
+-/* @(#)e_atan2.c 1.3 95/01/18 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+-/* __ieee754_atan2(y,x)
++/* atan2(y,x)
+-__ieee754_atan2(double y, double x)
++atan2(double y, double x)
+-	   return x+y;
+-	if((hx-0x3ff00000|lx)==0) return atan(y);   /* x=1.0 */
++	    return nan_mix(x, y);
++	if(hx==0x3ff00000&&lx==0) return atan(y);   /* x=1.0 */
+=== s_atan.c
+-/* @(#)s_atan.c 5.1 93/09/24 */
+-#include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
+-
+=== math_private.h: 452 changed lines, not summarised

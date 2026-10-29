@@ -1,0 +1,9 @@
+# bionic libm directory listings (gitiles ?format=JSON, decoded)
+-- bionic-8/tree-libm.json
+Android.bp MODULE_LICENSE_BSD_LIKE amd64/ arm/ arm64/ digittoint.c fabs.cpp fake_long_double.c fpmath.h freebsd-compat.h i387/ libm.arm.map libm.arm64.map libm.map.txt libm.mips.map libm.mips64.map libm.x86.map libm.x86_64.map mips/ signbit.c significandl.c sincos.c upstream-freebsd/ upstream-netbsd/ x86/ x86_64/
+-- bionic-8/tree-libm_x86_64.json
+ceil.S ceilf.S e_acos.S e_asin.S e_atan2.S e_cosh.S e_exp.S e_hypot.S e_log.S e_log10.S e_pow.S e_sinh.S floor.S floorf.S lrint.S lrintf.S rint.S rintf.S s_atan.S s_cbrt.S s_cos.S s_expm1.S s_log1p.S s_sin.S s_tan.S s_tanh.S sqrt.S sqrtf.S trunc.S truncf.S
+-- bionic-8/tree-libm_arm64.json
+ceil.S fenv.c floor.S fma.S lrint.S rint.S sqrt.S trunc.S
+-- bionic-17/tree-libm.json
+Android.bp MODULE_LICENSE_BSD_LIKE NOTICE builtins.cpp fake_long_double.c fenv-arm.c fenv-arm64.c fenv-riscv64.c fenv-x86.c fenv-x86_64.c fpmath.h freebsd-compat.h libm.map.txt signbit.cpp significandl.c upstream-freebsd/ upstream-netbsd/
