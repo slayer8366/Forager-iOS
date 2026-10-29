@@ -1,9 +1,95 @@
 package com.zynergylabs.forager.brouter.util
 
-// Stub (item I, step 2a): btools/util/LruMap.java.
+/**
+ * Port of btools/util/LruMap.java (by ab): something like LinkedHashMap, but purpose build, less dynamic and memory
+ * efficient. As in Java, `get` bins by the `hash` field while `removeLru` and `put` bin by the virtual `hashCode()`, and
+ * `get` matches by the virtual `equals`; the unguarded dereferences are Java's, so they throw where Java's do.
+ */
 internal class LruMap(bins: Int, size: Int) {
-    fun get(key: LruMapNode): LruMapNode? = TODO("step 2a stub")
-    fun touch(e: LruMapNode): Unit = TODO("step 2a stub")
-    fun removeLru(): LruMapNode? = TODO("step 2a stub")
-    fun put(v: LruMapNode): Unit = TODO("step 2a stub")
+    private val hashbins: Int = bins
+    private val maxsize: Int = size
+    private var size = 0
+
+    private var lru: LruMapNode? = null
+    private var mru: LruMapNode? = null
+
+    private val binArray: Array<LruMapNode?> = arrayOfNulls(hashbins)
+
+    fun get(key: LruMapNode): LruMapNode? {
+        val bin = (key.hash and 0xfffffff) % hashbins
+
+        var e = binArray[bin]
+        while (e != null) {
+            if (key == e) {
+                return e
+            }
+            e = e.nextInBin
+        }
+        return null
+    }
+
+    // put e to the mru end of the queue
+    fun touch(e: LruMapNode) {
+        val n = e.next
+        val p = e.previous
+
+        if (n == null) {
+            return // already at mru
+        }
+        n.previous = p
+        if (p != null) {
+            p.next = n
+        } else {
+            lru = n
+        }
+
+        mru!!.next = e
+        e.previous = mru
+        e.next = null
+        mru = e
+    }
+
+    fun removeLru(): LruMapNode? {
+        if (size < maxsize) {
+            return null
+        }
+        size--
+        // unlink the lru from it's bin-queue
+        val bin = (lru!!.hashCode() and 0xfffffff) % hashbins
+        var e = binArray[bin]
+        if (e === lru) {
+            binArray[bin] = lru!!.nextInBin
+        } else {
+            while (e != null) {
+                val prev: LruMapNode = e
+                e = e.nextInBin
+                if (e === lru) {
+                    prev.nextInBin = lru!!.nextInBin
+                    break
+                }
+            }
+        }
+
+        val res = lru
+        lru = lru!!.next
+        lru!!.previous = null
+        return res
+    }
+
+    fun put(v: LruMapNode) {
+        val bin = (v.hashCode() and 0xfffffff) % hashbins
+        v.nextInBin = binArray[bin]
+        binArray[bin] = v
+
+        v.previous = mru
+        v.next = null
+        val m = mru
+        if (m == null) {
+            lru = v
+        } else {
+            m.next = v
+        }
+        mru = v
+        size++
+    }
 }

@@ -1,0 +1,3 @@
+seed 1: ops 20000000 (cap 20000000), ended false, resets 80343, longest run without reset 3423 ops, max position 26863 of 32640 bits, mean advance 7.97 bits/op
+seed 2: ops 20000000 (cap 20000000), ended false, resets 79902, longest run without reset 3175 ops, max position 25224 of 32640 bits, mean advance 7.98 bits/op
+seed 3: ops 20000000 (cap 20000000), ended false, resets 79933, longest run without reset 2817 ops, max position 23290 of 32640 bits, mean advance 7.98 bits/op

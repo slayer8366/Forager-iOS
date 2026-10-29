@@ -1,0 +1,1 @@
+20 seeds x cap 1000000: 20000000 ops compared (decodeBits 3997364, decodeBitsReverse 4000276, decodeVarBits 4000514, decodeBit 4000894, decodeBounded 4000952), 80247 resets, max reading position 21994 bits, 0 mismatches

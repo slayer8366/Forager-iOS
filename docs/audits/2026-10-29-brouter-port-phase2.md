@@ -19,6 +19,11 @@ green twice, and refused once by a one-character change (section "Amendment 4" b
 word** after sub-step 1. The stubs and tests are pushed (`3cd61ad`) and seen failing for their reason; the port (sub-step 2) and
 the revert check (sub-step 3) are not started. See "Step 2a" below, and its handoff.
 
+**Status (2026-10-29, sixth session, Linden Caliper, Amendment 3 Part B, step 2a):** **partial, stopped on a wrong
+premise.** The port is written and pushed. 24 of the 25 tests pass locally. The 25th,
+`BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle`, cannot finish under any port: its loop does not end on the
+oracle alone. Changing it is the planner's call (section "Step 2a, sub-step 2" below).
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -468,6 +473,57 @@ checks the expected values `JavaLangCommonTest` asserts, so none of them is from
   worked. The iOS klib compile was not run locally; CI's `jvm` job runs it.
 - **Then:** sub-step 2 is pushed when `jvmTest` reads 25 tests, 0 failures from the XML (prediction 1), with CI read for
   that commit; sub-step 3 is the revert at `SortedHeap.kt`'s line for `SortedHeap.java:139` under the runner rules.
+
+**Step 2a, sub-step 2: the port (sixth session, Linden Caliper)** [C: `step2a/2-port-jvmTest-24.txt`, `step2a/2-loop/`]
+- **Base:** `brouter-port` at `41cc4ca`, equal to `origin/brouter-port` after `git pull` [R]. Forager's
+  `third_party/brouter/src/main/java/btools/util/` was last changed at `994b4384`, with a clean tree [R: `git log -1`,
+  `git status`].
+- **The port:** 10 stub files filled, method by method against the Java. `IByteArrayUnifier` and `LruMapNode` are
+  unchanged. The 256 CRC literals and `getMinBin`'s 31 unrolled steps are generated from the Java text by script, not
+  retyped. `getMinBin` has **31** comparisons (`SortedHeap.java:139` to `:199`), not the 30 the handoff gave [C: `grep -c`].
+- **The 24 tests that can finish:** run locally by an include filter that is never committed (`step2a/runner/filter24.txt`).
+  The build log has 0 compile errors. The JUnit XML reads **24 tests, 0 failures**, on the first run.
+- **The 25th test cannot finish, under any port (the stop).** The first full run sat in
+  `rawBitReadsOnRandomBytesMatchTheOracle` for over 10 minutes. A thread dump put the worker in the test's own loop
+  (`BitCoderContextTest.kt:105`), with 574 s of CPU, not in port code. The loop ends only when the oracle's reading
+  position reaches 32,640 bits. But about one op in 250 resets both contexts to bit 0 (`r.nextInt(5)` then
+  `r.nextInt(50)`), and an op advances 7.97 bits on average. Run on the oracle alone, with the test's draws in the test's
+  order and a cap of 20 million ops, seeds 1 to 3 never end; the furthest any got is bit 26,863 [C: `2-loop/LoopCheck-out.txt`].
+  The sub-step 1 run could not show this, because each stub threw on its first call. The handoff's finish line ("25
+  tests, 0 failures") is therefore unreachable as written. I have not changed the test: that is a choice about what it
+  covers, and it goes to the planner. Options:
+  - **(a)** Add an op cap to the loop condition, keeping the position bound (it guards Java's unguarded `ab[++idx]`
+    reads) and both assertions as they are.
+  - **(b)** Drop the in-loop reset. This loses the reset-mid-stream coverage.
+  - **(c)** Make the reset rarer. Any rate that lets the loop end also makes resets rare per seed.
+
+  My default would be (a), with a cap of about 1 million ops per seed. It is not applied.
+- **The 25th test's comparison, run outside the test** [C: `2-loop/PortLoopCheck-out.txt`]. A scratch Java harness
+  (`2-loop/PortLoopCheck.java`) runs the same loop, draws and two equalities (value and reading position) on the oracle
+  and the port's `brouter-jvm.jar`, capped at 1 million ops per seed. Over 20 seeds it compared **20,000,000 ops**, about
+  4 million of each of the five reads, with 80,247 resets and **0 mismatches**. It bites: with one bit flipped at byte
+  100 of the port's copy, it reports 56,167 mismatches in 2 million ops (`2-loop/PortLoopCheckBite.diff`,
+  `-out.txt`). The ops never reach past bit 21,994, so the last ~1,350 bytes, and `fillBuffer`'s end-of-array branch,
+  are not read by this loop, under the test or the harness [C].
+- **Calls in the port:**
+  - `javaSplit` follows `Pattern.split`'s loop, not `Regex.split` plus trimming. Its results are the same for every
+    regex the reached code passes. A zero-width match throws "unsupported" instead of guessing how Java skips it.
+  - Java's static `earlyDuplicateCheck` is the constant `false` (B row 17).
+  - Java's unguarded null dereferences are `!!`, so they throw where Java's do (`LruMap.removeLru`,
+    `CompactLongMap` after freezing).
+  - Kotlin's infix operators share one precedence, below `+`, so Java's
+    `(value << count) | reverse_byte[b & 0xff] >> (8 - count)` (`BitCoderContext.java:242`) is parenthesised. Without the
+    parentheses Kotlin would shift the whole `or`.
+  - Write-only Java fields stay as Java has them: `SortedHeap.peaksize`, `BitCoderContext.bm2bits`, and the
+    `ByteArrayUnifier` constructor's arrays.
+- **Lines:** the Kotlin in `util/` is 1,282 lines across the 12 files (992 not blank or comment). That includes
+  `JavaLang.kt`'s 69 lines, which have no Java counterpart. The Java's 11 files are 1,542 lines (1,174 not blank or
+  comment), including the methods not ported. The plan's figure, 1,302 kept lines, is T2's `kept_lines` column. I did not
+  re-derive what that column counts, so the two Kotlin counts are not set against it line for line [C, `wc -l` and `grep`].
+- **Not run locally:** the iOS klib compile and the simulator. CI's `ios-smoke` job compiles the simulator target and runs
+  `JavaLangCommonTest` there. CI's `jvm` job will reach the 25th test and be stopped by its 30-minute timeout
+  (`.github/workflows/brouter.yml:18`). Its `iOS klibs` step comes after `jvmTest`, so it is expected not to run on this
+  commit [I, from the workflow's step order].
 
 ## Confirmed vs inferred
 

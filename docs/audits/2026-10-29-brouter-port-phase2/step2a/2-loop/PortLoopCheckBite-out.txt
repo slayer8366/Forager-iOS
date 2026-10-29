@@ -1,0 +1,3 @@
+MISMATCH seed 1 op 1775 (kind 1, count 25): value 30800944 vs 30800946, position 802 vs 802
+MISMATCH seed 1 op 2085 (kind 1, count 31): value 799061 vs 831829, position 816 vs 816
+20 seeds x cap 100000: 2000000 ops compared (decodeBits 399045, decodeBitsReverse 399810, decodeVarBits 400368, decodeBit 400961, decodeBounded 399816), 8034 resets, max reading position 18092 bits, 56167 mismatches

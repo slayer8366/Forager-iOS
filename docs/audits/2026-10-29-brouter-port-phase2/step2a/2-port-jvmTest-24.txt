@@ -1,0 +1,39 @@
+# Step 2a, sub-step 2: jvmTest over the port, local, 2026-10-29T22:51:30Z, base 41cc4ca plus the port (uncommitted); the 24 tests that can finish, by an include filter (never committed), all but BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle
+# JDK: Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=; Gradle run with a local-only mirror init script (never committed)
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+TOTAL: tests 24, failures 0, errors 0, skipped 0 in 12 files
+
+# Each util test case: outcome | failure type | message (first line) | first frame in the port's main code
+PASS BitCoderContextTest.varBitsLookupTablesEqualTheOracles[jvm]
+PASS BitCoderContextTest.encodedStreamsAreByteIdenticalAndDecodeIdenticallyBothWays[jvm]
+PASS ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported[jvm]
+PASS ByteDataTest.aNullArrayHasNoDataOnBoth[jvm]
+PASS ByteDataTest.fixedWidthReadsOnRandomBytesMatchTheOracle[jvm]
+PASS ByteDataTest.varLengthStreamsAreByteIdenticalAndReadIdenticallyBothWays[jvm]
+PASS Crc32Test.crcOfSeededSlicesEqualsTheOracles[jvm]
+PASS JavaLangCommonTest.javaRoundGivesJavasAnswers[jvm]
+PASS JavaLangCommonTest.javaIsWhitespaceGivesJavasAnswers[jvm]
+PASS JavaLangCommonTest.javaSplitGivesJavasAnswers[jvm]
+PASS JavaLangTest.javaIsWhitespaceEqualsCharacterIsWhitespaceOnEveryChar[jvm]
+PASS JavaLangTest.javaSplitEqualsStringSplitForEveryRegexTheReachedCodePasses[jvm]
+PASS JavaLangTest.theCommonCasesExpectedValuesAreTheJdks[jvm]
+PASS JavaLangTest.javaRoundEqualsMathRound[jvm]
+PASS LongMapTest.duplicateKeysFailAsTheOracleFails[jvm]
+PASS LongMapTest.compactAndFrozenMapsAnswerAsTheOracleDoes[jvm]
+PASS LruMapTest.cacheTrafficHitsAndEvictsAsTheOracleDoes[jvm]
+PASS SortedHeapTest.fewDistinctKeysPopInTheOraclesOrder[jvm]
+PASS SortedHeapTest.allKeysEqualPopInTheOraclesOrder[jvm]
+PASS SortedHeapTest.aLargeHeapThroughManyBinsPopsInTheOraclesOrder[jvm]
+PASS SortedHeapTest.clearAndEmptyPopsMatchTheOracle[jvm]
