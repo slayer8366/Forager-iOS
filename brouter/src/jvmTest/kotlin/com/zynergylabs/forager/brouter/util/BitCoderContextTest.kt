@@ -82,6 +82,12 @@ class BitCoderContextTest {
         }
     }
 
+    /**
+     * Random reads, with a reset of both contexts about one op in 250. The resets keep the reading position below about
+     * bit 22,000, so the loop ends at its op cap, 1,000,000 per seed (the planner's ruling, RECORD -33): without the cap
+     * it never ended (Phase 2 report, step 2a sub-step 2). The position bound stays, as the guard on Java's unguarded
+     * `ab[++idx]` reads.
+     */
     @Test
     fun rawBitReadsOnRandomBytesMatchTheOracle() {
         for (seed in 1..20) {
@@ -90,7 +96,7 @@ class BitCoderContextTest {
             val j = JBitCoderContext(bytes)
             val k = BitCoderContext(bytes)
             var i = 0
-            while (j.readingBitPosition < (bytes.size - 16) * 8) {
+            while (j.readingBitPosition < (bytes.size - 16) * 8 && i < 1_000_000) {
                 val count = r.nextInt(0, 33)
                 val (vj, vk) = when (r.nextInt(5)) {
                     0 -> j.decodeBits(count) to k.decodeBits(count)
@@ -106,6 +112,38 @@ class BitCoderContextTest {
                 assertEquals(j.readingBitPosition, k.getReadingBitPosition(), "seed $seed op $i: reading position")
                 i++
             }
+            println("rawBitReadsOnRandomBytesMatchTheOracle seed $seed: $i ops, reading position ${j.readingBitPosition}")
+        }
+    }
+
+    /**
+     * The same reads with no reset, so each seed runs to the position bound (about 4,100 ops) and reads the last part of
+     * the array, which the first case never reaches (the planner's ruling, RECORD -33). It stops short of `fillBuffer`'s
+     * end-of-array branch: the buffer looks ahead at most 31 bits, so the oracle's `idx` stays at or below 4,084 of its
+     * `idxMax` 4,095 (step 2a's close, `2-loop/LoopCheck2-out.txt`).
+     */
+    @Test
+    fun rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle() {
+        for (seed in 1..20) {
+            val r = Random(seed)
+            val bytes = ByteArray(4_096).also { r.nextBytes(it) }
+            val j = JBitCoderContext(bytes)
+            val k = BitCoderContext(bytes)
+            var i = 0
+            while (j.readingBitPosition < (bytes.size - 16) * 8) {
+                val count = r.nextInt(0, 33)
+                val (vj, vk) = when (r.nextInt(5)) {
+                    0 -> j.decodeBits(count) to k.decodeBits(count)
+                    1 -> j.decodeBitsReverse(count) to k.decodeBitsReverse(count)
+                    2 -> j.decodeVarBits() to k.decodeVarBits()
+                    3 -> (if (j.decodeBit()) 1 else 0) to (if (k.decodeBit()) 1 else 0)
+                    else -> j.decodeBounded(count) to k.decodeBounded(count)
+                }
+                assertEquals(vj, vk, "seed $seed op $i: value")
+                assertEquals(j.readingBitPosition, k.getReadingBitPosition(), "seed $seed op $i: reading position")
+                i++
+            }
+            println("rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed $seed: $i ops, reading position ${j.readingBitPosition}")
         }
     }
 }

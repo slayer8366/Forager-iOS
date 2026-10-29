@@ -1,0 +1,21 @@
+case 2 seed 1: ops 4125, ended by position bound, resets 0, final position 32645, max position 32645 of bound 32640, max idx 4082 of idxMax 4095, end-of-array branch not reached
+case 2 seed 2: ops 4013, ended by position bound, resets 0, final position 32647, max position 32647 of bound 32640, max idx 4083 of idxMax 4095, end-of-array branch not reached
+case 2 seed 3: ops 4097, ended by position bound, resets 0, final position 32655, max position 32655 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 4: ops 3976, ended by position bound, resets 0, final position 32659, max position 32659 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 5: ops 4142, ended by position bound, resets 0, final position 32642, max position 32642 of bound 32640, max idx 4082 of idxMax 4095, end-of-array branch not reached
+case 2 seed 6: ops 4224, ended by position bound, resets 0, final position 32641, max position 32641 of bound 32640, max idx 4082 of idxMax 4095, end-of-array branch not reached
+case 2 seed 7: ops 4079, ended by position bound, resets 0, final position 32644, max position 32644 of bound 32640, max idx 4079 of idxMax 4095, end-of-array branch not reached
+case 2 seed 8: ops 4080, ended by position bound, resets 0, final position 32644, max position 32644 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 9: ops 4066, ended by position bound, resets 0, final position 32643, max position 32643 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 10: ops 4076, ended by position bound, resets 0, final position 32645, max position 32645 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 11: ops 4250, ended by position bound, resets 0, final position 32648, max position 32648 of bound 32640, max idx 4082 of idxMax 4095, end-of-array branch not reached
+case 2 seed 12: ops 4061, ended by position bound, resets 0, final position 32644, max position 32644 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 13: ops 4076, ended by position bound, resets 0, final position 32658, max position 32658 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 14: ops 4191, ended by position bound, resets 0, final position 32652, max position 32652 of bound 32640, max idx 4083 of idxMax 4095, end-of-array branch not reached
+case 2 seed 15: ops 4118, ended by position bound, resets 0, final position 32641, max position 32641 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 16: ops 4100, ended by position bound, resets 0, final position 32663, max position 32663 of bound 32640, max idx 4084 of idxMax 4095, end-of-array branch not reached
+case 2 seed 17: ops 3976, ended by position bound, resets 0, final position 32643, max position 32643 of bound 32640, max idx 4082 of idxMax 4095, end-of-array branch not reached
+case 2 seed 18: ops 4041, ended by position bound, resets 0, final position 32649, max position 32649 of bound 32640, max idx 4082 of idxMax 4095, end-of-array branch not reached
+case 2 seed 19: ops 4188, ended by position bound, resets 0, final position 32642, max position 32642 of bound 32640, max idx 4081 of idxMax 4095, end-of-array branch not reached
+case 2 seed 20: ops 4090, ended by position bound, resets 0, final position 32650, max position 32650 of bound 32640, max idx 4083 of idxMax 4095, end-of-array branch not reached
+case 2: 20 of 20 seeds ended; 81969 ops in all
