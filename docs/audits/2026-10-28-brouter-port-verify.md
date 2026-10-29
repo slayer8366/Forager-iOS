@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D, F and G; H in part, steps 1 and 2 of 4)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D, F, G and H; H's Android question in part)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -33,6 +33,12 @@ and whether the JVM and Kotlin/Native can differ there, with scratch runs on the
 **H's steps 3 (hash order) and 4 (the simulator test) are not answered.** Step 3's evidence was gathered in the same runs and is
 committed; its findings are under "Handoff", as input. Part 6 stopped at the planner's handoff limit: the harness count had
 passed it during step 2 (about 290k when step 2 was pushed), which this session noticed late. E is not started.
+
+**Part 7** (an eighth session, Hazel, 2026-10-29) wrote **H's step 3** (hash order) and designed **H's step 4** (the simulator
+test, not built or run). It answered **the planner's Android question in part**: two Android source files were read, and the
+rest is listed as not read. It stopped at the planner's handoff message (05:01Z, past 180k by the harness's count). **E, I, J and
+K are not answered.** New in step 3: the oracle's own `HashMap` order is not a function of the input where a bucket holds nine
+or more nodes with equal `ilon + ilat`.
 
 **F is ruled.** The owner chose "Forager-iOS release (Recommended)", relayed by the planner to part 5 on 2026-10-29, to be
 recorded as RECORD -12. It was not yet on `main` when part 5 read `main` at `7043843`.
@@ -860,7 +866,7 @@ Gradle 9.7.0, drops to 9.0.0 for the port alone, or waits for Forager to move Ko
 - **The jobs that read tiles wait for the release,** which the owner creates in Phase 2. Until then the `jvm` job runs tests that
   need no tile.
 
-### H. Floating point, and hash order (parts 5 and 6: answered in part)
+### H. Floating point, and hash order (parts 5 to 7; the Android question in part)
 
 Written by the sixth session (Hazel, part 5, 2026-10-29). **The hash-order question is answered. The floating-point list is
 computed but not yet classified, and the simulator test plan is not written.** Both are for the next session.
@@ -1279,10 +1285,59 @@ None is chosen here.
 **When it is added (G's rule, "once `commonTest` holds a test whose answer can differ on iOS"):** with the Phase 2 step that
 ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, in part 9.
 
+#### Part 7: Android's `Math.cos` and `Math.atan2` (partial)
+
+Written by the eighth session (Hazel, part 7, 2026-10-29). **Partial.** The planner called the handoff at 05:01Z, after two
+files had been read. Sources, with URL, date and SHA-256, are in `09-float/part7/sources.txt`. They are AOSP `libcore` at
+commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read on 2026-10-29; its committer date is
+2025-03-26.
+
+**What was read [R].**
+- **Android replaces the JDK's Java bodies with native methods.** `ojluni/src/main/java/java/lang/Math.java:219-228`
+  comments out the JDK's `cos`, which delegates to `StrictMath.cos`, under "Android-changed: Reimplement in native". It
+  declares `@CriticalNative public static native double cos(double a)` in its place. `atan2` is the same at `:712-721`.
+  Source: <https://android.googlesource.com/platform/libcore/+/de876a01b29230b877c9f408348c38a90ee724a5/ojluni/src/main/java/java/lang/Math.java>,
+  read 2026-10-29.
+- **The native bodies call the C library.** `ojluni/src/main/native/Math.c:30-31` is `Math_cos(jdouble d) { return cos(d); }`
+  and `:85-86` is `Math_atan2(jdouble d1, jdouble d2) { return atan2(d1, d2); }`. Both are registered at `:149` and `:151`,
+  and the file includes `<math.h>` (`:27`). On Android, that is the platform's C library, bionic **[I]**. Source:
+  <https://android.googlesource.com/platform/libcore/+/de876a01b29230b877c9f408348c38a90ee724a5/ojluni/src/main/native/Math.c>,
+  read 2026-10-29.
+
+**Not read, so not determined [?].**
+- whether ART's compilers (JIT and ahead-of-time) replace these calls with intrinsics that call something else (`art/`,
+  the intrinsics list and the arm64 code generator);
+- which source bionic builds `cos` and `atan2` from on arm64, and with which flags, including whether fused multiply-add is
+  allowed (`bionic/libm/Android.bp`);
+- whether that differs across Forager's range of Android versions (`minSdk = 26`, `app/build.gradle.kts:265`);
+- any computed comparison with HotSpot.
+
+**Whether the results can differ from HotSpot's: not determined. Inferred that they can [I].**
+- On the native-method path, Android's answer is bionic's `cos` and `atan2`.
+- HotSpot's `Math.cos` on x86_64 is neither glibc's nor `StrictMath`'s: it differs from glibc at 8 of 1,800 rows and from
+  `StrictMath` at 60 **[C: part 6]**. Two glibc builds already differ from each other.
+- Bionic is a third C library, so equal bits would be a coincidence, not something the code ensures.
+
+**What it would mean, if they differ [I]. To be confirmed by the reads above.**
+- **Today:** Forager's Android app builds CheapRuler's table and the `atan2` tie-break with the phone's C library, not
+  with HotSpot's. A HotSpot oracle in CI does not stand for what phones run now.
+- **At the switch of Forager's app to the port:**
+  - **(a) HotSpot constants:** the table on phones changes from bionic's to HotSpot's wherever they differ. Routes can
+    change at the switch.
+  - **(b) each platform's functions:** on Android the port calls the same functions the Java engine calls now, assuming
+    `kotlin.math.cos` on Android is `Math.cos` (not read). Android's routes are unchanged at the switch, and iOS differs
+    from Android.
+  - **(c) fdlibm:** the same everywhere, and it differs from today's phones and from the HotSpot oracle wherever each of
+    those differs from fdlibm.
+- **For the differential tests:** an oracle on HotSpot proves the port matches HotSpot. It does not prove the port matches
+  today's Android app. That would take the Java engine run on Android's runtime, on an emulator or a device, which nothing
+  in G or the step 4 design provides.
+
 ### Not answered yet (parts 6 and 7, in RECORD -11's order)
 
 - ~~H's step 3, hash order~~: written by part 7, above;
 - ~~H's step 4, the simulator test~~: designed by part 7, above (not built or run);
+- H's Android question: in part (part 7, above). ART's intrinsics and bionic's `cos` and `atan2` were not read;
 - E, the differential tests;
 - I, the Phase 2 order;
 - J, the mechanism prediction;
@@ -1497,6 +1552,38 @@ ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, 
       A port that keeps Java's types and evaluation order can only differ from the oracle through the table, `atan2`,
       `HashMap` order and `roundToLong`. The last has a fix (`floor(x + 0.5)`, step 2) **[C][I]**.
 
+- **Part 7** wrote H's step 3 and designed step 4, and answered the Android question in part, with `09-float/part7/`. Its
+  commits are `765b65c` (step 3), `2b0a289` (step 4), then this handoff. **E is not started.**
+  - **Reproduce step 3's new run:** `09-float/part7/README.txt` (`TreeBinOrder.java` over the vendored `OsmNode`, JDK 21).
+  - **Scratch** for part 7 is `hazel/part7/`. It holds the compiled vendored classes, OpenJDK's `HashMap.java` and the two
+    Android files. Left in place until Phase 1 ends.
+  - **The Android question, what remains** (for whichever part the planner gives it), read from Android's published
+    source at a pinned commit:
+    - ART's intrinsics for `Math.cos` and `Math.atan2`: the intrinsics list, the arm64 code generator, and the
+      entrypoints those call;
+    - bionic's `libm/Android.bp`: which source `cos` and `atan2` come from on arm64, and the build flags (`-ffp-contract`);
+    - whether this changed across API 26 to 37;
+    - then whether a computed comparison is worth it. Compiling bionic's `cos` for aarch64 with its own flags and running it
+      under part 6's `qemu-aarch64` would give the table rows against HotSpot.
+  - **For part 8 (E), from part 7** (input, not answers):
+    - **The memory-pressure path is reachable on Forager's calls.** `collectOutreachers` runs once a search holds about
+      42,100 nodes (`currentmaxmem` starts at 4,000,000 and each node counts 95; Forager keeps `memoryclass` 64). E's sample
+      needs routes long enough to reach it. Its failure kinds are "memory limit reached" and memory panic mode
+      (`RoutingEngine.java:2026-2031`).
+    - **There, the oracle may not agree with itself.** In a `HashMap` bucket with nine or more nodes sharing `ilon + ilat`,
+      the order follows identity hashes (step 3). Before E fixes expected results on that path, run the Java engine twice in
+      one JVM on such a route and compare its "collected, nodes/paths before=… after=…" log line (`RoutingEngine.java:2025`).
+      If the two runs differ, compare that path's outcome more coarsely.
+    - **Equality there depends on step 3's (i) to (iii)** for `hmap`. Under (ii) or (iii), `nodesCreated` can differ from
+      the oracle's by design.
+    - **The step 4 design keeps route tests and platform invariants apart.** Under part 6's (b), the simulator's table and
+      `atan2` are expected to differ, and E's route comparison on the simulator carries the pass or fail. E should say
+      what "identical" means on iOS under each of (a) to (c).
+    - **Route tests on the simulator read tiles from disk.** Whether a simulator test process can read the runner's disk
+      is still not determined. The invariants test avoids the question, and E's tests cannot.
+    - **If Android's `cos` differs from HotSpot's** (not yet determined), a HotSpot oracle does not stand for today's
+      Android app. E may need a case run on Android's runtime, or a statement that it compares against HotSpot only.
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -1580,6 +1667,27 @@ ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, 
     - `floor(x + 0.5)` matching `Math.round` at BRouter's distance sites;
     - the options (a) to (c).
 
+- **Part 7 (H steps 3 and 4, the Android question in part):**
+  - **Confirmed by computation:**
+    - the bases;
+    - part 6's `collectOutreachers` counts recounted from the committed files (14 of 20, by one);
+    - `java.util.HashMap` ordering BRouter's own `OsmNode` keys differently on each build when they share a hash in a tree
+      bucket, with a control that did not move.
+  - **Confirmed by reading:**
+    - `collectOutreachers`, `isInMemoryBounds` and the memory-pressure branch;
+    - `_parseFile`'s injected keys;
+    - Kotlin/Native's `HashMap` lines;
+    - OpenJDK 21.0.12.1's `HashMap` tree-bucket code;
+    - Android `libcore`'s `Math.cos` and `Math.atan2`, which are native methods calling C's `cos` and `atan2`.
+  - **Inferred:**
+    - that order changes only the count, not the vanished set;
+    - that a one-node difference can move the failure kind and later collections;
+    - that real tiles rarely fill a bucket that far;
+    - that `<math.h>` on Android is bionic;
+    - that Android's results can differ from HotSpot's;
+    - what each of (a) to (c) means at the switch;
+    - every choice in the step 4 design.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -1622,6 +1730,15 @@ ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, 
   - Whether HotSpot on arm64 builds the same table as HotSpot on x86_64.
   - Kotlin/Native's code generation for iOS, run rather than read.
 
+- **Part 7:**
+  - whether a moved collection, or memory panic mode reached in a different place, changes a route;
+  - how often real tiles put nine or more nodes with one `ilon + ilat` into one `hmap` bucket;
+  - whether Ubuntu's OpenJDK build patches `HashMap`;
+  - ART's intrinsics for `Math.cos` and `Math.atan2`, bionic's `cos` and `atan2` and their flags, and any change across
+    API 26 to 37 (not read: handoff);
+  - whether Android's `Math.cos` and `Math.atan2` give HotSpot's bits;
+  - whether a simulator test process can read the runner's disk (still open; step 4 avoids it).
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -1656,6 +1773,12 @@ ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, 
   - **The part 6 prompt's "Include whether multiply-add can be fused on arm64":** it cannot be in Kotlin code on
     `linuxArm64`, but it is in Kotlin/Native's own C++ runtime (the number printer). Its output still matched the JVM on all
     220,001 values printed.
+
+- **Part 7:**
+  - **Part 6's "To match on iOS, this one map has to iterate in `java.util.HashMap`'s order"** cannot be met in full. Where a
+    bucket holds nine or more nodes with equal hashes, the oracle's own order follows identity hashes.
+  - **Part 6's step 3 list said `_parseFile` was settled by reading `:439-446` and `:512-524`.** Part 7 re-read only
+    `:818-840`, `:855-868` and `BExpression.java:393-405`, which agree. The rest is part 6's reading, not repeated.
 
 ### Decided beyond scope
 
@@ -1724,4 +1847,14 @@ ports `CheapRuler` and `CheapAngleMeter`. The step's place in the order is I's, 
     compares.
   - **The handoff limit was passed** during step 2 (about 290k when step 2 was pushed, against about 200k). This session read
     the count late. It finished step 2, pushed, and handed off without writing steps 3 and 4.
+- **Part 7:**
+  - **One run beyond part 6's evidence** (`TreeBinOrder.java`). Step 3's claim about the oracle's order needed it. It
+    compiled the vendored BRouter tree into scratch.
+  - **Fetched from outside:** OpenJDK `jdk21u`'s `HashMap.java` at two tags, and two Android `libcore` files plus their
+    repository metadata. All are listed in `part7/sources.txt`.
+  - **Step 3 offers three designs for `hmap`, (i) to (iii), and a check on the oracle alone.** Neither is chosen.
+  - **Step 4 uses digests in source in place of expected files,** to avoid the open question of file access on the
+    simulator. That is a design choice for the planner.
+  - **The Android question was cut short at the planner's handoff,** after two files. It is marked partial, and the reads
+    that remain are listed in the handoff.
 

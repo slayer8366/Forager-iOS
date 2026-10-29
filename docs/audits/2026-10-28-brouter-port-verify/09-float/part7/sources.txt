@@ -6,3 +6,11 @@ https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.12.1-ga/src/java.base/
   sha256 71c8d82247c2736e9fbe3769f366e9bd250bc73ecf390749998e830201aaabf2
   identical to the jdk-21.0.12-ga copy (cmp)
   local JVM: java.runtime.version 21.0.12.1+1-1-24.04.4-Ubuntu (its src.zip is a dangling link, so upstream was read)
+
+## Android question (partial: two files read, then handoff at the planner's message, 05:01Z)
+libcore main at commit de876a01b29230b877c9f408348c38a90ee724a5 (committer time 2025-03-26, read from ?format=JSON on 2026-10-29)
+https://android.googlesource.com/platform/libcore/+/refs/heads/main/ojluni/src/main/java/java/lang/Math.java
+  read 2026-10-29T05:01:09Z, 144095 bytes, sha256 3ed2eacea132ac037d00ef0d7a5b0d38ece9c1a8e26adfbf56b909c73adbf0e2; identical (cmp) to the copy at the commit below
+Pinned reads (?format=TEXT, base64-decoded): date, bytes, sha256, file, URL
+2026-10-29T05:01:26Z 4043 e38f01b7429ca942c2882ae6e7c2e9b08bbac9939de1976b4790e77304463941 Math.c https://android.googlesource.com/platform/libcore/+/de876a01b29230b877c9f408348c38a90ee724a5/ojluni/src/main/native/Math.c
+2026-10-29T05:01:27Z 144095 3ed2eacea132ac037d00ef0d7a5b0d38ece9c1a8e26adfbf56b909c73adbf0e2 Math-at-commit.java https://android.googlesource.com/platform/libcore/+/de876a01b29230b877c9f408348c38a90ee724a5/ojluni/src/main/java/java/lang/Math.java
