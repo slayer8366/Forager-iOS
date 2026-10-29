@@ -218,6 +218,14 @@ committed here (ruling c).
 - `release-notes.md` is the release body.
 - Both rely on 4.2(d), since an `.rd5` file has no place for a notice. Sections beyond 4.2 were not examined, as in Phase 1.
 
+**CI on step 1's commits** [R: the runs, through the GitHub API]:
+- runs 40948343921 (`4da988d`), 40948581610 (`1df847c`) and 40948692469 (`91754bc`): each `success`, `jvm` and `ios-smoke`;
+- run 40949189161 (`4fd1ed9`): in progress when this was written.
+
+**These runs are not evidence for step 1.** Neither job reads a tile, the pin file or the notices; step 1 changed only
+`docs/` and `tools/` files that no build step uses. They would pass identically without step 1. Its evidence is the local
+logs above. CI first touches the tiles when a release URL exists and `tools/fetch-tiles.sh` is wired in.
+
 **Staged for the release, in scratch only:** `<scratch>/phase2/release-staging/` holds the six assets, 129,831,426 bytes in all
 [C]: the four tiles (hard links to the downloaded files, the same inodes), F0's copy, and `README.md`.
 
