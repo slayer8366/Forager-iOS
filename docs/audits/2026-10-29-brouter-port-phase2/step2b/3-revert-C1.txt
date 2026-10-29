@@ -1,0 +1,27 @@
+# HEAD 6c3de2d; tree clean before, outside this runner's folder: yes
+# saved copy: 1127aec55f237080
+# the edit (diff saved -> reverted):
+27c27
+< private const val C1 = 4.16666666666666019037e-02 /* 0x3FA55555, 0x5555554C */
+---
+> private val C1 = Double.fromBits(0x3FA555555555554DL) /* REVERT CHECK: one ulp up */
+# lines differing: 1
+# Step 2b revert check, local, 2026-10-29T23:27:00Z: MsunCos.kt C1 one ulp up; the msun classes
+# JDK: openjdk version "21.0.12.1" 2026-08-18; Gradle run with a local-only mirror init script (never committed)
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.msun.MsunAgainstCTest: tests 3, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAgainstCTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest.xml)
+TOTAL: tests 11, failures 3, errors 0, skipped 0 in 5 files
+
+# Each util test case: outcome | failure type | message (first line) | first frame in the port's main code
+FAIL MsunAgainstCTest.cosEqualsTheCBuildRowByRow[jvm] | java.lang.AssertionError | java.lang.AssertionError: 3 of 1800 rows expected:<[]> but was:<[row 502: port 3fe89a5a2f91abe4 C 3fe89a5a2f91abe3, row 1297: port 3fe89a5a2f91abe4 C 3fe89a5a2f91abe3, row 1318: port 3fe7d62c0f81771e C 3fe7d62c0f81771d]> | 
+FAIL MsunAgainstCTest.cosDiffersFromStrictMathAtTheResearchsThirteenRows[jvm] | java.lang.AssertionError | java.lang.AssertionError: expected:<[474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297, 1310, 1311, 1318]> but was:<[474, 488, 663, 675, 1046, 1053, 1079, 1295, 1310, 1311]> | 
+FAIL MsunCosTableTest.cosEqualsBionicAtEveryTableRow[jvm] | java.lang.AssertionError | java.lang.AssertionError: 3 of 1800 rows differ from bionic's C expected:<[]> but was:<[row 502: lat bfe63359bda29f4d port 3fe89a5a2f91abe4 C 3fe89a5a2f91abe3, row 1297: lat 3fe63359bda29f4d port 3fe89a5a2f91abe4 C 3fe89a5a2f91abe3, row 1318: lat 3fe75f9a6049a4d0 port 3fe7d62c0f81771e C 3fe7d62c0f81 | 
+
+# run-jvmtest exit: 0
+# restored from the saved copy; cmp saved vs file: identical
+# file vs HEAD (the forward change is committed): identical
+# C1 line after: 27:private const val C1 = 4.16666666666666019037e-02 /* 0x3FA55555, 0x5555554C */

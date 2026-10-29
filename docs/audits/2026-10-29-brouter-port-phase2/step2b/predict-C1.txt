@@ -1,0 +1,4 @@
+# Prediction for the revert check, computed 2026-10-29T23:27:00Z before it ran: bionic's k_cos.c with C1 = 0x1.555555555554dp-5 (one ulp up), built with the same flags by clang, run by tab.c and edges.c.
+table rows differing from the unedited C: 502 1297 1318
+edge lines differing: none
+rows differing from StrictMath under the edit: 474 488 663 675 1046 1053 1079 1295 1310 1311

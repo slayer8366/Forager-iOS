@@ -1,0 +1,59 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:msunReference UP-TO-DATE
+> Task :brouter:compileKotlinJvm
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:jvmMainClasses
+> Task :brouter:jvmJar
+> Task :brouter:compileTestKotlinJvm
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+
+> Task :brouter:jvmTest FAILED
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+MsunAgainstCTest[jvm] > atan2EqualsTheCBuildAndStrictMathPairByPair[jvm] PASSED
+
+MsunAgainstCTest[jvm] > cosEqualsTheCBuildRowByRow[jvm] FAILED
+    java.lang.AssertionError at MsunAgainstCTest.kt:18
+
+MsunAgainstCTest[jvm] > cosDiffersFromStrictMathAtTheResearchsThirteenRows[jvm] FAILED
+    java.lang.AssertionError at MsunAgainstCTest.kt:29
+
+MsunAtan2PairsTest[jvm] > atan2OverThePairsHashesAsBionicsDoes[jvm] PASSED
+
+MsunCosTableTest[jvm] > latitudesAreTheTables[jvm] PASSED
+
+MsunCosTableTest[jvm] > cosEqualsBionicAtEveryTableRow[jvm] FAILED
+    java.lang.AssertionError at MsunCosTableTest.kt:26
+
+MsunEdgesTest[jvm] > theRefusalIsNamedAndCarriesItsArgument[jvm] PASSED
+
+MsunEdgesTest[jvm] > cosEdges[jvm] PASSED
+
+MsunEdgesTest[jvm] > atan2Edges[jvm] PASSED
+
+MsunReferenceCommittedTest[jvm] > committedEdgesAreTheCBuilds[jvm] PASSED
+
+MsunReferenceCommittedTest[jvm] > committedCosRowsAreTheCBuilds[jvm] PASSED
+
+11 tests completed, 3 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 5s
+7 actionable tasks: 5 executed, 2 up-to-date
+gradle exit: 1
