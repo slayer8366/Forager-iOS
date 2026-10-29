@@ -1,0 +1,3 @@
+methods in sites.tsv: 72; classified: 72; missing: []; extra: []
+by class: {'D': 2, 'H': 6, 'M': 6, 'O': 17, 'P': 4, 'R': 30, 'Rp': 5, 'X': 2}
+R methods by kind: {'basic': 19, 'print': 1, 'parse': 2, 'table': 5, 'libm': 3}

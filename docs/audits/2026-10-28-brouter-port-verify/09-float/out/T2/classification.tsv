@@ -1,0 +1,73 @@
+method	class	kind	categories in sites.tsv	reason (J paths, Forager e2969abe4)
+BExpression.createAssignExpressionFromKeyValue	P	parse	boxed	profile: values become constants (BExpression.java:401); Forager passes one, use_dynamic_range
+BExpression.divide	R	basic	arith,cmp	profile evaluator, feeds every cost (BExpression.java:369-370)
+BExpression.evaluate	R	basic	arith,cmp	profile evaluator: add, multiply, compare (BExpression.java:272-310)
+BExpression.max	R	basic	cmp	profile evaluator (BExpression.java:361)
+BExpression.min	R	basic	cmp	profile evaluator (BExpression.java:365)
+BExpression.parseRaw	P	parse	boxed	profile number literals; a token that does not parse is "unknown expression", a failure (BExpression.java:233-238)
+BExpression.toString	M	print	fstr	debug text (BExpression.java:376)
+BExpression.tryCollapse	P	basic	cmp	constant folding at parse, comparisons with constants (BExpression.java:322-340)
+BExpressionContext._parseFile	H	-	hashit	profile: keys in map order (BExpressionContext.java:860-865); step 3
+BExpressionContext.addLookupValue	X	parse	arith,boxed,conv,math	every float site is in the unknown-value branch :572-696, which B row 14 makes "unsupported"
+BExpressionContext.getKeyValueDescription	R	print	arith,boxed,conv	Float.toString((val-1000)/100f) (:225); its text reaches a cost only through StdPath.java:98-130, bikeMode with consider_crossing (both profile settings), which reads one character; otherwise messages and postElevationCheck (elevations)
+BExpressionContext.getLookupValue	R	parse	arith,boxed,conv	tag values become profile inputs: Float.parseFloat of a lookup value name, or (val-1000)/100f (BExpressionContext.java:258-272)
+BExpressionContextWay.accessType	R	basic	cmp	compares way-context results with constants (BExpressionContextWay.java:118-125)
+BExpressionMetaData.readMetaData	H	-	hashit	only which context a failure names (part 5)
+CheapAngleMeter.calcAngle	R	table	arith,cmp,conv,math	cosangle feeds turncost (StdPath.java:89); the sign of angle feeds the crossing penalty (:98, :121)
+CheapAngleMeter.getAngle	R	libm	conv,math	atan2 and toDegrees (CheapAngleMeter.java:54), for WaypointMatcherImpl directionDiff
+CheapAngleMeter.getDifferenceFromDirection	R	basic	arith,cmp,math	(b2-b1) % 360.0 (fmod, exact), abs (CheapAngleMeter.java:69-72)
+CheapAngleMeter.normalize	R	basic	arith,cmp,conv	a - 360*(int)(a/360) (CheapAngleMeter.java:64-65)
+CheapRuler.calcKxKyFromILat	R	libm	arith,conv,math	Math.cos for the 1800-entry scale table (CheapRuler.java:37), read by every distance, angle and match
+CheapRuler.distance	R	table	arith,conv,math	sqrt(dlat*dlat + dlon*dlon) (CheapRuler.java:78); R through OsmNode.calcDistance, D through OsmPathElement.calcDistance
+Formatter.format1	M	basic	arith,conv	text formatting
+Formatter.getFormattedEnergy	M	basic	arith,conv	text formatting
+Formatter.getFormattedTime2	M	basic	arith,conv	text formatting
+MessageData.toString	M	print	fstr	message text (MessageData.java:77)
+NodesCache.close	H	-	hashit	closes files (part 5)
+NodesCache.matchWaypointsToNodes	R	basic	cmp	mwp.radius > RETRY_RANGE decides a second, wider preload for matching (NodesCache.java:298-300)
+OsmNode.calcDistance	R	table	conv,math	Math.round(CheapRuler.distance) (OsmNode.java:103): air distance for the open-set key and pruning (RoutingEngine.java:1854, 2230), catching range (:1637), outreach (OsmNodesMap.java:198)
+OsmNodesMap.collectOutreachers	H	-	hashit	memory-pressure path; step 3
+OsmPath.addAddionalPenalty	R	basic	arith,cmp,conv,math	the per-link cost: classifier differences (OsmPath.java:158-161), section and target costs (:306, :380), (int) casts (:166, :315, :384). Its one libm use, sin/cos at :282-283, is Rp: startDirectionValid needs forceUseStartDirection or fastPartialRecalc (RoutingEngine.java:1931)
+OsmPath.interpolateEle	R	basic	arith,conv	(short)(e1*(1-f) + e2*f) (OsmPath.java:392): elevation at a partial start or end link (:244, :255, :266), which feeds the elevation cost through delta_h (:296)
+OsmPathElement.calcDistance	D	table	conv,math	Math.round(CheapRuler.distance) (OsmPathElement.java:78), summed into track.distance (RoutingEngine.java:1512, :1522, :1565)
+OsmPathElement.getElev	O	basic	arith,conv	elevation in metres (OsmPathElement.java:44)
+OsmTrack.appendTrack	O	basic	arith,conv	time and energy offsets (OsmTrack.java:347-348, :384)
+OsmTrack.getTotalSeconds	O	basic	arith,conv	time (OsmTrack.java:426-427)
+OsmTrack.processVoiceHints	O	basic	conv	voice hints; no voice-hint class removes nodes or sets a cost (grep of VoiceHint*.java)
+OsmTrack.readBinary	X	basic	math	body after filename != null never runs for Forager (B row 4)
+RoutingContext.calcDistance	R	table	arith,boxed,cmp,conv,math	per-link distance for the cost (OsmPath.java:238, :263); with a waypoint in nogopoints it also computes the shortest-match point ilonshortest/ilatshortest (RoutingContext.java:504-523), the first and last route node
+RoutingContext.checkMatchedWaypointAgainstNogos	Rp	basic	boxed,cmp,conv	nogos only (RoutingContext.java:350-351)
+RoutingContext.cleanNogoList	Rp	basic	cmp,conv	nogos only (RoutingContext.java:324)
+RoutingContext.getKeyValueChecksum	H	-	hashit	order-free sum of hash codes (part 5)
+RoutingContext.getNogoChecksums	Rp	basic	arith,conv	nogo checksum for the profile cache key (RoutingContext.java:421)
+RoutingContext.readGlobalConfig	P	basic	arith,cmp,conv	profile globals: != 0.f switches and float-to-int/double conversions (RoutingContext.java:118-203)
+RoutingEngine._findTrack	R	basic	arith,cmp,conv,fstr	open-set key cost + (int)(airdistance*airDistanceCostFactor) (RoutingEngine.java:1994, :2022) and the pruning bound (:2234); :1896 is a log line, :2193 a voice-hint detour
+RoutingEngine.addToOpenset	R	basic	arith,conv	open-set key (RoutingEngine.java:2265)
+RoutingEngine.compileTrack	O	basic	arith,conv	energy and time (RoutingEngine.java:2282, :2298-2299)
+RoutingEngine.doRouting	M	print	arith,conv,fstr	log line (RoutingEngine.java:317)
+RoutingEngine.getStartPath	R	basic	cmp	endPos.radius < 1.5 and wp.radius < minradius choose the start link (RoutingEngine.java:1825, :1855)
+RoutingEngine.matchWaypointsToNodes	R	basic	cmp,conv	mwp.radius >= waypointCatchingRange sends a waypoint to the dynamic-range second pass (RoutingEngine.java:1621), which Forager turns on with use_dynamic_range; :1637 needs buildBeelineOnRange
+RoutingEngine.postElevationCheck	O	parse	arith,boxed,cmp,conv	elevations only: setSElev (RoutingEngine.java:785-800); Double.parseDouble of incline tags (:760)
+RoutingEngine.recalcTrack	D	basic	arith,cmp,conv,hashit,math	track.distance is the sum of int calcDistance values (RoutingEngine.java:1512-1565); the float arithmetic here is time, energy, ascend and turn angles (O)
+RoutingEngine.searchRoutedTrack	R	basic	cmp	a negative pass coefficient skips a pass (RoutingEngine.java:1743)
+RoutingEngine.snapPathConnection	Rp	libm	arith,cmp,conv,math	via points only: returns false unless the waypoint name starts with via or rt (RoutingEngine.java:1266-1267); Forager names its two from and to (RoutingParamCollector.java:48-50)
+RoutingEngine.snapRoundaboutConnection	Rp	basic	arith,cmp,conv	called only from snapPathConnection (RoutingEngine.java:1356)
+RoutingParamCollector.readPosition	R	parse	arith,boxed,conv	Double.parseDouble (:90), then (int)((lon+180.)*1000000.+0.5) (:96-97): the waypoints
+RoutingParamCollector.setParams	H	-	hashit	caller map order (part 5)
+StdPath.calcIncline	O	libm	arith,cmp,conv,math	exp, kinematic time and energy, detailMode only (StdPath.java:283, :292)
+StdPath.computeKinematic	O	libm	arith,cmp,conv,math	exp, time and energy (StdPath.java:291-320)
+StdPath.getTotalEnergy	O	basic	conv	energy
+StdPath.getTotalTime	O	basic	conv	time
+StdPath.processTargetNode	R	basic	cmp,conv	node access and initialcost >= 1000000 (StdPath.java:237-241)
+StdPath.processWaySection	R	basic	arith,cmp,conv,math	the way-section cost: turncost (int)((1.-cosangle)*turncostbase+0.2) (StdPath.java:89), elevation buffers (:153-219), costfactor blend (:222), dist*costfactor+0.5f (:228)
+StdPath.solveCubic	O	basic	arith,cmp	kinematic speed
+VoiceHint.calcCommand	O	basic	cmp,conv	voice hints
+VoiceHint.is180DegAngle	O	basic	cmp,math	voice hints
+VoiceHintProcessor.checkStraightHold	O	basic	cmp,math	voice hints
+VoiceHintProcessor.postProcess	O	basic	arith,cmp,conv,math	voice hints
+VoiceHintProcessor.process	O	basic	arith,cmp,conv,math	voice hints
+VoiceHintProcessor.sumNonConsumedWithinCatchingRange	O	basic	arith,cmp,conv	voice hints
+WaypointMatcherImpl$1.compare	R	basic	boxed	orders candidate ways by radius, then directionDiff (WaypointMatcherImpl.java:66-73); wayNearest.get(0) becomes the match (:229-235)
+WaypointMatcherImpl.<init>	R	libm	arith,cmp	directionToNext from CheapAngleMeter.getDirection, atan2 (WaypointMatcherImpl.java:52, :61), the tie-break above
+WaypointMatcherImpl.checkSegment	R	table	arith,cmp,conv,math	radius and crosspoint of each waypoint (WaypointMatcherImpl.java:80-150); crosspoint is (int)(xm/dlon2m + wp.ilon), the first and last route node
+WaypointMatcherImpl.hasMatch	R	basic	cmp	mwp.radius < maxDistance (WaypointMatcherImpl.java:245)

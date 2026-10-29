@@ -910,6 +910,62 @@ Its first run reported no float printed into a string, which was the script's bl
   test. One cheap test the list suggests, not designed or run: the latitude scale table has 1,800 entries computed from fixed
   inputs, so its bits can be written on the JVM and compared in full on the simulator.
 
+#### Part 6, step 1: which sites can choose between routes
+
+Written by the seventh session (Hazel, part 6, 2026-10-29). Every method in `09-float/out/T2/sites.tsv` is classified by hand
+from its source, with the reason and line, in `09-float/out/T2/classification.tsv` **[R]**. `09-float/tools/classify.py`
+writes the table and checks it against `sites.tsv`: 72 of 72 methods classified, none missing, none extra **[C:
+`out/T2/classification-summary.txt`]**. The 72 are part 5's 68 floating-point methods, counted by descriptor (66 names:
+`getStartPath` and `readPosition` each have two overloads), plus the 6 that only iterate a hash map.
+
+| Class | Meaning | Methods |
+|---|---|---|
+| **R** | can choose between routes, or change the cost, the node list or the failure kind, on Forager's calls with some profile ("Any profile", RECORD -8) | 30 |
+| **Rp** | the same, but only with a request parameter Forager never passes: a heading, nogos, via points | 5 |
+| **P** | parse or setup: turns profile text into the numbers R sites use | 4 |
+| **D** | output Forager reads: `track.distance` (`BRouterTrailRouter.kt:115`) | 2 |
+| **O** | output Forager does not read: time, energy, elevations, ascend, turn angles, voice hints | 17 |
+| **M** | messages, logs, debug text | 6 |
+| **H** | hash iteration only (step 3) | 6 |
+| **X** | a branch the port fails as "unsupported" or never runs (B rows 4, 14) | 2 |
+
+**What the 30 R methods do with floating point [R].** Of the 30, 19 use only IEEE basic operations (add, subtract,
+multiply, divide, `sqrt`, compare, conversions). 5 read CheapRuler's scale table, 3 call a library function, 2 parse text
+and 1 prints a float. They form five chains:
+- **The scale table.** `CheapRuler.calcKxKyFromILat` builds 1,800 `(kx, ky)` pairs with `Math.cos` at class load
+  (`CheapRuler.java:20-47`). Every distance on the path multiplies by them:
+  - the per-link cost distance (`RoutingContext.calcDistance`, `OsmPath.java:238`);
+  - the air distance in the open-set key and the pruning bound (`OsmNode.calcDistance`, `RoutingEngine.java:1854`, `:1994`,
+    `:2230-2234`);
+  - waypoint matching (`WaypointMatcherImpl.checkSegment`);
+  - the turn angle (`CheapAngleMeter.calcAngle` → `StdPath.java:89`).
+- **Waypoint matching** picks each waypoint's way and its crosspoint, which becomes the route's first or last node:
+  - radius tests (`WaypointMatcherImpl.java:117-135`, `NodesCache.java:298-300`, `RoutingEngine.java:1621`, `:1825`, `:1855`);
+  - the crosspoint, truncated to int (`WaypointMatcherImpl.java:145-146`; `RoutingContext.java:504-523`);
+  - **the tie-break between equally near ways,** by `directionDiff` (comparator, `WaypointMatcherImpl.java:66-73`, then
+    `wayNearest.get(0)`, `:229-235`). `directionDiff` comes from `Math.atan2` through `CheapAngleMeter.getDirection`
+    (`:52`, `:61`, `:189`, `:211`). Two ways meeting at the node nearest a waypoint have exactly equal radii, so this
+    tie-break is reached whenever a waypoint's nearest point is a junction **[I]**.
+- **The cost formula.** `OsmPath.addAddionalPenalty`, `StdPath.processWaySection` and `processTargetNode`,
+  `OsmPath.interpolateEle`, and the profile evaluator (`BExpression.evaluate` and friends): float arithmetic cast to int at
+  `OsmPath.java:166`, `:315`, `:384`.
+- **The search.** The open-set key `cost + (int)(airdistance * airDistanceCostFactor)` (`RoutingEngine.java:1994`, `:2022`,
+  `:2265`); the pruning bound `maxTotalCost * lastAirDistanceCostFactor + addDiff` (`:2234`); pass selection (`:1743`).
+- **Text to numbers.** The waypoints (`RoutingParamCollector.java:90`, `:96-97`), lookup values (`getLookupValue`), profile
+  literals and `profile:` values (P). One float is printed where a cost can read it: `getKeyValueDescription` (`:225`), used
+  by the crossing penalty (`StdPath.java:98-130`), which needs `bikeMode` and `consider_crossing`, both profile settings,
+  and reads one character.
+
+**What does not choose [R].**
+- **Time, energy and voice hints (O)** never feed a cost or the node list. `computeKinematic` returns early outside
+  `detailMode` (`StdPath.java:292`). No voice-hint class removes a node or sets a cost (grep of `VoiceHint*.java`).
+- **The `exp` calls** (`StdPath.java:283`, `:310`) are O.
+- **The `sin`/`cos` at `OsmPath.java:282-283`** are Rp: they need `startDirectionValid` (`RoutingEngine.java:1931`).
+- **The `atan2` in `snapPathConnection`** (`RoutingEngine.java:1326-1327`) is Rp: that method returns at once unless a
+  waypoint is named `via…` or `rt…` (`:1266-1267`), and Forager's two are `from` and `to` (`RoutingParamCollector.java:48-50`).
+- **Of the library functions on the path, two reach a route on Forager's calls: `cos` (the table) and `atan2` (the
+  tie-break).** `track.distance` (D) depends on the table too.
+
 ### Not answered yet (parts 6 and 7, in RECORD -11's order)
 
 - H's floating-point classification and its simulator test plan (above);
