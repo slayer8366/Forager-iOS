@@ -51,8 +51,8 @@ profile is written here when it is named. Every helper's prompt opens with its n
 | Name | Role | Model | Profile |
 |---|---|---|---|
 | Cedar Datum | planner: plans, asks, records, relays | the session's own | this file |
-| (named on first run) | primary coder | Opus | to follow |
-| (named on first run) | secondary coder, when the primary is busy | Opus | to follow |
+| Linden Caliper | primary coder | Opus | `coder-profile.md` |
+| (named on first run) | secondary coder, when the primary is busy | Opus | `coder-profile.md` |
 | Madrone Gauge | researcher: read-only, licences quoted at source | Fable | `researcher-profile.md` |
 | (named on first run) | independent reviewer | Fable | to follow |
 | (named on first run) | UX auditor | Fable | to follow |

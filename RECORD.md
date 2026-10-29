@@ -1118,3 +1118,45 @@ watcher read 183,613 tokens at 20:28:38Z, after the last push. The harness's fin
   - the README and release notes in `tools/tile-release/` read in full: OpenStreetMap attribution, the ODbL 1.0 URI
     and the copyright page, and each file's source. The staged README is byte-identical to the committed one.
 **Notes:** Written by Cedar Datum by hand. Next free ID -28.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-28
+**Timestamp:** 2026-10-29T21:17:36Z
+**Continues:** 2026-10-28-3, 2026-10-28-25, 2026-10-28-27
+**Title:** The tile release goes ahead; Phase 2 continues through the port with built-in stops; the primary coder is
+Linden Caliper (owner); Amendment 3
+**Decision:** the owner chose, from three questions asked together after step 1:
+- **The release:** "Yes, upload these (Recommended)". The option read: "A session creates a draft release under tag
+  'brouter-tiles-2026-10-29', uploads the 5 files and the README, and downloads each one back to check it against its
+  fingerprint. Only then does it publish. A failed upload leaves nothing public. If the session's network won't pass
+  the 114 MB file, it stops and reports."
+  - Rejected: "Yes, but recapture first"; "Not yet".
+  - This is the owner's word on the public action RECORD -12 left open.
+- **The rest of Phase 2:** "Continue, built-in stops (Recommended)". The option read: "Runs in Hazel's order, one
+  checked session per step. It stops for you if the Java engine proves unstable on more than 5% of any test set, for
+  anything public, on a wrong premise, or after two failed fixes. I'll report at each milestone: the Java engine's own
+  runs, then each package, the full JVM run, the iPhone simulator run and the timing."
+  - Rejected: "Only the Java runs, then pause"; "Pause after the release".
+  - The question gave the cost as "3 to 6 million more tokens over several days", estimated, not measured.
+- **The primary coder's name:** "Linden Caliper (Recommended)". Rejected: Aspen Tally, Rowan Tracewell.
+  - Profile: `docs/process/coder-profile.md`, added to the team table.
+
+**Dispatch:** `prompts/preserved/2026-10-28-01-brouter-port-amendment-3.md`.
+- **Part A:** the release exactly as ruled. Draft, upload, read back against the pins, publish, read back
+  anonymously; then the pinned-tile fetch wired into the build.
+- **Part B:** steps 1b to 12 in item I's order, changed by -24's rulings:
+  - `cos` and `atan2` from bionic's msun, ported to common Kotlin;
+  - `hmap` (i);
+  - via points left out;
+  - flags at 25%.
+- **Milestone reports** at 1b, each package, 9, 10, 11 and 12.
+
+**The planner's calls:**
+- the tag targets `91754bc`. Checked at 21:17Z: the pin file and the notices are unchanged from there to
+  `0a9999a`, and the six staged files still match their pins after the worker restart.
+- the oracle's JDK is CI's Temurin 21.0.13+9, after step 1b checks its no-intrinsic `cos` table against Phase 1's
+  OpenJDK 21.0.12.1 measurement. A difference is a stop.
+**Notes:** Written by Cedar Datum by hand. The answers came after a worker restart; the time is the recording time.
+Next free ID -29.
