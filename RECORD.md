@@ -1194,3 +1194,31 @@ first stop.
 **The planner's call (technical):** step 2a starts now. Item I lets steps 2 to 4 run while the release waits (line
 1692), and they need no tile. Step 1b and steps 5 on wait for the release.
 **Notes:** Written by Cedar Datum by hand. Next free ID -30.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-30
+**Timestamp:** 2026-10-29T22:00:52Z
+**Continues:** 2026-10-28-3, 2026-10-28-28, 2026-10-28-29
+**Title:** The tile release is made by a workflow the owner runs (owner); Amendment 4
+**Decision:** asked how the release should be made after the session's proxy refused (-29), the owner chose "A button
+for you (Recommended)". The option read: "I add one small workflow file to main. Main changes only on your word, and
+choosing this is that word, for this one file. You open Forager-iOS's Actions page on GitHub and press 'Run workflow'.
+It downloads fresh copies from brouter.de, checks each in BRouter 1.7.10 the same way Linden did, and publishes the
+release with the attribution only if all pass. A session then pins the published files. These are new files, not
+today's. Not yet known: whether the repository lets workflows create releases; the first run shows it."
+- **Rejected:**
+  - "Let a push trigger it", which routes around this session type's refusal to create releases;
+  - "Hold the release".
+- **The owner's word on `main` covers one file,** `.github/workflows/publish-tiles.yml`, copied unchanged from
+  `brouter-port` after the planner reads it.
+- **Linden's checked copies of 20:09Z are superseded.** The release will hold the workflow's capture. Their pins on
+  `brouter-port` are replaced by the release's.
+- **Linden's final Part A message** was read back from its log after the container restart. It agrees with -29: no
+  retry, no other route tried, the tree clean at `469b33b`.
+- **Correction to -29,** which said step 2a "starts now": it did not start. The container restarted, and the release
+  question came first. Step 2a follows Amendment 4's workflow session.
+
+**Dispatch-file:** prompts/preserved/2026-10-28-01-brouter-port-amendment-4.md
+**Notes:** Written by Cedar Datum by hand. Next free ID -31.
