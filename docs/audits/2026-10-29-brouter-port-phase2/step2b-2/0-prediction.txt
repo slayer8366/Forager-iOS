@@ -1,0 +1,13 @@
+# Step 2b, second part: the mechanism prediction, written before any of this step's code (2026-10-29, Linden Caliper).
+# Base: brouter-port at b7543f3, equal to origin/brouter-port at the start (git status -sb).
+1. CheapRuler.calcKxKyFromILat is IEEE +, -, * in the Java source's order (CheapRuler.java:35-49, read). Fed the oracle
+   JVM's own Math.cos, the port's table equals the oracle's SCALE_CACHE bit for bit at all 1,800 rows.
+2. With the oracle's table and Math.atan2 injected (the logic run), distance, calcAngle, cosAngle, getAngle,
+   getDirection, normalize and getDifferenceFromDirection equal the oracle's bit for bit on every input tried.
+3. The production table (msunCos) differs from the oracle's in cos at exactly the 13 known rows (474 488 502 663 675
+   1046 1053 1079 1295 1297 1310 1311 1318), because under -XX:-UseLibmIntrinsic the oracle's Math.cos is fdlibm's
+   (Phase 1 E6 [C]) and msun differs from StrictMath there (RECORD -35). kx/ky differ at a subset of those 13 only.
+4. Production getAngle equals the oracle's at every pair (msun atan2 = StrictMath at the 299,974 pairs, RECORD -35;
+   the oracle's Math.atan2 is StrictMath's under the flag [I, checked by the test]).
+5. If the JVM ran WITHOUT the flag, Math.cos would differ from StrictMath.cos at some of the 1,800 rows (Phase 1 part 6
+   [C]: 60 rows on one HotSpot), so the flag test's behavioural half would fail. To be shown by a scratch run.

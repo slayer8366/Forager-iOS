@@ -38,8 +38,9 @@ jobs:
           name: jvm-test-results
           path: brouter/build/test-results/
 
-  # Amendment 2's smoke job, ahead of item G's full simulator job (step 2b): one commonTest test on the iOS simulator,
-  # to answer whether Kotlin 2.3.10 links and runs there with Xcode 26.0.1 before the port starts.
+  # Item G's simulator job, joined at step 2b as item I says (Phase 1 report; dispatch 2026-10-28-01, Amendment 3 Part B).
+  # It grew from Amendment 2's smoke job and keeps that job's id, so earlier runs read the same: all of commonTest on the
+  # iOS simulator, H step 4's platform-invariants test among it. Tiles are fetched from the step that first reads one.
   ios-smoke:
     runs-on: macos-26 # arm64; not macos-latest, which moves
     timeout-minutes: 45
@@ -62,6 +63,20 @@ jobs:
         run: |
           python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
           for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # H step 4: the JVM half on HotSpot for arm64, recorded and never failing the job. It answers whether arm64 HotSpot
+      # with -XX:-UseLibmIntrinsic builds the same table and angles as the oracle's x86_64 JVM.
+      - name: Recorded, not gating - the JVM half on arm64 HotSpot (H step 4)
+        if: always()
+        continue-on-error: true
+        run: >-
+          ./gradlew --no-daemon :brouter:jvmTest
+          --tests 'com.zynergylabs.forager.brouter.util.CheapLogicRunTest'
+          --tests 'com.zynergylabs.forager.brouter.util.CheapProductionRecordTest'
+          --tests 'com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest'
+      - name: Counts for the recorded arm64 JVM step
+        if: always()
+        continue-on-error: true
+        run: python3 tools/junit-counts.py brouter/build/test-results/jvmTest
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

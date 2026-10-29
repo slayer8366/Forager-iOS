@@ -1,0 +1,5 @@
+# Scratch run (prediction 5), 2026-10-29T23:41:48Z: Rows.java, the 1,800 table latitudes, Math.cos vs StrictMath.cos
+## default flags:
+21.0.12.1+1-1-24.04.4-Ubuntu amd64: Math.cos != StrictMath.cos at 60 of 1800 rows; first: 71 102 105 129 161 
+## -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic:
+21.0.12.1+1-1-24.04.4-Ubuntu amd64: Math.cos != StrictMath.cos at 0 of 1800 rows; first: 

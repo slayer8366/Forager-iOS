@@ -1,0 +1,28 @@
+# Step 2b second part, tests first with the generated constants, local, 2026-10-29T23:42:24Z: stubs; the new classes
+# JDK: openjdk version "21.0.12.1" 2026-08-18; Gradle run with a local-only mirror init script (never committed)
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 4, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: tests 2, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionRecordTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 5, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml)
+TOTAL: tests 17, failures 13, errors 0, skipped 0 in 5 files
+
+# Each util test case: outcome | failure type | message (first line) | first frame in the port's main code
+FAIL CheapLogicRunTest.calcAngleEqualsTheOraclesWithItsTable[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapAngleMeter.calcAngle(CheapAngleMeter.kt:8)
+FAIL CheapLogicRunTest.portTableArithmeticGivesTheOraclesTableFromTheOraclesCos[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapRuler.buildScaleTable(CheapRuler.kt:8)
+PASS CheapLogicRunTest.theJvmRunsWithLibmIntrinsicsOff[jvm]
+FAIL CheapLogicRunTest.distanceEqualsTheOraclesWithItsTable[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapRuler.distance(CheapRuler.kt:14)
+FAIL CheapLogicRunTest.angleFunctionsEqualTheOracles[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapAngleMeter$Companion.getAngle(CheapAngleMeter.kt:11)
+FAIL CheapProductionRecordTest.productionAnglesEqualTheOraclesAtEveryPair[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapAngleMeter$Companion.getDirection(CheapAngleMeter.kt:13)
+FAIL CheapProductionRecordTest.productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b: the table from msunCos | at com.zynergylabs.forager.brouter.util.MsunLibm.scales(LibmSeam.kt:24)
+FAIL CheapProductionTableTest.scalesAreLookedUpByIlatOver100000AsJavaDoes[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b: the table from msunCos | at com.zynergylabs.forager.brouter.util.MsunLibm.scales(LibmSeam.kt:24)
+FAIL CheapProductionTableTest.productionTableIsMsunsAtEveryRow[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapRuler.calcKxKyFromILat(CheapRuler.kt:10)
+PASS PlatformInvariantsExpectedTest.tableConstantsAreMsunsCosThroughTheOraclesArithmetic[jvm]
+PASS PlatformInvariantsExpectedTest.angleConstantsAreTheOraclesOwn[jvm]
+FAIL PlatformInvariantsTest.remainderIsJavas[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapAngleMeter$Companion.getDifferenceFromDirection(CheapAngleMeter.kt:17)
+FAIL PlatformInvariantsTest.doubleToIntIsJavas[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapAngleMeter$Companion.normalize(CheapAngleMeter.kt:15)
+FAIL PlatformInvariantsTest.productionAnglesMatchTheJvmDigests[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapAngleMeter$Companion.getAngle(CheapAngleMeter.kt:11)
+PASS PlatformInvariantsTest.multiplyThenAddIsNeverFused[jvm]
+FAIL PlatformInvariantsTest.oneUlpInOneRowChangesItsChunksDigest[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapRuler.calcKxKyFromILat(CheapRuler.kt:10)
+FAIL PlatformInvariantsTest.productionTableMatchesTheJvmDigests[jvm] | kotlin.NotImplementedError | kotlin.NotImplementedError: An operation is not implemented: step 2b | at com.zynergylabs.forager.brouter.util.CheapRuler.calcKxKyFromILat(CheapRuler.kt:10)
