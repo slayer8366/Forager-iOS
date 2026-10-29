@@ -692,6 +692,300 @@ Both options run on the same test JVM, so the last does not separate them.
 **Input for E, not a choice:** the zip's 26 profiles are pinned by the same SHA-256. Under "Any profile" (-8) they are
 a ready source of profiles that switch on turn restrictions, bike mode and the other T2 features.
 
+### E. The differential tests (part 8: a design, fixed before any result is read)
+
+Written by the ninth session on this dispatch (Hazel, part 8, 2026-10-29). **A design.** No case was routed and no tile was
+downloaded. The facts the design rests on were computed in `10-tests/`: which scale-table rows differ, which profiles switch on
+which features, and the sample-size arithmetic. Bases: Forager `pre-main` is still `d100a4776` (05:10Z), so no premise check is
+needed **[C: `10-tests/00-bases-part8.txt`]**.
+
+**Fixed before data.** Every choice marked **[FBD]** is fixed at this commit. In Phase 2 one changes only by a commit that says
+why, made before any port result exists for the cases it touches (the dispatch: "Fix choices before data"). Where a choice
+waits on an owner ruling (part 6's (a) to (c), part 7's (i) to (iii)), each branch is written and none is chosen. Every **[FBD]**
+choice is also **[I]**: a design, not a measurement.
+
+#### E1. One case, and what "identical" compares
+
+**A case [FBD]** is:
+- the tiles in the segment folder;
+- the start and the end (two waypoints, as Forager sends);
+- the profile, and the params map;
+- the time limit, a cancel plan, and `memoryclass`.
+
+Both engines get Forager's call, as part 1's `ForagerCalls.java` and D's step 4 do: `getWayPointList("lon,lat|lon,lat")`;
+`setParams` with `alternativeidx=0` and `profile:use_dynamic_range=0`; `quite = true`; `doRun(maxRunningTime)`; `terminate()`
+(`BRouterTrailRouter.kt:146-174`) **[R]**.
+
+**The outcome compared [FBD]:**
+
+| Field | Read from, on the oracle | Compared |
+|---|---|---|
+| kind | `getErrorMessage()`: null is a route; otherwise its family (below) | exactly |
+| node list | `track.nodes`, each `(ilon, ilat)`, in order | exactly: the length and every pair |
+| cost | `OsmTrack.cost` (`OsmTrack.java:393`) | exactly |
+| distance | `OsmTrack.distance` (`:390`), which Forager reads (`BRouterTrailRouter.kt:115`) | exactly |
+| message | the engine's string | exactly, except the two timing families |
+
+- **Distance is added to the dispatch's three** (node list, cost, failure kind), because Forager reads it (premise 3's
+  correction). A call beyond the dispatch.
+- **Recorded, not asserted:** elevations, ascent, time, energy and voice hints. Forager reads none of them; part 6 classed them
+  O. A difference there is reported as a finding.
+- **C's sketched surface has no cost.** `RouteOutcome.Found` carries nodes and distance only. The tests read the cost through
+  an `internal` accessor, which `jvmTest` and `commonTest` can see in the same module **[I]**. A finding for C, not a change to it.
+
+**Failure kinds, by family [FBD].** Lines are `RoutingEngine.java` unless named **[R]**.
+
+| Family | Thrown at | Forager's name for it (`BRouterFailures.kt:18-49`) | Compared |
+|---|---|---|---|
+| `from-position not mapped…`, `to-position not mapped…` | `:1629` | EndOutsideData | exactly |
+| `start island detected for section N`, `target island…` | `:958`, `:963` | NoPath | exactly |
+| `no track found`, `no track found at pass=N` | `:477`, `:1771`, `:1775` | NoPath | exactly |
+| `datafile … not found`, `segment directory … does not exist` | `NodesCache` | DataMissing | exactly |
+| `file of size …`, `top index checksum error`, and the rest of Forager's list | `PhysicalFile`, `OsmFile` | DataCorrupt | exactly |
+| `memory limit reached` | `:2028` | EngineFailed | exactly |
+| `<operation> timeout after N seconds` | `:1982` | EngineFailed | **family only**; the operation and N are recorded |
+| `operation killed by thread-priority-watchdog after N seconds` | `:1976` | EngineFailed | **family only**; N is recorded |
+| anything else | `:812` | EngineFailed | exactly, and listed as a finding |
+
+The timing families' N and operation depend on the wall clock (`:1976`, `:1981`), so no exact string is stable **[R][I]**.
+
+**The stored form [FBD].** For each case: the kind, the node count, the cost, the distance, and a 64-bit FNV-1a digest of the
+tuple's bits (part 7 step 4's digest, integer-only).
+- **No coordinates are committed.** So the expected values add no OpenStreetMap data to the repository **[I]**.
+- **On the JVM the oracle runs live beside the port** (D), and its result is also checked against the stored digest. A moved
+  oracle (another JDK, another jar) then shows as an oracle failure, not a port failure.
+- **iOS compares against the stored digests,** since no oracle runs there.
+- **On a mismatch,** the JVM test prints both node lists to its log.
+- **The expensive runs are not per push [FBD].** E3's extra oracle runs belong to a task run when expected values are written or
+  rewritten. How long any of it takes is K's (part 9) **[?]**.
+
+#### E2. Which Java the oracle is
+
+- **HotSpot, one pinned build, on x86_64 [FBD].** The expected values are written by, and valid for, one JDK, whose vendor, exact
+  version and `os.arch` head the stored file. The `jvm` job (G) runs that JDK. Which vendor's build is pinned is for Phase 2 with
+  G's workflow. Parts 6 and 7 and this part ran Ubuntu's OpenJDK 21.0.12.1 **[C]**.
+- **What E compares:** the port against the unmodified 1.7.10 jar (D) in the same HotSpot process. So E can prove "the port
+  routes as the Java engine does on this HotSpot", and nothing wider.
+- **What E cannot speak for:**
+  - **Forager's Android app today.** It runs the Java engine on Android's runtime, whose `Math.cos` and `Math.atan2` return C's
+    `cos` and `atan2` (part 7). Whether they give HotSpot's bits is open and is not settled here. E's results say nothing about it,
+    either way.
+  - **HotSpot on another CPU.** The `macos-26` runner's HotSpot is arm64. Part 7's step 4 records its table without failing;
+    E's expected values are not claimed there.
+  - **HotSpot of another version.** `Math.cos` is an intrinsic, not `StrictMath`: on this HotSpot the two differ at 60 table rows
+    (part 6) **[C]**. A JDK update can move it.
+- **A HotSpot fact E uses [C: `10-tests/logs/table-run.log`, `rows-nointrinsic-vs-strict.txt`].** With
+  `-XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic`, this HotSpot's `Math.cos` builds the same 1,800-row table as
+  `StrictMath.cos`, bit for bit. `-Xint` gives the default table. Shown for the table only; what else the flag changes was not
+  checked **[?]**. E uses it under (c) (E6).
+
+#### E3. Does the oracle agree with itself? (before any expected value is fixed)
+
+Two things can make the oracle's answer depend on more than its input:
+- **`hmap`'s order** follows identity hashes where nine or more nodes with one `ilon + ilat` share a tree bucket (part 7);
+- **the profile cache evicts by the clock** (`ProfileCache.java:114`, `:122`) **[R]**. Whether a reparsed profile can route
+  differently from a cached one was not read **[?]**.
+
+**So each case runs under four regimes before its expected value is fixed [FBD]:**
+1. **R1, alone:** a fresh JVM, this case only, on a new thread. **Its outcome is the expected value.**
+2. **R2, repeated:** in R1's JVM, the same case again at once, on another new thread.
+3. **R3, in the suite:** one JVM running the whole case list in a fixed shuffled order (the seed in the test source), on one
+   thread.
+4. **R4, perturbed:** a fresh JVM, after asking `System.identityHashCode` of 997 fresh objects on the run's thread.
+
+**What is compared:** the outcome tuple, and the oracle's log of each collection: "collected, nodes/paths before=… after=…"
+(`RoutingEngine.java:2025`) and "memory limit reached, enabled memory panic mode" (`:2031`).
+- **The log needs no change to the jar:** a `debug.txt` in the folder above the profile folder switches it on (`:111-121`) **[R]**.
+- **What the log adds is string building only,** at the lines read (`:906`, `:913-921`, `:943`, `:1809`; `cacheStats`,
+  `formatStatus`) **[R]**. Even so, R1 runs without `debug.txt`, and a fifth run with it must give R1's tuple. Otherwise the log
+  does not describe the expected-value run.
+- **A sixth run under JaCoCo's agent** on the jar records which lines each case reached: the reach evidence in E4. It too must give
+  R1's tuple.
+
+**A case is stable** when all six runs agree on the tuple, and R1 to R4 on the collection counts.
+- **Unstable cases** are counted per stratum and named. They are kept out of every exact assertion, and compared on kind only
+  where all six runs agree on the kind.
+- **A stop for Phase 2 [FBD]:** if more than 5% of any stratum is unstable, stop and report. The comparison is not shrunk to fit.
+
+**A positive control.** In each regime the harness also builds part 7's twelve-node equal-hash map
+(`09-float/part7/TreeBinOrder.java`) and records its order. R1 and R4 must give different orders (part 7 saw five orders in five
+builds). If they do not, the regimes do not move identity hashes, and E3 has not been run.
+
+#### E4. The inputs
+
+**Tiles [FBD],** chosen from part 4's listing (`07-tiles/logs/segments4-index-0354Z.tsv`). The sizes are the listing's at 03:54Z;
+the bytes captured in Phase 2 will differ (F).
+
+| Tile | Bytes (listing) | Why it is in the sample |
+|---|---|---|
+| `W75_N40.rd5` | 119,750,873 | Forager's fixture square (premise 7). Dense enough (the New York area) for searches past 42,100 nodes, with rural trail country for the hiking profile **[I]**. 8 of the 54 rows where `Math.cos` and `StrictMath.cos` give different `kx` or `ky` lie in it, between 40.6° and 44.8° **[C: `rows-math-vs-strict.txt`]**. It holds 1° lines. |
+| `W75_N35.rd5` | 3,571,019 | The 5° file line at 40°N, with New Jersey on both sides between 75°W and 74°W **[I: geography, not read from the tile]**. Two more of the 54 rows (39.2°, 39.7°). |
+| `W70_N40.rd5` | 5,292,557 | The 5° file line at 70°W, crossed by roads in Maine and on Cape Cod **[I: geography]**. |
+| `E170_S50.rd5` | 1,061,589 | The `E` and `S` branches of the tile name (`NodesCache.java:348-355`) **[R]**, and one of the 54 rows (−45.9°, Dunedin **[I]**). Small, for the fast cases. |
+| Forager's sparse `W75_N40.rd5` | 152,665 | Stratum F0: Forager's own two routes. SHA-256 `ff6d9d8e…` (premise 7). |
+
+- **About 129.8 MB in all** **[C: the sum of the listing's sizes]**, every file far under a release asset's 2 GiB (F).
+- **F0's fixture becomes a release asset too,** copied from Forager's test resources at its SHA-256, with its ODbL notice
+  (`app/src/test/resources/routing/README.md`) **[R]**. A call beyond the dispatch.
+- **Whether 1.7.10 reads today's brouter.de tiles is still unknown** (part 4). Each tile is loaded in the oracle at capture. One
+  that fails is replaced by the listing tile nearest in size in the same tile row, recorded before any port result.
+- **Not a criterion:** glibc's differing rows. They predict nothing about Apple's (part 6), and Forager-iOS has no Linux target.
+  Of part 6's 8 glibc rows only 6 change `kx` or `ky`; rows 128 and 1671 change `cos` alone **[C: `rows-math-vs-native-x64.txt`]**.
+  The handoff's "rows 128, 253, 261, 431 and four more" therefore overcounts by two for routing.
+
+**Profiles [FBD]: all 26 in the release zip, plus one of E's own.**
+- **Why all 26:** "Any profile" (RECORD -8), and they are pinned by the zip's SHA-256 (D). Forager's `hiking-mountain.brf` is one
+  of them (the same git blob, D). What they switch on **[C: `10-tests/logs/profile-features.tsv`]**:
+  - turn restrictions: 24, all but the two foot profiles `hiking-mountain` and `shortest`;
+  - turn instructions (`turnInstructionMode = 1`): 24;
+  - bike mode (`validForBikes`): 16; car mode: 7.
+- **What none of them switches on [C]:** `consider_crossing`, `correctMisplacedViaPoints`, `continueStraight`,
+  `processUnusedTags`, `add_beeline`, and `pass2coefficient`.
+- **So the crossing case needs a profile of E's own [FBD]:** `trekking.brf` (bike mode, and it assigns `priorityclassifier`) with
+  `consider_crossing = true`, `crossing_Prio_H = 1`, `crossing_Prio_L = 1000`, and `cost_ToLeft_from_H_classK` and
+  `cost_ToRight_from_H_classK` set to 100·K for K from 1 to 6. The costs are non-zero so a misread crossing class changes the cost.
+  - `estimated_crossing_class` is a node key of the pinned `lookups.dat` (`:862-868`, values 0 to 6) **[C: `crossing-reach.txt`]**,
+    so the cost is reachable wherever a captured tile carries the tag.
+  - Whether any captured tile does is read from the coverage run at capture **[?]**.
+- **`correctMisplacedViaPoints` cannot run through Forager's call [R].** `snapPathConnection` returns at once unless the waypoint's
+  name starts with `via` or `rt` (`RoutingEngine.java:1265-1266`), and Forager's two are `from` and `to`. T2 ports it (RECORD -8),
+  but no case through the port's entry point can reach its body. **A finding for I and the planner**, under Forager's "check
+  reachability before measuring behaviour": port it untested, or give the entry point named waypoints. Not decided here.
+
+**Strata [FBD].**
+- **Every case comes from a generator** with its seed in the test source.
+- **Start and end are drawn on the tile's own nodes,** read with the oracle's own reader. Each is moved by a random 0 to 100 m and
+  written with six decimals, so `ilon` and `ilat` are exact.
+- **A stratum's reach is taken from the oracle,** E3's log and coverage runs, never from the port.
+- **Cases are kept in generation order** until the stratum is full. The port's results take no part in choosing them.
+
+| Stratum | n | Generator | Reach evidence, from the oracle |
+|---|---|---|---|
+| **R**, random | 59 per profile: 1,534 | air distance log-uniform from 100 m to 100 km, within one tile or across a 5° line | none needed; kinds counted |
+| **F0**, Forager's own | 2 | `inside-across-the-degree-line` and `inside-long` on Forager's sparse tile with Forager's profile | R1 agrees with the command-line router's `geojson` (premise 7) |
+| **DL-lat**, **DL-lon** | 59 each | ends on opposite sides of 40°N (`W75_N40`, `W75_N35`) and of 70°W (`W75_N40`, `W70_N40`) | the found route has nodes on both sides |
+| **MP64**, collecting | 59 | R's generator, `memoryclass` 64, 20 to 100 km in `W75_N40` | at least one "collected" line |
+| **ML5**, **PM5** | 59 each | MP64's generator with `memoryclass` 5 | "memory limit reached" (`:2028`); panic mode (`:2031`) |
+| **NT**, near-ties | 59 | a start nearest a junction node, and an end placed so the two ways' `directionDiff`s differ by at most 4 ulps on the oracle's JVM (`WaypointMatcherImpl.java:66-73`, `:194-235`) | coverage of the comparator's second line (`:71`) |
+| **LB**, latitude bands | 59 | start and end in the (c) rows inside the tiles; under (b), in Apple's rows (E6) | the route lies in the band |
+| **CR**, crossing | 59 | R's generator with E's crossing profile | coverage of `StdPath.java:101-103` (the description is printed) and `:105-113` (a class is read) |
+| **FK**, failure kinds | 10 per kind: 110 | constructed, below | the oracle's message is in the kind's family |
+
+- **`memoryclass` 5 is outside Forager's calls,** which keep 64 (part 7).
+  - **Why:** its cap is 3,495,253 bytes [computed: `2 × 5 MiB / 3`, `NodesCache.java:68`, `RoutingEngine.java:1812`], below the
+    4,000,000 at which the first collection starts (`OsmNodesMap.java:24`). So the limit or panic mode is decided at the first
+    collection. At 64 the cap is 44,739,242 bytes, about 470,000 nodes [computed: 44,739,242 / 95], a search the sample cannot
+    promise.
+  - **What it costs:** the port has to keep `memoryclass` as a field (a call beyond the dispatch, for I). It also sizes the
+    expression cache (`ProfileCache.java:88`) and the tile cache (`RoutingEngine.java:1812`) **[R]**, so these cases differ from
+    Forager's in more than the cap.
+  - **`memoryclass` 64 cases** that reach the limit or panic mode in any stratum are counted and reported, never padded.
+- **A stratum that cannot be filled** from 20 times its size in candidates is reported short, with its n and its own bound (E5).
+  It is never filled from another generator.
+- **The time limit is off in every case but FK 9 [FBD]:** `maxRunningTime = 0` disables it (`RoutingEngine.java:1979`) **[R]**.
+  Forager passes 30,000 ms (`BRouterTrailRouter.kt:199`), but a limit makes the outcome depend on machine speed, and the
+  simulator will be slower than the JVM. A call beyond Forager's calls, so that only FK 9 meets the clock.
+
+**The failure kinds, 11, 10 cases each [FBD]:**
+1. **Start not mapped:** a start in water more than 250 m (`waypointCatchingRange`'s default, `RoutingContext.java:143`) from
+   any way.
+2. **End not mapped:** the same at the end.
+3. **Start island,** and 4. **target island:** an end on an island reached only by ferry, with `trekking-noferries.brf`; then
+   the reverse.
+5. **No track found:** an end on a way the profile cannot use, with no connection it can.
+6. **Data missing:** an end in a square whose tile is not in the folder (`W80_N40`, not captured).
+7. **Data corrupt, short:** a copy of `E170_S50` cut short, made by the test.
+8. **Data corrupt, checksum:** a copy with one index byte flipped, made by the test.
+9. **The time limit:** `maxRunningTime = 50` on a case whose R1 run takes at least 1 s, measured in the same run; otherwise
+   the case is void and not counted.
+10. **A cancel before start:** `terminate()` before `doRun`. `terminated` is never reset (its only write is `:2433`), so the run
+    fails at the loop's first pass (`:1975-1976`) **[R]**.
+11. **A cancel mid-search:** `doRun` on its own thread; the test thread calls `terminate()` once `getLinksProcessed()` (`:2392`)
+    passes 10,000, on a case whose R1 processes at least 100,000 links.
+
+Kinds 9 to 11 compare the family only. Kind 11 needs a progress count in the port (a call beyond, for I). Kinds 1, 2 and 6
+overlap Forager's `RoutingDataFolder` check, which C's `checkDataFile` covers separately.
+
+#### E5. The sample size [C: `10-tests/logs/sample-size.txt`, `tools/sample_size.py`]
+
+**What each figure is about.** A stratum is a population defined by its generator, tiles, profiles and params. Each figure is a
+claim about that population only, not about routes in general or other tiles (Forager's `CLAUDE.md`, "A derived figure carried
+across a boundary"). The required result in every exact assertion is zero discrepancies.
+
+**Detection, exact.** If the port differs from the oracle on a fraction p of a stratum's cases, a clean run of n cases has
+probability (1 − p)^n. The smallest n with (1 − p)^n ≤ β, for β = 0.05, is n = ⌈ln β / ln(1 − p)⌉. The script checks the
+inequality itself at n and n − 1:
+- **p = 5%:** ln 0.05 / ln 0.95 = 58.40, so **n = 59**: 0.95^59 = 0.0485 ≤ 0.05 < 0.95^58 = 0.0510.
+- **p = 1%:** ln 0.05 / ln 0.99 = 298.07, so **n = 299**: 0.99^299 = 0.04954 ≤ 0.05 < 0.99^298 = 0.05004.
+
+**The figures, [FBD]:**
+- **R: 59 per profile, 26 profiles, 1,534 cases.**
+  - Per profile: a defect touching at least 5% of that profile's routes is seen with probability 0.9515 or more (0.9980 at 10%).
+  - Pooled: a clean run bounds the rate below **0.195%**, one-sided at 95% (1 − 0.05^(1/1,534) = 0.001951).
+- **Each targeted stratum, 59:** a clean run bounds its rate below 4.95%.
+- **FK, 110:** constructed, not sampled. Each case reaches its kind or does not; no rate is claimed.
+- **F0, 2:** Forager's own check, carried over; no rate is claimed.
+- **Total: 2,118 cases.**
+
+**Where a difference is expected by design** (iOS under (b), `hmap` under (ii) or (iii)), the count is reported with its exact
+two-sided 95% Clopper–Pearson interval, never as a pass. For n = 1,534: 0 gives 0 to 0.24%, and 5 give 0.11% to 0.76%. For
+n = 59: 0 gives 0 to 6.1%.
+
+**If K finds the full list too slow on the simulator [FBD]:** iOS runs every targeted, FK and F0 case, plus the first 12 random
+cases per profile, 312. That is at least the 299 needed for p = 1%, and a clean run bounds the rate below 0.956%. A weaker claim
+than the JVM's, and it is to be reported as such.
+
+**Not used:** the rule of three (3/p: 60 and 300) and 9/p (180 and 900). The script prints them beside the exact figures only to
+show the difference.
+
+#### E6. What "identical" means, by platform and by the open options
+
+**Two kinds of run [FBD]:**
+- **Logic runs:** the port with library behaviour equal to the oracle's, asserted exactly equal to the oracle.
+- **Production runs:** the port as it would ship. Asserted where the option makes equality the design; **recorded** where it does
+  not, with E5's interval.
+
+Where the two differ, the port needs a test seam: one internal interface for the scale table and `atan2`, and `hmap`'s map type
+as a constructor parameter. A call beyond the dispatch, for I.
+
+**The table and `atan2`, by part 6's options:**
+
+| | (a) table constants written on the CI JVM | (b) each platform's `cos` and `atan2` | (c) fdlibm ported |
+|---|---|---|---|
+| **JVM, production** | exact on every stable case. The constants equal the oracle's `Math.cos` on the pinned JDK; part 7's invariants test guards that | exact: on the JVM `kotlin.math` calls `java.lang.Math` **[I, not read]**, in the oracle's own process | **recorded** against the default oracle: different by design at 54 rows. **Exact** against the oracle run with `-XX:-UseLibmIntrinsic`, whose table is `StrictMath`'s **[C]** |
+| **JVM, logic** | the production run | the production run | the port with HotSpot's table injected, exact against the default oracle |
+| **iOS, production** | exact against the stored digests if `atan2` takes (c); if it takes (b), NT is **recorded** | **recorded**: Apple's C library is on the path. This count is what (b) costs against HotSpot | exact against the no-intrinsic oracle's digests |
+| **iOS, logic** | if `atan2` takes (b): the port with fdlibm `atan2`, exact | the port with the JVM's table (constants in the test source) and fdlibm `atan2`, exact | the production run |
+
+- **(a) cannot hold `atan2` as constants** (part 7), so under (a) `atan2` takes (b) or (c). The rows above say which.
+- **fdlibm's `atan2` stands for HotSpot's `Math.atan2` only where tried:** equal at 299,974 pairs (part 6). NT is where a
+  difference would show.
+- **Under (c), E needs a second oracle JVM** with the flag, run as its own Gradle test task. What the flag changes beyond the table
+  was not checked **[?]**.
+- **LB under (b) on iOS:** Apple's rows are known only after the invariants test first runs on the simulator. Then LB is generated
+  in those rows that fall inside the tiles, by the rule above. If none does, LB reports that, and capturing a tile for it is a new
+  decision.
+
+**`hmap` order, by part 7's options.** This touches MP64, ML5 and PM5 only. Below about 42,100 nodes, hash order cannot change a
+route (part 7) **[R][I]**.
+
+| | (i) `java.util.HashMap`'s order in common code | (ii) each platform's `HashMap` | (iii) insertion order everywhere |
+|---|---|---|---|
+| **JVM** | exact on stable cases | exact on stable cases | production **recorded**; a logic run with `java.util.HashMap` injected, exact |
+| **iOS** | exact on stable cases | production **recorded**; no logic run is possible on iOS | exact against the JVM port's own digests (the platforms agree); against the oracle, **recorded** |
+
+Unstable cases (E3) are outside every exact assertion, under every option.
+
+#### E7. What E leaves uncovered
+
+- **Forager's Android app,** and HotSpot on other CPUs or versions (E2).
+- **Phones under (b):** whether a phone's C library equals the simulator's **[?]** (part 6).
+- **Other tiles, other profiles, more than two waypoints, other params:** outside the strata's populations (E5).
+- **`correctMisplacedViaPoints`'s body:** unreachable through the entry point (E4).
+- **Whether a simulator test can read tiles from the runner's disk** (part 5) **[?]**. Every route stratum on iOS depends on it;
+  part 7's invariants test does not.
+- **Run time,** on either job (K) **[?]**.
+
 ### F. The test tiles in CI (ruling c): where a pinned copy lives
 
 Written by the fifth session on this dispatch (Hazel, part 4, 2026-10-29). **F is a stop for the owner's ruling.**
