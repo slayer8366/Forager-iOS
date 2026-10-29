@@ -1,0 +1,51 @@
+Reads of the Kotlin/Native 2.3.10 distribution (part 6, item H). K=~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10
+sha256 of the files read:
+d9a5082b2a595e5a8e2e72dbc3442a1038590887d0cd5288a49f7ae7647144aa  ~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10/konan/konan.properties
+302ce945629d845a53444c42ed466f13e82756d9252273a916d84bbe0c6236cd  ~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10/konan/lib/kotlin-native-compiler-embeddable.jar
+298cb333c85ef715390a5a3d17c7442bee66296f0eee798e6da1821464a4c02e  ~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10/konan/targets/linux_x64/native/runtime.bc
+bc405cabeb9b366a89255fceb2aa91dfd24bd565012e16e735c01d7a38a25157  ~/.konan/kotlin-native-prebuilt-linux-x86_64-2.3.10/sources/kotlin-stdlib-native-sources.zip
+
+1. Code generation flags, konan.properties (no -ffp-contract on any target):
+49:clangDebugFlags = -O0
+168:targetCpu.ios_arm64 = apple-a7
+170:clangFlags.ios_arm64 = -cc1 -emit-obj -disable-llvm-passes -x ir
+172:clangOptFlags.ios_arm64 = -O3
+176:clangDebugFlags.ios_arm64 = -O0 -mllvm -fast-isel=false -mllvm -global-isel=false
+197:targetCpu.ios_x64 = core2
+199:clangFlags.ios_x64 = -cc1 -emit-obj -disable-llvm-passes -x ir
+201:clangOptFlags.ios_x64 = -O3
+202:clangDebugFlags.ios_x64 = -O0
+220:targetCpu.ios_simulator_arm64 = apple-m1
+222:clangFlags.ios_simulator_arm64 = -cc1 -emit-obj -disable-llvm-passes -x ir
+224:clangOptFlags.ios_simulator_arm64 = -O3
+225:clangDebugFlags.ios_simulator_arm64 = -O0 -mllvm -fast-isel=false -mllvm -global-isel=false
+580:targetCpu.linux_arm64 = cortex-a57
+582:clangFlags.linux_arm64 = -cc1 -emit-obj -disable-llvm-optzns -x ir
+584:clangOptFlags.linux_arm64 = -O3 -ffunction-sections
+585:clangDebugFlags.linux_arm64 = -O0
+   grep -i 'fp-contract|ffast|fast-math' konan.properties: 0 lines
+
+2. Compiler backend: classes under org/ in kotlin-native-compiler-embeddable.jar that reference LLVMSetFastMathFlags, fmuladd, unsafe-fp-math or fp-contract:
+   0 of 1518 classes (the binding llvm/llvm.class declares LLVMSetFastMathFlags; nothing in org/ calls it)
+
+3. Runtime bitcode, linux_x64 runtime.bc disassembled with the bundled clang -S -emit-llvm:
+   Kotlin_math_cos -> %2 = tail call double @cos(double noundef %0) #76
+   Kotlin_math_atan2 -> %3 = tail call double @atan2(double noundef %0, double noundef %1) #76
+   Kotlin_math_exp -> %2 = tail call double @exp(double noundef %0) #76
+   Kotlin_math_round -> %2 = tail call double @llvm.rint.f64(double %0)
+   functions containing llvm.fmuladd: Kotlin_native_NumberConverter_bigIntDigitGeneratorInstImpl 
+   Kotlin_Double_toInt: NaN -> 0, saturates at Int.MAX/MIN, else fptosi (runtime.ll, define i32 @Kotlin_Double_toInt)
+
+4. Stdlib sources, kotlin-stdlib-native-sources.zip:
+   nativeMain/kotlin/math/math.kt:590:public actual fun Double.roundToLong(): Long = when {
+   nativeMain/kotlin/math/math.kt:594:    else -> floor(this + 0.5).toLong()
+   StringNumberConversions.kt:159:public actual fun String.toFloat(): Float = FloatingPointParser.parseFloat(this)
+   StringNumberConversions.kt:166:public actual fun String.toDouble(): Double = FloatingPointParser.parseDouble(this)
+   StringNumberConversions.kt:173:public actual fun String.toFloatOrNull(): Float? {
+   Primitives.kt:2247:        NumberConverter.convert(this)
+   Primitives.kt:2660:        NumberConverter.convert(this)
+   nativeWasmMain/kotlin/collections/HashMap.kt:10:    private var keysArray: Array<K>,
+   nativeWasmMain/kotlin/collections/HashMap.kt:270:    private fun compact(updateHashArray: Boolean) {
+   nativeWasmMain/kotlin/collections/HashMap.kt:361:                    val putIndex = length++
+   nativeWasmMain/kotlin/collections/HashMap.kt:395:        presenceArray[index] = TOMBSTONE
+   nativeWasmMain/kotlin/collections/HashMap.kt:576:            while (index < map.length && map.presenceArray[index] < 0)

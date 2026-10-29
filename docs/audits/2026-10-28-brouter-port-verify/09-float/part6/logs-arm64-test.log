@@ -1,0 +1,28 @@
+[==========] Running 10 tests from 1 test cases.
+[----------] Global test environment set-up.
+[----------] 10 tests from probe.ProbeTest
+[ RUN      ] probe.ProbeTest.fma
+[       OK ] probe.ProbeTest.fma (106 ms)
+[ RUN      ] probe.ProbeTest.scaleTable
+[       OK ] probe.ProbeTest.scaleTable (94 ms)
+[ RUN      ] probe.ProbeTest.atan2Sample
+[       OK ] probe.ProbeTest.atan2Sample (12168 ms)
+[ RUN      ] probe.ProbeTest.expSinCos
+[       OK ] probe.ProbeTest.expSinCos (783 ms)
+[ RUN      ] probe.ProbeTest.parseProfiles
+[       OK ] probe.ProbeTest.parseProfiles (684 ms)
+[ RUN      ] probe.ProbeTest.parseLookups
+[       OK ] probe.ProbeTest.parseLookups (342 ms)
+[ RUN      ] probe.ProbeTest.parseStress
+[       OK ] probe.ProbeTest.parseStress (44397 ms)
+[ RUN      ] probe.ProbeTest.printing
+[       OK ] probe.ProbeTest.printing (7290 ms)
+[ RUN      ] probe.ProbeTest.conversions
+[       OK ] probe.ProbeTest.conversions (536 ms)
+[ RUN      ] probe.ProbeTest.hashOrder
+[       OK ] probe.ProbeTest.hashOrder (706 ms)
+[----------] 10 tests from probe.ProbeTest (67121 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test cases ran. (67124 ms total)
+[  PASSED  ] 10 tests.

@@ -966,6 +966,126 @@ and 1 prints a float. They form five chains:
 - **Of the library functions on the path, two reach a route on Forager's calls: `cos` (the table) and `atan2` (the
   tie-break).** `track.distance` (D) depends on the table too.
 
+#### Part 6, step 2: can the JVM and Kotlin/Native differ at those sites?
+
+**Method [C: `09-float/probe/`, `09-float/part6/`].**
+- **The scratch probe** is a Kotlin Multiplatform project built outside the repository with Gradle 9.7.0 and Kotlin 2.3.10.
+  `commonMain` mirrors each R chain's expressions in Java's types and evaluation order. `commonTest` writes their results as
+  bit patterns.
+- **It ran on three platforms:**
+  - the JVM: HotSpot 21.0.12.1 on amd64;
+  - Kotlin/Native `linuxX64`;
+  - Kotlin/Native `linuxArm64`, cross-compiled here and run under JetBrains' `qemu-aarch64` 5.1.0, with the aarch64 glibc
+    2.25 sysroot.
+
+  Each ran 10 of 10 tests, timestamped 04:40Z, with no compile error in the logs (`part6/junit-counts.txt`, `part6/logs-*.log`).
+- **Inputs:**
+  - the 928 tokens of all 27 `.brf` files (26 from the release zip, plus Forager's pinned profile);
+  - the 611 value names in `lookups.dat`;
+  - 180,000 stress decimals, including 120,000 at or within 10^-40 of float halfway points (`tools/make_corpus.py`);
+  - 299,974 integer `atan2` pairs;
+  - the 1,800-row scale table;
+  - 220,001 numbers printed.
+- **Compared line by line** with `tools/compare.py`. The libm results were also recomputed with the host's C library through
+  Python (`tools/libm_check.py`), a check from outside the probe.
+- **Kotlin/Native's toolchain was read** where it decides the answer (`09-float/part6/kn-reads.txt`):
+  - the compiler jar;
+  - the `linux_x64` runtime bitcode, disassembled with the bundled clang;
+  - `konan.properties`;
+  - the native stdlib sources.
+
+**Results [C unless marked].**
+
+| Kind | JVM vs `linuxX64` | JVM vs `linuxArm64` | `linuxX64` vs `linuxArm64` | What decides it |
+|---|---|---|---|---|
+| IEEE basic operations, with the fused-multiply detectors | 0 differ | 0 differ | 0 differ | Kotlin/Native does not fuse (below) |
+| `cos`, the scale table (rows of `lat, cos, kx, ky`) | **8 of 1,800** | **3 of 1,800** | 5 of 1,800 | the C library: Kotlin/Native's `cos` is a direct call to C's `cos` (`part6/kn-reads.txt` 3) |
+| `atan2` (with `toDegrees` and `normalize`) | **50,215 of 299,974** | **50,150** | 449 | the same, C's `atan2` |
+| `exp`, `sin`, `cos` (O and Rp sites) | 64 of 27,601 | 53 | 27 | the same |
+| `toFloat`, `toDouble`, accepted or rejected, and bits | 0 of 181,539 | 0 | 0 | Kotlin/Native's own parser (Harmony's, in its C++ runtime), the same on each target **[I]** |
+| `Float.toString`, `Double.toString`, round trip | 0 of 220,001 | 0 | 0 | Kotlin/Native's own `NumberConverter` |
+| `roundToLong` | 2 of 10,012 | 2 | 0 | **the stdlib itself differs** (below) |
+| `HashMap` iteration order | differs | differs | the same | step 3 |
+
+- **`linuxX64` equals the host C library exactly:** `atan2` 299,974 of 299,974, `cos` 1,800 of 1,800 (glibc 2.39). The JVM
+  equals it at 249,759 and 1,792 (`part6/libm-check-*.txt`). So the differences are the C library's against the JVM's, not
+  the probe's.
+- **The JVM is not one answer either:** on the same HotSpot, `Math.cos` and `StrictMath.cos` differ at **60 of the 1,800**
+  table rows. `Math.atan2` equals `StrictMath.atan2` at all 299,974 (`part6/results/jvm-amd64/jvm-only.txt`). The oracle's
+  table therefore depends on which JVM runs it. A HotSpot on another CPU, or Android's runtime, may build a different table
+  **[I]**.
+
+**Multiply-add on arm64: not fused [C][R].**
+- **Detectors.** `a*b - c` with `a*b = 1 - 2^-54` gives `0` unfused and `-2^-54` fused; the float form uses `1 - 2^-26`. Both
+  print the unfused result on `linuxArm64`, in debug and release executables and in the test binary (`part6/fma-run.txt`).
+  The first float detector was wrong: with `2^-12` its product was exact. It was fixed to `2^-13` and rerun; the logs of
+  both builds are kept.
+- **Disassembly** of both arm64 executables with `llvm-objdump`: no `kfun:` symbol (722 in release, 2,288 in debug) holds
+  an `fmadd`, `fmsub`, `fnmadd` or `fnmsub` (`part6/fma-disasm.txt`). The only fused instruction in either binary is in the
+  runtime's C++ `Kotlin_native_NumberConverter_bigIntDigitGeneratorInstImpl`, compiled from an `llvm.fmuladd`. That is the
+  positive control: the scan can see a fused instruction where one exists.
+- **Why** **[R]:**
+  - the backend never sets fast-math flags. No class under `org/` in the compiler jar references `LLVMSetFastMathFlags`,
+    `fmuladd`, `unsafe-fp-math` or `fp-contract`; 0 of 1,518;
+  - every target compiles its IR with `clang -cc1 -emit-obj -disable-llvm-passes -x ir` and no `-ffp-contract`
+    (`konan.properties:170-176`, `:222-225`, `:582-585`).
+- **For iOS this is inferred, not run** **[I]:** iOS uses the same backend and the same flags, plus `-mllvm -fast-isel=false
+  -mllvm -global-isel=false` in debug, which does not enable fusion.
+- **Would fusion have mattered?** A JVM search with `Math.fma` found no input, in 50,000,000 random tries at each of four
+  int-producing multiply-add sites, where fused and unfused give different ints (`part6/fma-sensitive-search.txt`). The four
+  sites were `readPosition`, `turncost`, the section cost and the rounded distance. Rare, not impossible.
+
+**Kotlin's own standard library differs between the JVM and Native [C][R].**
+- **`roundToLong`.** On the JVM it is `Math.round`; on Native it is `floor(x + 0.5).toLong()`
+  (`nativeMain/kotlin/math/math.kt:590-595`). They differ at `0.49999999999999994` and `2^52+1`, the 2 lines above.
+  - BRouter's three `Math.round` sites take a distance and clamp it with `Math.max(1.0, …)` (`OsmNode.java:103`,
+    `OsmPathElement.java:78`, `RoutingContext.java:554`).
+  - For `x >= 0.5` and below `2^52`, `floor(x + 0.5)` equals `Math.round(x)`, and below `0.5` the clamp gives 1 either way.
+    So the port can write `floor(x + 0.5)` on every platform at these sites **[I]**: argued here, with no counterexample in
+    the 10,012 probe values, which include `n + 0.5` and the double just below it for n up to 5,000.
+- **`kotlin.math.round`** is `rint`, which rounds halves to even (`part6/kn-reads.txt` 3). It is not `Math.round`. A port that
+  used it would be wrong on every platform **[R]**.
+- **The same on all three** **[C]:** `toInt` (NaN to 0, saturating), `min`/`max` with `-0.0` and NaN, and `%` (exact
+  `fmod`).
+
+**What a `linuxX64` or `linuxArm64` run can and cannot stand for on iOS.**
+- **It stands for** **[I]**, because the iOS build compiles the same Kotlin through the same backend, and the same
+  runtime C++ for an arm64 target:
+  - IEEE arithmetic in Kotlin code;
+  - the absence of fusion;
+  - `toInt`, `min`/`max`;
+  - parsing and printing; the arm64 run covers the one fused instruction in the number printer;
+  - `HashMap` order;
+  - `String.hashCode`.
+- **It cannot stand for** `cos`, `sin`, `exp` and `atan2`. On iOS these are Apple's C library. Two glibc builds already
+  disagree with each other (449 `atan2` results, 5 table rows), so no Linux run says anything about Apple's results
+  **[C][I]**.
+- **Whether the simulator's C library gives the same bits as a phone's** could not be determined **[?]**.
+
+**At each R chain, for Forager's calls.**
+- **The scale table (`cos`).** It **can differ, and did on every pair of platforms tried.** A different entry moves every
+  distance in its 0.1-degree latitude band by about an ulp. That changes a route's ints only where a value sits within an
+  ulp of a rounding boundary: the `Math.round` of a distance, or the `(int)` casts in the cost. Both `track.distance` (D)
+  and the cost can change. Whether a route changes on real tiles was **not determined [?]**; that is E's work.
+- **The waypoint tie-break (`atan2`).** It **can differ** (50,215 of 299,974). The comparator decides by `directionDiff`
+  only between candidates with exactly equal radius. Every match has at least two such candidates: `end()` adds each way
+  twice, once per direction, with the same radius (`WaypointMatcherImpl.java:194-227`). Ways that meet at the nearest node
+  add more.
+  - The search starts from both directions of the chosen way (`RoutingEngine.java:1937-1938`), so a flip between one way's
+    two directions should not change the route **[I]**.
+  - A flip between two different ways at a junction could. That needs their `directionDiff`s within an ulp, a near-tie
+    that integer geometry can produce but that was not constructed here **[?]**.
+- **Everything else on the R path** is IEEE basic arithmetic, parsing, `toInt` or `min`/`max`. These **cannot differ**,
+  given the same table and no fusion **[C][I]**.
+- **What this means for the port** **[I]**, for the planner (options, not decided):
+  - **(a)** put the scale table into the port as 3,600 constants, written from the oracle's JVM in CI. Then iOS reads the
+    same bits as the CI oracle, and no C library is involved;
+  - **(b)** compute it with `kotlin.math.cos` on each platform, and accept iOS differences from the oracle;
+  - **(c)** port fdlibm's `cos` (`StrictMath`). It is the same everywhere, but differs from the HotSpot oracle at 60 rows.
+
+  `atan2` has the same three options. For (a) the domain is every integer pair, so a ported fdlibm `atan2` is the
+  constant-free form. The JVM's `Math.atan2` equals `StrictMath.atan2` on all 299,974 pairs tried.
+
 ### Not answered yet (parts 6 and 7, in RECORD -11's order)
 
 - H's floating-point classification and its simulator test plan (above);

@@ -1,0 +1,25 @@
+> Task :kmpPartiallyResolvedDependenciesChecker
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :downloadKotlinNativeDistribution UP-TO-DATE
+> Task :compileKotlinLinuxArm64
+> Task :linkDebugExecutableLinuxArm64
+> Task :linkReleaseExecutableLinuxArm64
+> Task :linuxArm64ProcessResources NO-SOURCE
+> Task :linuxArm64MainKlibrary
+> Task :compileTestKotlinLinuxArm64
+> Task :linkDebugTestLinuxArm64
+> Task :compileKotlinLinuxX64
+> Task :linkReleaseExecutableLinuxX64
+> Task :linkDebugExecutableLinuxX64
+
+[Incubating] Problems report is available at: file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 25s
+10 actionable tasks: 9 executed, 1 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.0/userguide/configuration_cache_enabling.html

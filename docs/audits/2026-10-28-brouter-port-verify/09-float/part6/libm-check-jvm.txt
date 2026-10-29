@@ -1,0 +1,3 @@
+atan2: 249759 of 299974 equal to host libm
+scale-table cos: 1792 of 1800 equal to host libm
+host libc: ('glibc', '2.39') python 3.13.17

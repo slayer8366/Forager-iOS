@@ -1,0 +1,32 @@
+A = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe-io/out/native-x64
+B = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe-io/out/native-arm64
+only in A: []
+only in B: []
+atan2.txt: lines A=299974 B=299974 differing=449
+   line 2311
+     A: 6620 21221 3fd35a54e5f2d5fa 403153592bf38e00
+     B: 6620 21221 3fd35a54e5f2d5fb 403153592bf38e01
+   line 2721
+     A: 3 28 3fbb53076f5837a8 40187646911f119a
+     B: 3 28 3fbb53076f5837a9 40187646911f119b
+conversions.txt: lines A=10021 B=10021 differing=0
+exp-sin-cos.txt: lines A=27601 B=27601 differing=27
+   line 2194
+     A: exp-dist 2194 3df45abbd1dfdf24
+     B: exp-dist 2194 3df45abbd1dfdf23
+   line 2536
+     A: exp-dist 2536 3da54e95ccf28366
+     B: exp-dist 2536 3da54e95ccf28365
+fma.txt: lines A=3 B=3 differing=0
+hash.txt: lines A=28 B=28 differing=0
+parse-lookup-values.txt: lines A=611 B=611 differing=0
+parse-profile-tokens.txt: lines A=928 B=928 differing=0
+parse-stress.txt: lines A=180000 B=180000 differing=0
+print.txt: lines A=220001 B=220001 differing=0
+scale-table.txt: lines A=1800 B=1800 differing=5
+   line 129
+     A: 128 bff58b5a25acc9ee 3fcc779550918456 3f996f0d0f6c6a51 3fbc94a0ef91aebd
+     B: 128 bff58b5a25acc9ee 3fcc779550918457 3f996f0d0f6c6a51 3fbc94a0ef91aebd
+   line 262
+     A: 261 bff1d48d77f13874 3fdc34cce5605d2c 3fa9303482ded01e 3fbc89d184d2ff8d
+     B: 261 bff1d48d77f13874 3fdc34cce5605d2b 3fa9303482ded01d 3fbc89d184d2ff8d

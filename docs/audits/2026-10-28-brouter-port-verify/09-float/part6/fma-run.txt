@@ -1,0 +1,28 @@
+== linuxArm64 debugExecutable (qemu-aarch64 5.1.0)
+platform native-arm64
+msubD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+msubF 00000000 (unfused 00000000, fused b2800000)
+maddD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+cheapDistance 3ff6a09e667f3bcd
+turncost 90 readPosition 181000000 section 401e00e000000000
+== linuxArm64 releaseExecutable (qemu-aarch64 5.1.0)
+platform native-arm64
+msubD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+msubF 00000000 (unfused 00000000, fused b2800000)
+maddD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+cheapDistance 3ff6a09e667f3bcd
+turncost 90 readPosition 181000000 section 401e00e000000000
+== linuxX64 debugExecutable
+platform native-x64
+msubD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+msubF 00000000 (unfused 00000000, fused b2800000)
+maddD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+cheapDistance 3ff6a09e667f3bcd
+turncost 90 readPosition 181000000 section 401e00e000000000
+== linuxX64 releaseExecutable
+platform native-x64
+msubD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+msubF 00000000 (unfused 00000000, fused b2800000)
+maddD 0000000000000000 (unfused 0000000000000000, fused bc90000000000000)
+cheapDistance 3ff6a09e667f3bcd
+turncost 90 readPosition 181000000 section 401e00e000000000

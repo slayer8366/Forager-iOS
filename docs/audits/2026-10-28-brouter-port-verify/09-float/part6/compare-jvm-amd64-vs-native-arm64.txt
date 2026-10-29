@@ -1,0 +1,44 @@
+A = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe-io/out/jvm-amd64
+B = /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/hazel/part6/fp-probe-io/out/native-arm64
+only in A: ['jvm-only.txt']
+only in B: []
+atan2.txt: lines A=299974 B=299974 differing=50150
+   line 12
+     A: 47895 1454134 3fa0db93478becdc 3ffe2f0202fdb391
+     B: 47895 1454134 3fa0db93478becdb 3ffe2f0202fdb38f
+   line 16
+     A: 184226 367074 3fddc4fc7a2d6927 403aa6a963925924
+     B: 184226 367074 3fddc4fc7a2d6926 403aa6a963925923
+conversions.txt: lines A=10021 B=10021 differing=2
+   line 1
+     A: d 3fdfffffffffffff toInt=0 toLong=0 roundToLong=0 floorHalf=1 kround=0000000000000000
+     B: d 3fdfffffffffffff toInt=0 toLong=0 roundToLong=1 floorHalf=1 kround=0000000000000000
+   line 7
+     A: d 4330000000000001 toInt=2147483647 toLong=4503599627370497 roundToLong=4503599627370497 floorHalf=4503599627370498 kround=4330000000000001
+     B: d 4330000000000001 toInt=2147483647 toLong=4503599627370497 roundToLong=4503599627370498 floorHalf=4503599627370498 kround=4330000000000001
+exp-sin-cos.txt: lines A=27601 B=27601 differing=53
+   line 60
+     A: exp-dist 60 3fe18fdd6b9604e4
+     B: exp-dist 60 3fe18fdd6b9604e3
+   line 387
+     A: exp-dist 387 3f955be57a1de24a
+     B: exp-dist 387 3f955be57a1de249
+fma.txt: lines A=3 B=3 differing=0
+hash.txt: lines A=28 B=28 differing=16
+   line 1
+     A: order 1677,297,1232,1905,215,412,1765,951,2118,734,971,999,865,1708,326,518,1371,1670,221,1065,2175,1089,2729,781,834,1932,2462,181,676,1357,2365,1797,2727,1140,2115,670,645,1096,1713,2543,1036,2408,2
+     B: order 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,
+   line 2
+     A: order-after-remove 1232,215,412,1765,2118,734,971,865,1708,326,518,1670,221,2729,781,2462,834,1932,181,676,1357,2365,1140,670,1096,2543,1036,2408,2911,796,475,1313,2178,2975,886,2778,1819,2522,1303,11
+     B: order-after-remove 1,2,4,5,7,8,10,11,13,14,16,17,19,20,22,23,25,26,28,29,31,32,34,35,37,38,40,41,43,44,46,47,49,50,52,53,55,56,58,59,61,62,64,65,67,68,70,71,73,74,76,77,79,80,82,83,85,86,88,89,91,92,9
+parse-lookup-values.txt: lines A=611 B=611 differing=0
+parse-profile-tokens.txt: lines A=928 B=928 differing=0
+parse-stress.txt: lines A=180000 B=180000 differing=0
+print.txt: lines A=220001 B=220001 differing=0
+scale-table.txt: lines A=1800 B=1800 differing=3
+   line 254
+     A: 253 bff20dbe59f8a739 3fdb66c1412c8dfc 3fa878704714e4ca 3fbc8aa2278fabf4
+     B: 253 bff20dbe59f8a739 3fdb66c1412c8dfd 3fa878704714e4cb 3fbc8aa2278fabf4
+   line 432
+     A: 431 bfea2a7d69a68d62 3fe5e298b15a5983 3fb3867e04bd2232 3fbc7577f5d22a0b
+     B: 431 bfea2a7d69a68d62 3fe5e298b15a5982 3fb3867e04bd2231 3fbc7577f5d22a0b

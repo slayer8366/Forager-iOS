@@ -1,0 +1,6 @@
+== releaseExecutable: symbols containing fmadd/fmsub/fnmadd/fnmsub
+1 <Kotlin_native_NumberConverter_bigIntDigitGeneratorInstImpl>:
+kfun symbols total: 722
+== debugExecutable: symbols containing fmadd/fmsub/fnmadd/fnmsub
+1 <Kotlin_native_NumberConverter_bigIntDigitGeneratorInstImpl>:
+kfun symbols total: 2288
