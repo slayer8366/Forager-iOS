@@ -1,0 +1,16 @@
+# Step 2a close (seventh session, Linden Caliper), mechanism prediction, written before building, 2026-10-29T23:00:36Z
+P1. Case 1 (op cap 1,000,000; reset kept; position bound 32,640 and both equalities kept): on the oracle alone every
+    seed 1-20 ends at the cap, 1,000,000 ops each, 20,000,000 in all; none ends at the position bound. Max reading
+    position near 22,000 (PortLoopCheck saw 21,994 on the same draws).
+P2. Case 2 (no in-loop reset, so no nextInt(50) draw; position bound 32,640): every seed ends at the position bound,
+    in about 32,640 / 8 = ~4,100 ops (3,800 to 4,400).
+P3. Case 2 at that bound does NOT reach fillBuffer's end-of-array branch (`idx++ < idxMax` false). The branch needs a
+    fillBuffer call with idx already 4,095 (idxMax), i.e. a reading position past ~32,744; the loop's last op starts
+    below 32,640 and the buffer looks ahead at most 31 bits, so the oracle's idx should stay near 4,090 or below.
+    If so, the ruling's "reaches the end of the byte array and fillBuffer's end-of-array branch" is a wrong premise
+    for this bound. Checked by reading the oracle's private idx by reflection after every op.
+P4. Over the port, both cases pass: full run 26 tests, 0 failures, 0 compile errors.
+P5. Bite (one bit flipped at byte 100 of the port's copy, one line edited per run): run A (case 1's port input)
+    fails case 1 only, seed 1, message "seed 1 op 1775: value" (expected 30800944, actual 30800946), the first
+    mismatch PortLoopCheckBite logged on these draws; run B (case 2's port input) fails case 2 only, seed 1, at the
+    first op whose read covers bit 800; nothing else fails in either run.
