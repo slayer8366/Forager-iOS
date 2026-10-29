@@ -1,0 +1,18 @@
+# Bases, read 2026-10-29T19:59:46Z
+forager-ios:
+c5c9411e21be32b04cd1e457f4ad200a47b359e3	HEAD
+20e1f92684474210bac2977b448ed0c4fb3f57a0	refs/heads/brouter-port
+c5c9411e21be32b04cd1e457f4ad200a47b359e3	refs/heads/main
+736a4c1129ef15db0107fb7a781f2a6bd25a5826	refs/heads/research/android-math
+
+forager-ios main move 3fc5cef..c5c9411:
+ RECORD.md                                          |  35 +++++
+ .../2026-10-28-01-brouter-port-amendment-2.md      | 144 +++++++++++++++++++++
+ 2 files changed, 179 insertions(+)
+
+forager pre-main:
+d100a4776055d922b74e2fb4e9d23fb2ad6895cc	refs/heads/pre-main
+forager read-only clone HEAD: e2969abe4f98674c24ce3913ce97be568184a4de
+
+Actions: mcp list_workflows -> {"total_count":0}
+gh api repos/slayer8366/forager-ios/actions/permissions -> HTTP 403 'Access to this GitHub Actions path is not permitted through this proxy.'
