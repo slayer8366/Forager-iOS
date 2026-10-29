@@ -7,6 +7,10 @@ Written by the team's primary coder (first run, not yet named), 2026-10-29, for 
 **Status (2026-10-29, second session):** steps 0 and 1 done. The tiles are checked and pinned, and the release routes are
 below. **No release exists:** the release waits for the owner's word, and steps 1b onward wait for the go.
 
+**Status (2026-10-29, third session, Linden Caliper, Amendment 3 Part A):** **stopped at Part A's step 2.** The proxy refused
+the draft release with a 403. **No release, draft or tag exists.** Steps 3 to 7 were not run, and the release waits for the
+planner (section "Amendment 3, Part A" below).
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -267,6 +271,48 @@ below keeps that, and only the first keeps today's bytes.
 - C asks for a new workflow and a trigger, and it publishes before the pins land. That makes it the most to build, and it is
   the only route where something public can exist that the repository does not pin.
 
+## Amendment 3, Part A: the release (third session, Linden Caliper)
+
+**Stopped at step 2, a draft that could not be created.** `prompts/preserved/2026-10-28-01-brouter-port-amendment-3.md` on
+`main` at `60ee807`. Logs are in `2026-10-29-brouter-port-phase2/partA/`.
+
+- **Base [C]:** `brouter-port` at `0a9999a`, equal to the remote. `tools/tile-pins.tsv` and `tools/tile-release/` are
+  unchanged from `91754bc` (empty `git diff`). On the remote, `91754bc...brouter-port` is 2 ahead and changes no `tools/` file
+  [C: `partA/prechecks.log`].
+- **Step 1, the staged files [C: `partA/step1-staged-check.log`]:** each of the 5 pin rows matched its staged file in size
+  and SHA-256, read from the pin file by script, not by eye. The staged `README.md` equals
+  `91754bc:tools/tile-release/README.md` by `cmp`. The folder holds 6 entries.
+- **How the API was reached [C: `partA/access.log`]:**
+  - through `HTTPS_PROXY`, the session's agent proxy, with the container's `GH_TOKEN`, a placeholder starting `proxy-`;
+  - GitHub authenticated it as `slayer8366`, admin on Forager-iOS, with a token expiring 2026-10-30 00:41:59 UTC. So the
+    proxy supplies the credential [I];
+  - this is step 1's route. No token was made.
+- **Before the first write [C]:** 0 releases, 0 tags, no `brouter*` tag ref.
+- **Step 2 [C: `partA/step2-create.log`]:**
+  - **Attempt 1:** `POST /releases` → **415 from the proxy:** "Request bodies must declare Content-Type:
+    application/json. Resend the JSON body with that header." My request lacked the header. 0 releases afterwards.
+  - **Attempt 2,** the same request with the header → **403 from the proxy:** "Creating, editing, or deleting releases is
+    not permitted for this session type."
+  - Afterwards: 0 releases (drafts included), 0 tags. The proxy listed no relay failure.
+- **Not done:**
+  - steps 3 to 7: no upload, read-back, publish or anonymous read;
+  - `tools/fetch-tiles.sh` not wired into the build;
+  - no fetch test, since there is no release URL to fetch from.
+  - No other route was tried: not `gh`, the GitHub MCP tools, a workflow, nor an asset upload to a draft someone else
+    makes.
+- **What the 403 changes in the release routes above [I]:**
+  - **A and B** both upload from a session like this one, so both are closed. Whether another session type is allowed
+    could not be determined.
+  - **C** would create the release with a workflow's own token, outside this proxy. After this refusal, that would be a way
+    around a deliberate policy, so it is the owner's decision, not a coder's. It also means new bytes and a re-pin, as
+    priced.
+  - **D** is unchanged: no channel from here to the owner carries 114 MiB.
+  - **An owner-made draft with session uploads** is untested. The refusal names "editing" releases, and an asset upload
+    plausibly counts as that.
+- **The staged files are still in scratch,** unchanged, so a later route A can reuse them while the container lasts. They
+  are 5 of the 6 assets' only copies outside brouter.de, which rewrites its tiles daily. F0's copy has its source in
+  Forager.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
@@ -300,6 +346,10 @@ below keeps that, and only the first keeps today's bytes.
   - the workflow token's default permissions on Forager-iOS (the proxy refuses the path);
   - what ODbL asks beyond 4.2 of a re-host (not examined, as in Phase 1);
   - whether any captured tile carries `estimated_crossing_class` (step 1b's coverage run).
+- Part A:
+  - whether any session type may create a release through the proxy, and which;
+  - whether the proxy would refuse an asset upload to a draft the owner made (not tried);
+  - what kind of credential the proxy supplies (inferred to be a GitHub App user token from the response headers).
 
 ## Premises that were wrong
 
@@ -312,6 +362,11 @@ below keeps that, and only the first keeps today's bytes.
   `checkFileIntegrity`'s `reallyDecode = false` (step 1, above). Its draft also did not compile. Neither would have
   passed off a bad tile as good, since the open, the integrity check and the route did not depend on the count. But the
   count was written as the evidence that a pass was "not a pass on no data", and it could not have shown that.
+- **Step 1's pricing of route A, which I relied on in Part A:** "admin: true through this session's proxy" and
+  "`uploads.github.com` reachable" were read with read-only calls. They could not see a write policy at the proxy, which
+  refuses release creation for this session type. A check that never sent a write could not have failed on one. Step 1
+  listed the 114 MiB upload as unknown, but not the create.
+- **My own:** the first create request lacked `Content-Type: application/json` (the 415).
 
 ## Decided beyond scope
 
@@ -338,3 +393,9 @@ below keeps that, and only the first keeps today's bytes.
   - **Read-only GitHub API queries** to price the routes: the repository's permissions and release count, and Forager's
     visibility. A fourth, on the workflow token, was refused by the proxy.
   - **A release-staging folder in scratch,** with the tiles hard-linked, so the six assets sit in one place for route A.
+- **Part A:**
+  - **Resending the create once with `Content-Type: application/json`** after the proxy's 415. That was my malformed
+    request, not a refusal of the release. I judged that fixing the header was not working around a refusal. Nothing
+    existed before the resend.
+  - **`curl` against the REST API, not `gh release create`:** each call and its reply are logged on its own.
+  - **The Part A logs' folder,** `2026-10-29-brouter-port-phase2/partA/`.
