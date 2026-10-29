@@ -1,0 +1,5 @@
+# nginx ETag = "<hex mtime>-<hex length>"? computed 2026-10-29T03:55:17Z
+W75_N40.rd5 etag-mtime=2026-10-29T01:03:01Z etag-length=119750873 content-length=119750873
+E5_N45.rd5 etag-mtime=2026-10-29T01:03:01Z etag-length=252948700 content-length=252948700
+W15_S45.rd5 etag-mtime=2026-10-29T01:03:01Z etag-length=4433 content-length=4433
+diff/W75_N40/891df250303bde0dcabebda2f466b375.df5 etag-mtime=2026-10-29T03:12:41Z etag-length=0 content-length=0

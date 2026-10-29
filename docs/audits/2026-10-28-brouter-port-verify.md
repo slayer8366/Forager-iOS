@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D and F)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -15,6 +15,9 @@ part 2 found that bears on C and G is under "Handoff to the next session".
 **Part 3** (a fourth session, Hazel, 2026-10-29) answered **C**, with Amendment 1's three Android questions, and **D**,
 the items RECORD -8 gave it. E to K are not answered here: F and G are part 4's; H and E are part 5's; I, J and K are
 part 6's.
+
+**Part 4** (a fifth session, Hazel, 2026-10-29) answered **F**, the test tiles in CI. **F is a stop for the owner's ruling**:
+the options and a recommendation are written, and nothing was chosen or created. G is part 4's and follows.
 
 **Marks.** **[R]** read, with file and line at the stated commit. **[C]** computed, with the evidence file under
 `2026-10-28-brouter-port-verify/`. **[I]** inferred. **[?]** could not determine.
@@ -665,10 +668,116 @@ Both options run on the same test JVM, so the last does not separate them.
 **Input for E, not a choice:** the zip's 26 profiles are pinned by the same SHA-256. Under "Any profile" (-8) they are
 a ready source of profiles that switch on turn restrictions, bike mode and the other T2 features.
 
+### F. The test tiles in CI (ruling c): where a pinned copy lives
+
+Written by the fifth session on this dispatch (Hazel, part 4, 2026-10-29). **F is a stop for the owner's ruling.**
+Below are the options and a recommendation. Nothing was chosen, hosted, uploaded or created.
+
+**Bases [C: `07-tiles/00-bases-part4.txt`].**
+- Forager `pre-main` is still `d100a4776`, the head RECORD -9 checked, so no new premise check is needed.
+- Forager-iOS `main` is at `a283961` (RECORD -9).
+- Forager reads stay at `e2969abe4`, in the read-only clone, whose tree is clean.
+
+**What brouter.de serves.** Checked with directory listings and `HEAD` only. **No tile was downloaded.**
+- **`segments4/` lists 1,142 `.rd5` tiles, 10,034,474,318 bytes in all, every one dated 29-Oct-2026 01:03**
+  **[C: `07-tiles/logs/segments4-index-0354Z.tsv`]**.
+  - Sizes: median 1,226,172 bytes; smallest 4,433; largest 252,948,700 (`E5_N45`).
+  - The fixture's square, `W75_N40.rd5`, is 119,750,873 bytes in full. Forager's fixture is a sparse 152,665-byte square
+    of the same name (premise 7).
+- **Forager recorded the same URL's files as "rd5 files dated 2026-10-03"**
+  (`docs/navigation/2026-10-03-trail-navigation-research.md:58`) **[R]**. The URLs are the same and the files are newer.
+- **`HEAD` on three tiles** (`W75_N40`, `E5_N45`, `W15_S45`) returned **[C: `logs/head-run1.txt`]**:
+  - `Last-Modified: Thu, 29 Oct 2026 01:03:01 GMT`;
+  - a `Content-Length` equal to the listing's size;
+  - `Accept-Ranges: bytes`;
+  - an `ETag` such as `"6ae29b45-72340d9"`.
+- **The `ETag` is not a content hash.** It decodes as the modification time and the length in hex: 2026-10-29T01:03:01Z
+  and 119,750,873 for `W75_N40` **[C: `logs/etag-decode.txt`]**. Neither header can pin content, and both change on
+  every rewrite **[I]**.
+- **`segments4/diff/` shows the tiles regenerated in place, daily.**
+  - Upstream's `Rd5DiffManager` names each diff after the MD5 of an earlier tile (`Rd5DiffManager.java:44`, `:54`). It
+    also writes a zero-byte diff named after the current tile's MD5 (`:57-59`), and skips tiles under 1 MiB (`:36`)
+    **[R, upstream `4d2639af`; quoted in `07-tiles/sources.txt`]**. The Android app asks for `diff/<tile>/<md5 of its
+    copy>.df5` (`DownloadWorker.java:340`) **[R]**.
+  - The listing follows that rule: 585 diff folders and 585 tiles of at least 1 MiB, with the same names
+    **[C: `logs/diff-crosscheck.txt`]**.
+  - **`diff/W75_N40/` holds 10 non-empty diffs, one dated each day from 20 to 29 October, and one zero-byte diff**
+    **[C: `logs/segments4-diff-W75_N40-index-0356Z.tsv`]**. Their names are 10 different MD5s, so 10 earlier contents.
+    So `W75_N40.rd5` had 11 different contents at one URL in 10 days **[I]**. That brouter.de runs this code, rather
+    than a later version of it, is also inferred.
+- **No dated archive at brouter.de.**
+  - `segments4/` holds only the tiles, `diff/`, `storageconfig.txt` and a zero-byte file named
+    `0_timestamps_are_map_snapshot_time_in_CET_timezone` **[C]**.
+  - The diffs only lead forward, from an old tile to the current one, and go back 10 days. No earlier tile can be
+    rebuilt from them **[I, from the source lines above]**.
+  - `brouter.de/brouter/` is an HTML page, not a listing. The offline page says only "The Map-Snapshot date is about 2
+    days before the timestamp of the routing data files". It states no update rate, archive or data licence
+    **[R: `07-tiles/sources.txt`]**.
+- **The Wayback Machine's capture index was asked about `W75_N40.rd5`** (an index query; no capture was requested).
+  Both attempts were reset by the far end **[C: `logs/wayback-cdx-W75_N40.txt`]**, so this **could not be determined**.
+- **v1.7.10 is still upstream's newest tag** **[C: `00-bases-part4.txt`]**. Which map creator brouter.de runs, and so
+  whether the 1.7.10 engine reads today's tiles, cannot be told without a download **[?]**.
+- **A second `HEAD` later in this session** is under G's closing check (`logs/head-run2.txt`).
+
+**Conclusion: a SHA-256 pin on a brouter.de URL would break within about a day [I, from the computed listings].** The
+planner's prediction holds: "brouter.de regenerates tiles in place, so a pinned copy has to be hosted elsewhere".
+
+**Ruling c limits the options.** Forager's feasibility report states it as "fetched in CI, not committed. Rejected: more
+fixtures in the repository" (`docs/audits/2026-10-26-ios-multiplatform-feasibility-report.md:304-306`) **[R]**.
+
+**The options.** GitHub's figures were read from its own documentation on 2026-10-29; each line is quoted, with its URL,
+in `07-tiles/sources.txt` **[R]**.
+
+| | Where the pinned copy lives | What it needs | Size limits | Fits ruling c |
+|---|---|---|---|---|
+| 1 | **brouter.de itself,** pinned by SHA-256 | nothing | none | **Fails:** the bytes change daily (above) |
+| 2 | **A release on Forager-iOS** holding the tiles, captured once from brouter.de in Phase 2. CI fetches each by URL and checks its size and SHA-256, as `fetch-brouter.sh:23-28` does. | **One repository action, by the owner or on the owner's word: create the release and upload the assets.** No account, setting or secret. Anonymous download from a public repository is inferred, not tested **[I]**. | Each file "under 2 GiB". "There is no limit on the total size of a release, nor bandwidth usage." | **Yes** |
+| 3 | **Git LFS in Forager-iOS** | **The owner's LFS quota.** Every CI download counts against the owner's bandwidth. Past the quota, a $0 budget blocks LFS for the rest of the month; otherwise it is billed, which is an account matter and a stop. | GitHub Free and Pro: 10 GiB storage and 10 GiB bandwidth a month | **No in effect:** the tiles are tracked in the repository **[I]**. Needs ruling c reopened. |
+| 4 | **Plain git in Forager-iOS** | a commit | Files over 100 MiB are blocked (`W75_N40` in full is 114.2 MiB), with a warning over 50 MiB. Repositories "ideally less than 1 GB". History keeps every byte. | **No:** this is the rejected "more fixtures in the repository" |
+| 5 | **The GitHub Actions cache** | nothing | 10 GB per repository; entries unused for 7 days are removed | **Not a pinned copy:** a refill from brouter.de gets new bytes and fails the pin |
+| 6 | **A bucket elsewhere,** for example Cloudflare R2 | **An account,** and perhaps a CI secret: a stop under this dispatch | not read | Yes |
+
+**ODbL, the same for options 2, 3, 4 and 6.**
+- Hosting the tiles publicly "Publicly Convey[s]" a derivative database of OpenStreetMap. ODbL 4.2 then asks for:
+  - the licence or its URI;
+  - kept notices, in "a location (such as a relevant directory) where users would be likely to look for it".
+
+  **[R: ODbL 1.0, `sources.txt`]**
+- For a release, that would be OpenStreetMap's attribution and the ODbL URI in the release notes and in a README asset.
+  Forager's fixture README does the same (`server/pmtiles-worker/test/fixtures/rd5/README.md:7-9`) **[R]**.
+- That is within the dispatch's "carrying ... OpenStreetMap's ODbL attribution". **No further licence question was
+  found [I].** Whether ODbL asks more of a re-host was not examined. If the owner wants it examined, it is a licence
+  question, and so a stop.
+
+**Recommendation [I]: option 2, a release on Forager-iOS.**
+- **Forager already trusts this form:** `fetch-brouter.sh` pins a GitHub release asset by URL, size and SHA-256
+  (`:11-13`, `:23-28`) **[R]**. D's oracle is fetched the same way.
+- **It meets ruling c as written:** the tiles are fetched in CI, not committed.
+- **The only new act is creating the release, and that act is the owner's.** No account is needed and no setting
+  changes.
+- **GitHub sets no total or bandwidth limit on release assets,** so hosting does not cap E's sample size.
+- **The risk:** anyone with write access can delete or replace an asset.
+  - The SHA-256 pin catches a replaced asset.
+  - A deleted asset makes CI fail loudly rather than pass.
+  - A tile can be captured again from brouter.de, but never byte for byte (above).
+
+**Left to E (part 5), not decided here:**
+- **Which tiles, and so the size.** The choice is between:
+  - full brouter.de squares: median 1.2 MB; `W75_N40` 119.8 MB; the largest 252.9 MB;
+  - sparse squares built by BRouter 1.7.10's map creator from a pinned query, as Forager's fixture was: 152,665 bytes,
+    built by "the same steps the Pi runs" (`server/pmtiles-worker/test/fixtures/rd5/README.md:21`) **[R]**.
+- **The capture, for Phase 2.** Each tile is downloaded once and checked to load in the 1.7.10 oracle (the format
+  question above). Then it is hashed and handed to whoever creates the release.
+
+**The question for the owner, as one:** "Where should the pinned test tiles for the port's differential tests live?
+(1) A release on Forager-iOS, which you create, holding tiles captured once from brouter.de; CI fetches them by URL and
+SHA-256, as Forager fetches BRouter itself. This is recommended: no account, no setting, and it keeps ruling c's 'not
+committed'. (2) Git LFS in Forager-iOS, which counts each CI download against your 10 GiB monthly LFS bandwidth and
+reopens ruling c. (3) A storage bucket on another service, which needs an account."
+
 ### Not answered yet (parts 4 to 6, in RECORD -8's order)
 
 - E, the differential tests;
-- F, tile stability (no HTTP `HEAD` was sent);
 - G, CI;
 - H, floating point;
 - I, the Phase 2 order;
@@ -781,12 +890,28 @@ a ready source of profiles that switch on turn restrictions, bike mode and the o
     - what GitHub Packages and Maven Central need;
     - that the language pin alone keeps vendored source compilable under 2.3.10.
 
+- **Part 4 (F):**
+  - **Confirmed by computation:**
+    - the listing's 1,142 tiles, all dated 29 October;
+    - the `HEAD` headers, and the `ETag` decoding to modification time and length;
+    - the `diff/` layout matching upstream's naming rule (585 = 585);
+    - `W75_N40`'s 10 distinct earlier MD5s in 10 days;
+    - v1.7.10 as upstream's newest tag.
+  - **Confirmed by reading:** ruling c's wording, GitHub's published limits, and ODbL 4.2.
+  - **Inferred:**
+    - that brouter.de runs upstream's diff code;
+    - that distinct MD5 names mean distinct tiles;
+    - that no earlier tile can be rebuilt;
+    - that LFS counts as "committed" under ruling c;
+    - that a public release asset downloads without a token;
+    - the recommendation itself.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
   Which inputs reach them is item E's work.
 - **How much of each kept method is dead inside it** (branch level). The counts are per method.
-- **Whether `brouter.de` serves stable bytes.** Not checked.
+- **Whether `brouter.de` serves stable bytes.** Answered by part 4 (F): it does not.
 - **Part 2, item B:**
   - whether any replacement behaves the same on iOS: nothing ran there;
   - whether `HashMap` iteration order changes a result at any of the nine sites in B row 18;
@@ -799,6 +924,13 @@ a ready source of profiles that switch on turn restrictions, bike mode and the o
   - whether GitHub Packages requires a token to read a public package (not checked);
   - iOS klib metadata across compiler versions (not tested);
   - whether Kotlin/Native 2.3.10 supports the runners' Xcode.
+
+- **Part 4 (F):**
+  - whether the Wayback Machine holds dated copies of a tile (both index queries were reset);
+  - which map creator brouter.de runs, and so whether the 1.7.10 engine reads today's tiles;
+  - what the zero-byte `0_timestamps_are_map_snapshot_time_in_CET_timezone` file implies for the listed times;
+  - the owner's GitHub plan, and so the LFS quota that applies (Free and Pro are the same, 10 GiB);
+  - option 6's limits, which were not read.
 
 ### Premises that were wrong
 
@@ -813,6 +945,11 @@ a ready source of profiles that switch on turn restrictions, bike mode and the o
   - **Forager `pre-main` moved** (`d100a4776`). No premise path changed, so this is a moved base, not a wrong premise
     (`05-layout/00-bases-part3.txt`).
   - **Amendment 1's account of Forager's build** is confirmed again, unchanged at `d100a4776`.
+
+- **Part 4:**
+  - **Premise 9's open question is answered.** brouter.de does not keep a tile's bytes stable at one URL: the files
+    listed as dated 2026-10-03 are dated 2026-10-29, and `W75_N40` had 10 earlier contents in 10 days. The citation
+    itself stands.
 
 ### Decided beyond scope
 
@@ -848,3 +985,12 @@ a ready source of profiles that switch on turn restrictions, bike mode and the o
     Amendment's question testable in Forager's own build configuration.
   - **A blob-less bare fetch of Forager `pre-main`** went into scratch to read the moved base. The read-only clone was
     not touched.
+- **Part 4:**
+  - **The Wayback Machine's capture index was queried** for one tile URL, as a dated-archive listing. It is not a
+    brouter.de listing or a `HEAD`, so it is named here. No capture was requested, and both queries failed.
+  - **Three `diff/` listings and one `HEAD` on a zero-byte `.df5`** were read alongside the tile `HEAD`s. A `.df5` is a
+    diff, not a tile, and the one sent a `HEAD` holds 0 bytes.
+  - **Two documentation pages were fetched in full,** brouter.de's offline page and ODbL 1.0, together with five
+    GitHub documentation pages through GitHub's article API.
+  - **Option 6 names Cloudflare R2 as an example** of an external bucket. Its limits were not read.
+  - **The listings were kept in scratch,** not committed, at 133 KB. Their parsed form and SHA-256s are committed.

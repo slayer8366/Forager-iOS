@@ -1,0 +1,3 @@
+# Wayback Machine CDX query for brouter.de/brouter/segments4/W75_N40.rd5
+# 2026-10-29T03:55:27Z and ~03:57Z: curl exit 35, "Connection reset by peer"; the agent proxy logged the tunnel to web.archive.org:443 closed mid-exchange after 10s.
+# Two attempts, both failed; not retried (could not determine).

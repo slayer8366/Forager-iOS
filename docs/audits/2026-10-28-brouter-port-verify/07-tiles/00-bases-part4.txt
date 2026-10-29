@@ -1,0 +1,11 @@
+# Part 4 bases, checked 2026-10-29T03:59:04Z (first check 2026-10-29T03:52:34Z)
+forager pre-main (remote, git ls-remote): d100a4776055d922b74e2fb4e9d23fb2ad6895cc
+forager read-only clone HEAD: e2969abe4f98674c24ce3913ce97be568184a4de; tree changes: 0
+forager-ios origin/main: a283961688fb7fc5a212712e76bb95b53ecbfbe6
+forager-ios brouter-port HEAD at start: 956f694f70c0a5be68dbaee6cb93e7b61df63482 (= origin/brouter-port after pull)
+upstream brouter scratch clone HEAD: 4d2639af77ea5ed9c30d3e400764eb6f9e8522da; status lines: 0
+upstream newest tags (git ls-remote --tags https://github.com/abrensch/brouter, sorted -V):
+  v1.7.8
+  v1.7.9
+  v1.7.10
+# pre-main is the d100a4776 RECORD -9 checked; no new commit since, so no new premise check is needed.

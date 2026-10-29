@@ -1,0 +1,4 @@
+# Cross-check, computed 2026-10-29T03:57:42Z: diff/ folders against tiles >= 1 MiB (Rd5DiffManager.java:36 skips smaller files)
+tiles >= 1 MiB: 585
+diff/ folders: 585
+# W75_N40 diff folder: 11 .df5 files, 10 non-empty (distinct MD5 names), dates 20-Oct-2026 21-Oct-2026 22-Oct-2026 23-Oct-2026 24-Oct-2026 25-Oct-2026 26-Oct-2026 27-Oct-2026 28-Oct-2026 29-Oct-2026 

@@ -1,0 +1,42 @@
+# Item F sources, read 2026-10-29 between 03:54Z and 04:02Z by Hazel (part 4).
+# GitHub docs were fetched as markdown via https://docs.github.com/api/article/body?pathname=<path>; quoted lines are verbatim, with the line number in that markdown.
+
+## https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
+11:GitHub limits the size of files allowed in repositories. If you attempt to add or update a file that is larger than 50 MiB, you will receive a warning from Git. The changes will still successfully push to your repository, but you can consider removing the commit to minimize performance impact. For more information, see [Removing files from a repository's history](#removing-files-from-a-repositorys-history).
+16:GitHub blocks files larger than 100 MiB.
+26:We recommend repositories remain small, ideally less than 1 GB, and less than 5 GB is strongly recommended. Smaller repositories are faster to clone and easier to work with and maintain. If your repository excessively impacts our infrastructure, you might receive an email from GitHub Support asking you to take corrective action. We try to be flexible, especially with large projects that have many collaborators, and will work with you to find a resolution whenever possible. You can prevent your repository from impacting our infrastructure by effectively managing your repository's size and overall health. You can find advice and a tool for repository analysis in the [`github/git-sizer`](https://github.com/github/git-sizer) repository.
+
+## https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
+31:Up to 1000 release assets may be associated with a single release. Each file included in a release must be under 2 GiB. There is no limit on the total size of a release, nor bandwidth usage.
+
+## https://docs.github.com/en/billing/concepts/product-billing/git-lfs
+16:* **Budget set to $0**: You are not charged for overages, but Git LFS usage is blocked for the rest of the calendar month. Usage resets on the first of the next month.
+17:* **Budget deleted**: There is no spending limit, and you are billed for all usage beyond the free quota.
+38:* If GitHub Actions downloads a 500 MB file that is tracked with Git LFS, it will use 500 MB of the repository owner's bandwidth.
+54:| GitHub Free                   | 10 GiB    | 10 GiB  |
+55:| GitHub Pro                    | 10 GiB    | 10 GiB  |
+
+## https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching
+310:GitHub will remove any cache entries that have not been accessed in over 7 days. There is no limit on the number of caches you can store, but the total size of all caches in a repository is limited. By default, the limit is 10 GB per repository, but this limit can be increased by enterprise owners, organization owners, or repository administrators. Any usage beyond 10 GB is billed to your acco
+
+## https://opendatacommons.org/licenses/odbl/1-0/ (ODbL 1.0, section 4.2, text extracted from the HTML)
+4.2 Notices. If You Publicly Convey this Database, any Derivative Database, or the Database as part of a Collective Database, then You must: a. Do so only under the terms of this License or another license permitted under Section 4.4; b. Include a copy of this License (or, as applicable, a license permitted under Section 4.4) or its Uniform Resource Identifier (URI) with the Database or Derivative Database, including both in the Database or Derivative Database and in any relevant documentation; and c. Keep intact any copyright or Database Right notices and notices that refer to this License. d. If it is not possible to put the required notices in a particular file due to its structure, then You must include the notices in a location (such as a relevant directory) where users would be likely to look for it.
+
+## https://brouter.de/brouter/offline.html (text extracted from the HTML)
+(The Map-Snapshot date is about 2 days before the timestamp of the routing data files)
+# No update cadence, archive or data licence is stated on that page. The parent page https://brouter.de/brouter/ links http://www.openstreetmap.org/copyright.
+
+## Upstream BRouter v1.7.10 (4d2639af77ea5ed9c30d3e400764eb6f9e8522da), scratch clone hazel/upstream/brouter
+brouter-mapaccess/src/main/java/btools/mapaccess/Rd5DiffManager.java:
+36:        continue; // exclude very small files from diffing
+44:      // calculate MD5 of old file
+54:      String diffFileName = md5 + ".df5";
+57:      String dummyDiffFileName = md5New + ".df5";
+59:      dummyDiffFile.createNewFile();
+brouter-routing-app/src/main/java/btools/routingapp/DownloadWorker.java:
+340: String segmentDeltaLocation = segmentBaseUrl + "diff/" + segmentName.replace(SEGMENT_SUFFIX, "/" + md5 + SEGMENT_DIFF_SUFFIX);
+
+## Raw listings kept in scratch (not committed), SHA-256:
+729f8956f64310a5ca634145eb65cfc1916c330d9bbbc4a013db1d2a76c224d9  segments4-index.html
+3496000d6ef2c2fe3669fd752657c05327b6b25ea52882731d5fcffb9216bf0e  diff-index.html
+e87d8896619a4d7196a7b745fcb1fb0c37840941cd17555f9ab1404a4a9350a8  diff-W75_N40-index.html
