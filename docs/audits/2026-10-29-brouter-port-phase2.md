@@ -40,7 +40,7 @@ close" below). CI run 40970686102 on `9ce54ee` succeeded: `jvm` 26 tests, 0 fail
 
 **Status (2026-10-29, ninth session, Linden Caliper, Amendment 3 Part B, step 2b, second part):** `CheapRuler`,
 `CheapAngleMeter` and the seam are ported and pushed (`35a1fb6` tests first, `073851b` the port, `c4e2eac` the revert).
-Locally, jvmTest gives 54 tests and 0 failures. CI on `073851b`: CI_PLACEHOLDER. Wrapped up on the planner's word, at about
+Locally, jvmTest gives 54 tests and 0 failures. CI run 40975094092 on `073851b` succeeded: `jvm` 54 tests, 0 failures, klibs compiled; `ios-smoke` 18 tests, 0 failures (simulator-checked). The arm64 HotSpot step did not run its tests (below). Wrapped up on the planner's word, at about
 180k tokens.
 
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
@@ -730,7 +730,7 @@ Base: `brouter-port` at `b7543f3`, equal to the remote at the start [R: `git sta
   `UseLibmIntrinsic` (`false`). It also requires `Math.cos` to equal `StrictMath.cos` at all 1,800 rows. That half can
   fail: in a scratch run (`0-flag-scratch.txt`), the default flags gave 60 of 1,800 rows differing, and the flag gave 0.
 - **Logic run [C, local; CI below]:** the port's table arithmetic, fed the oracle's `Math.cos`, equals the oracle's table
-  at all 1,800 rows. With `OracleLibm`, the port is bit for bit with the oracle at all of these: `distance` at 200,000
+  at all 1,800 rows. CI, Temurin 21.0.13+9, gave the same counts and branch figures (`ci-run-40975094092.txt`). With `OracleLibm`, the port is bit for bit with the oracle at all of these: `distance` at 200,000
   cases (50,000 zero); `calcAngle` and `cosAngle` at 200,000, with each branch counted (dd==0 20,166; +90 39,680; -90 39,456;
   cosp<0 50,453; plain 50,245); `getAngle` and `getDirection` at 2,399,792 evaluations (each pair in four signs); and
   `normalize` and `getDifferenceFromDirection` over 20,021 values, 20,000 pairs and 441 edge pairs.
@@ -768,7 +768,14 @@ Base: `brouter-port` at `b7543f3`, equal to the remote at the start [R: `git sta
   - which simulator runtime ran the tests [?];
   - "by stratum" in the production record: strata are route-level, and they arrive with E's steps;
   - the revert check ran on the JVM only, not on the simulator;
-  - the arm64 HotSpot step's outcome: CI_ARM64_PLACEHOLDER.
+  - **the arm64 HotSpot step did not run its tests [C: `ci-run-40975094092-ios-smoke.log`]:** jvmTest depends on
+    `msunReference`, and bionic's C does not compile against the macOS SDK (`freebsd-compat.h:35`, `digittoint`, then
+    `endian.h`). The job stayed green because the step is `continue-on-error`. Part 6's arm64 question is still open.
+    For the next session: run it with `-x msunReference`, and only the two classes that do not read the C build
+    (`CheapLogicRunTest` and `CheapProductionRecordTest`);
+  - **the simulator has no failing-first evidence from CI:** on `35a1fb6`, `ios-smoke` failed before any test because Maven
+    Central answered 429 while Gradle resolved the Kotlin plugin. `jvm` failed as intended there: 54 tests, 13 failures,
+    the same 13 as locally (`ci-run-40974977957.txt`).
 - **Handoff to step 3 (`codec`):** `codec` calls neither `CheapRuler` nor `CheapAngleMeter` [R: grep of `btools/codec`].
   The first callers are in `mapaccess`: `OsmNode.calcDistance` (`OsmNode.java:103`, which needs `javaRound`) and
   `WaypointMatcherImpl` (`:52`, `:61`, `:80`, `:189-212`). Each will need a `LibmSeam` passed in. Runners are in

@@ -1,0 +1,795 @@
+﻿2026-10-29T23:43:54.8569410Z Current runner version: '2.338.0'
+2026-10-29T23:43:54.8588680Z ##[group]Runner Image Provisioner
+2026-10-29T23:43:54.8589300Z Hosted Compute Agent
+2026-10-29T23:43:54.8591970Z Version: 20261021.618
+2026-10-29T23:43:54.8593140Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-29T23:43:54.8594410Z Build Date: 2026-10-21T00:45:21Z
+2026-10-29T23:43:54.8595560Z Worker ID: {601923bf-5a25-4f48-86d4-8b58273bc742}
+2026-10-29T23:43:54.8596740Z Region: westus
+2026-10-29T23:43:54.8597660Z Cloud: MacCloud
+2026-10-29T23:43:54.8598560Z ##[endgroup]
+2026-10-29T23:43:54.8601840Z ##[group]Operating System
+2026-10-29T23:43:54.8602910Z macOS
+2026-10-29T23:43:54.8603730Z 26.6.2
+2026-10-29T23:43:54.8604570Z 25G83
+2026-10-29T23:43:54.8605430Z ##[endgroup]
+2026-10-29T23:43:54.8606350Z ##[group]Runner Image
+2026-10-29T23:43:54.8607430Z Image: macos-26-arm64
+2026-10-29T23:43:54.8608480Z Version: 20261021.0445.8
+2026-10-29T23:43:54.8611350Z Included Software: https://github.com/actions/runner-images/blob/macos-26-arm64/20261021.0445/images/macos/macos-26-arm64-Readme.md
+2026-10-29T23:43:54.8612540Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261021.0445
+2026-10-29T23:43:54.8613290Z ##[endgroup]
+2026-10-29T23:43:54.8614090Z ##[group]GITHUB_TOKEN Permissions
+2026-10-29T23:43:54.8616190Z Contents: read
+2026-10-29T23:43:54.8616570Z Metadata: read
+2026-10-29T23:43:54.8616940Z ##[endgroup]
+2026-10-29T23:43:54.8618660Z Secret source: Actions
+2026-10-29T23:43:54.8619230Z Cache mode: write
+2026-10-29T23:43:54.8619700Z Prepare workflow directory
+2026-10-29T23:43:54.9057670Z Prepare all required actions
+2026-10-29T23:43:54.9167110Z Getting action download info
+2026-10-29T23:43:55.2100080Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-29T23:43:55.5166520Z Download action repository 'actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad' (SHA:b843ebf9b913146b38da2eaa7aeddf76074ae1ad)
+2026-10-29T23:43:56.1707380Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-29T23:43:56.3446420Z Complete job name: ios-smoke
+2026-10-29T23:43:56.4138760Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-29T23:43:56.4139560Z with:
+2026-10-29T23:43:56.4139920Z   repository: slayer8366/Forager-iOS
+2026-10-29T23:43:56.4142840Z   token: ***
+2026-10-29T23:43:56.4143180Z   ssh-strict: true
+2026-10-29T23:43:56.4143500Z   ssh-user: git
+2026-10-29T23:43:56.4143840Z   persist-credentials: true
+2026-10-29T23:43:56.4144210Z   clean: true
+2026-10-29T23:43:56.4144620Z   sparse-checkout-cone-mode: true
+2026-10-29T23:43:56.4144990Z   fetch-depth: 1
+2026-10-29T23:43:56.4145340Z   fetch-tags: false
+2026-10-29T23:43:56.4145660Z   show-progress: true
+2026-10-29T23:43:56.4146000Z   lfs: false
+2026-10-29T23:43:56.4146320Z   submodules: false
+2026-10-29T23:43:56.4146660Z   set-safe-directory: true
+2026-10-29T23:43:56.4147150Z   allow-unsafe-pr-checkout: false
+2026-10-29T23:43:56.4147790Z ##[endgroup]
+2026-10-29T23:43:56.9213540Z Syncing repository: slayer8366/Forager-iOS
+2026-10-29T23:43:56.9215330Z ##[group]Getting Git version info
+2026-10-29T23:43:56.9215890Z Working directory is '/Users/runner/work/Forager-iOS/Forager-iOS'
+2026-10-29T23:43:56.9216780Z [command]/opt/homebrew/bin/git version
+2026-10-29T23:43:56.9574120Z git version 2.56.0
+2026-10-29T23:43:56.9594210Z ##[endgroup]
+2026-10-29T23:43:56.9604690Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/2882c015-004a-42d6-8feb-6bdc1f83da85/.gitconfig'
+2026-10-29T23:43:56.9610600Z Temporarily overriding HOME='/Users/runner/work/_temp/2882c015-004a-42d6-8feb-6bdc1f83da85' before making global git config changes
+2026-10-29T23:43:56.9613430Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T23:43:56.9619180Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Forager-iOS/Forager-iOS
+2026-10-29T23:43:56.9777570Z Deleting the contents of '/Users/runner/work/Forager-iOS/Forager-iOS'
+2026-10-29T23:43:56.9781260Z ##[group]Determining repository object format
+2026-10-29T23:43:56.9783590Z ##[endgroup]
+2026-10-29T23:43:56.9785340Z ##[group]Initializing the repository
+2026-10-29T23:43:56.9787420Z [command]/opt/homebrew/bin/git init /Users/runner/work/Forager-iOS/Forager-iOS
+2026-10-29T23:43:57.0126600Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-29T23:43:57.0127540Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-29T23:43:57.0128220Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-29T23:43:57.0128780Z hint: call:
+2026-10-29T23:43:57.0129220Z hint:
+2026-10-29T23:43:57.0129650Z hint: 	git config --global init.defaultBranch <name>
+2026-10-29T23:43:57.0130240Z hint:
+2026-10-29T23:43:57.0130720Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-29T23:43:57.0131700Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-29T23:43:57.0132280Z hint:
+2026-10-29T23:43:57.0132640Z hint: 	git branch -m <name>
+2026-10-29T23:43:57.0133020Z hint:
+2026-10-29T23:43:57.0133700Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-29T23:43:57.0163040Z Initialized empty Git repository in /Users/runner/work/Forager-iOS/Forager-iOS/.git/
+2026-10-29T23:43:57.0175800Z [command]/opt/homebrew/bin/git remote add origin https://github.com/slayer8366/Forager-iOS
+2026-10-29T23:43:57.0298670Z ##[endgroup]
+2026-10-29T23:43:57.0299530Z ##[group]Disabling automatic garbage collection
+2026-10-29T23:43:57.0300500Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-10-29T23:43:57.0383080Z ##[endgroup]
+2026-10-29T23:43:57.0383850Z ##[group]Setting up auth
+2026-10-29T23:43:57.0384440Z Removing SSH command configuration
+2026-10-29T23:43:57.0385340Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T23:43:57.0490410Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T23:43:57.1818470Z Removing HTTP extra header
+2026-10-29T23:43:57.1821520Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T23:43:57.1896730Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T23:43:57.3124100Z Removing includeIf entries pointing to credentials config files
+2026-10-29T23:43:57.3126250Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T23:43:57.3205990Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T23:43:57.4613430Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-29T23:43:57.4624720Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git.path /Users/runner/work/_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:43:57.4698730Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:43:57.4777360Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:43:57.4856930Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:43:57.4934540Z ##[endgroup]
+2026-10-29T23:43:57.4936160Z ##[group]Fetching the repository
+2026-10-29T23:43:57.4939510Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +073851bb35a58ce7a441ef995319de50dab328d6:refs/remotes/origin/brouter-port
+2026-10-29T23:43:58.0463870Z From https://github.com/slayer8366/Forager-iOS
+2026-10-29T23:43:58.0468360Z  * [new ref]         073851bb35a58ce7a441ef995319de50dab328d6 -> origin/brouter-port
+2026-10-29T23:43:58.0529760Z [command]/opt/homebrew/bin/git branch --list --remote origin/brouter-port
+2026-10-29T23:43:58.0603010Z   origin/brouter-port
+2026-10-29T23:43:58.0627090Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/brouter-port
+2026-10-29T23:43:58.0698970Z 073851bb35a58ce7a441ef995319de50dab328d6
+2026-10-29T23:43:58.0702260Z ##[endgroup]
+2026-10-29T23:43:58.0703870Z ##[group]Determining the checkout info
+2026-10-29T23:43:58.0717430Z ##[endgroup]
+2026-10-29T23:43:58.0732280Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-10-29T23:43:58.0837130Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-29T23:43:58.0922550Z ##[group]Checking out the ref
+2026-10-29T23:43:58.0925140Z [command]/opt/homebrew/bin/git checkout --progress --force -B brouter-port refs/remotes/origin/brouter-port
+2026-10-29T23:43:58.1606460Z Switched to a new branch 'brouter-port'
+2026-10-29T23:43:58.1610570Z branch 'brouter-port' set up to track 'origin/brouter-port'.
+2026-10-29T23:43:58.1615590Z ##[endgroup]
+2026-10-29T23:43:58.1732280Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-10-29T23:43:58.1814830Z 073851bb35a58ce7a441ef995319de50dab328d6
+2026-10-29T23:43:58.2206710Z ##[group]Run actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+2026-10-29T23:43:58.2207660Z with:
+2026-10-29T23:43:58.2208000Z   distribution: temurin
+2026-10-29T23:43:58.2208440Z   java-version: 21.0.13+9
+2026-10-29T23:43:58.2208870Z   java-package: jdk
+2026-10-29T23:43:58.2209250Z   check-latest: false
+2026-10-29T23:43:58.2209650Z   force-download: false
+2026-10-29T23:43:58.2210120Z   set-default: true
+2026-10-29T23:43:58.2210530Z   server-id: github
+2026-10-29T23:43:58.2210960Z   mvn-repositories-include-central: true
+2026-10-29T23:43:58.2211600Z   mvn-repositories-prioritize-central: true
+2026-10-29T23:43:58.2212220Z   overwrite-settings: true
+2026-10-29T23:43:58.2212690Z   cache-read-only: false
+2026-10-29T23:43:58.2213110Z   job-status: success
+2026-10-29T23:43:58.2219960Z   token: ***
+2026-10-29T23:43:58.2220450Z   show-download-progress: false
+2026-10-29T23:43:58.2221370Z   problem-matcher: true
+2026-10-29T23:43:58.2221850Z ##[endgroup]
+2026-10-29T23:43:58.3420880Z ##[group]Installed distributions
+2026-10-29T23:43:58.3492320Z Trying to resolve the latest version from remote
+2026-10-29T23:43:59.3351410Z Resolved latest version as 21.0.13+9.0.LTS
+2026-10-29T23:43:59.3450350Z Trying to download...
+2026-10-29T23:43:59.3553610Z Downloading Java 21.0.13+9.0.LTS (Temurin-Hotspot) from https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk_aarch64_mac_hotspot_21.0.13_9.tar.gz ...
+2026-10-29T23:44:02.0009240Z Verifying Java package signature...
+2026-10-29T23:44:03.9638330Z Extracting Java archive...
+2026-10-29T23:44:03.9775420Z [command]/usr/bin/tar xz -C /Users/runner/work/_temp/2ce3c7ea-1979-4f1a-87b9-c0650aa024fb -f /Users/runner/work/_temp/91f081c7-006d-4111-adfa-7265677fd959
+2026-10-29T23:44:05.1112240Z Java 21.0.13+9.0.LTS was downloaded
+2026-10-29T23:44:05.1117470Z Setting Java 21.0.13+9.0.LTS as the default
+2026-10-29T23:44:05.1190000Z 
+2026-10-29T23:44:05.1190430Z Java configuration:
+2026-10-29T23:44:05.1191200Z   Distribution: temurin
+2026-10-29T23:44:05.1191890Z   Version: 21.0.13+9.0.LTS
+2026-10-29T23:44:05.1192560Z   Path: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:44:05.1200180Z 
+2026-10-29T23:44:05.1202790Z ##[endgroup]
+2026-10-29T23:44:05.1240210Z Creating settings.xml with server-id: github
+2026-10-29T23:44:05.1240690Z Creating toolchains.xml for JDK version 21.0.13+9 from temurin
+2026-10-29T23:44:05.1241100Z Writing to /Users/runner/.m2/settings.xml
+2026-10-29T23:44:05.1241520Z Writing to /Users/runner/.m2/toolchains.xml
+2026-10-29T23:44:05.1242160Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-29T23:44:05.1415740Z ##[group]Run sudo xcode-select -s /Applications/Xcode_26.0.1.app
+2026-10-29T23:44:05.1416310Z [36;1msudo xcode-select -s /Applications/Xcode_26.0.1.app[0m
+2026-10-29T23:44:05.1416670Z [36;1mxcodebuild -version[0m
+2026-10-29T23:44:05.1416960Z [36;1mxcrun simctl list runtimes[0m
+2026-10-29T23:44:05.1417270Z [36;1mxcrun simctl list devices available[0m
+2026-10-29T23:44:05.1485580Z shell: /bin/bash -e {0}
+2026-10-29T23:44:05.1486870Z env:
+2026-10-29T23:44:05.1487560Z   JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:44:05.1488760Z   JAVA_HOME_21_AARCH64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:44:05.1490030Z   MAVEN_ARGS: -ntp
+2026-10-29T23:44:05.1490210Z ##[endgroup]
+2026-10-29T23:44:07.7686520Z Xcode 26.0.1
+2026-10-29T23:44:13.4052100Z Build version 17A400
+2026-10-29T23:44:13.4052700Z == Runtimes ==
+2026-10-29T23:44:13.4055630Z iOS 26.2 (26.2 - 23C54) - com.apple.CoreSimulator.SimRuntime.iOS-26-2
+2026-10-29T23:44:13.4059200Z iOS 26.4 (26.4.1 - 23E254a) - com.apple.CoreSimulator.SimRuntime.iOS-26-4
+2026-10-29T23:44:13.4060210Z iOS 26.5 (26.5 - 23F77) - com.apple.CoreSimulator.SimRuntime.iOS-26-5
+2026-10-29T23:44:13.4061000Z tvOS 26.2 (26.2 - 23K51) - com.apple.CoreSimulator.SimRuntime.tvOS-26-2
+2026-10-29T23:44:13.4061760Z tvOS 26.4 (26.4 - 23L243a) - com.apple.CoreSimulator.SimRuntime.tvOS-26-4
+2026-10-29T23:44:13.4062630Z tvOS 26.5 (26.5 - 23L470) - com.apple.CoreSimulator.SimRuntime.tvOS-26-5
+2026-10-29T23:44:13.4064710Z watchOS 26.2 (26.2 - 23S303) - com.apple.CoreSimulator.SimRuntime.watchOS-26-2
+2026-10-29T23:44:13.4065580Z watchOS 26.4 (26.4 - 23T240b) - com.apple.CoreSimulator.SimRuntime.watchOS-26-4
+2026-10-29T23:44:13.4066140Z watchOS 26.5 (26.5 - 23T570) - com.apple.CoreSimulator.SimRuntime.watchOS-26-5
+2026-10-29T23:44:13.4066810Z visionOS 26.2 (26.2 - 23N301) - com.apple.CoreSimulator.SimRuntime.xrOS-26-2
+2026-10-29T23:44:13.4067350Z visionOS 26.4 (26.4.1 - 23O249a) - com.apple.CoreSimulator.SimRuntime.xrOS-26-4
+2026-10-29T23:44:13.4067970Z visionOS 26.5 (26.5 - 23O470) - com.apple.CoreSimulator.SimRuntime.xrOS-26-5
+2026-10-29T23:44:13.8111950Z == Devices ==
+2026-10-29T23:44:13.8127970Z -- iOS 26.2 --
+2026-10-29T23:44:13.8130980Z     iPhone 17 Pro (2263B19F-42E8-4C8B-8AF1-D79508216C90) (Shutdown) 
+2026-10-29T23:44:13.8132310Z     iPhone 17 Pro Max (CDFBE5B7-49AC-41DA-BEF5-734F34972AEC) (Shutdown) 
+2026-10-29T23:44:13.8133040Z     iPhone Air (14818EE9-508F-4481-A5BB-B25046EE207C) (Shutdown) 
+2026-10-29T23:44:13.8133520Z     iPhone 17 (2FB8D9D0-0E7C-4DE0-9836-3F7CBA959484) (Shutdown) 
+2026-10-29T23:44:13.8133910Z     iPhone 16e (582B068E-2ACA-440E-8D01-417AEDF26981) (Shutdown) 
+2026-10-29T23:44:13.8134420Z     iPad Pro 13-inch (M5) (C5A0F722-3377-4D6E-8576-6C3E27DD9E63) (Shutdown) 
+2026-10-29T23:44:13.8135230Z     iPad Pro 11-inch (M5) (EAB7755E-CCCD-4EF7-8673-D78A18AF4083) (Shutdown) 
+2026-10-29T23:44:13.8135850Z     iPad mini (A17 Pro) (714853ED-4EB5-4118-B921-88521B41BCB4) (Shutdown) 
+2026-10-29T23:44:13.8137120Z     iPad (A16) (CBFB76F3-C27E-4A9E-BB6D-FDC1E0CD8179) (Shutdown) 
+2026-10-29T23:44:13.8137610Z     iPad Air 13-inch (M3) (CE87FE46-0774-4422-A008-7737E703E55F) (Shutdown) 
+2026-10-29T23:44:13.8138180Z     iPad Air 11-inch (M3) (99E3A897-7456-4E6F-9593-71D9D94C7BCA) (Shutdown) 
+2026-10-29T23:44:13.8138560Z -- iOS 26.4 --
+2026-10-29T23:44:13.8138910Z     iPhone 17 Pro (58FBEAC1-8EC6-4E83-B597-D6801A423A50) (Shutdown) 
+2026-10-29T23:44:13.8145240Z     iPhone 17 Pro Max (ADA5D392-69F1-433A-A39A-74D624E79F7C) (Shutdown) 
+2026-10-29T23:44:13.8145700Z     iPhone 17e (B6064BED-00EB-4225-A771-C47E56E1AE52) (Shutdown) 
+2026-10-29T23:44:13.8146140Z     iPhone Air (04B81904-66B9-4BE3-9C01-83C52C122685) (Shutdown) 
+2026-10-29T23:44:13.8146520Z     iPhone 17 (420363C1-8FA8-4D3E-B731-CD3EDE262E4F) (Shutdown) 
+2026-10-29T23:44:13.8147010Z     iPad Pro 13-inch (M5) (1812E91B-A366-406E-B714-BC3D488891B9) (Shutdown) 
+2026-10-29T23:44:13.8147920Z     iPad Pro 11-inch (M5) (4A3215D3-F403-4E39-A3EE-44EA4F92F00B) (Shutdown) 
+2026-10-29T23:44:13.8148410Z     iPad mini (A17 Pro) (DA68FF45-6141-4785-ACD6-DDF0A77EE8D0) (Shutdown) 
+2026-10-29T23:44:13.8148920Z     iPad Air 13-inch (M4) (82440E24-692F-40A0-8892-C2CAB325DBA1) (Shutdown) 
+2026-10-29T23:44:13.8149350Z     iPad Air 11-inch (M4) (556B1354-B29F-4DFE-997B-F17886ECD500) (Shutdown) 
+2026-10-29T23:44:13.8149850Z     iPad (A16) (B1AB0871-05ED-44E0-8640-DD5179F4A3C4) (Shutdown) 
+2026-10-29T23:44:13.8150210Z -- iOS 26.5 --
+2026-10-29T23:44:13.8150570Z     iPhone 17 Pro (77AA4492-C787-4EEE-A772-05D4B3E9ECCD) (Shutdown) 
+2026-10-29T23:44:13.8151070Z     iPhone 17 Pro Max (36E2B8D9-F7DC-43ED-8383-C3824D1485A8) (Shutdown) 
+2026-10-29T23:44:13.8151480Z     iPhone 17e (D47C0C27-5FB8-4721-B865-C68B6AB925CC) (Shutdown) 
+2026-10-29T23:44:13.8152050Z     iPhone Air (D8AAABAD-F0D0-4A6C-8B1B-8249EADEEEDE) (Shutdown) 
+2026-10-29T23:44:13.8152470Z     iPhone 17 (F94FB7BA-C33C-4B3B-B505-F0FB478DB847) (Shutdown) 
+2026-10-29T23:44:13.8153000Z     iPad Pro 13-inch (M5) (687AB7EE-DF9A-4A96-878E-7509AB01A80C) (Shutdown) 
+2026-10-29T23:44:13.8153460Z     iPad Pro 11-inch (M5) (7E28B4AB-81E4-41C6-BD7E-2F4EC285FB95) (Shutdown) 
+2026-10-29T23:44:13.8154040Z     iPad mini (A17 Pro) (C31127F4-83B8-4B9A-ACFE-3135F1C62B4E) (Shutdown) 
+2026-10-29T23:44:13.8154680Z     iPad Air 13-inch (M4) (DC796EB6-167A-42A9-807C-DE486D5B0220) (Shutdown) 
+2026-10-29T23:44:13.8155130Z     iPad Air 11-inch (M4) (359DF948-ECA4-4245-8BDF-B1AE300B058A) (Shutdown) 
+2026-10-29T23:44:13.8155610Z     iPad (A16) (D798106A-0403-425E-8352-3E7056FA9F79) (Shutdown) 
+2026-10-29T23:44:13.8155980Z -- tvOS 26.2 --
+2026-10-29T23:44:13.8156360Z     Apple TV 4K (3rd generation) (461F7CA7-2FDD-4E77-83E2-F48752996B5A) (Shutdown) 
+2026-10-29T23:44:13.8156910Z     Apple TV 4K (3rd generation) (at 1080p) (48F7BDF3-5FDF-40DD-9D31-AE8108089008) (Shutdown) 
+2026-10-29T23:44:13.8157530Z     Apple TV (4AD244D1-1A2B-4855-8106-4A5E6C834A98) (Shutdown) 
+2026-10-29T23:44:13.8157940Z -- tvOS 26.4 --
+2026-10-29T23:44:13.8158340Z     Apple TV 4K (3rd generation) (569FACC5-89AD-47DE-826A-CC89CACB8B47) (Shutdown) 
+2026-10-29T23:44:13.8158890Z     Apple TV 4K (3rd generation) (at 1080p) (19A8EE54-A2A8-4EAA-861F-A3E366E5A451) (Shutdown) 
+2026-10-29T23:44:13.8159360Z     Apple TV (04CF37CD-5F05-410F-832A-D724461F2B71) (Shutdown) 
+2026-10-29T23:44:13.8159740Z -- tvOS 26.5 --
+2026-10-29T23:44:13.8160060Z     Apple TV 4K (3rd generation) (D974C856-C500-48B8-A908-AEFB26510880) (Shutdown) 
+2026-10-29T23:44:13.8160720Z     Apple TV 4K (3rd generation) (at 1080p) (4BAEB347-DC4B-48EB-A0CC-13EE505AC279) (Shutdown) 
+2026-10-29T23:44:13.8161290Z     Apple TV (67D4249A-10D3-40F4-922A-C440CE53D3D2) (Shutdown) 
+2026-10-29T23:44:13.8161640Z -- watchOS 26.2 --
+2026-10-29T23:44:13.8162040Z     Apple Watch Series 11 (46mm) (742C28D1-F312-4B24-8AA6-105CE73B04A3) (Shutdown) 
+2026-10-29T23:44:13.8162560Z     Apple Watch Series 11 (42mm) (CFC2087B-B723-4A51-9BCD-FA26571CC5A8) (Shutdown) 
+2026-10-29T23:44:13.8163090Z     Apple Watch Ultra 3 (49mm) (5432DD47-4EE3-4C2B-ABF3-436F9B865E6B) (Shutdown) 
+2026-10-29T23:44:13.8163560Z     Apple Watch SE 3 (44mm) (6C56CA71-BC9D-4DAF-A9C1-C6FA9F7B9940) (Shutdown) 
+2026-10-29T23:44:13.8164080Z     Apple Watch SE 3 (40mm) (EA85E100-5C68-42EF-B039-2097F483D00C) (Shutdown) 
+2026-10-29T23:44:13.8164550Z -- watchOS 26.4 --
+2026-10-29T23:44:13.8164860Z     Apple Watch Series 11 (46mm) (A9AD10C4-A99C-4258-8A6A-36B7A36DBED4) (Shutdown) 
+2026-10-29T23:44:13.8166000Z     Apple Watch Series 11 (42mm) (7EB3046C-4AA0-4D9C-BDE5-E9833760EBA2) (Shutdown) 
+2026-10-29T23:44:13.8166470Z     Apple Watch Ultra 3 (49mm) (2D846D25-B495-4479-B54D-9E8927AF47F5) (Shutdown) 
+2026-10-29T23:44:13.8167030Z     Apple Watch SE 3 (44mm) (CE33676A-E763-4E3C-BA93-CB6C77AA697A) (Shutdown) 
+2026-10-29T23:44:13.8167550Z     Apple Watch SE 3 (40mm) (674E0F2B-656B-4220-9604-ADF81FD76E33) (Shutdown) 
+2026-10-29T23:44:13.8167980Z -- watchOS 26.5 --
+2026-10-29T23:44:13.8168540Z     Apple Watch Series 11 (46mm) (5A942514-40AA-4931-B61F-969151943FC7) (Shutdown) 
+2026-10-29T23:44:13.8169140Z     Apple Watch Series 11 (42mm) (4FA98031-3809-4E24-9F22-52C4551A1C15) (Shutdown) 
+2026-10-29T23:44:13.8169660Z     Apple Watch Ultra 3 (49mm) (E1C880B0-741C-4D68-8547-8F50DB49405E) (Shutdown) 
+2026-10-29T23:44:13.8170120Z     Apple Watch SE 3 (44mm) (059D391B-7696-4CEE-9DB0-505AE01FDEEA) (Shutdown) 
+2026-10-29T23:44:13.8170700Z     Apple Watch SE 3 (40mm) (D4A9E89A-EBBD-4AF7-A3D1-BB59DD0EE75A) (Shutdown) 
+2026-10-29T23:44:13.8171180Z -- visionOS 26.2 --
+2026-10-29T23:44:13.8171660Z     Apple Vision Pro (9D68183F-545F-492D-ADBD-B4DBF3DF5977) (Shutdown) 
+2026-10-29T23:44:13.8172010Z -- visionOS 26.4 --
+2026-10-29T23:44:13.8172450Z     Apple Vision Pro (93FCC14B-1F57-498B-AF71-37140CA6C6D0) (Shutdown) 
+2026-10-29T23:44:13.8172800Z -- visionOS 26.5 --
+2026-10-29T23:44:13.8173270Z     Apple Vision Pro (95F44328-80F6-4961-9A59-AF27DB129AE8) (Shutdown) 
+2026-10-29T23:44:13.8265080Z ##[group]Run ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
+2026-10-29T23:44:13.8265470Z [36;1m./gradlew --no-daemon :brouter:iosSimulatorArm64Test[0m
+2026-10-29T23:44:13.8307490Z shell: /bin/bash -e {0}
+2026-10-29T23:44:13.8307690Z env:
+2026-10-29T23:44:13.8308050Z   JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:44:13.8308670Z   JAVA_HOME_21_AARCH64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:44:13.8309110Z   MAVEN_ARGS: -ntp
+2026-10-29T23:44:13.8309310Z ##[endgroup]
+2026-10-29T23:44:14.2408590Z Downloading https://services.gradle.org/distributions/gradle-9.0.0-bin.zip
+2026-10-29T23:44:16.2536530Z ............10%.............20%.............30%.............40%.............50%............60%.............70%.............80%.............90%.............100%
+2026-10-29T23:44:18.0527100Z 
+2026-10-29T23:44:18.0550990Z Welcome to Gradle 9.0.0!
+2026-10-29T23:44:18.0610570Z 
+2026-10-29T23:44:18.0611350Z Here are the highlights of this release:
+2026-10-29T23:44:18.0615930Z  - Configuration Cache is the recommended execution mode
+2026-10-29T23:44:18.0616360Z  - Gradle requires JVM 17 or higher to run
+2026-10-29T23:44:18.0616730Z  - Build scripts use Kotlin 2.2 and Groovy 4.0
+2026-10-29T23:44:18.0617240Z  - Improved Kotlin DSL script compilation avoidance
+2026-10-29T23:44:18.0618880Z 
+2026-10-29T23:44:18.0619200Z For more details see https://docs.gradle.org/9.0.0/release-notes.html
+2026-10-29T23:44:18.0619670Z 
+2026-10-29T23:44:18.0620570Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-10-29T23:44:19.1632740Z Daemon will be stopped at the end of the build 
+2026-10-29T23:44:55.6262520Z > Task :brouter:kmpPartiallyResolvedDependenciesChecker
+2026-10-29T23:44:55.7352480Z > Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-29T23:45:25.6930060Z > Task :brouter:downloadKotlinNativeDistribution
+2026-10-29T23:45:39.2126570Z Kotlin/Native bundle directory /Users/runner/.konan/kotlin-native-prebuilt-macos-aarch64-2.3.10 is not empty. Native bundle files will be overwritten.
+2026-10-29T23:46:06.8602370Z Downloading native dependencies (LLVM, sysroot etc). This is a one-time action performed only on the first run of the compiler.
+2026-10-29T23:46:06.8606790Z Downloading dependency https://download.jetbrains.com/kotlin/native/resources/llvm/19-aarch64-macos/llvm-19-aarch64-macos-essentials-79.tar.gz to /Users/runner/.konan/dependencies/cache/llvm-19-aarch64-macos-essentials-79.tar.gz
+2026-10-29T23:46:08.0582560Z Done.
+2026-10-29T23:46:08.0584830Z Extracting dependency: /Users/runner/.konan/dependencies/cache/llvm-19-aarch64-macos-essentials-79.tar.gz into /Users/runner/.konan/dependencies
+2026-10-29T23:46:11.3367470Z Downloading dependency https://download.jetbrains.com/kotlin/native/libffi-3.3-1-macos-arm64.tar.gz to /Users/runner/.konan/dependencies/cache/libffi-3.3-1-macos-arm64.tar.gz
+2026-10-29T23:46:11.3469520Z Done.
+2026-10-29T23:46:11.3574350Z Extracting dependency: /Users/runner/.konan/dependencies/cache/libffi-3.3-1-macos-arm64.tar.gz into /Users/runner/.konan/dependencies
+2026-10-29T23:46:31.1029980Z 
+2026-10-29T23:46:31.1066310Z > Task :brouter:compileKotlinIosSimulatorArm64
+2026-10-29T23:46:31.1068370Z > Task :brouter:iosSimulatorArm64ProcessResources NO-SOURCE
+2026-10-29T23:46:31.1070450Z > Task :brouter:iosSimulatorArm64MainKlibrary
+2026-10-29T23:46:32.8813630Z > Task :brouter:compileTestKotlinIosSimulatorArm64
+2026-10-29T23:46:59.4818260Z > Task :brouter:linkDebugTestIosSimulatorArm64
+2026-10-29T23:47:08.4054360Z > Task :brouter:iosSimulatorArm64Test
+2026-10-29T23:47:08.5872940Z 
+2026-10-29T23:47:08.5938110Z BUILD SUCCESSFUL in 2m 54s
+2026-10-29T23:47:08.5939930Z 6 actionable tasks: 6 executed
+2026-10-29T23:47:08.5947350Z Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html
+2026-10-29T23:47:08.9111240Z ##[group]Run python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+2026-10-29T23:47:08.9112370Z [36;1mpython3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test[0m
+2026-10-29T23:47:08.9113090Z [36;1mfor f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done[0m
+2026-10-29T23:47:09.3005770Z shell: /bin/bash -e {0}
+2026-10-29T23:47:09.3006970Z env:
+2026-10-29T23:47:09.3008200Z   JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:09.3009360Z   JAVA_HOME_21_AARCH64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:09.3010730Z   MAVEN_ARGS: -ntp
+2026-10-29T23:47:09.3012030Z ##[endgroup]
+2026-10-29T23:47:09.7233250Z com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+2026-10-29T23:47:09.7235040Z com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+2026-10-29T23:47:09.7236670Z com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+2026-10-29T23:47:09.7238210Z com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+2026-10-29T23:47:09.7239740Z com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml)
+2026-10-29T23:47:09.7241350Z com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+2026-10-29T23:47:09.7242760Z com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml)
+2026-10-29T23:47:09.7254330Z TOTAL: tests 18, failures 0, errors 0, skipped 0 in 7 files
+2026-10-29T23:47:09.7286090Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml
+2026-10-29T23:47:09.7341610Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7343280Z <testsuite name="com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:04.669Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="1.818">
+2026-10-29T23:47:09.7344300Z   <properties/>
+2026-10-29T23:47:09.7349150Z   <testcase name="atan2OverThePairsHashesAsBionicsDoes[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest" time="1.818"/>
+2026-10-29T23:47:09.7350110Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7350780Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7351160Z </testsuite>
+2026-10-29T23:47:09.7351870Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml
+2026-10-29T23:47:09.7389170Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7392230Z <testsuite name="com.zynergylabs.forager.brouter.msun.MsunCosTableTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:06.489Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="0.025">
+2026-10-29T23:47:09.7394750Z   <properties/>
+2026-10-29T23:47:09.7398130Z   <testcase name="latitudesAreTheTables[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.msun.MsunCosTableTest" time="0.024"/>
+2026-10-29T23:47:09.7400650Z   <testcase name="cosEqualsBionicAtEveryTableRow[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.msun.MsunCosTableTest" time="0.0"/>
+2026-10-29T23:47:09.7402460Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7403200Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7403900Z </testsuite>
+2026-10-29T23:47:09.7405050Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml
+2026-10-29T23:47:09.7423150Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7425800Z <testsuite name="com.zynergylabs.forager.brouter.msun.MsunEdgesTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:06.514Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="0.002">
+2026-10-29T23:47:09.7428220Z   <properties/>
+2026-10-29T23:47:09.7430040Z   <testcase name="cosEdges[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.msun.MsunEdgesTest" time="0.001"/>
+2026-10-29T23:47:09.7432990Z   <testcase name="atan2Edges[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.msun.MsunEdgesTest" time="0.0"/>
+2026-10-29T23:47:09.7434090Z   <testcase name="theRefusalIsNamedAndCarriesItsArgument[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.msun.MsunEdgesTest" time="0.0"/>
+2026-10-29T23:47:09.7434880Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7435310Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7435710Z </testsuite>
+2026-10-29T23:47:09.7436830Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml
+2026-10-29T23:47:09.7473330Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7474730Z <testsuite name="com.zynergylabs.forager.brouter.ToolchainSmokeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:04.658Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="0.008">
+2026-10-29T23:47:09.7475810Z   <properties/>
+2026-10-29T23:47:09.7476470Z   <testcase name="okioSplitsATilePathOnThisTarget[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.ToolchainSmokeTest" time="0.008"/>
+2026-10-29T23:47:09.7477220Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7483440Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7484370Z </testsuite>
+2026-10-29T23:47:09.7485690Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml
+2026-10-29T23:47:09.7552540Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7554110Z <testsuite name="com.zynergylabs.forager.brouter.util.CheapProductionTableTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:06.516Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="0.023">
+2026-10-29T23:47:09.7558030Z   <properties/>
+2026-10-29T23:47:09.7559140Z   <testcase name="productionTableIsMsunsAtEveryRow[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.CheapProductionTableTest" time="0.023"/>
+2026-10-29T23:47:09.7561260Z   <testcase name="scalesAreLookedUpByIlatOver100000AsJavaDoes[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.CheapProductionTableTest" time="0.0"/>
+2026-10-29T23:47:09.7562340Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7565620Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7580070Z </testsuite>
+2026-10-29T23:47:09.7581540Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml
+2026-10-29T23:47:09.7661850Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7665820Z <testsuite name="com.zynergylabs.forager.brouter.util.JavaLangCommonTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:06.540Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="0.001">
+2026-10-29T23:47:09.7668180Z   <properties/>
+2026-10-29T23:47:09.7671500Z   <testcase name="javaRoundGivesJavasAnswers[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.JavaLangCommonTest" time="0.0"/>
+2026-10-29T23:47:09.7675170Z   <testcase name="javaIsWhitespaceGivesJavasAnswers[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.JavaLangCommonTest" time="0.0"/>
+2026-10-29T23:47:09.7694490Z   <testcase name="javaSplitGivesJavasAnswers[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.JavaLangCommonTest" time="0.0"/>
+2026-10-29T23:47:09.7704490Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7705670Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7706580Z </testsuite>
+2026-10-29T23:47:09.7708330Z == brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml
+2026-10-29T23:47:09.7710170Z <?xml version="1.0" encoding="UTF-8"?>
+2026-10-29T23:47:09.7712170Z <testsuite name="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-29T23:47:06.541Z" hostname="sat12-bq163-de67a95a-6e5d-42b1-9036-4ffa1bed0315-7A2F64E188E4.local" time="1.572">
+2026-10-29T23:47:09.7714150Z   <properties/>
+2026-10-29T23:47:09.7715890Z   <testcase name="multiplyThenAddIsNeverFused[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" time="0.001"/>
+2026-10-29T23:47:09.7718700Z   <testcase name="doubleToIntIsJavas[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" time="0.0"/>
+2026-10-29T23:47:09.7720230Z   <testcase name="remainderIsJavas[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" time="0.0"/>
+2026-10-29T23:47:09.7721170Z   <testcase name="productionTableMatchesTheJvmDigests[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" time="0.001"/>
+2026-10-29T23:47:09.7722290Z   <testcase name="productionAnglesMatchTheJvmDigests[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" time="1.567"/>
+2026-10-29T23:47:09.7723330Z   <testcase name="oneUlpInOneRowChangesItsChunksDigest[iosSimulatorArm64]" classname="com.zynergylabs.forager.brouter.util.PlatformInvariantsTest" time="0.003"/>
+2026-10-29T23:47:09.7724460Z   <system-out><![CDATA[]]></system-out>
+2026-10-29T23:47:09.7724720Z   <system-err><![CDATA[]]></system-err>
+2026-10-29T23:47:09.7725070Z </testsuite>
+2026-10-29T23:47:09.7765170Z ##[group]Run ./gradlew --no-daemon :brouter:jvmTest --tests 'com.zynergylabs.forager.brouter.util.CheapLogicRunTest' --tests 'com.zynergylabs.forager.brouter.util.CheapProductionRecordTest' --tests 'com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest'
+2026-10-29T23:47:09.7768790Z [36;1m./gradlew --no-daemon :brouter:jvmTest --tests 'com.zynergylabs.forager.brouter.util.CheapLogicRunTest' --tests 'com.zynergylabs.forager.brouter.util.CheapProductionRecordTest' --tests 'com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest'[0m
+2026-10-29T23:47:09.7850570Z shell: /bin/bash -e {0}
+2026-10-29T23:47:09.7851370Z env:
+2026-10-29T23:47:09.7852370Z   JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:09.7854180Z   JAVA_HOME_21_AARCH64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:09.7855310Z   MAVEN_ARGS: -ntp
+2026-10-29T23:47:09.7856020Z ##[endgroup]
+2026-10-29T23:47:10.9972560Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-10-29T23:47:12.7375530Z Daemon will be stopped at the end of the build 
+2026-10-29T23:47:21.0080960Z > Task :brouter:kmpPartiallyResolvedDependenciesChecker
+2026-10-29T23:47:21.0092830Z > Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-29T23:47:26.0431580Z 
+2026-10-29T23:47:26.0538480Z > Task :brouter:fetchOracle
+2026-10-29T23:47:26.0635390Z brouter-1.7.10.zip: fetched from https://github.com/abrensch/brouter/releases/download/v1.7.10/brouter-1.7.10.zip, matches its pins (6724983 bytes, SHA-256 023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532)
+2026-10-29T23:47:26.0741080Z brouter-1.7.10-ro.jar: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/oracle/unzipped/brouter-1.7.10/brouter-1.7.10-ro.jar, matches its pins (345776 bytes, SHA-256 598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972)
+2026-10-29T23:47:26.0846000Z oracle ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/oracle
+2026-10-29T23:47:26.0947750Z 
+2026-10-29T23:47:26.1073060Z > Task :brouter:jvmProcessResources NO-SOURCE
+2026-10-29T23:47:26.1175550Z > Task :brouter:processJvmMainResources SKIPPED
+2026-10-29T23:47:26.1285370Z > Task :brouter:jvmTestProcessResources NO-SOURCE
+2026-10-29T23:47:26.1387170Z > Task :brouter:processJvmTestResources SKIPPED
+2026-10-29T23:47:27.9028180Z 
+2026-10-29T23:47:27.9151400Z > Task :brouter:msunReference
+2026-10-29T23:47:27.9268000Z s_cos.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/s_cos.c, matches its pins (2167 bytes, SHA-256 b9ebcab1e4d5813404d61f8d2f563e1d3a1793d45d481a064762aa19c4ddd818)
+2026-10-29T23:47:27.9271780Z e_rem_pio2.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/e_rem_pio2.c, matches its pins (4733 bytes, SHA-256 279da18436f04c773b200a5eaa9fd2facf83b8a0e3873afe754f24f484a0d627)
+2026-10-29T23:47:27.9369210Z k_cos.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/k_cos.c, matches its pins (2733 bytes, SHA-256 e1d3c819b635a744fcf09d082ebffc26a8464474ce4da567cd36464bc8772ddf)
+2026-10-29T23:47:27.9481160Z k_sin.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/k_sin.c, matches its pins (2243 bytes, SHA-256 28388c44b0b3f59c72948452b45c8c60aded8d658be27bf1a9568c09ba63de09)
+2026-10-29T23:47:27.9583600Z k_rem_pio2.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/k_rem_pio2.c, matches its pins (15799 bytes, SHA-256 1ce6c260dd5327b96fdc8dc211a41651fbb71e36fa6e529170ab4da258d1b910)
+2026-10-29T23:47:28.1404860Z e_atan2.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/e_atan2.c, matches its pins (3725 bytes, SHA-256 cae6f5c5ddf95616c4d6bbfdcc081ac5898d18c3e79ed944a777c8a687540c1d)
+2026-10-29T23:47:28.4576240Z s_atan.c: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/s_atan.c, matches its pins (4099 bytes, SHA-256 562febb0fe60383526f7fda1a668f1186b2dcd2e0773b738d57f2ed30bdb6ebb)
+2026-10-29T23:47:28.7110490Z math_private.h: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/math_private.h, matches its pins (22474 bytes, SHA-256 c33130c3a7ecd511074a8b5a7ca3e403661717dbd28c2080771ae13683ba0f2f)
+2026-10-29T23:47:29.0127480Z freebsd-compat.h: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/freebsd-compat.h, matches its pins (1414 bytes, SHA-256 2b31832650266a59230b532a2e87f3ad12ef191ebe9d4b4c6d65a47339caab4c)
+2026-10-29T23:47:29.5476640Z fpmath.h: fetched from file:///Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/dl/fpmath.h, matches its pins (2847 bytes, SHA-256 9ea58637b8c69206a0eff2c20beffa9344de9d37b4c3f319b66b18a668c1f3f3)
+2026-10-29T23:47:30.3537580Z rows written 1800 java.version 21.0.13 vm OpenJDK 64-Bit Server VM 21.0.13+9-LTS arch aarch64
+2026-10-29T23:47:32.6420000Z pairs 299974 Math!=StrictMath 0 java.version 21.0.13 arch aarch64
+2026-10-29T23:47:35.3818890Z ## clang: Apple clang version 17.0.0 (clang-1700.3.19.1)
+2026-10-29T23:47:35.6349150Z In file included from <built-in>:2:
+2026-10-29T23:47:35.6457120Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/freebsd-compat.h:35:19: error: static declaration of 'digittoint' follows non-static declaration
+2026-10-29T23:47:35.6554160Z    35 | static inline int digittoint(char ch) {
+2026-10-29T23:47:35.6555750Z       |                   ^
+2026-10-29T23:47:35.6660440Z /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_ctype.h:310:1: note: previous definition is here
+2026-10-29T23:47:35.6686750Z   310 | digittoint(int _c)
+2026-10-29T23:47:35.6715240Z       | ^
+2026-10-29T23:47:35.6716040Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.6716940Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.6718830Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.6727360Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.6731420Z     1 | #include <endian.h>
+2026-10-29T23:47:35.6731830Z       |          ^
+2026-10-29T23:47:35.6733650Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.6734510Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.6735400Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.6736400Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.6737410Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.6738210Z     1 | #include <endian.h>
+2026-10-29T23:47:35.6738610Z       |          ^
+2026-10-29T23:47:35.6739530Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.6776770Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.6777850Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.6778680Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.6834890Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.6837330Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.6852980Z     1 | #include <endian.h>
+2026-10-29T23:47:35.6891810Z       |          ^
+2026-10-29T23:47:35.6894850Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.6998980Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7017470Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7019250Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7021080Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7128100Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7229990Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7299050Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7299610Z       |          ^
+2026-10-29T23:47:35.7300130Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7301030Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7302030Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7302980Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7303850Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7304840Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7305720Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7306900Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7307740Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7308190Z       |          ^
+2026-10-29T23:47:35.7308890Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7309670Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7310630Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7311570Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7314380Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7360420Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7363170Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7366590Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7368980Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7370670Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7371410Z       |          ^
+2026-10-29T23:47:35.7372480Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7374490Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7376610Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7378890Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7380960Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7383130Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7385080Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7387690Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7389620Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7391980Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7393770Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7394350Z       |          ^
+2026-10-29T23:47:35.7395490Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7397200Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7399390Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7401660Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7403460Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7405300Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7407670Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7409610Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7411390Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7413370Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7417610Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7419270Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7419980Z       |          ^
+2026-10-29T23:47:35.7420990Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7423440Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7425640Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7427830Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7429780Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7431610Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7433530Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7435210Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7437120Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7438810Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7440640Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7443050Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7445060Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7445820Z       |          ^
+2026-10-29T23:47:35.7446900Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7448800Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7450870Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7452970Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7454790Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7456490Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7458500Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7460420Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7461890Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7462690Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7463640Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7464280Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7465180Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7466830Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7467200Z       |          ^
+2026-10-29T23:47:35.7467610Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7468380Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7469310Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7470130Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7470850Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7471590Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7472380Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7473080Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7473930Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7474730Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7475420Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7476040Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7476750Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7477680Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7478240Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7478420Z       |          ^
+2026-10-29T23:47:35.7479120Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7479900Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7480720Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7481670Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7482400Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7483220Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7483900Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7484620Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7485410Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7486170Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7486990Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7488130Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7489130Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7489910Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7490830Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7491530Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7491770Z       |          ^
+2026-10-29T23:47:35.7492290Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7492980Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7493970Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7494900Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7495630Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7496400Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7497110Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7497740Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7498460Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7499180Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7500090Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7500720Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7501330Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7501940Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7502770Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7503880Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7504530Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7504860Z       |          ^
+2026-10-29T23:47:35.7505270Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7505860Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7506590Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7507310Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7508030Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7508760Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7510060Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7510920Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7511590Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7512320Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7513040Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7513700Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7514440Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7515140Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7515930Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7516610Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7517490Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7518140Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7518360Z       |          ^
+2026-10-29T23:47:35.7518810Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7519490Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7520220Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7520940Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7521650Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7522320Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7522930Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7523640Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7525020Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7529270Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7530000Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7530690Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7531350Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7532150Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7532830Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7534130Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7535040Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7536060Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7536710Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7537010Z       |          ^
+2026-10-29T23:47:35.7537360Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7538060Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7538900Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7539910Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7540700Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7541350Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7542110Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7542880Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7543910Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7544640Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7545420Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7546090Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7546840Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7547520Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7548240Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7549000Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7549680Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7550380Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7551210Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7551850Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7552030Z       |          ^
+2026-10-29T23:47:35.7552420Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7553090Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7553830Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7554570Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7555940Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7556610Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7557220Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7557830Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7558440Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7559050Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7559660Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7560300Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7560920Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7561530Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7562150Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7562770Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7563380Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7564020Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7564650Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7565440Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7566040Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7566200Z       |          ^
+2026-10-29T23:47:35.7566540Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/s_cos.c:47:
+2026-10-29T23:47:35.7567120Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/src/math_private.h:18:
+2026-10-29T23:47:35.7567840Z In file included from /Applications/Xcode_26.0.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/types.h:81:
+2026-10-29T23:47:35.7568570Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7569200Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7569820Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7570430Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7571280Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7573190Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7576390Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7578620Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7580540Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7581300Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7582140Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7582860Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7583570Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7591900Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7592520Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7593150Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7593760Z In file included from /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:
+2026-10-29T23:47:35.7594530Z /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/msun-ref/work/inc/machine/endian.h:1:10: error: 'endian.h' file not found with <angled> include; use "quotes" instead
+2026-10-29T23:47:35.7595090Z     1 | #include <endian.h>
+2026-10-29T23:47:35.7595260Z       |          ^
+2026-10-29T23:47:35.7595520Z fatal error: too many errors emitted, stopping now [-ferror-limit=]
+2026-10-29T23:47:35.7595800Z 20 errors generated.
+2026-10-29T23:47:35.7595960Z 
+2026-10-29T23:47:35.7597830Z > Task :brouter:msunReference FAILED
+2026-10-29T23:47:37.9561180Z 
+2026-10-29T23:47:37.9561460Z > Task :brouter:compileKotlinJvm
+2026-10-29T23:47:37.9668370Z FAILURE: Build failed with an exception.
+2026-10-29T23:47:37.9668650Z 4 actionable tasks: 4 executed
+2026-10-29T23:47:37.9781290Z 
+2026-10-29T23:47:37.9888610Z * What went wrong:
+2026-10-29T23:47:37.9989790Z Execution failed for task ':brouter:msunReference'.
+2026-10-29T23:47:38.0096770Z > Process 'command 'bash'' finished with non-zero exit value 1
+2026-10-29T23:47:38.0199140Z 
+2026-10-29T23:47:38.0303930Z * Try:
+2026-10-29T23:47:38.0406200Z > Run with --stacktrace option to get the stack trace.
+2026-10-29T23:47:38.0507410Z > Run with --info or --debug option to get more log output.
+2026-10-29T23:47:38.0570270Z > Run with --scan to generate a Build Scan (Powered by Develocity).
+2026-10-29T23:47:38.0672680Z > Get more help at https://help.gradle.org.
+2026-10-29T23:47:38.0672900Z 
+2026-10-29T23:47:38.0672980Z BUILD FAILED in 27s
+2026-10-29T23:47:39.3133920Z ##[error]Process completed with exit code 1.
+2026-10-29T23:47:39.3251910Z ##[group]Run python3 tools/junit-counts.py brouter/build/test-results/jvmTest
+2026-10-29T23:47:39.3252400Z [36;1mpython3 tools/junit-counts.py brouter/build/test-results/jvmTest[0m
+2026-10-29T23:47:39.4043670Z shell: /bin/bash -e {0}
+2026-10-29T23:47:39.4043890Z env:
+2026-10-29T23:47:39.4044230Z   JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:39.4044850Z   JAVA_HOME_21_AARCH64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:39.4045270Z   MAVEN_ARGS: -ntp
+2026-10-29T23:47:39.4045420Z ##[endgroup]
+2026-10-29T23:47:39.6171640Z Traceback (most recent call last):
+2026-10-29T23:47:39.6194880Z   File "/Users/runner/work/Forager-iOS/Forager-iOS/tools/junit-counts.py", line 21, in <module>
+2026-10-29T23:47:39.6196840Z     suite = ET.parse(path).getroot()
+2026-10-29T23:47:39.6197960Z             ~~~~~~~~^^^^^^
+2026-10-29T23:47:39.6200050Z   File "/opt/homebrew/Cellar/python@3.15/3.15.0_1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/xml/etree/ElementTree.py", line 1230, in parse
+2026-10-29T23:47:39.6203230Z     tree.parse(source, parser)
+2026-10-29T23:47:39.6204060Z     ~~~~~~~~~~^^^^^^^^^^^^^^^^
+2026-10-29T23:47:39.6205660Z   File "/opt/homebrew/Cellar/python@3.15/3.15.0_1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/xml/etree/ElementTree.py", line 570, in parse
+2026-10-29T23:47:39.6207410Z     source = open(source, "rb")
+2026-10-29T23:47:39.6208870Z FileNotFoundError: [Errno 2] No such file or directory: 'brouter/build/test-results/jvmTest'
+2026-10-29T23:47:39.6246210Z ##[error]Process completed with exit code 1.
+2026-10-29T23:47:39.6426330Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-10-29T23:47:39.6426710Z with:
+2026-10-29T23:47:39.6426880Z   name: ios-smoke-test-results
+2026-10-29T23:47:39.6427100Z   path: brouter/build/test-results/
+2026-10-29T23:47:39.6427310Z   if-no-files-found: warn
+2026-10-29T23:47:39.6427510Z   compression-level: 6
+2026-10-29T23:47:39.6427680Z   overwrite: false
+2026-10-29T23:47:39.6427920Z   include-hidden-files: false
+2026-10-29T23:47:39.6428120Z   archive: true
+2026-10-29T23:47:39.6428270Z env:
+2026-10-29T23:47:39.6428600Z   JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:39.6429350Z   JAVA_HOME_21_AARCH64: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.13-9.0.LTS/aarch64/Contents/Home
+2026-10-29T23:47:39.6429990Z   MAVEN_ARGS: -ntp
+2026-10-29T23:47:39.6430330Z ##[endgroup]
+2026-10-29T23:47:40.3870810Z With the provided path, there will be 11 files uploaded
+2026-10-29T23:47:40.3875000Z Artifact name is valid!
+2026-10-29T23:47:40.3875660Z Root directory input is valid!
+2026-10-29T23:47:40.7186670Z Uploading artifact: ios-smoke-test-results.zip
+2026-10-29T23:47:40.7187930Z Beginning upload of artifact content to blob storage
+2026-10-29T23:47:40.9183160Z Uploaded bytes 5897
+2026-10-29T23:47:40.9647750Z Finished uploading artifact content to blob storage!
+2026-10-29T23:47:40.9648900Z SHA256 digest of uploaded artifact is 90b77e3f94e0bc0086a497fc61d148264f11f97b7ebf7bed99cab2c110f82bd1
+2026-10-29T23:47:40.9649710Z Finalizing artifact upload
+2026-10-29T23:47:41.5251040Z Artifact ios-smoke-test-results successfully finalized. Artifact ID 12942606444
+2026-10-29T23:47:41.5289040Z Artifact ios-smoke-test-results has been successfully uploaded! Final size is 5897 bytes. Artifact ID is 12942606444
+2026-10-29T23:47:41.5291910Z Artifact download URL: https://github.com/slayer8366/Forager-iOS/actions/runs/40975094092/artifacts/12942606444
+2026-10-29T23:47:41.5540910Z Post job cleanup.
+2026-10-29T23:47:41.7409070Z Post job cleanup.
+2026-10-29T23:47:41.8910890Z [command]/opt/homebrew/bin/git version
+2026-10-29T23:47:41.9713650Z git version 2.56.0
+2026-10-29T23:47:41.9735880Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/a43f100f-7407-4e07-af9c-08d40df7e042/.gitconfig'
+2026-10-29T23:47:41.9759400Z Temporarily overriding HOME='/Users/runner/work/_temp/a43f100f-7407-4e07-af9c-08d40df7e042' before making global git config changes
+2026-10-29T23:47:41.9762160Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-29T23:47:41.9763020Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Forager-iOS/Forager-iOS
+2026-10-29T23:47:42.0352690Z Removing SSH command configuration
+2026-10-29T23:47:42.0494970Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-29T23:47:42.0583600Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-29T23:47:42.3033280Z Removing HTTP extra header
+2026-10-29T23:47:42.3039950Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-29T23:47:42.3137300Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-29T23:47:42.5216020Z Removing includeIf entries pointing to credentials config files
+2026-10-29T23:47:42.5316010Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-29T23:47:42.5419890Z includeif.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git.path
+2026-10-29T23:47:42.5523280Z includeif.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path
+2026-10-29T23:47:42.5622690Z includeif.gitdir:/github/workspace/.git.path
+2026-10-29T23:47:42.5724750Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-29T23:47:42.5933110Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git.path
+2026-10-29T23:47:42.5935310Z /Users/runner/work/_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:47:42.5939280Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git.path \/Users\/runner\/work\/_temp\/git\-credentials\-ce40f335\-b24a\-4770\-b9e8\-8eb0df78c8e4\.config
+2026-10-29T23:47:42.5942800Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path
+2026-10-29T23:47:42.5944980Z /Users/runner/work/_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:47:42.5946310Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Forager-iOS/Forager-iOS/.git/worktrees/*.path \/Users\/runner\/work\/_temp\/git\-credentials\-ce40f335\-b24a\-4770\-b9e8\-8eb0df78c8e4\.config
+2026-10-29T23:47:42.5947640Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-29T23:47:42.5948230Z /github/runner_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:47:42.5949410Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-ce40f335\-b24a\-4770\-b9e8\-8eb0df78c8e4\.config
+2026-10-29T23:47:42.5950550Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-29T23:47:42.6075580Z /github/runner_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config
+2026-10-29T23:47:42.6320170Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-ce40f335\-b24a\-4770\-b9e8\-8eb0df78c8e4\.config
+2026-10-29T23:47:42.6609810Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-29T23:47:42.8560140Z Removing credentials config '/Users/runner/work/_temp/git-credentials-ce40f335-b24a-4770-b9e8-8eb0df78c8e4.config'
+2026-10-29T23:47:42.8657970Z Cleaning up orphan processes
