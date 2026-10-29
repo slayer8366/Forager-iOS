@@ -242,3 +242,33 @@ Amendment 1's Android questions), D, F, G and H; part 3 is E, I, J and K, which 
 CLAUDE.md before working. At that rate the nine items left would take several more helpers. The pace is
 put to the owner.
 **Notes:** Written by the planner by hand. Next free ID -8.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-8
+**Timestamp:** 2026-10-29T03:30:55Z
+**Continues:** 2026-10-28-3, 2026-10-28-7
+**Title:** Full Phase 1 as dispatched; the port covers any profile (owner)
+**Decision:** the owner chose, from two questions:
+- **Pace:** "Full Phase 1 as dispatched". The option read: "All 9 remaining items answered before any
+  building starts. About 5 to 9 more helpers (inferred from two so far)." Rejected:
+  - "Lean Phase 1 (Recommended)", which moved H, I, J and K into Phase 2;
+  - "Pause Phase 1".
+- **Scope:** "Any profile". The option read: "About 11,200 lines. Those four features are ported too, so
+  other BRouter profiles would work, at roughly 1,200 more lines to port and prove identical."
+  - This is the report's tier T2 (11,218 lines, 481 methods).
+  - Turn restrictions, `correctMisplacedViaPoints`, turn instructions and bike mode are ported, not
+    refused.
+  - Rejected: "Hiking profile only (Recommended)", the T3 tier with named "unsupported" failures.
+  - Ruling b's "Forager-only" therefore means Forager's calls with any profile.
+
+**The planner's order for the remaining items,** each part a fresh helper reading the dispatch, Amendment
+1, the record and the report, with the same 150k-token handoff:
+- part 3: C (with Amendment 1's Android questions) and D;
+- part 4: F and G;
+- part 5: H and E;
+- part 6: I, J and K.
+
+F stays a stop for an owner ruling.
+**Notes:** Written by the planner by hand. Next free ID -9.
