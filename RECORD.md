@@ -1273,3 +1273,48 @@ The harness's final count was 194,712, after the planner's 180k message at 22:14
   `69576e41…f0a677`), on the owner's word at -30. It is the only code on `main`.
 **Notes:** Written by Cedar Datum by hand. The owner's run comes next; then a session pins the release, and step 2a
 starts. Next free ID -32.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-32
+**Timestamp:** 2026-10-29T22:30:59Z
+**Continues:** 2026-10-28-3, 2026-10-28-28, 2026-10-28-31
+**Title:** Phase 2, step 2a, sub-step 1: the `util` stubs and 22 tests pushed and seen failing; the port goes to the next
+session
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `3cd61ad`: 12 `internal` stubs, 8 `jvmTest` classes, 2 `commonTest` files, and the step's section with its
+  prediction;
+- `41cc4ca`: the handoff.
+
+The watcher read 182,359 tokens at 22:29:03Z with nothing pushed, and the planner asked for the tests-first push and a
+handoff. The harness's final count was 195,246.
+- **Failing first (computed, local):**
+  - 0 compile errors; the JUnit XML reads 25 tests, 21 failures;
+  - every failure is `NotImplementedError` from its own stub;
+  - the 3 earlier tests pass;
+  - one new test, a check of the common tests' expected values against the JDK, passes by design and is listed
+    "not shown to bite".
+- **The tests cover:**
+  - the coders both ways, byte for byte;
+  - `SortedHeap`'s exact pop order on tie-heavy seeds;
+  - the maps on seeded keys;
+  - `Crc32`;
+  - `Math.round` on about 3.07 million inputs;
+  - `isWhitespace` on all 65,536 chars;
+  - `split` with the 14 regexes the reached code passes.
+- **CI on `3cd61ad` and `41cc4ca`** (runs 40966293309 and 40966347514) were in progress at recording. Both are
+  expected red over the stubs, `jvm` with 21 failures and `ios-smoke` with 3. Within a step, item I's method pushes the
+  tests before the port, so the branch is red until the port's push. That push is the next session's first job.
+- **Calls beyond the amendment:**
+  - classes `internal`;
+  - `moveToFrozenArrays` `internal`;
+  - `ByteArrayUnifier.unify` as a named "unsupported";
+  - `commonTest` cases for the helpers, so the simulator checks them too.
+- **A reach question for step 5b:** `OsmNode.java:134` calls `readUnified`, and through it `unify`. Neither is on the
+  port list. Whether that line runs on Forager's tiles could not be determined.
+- **Checked by the planner:**
+  - the two commits touch only `brouter/src/` and the Phase 2 report's folder;
+  - the tree is clean;
+  - the runs exist on both commits.
+**Notes:** Written by Cedar Datum by hand. Next free ID -33.
