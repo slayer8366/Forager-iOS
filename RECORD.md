@@ -991,3 +991,72 @@ for the go on the rest."
 **Dispatch-file:** prompts/preserved/2026-10-28-01-brouter-port-amendment-2.md
 **Notes:** Written by Cedar Datum by hand. The go was answered after a worker restart; the time is the recording
 time. Next free ID -26.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-26
+**Timestamp:** 2026-10-29T20:16:33Z
+**Continues:** 2026-10-28-3, 2026-10-28-25
+**Title:** Phase 2, step 0 done: the scaffold builds, and CI is green on Linux and on the Mac runner
+(simulator-checked); step 1 handed to a fresh session
+**Observed:** the primary coder (Opus, first run, not yet named), on `brouter-port`:
+- `d33c2f0`: bases, the planner's FK 6 ruling, and the coder's mechanism prediction, written before building;
+- `fea07f8`: step 0;
+- `27f4132`: step 0's results and step 1's handoff.
+
+The Phase 2 report, `docs/audits/2026-10-29-brouter-port-phase2.md`, is filed unedited as
+`prompts/preserved/2026-10-28-01-phase2-report-step0.md` (SHA-256 equal). The watcher read 181,469 tokens at
+20:12:51Z, and the planner told the coder to close step 0 and hand off. The harness's final count was 234,033.
+- **The planner's ruling on FK 6, given by message during the run:**
+  - item I's step 0 test "one case per tile-free failure kind on both engines (FK 6), failing on the stub" cannot
+    pass until step 5a ports the file layer;
+  - the coder offered (a) a red job by design, (b) a separate non-blocking task, or (c) the oracle half only;
+  - **the planner ruled (c):** each step's port-side tests arrive with the step that ports them. (b) moves a
+    written test out of the default run, which Forager's `CLAUDE.md` treats as silencing. (a) leaves a job red
+    for five steps, where a real failure cannot be told from the planned one.
+- **Step 0:**
+  - Gradle 9.0.0, with the wrapper's checksum from Gradle's published one; Kotlin 2.3.10; okio 3.18.2;
+  - the `:brouter` module for `jvm` 17, `iosArm64` and `iosSimulatorArm64`, with C's entry point as stubs;
+  - `tools/fetch-pinned.sh` and `fetch-oracle.sh`, which refuse the oracle unless size and SHA-256 match;
+  - `.github/workflows/brouter.yml`: `jvm` on `ubuntu-24.04`, and `ios-smoke` on `macos-26` with Xcode 26.0.1.
+- **CI, run 40946531992 on `fea07f8`, both jobs `success`:**
+  - `jvm` (Temurin 21.0.13+9): 3 tests, 0 failures, both iOS klibs compiled;
+  - `ios-smoke`: 1 test, 0 failures, linked and run on the iOS simulator. **Simulator-checked.**
+  - Run 40947359130 on `27f4132`, docs only, was in progress at recording.
+- **Revert check:**
+  - one character of the oracle zip's pinned SHA-256 changed: the fetch refused both the cached and a fresh copy,
+    and no test ran. Restored from a saved copy, and the forward change confirmed afterwards.
+  - A second bite check, on the test's own jar hash, failed 1 of 3 as it should.
+  - FK 6's oracle half and the smoke test are "not shown to bite".
+- **Predictions (-25), scored:**
+  - Actions on: held;
+  - `ubuntu-24.04` green within two pushes: held, on the first;
+  - Kotlin 2.3.10 links and runs on `macos-26`: held (simulator-checked);
+  - **an Xcode warning: did not hold.** No warning appears in the job log, and why is unknown. KGP 2.3.10's
+    `maxTested` is 16.0 (-14), so the warning's logic was read, not seen run.
+  - BRouter 1.7.10 reads the tiles: not yet scored.
+- **The coder's own slip, caught by its test:** it predicted FK 6's message wrongly. The oracle says "datafile
+  W75_N40.rd5 not found" (`NodesCache.java:326-332`), and the test now asserts that.
+- **Step 1, part done:** the four tiles were downloaded once at 20:09:48–58Z into scratch, sizes equal to
+  `Content-Length`, all `Last-Modified` 2026-10-29 01:03:01 GMT. None has been loaded in the oracle yet. Hashes are
+  in `step1-handoff/tiles-downloaded.txt`.
+- **Calls beyond the amendment:**
+  - a root `.gitignore`;
+  - `tools/junit-counts.py`;
+  - the oracle fetched by a Gradle task;
+  - okio as an `api` dependency;
+  - `-XX:+UnlockDiagnosticVMOptions` with `-XX:-UseLibmIntrinsic`;
+  - **the CI oracle JDK pinned as Temurin 21.0.13+9,** where Phase 1 measured on OpenJDK 21.0.12.1. To be settled
+    before step 1b writes any expected value.
+- **Found for step 2b:** `macos-26` carries simulator runtimes 26.2, 26.4.1 and 26.5, not 26.0. Which one ran the
+  test is not in the log.
+- **Checked by the planner:**
+  - the tree is clean, and the step's 16 untracked evidence files that a stop hook flagged at 20:13Z were
+    committed by the coder in `27f4132`;
+  - the run and job conclusions, through the GitHub API;
+  - the `ios-smoke` log's JUnit XML: `tests="1" failures="0" errors="0"`, testcase
+    `okioSplitsATilePathOnThisTarget[iosSimulatorArm64]`, JDK Temurin 21.0.13+9 aarch64.
+- **Three names proposed:** Linden Caliper, Aspen Tally, Rowan Tracewell. Two repeat Forager names: "Aspen" is on
+  Forager's Pi team and "Tally" is Sorrel Tally's surname; "Rowan" is Forager's planner.
+**Notes:** Written by Cedar Datum by hand. Next free ID -27.
