@@ -1,0 +1,15 @@
+# 2026-10-29T20:23:08Z revert: E170_S50.rd5's pinned size 1061589 -> 1061590 in tools/tile-pins.tsv (saved copy: <scratch>/step1/revert1-saved-tile-pins.tsv, SHA-256 af2fa46fcb5f2760c18be680d48ffbad7ed59345d2217c83c5b71a24098ac3af)
+# diff against the saved copy:
+19c19
+< E170_S50.rd5	segments/E170_S50.rd5	1061589	878455e284d0e8636e22159f1081e658fe2
+---
+> E170_S50.rd5	segments/E170_S50.rd5	1061590	878455e284d0e8636e22159f1081e658fe2
+# shell syntax of the reader (this revert edits data, not code): ok
+W75_N40.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/W75_N40.rd5, matches its pins (119750873 bytes, SHA-256 dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6)
+W75_N35.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/W75_N35.rd5, matches its pins (3571019 bytes, SHA-256 73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721)
+W70_N40.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/W70_N40.rd5, matches its pins (5292557 bytes, SHA-256 c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c)
+REFUSED E170_S50.rd5 from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/E170_S50.rd5: E170_S50.rd5 is 1061589 bytes, pinned 1061590
+exit=1
+# restored from the saved copy; SHA-256 now af2fa46fcb5f2760c18be680d48ffbad7ed59345d2217c83c5b71a24098ac3af, forward af2fa46fcb5f2760c18be680d48ffbad7ed59345d2217c83c5b71a24098ac3af
+# git status of the pin file (untracked = the forward file, not HEAD): ?? tools/tile-pins.tsv
+# forward row present: 1

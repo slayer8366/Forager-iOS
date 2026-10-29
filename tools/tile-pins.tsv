@@ -1,0 +1,20 @@
+# Tile pins for the BRouter port's tests (dispatch 2026-10-28-01, Amendment 2, Phase 2 step 1; Phase 1 report, item E4).
+# One row per release asset, tab-separated. tools/fetch-tiles.sh reads it; tools/fetch-pinned.sh refuses any file whose
+# size or SHA-256 differs. brouter.de rewrites these files in place about daily (Phase 1, item F), so the source URL is
+# provenance only: a fresh download from it will not match. The pinned bytes are fetched from a release on Forager-iOS,
+# which does not exist yet (the owner's word, RECORD -12).
+#
+# Captured 2026-10-29 by one download each (step1-handoff/tiles-downloaded.txt). Each brouter.de tile was loaded in
+# BRouter 1.7.10's -ro jar before it was pinned: lookup version 11, the version-checked open, checkFileIntegrity, every
+# cell decoded, and one route (docs/audits/2026-10-29-brouter-port-phase2/step1/check-*.log). None was replaced.
+# The tiles contain OpenStreetMap data, (c) OpenStreetMap contributors, under the ODbL 1.0 (tools/tile-release/README.md).
+#
+# Columns: asset, the release asset's name | path, where the fetch puts it under its folder (the engine finds a tile by
+# its file name, so F0's fixture keeps W75_N40.rd5 in a folder of its own) | bytes | sha256 | source | last_modified and
+# etag, the source's response headers ("-" for a file not fetched over HTTP) | captured, UTC.
+asset	path	bytes	sha256	source	last_modified	etag	captured
+W75_N40.rd5	segments/W75_N40.rd5	119750873	dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6	https://brouter.de/brouter/segments4/W75_N40.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-72340d9"	2026-10-29T20:09:48Z
+W75_N35.rd5	segments/W75_N35.rd5	3571019	73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721	https://brouter.de/brouter/segments4/W75_N35.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-367d4b"	2026-10-29T20:09:54Z
+W70_N40.rd5	segments/W70_N40.rd5	5292557	c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c	https://brouter.de/brouter/segments4/W70_N40.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-50c20d"	2026-10-29T20:09:55Z
+E170_S50.rd5	segments/E170_S50.rd5	1061589	878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584	https://brouter.de/brouter/segments4/E170_S50.rd5	Thu, 29 Oct 2026 01:03:01 GMT	"6ae29b45-1032d5"	2026-10-29T20:09:57Z
+forager-fixture-W75_N40.rd5	f0/W75_N40.rd5	152665	ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990	slayer8366/Forager e2969abe4 app/src/test/resources/routing/segments/W75_N40.rd5 (blob 434697225fed)	-	-	2026-10-29T20:22:16Z

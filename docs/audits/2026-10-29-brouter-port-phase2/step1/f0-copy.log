@@ -1,0 +1,6 @@
+# 2026-10-29T20:22:16Z F0's fixture copied from /home/user/forager (read-only clone, HEAD e2969abe4f98674c24ce3913ce97be568184a4de), app/src/test/resources/routing/segments/W75_N40.rd5, git blob 434697225fed5a7a803de9270805e202b1b63c5e
+# expected: 152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990 (Forager's routing/README.md)
+# Forager clone status after the copy (must be empty):
+# staged copy:
+152665 forager-fixture-W75_N40.rd5
+ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990  forager-fixture-W75_N40.rd5

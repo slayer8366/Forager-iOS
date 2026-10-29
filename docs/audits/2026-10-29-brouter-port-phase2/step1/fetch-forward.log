@@ -1,0 +1,8 @@
+# 2026-10-29T20:22:56Z forward: tools/fetch-tiles.sh <scratch>/step1/fetch-fwd file://<scratch>/release-staging
+W75_N40.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/W75_N40.rd5, matches its pins (119750873 bytes, SHA-256 dd141c3ed1d11036373175dd1242d7a64bf101e11523a270efcb7371599d29e6)
+W75_N35.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/W75_N35.rd5, matches its pins (3571019 bytes, SHA-256 73d58fa5d4a4e5d4c9fef3b01af003d75489f0316169901259fb5daef4c6a721)
+W70_N40.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/W70_N40.rd5, matches its pins (5292557 bytes, SHA-256 c35113bb5448216b60e4805dc899580b6661b4bbe8155c9e174da562a3e0521c)
+E170_S50.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/E170_S50.rd5, matches its pins (1061589 bytes, SHA-256 878455e284d0e8636e22159f1081e658fe2131b35f3a5e12f2873036b2acd584)
+W75_N40.rd5: fetched from file:///tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/release-staging/forager-fixture-W75_N40.rd5, matches its pins (152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990)
+5 tiles ready in /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/step1/fetch-fwd
+exit=0
