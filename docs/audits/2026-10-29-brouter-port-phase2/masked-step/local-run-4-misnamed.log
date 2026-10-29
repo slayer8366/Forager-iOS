@@ -1,0 +1,56 @@
+2026-10-29T23:54:08Z
+c8a32e67b08f79462dcacb6f296f8e5c6edebaa0
+classes: com.zynergylabs.forager.brouter.util.CheapLogicRunTest com.zynergylabs.forager.brouter.util.NoSuchClassTest
+Picked up JAVA_TOOL_OPTIONS: (proxy settings, elided)
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+
+> Task :brouter:jvmTest
+Picked up JAVA_TOOL_OPTIONS: (proxy settings, elided)
+
+CheapLogicRunTest[jvm] > calcAngleEqualsTheOraclesWithItsTable[jvm] STANDARD_OUT
+    calcAngle branches (dd==0, +90, -90, cosp<0, plain): [20166, 39680, 39456, 50453, 50245]
+
+CheapLogicRunTest[jvm] > calcAngleEqualsTheOraclesWithItsTable[jvm] PASSED
+
+CheapLogicRunTest[jvm] > portTableArithmeticGivesTheOraclesTableFromTheOraclesCos[jvm] PASSED
+
+CheapLogicRunTest[jvm] > theJvmRunsWithLibmIntrinsicsOff[jvm] STANDARD_OUT
+    JVM: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; [-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts, -Djavax.net.ssl.trustStoreType=JKS, -Dhttps.proxyHost=127.0.0.1, -Dhttps.proxyPort=46617, -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local, -Djdk.http.auth.tunneling.disabledSchemes=, -Djdk.http.auth.proxying.disabledSchemes=, -Dbrouter.msunref.dir=/home/user/forager-ios/brouter/build/msun-ref, -Dbrouter.oracle.dir=/home/user/forager-ios/brouter/build/oracle, -Dorg.gradle.internal.worker.tmpdir=/home/user/forager-ios/brouter/build/tmp/jvmTest/work, -XX:+UnlockDiagnosticVMOptions, -XX:-UseLibmIntrinsic, -Xmx512m, -Dfile.encoding=UTF-8, -Duser.country=US, -Duser.language=en, -Duser.variant, -ea]
+
+CheapLogicRunTest[jvm] > theJvmRunsWithLibmIntrinsicsOff[jvm] PASSED
+
+CheapLogicRunTest[jvm] > distanceEqualsTheOraclesWithItsTable[jvm] PASSED
+
+CheapLogicRunTest[jvm] > angleFunctionsEqualTheOracles[jvm] PASSED
+
+[Incubating] Problems report is available at: file:///home/user/forager-ios/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 15s
+6 actionable tasks: 2 executed, 4 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html
+gradle exit 0
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: 5 test cases, 5 ran, 0 failed (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+com.zynergylabs.forager.brouter.util.NoSuchClassTest: did not run, no brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.NoSuchClassTest.xml
+FAIL: 1 of 2 classes did not run: com.zynergylabs.forager.brouter.util.NoSuchClassTest
+check exit 1

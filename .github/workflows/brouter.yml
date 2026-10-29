@@ -44,6 +44,11 @@ jobs:
   ios-smoke:
     runs-on: macos-26 # arm64; not macos-latest, which moves
     timeout-minutes: 45
+    env:
+      # The arm64 JVM step's classes, read by the step and by the check after it, so the two cannot drift (RECORD -36).
+      ARM64_JVM_CLASSES: >-
+        com.zynergylabs.forager.brouter.util.CheapLogicRunTest
+        com.zynergylabs.forager.brouter.util.CheapProductionRecordTest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
@@ -63,20 +68,29 @@ jobs:
         run: |
           python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
           for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
-      # H step 4: the JVM half on HotSpot for arm64, recorded and never failing the job. It answers whether arm64 HotSpot
-      # with -XX:-UseLibmIntrinsic builds the same table and angles as the oracle's x86_64 JVM.
+      # H step 4: the JVM half on HotSpot for arm64. It answers whether arm64 HotSpot with -XX:-UseLibmIntrinsic builds the
+      # same table and angles as the oracle's x86_64 JVM. A test that fails here is a difference, recorded and not gating.
+      # RECORD -36: without -x msunReference this step never reached its tests (bionic's C does not compile against the
+      # macOS SDK) and read green. So it runs only the two classes that do not read the C build, and the step after it
+      # fails the job if any of them left no XML or ran no test: continue-on-error never masks a step that did not run.
       - name: Recorded, not gating - the JVM half on arm64 HotSpot (H step 4)
+        id: arm64-jvm
         if: always()
         continue-on-error: true
-        run: >-
-          ./gradlew --no-daemon :brouter:jvmTest
-          --tests 'com.zynergylabs.forager.brouter.util.CheapLogicRunTest'
-          --tests 'com.zynergylabs.forager.brouter.util.CheapProductionRecordTest'
-          --tests 'com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest'
-      - name: Counts for the recorded arm64 JVM step
+        run: |
+          args=()
+          for c in $ARM64_JVM_CLASSES; do args+=(--tests "$c"); done
+          ./gradlew --no-daemon :brouter:jvmTest -x msunReference "${args[@]}"
+      - name: Gating - the arm64 JVM step ran every class it names, with counts and the XML
         if: always()
-        continue-on-error: true
-        run: python3 tools/junit-counts.py brouter/build/test-results/jvmTest
+        env:
+          OUTCOME: ${{ steps.arm64-jvm.outcome }}
+        run: |
+          shopt -s nullglob
+          echo "arm64 JVM step outcome: $OUTCOME (a failure there is a recorded difference only if every class ran)"
+          for f in brouter/build/test-results/jvmTest/*.xml; do echo "== $f"; cat "$f"; done
+          python3 tools/junit-counts.py brouter/build/test-results/jvmTest || true
+          python3 tools/junit-ran.py brouter/build/test-results/jvmTest $ARM64_JVM_CLASSES
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

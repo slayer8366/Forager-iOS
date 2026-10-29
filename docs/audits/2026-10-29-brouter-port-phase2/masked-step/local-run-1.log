@@ -1,0 +1,43 @@
+2026-10-29T23:52:14Z
+c8a32e67b08f79462dcacb6f296f8e5c6edebaa0
+classes
+konan.txt
+kotlin
+libs
+msun-ref.aside
+oracle
+reports
+test-results
+tmp
+Picked up JAVA_TOOL_OPTIONS: (proxy settings, elided)
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:compileKotlinJvm'.
+> Could not resolve all files for configuration ':brouter:jvmCompileClasspath'.
+   > Could not download okio-jvm-3.18.2.jar (com.squareup.okio:okio-jvm:3.18.2)
+      > Could not get resource 'https://repo.maven.apache.org/maven2/com/squareup/okio/okio-jvm/3.18.2/okio-jvm-3.18.2.jar'.
+         > Could not HEAD 'https://repo.maven.apache.org/maven2/com/squareup/okio/okio-jvm/3.18.2/okio-jvm-3.18.2.jar'. Received status code 429 from server: Too Many Requests
+   > Could not download annotations-13.0.jar (org.jetbrains:annotations:13.0)
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar'.
+         > Could not HEAD 'https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar'. Received status code 429 from server: Too Many Requests
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 19s
+2 actionable tasks: 2 executed
+gradle exit 1
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: did not run, no brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: did not run, no brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionRecordTest.xml
+FAIL: 2 of 2 classes did not run: com.zynergylabs.forager.brouter.util.CheapLogicRunTest com.zynergylabs.forager.brouter.util.CheapProductionRecordTest
+check exit 1

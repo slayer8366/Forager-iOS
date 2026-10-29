@@ -1,0 +1,7 @@
+// Local only, never committed: Maven Central answered 429 in this container on 2026-10-29; Google's mirror of it did not.
+// This repository has no gradle/verification-metadata.xml, so artifacts from the mirror are not checksum-verified by Gradle; local runs only.
+def mirror = 'https://maven-central.storage-download.googleapis.com/maven2/'
+beforeSettings { settings ->
+    settings.pluginManagement.repositories { maven { url mirror } }
+    settings.dependencyResolutionManagement.repositories { maven { url mirror } }
+}
