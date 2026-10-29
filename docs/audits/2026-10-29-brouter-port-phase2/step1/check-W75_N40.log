@@ -1,0 +1,8 @@
+# start 2026-10-29T20:20:26Z run-check.sh segs/W75_N40 W75_N40 41.2742564 -73.9978932 41.3036912 -74.0159457
+W75_N40 | bytes=119750873 | tile lookupversion=11 | lookups.dat=11.2
+W75_N40 | engine open (version-checked) | ok
+W75_N40 | checkFileIntegrity | ok (null)
+W75_N40 | decoded | 1-degree squares with data=23/25 | micro-caches=23552 | non-empty=19671 | nodes=8136499
+W75_N40 | route 41.2742564,-73.9978932 -> 41.3036912,-74.0159457 | error=null | nodes=226 | distance=5047
+exit=0
+# end 2026-10-29T20:20:34Z wall=8s

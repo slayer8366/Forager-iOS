@@ -1,0 +1,8 @@
+# start 2026-10-29T20:20:15Z run-check.sh segs/E170_S50 E170_S50 -45.8788 170.5028 -45.8650 170.5150
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | ok
+E170_S50 | checkFileIntegrity | ok (null)
+E170_S50 | decoded | 1-degree squares with data=3/25 | micro-caches=3072 | non-empty=767 | nodes=50074
+E170_S50 | route -45.8788,170.5028 -> -45.8650,170.5150 | error=null | nodes=115 | distance=2003
+exit=0
+# end 2026-10-29T20:20:16Z wall=1s

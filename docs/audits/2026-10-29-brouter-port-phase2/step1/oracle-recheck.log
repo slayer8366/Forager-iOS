@@ -1,0 +1,3 @@
+brouter-1.7.10.zip: present, matches its pins (6724983 bytes, SHA-256 023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532)
+brouter-1.7.10-ro.jar: fetched from file:///home/user/forager-ios/brouter/build/oracle/unzipped/brouter-1.7.10/brouter-1.7.10-ro.jar, matches its pins (345776 bytes, SHA-256 598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972)
+oracle ready in /home/user/forager-ios/brouter/build/oracle

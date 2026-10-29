@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# run-check.sh <segs dir> <tile> <lat1> <lon1> <lat2> <lon2>: one tile through TileCheck in the 1.7.10 -ro jar.
+set -uo pipefail
+H=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/phase2/step1/harness
+O=/home/user/forager-ios/brouter/build/oracle
+java -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic -cp "$O/brouter-1.7.10-ro.jar:$H/classes" TileCheck "$O/profiles2" "$@" 2>&1 | grep -v '^Picked up JAVA_TOOL_OPTIONS'
+echo "exit=${PIPESTATUS[0]}"

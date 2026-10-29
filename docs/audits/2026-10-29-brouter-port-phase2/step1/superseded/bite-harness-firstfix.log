@@ -1,0 +1,24 @@
+== bite: ver
+E170_S50 | bytes=1061589 | tile lookupversion=10 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | FAILED lookup version mismatch (old rd5?) lookups.dat=11 E170_S50.rd5=10
+E170_S50 | checkFileIntegrity | FAILED java.io.IOException: top index checksum error
+Exception in thread "main" java.io.IOException: top index checksum error
+	at btools.mapaccess.PhysicalFile.<init>(PhysicalFile.java:136)
+	at TileCheck.main(TileCheck.java:44)
+exit=1
+== bite: crc
+E170_S50 | bytes=1061589 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | FAILED top index checksum error
+E170_S50 | checkFileIntegrity | FAILED java.io.IOException: top index checksum error
+Exception in thread "main" java.io.IOException: top index checksum error
+	at btools.mapaccess.PhysicalFile.<init>(PhysicalFile.java:136)
+	at TileCheck.main(TileCheck.java:44)
+exit=1
+== bite: short
+E170_S50 | bytes=530794 | tile lookupversion=11 | lookups.dat=11.2
+E170_S50 | engine open (version-checked) | FAILED file of size 530794 too short, should be 1061588
+E170_S50 | checkFileIntegrity | FAILED java.io.IOException: file of size 530794 too short, should be 1061588
+Exception in thread "main" java.io.IOException: file of size 530794 too short, should be 1061588
+	at btools.mapaccess.PhysicalFile.<init>(PhysicalFile.java:122)
+	at TileCheck.main(TileCheck.java:44)
+exit=1
