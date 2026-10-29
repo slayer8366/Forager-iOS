@@ -1222,3 +1222,54 @@ today's. Not yet known: whether the repository lets workflows create releases; t
 
 **Dispatch-file:** prompts/preserved/2026-10-28-01-brouter-port-amendment-4.md
 **Notes:** Written by Cedar Datum by hand. Next free ID -31.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-31
+**Timestamp:** 2026-10-29T22:16:16Z
+**Continues:** 2026-10-28-3, 2026-10-28-30
+**Title:** The tile release workflow is written and dry-run; the planner copies it to `main` on the owner's word
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `aa144a0` and `5d00761`: the tools, with the check moved to `tools/tile-check/` and failing on any failed check;
+- `d54b95c`: `.github/workflows/publish-tiles.yml`;
+- `4d667f4`: the planted failure;
+- `41be45e`: the restore;
+- `f57b003`: the report.
+
+The Phase 2 report is filed unedited as `prompts/preserved/2026-10-28-01-phase2-report-amendment4.md` (SHA-256 equal).
+The harness's final count was 194,712, after the planner's 180k message at 22:14Z.
+- **The workflow has two jobs:**
+  - **`capture`,** with `contents: read`, runs the tools from `brouter-port` at `TOOLS_SHA` `5d00761`;
+  - **`publish`,** with `contents: write`, runs only when
+    `success() && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'`. It creates a draft,
+    reads all seven assets back against the pins, then publishes.
+  - The push trigger is limited to `brouter-port`.
+- **Dry runs, all with `publish` skipped:**
+  - **40963971506 on `d54b95c`: green.** F0 was fetched anonymously from `raw.githubusercontent.com`, and the four
+    tiles and the F0 control each read `PASS` on Temurin 21.0.13+9.
+  - **40964144495 on `4d667f4`: refused,** naming the planted character: "has SHA-256 ff6d…5990, pinned ff6d…5991".
+  - **40964254673 on `41be45e`: green.** The file was restored from a saved copy and equals `d54b95c`'s.
+- **The coder's prediction "new bytes" failed:** brouter.de still served the 20:09Z bytes at 22:12Z.
+- **Calls beyond the amendment:**
+  - the README and notes made into templates the run fills;
+  - `TileCheck` exiting 1 on failure, shown to bite;
+  - a stale-tools check on push;
+  - the tag check also refusing a draft;
+  - `concurrency` on `publish`.
+- **Never run:** the `publish` job, so whether the repository lets workflows create releases is unknown. No linter ran:
+  downloading one was refused by the session's permission check, and each `run:` block passed `bash -n` instead.
+- **Checked by the planner, before the copy:**
+  - **read in full:** the workflow at `f57b003` (SHA-256 `69576e41…f0a677`, unchanged since `d54b95c`), and every file
+    it runs at `5d00761`: `tools/tile-check/capture.sh`, `tools/fetch-tiles.sh`, `tiles.tsv`, and the README and notes
+    templates that go public. Nothing in them writes to GitHub except `publish`'s `gh` calls.
+  - **the four action pins match their release tags** by `git ls-remote`:
+    - checkout v7.0.1 `3d3c42e5…`;
+    - setup-java v6.1.0 `b843ebf9…`;
+    - upload-artifact v7.0.2 `cf430e03…`;
+    - download-artifact v8.0.2 `9000827c…`.
+  - the stop hook's three untracked `amendment4/` logs were committed by Linden in `f57b003`; the tree is clean.
+- **The copy:** `.github/workflows/publish-tiles.yml` is copied byte for byte to `main` in this commit (SHA-256
+  `69576e41…f0a677`), on the owner's word at -30. It is the only code on `main`.
+**Notes:** Written by Cedar Datum by hand. The owner's run comes next; then a session pins the release, and step 2a
+starts. Next free ID -32.
