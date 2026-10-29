@@ -1453,3 +1453,48 @@ tests-first and the port in one session.
     `googleapis` entry. The mirror script exists only as evidence.
   - `brouter/build.gradle.kts:22-33` registers the C reference task.
 **Notes:** Written by Cedar Datum by hand. Next: step 2b's second part. Next free ID -36.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-36
+**Timestamp:** 2026-10-29T23:49:45Z
+**Continues:** 2026-10-28-3, 2026-10-28-35
+**Title:** Milestone: the `util` package is complete (steps 2a and 2b), green on the JVM and on the simulator; one CI step
+found masked
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `35a1fb6`: tests first;
+- `073851b`: the port;
+- `c4e2eac`: the revert check;
+- `bc7c1b8` and `c8a32e6`: the report.
+
+The watcher read 183,227 tokens at 23:43:54Z, and the planner asked for a wrap-up. The session went on to the revert check
+and the simulator job, and **the harness's final count was 254,582, an overrun.**
+- **CI, run 40975094092 on `073851b`: success** (conclusion read by the planner).
+  - `jvm`: 54 tests, 0 failures; iOS klibs compiled.
+  - `ios-smoke`: 18 tests, 0 failures. **Simulator-checked.**
+- **Failing first:** locally, 13 of 17 new tests failed on the stubs. The four that passed do not call the port. The CI
+  run on the tests-first commit lost `ios-smoke` to a Maven Central 429, so **the simulator has no failing-first
+  evidence.** Its one-ulp positive control in `commonTest` ran there green.
+- **Results:**
+  - **Logic run (the oracle's table through the seam):** bit for bit on the table, 200,000 distances, 200,000 angle
+    cases with all five branches, and 2,399,792 `getAngle`/`getDirection` evaluations.
+  - **Production run (msun's table):** `cos` and `kx` differ from the oracle by one ulp at the 13 known rows, and `ky` at
+    none; `getDirection` differs at 0 of 1,199,896.
+  - The `jvmTest` JVM is shown to run `-XX:-UseLibmIntrinsic`, and the check of that can fail (60 rows differ without
+    the flag).
+- **Revert check:** row 1234's `cos` one ulp up. 4 failures against 3 predicted. The extra one is a test that also
+  compares every chunk, so the failure can come from this edit. JVM only.
+- **The seam:** `LibmSeam` is a parameter of every `CheapRuler` and `CheapAngleMeter` call. Production passes
+  `MsunLibm`; the logic run passes the oracle's own `SCALE_CACHE` and `Math.atan2`.
+- **Found masked:** the simulator job's "recorded, not gating" step was meant to run the arm64 HotSpot half of H step
+  4. **It never ran its tests:** its `jvmTest` depends on the C reference, which does not compile against the macOS SDK.
+  Both it and its counts step are `continue-on-error` (`brouter.yml:68-79`, read by the planner), so the job read
+  green. This is the family in Forager's `CLAUDE.md` of a check that never saw its data.
+
+**The planner's ruling (technical):** the next session fixes this before step 3's port.
+- The step runs its two classes with `-x msunReference`, as the coder proposed.
+- Differences there stay recorded, not gating, but **a run with no tests, or no XML, fails the job visibly.**
+  `continue-on-error` may not mask a step that did not run.
+**Milestone:** the `util` package (steps 2a and 2b) is done. The planner reports it to the owner.
+**Notes:** Written by Cedar Datum by hand. Next: the arm64 step's fix, then step 3 (`codec`). Next free ID -37.
