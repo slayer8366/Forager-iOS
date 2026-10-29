@@ -349,6 +349,248 @@ checked **[?]**.
 
   **[I]**
 
+### C. The project layout, and how Forager's Android app takes the port in
+
+Written by the fourth session on this dispatch (Hazel, part 3, 2026-10-29). The scope is tier T2, by the owner's
+"Any profile" (RECORD -8).
+
+**Base check first [C: `05-layout/00-bases-part3.txt`].**
+- **Forager `pre-main` has moved,** from `e2969abe4` to `d100a4776`: 32 commits.
+- **No premise path changed.** The diff is empty for:
+  - `third_party/`;
+  - the routing sources, tests, resources and assets;
+  - `gradle/`, `gradle.properties`, `settings.gradle.kts` and the build files;
+  - `server/pmtiles-worker/test/rd5/`.
+- **No changed line mentions `btools` or BRouter.** The moved base changes no premise, so it is not a stop.
+- **Every Forager read below is at `e2969abe4`,** the read-only clone, still at that commit.
+- **Forager-iOS `main`** moved to `38bbb23`, by RECORD -6 to -8 and two filed reports only.
+
+**Recommendations, one of each.**
+
+| Question | Recommendation | Basis |
+|---|---|---|
+| Gradle | **9.7.0**, by the wrapper, with `distributionSha256Sum` set | Forager's own (`gradle/wrapper/gradle-wrapper.properties:3`) **[R]**. Part 2's probe and this part's Kotlin probe built with it **[C]**. Forager's wrapper has no `distributionSha256Sum` (the whole file is 7 lines) **[R]**, so pinning the checksum is new here, not copied. Its value was not read **[?]**. |
+| Kotlin | **2.3.10 exactly,** Forager's pin, moved only together with Forager | the probe below **[C]** |
+| Modules | **One KMP library module, `:brouter`,** in `brouter/` | see "Modules" |
+| Targets | **`jvm` (JVM target 17), `iosArm64`, `iosSimulatorArm64`.** No `androidTarget`, no `iosX64`. | see "Targets" |
+| Packages | **Rename to `com.zynergylabs.forager.brouter.<upstream sub-package>`,** keeping every class and file name | see "Packages" |
+| MIT notice | **`brouter/LICENSE`,** upstream's file unchanged, plus a provenance README and one header line per file | see "The MIT notice" |
+
+**Modules.**
+- **Source sets:**
+  - `commonMain` holds all ported code;
+  - `commonTest` holds unit tests that run on every target, the iOS simulator included (item G);
+  - `jvmTest` holds the differential tests against the oracle (item D), on the JVM only.
+- **No `jvmMain` or `iosMain`.** okio covers the file reads (B, rows 1 to 3), so the port needs no `expect`/`actual`.
+  Keeping it that way is what lets Forager vendor the source (below) **[I]**.
+- **Why one module rather than upstream's five:**
+  - Kotlin's `internal` is per module, so one module lets everything but the entry point stay `internal` **[I]**;
+  - Forager already merges the five into one source tree (`third_party/brouter/README.md:6`) **[R]**.
+
+**Targets.**
+- **`jvm`, with JVM target 17,** as Forager's app compiles (`app/build.gradle.kts:316-317`, `:529`) **[R]**.
+- **Android takes the `jvm` variant,** so there is no `androidTarget`, no Android Gradle plugin in the port's build,
+  and no Android SDK in its CI.
+  - The JVM consumer below compiled and ran against the `jvm` jar **[C]**.
+  - The Android-build half is under "Android consumer" below.
+- **`iosArm64` for phones, `iosSimulatorArm64` for CI's simulator.** Part 2 compiled both klibs on this Ubuntu
+  container **[C, part 2]**.
+- **`iosX64` (Intel simulators) is left out.** Whether any GitHub macOS runner label the project would use is still
+  Intel is item G's question **[?]**.
+
+**Packages.** Rename. **What decides it [I]:**
+- The oracle (item D) puts `btools.router.RoutingEngine` and the rest on the same JVM test classpath as the port.
+- With the same names, a class loader loads one copy of each name, so one engine shadows the other. The differential
+  tests would need class-loader isolation, or would compare an engine with itself.
+- At Android's switch, Forager's `:brouter` (`settings.gradle.kts:21`) and the port could not both be in the app under
+  the same names (duplicate classes) **[I]**. Renamed, Forager can carry both while it compares them.
+
+**Traceability is kept by the path below the prefix:**
+- `btools/router/RoutingEngine.java` becomes `com/zynergylabs/forager/brouter/router/RoutingEngine.kt`;
+- every class keeps its upstream name.
+
+The prefix sits under the namespace Forager's own code uses (`com.zynergylabs.forager.app`, `BRouterTrailRouter.kt:1`)
+**[R]**. The exact prefix is a naming choice, listed under "Decided beyond scope".
+
+**The MIT notice.**
+- **`brouter/LICENSE`:** upstream's `LICENSE`, unchanged.
+  - Forager's copy is identical to upstream's (part 1, `01-vendored-vs-upstream.txt`).
+  - It begins "The MIT License (MIT) / Copyright (c) 2019 BRouter contributors" (`third_party/brouter/LICENSE:1-3`)
+    **[R]**.
+  - MIT asks that the notice go with "all copies or substantial portions", and a line-by-line port is one **[I]**.
+- **`brouter/README.md`:**
+  - a Kotlin port of BRouter v1.7.10 (upstream `4d2639af`), MIT;
+  - how its paths map to upstream's;
+  - what is ported (tier T2) and what fails as unsupported.
+- **One header line per ported file,** naming its upstream file. That is for traceability; MIT does not ask for it
+  **[I]**.
+- **In the apps:**
+  - Forager's open-source page already credits BRouter under MIT, "Built into the app from BRouter's source"
+    (`app/src/main/assets/credits/software.json:333-338`) **[R]**. Whether that wording changes at the switch is
+    Forager's call.
+  - The iOS app will need its own credits page. That is later iOS work, not Phase 2.
+- **No further licence question arises from this layout [I].** OpenStreetMap's ODbL attribution concerns the tiles
+  (item F), not the code.
+
+#### Amendment 1: how Forager's Android app takes the port in
+
+**Nothing below changes slayer8366/Forager now.** Each route is something Forager's planner would do at the switch,
+under Forager's record. None is a stop for Phase 1.
+
+| Route | What Forager would do at the switch | What it needs | Kotlin coupling |
+|---|---|---|---|
+| **Published artifact, Maven Central** | add one coordinate | **an account** (a Sonatype namespace) and signing keys **[I]**: a stop if chosen | the binary rule below |
+| **Published artifact, GitHub Packages** | add a repository and a credential | a read token in Forager's CI, even for a public package **[I, not checked]**: a change to Forager's settings | the binary rule below |
+| **Published artifact, a Maven layout committed in Forager-iOS,** read at a commit-pinned URL | add a repository URL with the commit in it, plus Gradle dependency verification | nothing new; it is unusual and was not tried **[I]** | the binary rule below |
+| **Gradle composite build** | `includeBuild` a Forager-iOS checkout pinned by submodule or a CI step | a second checkout in every Forager build and CI run. Forager's build then configures the port's KMP build, iOS targets included. | Gradle and plugin versions shared in one build **[I]** |
+| **Vendored Kotlin source** at a pinned Forager-iOS commit, as `third_party/brouter/` is today | copy `brouter/src/commonMain` and the `LICENSE`; add a README with the same `cmp` check as `third_party/brouter/README.md:7-16`; compile it as a plain Kotlin/JVM module | nothing new: no account, no token, no network at build time | **source only:** it must compile under Forager's 2.3.10 |
+
+**Recommendation: vendored source [I].**
+- **Forager already works this way,** for a reason it recorded: BRouter publishes no Maven artifact
+  (`third_party/brouter/README.md:18`) **[R]**.
+- **It needs no account and no secret.**
+- **Forager's own compiler compiles it,** so the binary-metadata question below does not arise on Android.
+  - The source has to compile under 2.3.10.
+  - **Tested:** the probe's common source compiled and ran as a plain `kotlin("jvm")` 2.3.10 module
+    **[C: `kotlin-probe/logs/consumer-c2310-vendored.log`]**.
+- **The proof carries by byte identity:** Forager's check would show its copy equals the commit at which the
+  differential tests passed.
+
+**What it asks of the port:**
+- `commonMain` only, with no `expect`/`actual`;
+- dependencies limited to okio, and atomicfu if B row 8's lock is kept.
+
+B's design already meets both **[I]**.
+
+**What it costs Forager at the switch [I]:**
+- a second copy to re-vendor on each port fix;
+- a Kotlin/JVM plugin entry, which its catalog lacks: `[plugins]` holds no `kotlin-jvm` (`gradle/libs.versions.toml:129-134`)
+  **[R]**;
+- an okio version change. OkHttp 4.12.0 requires okio 3.6.0 **[C: `05-layout/okhttp/okhttp-4.12.0.pom`, `.module`]**,
+  and Forager declares no okio of its own **[R: grep of `libs.versions.toml` and `app/build.gradle.kts`]**. With the
+  port's okio 3.18.2, Gradle would resolve 3.18.2 for OkHttp too.
+
+**The composite build is the second choice.** It fits a developer trying the port locally, not Forager's CI.
+
+#### Amendment 1: which Kotlin version the port may compile with
+
+**Tested [C: `05-layout/kotlin-probe/`, `logs/summary.txt`, `logs/metadata-versions.txt`].**
+- **Producers:** a small KMP library, standing in for the port's surface. It has:
+  - a sealed result, an open class overridden by the consumer, an inline function;
+  - a `@Volatile` field and `TimeSource.Monotonic`.
+- **The four producer builds:**
+  - Kotlin 2.3.10 (with the iOS targets);
+  - 2.3.21;
+  - 2.4.21, the newest stable;
+  - 2.4.21 with `languageVersion`/`apiVersion` 2.3 and `coreLibrariesVersion` 2.3.10.
+- **Consumers:**
+  - a Kotlin/JVM build at JVM target 17, Gradle 9.7.0;
+  - compiled and run with **Kotlin 2.3.10**;
+  - and, as the negative control, with **2.2.21**.
+- **Each consumer run** starts with `clean`. Its result line comes from the program's own output.
+- **The predictions were written into the summary before any run.** All held.
+
+| Producer (metadata `mv` read from the jar) | 2.3.10 consumer | Its runtime stdlib | 2.2.21 consumer (control) |
+|---|---|---|---|
+| 2.3.10 (`mv` 2.3.0) | compiles, runs | 2.3.10 | compiles, runs |
+| 2.3.21 (`mv` 2.3.0) | compiles, runs | **moves to 2.3.21** | not run |
+| 2.4.21 (`mv` 2.4.0) | compiles, runs, no warning | **moves to 2.4.21** | **refused, 35 errors:** "The binary version of its metadata is 2.4.0, expected version is 2.2", on the probe's jar and on the stdlib |
+| 2.4.21, pinned to 2.3 (`mv` 2.3.0, POM names stdlib 2.3.10) | compiles, runs | 2.3.10 | compiles, runs |
+| Vendored source, compiled by the consumer | compiles, runs | 2.3.10 | not run |
+
+**What this shows [C]:**
+- A compiler reads binaries one minor version newer than itself and refuses two:
+  - 2.3.10 read 2.4.0;
+  - 2.2.21 refused 2.4.0.
+- So a published or composite port may compile with 2.3.x or 2.4.x for Forager's 2.3.10, and not with 2.5 or later.
+- **An unpinned newer compiler still changes Forager.** Its POM names its own stdlib, and Gradle resolved the
+  consumer's runtime stdlib upward, to 2.4.21. Forager's app would then ship a newer stdlib than its compiler, by
+  nobody's choice.
+- **`coreLibrariesVersion` with `languageVersion`/`apiVersion` 2.3** keeps both the metadata and the stdlib at
+  Forager's level.
+
+**Recommendation: compile the port with 2.3.10, exactly as Forager does. Neither side has to move.**
+- If iOS later needs a newer compiler, for example for a newer Xcode on CI's runners (item G; not checked):
+  - keep `languageVersion` and `apiVersion` at 2.3 and `coreLibrariesVersion` at 2.3.10 until Forager moves;
+  - with vendored source, the language pin alone keeps the source compilable under 2.3.10 **[I: not tested]**.
+
+**Not tested:**
+- iOS klib metadata across compiler versions. Forager's Android app never reads a klib.
+- A real phone.
+
+**Android consumer** (the same check in an Android app build at Forager's settings: AGP 9.3.1, `kotlin-android`
+2.3.10, `builtInKotlin=false`, `newDsl=false`, JVM target 17, minSdk 26):
+- **Its compileSdk is 35,** the only platform in this container. Forager uses 37 (`app/build.gradle.kts:243`)
+  **[R]**.
+- **Result [C: `kotlin-probe/logs/android-summary.txt`, `android-*.log`]:** `clean :app:assembleDebug` compiled,
+  dexed and produced an APK against the 2.3.10, 2.4.21, and pinned 2.4.21 libraries, with no `e:` lines.
+  - The dependency tree resolves `portprobe` to `portprobe-jvm`, so an Android build takes the KMP `jvm` variant.
+  - Against the unpinned 2.4.21 library, the app's stdlib moved from 2.3.10 to 2.4.21, as on the JVM.
+  - The only warnings are deprecations of the build settings themselves (`builtInKotlin=false`, `newDsl=false`, the
+    `kotlin-android` plugin), which Forager's build shares **[I]**.
+
+#### Amendment 1: what the port exposes in place of the seven classes
+
+**Today's shapes cannot be kept exactly [R]:**
+- **`RoutingEngine` and `PhysicalFile` take a `java.io.File`** (`BRouterTrailRouter.kt:212-213`;
+  `RoutingDataFolder.kt:49`). Common code has no such type; B row 2 replaces it with okio's `Path`.
+- **Forager uses the Java side's own shapes:**
+  - it writes the field `quite` (`:161`);
+  - it calls Java getters (`getErrorMessage()`, `getFoundTrack()`, `getILat()`; `:136`, `:142`, `:99`), choosing
+    "the getters, not properties" because `RoutingEngine` has protected fields of those names (`:135`).
+  - In Kotlin these become properties, and the call shapes change.
+- **Forager's cancel test subclasses `RoutingEngine` and overrides `doRun`** (`BRouterTrailRouterCancelTest.kt:58-64`,
+  part 1). Kotlin classes are final unless opened.
+
+So Forager's adapter changes at the switch whichever option is taken.
+
+**Recommendation: a small entry point, which Forager wraps behind its own `TrailRouter`.**
+- `TrailRouter` is already Forager's port for the engine (`domain/routing/TrailRouter.kt:15-28`) **[R]**.
+- The engine's classes stay `internal`.
+
+A sketch, not a fixed API **[I]**:
+
+```kotlin
+// commonMain: the port's public surface, all of it
+class RouteRequest(
+    val startLon: Double, val startLat: Double, val endLon: Double, val endLat: Double,
+    val routeData: okio.Path, val profile: okio.Path,
+    val params: Map<String, String>,      // Forager's: alternativeidx=0, profile:use_dynamic_range=0
+    val maxRunningTimeMillis: Long,
+)
+class RouteCancel { fun terminate(); val isTerminated: Boolean }    // the volatile flag, B row 7
+sealed interface RouteOutcome {
+    class Found(val iLat: IntArray, val iLon: IntArray, val distance: Int) : RouteOutcome   // track.nodes, track.distance
+    class Failed(val message: String) : RouteOutcome                                       // the engine's own message
+}
+fun route(request: RouteRequest, cancel: RouteCancel): RouteOutcome    // blocking; the caller picks the thread
+fun checkDataFile(file: okio.Path): String?                            // RoutingDataFolder.headerProblem's check
+```
+
+**Why [I]:**
+- **It is exactly what A found Forager calling, and nothing more:**
+  - the request;
+  - `doRun` and `terminate()`;
+  - `getErrorMessage()`, and the found track's nodes and distance;
+  - the header check.
+
+  The surface the differential tests have to prove is therefore the surface Forager uses.
+- **iOS gets the same call.** With the engine `internal`, an iOS framework built from it shows only this surface.
+- **Forager's domain stays in Forager:**
+  - `Failed` carries the engine's message unchanged, so `BRouterFailures.classify` (`BRouterFailures.kt:18-49`) goes
+    on naming the failures;
+  - the adapter keeps its one-route lock, its engine thread and its cancel-and-wait (`BRouterTrailRouter.kt:120-178`).
+
+**What it changes for Forager at the switch:**
+- the adapter's calls;
+- its cancel test, which would fake the entry point rather than subclass the engine.
+
+Both are Forager's work.
+
+**The other option, keeping the seven classes public under their upstream names, is not recommended.**
+- It does not spare Forager a rewrite (above).
+- It makes the whole engine public API on both platforms **[I]**.
+
 ### Not answered in part 2 (left for the next session)
 
 - C, layout and the Android questions of Amendment 1;

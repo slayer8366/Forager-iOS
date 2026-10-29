@@ -1,0 +1,73 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43209 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :cleanIosSimulatorArm64Test UP-TO-DATE
+> Task :cleanJvmTest UP-TO-DATE
+> Task :cleanAllTests UP-TO-DATE
+> Task :clean UP-TO-DATE
+> Task :kmpPartiallyResolvedDependenciesChecker
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :downloadKotlinNativeDistribution
+> Task :compileKotlinIosArm64
+> Task :iosArm64Klib
+
+> Task :commonizeNativeDistribution
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43209 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+> Task :transformCommonMainDependenciesMetadata
+> Task :metadataCommonMainProcessResources NO-SOURCE
+> Task :transformNativeMainDependenciesMetadata
+> Task :metadataNativeMainProcessResources NO-SOURCE
+> Task :transformAppleMainDependenciesMetadata
+> Task :metadataAppleMainProcessResources NO-SOURCE
+> Task :transformIosMainDependenciesMetadata
+> Task :metadataIosMainProcessResources NO-SOURCE
+> Task :iosArm64SourcesJar
+> Task :generatePomFileForIosArm64Publication
+> Task :compileKotlinIosSimulatorArm64
+> Task :iosSimulatorArm64Klib
+> Task :iosSimulatorArm64SourcesJar
+> Task :generatePomFileForIosSimulatorArm64Publication
+> Task :jvmProcessResources NO-SOURCE
+> Task :processJvmMainResources SKIPPED
+> Task :jvmSourcesJar
+> Task :generatePomFileForJvmPublication
+> Task :generateProjectStructureMetadata
+> Task :buildKotlinToolingMetadata
+> Task :sourcesJar
+> Task :generatePomFileForKotlinMultiplatformPublication
+> Task :compileCommonMainKotlinMetadata
+> Task :metadataCommonMainClasses
+> Task :compileNativeMainKotlinMetadata NO-SOURCE
+> Task :metadataNativeMainClasses UP-TO-DATE
+> Task :compileAppleMainKotlinMetadata NO-SOURCE
+> Task :metadataAppleMainClasses UP-TO-DATE
+> Task :compileIosMainKotlinMetadata NO-SOURCE
+> Task :metadataIosMainClasses UP-TO-DATE
+> Task :iosArm64MetadataElements
+> Task :generateMetadataFileForIosArm64Publication
+> Task :publishIosArm64PublicationToProbeRepoRepository
+> Task :iosSimulatorArm64MetadataElements
+> Task :generateMetadataFileForIosSimulatorArm64Publication
+> Task :publishIosSimulatorArm64PublicationToProbeRepoRepository
+> Task :allMetadataJar
+> Task :generateMetadataFileForKotlinMultiplatformPublication
+> Task :publishKotlinMultiplatformPublicationToProbeRepoRepository
+> Task :compileKotlinJvm
+> Task :compileJvmMainJava NO-SOURCE
+> Task :jvmMainClasses
+> Task :jvmJar
+> Task :generateMetadataFileForJvmPublication
+> Task :publishJvmPublicationToProbeRepoRepository
+> Task :publishAllPublicationsToProbeRepoRepository
+
+[Incubating] Problems report is available at: file://<scratch>/part3/kv/producer/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.7.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2m 12s
+38 actionable tasks: 35 executed, 3 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.0/userguide/configuration_cache_enabling.html

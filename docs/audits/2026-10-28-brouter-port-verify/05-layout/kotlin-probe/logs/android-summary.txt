@@ -1,0 +1,8 @@
+# Android consumer probe, 2026-10-29T03:44:45Z. Prediction: all three compile and dex; k2421 moves the app's stdlib to 2.4.21.
+android against k2310ios: exit 0; compileDebugKotlin ran: 1; dex ran: 3; apk: 1; e-lines: 0; first failure: 
+    resolved: kotlin-stdlib:2.3.10 portprobe:k2310ios 
+android against k2421: exit 0; compileDebugKotlin ran: 1; dex ran: 3; apk: 1; e-lines: 0; first failure: 
+    resolved: kotlin-stdlib:2.3.10 -> 2.4.21 kotlin-stdlib:2.4.21 portprobe:k2421 
+android against k2421lv23: exit 0; compileDebugKotlin ran: 1; dex ran: 3; apk: 1; e-lines: 0; first failure: 
+    resolved: kotlin-stdlib:2.3.10 portprobe:k2421lv23 
+# finished 2026-10-29T03:48:07Z

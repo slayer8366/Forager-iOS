@@ -1,0 +1,80 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43209 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :clean UP-TO-DATE
+> Task :checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :processResources NO-SOURCE
+
+> Task :compileKotlin FAILED
+e: Incompatible classes were found in dependencies. Remove them from the classpath or use '-Xskip-metadata-version-check' to suppress errors
+e: file:///root/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.21/c343e135bd1e7dd94b7ed76b4159068d888d09db/kotlin-stdlib-2.4.21.jar!/META-INF/kotlin-stdlib-jdk7.kotlin_module Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.4.0, expected version is 2.2.0.
+e: file:///root/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.21/c343e135bd1e7dd94b7ed76b4159068d888d09db/kotlin-stdlib-2.4.21.jar!/META-INF/kotlin-stdlib-jdk8.kotlin_module Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.4.0, expected version is 2.2.0.
+e: file:///root/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.21/c343e135bd1e7dd94b7ed76b4159068d888d09db/kotlin-stdlib-2.4.21.jar!/META-INF/kotlin-stdlib.kotlin_module Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.4.0, expected version is 2.2.0.
+e: file://<scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/META-INF/probe_portprobe.kotlin_module Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.4.0, expected version is 2.2.0.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:5:19 Unresolved reference 'javaSplit'.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:6:19 Unresolved reference 'withEngine'.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:9:21 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:9:37 Class 'probe.port.Engine' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/Engine.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:9:44 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:9:47 Class 'probe.port.CancelFlag' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/CancelFlag.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:10:53 Class 'probe.port.RouteOutcome' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:10:68 Class 'probe.port.RouteOutcome.Failed' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Failed.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:14:15 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:15:15 Unresolved reference 'withEngine'.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:15:26 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:15:33 Unresolved reference 'it'.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:15:42 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:15:42 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:16:16 'when' expression must be exhaustive. Add an 'else' branch.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:17:12 Class 'probe.port.RouteOutcome.Found' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Found.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:17:43 Class 'probe.port.RouteOutcome.Found' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Found.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:17:60 Class 'probe.port.RouteOutcome.Found' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Found.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:18:12 Class 'probe.port.RouteOutcome.Failed' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Failed.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:18:45 Class 'probe.port.RouteOutcome.Failed' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Failed.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:5 Unresolved reference 'println'.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:32 Class 'kotlin.KotlinVersion' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from /root/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.21/c343e135bd1e7dd94b7ed76b4159068d888d09db/kotlin-stdlib-2.4.21.jar!/kotlin/KotlinVersion.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:32 Class 'kotlin.KotlinVersion.Companion' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from /root/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.21/c343e135bd1e7dd94b7ed76b4159068d888d09db/kotlin-stdlib-2.4.21.jar!/kotlin/KotlinVersion$Companion.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:75 Class 'probe.port.RouteOutcome.Failed' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Failed.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:76 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:76 Class 'probe.port.RouteOutcome' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:87 Class 'probe.port.RouteRequest' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteRequest.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:104 Class 'probe.port.RouteOutcome.Failed' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from <scratch>/part3/kv/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/probe/port/RouteOutcome$Failed.class
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:142 Unresolved reference 'javaSplit'.
+e: file://<scratch>/part3/kv/consumer/src/main/kotlin/Main.kt:20:161 Class 'kotlin.text.Regex' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.4.0, but the compiler version 2.2.0 can read versions up to 2.3.0.
+The class is loaded from /root/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.21/c343e135bd1e7dd94b7ed76b4159068d888d09db/kotlin-stdlib-2.4.21.jar!/kotlin/text/Regex.class
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileKotlin' (registered by plugin 'org.jetbrains.kotlin.jvm').
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 9s
+2 actionable tasks: 1 executed, 1 up-to-date

@@ -1,0 +1,12 @@
+# @kotlin.Metadata mv read with javap -v from probe/port/Engine.class in each producer's -jvm jar, and class-file major version
+k2310ios: mv=[2,3,0] major=61
+k2321: mv=[2,3,0] major=61
+k2421: mv=[2,4,0] major=61
+k2421lv23: mv=[2,3,0] major=61
+# POM kotlin-stdlib dependency per producer:
+k2310ios: 2.3.10
+k2321: 2.3.21
+k2421: 2.4.21
+k2421lv23: 2.3.10
+# Probe-jar error lines in the 2.2.21-against-2.4.21 negative control:
+e: file://<probe>/repo/probe/portprobe-jvm/k2421/portprobe-jvm-k2421.jar!/META-INF/probe_portprobe.kotlin_module Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.4.0, expected version is 2.2.0.

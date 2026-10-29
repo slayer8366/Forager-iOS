@@ -1,0 +1,57 @@
+# Part 3 base check, 2026-10-29T03:32:31Z
+## Forager pre-main on the remote (git ls-remote https://github.com/slayer8366/forager pre-main)
+d100a4776055d922b74e2fb4e9d23fb2ad6895cc	refs/heads/pre-main
+## Dispatch base: e2969abe4f98674c24ce3913ce97be568184a4de. Commits since (git rev-list --count e2969abe4..pre-main):
+32
+d100a477 Merge pull request #434 from slayer8366/live-counts-empty-states
+1da6b9fd Live counts: Amendment 2 in the completion report, N8 corrected, index row, S22 steps 7 and 8
+46cc439d Live counts: no default for the count source, so a factory that forgets it does not compile (Sorrel's N1)
+5ecb7bd4 Finds: a drafts read that fails says so on Drafts, not "No drafts" (Sorrel's N5)
+544a095b Live counts: a failed count read is tried again on its own, after a bounded backoff (Sorrel's N4)
+0b557868 Live counts, Amendment 2: fail-first tests for the counts' retry (N4) and the drafts read failure (N5)
+b677cdba Live counts: name PR #434 in the index row and the report
+6df462f7 Live counts and empty states: completion report and index row (dispatch 2026-10-28-08)
+0d6f969f Settings panel test (testDebug): locate the new Tracks and Offline maps empty lines
+1a078d5e Live journal-entry counts and empty lines with a next step (dispatch 2026-10-28-08)
+1cc95271 Live counts and empty states: first-stop report (dispatch 2026-10-28-08), nothing built
+9f2df1ab Merge pull request #432 from slayer8366/layers-to-tools
+21720000 [skip ci] Layers to Tools: Amendments 5 and 6 results in the completion report and the audit index
+b25806b4 layers-to-tools Amendments 5 and 6: every selected map type chip, normal or grey, carries a 1 dp outline in the theme's onSurface, in both themes
+f13e264d [skip ci] layers-to-tools Amendments 5 and 6: tests first for the uniform 1 dp onSurface outline (selected and grey chips, both themes)
+5bd69cd4 [skip ci] Layers to Tools: Amendment 4 results in the completion report and the audit index
+66c0457c layers-to-tools Amendment 4: the PureWhite comment no longer spells the role read ThemeCompletenessTest scans for
+e2a4e0bf layers-to-tools Amendment 4: the selected chip's light label named as PureWhite, not read as colorScheme.onSecondary
+61bfe533 layers-to-tools Amendment 4: the outline assertion names the outline when it is missing
+64aacd96 layers-to-tools Amendment 4: the light theme's selected map type chip filled secondary with a 1 dp onSurface outline
+d4f30038 [skip ci] layers-to-tools Amendment 4: test first for the light theme's selected map type chip (secondary fill, onSurface outline)
+8c309720 [skip ci] Layers to Tools: Amendment 3 results in the completion report and the audit index
+c76d1df9 layers-to-tools Amendment 3: opening Tools closes the panel (N1); Trip Planner's fold held as Map Layers' (N3), its doc corrected; the sheet comments repointed (N7)
+c67ea705 layers-to-tools Amendment 3: tests first for N1 (Tools closes the panel), N3 (Trip Planner's fold held, incl. a rotation restore) and N5 (fullscreen Back with the panel open)
+e3221a9d [skip ci] Layers to Tools: completion report and audit index row (dispatch 2026-10-28-02)
+c217480e layers-to-tools: the long-press check also runs before the panel is first opened
+812c1aed layers-to-tools: the testDebug quick-fire test on the panel; label checks per switch row, since the Tools row also reads Offline Maps; Settings row touched without a scroll
+76264595 layers-to-tools: a test name with a semicolon, which Kotlin rejects on JVM names
+26becf0c layers-to-tools: anchor checks to 2 dp, so the L's own row offset is distinguishable; Offline Maps row text asserted
+e7b31ebb layers-to-tools: tests for the map type panel, Tools > Map Layers, Trails grey on Topo/OSM, Title Case labels, no chevrons
+f2bbb023 WIP layers-to-tools: map type panel, Tools > Map Layers, card and sources fetch removed, chevrons removed
+cdf9bfe7 Layers to Tools: verify-first report (dispatch 2026-10-28-02 with Amendment 1)
+## Diff stat on premise paths (third_party/, routing main+test+resources+assets, domain/routing, gradle/, gradle.properties, settings.gradle.kts, build.gradle.kts, app/build.gradle.kts, server/pmtiles-worker/test/rd5/):
+(empty above = no change)
+## Changed file names matching rout|brouter|gradle|libs|kotlin|settings|third_party:
+app/src/main/java/com/zynergylabs/forager/app/ui/availability/AvailabilitySettingsUi.kt
+app/src/test/java/com/zynergylabs/forager/app/ui/availability/AvailabilityViewModelOfflineRoutesTest.kt
+app/src/testDebug/java/com/zynergylabs/forager/app/ui/availability/AvailabilityScreenSettingsPanelTest.kt
+## Changed lines mentioning btools|brouter:
+0
+## Local read-only clone HEAD:
+e2969abe4f98674c24ce3913ce97be568184a4de
+0
+## Forager-iOS: brouter-port remote and local
+557749153ac211674646db851f5cd6a5b0eb1b49	refs/heads/brouter-port
+38bbb233911de465647cb8172eb3df6990c6ac51	refs/heads/main
+557749153ac211674646db851f5cd6a5b0eb1b49
+## Forager-iOS main since 507dbfb (the base part 1 recorded):
+ RECORD.md                                          | 103 +++++
+ .../preserved/2026-10-28-01-phase1-report-part1.md | 363 ++++++++++++++++
+ .../preserved/2026-10-28-01-phase1-report-part2.md | 470 +++++++++++++++++++++
+ 3 files changed, 936 insertions(+)

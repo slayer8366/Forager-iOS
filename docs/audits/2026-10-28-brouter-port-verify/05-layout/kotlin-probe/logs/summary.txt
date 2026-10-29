@@ -1,0 +1,27 @@
+# Kotlin metadata probe, started 2026-10-29T03:37:15Z, Gradle Gradle 9.7.0
+# Predictions, written before any run:
+#  - consumer 2.3.10 reads producers 2.3.10, 2.3.21, 2.4.21, and 2.4.21 pinned to language/api 2.3
+#  - negative control consumer 2.2.21: reads 2.3.10 (one ahead), FAILS on 2.4.21 (two ahead) with a metadata-version error,
+#    reads 2.4.21 pinned to language/api 2.3
+#  - producer 2.4.21 unpinned names kotlin-stdlib 2.4.21, so the 2.3.10 consumer's runtime stdlib moves to 2.4.21
+producer k2310ios (kotlin 2.3.10 -Pios=true): exit 0  1 success-lines; jar: 2 ; pom stdlib: 2.3.10
+producer k2321 (kotlin 2.3.21 ): exit 0  1 success-lines; jar: 2 ; pom stdlib: 2.3.21
+producer k2421 (kotlin 2.4.21 ): exit 0  1 success-lines; jar: 2 ; pom stdlib: 2.4.21
+producer k2421lv23 (kotlin 2.4.21 -Plv=2.3 -PcoreLibs=2.3.10): exit 0  1 success-lines; jar: 2 ; pom stdlib: 2.3.10
+consumer c2310-p2310ios (kotlin 2.3.10, against k2310ios ): exit 0; run line: consumer kotlin=2.3.10 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.3.10
+consumer c2310-p2321 (kotlin 2.3.10, against k2321 ): exit 0; run line: consumer kotlin=2.3.21 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.3.10 -> 2.3.21
+consumer c2310-p2421 (kotlin 2.3.10, against k2421 ): exit 0; run line: consumer kotlin=2.4.21 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.3.10 -> 2.4.21
+consumer c2310-p2421lv23 (kotlin 2.3.10, against k2421lv23 ): exit 0; run line: consumer kotlin=2.3.10 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.3.10
+consumer c2310-vendored (kotlin 2.3.10, against none -Pvendored=<scratch>/part3/kv/producer/src/commonMain/kotlin): exit 0; run line: consumer kotlin=2.3.10 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.3.10
+consumer c2221-p2310ios (kotlin 2.2.21, against k2310ios ): exit 0; run line: consumer kotlin=2.3.10 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.2.21 -> 2.3.10
+consumer c2221-p2421 (kotlin 2.2.21, against k2421 ): exit 1; run line: NONE; errors: 35; first error: e: Incompatible classes were found in dependencies. Remove them from the classpath or use '-Xskip-metadata-version-check' to suppress errors
+    stdlib resolved: 
+consumer c2221-p2421lv23 (kotlin 2.2.21, against k2421lv23 ): exit 0; run line: consumer kotlin=2.3.10 result=found 1 0 held=held split=[a, b]; errors: 0; first error: 
+    stdlib resolved: kotlin-stdlib:2.2.21 -> 2.3.10
+# finished 2026-10-29T03:42:50Z
