@@ -860,3 +860,51 @@ ranges.
   on aarch64 (-21), and K times HotSpot arm64 there.
 - **Phase 1's items:** A to K are answered. The Android measurement is the researcher's run 2 (-21).
 **Notes:** Written by Cedar Datum by hand. Next free ID -23.
+
+---
+
+**Kind:** terminal
+**ID:** 2026-10-28-23
+**Timestamp:** 2026-10-29T11:14:30Z
+**Closes:** 2026-10-28-19
+**Title:** Research 2026-10-29-01 done: Android's cosine table differs from every HotSpot setting; atan2 agrees
+everywhere
+**Observed:** the researcher (Fable), run 2, branch `research/android-math` at `c5893b6` (the measurement), `1ff88aa`
+and `736a4c1`. `1ff88aa` dropped four sections by a faulty edit, and `736a4c1` restored them minutes later. Filed
+unedited as `prompts/preserved/2026-10-29-01-android-math-report-run2.md` (SHA-256 equal to the branch's file).
+The watcher read 188,920 tokens at 11:09:34Z, after the measurement was pushed, and the planner asked for a wrap-up.
+The harness's final count was 221,913.
+- **The measurement (computed):**
+  - **What was built:** bionic's FreeBSD msun sources at `android-17.0.0_r1`, compiled with Android's own flags
+    (`-ffp-contract=off -fno-builtin -fno-math-errno`) by clang 18 and by gcc 13. The two outputs are byte for
+    byte identical.
+  - **`cos`:** against `StrictMath.cos` (fdlibm), 13 of 1,800 rows differ, each by 1 ulp, all where only
+    `__kernel_cos` runs. Against HotSpot's default `Math.cos`, 59 of 1,800.
+  - **`atan2`:** 0 of 299,974 against both.
+  - **Outside checks:** HotSpot's table equals part 6's byte for byte; Math against Strict is 60 of 1,800 again;
+    the pairs regenerate to 299,974.
+- **Why the 13 (read):** FreeBSD's `k_cos.c` keeps fdlibm's six constants but evaluates them differently.
+  `s_atan.c` and `e_atan2.c` are fdlibm's algorithm line for line.
+- **Also read:**
+  - ARM's optimized routines supply no double `cos` or `atan2` on Android;
+  - the contraction flag sits in soong's `commonGlobalCflags`;
+  - Android 12 built with clang 12.0.7;
+  - Apple's `Libm` on GitHub is a 2021 tree without arm64, not what iOS ships.
+- **Could not determine:**
+  - the commit removing Android's x86_64 assembly;
+  - whether HotSpot's fdlibm flags reach its C++ trig;
+  - a phone's own `libm.so` bits; the result is modelled on x86_64 and inferred for arm64 from the source;
+  - whether the 13 rows change `kx` or `ky`;
+  - iOS's own `cos` and `atan2`.
+- **Conclusion:** no HotSpot setting reproduces today's Android cosine table. The no-intrinsic (fdlibm) oracle is
+  nearest, at 13 rows; the default is at 59. `atan2` is the same on HotSpot and Android at every pair tried.
+- **Checked by the planner:**
+  - only research files changed on the branch;
+  - all report sections are present at `736a4c1`;
+  - `q7/README.txt` and the comparison files read: four `atan2` comparisons at 0 of 299,974; `cos` differences
+    against Math and against Strict listed row by row;
+  - `rows-msun-vs-strict.txt` lists the 13 rows. Five of them (39.55, 39.75, 41.05, 41.15 and 41.85 degrees)
+    fall in the latitude bands of E's tiles `W75_N35` and `W75_N40`.
+- **The dispatch's finish line is met:** the report and evidence are pushed, and the three names came in run 1
+  (-21).
+**Notes:** Written by Cedar Datum by hand. Next free ID -24.
