@@ -1318,3 +1318,51 @@ handoff. The harness's final count was 195,246.
   - the tree is clean;
   - the runs exist on both commits.
 **Notes:** Written by Cedar Datum by hand. Next free ID -33.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-33
+**Timestamp:** 2026-10-29T22:56:53Z
+**Continues:** 2026-10-28-3, 2026-10-28-32
+**Title:** Phase 2, step 2a: `util` ported, 24 of 25 tests green; one test from sub-step 1 can never finish; the
+planner's ruling
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `612bb0d`: the port, 10 stub files filled, with logs, scratch harnesses and the run scripts;
+- `87e7fc9`: the revert check.
+
+The watcher read 185,584 tokens at 22:55:08Z. The harness's final count was 200,380.
+- **The port (computed, local):** 0 compile errors; 24 tests, 0 failures, for the 24 that can finish. `util/` is
+  1,282 Kotlin lines in 12 files, 992 of them code.
+- **The 25th test, `BitCoderContextTest.rawBitReadsOnRandomBytesMatchTheOracle` (sub-step 1's, `3cd61ad`), can never
+  end:**
+  - its loop ends only at bit 32,640, but about one op in 250 resets both contexts;
+  - on the oracle alone, three seeds ran 20 million ops each and reached bits 26,863, 25,224 and 23,290
+    (`2-loop/LoopCheck-out.txt`, read by the planner);
+  - over the stubs it could not show this, since every stub threw on its first call. This is the family in Forager's
+    `CLAUDE.md`: "A check that passes because it never saw the data that could fail it".
+  - The same comparison, capped at 1 million ops per seed in a scratch harness, ran 20 million ops over 20 seeds
+    with 0 mismatches. It bites: one flipped bit gave 56,167 mismatches.
+  - The coder stopped rather than change the test. This is Amendment 3's wrong-premise stop.
+- **Revert check:** `SortedHeap.kt:112` (`SortedHeap.java:139`), `<` to `<=`. Of 24 tests, exactly the four
+  `SortedHeapTest` cases failed, each on its pop sequence. The prediction held. Restored from a saved copy.
+- **CI, runs 40969246695 and 40969414415:** not read to the end. The `jvm` job is expected to hit its 30-minute
+  timeout on the 25th test. That would leave the iOS klib step unrun and the job red until the test is fixed.
+- **Wrong premises:** the handoff's "25 tests, 0 failures" finish line; `getMinBin` has 31 unrolled steps, not 30.
+- **Checked by the planner:**
+  - the commits touch only `util/` and the Phase 2 report's folder;
+  - the tree is clean at `87e7fc9`;
+  - the loop-check log reads as reported.
+- **The planner's slip:** while sending a handoff message, the planner sent the word "placeholder" to the finished
+  sub-step 1 session (`aa35ff27`), which resumed. It read the message, did nothing, and said so. Told it was a
+  mistake, it replied "No action taken". Nothing was written or pushed by it.
+
+**The planner's ruling on the 25th test (a test-harness detail):** the coder's option (a), plus one case.
+- **The loop gets an op cap of 1,000,000 per seed.** The position bound and both equalities stay.
+- **A second case per seed, with no in-loop reset, runs to the position bound.** This reaches the end of the byte array
+  and `fillBuffer`'s end-of-array branch, which no version of the first case reaches.
+- **Each new loop's termination is checked on the oracle alone before the push,** with its op count logged.
+- **The fixed test must be seen to bite,** by the one-flipped-bit check run on the port.
+- **Why this is not a weakened test:** the test never finished, so it never asserted anything. Capping it makes it
+  assert on 1 million ops per seed, and the second case adds coverage it never had.
+**Notes:** Written by Cedar Datum by hand. Next free ID -34.
