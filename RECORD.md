@@ -708,3 +708,41 @@ to the owner.
 - Part 9 of dispatch 2026-10-28-01 (I, J and K, continuing -3) starts alongside it, on `brouter-port`; the two
   write different branches.
 - Next free ID -20.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-20
+**Timestamp:** 2026-10-29T10:49:11Z
+**Continues:** 2026-10-28-3, 2026-10-28-17
+**Title:** Phase 1, part 9: item I, the Phase 2 order, done; J and K not written
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `775f122` (I, with `11-plan/`) and `7b2b403`. Filed
+unedited as `prompts/preserved/2026-10-28-01-phase1-report-part9.md` (SHA-256 equal to the branch's file). The
+planner's watcher read 194,590 tokens at 10:43:21Z with nothing yet pushed; the planner told Hazel to finish and
+push I and not start J or K. The harness's final count was 230,100.
+- **I, the order:**
+  - 0, scaffold; 1, tile capture; 1b, the oracle's own runs (E3 and the expected values);
+  - 2a and 2b, `util`, with the simulator job joining at 2b; 3, `codec`; 4, `expressions`;
+  - 5a to 5c, `mapaccess`; 6 to 8d, `router`;
+  - 9, the full JVM run; 10, the simulator run; 11, timing; 12, the Phase 2 report.
+
+  Each step has its tests, a revert, its size and push points, and the rulings it waits on.
+  - The packages build bottom-up; every upward dependency is a callback through a type the lower package
+    declares.
+  - 11,188 lines to port, or 10,759 without the via-point code.
+  - The oracle-only steps come first, so E3's 5% stop is met before the 5,444 lines of `router`.
+  - Branches written for (a) to (c) ((c) needs 726 lines of fdlibm), (i) to (iii), and the via-point choice.
+- **J and K:** not written; part 9's working is in the report's handoff, marked as input only.
+- **Checked by the planner:** only the report and `11-plan/` changed (7 files since `529cea9`).
+  `via-point-spans.txt` names the four methods reached only through `snapPathConnection`, with their callers and
+  spans, totalling 429 lines; 11,188 less 429 is 10,759.
+- **Why the overrun:** the report is now 2,448 lines, and part 9's reading list took it from about 61k to about
+  143k before any work. -16's watcher fixed the count's visibility, not the reading's size.
+- **Not answered:** J, K, and the rest of the Android question (the researcher, -19).
+
+**The planner's calls (technical; the owner may overrule):**
+- **Part 10 writes J and K only,** reading the dispatch, Amendment 1 and named line ranges of the report rather
+  than whole sections.
+- **The planner writes the list of owner choices itself,** from this record and the report, rather than giving a
+  helper another long read.
+**Notes:** Written by Cedar Datum by hand. Next free ID -21.
