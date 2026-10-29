@@ -1,0 +1,120 @@
+== btools/codec/IntegerFifo3Pass.class
+107c107
+<        5: if_icmplt     26
+---
+>        5: if_icmplt     47
+110,120c110,129
+<       12: aload_0
+<       13: getfield                       // Field size:I
+<       16: iload_1
+<       17: invokedynamic              // InvokeDynamic :makeConcatWithConstants:(II)Ljava/lang/String;
+<       22: invokespecial                  // Method java/lang/IndexOutOfBoundsException."<init>":(Ljava/lang/String;)V
+<       25: athrow
+<       26: aload_0
+<       27: getfield                        // Field a:[I
+<       30: iload_1
+<       31: iaload
+<       32: ireturn
+---
+>       12: new                            // class java/lang/StringBuilder
+>       15: dup
+>       16: invokespecial                  // Method java/lang/StringBuilder."<init>":()V
+>       19: ldc                            // String list size=
+>       21: invokevirtual                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+>       24: aload_0
+>       25: getfield                       // Field size:I
+>       28: invokevirtual                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+>       31: ldc                            // String  idx=
+>       33: invokevirtual                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+>       36: iload_1
+>       37: invokevirtual                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+>       40: invokevirtual                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+>       43: invokespecial                  // Method java/lang/IndexOutOfBoundsException."<init>":(Ljava/lang/String;)V
+>       46: athrow
+>       47: aload_0
+>       48: getfield                        // Field a:[I
+>       51: iload_1
+>       52: iaload
+>       53: ireturn
+== btools/codec/MicroCache.class
+468,498c468,519
+<        4: aload_0
+<        5: getfield                        // Field size:I
+<        8: aload_0
+<        9: getfield                       // Field aboffset:I
+<       12: invokedynamic             // InvokeDynamic :makeConcatWithConstants:(II)Ljava/lang/String;
+<       17: invokespecial                  // Method java/lang/StringBuilder."<init>":(Ljava/lang/String;)V
+<       20: astore_1
+<       21: iconst_0
+<       22: istore_2
+<       23: iload_2
+<       24: aload_0
+<       25: getfield                        // Field size:I
+<       28: if_icmpge     60
+<       31: aload_1
+<       32: iload_2
+<       33: aload_0
+<       34: getfield                       // Field faid:[I
+<       37: iload_2
+<       38: iaload
+<       39: aload_0
+<       40: getfield                       // Field fapos:[I
+<       43: iload_2
+<       44: iaload
+<       45: invokedynamic             // InvokeDynamic :makeConcatWithConstants:(III)Ljava/lang/String;
+<       50: invokevirtual                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+<       53: pop
+<       54: iinc          2, 1
+<       57: goto          23
+<       60: aload_1
+<       61: invokevirtual                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+<       64: areturn
+---
+>        4: new                            // class java/lang/StringBuilder
+>        7: dup
+>        8: invokespecial                 // Method java/lang/StringBuilder."<init>":()V
+>       11: ldc                           // String size=
+>       13: invokevirtual                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+>       16: aload_0
+>       17: getfield                        // Field size:I
+== btools/codec/MicroCache2.class
+185c185
+<      234: ifeq          255
+---
+>      234: ifeq          284
+187,283c187,279
+<      240: aload_0
+<      241: getfield                       // Field size:I
+<      244: iload_3
+<      245: iload         4
+<      247: invokedynamic              // InvokeDynamic :makeConcatWithConstants:(III)Ljava/lang/String;
+<      252: invokevirtual                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+<      255: aload_1
+<      256: aload_0
+<      257: getfield                        // Field faid:[I
+<      260: iconst_0
+<      261: aload_0
+<      262: getfield                       // Field size:I
+<      265: bipush        29
+<      267: iconst_0
+<      268: invokevirtual                  // Method btools/codec/StatCoderContext.decodeSortedArray:([IIIII)V
+<      271: iconst_0
+<      272: istore        17
+<      274: iload         17
+<      276: aload_0
+<      277: getfield                       // Field size:I
+<      280: if_icmpge     325
+<      283: aload_0
+<      284: aload_0
+<      285: getfield                        // Field faid:[I
+<      288: iload         17
+<      290: iaload
+<      291: invokevirtual                  // Method expandId:(I)J
+<      294: lstore        18
+<      296: aload         15
+<      298: iload         17
+<      300: lload         18
+<      302: bipush        32
+<      304: lshr
+<      305: l2i
+<      306: iastore

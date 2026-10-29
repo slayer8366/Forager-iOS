@@ -1,0 +1,45 @@
+# Oracle fetch, 2026-10-29T03:37:39Z, with fetch-brouter.sh's URL, size and SHA-256 (Forager e2969abe4, server/pmtiles-worker/test/rd5/fetch-brouter.sh:11-13, :20-28)
+curl exit 0
+size: 6724983 (pinned 6724983)
+dl/brouter-1.7.10.zip: OK
+sha256sum --check exit 0
+023fec3ba997758e8cd7ab9e1bae52e962af3f00b57683e3de86b84ffad01532  dl/brouter-1.7.10.zip
+## zip listing (unzip -l)
+Archive: 
+Length Name
+--------- ----
+232313 brouter-1.7.10/lib/osmosis-osm-binary-0.48.3.jar
+1670274 brouter-1.7.10/lib/protobuf-java-3.12.2.jar
+10362 brouter-1.7.10/profiles2/car-eco-nocost.brf
+11875 brouter-1.7.10/profiles2/car-eco.brf
+10363 brouter-1.7.10/profiles2/car-fast-nocost.brf
+11876 brouter-1.7.10/profiles2/car-fast.brf
+10362 brouter-1.7.10/profiles2/car-vario-nocost.brf
+11891 brouter-1.7.10/profiles2/car-vario.brf
+15976 brouter-1.7.10/profiles2/fastbike-asia-pacific.brf
+15975 brouter-1.7.10/profiles2/fastbike-lowtraffic.brf
+15462 brouter-1.7.10/profiles2/fastbike-verylowtraffic.brf
+15984 brouter-1.7.10/profiles2/fastbike.brf
+19121 brouter-1.7.10/profiles2/gravel.brf
+26846 brouter-1.7.10/profiles2/hiking-mountain.brf
+31604 brouter-1.7.10/profiles2/lookups.dat
+7015 brouter-1.7.10/profiles2/moped.brf
+28998 brouter-1.7.10/profiles2/mtb.brf
+460 brouter-1.7.10/profiles2/rail.brf
+308 brouter-1.7.10/profiles2/readme.txt
+576 brouter-1.7.10/profiles2/river.brf
+17836 brouter-1.7.10/profiles2/safety.brf
+5528 brouter-1.7.10/profiles2/shortest.brf
+21727 brouter-1.7.10/profiles2/skating.brf
+17842 brouter-1.7.10/profiles2/trekking-ignore-cr.brf
+17838 brouter-1.7.10/profiles2/trekking-noferries.brf
+17836 brouter-1.7.10/profiles2/trekking-nosteps.brf
+17843 brouter-1.7.10/profiles2/trekking-steep.brf
+17852 brouter-1.7.10/profiles2/trekking.brf
+20649 brouter-1.7.10/profiles2/vm-forum-liegerad-schnell.brf
+20549 brouter-1.7.10/profiles2/vm-forum-velomobil-schnell.brf
+3539196 brouter-1.7.10/BRouterApp.1.7.10-release.apk
+2341826 brouter-1.7.10/brouter-1.7.10-all.jar
+345776 brouter-1.7.10/brouter-1.7.10-ro.jar
+--------- 
+8549939 

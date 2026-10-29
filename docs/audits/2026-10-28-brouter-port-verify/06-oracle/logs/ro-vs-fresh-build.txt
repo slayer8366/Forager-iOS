@@ -1,0 +1,4 @@
+classes in A: 115; in B: 115; only in A: 0; only in B: 0
+major versions A:     115 55 
+major versions B:     115 55 
+javap -c -p, constant-pool indices removed: identical 115, different 0 (details: ro-vs-fresh-build.diffs.txt)

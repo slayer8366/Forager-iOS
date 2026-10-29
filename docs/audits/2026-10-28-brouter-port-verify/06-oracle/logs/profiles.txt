@@ -1,0 +1,4 @@
+# Profile pins (fetch-brouter.sh:14: lookups.dat 60e59d08..., hiking-mountain.brf f2bed1a5...) against the zip's copies
+lookups.dat zip blob 60e59d083bfff198e27e14aae6a3d4ed44e1cb2b
+hiking-mountain.brf zip blob f2bed1a5c21895195d6fe47c4b1982b5f0a0d4c5
+profiles in the zip: 26 .brf files

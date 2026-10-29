@@ -1,0 +1,6 @@
+598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972  brouter-1.7.10-ro.jar
+93e9821640093cde82ed470ac8c08ab84fc7ae3b570e30c9ab41d686c7af1d4a  brouter-1.7.10-all.jar
+Manifest-Version: 1.0
+Main-Class: btools.server.BRouter
+Implementation-Version: 1.7.10
+

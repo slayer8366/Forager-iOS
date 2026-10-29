@@ -1,4 +1,4 @@
-# BRouter port, Phase 1: verify and plan (partial: the premises, items A and B)
+# BRouter port, Phase 1: verify and plan (partial: the premises, items A to D)
 
 Dispatch 2026-10-28-01 and its Amendment 1 (RECORD -3, -4), restarted at -5. Written by Hazel Cairnwright, the
 second session on this dispatch, 2026-10-28.
@@ -11,6 +11,10 @@ session, not an answer to those items.
 **Part 2** (a third session, Hazel, 2026-10-28) answered **item B** only and stopped at its own token limit
 (about 150k, set by the planner for this helper). C, D, F, G and H, which were part 2's, are not answered; what
 part 2 found that bears on C and G is under "Handoff to the next session".
+
+**Part 3** (a fourth session, Hazel, 2026-10-29) answered **C**, with Amendment 1's three Android questions, and **D**,
+the items RECORD -8 gave it. E to K are not answered here: F and G are part 4's; H and E are part 5's; I, J and K are
+part 6's.
 
 **Marks.** **[R]** read, with file and line at the stated commit. **[C]** computed, with the evidence file under
 `2026-10-28-brouter-port-verify/`. **[I]** inferred. **[?]** could not determine.
@@ -591,10 +595,78 @@ Both are Forager's work.
 - It does not spare Forager a rewrite (above).
 - It makes the whole engine public API on both platforms **[I]**.
 
-### Not answered in part 2 (left for the next session)
+### D. The oracle
 
-- C, layout and the Android questions of Amendment 1;
-- D, the oracle;
+**What was checked [C: `06-oracle/`].**
+- **The release zip,** fetched from `fetch-brouter.sh:11`'s URL to scratch:
+  - 6,724,983 bytes, matching `:13`;
+  - SHA-256 `023fec3b…ad01532`, matching `:12` (`logs/fetch.log`).
+- **Two jars in it:**
+  - `brouter-1.7.10-all.jar`, which `fetch-brouter.sh:31` and `make-expected.sh:15` use, with the map creator, server,
+    protobuf and osmosis classes;
+  - `brouter-1.7.10-ro.jar`, 345,776 bytes, SHA-256 `598b647f…dbd972`: only the five router packages and
+    `btools/server`.
+  - Both manifests say `Implementation-Version: 1.7.10` (`logs/jars.txt`).
+- **The zip's `hiking-mountain.brf` and `lookups.dat`** have the git blob hashes `fetch-brouter.sh:14` pins. It carries
+  26 `.brf` profiles in all (`logs/profiles.txt`).
+- **The jar's classes are the vendored source's classes.** In `btools/{codec,expressions,mapaccess,router,util}`:
+  - the `-ro` jar's 115 class files have the same names as the vendored source compiled fresh from Forager's clone
+    (`javac` 21, `--release 11`, as `third_party/brouter/build.gradle.kts:14-16`);
+  - all are class-file major 55;
+  - **all 115 give identical `javap -c -p` output** once constant-pool indices are removed (`logs/ro-vs-fresh-build.txt`).
+  - The same holds against part 1's build, and between `-ro` and `-all` (`ro-vs-vendored-build.txt`, `ro-vs-all.txt`).
+- **The comparison can fail.** The same source compiled with string concatenation inlined differs in 43 of 115
+  classes (`negative-control.txt`).
+- **The jar routes as the source does.** Part 1's harness (`03-reach/tools/ForagerCalls.java`: Forager's calls, 18
+  cases on the fixture tile) printed identical lines on the `-ro` jar and on the fresh source build, and both match
+  part 1's `harness-run.log` (`logs/harness-jar.log`, `harness-source.log`).
+
+**What that comparison does not cover [I]:**
+- what `javap -c -p` does not print: debug attributes, and constant-pool entries that no instruction or declaration
+  shows;
+- and anything that runs differently on another JVM.
+
+Both options run on the same test JVM, so the last does not separate them.
+
+**The two options.**
+
+| | Release jar (`-ro`), fetched and checked | Source copied from Forager's `third_party/brouter/` |
+|---|---|---|
+| The bytecode Forager runs | **The same instructions** as Forager's source build **[C]** | The same, by construction |
+| In Forager-iOS | a pinned URL, size and two SHA-256s | 101 Java files, 19,327 lines, a second MIT copy, and a Java compile in the test build |
+| Pin | already checked in Forager (`fetch-brouter.sh:12-13`, `:23-28`) | the README's `cmp` check against upstream |
+| Network in CI | one GitHub release download per cold cache | none |
+| If the release asset disappears | the oracle goes with it, unless a copy is kept (the same hosting question as F) | unaffected |
+| Precedent in Forager | Forager's expected routes come from the release jar's command-line router (`make-expected.sh:15`) **[R]** | Forager's app compiles this source (`settings.gradle.kts:21-22`) **[R]** |
+
+**Recommendation: the release jar, `brouter-1.7.10-ro.jar`, fetched and checked.**
+- **Why:** on the JVM the copied source would add no fidelity, since its bytecode is the same instructions **[C]**.
+  The jar keeps 19,327 lines of Java out of the repository, and its pin is the one Forager already checks.
+- **Why `-ro` over `-all`:** the router classes are identical in both **[C]**, and `-ro` leaves the map creator,
+  protobuf and osmosis off the test classpath. Forager's own scripts use `-all`, so this is listed under "Decided
+  beyond scope".
+- **The source option stays the fallback** if a download in CI proves unreliable, with the same instructions.
+
+**How the oracle runs in tests [I].**
+1. **A Gradle task in the port's build** downloads the zip into `build/`:
+   - it checks the size and SHA-256 as `fetch-brouter.sh:23-28` does;
+   - it extracts `brouter-1.7.10-ro.jar` and checks that file's own SHA-256 (`598b647f…`).
+
+   Nothing is committed.
+2. **Only `jvmTest` depends on it,** as a file dependency. It never reaches `commonMain`, the iOS targets or anything
+   vendored.
+3. **Both engines load in one test JVM, no isolation needed,** because the port is renamed (C, "Packages").
+4. **Each differential case drives both engines through the same calls Forager makes.**
+   - Part 1's `ForagerCalls.java` is the model.
+   - What "identical" compares is item E's.
+5. **The two engines run one after the other,** not at once. Each has its own static profile cache under its own
+   class names, so neither warms the other's **[I]**.
+
+**Input for E, not a choice:** the zip's 26 profiles are pinned by the same SHA-256. Under "Any profile" (-8) they are
+a ready source of profiles that switch on turn restrictions, bike mode and the other T2 features.
+
+### Not answered yet (parts 4 to 6, in RECORD -8's order)
+
 - E, the differential tests;
 - F, tile stability (no HTTP `HEAD` was sent);
 - G, CI;
@@ -645,6 +717,32 @@ Both are Forager's work.
   - F, `HEAD` requests only;
   - G, H, I, J, K.
 
+- **Part 3** added C and D, with `05-layout/` and `06-oracle/` (commits `28c9d65` for C; D's hash is in the final
+  message).
+  - **Reproduce C:** run `05-layout/kotlin-probe/run.sh` and `run-android.sh` from a copy in scratch. They need:
+    - Gradle 9.7.0 at the wrapper path hard-coded there;
+    - JDK 21;
+    - for the Android half, an Android SDK with platform 35 and build-tools 35.0.0, which this container has at
+      `/opt/android-sdk`.
+  - **Reproduce D:** fetch the zip as `fetch-brouter.sh` does, then run `06-oracle/tools/compare-classes.sh <-ro jar
+    unpacked> <vendored source compiled with javac --release 11>`. Run part 1's `ForagerCalls.java` on each, as
+    `06-oracle/README.txt` says.
+  - **Scratch** for part 3 is `hazel/part3/`: the Kotlin probe and its file repo, the oracle zip and the unpacked jars,
+    and a blob-less bare fetch of Forager `pre-main`. Left in place, like parts 1 and 2's, until Phase 1 ends.
+- **Found by part 3 that bears on later items** (input, not answers):
+  - **For F:** the release zip's own SHA-256 pin and size are confirmed live at GitHub. Whether a tile source is
+    stable is still unchecked.
+  - **For G:**
+    - an Android build with AGP 9.3.1 runs in this container;
+    - whether Kotlin/Native 2.3.10 supports the Xcode on the macOS runner chosen was not checked. It decides whether
+      C's "2.3.10 exactly" holds for iOS.
+  - **For E:**
+    - the oracle zip carries 26 pinned profiles, for "Any profile";
+    - D's harness lines already compare node count, distance and a node hash between two engines.
+  - **For H:** the oracle and Forager's source build are the same instructions on the JVM, so any JVM-side
+    difference the port shows is the port's.
+- **Next:** part 4, F (`HEAD` requests only; a stop for the owner's ruling) and G.
+
 ## Disclosures
 
 ### Confirmed vs inferred
@@ -668,6 +766,21 @@ Both are Forager's work.
   - the recommendation to port T2 with T3 as named failures;
   - the semantics notes above.
 
+- **Part 3 (C and D):**
+  - **Confirmed by computation:**
+    - the moved base and that no premise path changed;
+    - the Kotlin metadata rule, one version ahead and not two, in both directions;
+    - the stdlib moving with an unpinned newer compiler;
+    - the Android consumer at Forager's settings;
+    - the oracle's size, SHA-256 and profile pins;
+    - the jar's classes against the vendored source (with a negative control);
+    - the jar and the source routing the harness identically.
+  - **Inferred:**
+    - every recommendation in C and D;
+    - the class-name clash that decides the package rename;
+    - what GitHub Packages and Maven Central need;
+    - that the language pin alone keeps vendored source compilable under 2.3.10.
+
 ### Could not determine
 
 - **Whether the sample reaches every path a real phone's data would.** It does not: 47 methods of T3 never ran.
@@ -680,6 +793,13 @@ Both are Forager's work.
   - whether `kotlinx-io` has a positional read;
   - the okio version Forager already gets through OkHttp.
 
+- **Part 3:**
+  - `distributionSha256Sum` for Gradle 9.7.0 (not read);
+  - whether a GitHub macOS runner label the project would use is still Intel;
+  - whether GitHub Packages requires a token to read a public package (not checked);
+  - iOS klib metadata across compiler versions (not tested);
+  - whether Kotlin/Native 2.3.10 supports the runners' Xcode.
+
 ### Premises that were wrong
 
 - **Premise 3, in part.** Forager also reads `track.distance` (`BRouterTrailRouter.kt:115`), so `recalcTrack`'s
@@ -688,6 +808,11 @@ Both are Forager's work.
 - **Premise 6's sorted maps, in part.** At source level they are used. On the method-level path only one sorted
   iteration remains, over an empty map for Forager's calls. Date formatting does not remain on the path at all.
 - **The ~13,400 estimate (premise 5)** was marked unverified. Measured, it falls between T0 and T1.
+
+- **Part 3:**
+  - **Forager `pre-main` moved** (`d100a4776`). No premise path changed, so this is a moved base, not a wrong premise
+    (`05-layout/00-bases-part3.txt`).
+  - **Amendment 1's account of Forager's build** is confirmed again, unchanged at `d100a4776`.
 
 ### Decided beyond scope
 
@@ -710,3 +835,16 @@ Both are Forager's work.
     version.
 - **Some rows in `exclusions.txt` are redundant once the fix landed:** their target classes are never
   instantiated. `summary.txt` lists them as unused rather than dropping them.
+- **Part 3:**
+  - **The package prefix** `com.zynergylabs.forager.brouter` is a naming choice made here. C asked for keep-or-rename,
+    and the prefix is offered for the planner to accept.
+  - **The `-ro` jar** over the `-all` jar Forager's scripts use. Identical router classes, fewer classes on the
+    classpath.
+  - **The release zip was downloaded to scratch,** to check its pins and compare its classes. It is BRouter's own
+    release, not a map tile, and nothing from it is committed.
+  - **Kotlin 2.3.21, 2.4.21 and 2.2.21, AGP 9.3.1 and their dependencies** were downloaded to `~/.gradle` for the
+    probes, from the Google mirror and Google's Maven.
+  - **The Android consumer probe** was not asked for. The Android SDK was found in the container and made the
+    Amendment's question testable in Forager's own build configuration.
+  - **A blob-less bare fetch of Forager `pre-main`** went into scratch to read the moved base. The read-only clone was
+    not touched.
