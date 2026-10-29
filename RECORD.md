@@ -361,3 +361,46 @@ iOS planner".
   - a person with an iPhone, which no agent can be. It needs TestFlight and so a paid Apple developer
     account, not needed until there is an app to test.
 **Notes:** Written by Cedar Datum by hand. Next free ID -11.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-11
+**Timestamp:** 2026-10-29T04:04:05Z
+**Continues:** 2026-10-28-3, 2026-10-28-8, 2026-10-28-9
+**Title:** Phase 1, part 4: item F answered and stopped for the owner's ruling; G not started
+**Observed:** Hazel (Opus), report updated on `brouter-port` at `858187a` (F) and `eee9a20`. Filed unedited as
+`prompts/preserved/2026-10-28-01-phase1-report-part4.md` (SHA-256 equal to the branch's file). The harness
+counted 184,071 tokens; Hazel reported about 110k spent on the required reading alone, and handed off at the
+planner's limit before starting G.
+- **F, from directory listings and `HEAD` requests only:**
+  - `segments4/` lists 1,142 tiles, 10.03 GB, all dated 29-Oct-2026 01:03;
+  - the `ETag` is the modification time and length in hex, not a content hash;
+  - `diff/W75_N40/` holds 10 non-empty diffs named by 10 different MD5s, one a day from 20 to 29 October,
+    plus the zero-byte diff upstream writes for the current tile;
+  - no dated archive at brouter.de; the Wayback Machine could not be determined.
+
+  A SHA-256 pin on a brouter.de URL would break within about a day (inferred from the listings). Six
+  options, recommending a release on Forager-iOS; nothing chosen, hosted or created. **A stop for the
+  owner's ruling.**
+- **G:** not started, apart from Forager-iOS being public (an anonymous API read: `private: False`).
+- **Checked by the planner:**
+  - only the report and its evidence folder changed (16 files since `956f694`);
+  - a fresh `HEAD` on `W75_N40.rd5` at 04:03Z matched Hazel's `Content-Length`, `Last-Modified` and `ETag`;
+  - a fresh listing of `diff/W75_N40/` matched Hazel's 11 lines exactly;
+  - `sources.txt` quotes GitHub's 2 GiB release-asset limit, 100 MiB file block, 10 GiB LFS figures and
+    7-day cache expiry, each under its URL.
+- **The planner's prediction against F:** right; brouter.de regenerates tiles in place.
+- **Not answered:** E, G, H, I, J, K.
+
+**The planner's calls, from this part (technical; the owner may overrule):**
+- **The handoff limit goes back to about 200k by the harness's count,** Forager's own rule. With about 110k
+  of required reading per helper, the 110k limit left no room for work. Each helper reads the report's
+  status, tables, handoff and disclosures, and the sections its items build on, rather than all of it.
+- **New order:** part 5, G and H; part 6, E, after F's ruling; part 7, I, J and K. E comes after H because
+  its failure cases depend on H's floating-point findings, and its tiles on F.
+
+**Correction to -10:** it says the owner was "asked whether anything else needs a role". The owner asked
+that, of the planner; the planner answered with the designer and the person with an iPhone, both still
+proposals.
+**Notes:** Written by Cedar Datum by hand. Next free ID -12.
