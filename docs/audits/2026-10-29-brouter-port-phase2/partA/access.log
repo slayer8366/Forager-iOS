@@ -1,0 +1,18 @@
+Part A: how the GitHub API was reached (read-only probe, 2026-10-29T21:20:35Z). No token value is recorded here.
+- Route: HTTPS_PROXY=http://127.0.0.1:34333, the session's local agent proxy, which tunnels to a policy-enforcing egress proxy
+  (/root/.ccr/README.md). TLS is re-terminated there; CA bundle /root/.ccr/ca-bundle.crt.
+- Credentials in the container: GH_TOKEN and GITHUB_TOKEN each hold a placeholder whose value starts 'proxy-'. curl sent it as
+  'Authorization: token $GH_TOKEN'. No token was made by this session. 'gh auth status' calls the placeholder invalid.
+- What GitHub saw (response headers of GET /repos/slayer8366/Forager-iOS):
+    HTTP/1.1 200 OK
+    Github-Authentication-Token-Expiration: 2026-10-30 00:41:59 UTC
+    X-Accepted-Github-Permissions: metadata=read
+    X-Accepted-Oauth-Scopes: repo
+    X-Oauth-Scopes: 
+    X-Ratelimit-Limit: 15000
+    repo: slayer8366/Forager-iOS visibility public permissions {'admin': True, 'maintain': True, 'push': True, 'triage': True, 'pull': True}
+    GET /user -> 200, login slayer8366
+- Read: GitHub authenticated the request as the owner's account, slayer8366, with admin on Forager-iOS, while the container
+  holds only the placeholder. Inferred from those two reads: the proxy supplies the credential in transit. Inferred, not read:
+  that it is a GitHub App user-to-server token (empty X-Oauth-Scopes, an X-Accepted-Github-Permissions header,
+  and an expiry about 3h20m out).

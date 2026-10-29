@@ -1,0 +1,18 @@
+Part A step 2: create the draft release. Payload: tag brouter-tiles-2026-10-29, target_commitish 91754bc6f93d701e7268dbda087a43a918f4d77f,
+name 'BRouter test tiles, 2026-10-29', body = tools/tile-release/release-notes.md at 91754bc, draft true. Nothing else set.
+
+Attempt 1, 2026-10-29T21:21:25Z: POST https://api.github.com/repos/slayer8366/Forager-iOS/releases, no Content-Type header
+  -> 415, body from the proxy (its documentation_url is Anthropic's, not GitHub's):
+     {"message":"Request bodies must declare Content-Type: application/json. Resend the JSON body with that header.","documentation_url":"https://docs.anthropic.com/en/docs/claude-code/github-actions"}
+  releases afterwards: 0. tag ref brouter-tiles-2026-10-29: 404.
+
+Attempt 2, 2026-10-29T21:21:57Z: the same request with Content-Type: application/json, as the 415 asked
+  -> 403, body from the proxy:
+     {"message":"Creating, editing, or deleting releases is not permitted for this session type.","documentation_url":"https://docs.anthropic.com/en/docs/claude-code/github-actions"}
+  tag ref brouter-tiles-2026-10-29: 404. Anonymous GET https://github.com/slayer8366/Forager-iOS/releases/tag/brouter-tiles-2026-10-29: 404.
+  (The capture also printed 'body equals release-notes.md: False'. That compared against a response with no release in it,
+  and means nothing.)
+
+After the 403, 2026-10-29T21:22:07Z: releases (drafts included, as in prechecks.log) 0; tags []; proxy recentRelayFailures []; uploadPauses 0.
+STOP (Amendment 3, Part A: 'a draft that cannot be created'). Not retried, and no other route tried (gh, the GitHub MCP tools, CI).
+Steps 3 to 7 not run. No draft exists, so there is nothing to leave or delete.

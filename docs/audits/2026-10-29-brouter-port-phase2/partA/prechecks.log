@@ -1,0 +1,6 @@
+Part A: read-only checks before the first write (2026-10-29T21:21:07Z), from the saved API responses.
+GET /releases?per_page=100 (drafts included for a caller with push access: GitHub's documented behaviour, from memory) -> count 0
+GET /git/matching-refs/tags/brouter -> 200, []
+GET /tags ->  []
+GET /commits/91754bc6f93d701e7268dbda087a43a918f4d77f -> 200, 91754bc6f93d701e7268dbda087a43a918f4d77f
+GET /compare/91754bc...brouter-port -> ahead ahead_by 2 behind_by 0 ; files under tools/ changed: []
