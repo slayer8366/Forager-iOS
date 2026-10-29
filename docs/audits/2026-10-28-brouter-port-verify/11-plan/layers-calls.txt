@@ -1,0 +1,75 @@
+mode=calls files=72 lines=11218 call-edge-hits=1229 type-edge-hits=0 sccs=58
+--- layer 0
+      24  codec/MicroCache2
+      17  codec/TagValueValidator
+      11  codec/TagValueWrapper
+      16  codec/WaypointMatcher
+      57  expressions/BExpressionLookupValue
+      37  mapaccess/MatchedWaypoint
+      12  mapaccess/OsmLinkHolder
+      18  mapaccess/OsmPos
+      16  mapaccess/OsmTransferNode
+      46  mapaccess/StorageConfigHelper
+      56  mapaccess/TurnRestriction
+      28  router/AreaInfo
+      13  router/FormatCsv
+      26  router/FormatGpx
+      22  router/FormatJson
+      15  router/FormatKml
+      84  router/Formatter
+      74  router/MessageData
+      52  router/OsmNogoPolygon
+      20  router/OsmPathModel
+      19  router/OsmPrePath
+       4  router/RoutingIslandException
+      31  router/SearchBoundary
+      33  router/VoiceHintList
+     290  util/BitCoderContext
+      15  util/ByteArrayUnifier
+      87  util/ByteDataReader
+      81  util/CheapRuler
+     406  SCC 2: util/CompactLongMap util/FrozenLongMap
+      53  util/Crc32
+       4  util/IByteArrayUnifier
+       9  util/LruMapNode
+     273  util/SortedHeap
+      30  util/StackSampler
+  layer total 1979
+--- layer 1
+      31  codec/DataBuffers
+     120  codec/StatCoderContext
+      27  expressions/CacheNode
+      23  expressions/VarWrapper
+      69  mapaccess/GeometryDecoder
+      98  mapaccess/OsmNodePairSet
+      96  mapaccess/PhysicalFile
+     201  router/VoiceHint
+      65  util/ByteDataWriter
+      75  util/CheapAngleMeter
+  layer total 805
+--- layer 2
+     186  codec/MicroCache
+      36  codec/NoisyDiffCoder
+    3675  SCC 14: expressions/BExpression expressions/BExpressionContext expressions/BExpressionContextNode expressions/BExpressionContextWay expressions/BExpressionMetaData mapaccess/OsmLink mapaccess/OsmNode mapaccess/OsmNodesMap router/OsmPath router/OsmPathElement router/RoutingContext router/StdModel router/StdPath util/LruMap
+     529  router/VoiceHintProcessor
+  layer total 4426
+--- layer 3
+     109  codec/TagValueCoder
+     263  mapaccess/WaypointMatcherImpl
+      28  router/OsmNodeNamed
+     444  router/OsmTrack
+     139  router/ProfileCache
+  layer total 983
+--- layer 4
+     200  mapaccess/DirectWeaver
+     206  router/RoutingParamCollector
+  layer total 406
+--- layer 5
+     216  mapaccess/OsmFile
+  layer total 216
+--- layer 6
+     394  mapaccess/NodesCache
+  layer total 394
+--- layer 7
+    2009  router/RoutingEngine
+  layer total 2009

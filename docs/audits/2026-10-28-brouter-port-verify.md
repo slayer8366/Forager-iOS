@@ -1634,13 +1634,124 @@ commit `de876a01b29230b877c9f408348c38a90ee724a5`, the head of `main` when read 
   today's Android app. That would take the Java engine run on Android's runtime, on an emulator or a device, which nothing
   in G or the step 4 design provides.
 
-### Not answered yet (parts 6 to 8, in RECORD -11's order)
+### I. The Phase 2 order
+
+Written by the tenth session on this dispatch (Hazel, part 9, 2026-10-29). **A plan, not built.** Bases: Forager `pre-main` is
+still `d100a4776` (`git ls-remote`, 10:36Z), so no premise check is needed; Forager-iOS `main` is `490b0e3`, which adds only
+`RECORD.md` entries and two files under `prompts/` since `87d9250` **[C]**. Every order and size choice below is **[I]** unless
+marked.
+
+**Why this order: packages bottom-up, and the oracle's own work before the router.**
+- **The packages layer as util, codec, expressions, mapaccess, router [C: `11-plan/package-edges.txt`].** Over T2's reached
+  call edges, every edge from a lower package to a higher one is a call through an interface or `Object` that the lower
+  package declares: `LruMap` calling `equals`/`hashCode` (`util/LruMapNode.java:3` is abstract), `OsmNode.calcDistance` taking
+  an `OsmPos` (`mapaccess/OsmPos.java:9`), `OsmLink.addLinkHolder` taking an `OsmLinkHolder` (`OsmLinkHolder.java:8`), and
+  `TagValueCoder.decodeTree` taking a `TagValueValidator` (`codec/TagValueValidator.java:4`) **[R]**. So each step compiles
+  against the steps below it, and its tests can fake what sits above.
+- **A file-level layering by the same edges** (`11-plan/layers-calls.txt`) shows the same picture, with one 14-file cycle
+  (3,675 lines) that consists of exactly those callbacks plus `router`'s path classes calling `expressions` and `mapaccess`.
+  The cycle is broken by the package order above, not by splitting files **[C][I]**.
+- **The oracle's own work comes early.** The tile capture, E3's self-agreement runs and E's expected values need only the
+  1.7.10 jar (D) and the tiles. Run before the router is ported, E3's stop (more than 5% of a stratum unstable) is met before
+  5,444 lines of `router` are written, not after.
+
+**How every step runs (the dispatch's Phase 2 evidence and the coder profile, applied to each).**
+1. **Tests first, over stubs:** each stub is a Kotlin signature whose body is `TODO()`. The tests are pushed and seen failing,
+   each with `NotImplementedError` from the stub it targets (their reason). A test that passes over stubs is listed as "not
+   shown to bite".
+2. **The port of the step's files,** line by line from the reached methods (A's `reached-methods.tsv` gives each method's span).
+   Pushed when `jvmTest` is green, with the counts read from the JUnit XML against the number of cases the step defines.
+3. **One revert check per step,** on its own scratch branch: one named edit; the compile log read first; the file restored from
+   a saved copy; the forward change confirmed afterwards. Each step below names its candidate edit.
+4. **Push points:** after 1, after 2, and after 3 at least; the large steps push per sub-step. Every push runs G's `jvm` job.
+
+**Sizes** are the Java lines A's tool keeps for T2 per file (`03-reach/out/T2/port-list.tsv`), which sum to 11,218 **[C]**. Kotlin
+lines will differ; they are not predicted here. Test code is not sized.
+
+| Step | What | Java lines kept (files) | Waits on | Tests (all differential against the oracle on the JVM unless named) | Candidate revert |
+|---|---|---|---|---|---|
+| **0** | **Scaffold.** Bases re-checked. The `brouter/` KMP module as C recommends (Gradle wrapper with its checksum, Kotlin 2.3.10, `jvm` 17, `iosArm64`, `iosSimulatorArm64`; okio 3.18.2; atomicfu 0.33.0 if B row 8's lock is kept); `brouter/LICENSE` and `README.md`; `tools/fetch-pinned.sh`; D's oracle fetch task; C's entry point (`route`, `RouteRequest`, `RouteOutcome`, `RouteCancel`, `checkDataFile`) as stubs; G's `jvm` job, the first file under `.github/workflows/` | 0 (build files) | the Gradle/Kotlin ruling below; Actions being enabled on the repository (not checked; turning it on is a settings change, so a stop) | the oracle jar's SHA-256; one case per tile-free failure kind on both engines (FK 6, data missing: a folder without the tile), failing on the stub | the oracle pin's SHA-256 changed by one character: the fetch must refuse |
+| **1** | **Tile capture** (E4, F's ruling at RECORD -12). Download the four tiles from brouter.de once; load each in the oracle (a route and `checkFileIntegrity`), replacing a failing one by E4's rule; record size, SHA-256, URL, `Last-Modified` and `ETag` in a pin file; copy F0's fixture from Forager's test resources at its SHA-256 (read only; Forager unchanged); hand the files, hashes and ODbL 4.2 notices to the owner, who creates the release | 0 | **the planner's Phase 2 go naming the download, and the owner's word on the release** (a public action, RECORD -12). Steps 2 to 4 proceed meanwhile; steps 5 on wait | after the release: both jobs fetch each tile and check its pin | one tile's size in the pin file off by one: the fetch must refuse |
+| **1b** | **The oracle's own runs** (E3, E4, E5): the case generators with their seeds; E3's six runs per case and the positive control; the instability count per stratum and E3's 5% stop; then the expected digests (2,118 cases, the JDK's vendor, version and `os.arch` at the head of the file). Under (c), also the no-intrinsic oracle's digests (E6). Each case's R1 time is logged for K | 0 (test code) | the release; (a) to (c) for the second oracle | the generators' counts against E5's figures; the control's orders differ between R1 and R4 | the control's 997-object perturbation removed: the R1/R4 control must fail |
+| **2a** | **`util`, all but the two below:** `BitCoderContext`, `ByteDataReader`/`Writer`, `CompactLongMap`, `FrozenLongMap`, `SortedHeap`, `LruMap`, `LruMapNode`, `Crc32`, `ByteArrayUnifier`, `IByteArrayUnifier`; plus the small Java-semantics helpers B rows 13 and 15 call for: Java's `Math.round` written out (part 6: Native's `roundToLong` is `floor(x + 0.5)`), `Character.isWhitespace`, Java's `split`. `StackSampler` (30) is logging and is not ported (B row 5) | 1,332 (13), of which 30 not ported | nothing | seeded random streams through Java's and the port's coders, both ways; `SortedHeap` under a seeded mix of adds and pops with equal keys, **the pop sequence exact** (it decides ties in the search); the maps on seeded keys; the helpers at edge inputs (`0.49999999999999994`, `2^52 + 1`, NaN, no-break spaces) | `SortedHeap`'s tie order changed (one comparison `<` to `<=`) |
+| **2b** | **`CheapRuler`, `CheapAngleMeter`,** with H step 4's platform-invariants test, and **G's `ios-simulator` job added here** (G's rule; H step 4) | 156 (2), plus per option below | **(a) to (c)** | H step 4's checks, chunk digests written on the pinned JVM; on the simulator, the same class | one table row's `cos` moved by an ulp: the chunk digest must change (H step 4's positive control, run as a revert) |
+| **3** | **`codec`:** `MicroCache`, `StatCoderContext`, `TagValueCoder`, `NoisyDiffCoder`, `DataBuffers`, `TagValueValidator`, `WaypointMatcher`, `TagValueWrapper`; `MicroCache2`'s kept lines are its declaration | 550 (9) | nothing for synthetic streams; the release for tile streams | streams encoded by the oracle's own encoder classes, if the `-ro` jar carries them (**not checked [?]**); otherwise decoded from tiles in step 5 | a sign extension dropped (`and 0xff` removed at one byte read) |
+| **4** | **`expressions`:** `BExpressionContext`, `BExpression`, `BExpressionContextWay`/`Node`, `BExpressionMetaData`, `BExpressionLookupValue`, `CacheNode`, `VarWrapper`. B row 14's `String.format` branch becomes a named "unsupported" failure, as B recommends | 1,562 (8) | nothing: the 26 profiles and `lookups.dat` come in the oracle's zip (D), and E's crossing profile is E's own | each of the 27 profiles parsed by both; then the way and node contexts evaluated on seeded random lookup vectors drawn from `lookups.dat`, **every output variable's bits** and `getKeyValueDescription`'s text compared; malformed profile text gives the oracle's message | one operator's evaluation swapped (`max` for `min` in `BExpression`) |
+| **5a** | **`mapaccess`, the file layer:** `PhysicalFile`, `OsmFile`, `NodesCache`, `StorageConfigHelper`, on okio's `FileHandle` (B rows 1 and 2) | 752 (4) | the release | each captured tile's header and integrity check; FK 6, 7 and 8's messages on missing, short and byte-flipped copies; `checkDataFile` | the short-read check in the `readFully` loop removed (B row 1): FK 7 must fail |
+| **5b** | **`mapaccess`, the graph:** `DirectWeaver`, `GeometryDecoder`, `OsmNode`, `OsmLink`, `OsmTransferNode`, `OsmLinkHolder`, `OsmPos`, `TurnRestriction`, `OsmNodePairSet`, `OsmNodesMap` (`hmap`) | 1,122 (10), plus (i)'s map if ruled | the release; **(i) to (iii)** | every micro-cache of each captured tile decoded by both, a digest per cache of nodes, links, elevations, way descriptions and turn restrictions; `collectOutreachers` on decoded regions, by branch below | one link direction flag inverted in `DirectWeaver` |
+| **5c** | **Waypoint matching:** `WaypointMatcherImpl`, `MatchedWaypoint` (the `atan2` tie-break) | 300 (2) | the release; (a) to (c) for `atan2` | the matched waypoint (way, node pair, radius, direction) for every generated endpoint of R and NT; NT's comparison here is the first evidence on the tie-break, before any route | the comparator's second line (`WaypointMatcherImpl.java:71`) dropped |
+| **6** | **`router`, the path model:** `RoutingContext`, `OsmPath`, `StdPath`, `OsmPathElement`, `MessageData`, `StdModel`, `OsmPathModel`, `OsmPrePath`, `OsmNodeNamed`, `ProfileCache` (B row 8's lock), `RoutingParamCollector`, `RoutingIslandException`, `SearchBoundary`, `AreaInfo`, `OsmNogoPolygon` | 2,068 (15) | B row 8 (a) or (b) | `RoutingParamCollector` on Forager's strings and generated ones; `RoutingContext` read from each profile; each path extension's cost on decoded links compared to the oracle's, from a test class in the oracle's package (package-private access on the classpath, **[I]**, to be confirmed in the step) | one `(int)` cast moved inside a sum in `StdPath` |
+| **7** | **`router`, the track and its hints:** `OsmTrack`, `VoiceHint`, `VoiceHintList`, `VoiceHintProcessor` (turn instructions, ported under T2 and recorded, not asserted, by E1); `Formatter` and `Format*` only as far as A found methods reached | 1,367 (9) | nothing beyond 6 | exercised through step 8's routes; the hints recorded per E1 | (with step 8) one distance rounding replaced by `roundToLong` |
+| **8** | **`RoutingEngine` and the entry point,** with E's four port requirements: the `internal` cost accessor (E1), the table and `atan2` seam and `hmap`'s map type as a parameter (E6, where the options need them), `memoryclass` as a field (E4), and a progress count a second thread can read (FK 11). Sub-steps, each pushed: **8a** matching and the search without memory pressure; **8b** the memory-pressure path (collection, limit, panic mode); **8c** terminate, the time limit and the progress count; **8d** `route()` and `checkDataFile` over the engine | 2,009 (1), less 429 if the via-point code is left out | **the via-point choice**; (i) to (iii) for 8b | F0 first (Forager's own two routes); then the strata 8a to 8c reach: R and DL in 8a, MP64, ML5 and PM5 in 8b, FK 9 to 11 in 8c | 8b: the `isInMemoryBounds` comparison flipped at `:2026`'s port; 8c: `terminated` written but not read |
+| **9** | **The full differential run on the JVM:** E's 2,118 cases, asserted or recorded per E6 under the options ruled; JUnit XML counts against 2,118 less E3's unstable cases | 0 | everything above | E as designed | none new: each step's revert stands |
+| **10** | **The simulator run:** first, one test that reads a tile from the runner's disk (part 5's open question). Then the stored digests, the full list or E5's fallback of 312 plus every targeted case, by K | 0 | step 9 | E6's iOS rows | none new |
+| **11** | **Timing,** by K (part 10's item) | 0 | step 10 | K's plan | none |
+| **12** | **The Phase 2 report:** results against E's figures; J scored; K's figures with their flags | 0 | | | |
+
+**Totals [C]:** 11,218 Java lines kept, of which 30 (`StackSampler`) are not ported, so **11,188 to port** before the options
+below; **10,759** if the via-point code is left out. **About 25 to 30 pushes** at three per step and per sub-step.
+
+**Branches on rulings still to come.** Each is written so that the step can start on the day the ruling arrives.
+
+- **(a) to (c), the scale table and `atan2` (step 2b; also 1b and 5c).** Lines from `11-plan/fdlibm-spans.txt` **[C: OpenJDK
+  `jdk21u` at `jdk-21.0.12.1-ga`, `FdLibm.java`]**.
+  - **(a) constants:** a generator task writes the 1,800 rows' `kx` and `ky` from the pinned JDK's `Math.cos` into a generated
+    source; the invariants test's JVM half regenerates and fails if the JDK moved. Stored as `Long` bit patterns in a string
+    decoded at class load, or split across functions, because a 3,600-value literal in one function sits at the JVM's 64 KB
+    method limit (H step 4) **[I]**. `atan2` then takes (b) or (c):
+    - with (c) for `atan2`: fdlibm `Atan` and `Atan2` and the bit helpers, **314 lines (171 code)**, tested exactly against
+      `StrictMath.atan2` on part 6's 299,974 pairs and the edge values (signed zeros, NaN, infinities, subnormals). No seam;
+    - with (b) for `atan2`: no fdlibm in `commonMain`, but the iOS logic run for NT needs that same fdlibm `atan2` in test code,
+      behind the seam.
+  - **(b) each platform's functions:** `kotlin.math.cos` and `atan2`. The seam is needed, and for the iOS logic run the test code
+    carries the JVM's table (the same 64 KB point) and fdlibm `atan2` (314 lines, test-only). LB on iOS is generated only after
+    the invariants test's first simulator run names Apple's rows (E6).
+  - **(c) fdlibm:** `Cos`, `__kernel_cos`, `__kernel_sin`, `RemPio2` and the bit helpers, plus `Atan` and `Atan2`: **726 lines
+    (379 code)**. `KernelRemPio2` (230 lines) serves only arguments above 2^19·π/2 (`RemPio2`, `FdLibm.java:628`) and a latitude
+    never reaches it, so it becomes a named "unsupported" failure rather than code ported untested (`CLAUDE.md`, unsupported
+    returns). Tested exactly against `StrictMath` at the 1,800 table inputs and the 299,974 pairs. Step 1b adds the second oracle
+    JVM with `-XX:-UseLibmIntrinsic` (E2, E6), and step 2b the seam for the JVM logic run with HotSpot's table.
+- **(i) to (iii), `hmap` (step 5b, then 8b).**
+  - **(i)** a common-code copy of `java.util.HashMap`'s order for this one map: table size, hash spread, resize split and tree
+    buckets with `TreeNode`'s balancing (part 7). Not sized: the parts of OpenJDK's `HashMap.java` it needs were not counted
+    **[?]**. Tested by iteration order equal to `java.util.HashMap`'s on seeded `OsmNode` keys, with the generator refusing
+    equal-hash tree buckets (H step 4). Then `collectOutreachers`' count exact.
+  - **(ii)** `HashMap`: nothing to write. On the JVM it is the oracle's map; on iOS the counts are recorded (E6).
+  - **(iii)** an insertion-ordered map everywhere, with the map type as a constructor parameter so the JVM logic run injects
+    `java.util.HashMap` (E6).
+- **`correctMisplacedViaPoints` (step 8; E's sample).** Its body is four methods, **429 lines**, reached only through
+  `snapPathConnection`'s call at `RoutingEngine.java:1027`, which returns at once for waypoints named `from` and `to`
+  (`:1265-1266`) **[R][C: `11-plan/via-point-spans.txt`]**.
+  - **Port it untested:** the 429 lines go in, listed in the report as ported code no test reaches. A unit test that hands
+    `snapPathConnection` made-up tracks is not offered: `CLAUDE.md` asks for behaviour to be exercised through its real entry
+    point.
+  - **Leave it out:** the call and the name guard are ported; past the guard, a waypoint named `via…` or `rt…` fails as
+    "unsupported". Nothing through the entry point can reach it, so no route changes. 429 lines fewer. This narrows RECORD -8's
+    "Any profile" for this one feature, which is why it is the owner's.
+  - **Widen the entry point:** `RouteRequest` takes named waypoints. E gains a stratum, 59 cases at E5's p = 5% (total 2,177),
+    with a profile of E's own that switches the feature on, since none of the 26 does (E4). Forager's adapter would not use
+    it. The 429 lines go in, tested.
+
+**Stops inside Phase 2 that this order meets early, by design.**
+- E3's 5% instability stop: step 1b, before the router.
+- A tile that 1.7.10 cannot read (part 4's open question): step 1, at capture.
+- A simulator test that cannot read the runner's disk (part 5): step 10's first test. If it cannot, that is a stop: how tiles
+  reach the simulator becomes a new decision.
+- G's first `ios-simulator` run (step 2b) is the first test of Kotlin 2.3.10 with Xcode 26.0.1 on `macos-26` (G). A failure there
+  that a pin cannot fix is a stop, not a reason to change the Kotlin pin alone (C: "moved only together with Forager").
+
+**Rulings and inputs the order waits on, by step:** the Gradle and Kotlin pair (G's finding, step 0); Actions on the repository
+(step 0, not checked); the download and the release (step 1); (a) to (c) (steps 1b, 2b, 5c); B row 8's lock (step 6); (i) to (iii)
+(steps 5b, 8b); the via-point choice (step 8); K's flag margin (step 11). The researcher's Android answer bears on (a) to (c)'s
+ruling, not on the order.
+
+### Not answered yet (parts 6 to 9, in RECORD -11's order)
 
 - ~~H's step 3, hash order~~: written by part 7, above;
 - ~~H's step 4, the simulator test~~: designed by part 7, above (not built or run);
 - H's Android question: in part (part 7, above). ART's intrinsics and bionic's `cos` and `atan2` were not read;
 - ~~E, the differential tests~~: designed by part 8, above (not built or run);
-- I, the Phase 2 order;
+- ~~I, the Phase 2 order~~: written by part 9, above;
 - J, the mechanism prediction;
 - K, the timing plan.
 

@@ -1,0 +1,12 @@
+OpenJDK jdk21u tag jdk-21.0.12.1-ga, src/java.base/share/classes/java/lang/FdLibm.java, fetched 2026-10-29T10:39Z
+from https://raw.githubusercontent.com/openjdk/jdk21u/jdk-21.0.12.1-ga/src/java.base/share/classes/java/lang/FdLibm.java
+SHA-256 f1c8f58db6d010532182fd2370f35e1cf7ac03f71f90a793fd15f4f88323dc46; StrictMath.java SHA-256 6be0b4ef1629d664134fd9d2972e8454e8cdbfc7331038b7ab601082a8004f88
+StrictMath.java:164-166 cos -> FdLibm.Cos.compute; :580-582 atan2 -> FdLibm.Atan2.compute. code = non-blank, non-comment lines
+bit helpers __LO/__HI/__HI_LO                                 85-130   lines   46 code   22
+Sin.__kernel_sin (doc+body)                                  186-239   lines   54 code   25
+Cos (class)                                                  270-366   lines   97 code   55
+RemPio2 (class, from its doc)                                540-800   lines  261 code  128
+KernelRemPio2 (class; only |x| > 2^19*pi/2, RemPio2:628)     801-1030  lines  230 code  194
+Atan (class)                                                1232-1349  lines  118 code   81
+Atan2 (class)                                               1350-1499  lines  150 code   68
+all 956 code 573 | without KernelRemPio2 726 code 379 | atan2 only (helpers+Atan+Atan2) 314 code 171

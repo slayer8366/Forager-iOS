@@ -1,0 +1,29 @@
+package edges (caller -> callee), kinds; '!' marks an edge from a lower package to a higher one in the order ['util', 'codec', 'expressions', 'mapaccess', 'router']
+! codec -> expressions: {'virtual': 3}
+       TagValueCoder.decodeTree -> BExpressionContext.isLookupIdxUsed
+       TagValueCoder.decodeTree -> BExpressionContext.unify
+       TagValueCoder.decodeTree -> BExpressionContextWay.accessType
+  codec -> util: {'special': 3, 'clinit': 1, 'virtual': 26}
+  expressions -> util: {'special': 6, 'static': 2, 'virtual': 14}
+  mapaccess -> codec: {'clinit': 2, 'static': 1, 'special': 9, 'virtual': 27, 'declaration': 5}
+  mapaccess -> expressions: {'virtual': 2}
+! mapaccess -> router: {'virtual': 3}
+       OsmLink.addLinkHolder -> OsmPath.setNextForLink
+       OsmNode.calcDistance -> OsmPathElement.getILat
+       OsmNode.calcDistance -> OsmPathElement.getILon
+  mapaccess -> util: {'clinit': 2, 'static': 14, 'special': 11, 'virtual': 64}
+  router -> expressions: {'special': 3, 'clinit': 2, 'virtual': 145}
+  router -> mapaccess: {'special': 33, 'virtual': 154, 'declaration': 7, 'static': 2}
+  router -> util: {'special': 9, 'virtual': 52, 'static': 6}
+! util -> expressions: {'virtual': 7}
+       LruMap.get -> BExpressionLookupValue.equals
+       LruMap.get -> CacheNode.equals
+       LruMap.get -> VarWrapper.equals
+       LruMap.put -> CacheNode.hashCode
+       LruMap.put -> VarWrapper.hashCode
+       LruMap.removeLru -> CacheNode.hashCode
+       LruMap.removeLru -> VarWrapper.hashCode
+! util -> mapaccess: {'virtual': 6}
+       LruMap.get -> OsmNode.equals
+       LruMap.put -> OsmNode.hashCode
+       LruMap.removeLru -> OsmNode.hashCode

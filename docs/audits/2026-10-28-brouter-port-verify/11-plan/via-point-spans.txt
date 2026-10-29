@@ -1,0 +1,10 @@
+Part 9. Methods T2 reaches only through correctMisplacedViaPoints (from 03-reach/out/T2 and T3 reached-methods.tsv,
+T2 minus T3 = 31 methods, 1,186 span lines; the four below are the via-point ones). Callers read at J/router/RoutingEngine.java
+(Forager pre-main e2969abe4): snapPathConnection's only call is :1027, guarded at :1023-1026; snapRoundaboutConnection's
+only call is :1356 (inside snapPathConnection); getExtraSegment's only call is :1218 (inside snapRoundaboutConnection);
+OsmTrack.getFromDetourMap's calls are :1149, :1162, :1179, :1214, :1379 (all inside the two snap methods).
+RoutingEngine.snapPathConnection       1265-1480  216 lines
+RoutingEngine.snapRoundaboutConnection 1094-1262  169 lines
+RoutingEngine.getExtraSegment          1054-1092   39 lines
+OsmTrack.getFromDetourMap (OsmTrack.java) 442-446    5 lines
+total 429 lines; the guard that returns at once for "from"/"to" is snapPathConnection's first lines (:1265-1266).

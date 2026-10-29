@@ -1,0 +1,68 @@
+mode=calls+types files=72 lines=11218 call-edge-hits=1229 type-edge-hits=292 sccs=47
+--- layer 0
+      17  codec/TagValueValidator
+      11  codec/TagValueWrapper
+      16  codec/WaypointMatcher
+      57  expressions/BExpressionLookupValue
+      12  mapaccess/OsmLinkHolder
+      18  mapaccess/OsmPos
+      16  mapaccess/OsmTransferNode
+      46  mapaccess/StorageConfigHelper
+      56  mapaccess/TurnRestriction
+      74  router/MessageData
+       4  router/RoutingIslandException
+     290  util/BitCoderContext
+      87  util/ByteDataReader
+      81  util/CheapRuler
+     406  SCC 2: util/CompactLongMap util/FrozenLongMap
+      53  util/Crc32
+       4  util/IByteArrayUnifier
+       9  util/LruMapNode
+     273  util/SortedHeap
+      30  util/StackSampler
+  layer total 1560
+--- layer 1
+      31  codec/DataBuffers
+     120  codec/StatCoderContext
+      27  expressions/CacheNode
+      23  expressions/VarWrapper
+      98  mapaccess/OsmNodePairSet
+     201  router/VoiceHint
+      15  util/ByteArrayUnifier
+      65  util/ByteDataWriter
+      75  util/CheapAngleMeter
+  layer total 655
+--- layer 2
+     186  codec/MicroCache
+      36  codec/NoisyDiffCoder
+      33  router/VoiceHintList
+  layer total 255
+--- layer 3
+     529  router/VoiceHintProcessor
+  layer total 529
+--- layer 4
+    4505  SCC 24: codec/MicroCache2 codec/TagValueCoder expressions/BExpression expressions/BExpressionContext expressions/BExpressionContextNode expressions/BExpressionContextWay expressions/BExpressionMetaData mapaccess/GeometryDecoder mapaccess/MatchedWaypoint mapaccess/OsmLink mapaccess/OsmNode mapaccess/OsmNodesMap router/AreaInfo router/OsmNodeNamed router/OsmNogoPolygon router/OsmPath router/OsmPathElement router/OsmPathModel router/OsmPrePath router/OsmTrack router/RoutingContext router/StdModel router/StdPath util/LruMap
+  layer total 4505
+--- layer 5
+     263  mapaccess/WaypointMatcherImpl
+      84  router/Formatter
+     139  router/ProfileCache
+     206  router/RoutingParamCollector
+      31  router/SearchBoundary
+  layer total 723
+--- layer 6
+     200  mapaccess/DirectWeaver
+      13  router/FormatCsv
+      26  router/FormatGpx
+      22  router/FormatJson
+      15  router/FormatKml
+  layer total 276
+--- layer 7
+     312  SCC 2: mapaccess/OsmFile mapaccess/PhysicalFile
+  layer total 312
+--- layer 8
+     394  mapaccess/NodesCache
+  layer total 394
+--- layer 9
+    2009  router/RoutingEngine
+  layer total 2009
