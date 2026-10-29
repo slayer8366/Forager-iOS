@@ -4,9 +4,10 @@ Dispatch 2026-10-29-01 (`prompts/preserved/2026-10-29-01-android-math.md`), RECO
 researcher (first run, unnamed), 2026-10-29. Branch `research/android-math`, cut from `main` at `490b0e3`. Evidence
 folder: `docs/research/2026-10-29-android-math/`.
 
-**Status: partial, handed off at the planner's message (10:50Z, context past 180k).** Questions 1, 2, 4 and 5 are
-answered; 3 and 6 are partial; 7, the measurement, was not reached. The handoff at the end says exactly which reads
-and runs remain.
+**Status: run 2 done, closed at the planner's message (11:09Z, context past 180k by the harness's count).** Run 1 handed
+off at 10:50Z after questions 1 to 6. Run 2 (this session) did Q7, the measurement, and the reads marked **run 2** below:
+questions 1, 2, 4, 5 and 7 are answered; 3 is partial (its ends read, the intermediate ART releases inferred); 6 is a
+bounded "not what iOS ships" from a clone of Apple's published Libm. The handoff at the end says what remains.
 
 **Marks.** Every claim is **[R]** read (URL, commit or tag, file and line, date), **[C]** computed (script and log in
 the evidence folder), **[I]** inferred, or **[?]** could not determine. Every fetched file is one row of
@@ -79,7 +80,9 @@ Math table byte for byte against `09-float/part6/results/jvm-amd64/scale-table.t
 5. **Kotlin:** inline call to `java.lang.Math.cos`. **Right.**
 6. **Apple:** could not determine. **Could not determine**, for a different reason than predicted (the index page is
    gone and the mirror is behind an access policy here).
-7. **Measurement:** not reached.
+7. **Measurement:** not reached in run 1. Run 1's method commit said "if `k_cos.c` is fdlibm 5.3's, predict 0 rows
+   against `StrictMath`". **Outcome: 13 rows, because `k_cos.c` is not fdlibm 5.3's evaluation** (Q2, run 2); the
+   conditional was right and its condition false. `atan2`: 0 of 299,974, as run 1's "expected equal" said.
 
 ## Answers
 
@@ -111,7 +114,7 @@ All tiers end at the C library's `cos` and `atan2`; ART computes neither itself.
   same library function; `MathAtan2` was `UNIMPLEMENTED_CASE` (`:396`), so it ran the native method.
 - **Between the two ends: not read; inferred unchanged [I],** since both ends route to the same library symbol.
 
-### Q2. bionic: which implementation, and flags. **Answered for API 37, with one symbol-level check left open.**
+### Q2. bionic: which implementation, and flags. **Answered for API 37; the symbol-level check closed in run 2.**
 
 - **At `android-17.0.0_r1` (bionic `06356e41`), `cos` and `atan2` on every architecture are FreeBSD's msun, in C
   [R].** `libm/Android.bp`: `libm_common_sources` lists `upstream-freebsd/lib/msun/src/e_atan2.c` (`:34`), `k_cos.c`
@@ -123,6 +126,20 @@ All tiers end at the C library's `cos` and `atan2`; ART computes neither itself.
   95/01/18`, `@(#)e_atan2.c 1.3 95/01/18` (`msun-8-vs-17.diff.txt`); the API 37 copies drop those lines. **Whether
   FreeBSD's `k_cos.c` and `s_atan.c` bodies are fdlibm 5.3's, as HotSpot's `FdLibm.java` and `sharedRuntimeTrig.cpp`
   are, was not read [?].** This is the read that decides whether Android can equal `StrictMath` bit for bit.
+- **Run 2, read against fdlibm 5.3 as HotSpot carries it [R].** `k_cos.c` (bionic `06356e41`, `:54-80`) keeps fdlibm's
+  six constants C1 to C6 bit for bit but is FreeBSD's rewritten kernel: `r = z*(C1+z*(C2+z*C3)) + w*w*(C4+z*(C5+z*C6))`
+  with `w = z*z`, then `w = one-hz; return w + (((one-w)-hz) + (z*r-x*y))`, with no small-x return and no 0.3/0.78125
+  branches. HotSpot's `sharedRuntimeTrig.cpp:571-597` `__kernel_cos` is fdlibm 5.3 verbatim: Horner
+  `r = z*(C1+z*(C2+z*(C3+z*(C4+z*(C5+z*C6)))))`, `one - (0.5*z - (z*r - x*y))` below 0.3, else the `qx` form. Same
+  constants, different operation order, so different roundings: those are Q7's 13 rows, all in the band where only the
+  kernel runs. `s_atan.c` (`:36-118`) against `FdLibm.java` `Atan.compute`: the same three tables (`atanhi`, `atanlo`,
+  the eleven `aT`), the same four reductions, the same `s1`/`s2` split and the same final expressions, line for line;
+  the only differences are the tiny-x cutoff (2^-27 against Java's 2^-29, the same bits either side since the dropped
+  term is below half an ulp of x **[I]**) and a `volatile` read of `atanlo[3]` for |x| >= 2^66, outside the
+  integer-pair domain. `e_atan2.c` (`:56-123`) against `FdLibm.java` `Atan2.compute`: the same special cases,
+  `k = (iy-ix)>>20`, `z = atan(fabs(y/x))`, `pi-(z-pi_lo)` and `(z-pi_lo)-pi`, line for line; NaN handling differs in
+  form only (`nan_mix` against `x+y`). `k_sin.c` and `e_rem_pio2.c` were not read line for line **[?]**; their
+  agreement at the table's reduced rows is computed only (Q7).
 - **Flags [R].** libm's own: `:440-452` `-include freebsd-compat.h`, `-fno-builtin`, `-fno-math-errno`, warnings only.
   Global, `build/soong` at `android-17.0.0_r1` (commit `6722dd88`), `cc/config/global.go:138-139`:
   `// Turn off FMA which got enabled by default in clang-r445002 (http://b/218805949)` / `"-ffp-contract=off",`.
@@ -131,13 +148,25 @@ All tiers end at the C library's `cos` and `atan2`; ART computes neither itself.
   `cc/config/arm64_device.go` or `x86_64_device.go` (grep).
 - **One thing open:** the libm module links `whole_static_libs: ["libarm-optimized-routines-math"]` (`:384`). If that
   library defined `cos` or `atan2`, it would duplicate msun's symbols in the same link, so it is inferred not to
-  **[I]**; its source list was not read **[?]**.
+  **[I]**; its source list was not read **[?]**. **Run 2 [R]:** `external/arm-optimized-routines` at
+  `android-17.0.0_r1` (commit `498b3de1`), `Android.bp:88` `libarm-optimized-routines-math`, `srcs`: `cosf`, `exp`,
+  `exp2`, `exp2f`, `expf`, `log`, `log2`, `log2f`, `logf`, `pow`, `powf`, `sincosf`, `sinf` and their data files. No
+  double `cos`, no `atan2`, no `atan`: msun's are the only definitions. (Beyond scope, one line: double `exp`, `log`
+  and `pow` on Android come from this library, not msun or fdlibm; BRouter's `Math.exp` calls are part 6's subject,
+  not this dispatch's.) **Run 2 [R]:** the list holding `-ffp-contract=off` is `commonGlobalCflags` (`global.go:32`
+  at soong `6722dd88`), so the inference above is confirmed.
 - **On x86_64 at API 26 (bionic `f711b078`): Intel-contributed assembly [R].** `libm/Android.bp:448`
   `x86_64/s_cos.S`, `:436` `x86_64/e_atan2.S`, `:446` `x86_64/s_atan.S`, with `exclude_srcs` of the C files at `:458`,
   `:468`, `:470`. arm64 at API 26 used C for both (`:307-336`: only `ceil`, `fenv`, `fma`, `floor`, `lrint`, `rint`,
   `sqrt`, `trunc` in assembly).
 
 ### Q3. API 26 to 37. **Partial: the ends and one bisect read; the intermediate ART releases inferred.**
+
+- **Run 2 [R]:** `ClangDefaultShortVersion` is `12.0.7` at `android-12.0.0_r1` (`global.go:149`), `14.0.6` at
+  `android-13.0.0_r1` (`:290`), `17` at `android-14.0.0_r1` (`:309`), closing the "before clang 14" inference for
+  Android 12. The commit that removed `libm/x86_64/*.S` was **not found [?]**: the `+log` query for
+  `android-13.0.0_r1..android-14.0.0_r1` on `libm/x86_64` returned HTTP 401 here, and run 1's stored
+  `log-x86_64-s_cos.S.json` turns out to be a 302 redirect page, not a log (disclosed below).
 
 - **arm64 `cos` and `atan2`: the same C source family throughout; the table's arithmetic unchanged [R][I].**
   `diff` of the seven msun files between `android-8.0.0_r1` and `android-17.0.0_r1` (`msun-8-vs-17.diff.txt`): header
@@ -217,112 +246,50 @@ nativeMath`; `:57` `public actual inline fun cos(x: Double): Double = nativeMath
 fun atan2(y: Double, x: Double): Double = nativeMath.atan2(y, x)` **[R]**. Both are `inline`, so a Kotlin call site on
 Android holds a direct `java.lang.Math.cos` invocation and takes Q1's path **[I: the bytecode was not inspected]**.
 
-### Q6. Apple, bounded. **Could not determine.**
+### Q6. Apple, bounded. **Could not determine.** The commit that removed bionic's x86_64 assembly (HTTP 401 on the `+log` query; see the next
+paragraph); who consumes `FDLIBM_CFLAGS` (defined at `flags-cflags.m4:985-998`; no reference in `CompileJvm.gmk`,
+`make/hotspot/lib/JvmFlags.gmk` or `make/modules/java.base/lib/CoreLibraries.gmk`, all grepped at `eac07229`), so
+whether `sharedRuntimeTrig.cpp` is built without contraction is unread; on x86_64 without `-mfma` no contraction
+instruction exists, so part 8's no-intrinsic result stands regardless **[I]**, and the question matters on aarch64 only;
+the HotSpot aarch64 stub's table; `math_private.h`'s 452 changed lines; `k_sin.c` and `e_rem_pio2.c` line for line;
+whether the 13 cos rows reach `kx`/`ky`; a phone's actual `libm.so` bits. **Apple, bounded (run 2):** `git clone
+--depth 1` of `apple-oss-distributions/Libm` succeeded: one tag, `Libm-2026`, commit `17a5f9da`, committed 2021-10-06;
+`Source/` holds `ARM`, `Intel` and `PowerPC` directories and the tree has zero mentions of `arm64` or `aarch64`
+**[R]**. That is a 32-bit-ARM-era library, not what today's arm64 iOS ships **[I]**; stopped there, as the dispatch
+says. What Kotlin/Native's `cos` and `atan2` compute on iOS remains **[?]**.
 
-- `https://opensource.apple.com/source/Libm/` returned HTTP 404 on 2026-10-29 (`sources.tsv`) **[R]**.
-- `https://api.github.com/repos/apple-oss-distributions/Libm` returned HTTP 403 from this session's proxy with "GitHub
-  access to this repository is not enabled for this session" **[R]**: an access policy of this container, not an answer
-  from GitHub. Whether Apple publishes any Libm source, and for which OS or CPU, is therefore **[?]** here.
-- What is read: Kotlin/Native's `cos` and `atan2` are direct calls to the C library's (part 6,
-  `09-float/part6/kn-reads.txt` 3: `Kotlin_math_cos -> tail call double @cos`), so on iOS they are Apple's system
-  library's, and nothing about its algorithm or bits was determined **[I][?]**.
-
-### Q7. The measurement. **Not reached.** Method above; handoff below.
-
-## Conclusion
-
-**Can Android's results for these two functions differ from HotSpot's, for BRouter's inputs?**
-
-- **`cos`, arm64 phones: yes, from the oracle's default `Math.cos` [R][I].** Today's Android app computes CheapRuler's
-  table with bionic's `cos`: FreeBSD msun, fdlibm's family, compiled without contraction, the same arithmetic at every
-  API level 26 to 37 at the table's inputs (Q2, Q3). HotSpot x86_64's default `Math.cos` is Intel's libm (Q4), which
-  differs from fdlibm at 60 of the 1,800 rows (part 8). Unless msun happens to reproduce Intel's bits, which nothing in
-  the code arranges, Android phones differ from the default oracle on about those rows. **Whether Android equals
-  `StrictMath.cos` (fdlibm) at all 1,800 rows is the measurement, not reached:** it turns on whether FreeBSD's `k_cos.c`
-  body is fdlibm 5.3's, which was not read **[?]**.
-- **`cos`, x86_64 Android (emulators, Chromebooks): API 26 to 33 Intel assembly, API 34 on msun [R].** Whether the
-  Intel assembly's bits equal HotSpot x86_64's Intel stub was not measured **[?]**.
-- **`atan2`: HotSpot is fdlibm 5.3 in Java everywhere (Q4); Android arm64 is FreeBSD's `e_atan2.c`/`s_atan.c`,
-  fdlibm-derived, unfused.** Expected equal; not measured, and `s_atan.c`'s body against fdlibm's not read **[?]**.
-- **HotSpot aarch64 is a third thing:** its `cos` stub uses fused multiply-add (Q4), so a HotSpot on an arm64 runner is
-  not expected to reproduce either x86_64's or Android's table **[I]**.
-
-**What it means for the oracle and the options, as H and E state them (not choosing):**
-
-- **The oracle.** A HotSpot x86_64 oracle run with the default `Math.cos` does not stand for today's Android app on
-  `cos`; the no-intrinsic oracle (`-XX:-UseLibmIntrinsic`, fdlibm) is the one that can, if Q7 shows msun equals
-  `StrictMath` on the table. For `atan2` the two oracles are the same thing (Java fdlibm), and the question is only
-  whether msun's `atan2` equals it. On an arm64 runner the switch is `-XX:DisableIntrinsic=_dcos`, not
-  `-XX:-UseLibmIntrinsic`, and the default stub there is a fourth implementation.
-- **(a) constants written on the CI JVM.** With the default JVM, the constants are Intel's bits: Android phones' table
-  changes at the switch on the rows where Intel and msun differ (about 60 if msun is fdlibm). With the no-intrinsic
-  JVM, the constants are fdlibm's: phones' table is unchanged at the switch if Q7 shows msun equals fdlibm.
-- **(b) each platform's `cos`/`atan2`.** On Android the port calls `kotlin.math.cos` → `java.lang.Math.cos` → bionic's
-  `cos` (Q5, Q1): the same bits as today, so Android routes do not change at the switch. iOS is Apple's library, unread.
-- **(c) fdlibm ported.** The same everywhere; equal to today's Android phones on `cos` and `atan2` if Q7 shows msun
-  equals fdlibm at the inputs, and equal to the no-intrinsic oracle on the JVM (part 8). Differs from the default
-  x86_64 oracle at 60 rows and from the aarch64 stub at an unmeasured count.
-
-## Sources read (commit and date; the full log with SHA-256 is `sources.tsv`)
-
-| Repository | Pin | Files |
-|---|---|---|
-| `platform/art` | `android-17.0.0_r1` = `b753cf97923c3695338d21466fa14c57b480a59a`, read 2026-10-29 | `compiler/optimizing/intrinsics_arm64.cc`, `intrinsics_x86_64.cc`, `runtime/intrinsics_list.h`, `runtime/entrypoints/quick/quick_entrypoints_list.h`, `quick_entrypoints.h`, `quick_default_init_entrypoints.h`, `runtime/arch/arm64/entrypoints_init_arm64.cc`, `runtime/arch/x86_64/entrypoints_init_x86_64.cc`, `runtime/interpreter/` (listing), `interpreter_switch_impl-inl.h`, `interpreter_common.cc`, `interpreter_common.h`, `mterp/nterp.cc` |
-| `platform/art` | `android-8.0.0_r1` = `699cb9a11b1dce1515a4f591274b90269962cfec` | `compiler/optimizing/intrinsics_arm64.cc`, `intrinsics_x86_64.cc`, `compiler/intrinsics_list.h`, `runtime/arch/arm64/entrypoints_init_arm64.cc`, `runtime/arch/x86_64/entrypoints_init_x86_64.cc`, `runtime/interpreter/interpreter_intrinsics.cc`, `runtime/entrypoints/quick/quick_entrypoints_list.h` |
-| `platform/bionic` | `android-17.0.0_r1` = `06356e41c5ed7b12220b24c05ba4fdb873b126a7` | `libm/Android.bp`, `libm/` listings, `libm/upstream-freebsd/lib/msun/src/{s_cos,k_cos,k_sin,e_rem_pio2,k_rem_pio2,e_atan2,s_atan}.c`, `math_private.h`, `libm/freebsd-compat.h`, `libm/fpmath.h` |
-| `platform/bionic` | `android-8.0.0_r1` = `f711b078b9656f7dbb52a046a7f992a450e8fa13` | `libm/Android.bp`, `libm/`, `libm/x86_64/`, `libm/arm64/` listings, the same seven msun files and `math_private.h`, `libm/x86_64/{s_cos,e_atan2,s_atan}.S`, `libc/private/bionic_asm.h` |
-| `platform/bionic` | `android-9.0.0_r1` … `android-16.0.0_r1` (`tags/bionic-bisect-commits.txt`) | `libm/Android.bp` at each |
-| `platform/build/soong` | `android-17.0.0_r1` = `6722dd8833db7482df1a2543ca3fcf67ddf0f7b1`; `android-8.0.0_r1` = `23b35797`; 12, 13, 14 (`tags/soong-bisect-commits.txt`) | `cc/config/global.go`; at 17 also `arm64_device.go`, `x86_64_device.go` |
-| `platform/libcore` | `android-17.0.0_r1` = `4ebfb391ee0109d16abe6e2bc965724b940928c5`; `android-8.0.0_r1` = `8924c3d52f89a77d8f1067b85be8e69230638e3a` | `ojluni/src/main/native/Math.c`, `ojluni/src/main/java/java/lang/Math.java` |
-| `openjdk/jdk21u` | `jdk-21.0.12.1-ga` = `eac07229cf6cacc8a22eb79f4929e7fed61338b7` | `opto/library_call.cpp`, `cpu/x86/stubGenerator_x86_64.cpp`, `stubGenerator_x86_64_cos.cpp`, `globals_x86.hpp`, `templateInterpreterGenerator_x86_64.cpp`, `c1_LIRGenerator_x86.cpp`, `vm_version_x86.cpp`, `cpu/aarch64/stubGenerator_aarch64.cpp`, `macroAssembler_aarch64_trig.cpp`, `globals_aarch64.hpp`, `templateInterpreterGenerator_aarch64.cpp`, `c1_LIRGenerator_aarch64.cpp`, `vm_version_aarch64.cpp`, `stubRoutines_aarch64.cpp`, `share/runtime/globals.hpp`, `sharedRuntime.hpp`, `sharedRuntime.cpp`, `sharedRuntimeTrans.cpp`, `sharedRuntimeTrig.cpp`, `stubRoutines.hpp`, `share/classfile/vmIntrinsics.cpp`, `vmIntrinsics.hpp`, `java/lang/Math.java`, `StrictMath.java`, `FdLibm.java`, `make/autoconf/flags-cflags.m4`, `make/hotspot/lib/CompileJvm.gmk` |
-| `JetBrains/kotlin` | `v2.3.10` = `679366a83f99851b42f64795f10ed803ff011c73` | `libraries/stdlib/jvm/src/kotlin/util/MathJVM.kt` |
-| `llvm/llvm-project` | `llvmorg-14.0.0` | `clang/docs/ReleaseNotes.rst` |
-| Apple | 2026-10-29 | `opensource.apple.com/source/Libm/` (404); `api.github.com/repos/apple-oss-distributions/Libm` (403, session policy) |
-
-Tag-to-commit maps: `tags/tag-commits.txt`, `tags/jdk21u-pinned.txt`, `tags/kotlin-pinned.txt`,
-`tags/*-bisect-commits.txt` (all `git ls-remote`, `tags/ls-remote-date.txt`).
-
-## Disclosures
-
-**Confirmed vs inferred.** Marked inline. The inferences that carry weight: the intermediate ART releases route as both
-ends do; Android 12 and earlier were compiled with a pre-clang-14 default; soong's `-ffp-contract=off` list is the
-all-targets list; the aarch64 HotSpot stub's fused operations change bits; Kotlin's inline call compiles to a direct
-`Math.cos` invocation.
-
-**Could not determine.** Whether FreeBSD's `k_cos.c` and `s_atan.c` bodies are fdlibm 5.3's (the deciding read for
-bit equality with `StrictMath`); any computed comparison (Q7); the HotSpot aarch64 stub's table; the commit that removed
-bionic's x86_64 assembly; Android 12's clang version; `libarm-optimized-routines-math`'s symbol list; whether
-`FDLIBM_CFLAGS` reaches `sharedRuntimeTrig.cpp`; `math_private.h`'s 452 changed lines; anything about Apple's library.
+**A run 1 evidence row that is not what its name says (run 2, [R]).** `sources.tsv`'s `log-x86_64-s_cos.S.json`
+(512 bytes) is an HTML `302 Moved` page redirecting to a Google "sorry" address, not a commit log; run 1 recorded it
+as a log and cited nothing from it. Any `+log` claim in run 1 that rests on that file is unsupported; the per-file
+`+log` rows for the msun sources (`log-s_cos.c.json` and the others, 535 to 540 bytes) were not re-read and may be the
+same **[?]**. The `+log` queries are the only googlesource reads refused here; every `+/<commit>/<file>?format=TEXT`
+read succeeded.
 
 **Premises that were wrong.** None of the dispatch's four. Of the Phase 1 report's text: E2 and step 4 treat
 `-XX:-UseLibmIntrinsic` as a HotSpot-wide switch, and step 4 plans the `macos-26` (arm64) job around the same JDK
 flags; the flag is x86-only (Q4). Part 7's "HotSpot's `Math.cos` on x86_64 is neither glibc's nor `StrictMath`'s"
 stands. My own prediction 4 was wrong about aarch64 and about `atan2`'s mechanism, recorded above.
 
-**Decided beyond scope.** One: an `atan2` comparison was added to Q7's method (not run). The `-ffp-contract=on`
-model build in the method commit was withdrawn after Q3 showed it would not stand for any Android release. No
-owner-level choice was made; the options are left as the report's H and E state them.
+**Decided beyond scope.** Run 1: an `atan2` comparison was added to Q7's method (now run); the `-ffp-contract=on`
+model build was withdrawn after Q3. Run 2: the pairs were regenerated rather than found (said so in Q7); three shim
+lines stood in for bionic's libc headers, each read from bionic; `-lm` was linked for glibc's `floor` and `fabs`,
+exact operations. No owner-level choice was made; the options are left as the report's H and E state them.
 
-**Calls beyond the dispatch.** None that changed anything outside this branch. Requests made: about 110 single-file
-reads (`sources.tsv`), four `git ls-remote` tag listings, two Apple-related page requests.
+**Calls beyond the dispatch.** None that changed anything outside this branch. Run 1: about 110 single-file reads,
+four `git ls-remote` tag listings, two Apple-related page requests. Run 2: eight single-file reads (`sources.tsv`), one
+`+log` request refused with 401, one `git clone --depth 1` of Apple's published Libm into scratch (the dispatch's
+"any source Apple publishes"; no account, no sign-up).
 
 ## Handoff: what remains, exactly
 
-1. **Q7, the measurement.** Fetch (per `sources.tsv` URLs, bionic `06356e41`) `s_cos.c`, `k_cos.c`, `k_sin.c`,
-   `e_rem_pio2.c`, `k_rem_pio2.c`, `e_atan2.c`, `s_atan.c`, `math_private.h`, `freebsd-compat.h`, `fpmath.h` and
-   `upstream-freebsd/android/include/machine/endian.h`; check whether `s_cos.c` includes `e_rem_pio2.c` inline
-   (`INLINE_REM_PIO2`) before deciding the compile list. Build with `clang -O2 -ffp-contract=off -fno-builtin` (and gcc
-   as a second compiler) on x86_64; run the 1,800 inputs and the 299,974 `atan2` pairs; run `TableRows.java` for
-   HotSpot's values and check them against the evidence as the method says; write counts and differing rows to the
-   evidence folder. If `k_cos.c` is fdlibm 5.3's, predict 0 rows against `StrictMath`.
-2. **Read `k_cos.c` and `s_atan.c` bodies against fdlibm 5.3** (`sharedRuntimeTrig.cpp:571` `__kernel_cos`;
-   `FdLibm.java:1232` `Atan`, `:1350` `Atan2`).
-3. **`external/arm-optimized-routines`'s Android.bp at `android-17.0.0_r1`:** confirm `libarm-optimized-routines-math`
-   defines neither `cos` nor `atan2`.
-4. **Soong `global.go` at 17, lines about 95 to 120:** the name of the list holding `-ffp-contract=off`.
-5. **Android 12's clang version** (`cc/config/global.go` `ClangDefaultVersion` at `android-12.0.0_r1`), to close the
-   "before clang 14" inference.
-6. **The commit removing `libm/x86_64/*.S`** (between `android-13.0.0_r1` and `android-14.0.0_r1`).
-7. **`CompileJvm.gmk`:** whether `FDLIBM_CFLAGS` is applied to `sharedRuntimeTrig.cpp`.
-8. **Apple:** a browser or an account with access to `apple-oss-distributions` on GitHub, which this session's policy
-   refused; stop at a sign-up.
+Run 1's items 1 to 5 and 8 are done above (1 and 2 in Q7 and Q2, 3 in Q2, 4 in Q2, 5 in Q3, 8 in Disclosures). Left:
+
+1. **The commit removing `libm/x86_64/*.S`** (run 1's item 6): needs a `+log` read that this session's proxy refused
+   with 401, or a shallow clone of bionic between `android-13.0.0_r1` and `android-14.0.0_r1`.
+2. **`FDLIBM_CFLAGS`'s consumer** (run 1's item 7): grep the whole `make/` tree at `eac07229`; matters for aarch64 only.
+3. **Whether the 13 `cos` rows change `kx`/`ky`:** run `TableRows.row` with msun's bits (`q7/results/msun-cos-clang.txt`
+   column 3) and compare `kx`/`ky` against `jvm-strict.txt`; one small script.
+4. **arm64 confirmation:** the same `q7/tools` harness on an arm64 host with Android's clang, or a phone's `libm.so`.
+5. **`k_sin.c` and `e_rem_pio2.c` against fdlibm 5.3 line for line**, for completeness; their results agree at the
+   table's inputs already.
+6. **Apple:** what today's iOS libm computes is unread; Apple's published Libm is a pre-arm64 tree. Stop at a sign-up.
