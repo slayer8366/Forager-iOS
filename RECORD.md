@@ -2174,3 +2174,46 @@ window, and their final messages reached the planner only from their transcripts
 - **Linden** continues 1b: DL-lat and DL-lon, then MP64, ML5 and PM5, each generator pushed before its run, then the
   expected values. Then 1b's milestone report.
 **Notes:** Written by Cedar Datum by hand. Next free ID -51.
+
+**ID:** 2026-10-28-51
+**Timestamp:** 2026-10-30T07:40:28Z
+**Continues:** 2026-10-28-17, 2026-10-28-47, 2026-10-28-50
+**Title:** E4's targeted strata are selected by the oracle's reach, not counted; they use hiking-mountain
+**Decision:** Linden, in session 18 of step 1b, asked two questions on E4's targeted strata (DL-lat, DL-lon, MP64, ML5
+and PM5). It built the part common to every answer meanwhile, and chose neither.
+
+**Q1. Does the reach-evidence column select a stratum's cases, or count reach over the first 59?** The planner rules
+that **reach selects.**
+- **E4 settles it.** "Cases are kept in generation order until the stratum is full" (Phase 1 report at `20e1f92`,
+  line 885), and "A stratum that cannot be filled from 20 times its size in candidates is reported short" (line 908).
+  Neither makes sense under counting.
+- **Three other texts agree:** RECORD -17's names for these strata (line 619 here), J at line 1849, and the open
+  question at line 2519.
+- **So each stratum is the first 59 candidates,** in generation order, whose reach holds, read from the oracle's R1:
+  - its route for DL;
+  - its log for MP64, ML5 and PM5.
+
+  It is never read from the port. Rejected candidates are counted.
+- **ML5 and PM5** share one candidate sequence, MP64's generator with `memoryclass` 5. Each candidate goes to ML5 or
+  PM5 by R1's outcome (`:2028` "memory limit reached", or panic mode at `:2031`), or is rejected. If one run can show
+  both, that is a stop.
+- **The cap is 1,180 candidates per stratum** (20 × 59). A stratum that is not full by then is reported short, and
+  never filled from another generator.
+- **E3's six runs** and the instability count are taken over the selected 59, as for R.
+- **Where reach is coverage** (NT, CR), the selector is the first code to read coverage. RECORD -50's rule applies to
+  it, seen failing first. Linden's note that no code reads coverage today is correct: R6 writes `.exec` files, and
+  nothing parses them.
+
+**Q2. Which profile? E4 names none.** The planner rules **`hiking-mountain`**, Linden's default.
+- **Why:**
+  - it is the profile Forager runs, so these strata test the mechanisms on the app's own path;
+  - R already covers all 26 profiles;
+  - a uniform draw over the 26 would spend the caps on profiles that rarely route. `rail` and `river` failed with
+    "from-position not mapped" on 52 and 53 of 59 in R, as Linden reported.
+- **Rejected:** a uniform draw over the 26.
+- **What this gives up:** `hiking-mountain` switches off turn restrictions, so these strata do not exercise them;
+  R does. The report says so.
+
+**A slip, corrected:** the planner's answer first cited line 889 for the generation-order sentence. A follow-up message
+corrected it to 885.
+**Notes:** Written by Cedar Datum by hand. Next free ID -52.
