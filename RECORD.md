@@ -1856,3 +1856,42 @@ commit on `main` (`GITHUB_SHA`), which by definition modifies no workflow file r
   one file.
 - **Unverified:** whether `GITHUB_SHA` clears the 403. That rests on GitHub's REST text quoted in -43.
 **Notes:** Written by Cedar Datum by hand. Next free ID -45.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-45
+**Timestamp:** 2026-10-30T03:56:12Z
+**Continues:** 2026-10-28-3, 2026-10-28-12, 2026-10-28-30, 2026-10-28-44
+**Title:** The tile release is published: `brouter-tiles-2026-10-30`, seven assets, each checked by the planner against its pin
+**Observed:** the owner ran `publish-tiles` from `main` again (run 40999738961, `workflow_dispatch` on `3a0a492`,
+2026-10-30T03:52:09Z) and said "Done". Read by the planner:
+- **Both jobs succeeded.**
+- **The release:** `https://github.com/slayer8366/Forager-iOS/releases/tag/brouter-tiles-2026-10-30`, "BRouter test tiles,
+  2026-10-30".
+  - Not a draft, published 2026-10-30T03:52:58Z.
+  - Its target is `3a0a4921` (`main`), so -43's fix held.
+- **Seven assets:**
+  - the four tiles: `W75_N40` 119,765,681 bytes, `W75_N35` 3,572,520, `W70_N40` 5,292,622, `E170_S50` 1,061,705;
+  - F0's fixture, 152,665 bytes;
+  - `README.md`;
+  - `tile-pins.tsv`.
+- **The tiles are brouter.de's of 2026-10-30** (`Last-Modified` 01:03:01 GMT), captured at 03:52Z. They supersede Linden's copies
+  of 2026-10-29, as -30 said they would.
+- **Checked by the planner:** each of the five data files was downloaded from its public release URL and checked against
+  the release's own `tile-pins.tsv`. All five match in size and SHA-256 (F0 still `ff6d9d8e…`).
+  - The downloads went through this session's proxy, which may add credentials, so an anonymous download is still
+    unproven.
+  - The README carries OpenStreetMap's attribution, the ODbL 1.0 URI and the copyright page, with no template placeholder
+    left. The release notes say the same.
+- **This settles the public action RECORD -12 left to the owner.** Item I's step 1 is complete apart from pinning on
+  `brouter-port`.
+
+**Next (the planner's call, technical):**
+- **A session pins the release on `brouter-port`:**
+  - replace `tools/tile-pins.tsv` with the release's;
+  - wire `tools/fetch-tiles.sh` into the build, reading the release URL;
+  - add item I's step 1 fetch test, seen failing first with one pinned size off by one;
+  - read CI.
+- **Then step 1b,** the oracle's own runs, the first of the milestones the owner asked to hear about.
+**Notes:** Written by Cedar Datum by hand. Next free ID -46.
