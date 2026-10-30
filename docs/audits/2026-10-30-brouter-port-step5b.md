@@ -61,7 +61,10 @@ with no effect on order; `HashIterator.remove` (`:1614-1623`), never called. Of 
 - Java assigns inside conditions at least 99 times in these spans (`if ((p = tab[i]) == null)`), counted by a regex
   that undercounts [C: `1-hmap-sizing/embedded-assignments.tsv`]. Kotlin needs a statement for each: about +100 to +130.
 - Java's multi-variable `for (TreeNode<K,V> r = this, p;;)` loops become `while` loops with declarations: about +40.
-- Specialised to `OsmNode` keys stored as their own values (`OsmNodesMap.put` passes `node, node`), so no generics.
+- Specialised to `OsmNode`, so no generics. **Corrected after the first push:** keys and values stay separate.
+  `OsmNodesMap.put` passes `node, node`, but a `put` of a second node equal to a present one keeps the old key and
+  stores the new value (`HashMap.java:660-667`), and `NodesCache.java:284-288` does exactly that. The line count is
+  unchanged.
 - **Three files, each under about 400 lines** (Forager's modular-code rule): the table, `get`, `put`, `remove`,
   `resize` and iteration; tree insert and lookup; tree removal and `split`.
 
@@ -82,3 +85,30 @@ with no effect on order; `HashIterator.remove` (`:1614-1623`), never called. Of 
 
 **For the planner, not chosen here:** what the port does when it reaches `tieBreakOrder`. The test, as dispatched,
 refuses equal-hash tree buckets in its generator, so it does not decide this.
+
+## Tests first, over stubs (item I, step 5b)
+Nine tests in `jvmTest/.../mapaccess/`, with stubs for every 5b class and for the map (`NodeHashMap.kt`, signatures
+only). Run 2 counted: **0 compile errors; 100 tests, 9 failures, each a `NotImplementedError` from a 5b stub or from 5a's
+`TODO("DirectWeaver, item I step 5b")` in `OsmFile`; the earlier 91 pass** [C: `2-tests-over-stubs.txt`]. Run 1 failed
+`CollectOutreachersTest`'s two on the harness's own bug (the tile was closed before the region loaded), not on a stub;
+the harness was fixed and that run is not counted.
+- **`GraphDecodeTest`, one test per captured tile (5):** every non-empty micro-cache decoded on both engines through
+  `OsmFile.createMicroCache`, four times each: *known* (every node of the cache already a hollow node in the map, ids
+  from the oracle's own `MicroCache2`; the text covers every node, isolated ones included, each link's geometry through
+  `GeometryDecoder`, link holders, and every turn its restrictions decide in four modes) and *fresh* in cleanup modes
+  0, 1 and 2 (the map's counters and every node reachable from the hollow nodes left). A cache passes when the two
+  texts are equal; the per-tile digest is the SHA-256 of the texts. It also asserts that every oracle decode returns
+  `MicroCache.emptyNonVirgin` with size 0 (RECORD -32's data).
+- **`CollectOutreachersTest` (2):** a 3 by 3 block of caches around the largest cache of four tiles' first data
+  square, loaded into one map per engine in modes 0, 1 and 2; `collectOutreachers` without a destination (then
+  `canEscape` on every 37th node, `clearTemp`, `isInMemoryBounds`), and with a destination and the median distance as
+  the cost bound, where the test fails unless some node is cut off.
+- **`NodeHashMapOrderTest` (1):** the port's map against `java.util.HashMap(4096)` of the oracle's `OsmNode`s, 12 seeds
+  of 40,000 operations up to 14,000 keys: forced tree bins of distinct hashes, anti-diagonal runs of equal hashes in list
+  bins, re-puts of equal nodes, gets and removes. Order compared every 200 operations. The generator refuses
+  equal-hash tree buckets by construction, and the reference's table is read after every operation that changes a bin
+  (and at every resize): an equal-hash tree bin stops the seed as refused, and the test fails on any refusal. It also
+  fails unless it saw tree bins, puts into and removes from them, a resize with tree bins, a tree turning back into a
+  list, and equal hashes in list bins. This needs `--add-opens java.base/java.util` on `jvmTest` (a call beyond the
+  dispatch, below).
+- **`OsmNodePairSetTest` (1):** 20 seeds of 5,000 operations on both engines, every answer compared.

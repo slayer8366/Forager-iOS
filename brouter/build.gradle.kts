@@ -122,6 +122,9 @@ val e3StrataPackage = "com.zynergylabs.forager.brouter.oracle.e3.strata.*"
 val jvmTestTask = tasks.named<Test>("jvmTest") {
     oracleJvm()
     filter { excludeTestsMatching(e3StrataPackage) }
+    // Step 5b: NodeHashMapOrderTest reads java.util.HashMap's table to see its tree bins and to refuse equal-hash ones.
+    // Reflection only; nothing in the oracle changes.
+    jvmArgs("--add-opens=java.base/java.util=ALL-UNNAMED")
 }
 // RECORD -47: e3Strata runs on the oracle's JDK, Temurin 21.0.13+9 amd64 (CI's, RECORD -46), never on whatever JDK runs
 // Gradle: identity-hash order, which E3 tests, is the running JVM's. tools/fetch-temurin.sh fetches it pinned and prints
