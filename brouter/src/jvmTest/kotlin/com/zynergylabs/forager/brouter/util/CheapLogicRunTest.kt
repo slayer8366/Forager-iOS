@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 /**
  * Step 2b's logic run (Amendment 3 Part B, "The seam for the two kinds of run"; Phase 1 report, E6): the port with the
@@ -11,12 +12,28 @@ import kotlin.test.assertTrue
  * calcAngle's counts each of its five branches, so a pass says which inputs it saw.
  */
 class CheapLogicRunTest {
+    /**
+     * The flag that belongs to the architecture the test JVM runs on, as `brouter/build.gradle.kts` picks it (RECORD -37,
+     * -38): x86_64 `-XX:-UseLibmIntrinsic`, which aarch64 HotSpot refuses; aarch64 `-XX:DisableIntrinsic=_dcos`. Any other
+     * architecture fails here as unsupported, as the build refuses it.
+     */
     @Test
     fun theJvmRunsWithLibmIntrinsicsOff() {
         val args = ManagementFactory.getRuntimeMXBean().inputArguments
-        assertTrue("-XX:+UnlockDiagnosticVMOptions" in args && "-XX:-UseLibmIntrinsic" in args, "JVM arguments: $args")
         val hotspot = ManagementFactory.getPlatformMXBean(com.sun.management.HotSpotDiagnosticMXBean::class.java)
-        assertEquals("false", hotspot.getVMOption("UseLibmIntrinsic").value, "UseLibmIntrinsic")
+        assertTrue("-XX:+UnlockDiagnosticVMOptions" in args, "JVM arguments: $args")
+        when (val arch = System.getProperty("os.arch")) {
+            "amd64", "x86_64" -> {
+                assertTrue("-XX:-UseLibmIntrinsic" in args, "JVM arguments: $args")
+                assertEquals("false", hotspot.getVMOption("UseLibmIntrinsic").value, "UseLibmIntrinsic")
+            }
+            "aarch64" -> {
+                assertTrue("-XX:DisableIntrinsic=_dcos" in args, "JVM arguments: $args")
+                // HotSpot shows a diagnostic option only once unlocked; then it reads "_dcos" (seen on x86_64 HotSpot 21).
+                assertEquals("_dcos", hotspot.getVMOption("DisableIntrinsic").value, "DisableIntrinsic")
+            }
+            else -> fail("unsupported: no libm intrinsic setting is known for os.arch '$arch' (build.gradle.kts refuses it too)")
+        }
         // The behaviour, not only the setting: with the intrinsic off, Math.cos is fdlibm's at every table row (E6 [C]).
         // With it on, they differ at some rows (Phase 1 part 6: 60 on one HotSpot; this step's scratch run, 0-prediction.txt).
         val rows = (0 until 1800).filter { Math.cos(oracleLat(it)).toRawBits() != StrictMath.cos(oracleLat(it)).toRawBits() }

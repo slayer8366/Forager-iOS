@@ -1,0 +1,26 @@
+# Step 3, RECORD -38: theJvmRunsWithLibmIntrinsicsOff by arch, local x86_64, 2026-10-30T00:30:10Z
+# JDK: openjdk version "21.0.12.1" 2026-08-18
+# compile tasks in the build log: :brouter:compileKotlinJvm, :brouter:compileJvmMainJava NO-SOURCE, :brouter:compileTestKotlinJvm, :brouter:compileJvmTestJava NO-SOURCE
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.codec.DataBuffersTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.MicroCacheTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.NoisyDiffCoderTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.StatCoderContextTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.TagValueCoderTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 0, errors 0, skipped 0
+TOTAL: tests 13, failures 0, errors 0, skipped 0 in 6 files
+
+# Each test case: outcome | failure type | message (first line) | first frame in the port's main code
+PASS DataBuffersTest.buffersHaveTheOraclesSizes[jvm]
+PASS DataBuffersTest.givenIobufferIsKeptAndBctx1WritesTagbuf1[jvm]
+PASS MicroCacheTest.emptyCacheIsTheOraclesEmptyCache[jvm]
+PASS MicroCacheTest.filledCachesFollowTheOracleUnderSeededOperations[jvm]
+PASS NoisyDiffCoderTest.threePassStreamsDecodeIdentically[jvm]
+PASS StatCoderContextTest.oracleEncodedStreamsDecodeIdentically[jvm]
+PASS StatCoderContextTest.noisyBitsTableEqualsTheOracles[jvm]
+PASS TagValueCoderTest.oracleEncodedTreesAndCodesDecodeIdentically[jvm]
+PASS CheapLogicRunTest.calcAngleEqualsTheOraclesWithItsTable[jvm]
+PASS CheapLogicRunTest.portTableArithmeticGivesTheOraclesTableFromTheOraclesCos[jvm]
+PASS CheapLogicRunTest.theJvmRunsWithLibmIntrinsicsOff[jvm]
+PASS CheapLogicRunTest.distanceEqualsTheOraclesWithItsTable[jvm]
+PASS CheapLogicRunTest.angleFunctionsEqualTheOracles[jvm]
