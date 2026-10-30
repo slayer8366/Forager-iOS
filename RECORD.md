@@ -1543,3 +1543,70 @@ The watcher read 182,695 tokens at 00:01:01Z. The harness's final count was 195,
   (`-XX:DisableIntrinsic=_dcos`, -21) or none, and says which and why.
 - Then step 3 continues from `9fe7a70`.
 **Notes:** Written by Cedar Datum by hand. Next free ID -38.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-38
+**Timestamp:** 2026-10-30T00:24:01Z
+**Continues:** 2026-10-28-3, 2026-10-28-37
+**Title:** The arm64 test JVM fixed, its cause seen first; step 3 (`codec`) ported, 62 tests green; the planner's rulings
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `f034bb0`: a probe;
+- `b3182d8`: step 3 compiled and seen failing;
+- `4436711`: the port;
+- `a0b04e1`: the arm64 fix;
+- `d99cc46`: logs and the revert.
+
+The watcher read 183,441 tokens at 00:19:34Z. The harness's final count was 190,155.
+- **Task 1, the cause seen before the fix.** On `macos-26` (`os.arch aarch64`, Temurin 21.0.13+9),
+  `java -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic -version` printed "Unrecognized VM option
+  'UseLibmIntrinsic'" and "Error: Could not create the Java Virtual Machine." This matched -37's inference.
+- **The probe's measurement on aarch64,** over 200,000 inputs: `Math.cos` differs from `StrictMath.cos` at 11,628 by
+  default and at 0 under `-XX:DisableIntrinsic=_dcos`, with and without the JIT; `atan2` differs at 0.
+- **The fix:** `brouter/build.gradle.kts` picks the flags by `os.arch`.
+  - x86_64 keeps `-XX:-UseLibmIntrinsic` exactly.
+  - aarch64 uses `-XX:DisableIntrinsic=_dcos`.
+  - Any other architecture fails the build rather than guessing.
+- **CI, read by the planner:** runs 40978719644 (`a0b04e1`) and 40978865021 (`d99cc46`) are `success` in both jobs, the
+  gate included. In 40978865021's `ios-smoke` log:
+  - the simulator ran 18 tests, 0 failures (**simulator-checked**);
+  - the arm64 JVM step ran **7 tests, 1 failure** (recorded, not gating), and the gate printed "OK: all 2 classes ran".
+  - **The one failure is `theJvmRunsWithLibmIntrinsicsOff`,** which looks for the x86 flag in the JVM's arguments. It
+    is the test's assumption, not a maths difference.
+  - **The other 6 pass on arm64 HotSpot,** among them `productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows`.
+    So arm64 HotSpot under `_dcos` builds the same table as x86_64 without the intrinsic. That answers Phase 1 part 6's
+    open question for this setting.
+- **Step 3:**
+  - **the one compile error** was a stub's JVM name clash (`size` against `getSize()`), fixed with `@JvmField`;
+  - **failing first:** 8 of 8 tests seen failing on stub `TODO`s;
+  - **the port:** the decoder halves of `DataBuffers`, `StatCoderContext`, `NoisyDiffCoder`, `TagValueCoder` and
+    `MicroCache`;
+  - **CI on `4436711`:** `jvm` 62 tests, 0 failures, with the 5 codec classes at 8 of 8.
+- **Two test expectations corrected, beyond "compile errors only":**
+  - **(1) `StatCoderContextTest`'s generator** drew predictors up to 2^28. The oracle's own encode/decode round-trips
+    only up to 24 noisy bits, misdecodes beyond, and leaves the stream misaligned. Predictors are now kept under 2^25;
+    the round-trip assertion is unchanged.
+  - **(2) `TagValueCoderTest`** expected the validator to be called on the empty set. The oracle does not call it there
+    either. The check now applies when the set is non-empty.
+- **Revert:**
+  - `btools/codec` has no sign-extension site, so the revert was made in `BitCoderContext.fillBuffer`'s byte read
+    (`util`), which the decoders read through;
+  - 3 of 8 failed as predicted;
+  - **`DataBuffers`' and `MicroCache`'s tests did not fail,** so no revert has shown they bite.
+- **Checked by the planner:**
+  - the commits touch only `brouter/`, `tools/jvm-probe/`, the workflow and the report's folder;
+  - the tree is clean;
+  - the run conclusions and the `ios-smoke` log lines quoted above.
+
+**The planner's rulings (technical):**
+- **Corrections (1) and (2) stand.** In both, the oracle itself fails the old expectation, and the port equalled the
+  oracle at every comparison. The bar is port equals oracle.
+  - **For (1), one condition:** when steps 5a and 5b decode the captured tiles, they log the largest noisy-bit count
+    the decoders meet. If any exceeds the generator's range, that is a finding, and the test widens.
+- **Two more revert checks inside `codec`,** each predicted first: one in a decoder (for example `StatCoderContext`),
+  and one in `MicroCache`, so that `MicroCacheTest` is shown to bite. `DataBuffers` is allocation only; say whether a
+  revert can bite there at all.
+- **`theJvmRunsWithLibmIntrinsicsOff` checks the flag that belongs to the architecture it runs on,** so the arm64 step
+  records no false failure.
+**Notes:** Written by Cedar Datum by hand. Next: those three items, then step 4 (`expressions`). Next free ID -39.
