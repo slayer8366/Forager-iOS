@@ -1498,3 +1498,48 @@ and the simulator job, and **the harness's final count was 254,582, an overrun.*
   `continue-on-error` may not mask a step that did not run.
 **Milestone:** the `util` package (steps 2a and 2b) is done. The planner reports it to the owner.
 **Notes:** Written by Cedar Datum by hand. Next: the arm64 step's fix, then step 3 (`codec`). Next free ID -37.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-37
+**Timestamp:** 2026-10-30T00:03:18Z
+**Continues:** 2026-10-28-3, 2026-10-28-36
+**Title:** The masked step's fix works as a gate, and shows the arm64 JVM tests still never run; step 3 pushed unfinished
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `4dd46db`: the fix;
+- `efb99ed`: the planted failure;
+- `106e868`: the restore;
+- `9fe7a70`: step 3 work in progress, never compiled or run, pushed on the planner's word.
+
+The watcher read 182,695 tokens at 00:01:01Z. The harness's final count was 195,913.
+- **The fix:**
+  - the step runs `CheapLogicRunTest` and `CheapProductionRecordTest` with `-x msunReference`;
+  - a new gating step runs `tools/junit-ran.py`, which fails the job if any named class left no XML or ran no
+    test. Gradle's `--tests` passes when only one of several filters matches, so the old counts could not catch a
+    misnamed class.
+  - Locally on x86_64: 7 tests, 0 failures. With one misnamed class, Gradle exited 0 and the check exited 1.
+- **CI, read by the planner:** runs 40976352957 (`4dd46db`), 40976367336 (`efb99ed`) and 40976378547 (`106e868`) are all
+  `failure`. In each, `jvm` succeeded and `ios-smoke` failed at the gating step.
+- **The `ios-smoke` log of 40976378547:**
+  - the arm64 step's only XML is Gradle's "failed to execute tests": "Process 'Gradle Test Executor 1' finished with
+    non-zero exit value 1";
+  - the gate printed "FAIL: 2 of 2 classes did not run".
+  - **The gate is doing its job:** the step that read green at -36 is now red for the right reason.
+- **The likely cause (inferred, not yet seen):** the test JVM is started with `-XX:-UseLibmIntrinsic`, which exists
+  only on x86 (-21, read at source in `globals_x86.hpp`). An aarch64 HotSpot would refuse it and not start. The
+  executor's stderr is not in the log.
+- **The branch is red on `ios-smoke` from `4dd46db` on,** until this is fixed.
+- **Step 3 (`codec`), started:**
+  - the `-ro` jar does carry the encoders (javap), so no test moves to step 5;
+  - the stubs and tests are written but never compiled.
+- **Checked by the planner:** the run conclusions, the `ios-smoke` job's steps, and the gating step's log, all through
+  the GitHub API.
+
+**The planner's call (technical):** the next session sees the arm64 failure's real cause before fixing it.
+- For example, a CI step that prints the test JVM's start-up error on `macos-26`. Forager's rule: see the failure
+  before writing the fix.
+- **The fix keeps the oracle's x86_64 setting exactly as it is.** On aarch64 it uses that platform's own switch
+  (`-XX:DisableIntrinsic=_dcos`, -21) or none, and says which and why.
+- Then step 3 continues from `9fe7a70`.
+**Notes:** Written by Cedar Datum by hand. Next free ID -38.
