@@ -2258,3 +2258,38 @@ goes to ML5; both coders hand off at the context margin
 - **The planner's dispatches cost each session about 60k tokens before any work.** The next ones point at the
   handoff, the governing RECORD entries and the files they name, and nothing more.
 **Notes:** Written by Cedar Datum by hand. Next free ID -53.
+
+**ID:** 2026-10-28-53
+**Timestamp:** 2026-10-30T07:45:31Z
+**Continues:** 2026-10-28-50, 2026-10-28-52
+**Title:** Both coders handed off; Plumb's `put` trace and partial tie-break count; the planner accepts its three
+proposals
+**Observed:**
+- **Linden, session 18 (`fa54097` on `brouter-port`, work in progress):**
+  - the rulings of -50 to -52 are written into the Phase 2 report;
+  - `DLGenerator.kt` was pushed without being compiled or run, so CI on `fa54097` may go red;
+  - no stratum ran.
+
+  Session 19 started at once. Its first act is to compile the code and fix any red.
+- **Plumb, session 3 (`7ce67e2` on `brouter-port-5b`, docs only):**
+  - **`put`'s callers** [R, as reported]: every key in `hmap` is exactly `btools.mapaccess.OsmNode`. The only
+    `put` is `OsmNodesMap.java:238-239`, and no path puts `OsmNodeNamed` or `OsmNogoPolygon` into it. So -50's
+    class-name step has nothing to order. No wrong premise.
+  - **`tieBreakOrder` on the oracle,** counted with the pinned Temurin's own `HashMap.java` patched into `java.base`
+    with counters [C, as reported]:
+    - 0 in 12 region loads;
+    - 0 in F0's two routes;
+    - 19 calls, all from `treeify`, at W75_N40 (106,130) sub 740, among the first 8,756 of 25,072 decoded caches.
+      The rest of the run had not finished.
+
+    **So the tie-break does occur on real tiles.** -50's stand-in is needed, not hypothetical.
+
+**The planner's calls (technical), on Plumb's three proposals:**
+- **Accepted: the stand-in's number lives on the `OsmNode` object, not on the map's entry.** HotSpot's identity hash
+  belongs to the object, and `untreeify`, `treeifyBin` and `split` replace entries.
+- **Accepted: a named "unsupported" in `tieBreakOrder` when the two keys' classes differ.** It never fires on
+  today's callers, and it turns the one case where Java would order by class name into an explicit failure, never a
+  silent difference.
+- **Accepted: the new determinism test goes in `commonTest`,** so it also runs on the simulator (23 to 24,
+  simulator-checked). It is the first 5b behaviour to run on iOS.
+**Notes:** Written by Cedar Datum by hand. Next free ID -54.
