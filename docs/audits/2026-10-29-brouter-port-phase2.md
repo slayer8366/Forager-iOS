@@ -1223,6 +1223,14 @@ none is short. The control moved in all 1,475 cases.
 - **Prediction 6 partly failed:** "most likely 0 unstable in each" was wrong for `shortest`. "No profile over 5%", "none short"
   and "rail and river mostly non-route" held.
 
+### CI [R: job logs]
+
+- **Run 41004546970 on `970df90`: `success`.** `jvm`: "TOTAL: tests 81, failures 0, errors 0, skipped 0 in 37 files", the same
+  81 as before, so no stratum ran there. E3ControlTest: "R1 repeats across fresh JVMs: true; R4: true". `ios-smoke`
+  `success` (simulator-checked).
+- **Runs on `8cf8be4`, `2ada78c` and the planner's `9f41799`:** `success` by their run conclusions, logs not read. The run on
+  this merge, `83cba83`, was in progress at handoff and was not read.
+
 ### Calls beyond the amendment (mine; for the planner)
 
 - **The JDK is given to `e3Strata` by a property, not fetched by a Gradle task,** because the dispatch said "into scratch".
