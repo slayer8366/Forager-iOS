@@ -50,7 +50,8 @@ step runs under `-XX:DisableIntrinsic=_dcos` and read 7 of 7 on `7bf6a3d` (secti
 **Status (2026-10-30, twelfth session, Linden Caliper, Amendment 3 Part B, step 4):** **partial, handed off on the planner's word**
 (context past 180k). The report's step 3 section is pushed (`c90f440`). For step 4, only drafts are committed, in
 `2026-10-29-brouter-port-phase2/step4/`: the mechanism prediction (`0-prediction.txt`), and a draft port of
-`BExpressionContext` (three files: 346, 117 and 175 lines) and of `BExpression` (338 lines) in `port-draft/`. That folder is
+`BExpressionContext` (three files: 379, 113 and 166 lines) and of `BExpression` (365 lines) in `port-draft/`
+[C: `wc -l`, thirteenth session; the twelfth session's figures, 346, 117, 175 and 338, were wrong (RECORD -40)]. That folder is
 outside `commonMain` on purpose, so the next session can still see the tests fail on stubs before the port lands.
 **Nothing compiles or has run:** `brouter/` is unchanged from `599dd40`, which does not compile. The drafts have never
 been compiled. Not written: the stubs, `BExpressionMetaData`'s port, `BExpressionContextWay`, `BExpressionContextNode`,
