@@ -1,0 +1,12 @@
+# Provenance of the HashMap.java counted (2026-10-30, secondary coder).
+# tools/fetch-temurin.sh <scratch>/5b/temurin: the tarball checked against its pins, then extracted fresh:
+#   OpenJDK21U-jdk_x64_linux_hotspot_21.0.13_9.tar.gz, 207858352 bytes, SHA-256 d7f5d5cf865a2902b70ff549b97586a7d3f234e016f041ab447ea740c7d66d1c
+IMPLEMENTOR="Eclipse Adoptium"
+IMPLEMENTOR_VERSION="Temurin-21.0.13+9"
+JAVA_RUNTIME_VERSION="21.0.13+9-LTS"
+# The source is in the JDK's own lib/src.zip, entry java.base/java/util/HashMap.java:
+# (from <scratch>/5b/temurin/jdk-21.0.13+9/lib/src.zip, the copy fetch-temurin.sh extracted for this session)
+    98875  2026-10-20 00:00   java.base/java/util/HashMap.java
+# extracted: 2587 lines, SHA-256 71c8d82247c2736e9fbe3769f366e9bd250bc73ecf390749998e830201aaabf2
+# Not committed: the counts cite its line numbers, and the file is reproducible from the pinned tarball.
+# Reproduce: python3 -I spans.py HashMap.java hashmap-spans.tsv ; python3 -I embedded.py HashMap.java hashmap-spans-out.tsv

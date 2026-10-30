@@ -1,0 +1,84 @@
+# Step 5b (`mapaccess`, the graph): report
+
+Dispatch 2026-10-28-01, Amendment 3 Part B; RECORD -49, with -24, -32, -34 and -38. The secondary coder (its name is
+the owner's to choose), second session. Branch `brouter-port-5b`, cut from `origin/brouter-port` at `9f41799`, the
+planner's merge of 5a. The base was checked against the remote first: `git ls-remote` gave `brouter-port` at
+`9f41799dc20a`, so the primary had not pushed since [C]. Evidence in `2026-10-30-brouter-port-step5b/`.
+
+**Status (2026-10-30): in progress.** Part 1 (5a closed) is pushed at `4cc7f20`. The `hmap` sizing is below. **The map
+is not written until the planner answers** (Amendment 3, "size it ... and report the count before writing it").
+
+Tags: [R] read (file and line), [C] computed (log in the evidence folder), [I] inferred, [?] could not determine.
+
+## Mechanism prediction (before building)
+- `OsmFile.createMicroCache`'s `TODO` becomes Java's two lines (`OsmFile.java:141-142`): construct a `DirectWeaver` over
+  the cache's `StatCoderContext`, then return `MicroCache.emptyNonVirgin`. The weaver decodes straight into `OsmNode` and
+  `OsmLink` objects through the codec step 3 ported, and registers each link target it has not seen as a hollow node in
+  `OsmNodesMap` [R: `DirectWeaver.java:19-171`].
+- The digest test decodes every non-empty micro-cache of each captured tile on both engines, one fresh `OsmNodesMap`
+  per cache, and hashes, per cache, the nodes (position, elevation, description, `visitID`), every link from each node
+  in chain order (target, direction, way description, geometry), each node's turn restrictions, and the hollow nodes
+  the cache left in the map. If the weaver is right, every digest is equal; one inverted direction flag changes the
+  link chain of every cache with an internal link.
+
+## The `hmap` sizing (option (i), RECORD -24)
+
+**Source.** `java/util/HashMap.java` from the oracle's own JDK, Temurin 21.0.13+9: `tools/fetch-temurin.sh` checked the
+tarball against its pins (207,858,352 bytes, SHA-256 `d7f5d5cf…6d1c`), and the source is in that JDK's `lib/src.zip`.
+The extracted file is 2,587 lines, SHA-256 `71c8d822…aabf2` [C: `1-hmap-sizing/provenance.txt`]. No other source was
+needed.
+
+**What `OsmNodesMap` uses.** One map, `new HashMap<>(4096)` (`OsmNodesMap.java:16`), through four calls: `get`
+(`:223`), `remove` (`:229`), `put` (`:239`) and iteration of `values()` in `collectOutreachers` (`:181`) [R, Forager's
+`third_party` copy, which equals upstream v1.7.10 at 0 of 101 files differing:
+`2026-10-28-brouter-port-verify/01-vendored-vs-upstream.txt`].
+
+**The count, method by method** [C: `1-hmap-sizing/hashmap-spans-out.tsv`, each span from its declaration to its
+matching brace; "code" excludes blank and comment-only lines]:
+
+| Group | Methods (HashMap.java lines) | Java lines | code |
+|---|---|---|---|
+| Declarations | 5 constants (`:245, 250, 260, 267, 275`); `Node`'s fields and constructor (`:281-292`); fields `table`, `size`, `modCount`, `threshold`, `loadFactor` | 22 | 21 |
+| Hash helpers | `hash` (`:336-339`) 4; `comparableClassFor` (`:345-362`) 18, reached but null at its first test, since `OsmNode` is not `Comparable` (`OsmNode.java:14`); `tableSizeFor` (`:377-380`) 4 | 26 | 26 |
+| Constructors | `HashMap(int, float)` (`:445-456`) 12; `HashMap(int)` (`:469-471`) 3 | 15 | 15 |
+| `get` | `get` (`:562-565`) 4; `getNode` (`:573-591`) 19 | 23 | 23 |
+| `put` | `put` (`:617-619`) 3; `putVal` (`:631-672`) 42; `resize` (`:683-755`) 73; `treeifyBin` (`:761-780`) 20 | 138 | 138 |
+| `remove` | `remove` (`:803-807`) 5; `removeNode` (`:819-858`) 40 | 45 | 45 |
+| Iteration | `values` (`:1039-1046`) 8; `Values`' class line and `iterator` (`:1048, 1051`) 2; `HashIterator`'s fields, constructor, `hasNext`, `nextNode` (`:1581-1612`, `:1624`) 33; `ValueIterator` (`:1631-1634`) 4 | 47 | 44 |
+| Node factories | `newNode`, `replacementNode`, `newTreeNode`, `replacementTreeNode` (`:1908-1925`) | 12 | 12 |
+| Tree bins: shape and lookup | `TreeNode`'s fields and constructor (`:1966-1974`) 9; `root` 7; `moveRootToFront` 21; `find` 26; `getTreeNode` 3; `tieBreakOrder` 9 | 75 | 75 |
+| Tree bins: insert | `treeify` (`:2071-2111`) 41; `putTreeVal` (`:2133-2177`) 45; `balanceInsertion` (`:2383-2436`) 54; `rotateLeft` 17; `rotateRight` 17 | 174 | 172 |
+| Tree bins: remove and resize | `removeTreeNode` (`:2189-2285`) 97; `balanceDeletion` (`:2438-2528`) 91; `untreeify` (`:2117-2128`) 12; `split` (`:2297-2342`) 46 | 246 | 242 |
+| **Total reached** | | **823** | **813** |
+
+Not counted, with why: `compareComparables` (`:369-372`), never called for `OsmNode` keys because `kc` stays null; the
+three empty `afterNode*` hooks (`:1941-1943`); `checkInvariants` (`:2533-2553`), reached only from an `assert` and
+with no effect on order; `HashIterator.remove` (`:1614-1623`), never called. Of the 823 lines, **575 are tree bins**
+[C].
+
+**The Kotlin estimate [I]: about 950 code lines, about 1,050 with comments; range 850 to 1,200.**
+- Start from 813 code lines; `comparableClassFor` becomes one documented constant `null` (−16).
+- Java assigns inside conditions at least 99 times in these spans (`if ((p = tab[i]) == null)`), counted by a regex
+  that undercounts [C: `1-hmap-sizing/embedded-assignments.tsv`]. Kotlin needs a statement for each: about +100 to +130.
+- Java's multi-variable `for (TreeNode<K,V> r = this, p;;)` loops become `while` loops with declarations: about +40.
+- Specialised to `OsmNode` keys stored as their own values (`OsmNodesMap.put` passes `node, node`), so no generics.
+- **Three files, each under about 400 lines** (Forager's modular-code rule): the table, `get`, `put`, `remove`,
+  `resize` and iteration; tree insert and lookup; tree removal and `split`.
+
+**Can tree buckets occur for `OsmNode` keys? Yes.** [R]
+- `OsmNode.hashCode()` is `ilon + ilat` (`OsmNode.java:260`). Every node on one anti-diagonal shares a hash, and nodes
+  with equal hashes share a bin at every table size.
+- A bin becomes a tree when a `put` makes it 9 long (`HashMap.java:649`, `TREEIFY_THRESHOLD` 8 at `:260`), provided
+  the table has at least 64 slots (`:763`). The table starts at 4,096 here (`OsmNodesMap.java:16` through
+  `tableSizeFor`), so that condition always holds.
+- **A tree bin holding two different nodes with equal hashes is not reproducible bit for bit, by any port.** `OsmNode`
+  is not `Comparable`, so `treeify` (`:2095`) and `putTreeVal` (`:2158`) break the tie with `tieBreakOrder`, which
+  compares class names (equal) and then `System.identityHashCode` (`:2063`). `putTreeVal` links each new node after its
+  tree parent (`:2164-2169`) and `moveRootToFront` moves the root to the head of the bin (`:1990`), so the identity
+  hashes reach iteration order. Whether two oracle runs even agree there is [I]: the identity hash is not part of the
+  program. **Tree bins whose hashes all differ are deterministic:** every comparison is on `hash` [R].
+- Whether either kind occurs on the captured tiles is [?] for now. The decode harness will measure, on the oracle, the
+  longest bin and any tree bin as the tiles' caches are loaded into one map.
+
+**For the planner, not chosen here:** what the port does when it reaches `tieBreakOrder`. The test, as dispatched,
+refuses equal-hash tree buckets in its generator, so it does not decide this.
