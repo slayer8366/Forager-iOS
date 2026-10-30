@@ -1,0 +1,103 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3RTest > rOnHikingMountainIsCountedAgainstE3sStop STANDARD_OUT
+    E3 R-hiking-mountain JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/temurin/jdk-21.0.13+9
+    E3 R-hiking-mountain seed: 20261030
+    E3 R tiles' node counts: {E170_S50.rd5=50088, W70_N40.rd5=233165, W75_N35.rd5=260090, W75_N40.rd5=8137833}
+    E3 R-hiking-mountain: 59 cases from 67 candidates; rejected {no node in the target's 3 x 3 cells, or the target is outside every tile=8}
+    E3 R-hiking-mountain kinds (R1): {route=59}
+    E3 R-hiking-mountain: 59 cases; unstable 0 of 59; over 5%: false
+    E3 R-hiking-mountain R-hiking-mountain-001: stable; R1 route|407|54141|20042|ad512d3230dd77bb; collection lines 1; R1 1414 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-002: stable; R1 route|8|1122|876|e951e05206941a3b; collection lines 0; R1 424 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-003: stable; R1 route|35|578|448|54d7618ed9fe2c68; collection lines 0; R1 559 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-004: stable; R1 route|287|33005|23783|823118ec21422fcf; collection lines 0; R1 921 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-005: stable; R1 route|4|338|256|5cb24b9c0af632b; collection lines 0; R1 416 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-006: stable; R1 route|164|4760|3757|eb31e0dfe5cea005; collection lines 0; R1 538 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-007: stable; R1 route|90|17841|9040|665bc84a3944047a; collection lines 0; R1 554 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-008: stable; R1 route|96|3192|2339|65bf394515a67030; collection lines 0; R1 398 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-009: stable; R1 route|43|1903|911|8843036f37f5e36e; collection lines 0; R1 328 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-010: stable; R1 route|14|429|344|8dde35a383938d41; collection lines 0; R1 488 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-011: stable; R1 route|115|4822|4085|b56ccc459b5132bd; collection lines 0; R1 603 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-012: stable; R1 route|1090|54584|35699|8d636660942844c4; collection lines 2; R1 1388 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-013: stable; R1 route|64|4110|2461|2d7059ad66602542; collection lines 0; R1 776 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-014: stable; R1 route|294|8559|6637|580d2a05d7f886a9; collection lines 1; R1 1328 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-015: stable; R1 route|44|1341|1069|a70afdb31b9fad38; collection lines 0; R1 404 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-016: stable; R1 route|306|24600|9602|bb43b5bff3b3a0c8; collection lines 0; R1 1007 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-017: stable; R1 route|28|4677|1457|a879a3c92ba818a4; collection lines 0; R1 276 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-018: stable; R1 route|14|445|336|dd504c9b4b8f622b; collection lines 0; R1 345 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-019: stable; R1 route|3886|192274|128892|e1872f42b75333e5; collection lines 52; R1 13656 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-020: stable; R1 route|1554|52290|39099|2d84b2a1afc45915; collection lines 5; R1 2467 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-021: stable; R1 route|36|1464|707|a6372327f71a339f; collection lines 0; R1 493 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-022: stable; R1 route|90|2453|1652|be1fd75572f55b0; collection lines 0; R1 419 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-023: stable; R1 route|93|4464|2642|cc090b28c412f5af; collection lines 0; R1 552 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-024: stable; R1 route|27|7675|5814|bc917ba1a226a268; collection lines 0; R1 355 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-025: stable; R1 route|4319|167575|121620|13a36d2dd72403f3; collection lines 67; R1 17007 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-026: stable; R1 route|15|670|293|f4c69d019945b6d5; collection lines 0; R1 425 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-027: stable; R1 route|9|3924|1308|490bbc80eec65869; collection lines 0; R1 233 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-028: stable; R1 route|117|10887|6773|ea0c826c4f9c6326; collection lines 0; R1 419 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-029: stable; R1 route|80|4387|2331|950296348a64b643; collection lines 0; R1 317 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-030: stable; R1 route|3|756|63|f72112372d18fbbf; collection lines 0; R1 398 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-031: stable; R1 route|557|66627|34561|2154fef04bc8ce61; collection lines 0; R1 679 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-032: stable; R1 route|818|25228|20874|b52b3063d6ccc432; collection lines 0; R1 1128 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-033: stable; R1 route|60|2068|1248|62e44b210f6cee0e; collection lines 0; R1 446 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-034: stable; R1 route|242|23110|11599|1d556864df5ef905; collection lines 0; R1 770 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-035: stable; R1 route|214|3838|2993|6647b8dd2358cf2b; collection lines 0; R1 685 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-036: stable; R1 route|17|324|247|346696b705b8d53c; collection lines 0; R1 469 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-037: stable; R1 route|2358|114604|69436|1ac12bc7caaa7aac; collection lines 0; R1 1286 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-038: stable; R1 route|804|42895|22673|49dc66371bcfcc82; collection lines 0; R1 898 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-039: stable; R1 route|66|1994|1494|efa388188507c24; collection lines 0; R1 512 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-040: stable; R1 route|57|1312|1038|527dc614f935d2c9; collection lines 0; R1 612 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-041: stable; R1 route|17|344|274|d6bfcabcb619adb5; collection lines 0; R1 419 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-042: stable; R1 route|1528|84959|66908|52f09d95968eb11b; collection lines 1; R1 1217 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-043: stable; R1 route|423|35567|21197|c798d984e50d4611; collection lines 0; R1 841 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-044: stable; R1 route|74|4242|2448|76f9934e49d9c5c6; collection lines 0; R1 373 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-045: stable; R1 route|3|29|22|8947386f59201a09; collection lines 0; R1 364 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-046: stable; R1 route|538|55754|19459|e93e2094a98918e7; collection lines 0; R1 1034 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-047: stable; R1 route|1973|112174|72433|d8aaf24efc2a8fd6; collection lines 0; R1 1424 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-048: stable; R1 route|62|6147|4074|918c3d66d9d02284; collection lines 0; R1 662 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-049: stable; R1 route|19|776|615|3d1afa23f7ad7be0; collection lines 0; R1 318 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-050: stable; R1 route|9|204|162|7b8372744d305bc6; collection lines 0; R1 431 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-051: stable; R1 route|13|379|289|38b11cde27abea53; collection lines 0; R1 565 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-052: stable; R1 route|11|835|631|e5554942bc26c4aa; collection lines 0; R1 315 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-053: stable; R1 route|970|40735|27034|231287fa9379f747; collection lines 0; R1 1177 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-054: stable; R1 route|43|2140|1073|2e3609e3e2ff1566; collection lines 0; R1 446 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-055: stable; R1 route|573|41245|23221|2a0eb44dae11b109; collection lines 0; R1 773 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-056: stable; R1 route|143|12325|4801|e7bf4bf5745cdb7a; collection lines 0; R1 619 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-057: stable; R1 route|3140|402344|210643|636a89d48bfb1da5; collection lines 5; R1 2904 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-058: stable; R1 route|926|30686|22114|e05a9e4674845759; collection lines 0; R1 1372 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 R-hiking-mountain R-hiking-mountain-059: stable; R1 route|309|41573|19198|d8c3e4cb96e3e50; collection lines 0; R1 842 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+
+E3RTest > rOnHikingMountainIsCountedAgainstE3sStop PASSED
+
+E3F0Test > f0IsStableUnderE3AndR1IsTheCommandLineRoute STANDARD_OUT
+    E3 F0 JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/temurin/jdk-21.0.13+9
+    E3 F0: 2 cases; unstable 0 of 2; over 5%: false
+    E3 F0 F0-inside-across-the-degree-line: stable; R1 route|226|5302|5047|9ca48d05a90f4dcd; collection lines 0; R1 485 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+    E3 F0 F0-inside-long: stable; R1 route|306|7405|6713|7d242f8dd2c428b4; collection lines 0; R1 398 ms; control R1 5,0,1,2,3,4,11,6,9,7,10,8, R4 3,0,9,1,2,4,10,5,6,7,8,11,
+
+E3F0Test > f0IsStableUnderE3AndR1IsTheCommandLineRoute PASSED
+
+BUILD SUCCESSFUL in 3m 3s
+9 actionable tasks: 2 executed, 7 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html
+gradle exit 0

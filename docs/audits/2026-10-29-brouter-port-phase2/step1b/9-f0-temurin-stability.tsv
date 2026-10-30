@@ -1,0 +1,3 @@
+id	verdict	tuple-stable	log-stable	control-R1-ne-R4	R1-tuple	R2-collection-lines	R1-ms
+F0-inside-across-the-degree-line	stable	true	true	true	route|226|5302|5047|9ca48d05a90f4dcd	0	485
+F0-inside-long	stable	true	true	true	route|306|7405|6713|7d242f8dd2c428b4	0	398
