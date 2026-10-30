@@ -2217,3 +2217,44 @@ that **reach selects.**
 **A slip, corrected:** the planner's answer first cited line 889 for the generation-order sentence. A follow-up message
 corrected it to 885.
 **Notes:** Written by Cedar Datum by hand. Next free ID -52.
+
+**ID:** 2026-10-28-52
+**Timestamp:** 2026-10-30T07:42:22Z
+**Continues:** 2026-10-28-51
+**Title:** A wrong premise in -51: R1 keeps no log, so reach is read from R2; a run showing both panic and the limit
+goes to ML5; both coders hand off at the context margin
+**Decision:** Linden found two problems with -51's answer.
+- **R1 runs without `debug.txt`,** by E3's design (`E3Jvm.kt`'s R1R2 branch checks that the file is absent). The
+  "collected" and panic lines are `logInfo` only (`RoutingEngine.java:2025`, `:2031`), so they cannot be seen in
+  R1. The planner's "its log for MP64, ML5 and PM5" was a **wrong premise.**
+- **One run can show both panic mode and "memory limit reached"** [R, code; whether the data does is not known].
+  Panic mode in pass 0 or pass 1 can be followed by the limit thrown in re-tracking (`:1739-1749`, `:1796-1799`,
+  `:1893`), and a panic reset followed by an out-of-bounds collection also throws (`:1997-1998`, `:2027`).
+  Linden stopped on this, as -51 told it to.
+
+**The planner's rulings (technical):**
+- **The reach source is R2,** the same case run at once in R1's own JVM with `debug.txt` (Linden's option (i)).
+  - The selection pass is E3's R1R2 JVM over the candidates, in generation order.
+  - A candidate's reach counts only if R2's tuple equals R1's, the same rule as -50's for coverage.
+  - R3 to R6 run on the selected 59 only.
+  - ML5's mark is R1's kind. MP64's and PM5's marks are R2's log lines.
+  - **Rejected:** R5, which reads reach only after selection is already done, and a separate selection run, which
+    costs a JVM per candidate and buys nothing R2 lacks.
+- **A run showing both goes to ML5,** by its outcome (Linden's (a)).
+  - ML5 = the run's kind is "memory limit reached", whatever came before it.
+  - PM5 = R2's log shows panic mode enabled, and the kind is not the limit.
+  - The count of ML5 cases that also showed panic is reported.
+  - **Rejected:**
+    - both strata, which puts one case in two and breaks E5's per-stratum sizes;
+    - neither, which drops a real path;
+    - PM5, which would put a fixed-message outcome in the stratum J predicts by its collections.
+- **DL is unaffected.** It is selected on R1's route, with `hiking-mountain`.
+
+**Context:**
+- Plumb Ledger passed 180k tokens at 07:40:15Z, eight minutes into its session. Most of that went on reading
+  `HashMap.java` and its probes.
+- Linden passed 180k at 07:41:45Z, at 190,822.
+- Both were asked to hand off. The helpers' limit is 200k (RECORD -15).
+- **The planner's dispatches cost each session about 60k tokens before any work.** The next ones point at the
+  handoff, the governing RECORD entries and the files they name, and nothing more.
+**Notes:** Written by Cedar Datum by hand. Next free ID -53.
