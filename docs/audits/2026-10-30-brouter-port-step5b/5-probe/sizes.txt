@@ -1,0 +1,5 @@
+segments/W75_N40.rd5: 19671 caches, 82 larger than 65636 bytes, largest 191419
+segments/W75_N35.rd5: 683 caches, 0 larger than 65636 bytes, largest 43365
+segments/W70_N40.rd5: 3904 caches, 0 larger than 65636 bytes, largest 36276
+segments/E170_S50.rd5: 767 caches, 1 larger than 65636 bytes, largest 89921
+f0/W75_N40.rd5: 47 caches, 0 larger than 65636 bytes, largest 11487

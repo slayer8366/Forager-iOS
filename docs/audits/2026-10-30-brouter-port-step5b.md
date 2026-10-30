@@ -138,3 +138,71 @@ Ported line for line from 1.7.10 (Forager's `third_party` copy): `OsmLink`, `Osm
 - **`parseNodeBody`'s `MicroCache2` branch is a named "unsupported"** (RECORD -32's condition, answered below), and
   `parseNodeBody2`, `OsmNode(long)` and the `toString`s are not ported (not reached).
 - **`jvmTest` opens `java.util` to reflection** (`brouter/build.gradle.kts`), for the order test only.
+
+## The three open conditions, from data
+**How the data was taken** [C: `5-probe/`]. A scratch harness decodes every non-empty micro-cache of the five captured
+tiles on the oracle (25,072 caches: W75_N40 19,671, W70_N40 3,904, E170_S50 767, W75_N35 683, F0 47), four times each
+as the test does (known in mode 0; fresh in modes 0, 1 and 2), and writes one digest per cache and scenario.
+- **The plain jar ran twice, in two JVMs: the 25,072 lines are identical** (`cmp`; SHA-256 `282555f9…6685a` both
+  times). **No cache decoded differently between runs, so the E3-like stop is not met.**
+- **The counters** come from copies of four 1.7.10 classes (Forager's `third_party` source, equal to upstream), with
+  counters added by a script (`5-probe/src/patch.py`), first on the classpath. **That run's 25,072 lines are identical
+  to the plain jar's,** so the counters changed no decode. The same classes ran F0's two routes on both folders, and
+  they reproduce E3's expected results, (226, 5047) and (306, 6713).
+
+**-38, the largest noisy-bit count: 19, at W70_N40, degree (113, 133), sub-index 794** (a 46-byte cache), an argument
+`decodePredictedValue` passed to `decodeNoisyDiff`. No call passed more than 24. By caller [C:
+`5-probe/shadow-counters.txt`]:
+- `decodePredictedValue`: 19, against the generator's at most 24 (`StatCoderContextTest`, kind 2);
+- other `decodeNoisyDiff` calls (`NoisyDiffCoder`'s stream-read counts and `DirectWeaver`'s fixed 10): 14, first at
+  W75_N40 (105, 130) sub 51. The generator's kind 1 draws 0 to 14, so the tiles reach its edge and do not pass it;
+- `decodeNoisyNumber`: 10, `DirectWeaver`'s fixed 1, 5 and 10; the generator draws 0 to 16.
+- **Nothing exceeds the generator's range, so -38 records no finding and the test does not widen.**
+
+**-34, `fillBuffer`'s end-of-array branch: it runs on real tiles, 40,772 times, but never in a micro-cache's stream.**
+- **The cache streams: 0 times in all 25,072 caches,** 83 of them larger than `DataBuffers`' 65,636-byte `iobuffer`
+  (82 in W75_N40, up to 191,419 bytes, and 1 in E170_S50). Those 83 are decoded from an array of exactly their own size
+  (`OsmFile.java:128-130`), so their streams end where the array ends, and still none read past it [C:
+  `5-probe/sizes.txt`].
+- **Every hit is a `BitCoderContext` over a way's tag bitmap, 1 to 10 bytes long.** First at W75_N40 (105, 130) sub 0,
+  on a 1-byte array, through `BExpressionContext.decode` (`:204`) from `evaluate` (`:409`), from
+  `BExpressionContextWay.accessType` (`:116`), from `TagValueCoder.decodeTree` (`:135`), as the validator reads each way
+  tag set. F0's two routes hit it 9,402 times on the same path.
+- **So the branch is on production's path, in step 4's expression decoding over step 2a's `BitCoderContext`.**
+  `GraphDecodeTest` drives it on the port through the validator, so it is the first test to compare that branch's
+  results with the oracle's. It can do so only once the map exists.
+
+**-32, `OsmNode.java:134`'s `readUnified`: it does not run here, and cannot under Forager's settings.** Reachability
+first [R]:
+- `readUnified` at `:134` is called only by `parseNodeBody2`, and `parseNodeBody2` only by `parseNodeBody` (`:112`), for
+  a `MicroCache2`.
+- `parseNodeBody` has two callers. One is `AreaReader.java:176`, which T2 does not reach (0 methods,
+  `03-reach/out/T2/port-list.tsv`). The other is `NodesCache.obtainNonHollowNode` (`:227`), which calls it only when
+  `segment.getAndClear(id)` is true. That needs a segment with entries (`MicroCache.java:93-95`).
+- The segment comes from `OsmFile.createMicroCache` (`NodesCache.java:189`), which returns `emptyCache()`,
+  `emptyNonVirgin` (both empty), or a `MicroCache2` only when `hollowNodes` is null. That happens only under
+  `-DdisableDirectWeaving` (`NodesCache.java:58`), which nothing in Forager sets (`git grep`: only the two reads at
+  `NodesCache.java:58` and `RoutingEngine.java:94`), and which the port fixes off.
+
+The data agrees [C]:
+- every one of the 125,360 decodes the probe made (25,072 caches times four, plus the whole-tile pass) returned
+  `emptyNonVirgin` with size 0;
+- `parseNodeBody`, `parseNodeBody2` and the `:134` call counted 0 over the decodes and over F0's two routes on both
+  folders.
+
+**So `unify` is not in scope, and `parseNodeBody`'s `MicroCache2` branch stays a named "unsupported".**
+
+**Two more findings from the same data, for the planner:**
+- **`hmap` tree buckets on the captured tiles** [C]:
+  - **Production-like loads: none.** Each cache decoded into a fresh map: longest bin 3, at most 422 nodes. Every cache
+    of each tile loaded into one map in mode 1: longest bin 6, at most 3,615 nodes. F0's routes: longest bin 3.
+  - **The test's own "known" seeding: one.** That seeding puts every node of one cache in the map first (up to 15,582
+    nodes). At W75_N40 (106, 130) sub 740 (105,494 bytes), a bin reached 9 and became a tree, **and that tree holds
+    equal hashes.** The decode test's texts never use the map's order (hollow nodes are sorted), so the oracle's
+    identity-hash tie there cannot change a comparison. But a port whose `tieBreakOrder` fails as "unsupported" would
+    fail `GraphDecodeTest.w75n40` at that cache. That bears on the planner's answer.
+- **The peninsula recursion reaches depth 5,679** (W75_N40 (106, 130) sub 801, 108,012 bytes, fresh, mode 1). No
+  `StackOverflowError` was caught on this JVM's default stack. **Whether Kotlin/Native on iOS survives 5,679 frames is
+  [?]**: no iOS thread has run it. A secondary iOS thread's default stack is smaller than a JVM thread's [I]. The port
+  has no catch (above), so an overflow there would end the search, where Java on Android may survive it. This is for
+  step 10's simulator run, and for the planner.
