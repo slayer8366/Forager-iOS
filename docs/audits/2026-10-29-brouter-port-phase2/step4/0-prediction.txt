@@ -1,0 +1,27 @@
+Step 4 (expressions), mechanism prediction, twelfth session (Linden Caliper). Written before any step 4 code beyond
+599dd40's three data classes, after reading the Java (BExpressionContext, BExpression, BExpressionContextWay/Node,
+BExpressionMetaData at 1.7.10, Forager's vendored copy).
+
+What the port is: a recursive-descent parser over a token stream (BExpressionContext._parseToken), a tree of float
+operations (BExpression.evaluate), and a per-description result cache (CacheNode, VarWrapper in LruMaps).
+
+Where it can differ from the oracle, most likely first:
+1. Text: Character.isWhitespace (no-break spaces are not whitespace in Java), String.trim (Java strips <= U+0020,
+   Kotlin strips Unicode whitespace), StringTokenizer (empty tokens dropped), String.split (regex, trailing empties
+   dropped), BufferedReader.readLine (\n, \r, \r\n). Each has a Java-shaped helper in util or is written here.
+2. Numbers: Float.parseFloat, Short.parseShort, Float.toString. On the JVM, Kotlin's toFloat/toShort/toString call
+   Java's own, so jvmTest cannot see a difference here; Kotlin/Native's are separate implementations. This is a
+   simulator question, not answered by step 4's JVM tests.
+3. Exceptions: NumberFormatException is an IllegalArgumentException, so parseFile's first catch takes it (both).
+   RuntimeException(e) carries e.toString(); on the JVM the port's exceptions are Java's own classes.
+4. Iteration order: keyValues and BExpressionMetaData's listeners are HashMaps. On the JVM, Kotlin's HashMap is
+   java.util.HashMap, so the order is the same. On Kotlin/Native it is not (insertion order); Phase 1 found the
+   keyValues order changes only variable indices, not outputs.
+5. Floats: evaluate is float +, -, *, / and comparisons, in Java's operand order; no library maths, so no libm seam.
+
+Not reachable from Forager's calls (read: grep of addLookupValue's callers in btools/, all pass null):
+the asterisk block (BExpressionContext.java:576-693) runs only when lookupData2 != null, and no caller in the vendored
+source passes a non-null array. So the block is unreachable whatever lookups file is used, not only on the pinned one.
+
+Prediction for the tests on stubs: every step 4 test fails, each on a stub's NotImplementedError ("step 4"),
+0 compile errors. On the port: if any test goes red first, it will be a text-handling case (1) in the malformed set.

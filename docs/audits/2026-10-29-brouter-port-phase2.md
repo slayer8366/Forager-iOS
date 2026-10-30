@@ -47,8 +47,17 @@ Locally, jvmTest gives 54 tests and 0 failures. CI run 40975094092 on `073851b` 
 ported and green (CI `jvm` 62 tests, 0 failures, on `4436711`), and all four reverts failed as predicted. The arm64 JVM
 step runs under `-XX:DisableIntrinsic=_dcos` and read 7 of 7 on `7bf6a3d` (section "Step 3" below).
 
-**Status (2026-10-30, twelfth session, Linden Caliper, Amendment 3 Part B, step 4):** in progress from `599dd40`; this line
-is updated at each push of the session.
+**Status (2026-10-30, twelfth session, Linden Caliper, Amendment 3 Part B, step 4):** **partial, handed off on the planner's word**
+(context past 180k). The report's step 3 section is pushed (`c90f440`). For step 4, only drafts are committed, in
+`2026-10-29-brouter-port-phase2/step4/`: the mechanism prediction (`0-prediction.txt`), and a draft port of
+`BExpressionContext` (three files: 346, 117 and 175 lines) and of `BExpression` (338 lines) in `port-draft/`. That folder is
+outside `commonMain` on purpose, so the next session can still see the tests fail on stubs before the port lands.
+**Nothing compiles or has run:** `brouter/` is unchanged from `599dd40`, which does not compile. The drafts have never
+been compiled. Not written: the stubs, `BExpressionMetaData`'s port, `BExpressionContextWay`, `BExpressionContextNode`,
+`util`'s `JavaStringTokenizer`, `javaTrim` and `javaReadLines` (which the drafts import), and every step 4 test.
+**Finding [R: grep of `addLookupValue` callers in Forager's vendored `btools/`]:** every caller passes a null array,
+so the asterisk block (`BExpressionContext.java:576-693`) cannot run from Forager's calls whatever the lookups file.
+Its test has to call `addLookupValue(name, value, int[])` directly.
 
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
