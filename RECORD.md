@@ -1610,3 +1610,48 @@ The watcher read 183,441 tokens at 00:19:34Z. The harness's final count was 190,
 - **`theJvmRunsWithLibmIntrinsicsOff` checks the flag that belongs to the architecture it runs on,** so the arm64 step
   records no false failure.
 **Notes:** Written by Cedar Datum by hand. Next: those three items, then step 4 (`expressions`). Next free ID -39.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-39
+**Timestamp:** 2026-10-30T00:36:28Z
+**Continues:** 2026-10-28-3, 2026-10-28-38
+**Title:** Step 3's reverts all bite, as predicted; the arm64 step reads 7 of 7; step 4 started; the planner's rulings
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `2215741`: the runner and three predictions, committed before any run;
+- `db53413`: a runner fix;
+- `0f4fe0b`: the results;
+- `7bf6a3d`: the arch-aware flag test;
+- `599dd40`: step 4 work in progress, not compiled and not run.
+
+The watcher read 183,144 tokens at 00:34:11Z. The harness's final count was 205,613.
+- **The three reverts,** each 1 of 8 failing exactly as predicted, each restored from a saved copy:
+  - **a decoder:** `StatCoderContext.kt:72` (Java `:250`) dropping the right branch's bit. It failed at seed 1, op 3,
+    kind 3.
+  - **`MicroCache`:** `MicroCache.kt:57` (Java `:103`), `<=` to `<`. It failed at "n 2 op 0: getAndClear(247) expected
+    true but was false", so `MicroCacheTest` bites.
+  - **`DataBuffers`:** `bctx1` given its own array. It failed `DataBuffersTest` only, since `TagValueCoder` repoints
+    `bctx1` before writing.
+- **The flag test is arch-aware.** CI run 40980103184 on `7bf6a3d` is `success` in both jobs. Its `ios-smoke` log (read by
+  the planner):
+  - the simulator ran 18 of 18 (**simulator-checked**);
+  - the arm64 JVM step ran **7 tests, 0 failures**, with `theJvmRunsWithLibmIntrinsicsOff` PASSED and the gate "OK: all
+    2 classes ran".
+  - **-38's three items are closed.**
+- **Step 4 (`expressions`), started:**
+  - **26 profiles, not 27:** E's crossing profile does not exist yet.
+  - **The pinned `lookups.dat` has no `*` value,** so the block holding all nine `String.format` calls
+    (`BExpressionContext.java:576-693`) cannot run on it.
+  - Three small data classes were ported ahead of their tests, a departure from tests-first that the coder disclosed.
+- **Not kept up:** the Phase 2 report has no step 3 section and no current status line.
+
+**The planner's rulings (technical):**
+- **`BExpressionContextWay.setDecodeForbidden`** is ported as a member of the way context. T2's port list keeps it, and
+  "Any profile" (-8) keeps T2.
+- **`showErrors` and `disableExpressionCache`** become constants at Java's default, `false`. They are read with
+  `Boolean.getBoolean` (`BExpressionContext.java:85`, `:118`), and a grep of Forager's app finds no
+  `System.setProperty`, so Forager runs with both `false`.
+- **The asterisk block becomes the named "unsupported" unit,** tested with a made-up lookups file that has a `*` value.
+- **The next session first brings the Phase 2 report up to date:** a step 3 section and a current status line.
+**Notes:** Written by Cedar Datum by hand. Next: step 4 continued. Next free ID -40.
