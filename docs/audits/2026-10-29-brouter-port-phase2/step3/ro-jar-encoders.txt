@@ -1,0 +1,171 @@
+2026-10-29T23:56:37Z
+jar: brouter/build/oracle/brouter-1.7.10-ro.jar
+598b647f2384a22a43495de7aee44f31e037062ec9c317e3bcc58cf799dbd972  brouter/build/oracle/brouter-1.7.10-ro.jar
+        0  1980-02-01 00:00   btools/codec/
+      825  1980-02-01 00:00   btools/codec/DataBuffers.class
+     1665  1980-02-01 00:00   btools/codec/IntegerFifo3Pass.class
+     1459  1980-02-01 00:00   btools/codec/LinkedListContainer.class
+     7181  1980-02-01 00:00   btools/codec/MicroCache.class
+    14924  1980-02-01 00:00   btools/codec/MicroCache2.class
+     1505  1980-02-01 00:00   btools/codec/NoisyDiffCoder.class
+     4852  1980-02-01 00:00   btools/codec/StatCoderContext.class
+     1278  1980-02-01 00:00   btools/codec/TagValueCoder$TagValueSet$FrequencyComparator.class
+     1864  1980-02-01 00:00   btools/codec/TagValueCoder$TagValueSet.class
+      456  1980-02-01 00:00   btools/codec/TagValueCoder$TreeNode.class
+     4721  1980-02-01 00:00   btools/codec/TagValueCoder.class
+      285  1980-02-01 00:00   btools/codec/TagValueValidator.class
+      341  1980-02-01 00:00   btools/codec/TagValueWrapper.class
+      229  1980-02-01 00:00   btools/codec/WaypointMatcher.class
+== javap -p btools.codec.StatCoderContext
+Compiled from "StatCoderContext.java"
+public final class btools.codec.StatCoderContext extends btools.util.BitCoderContext {
+  private static java.util.Map<java.lang.String, long[]> statsPerName;
+  private long lastbitpos;
+  private static final int[] noisy_bits;
+  public btools.codec.StatCoderContext(byte[]);
+  public void assignBits(java.lang.String);
+  public static java.lang.String getBitReport();
+  public void encodeNoisyNumber(int, int);
+  public int decodeNoisyNumber(int);
+  public void encodeNoisyDiff(int, int);
+  public int decodeNoisyDiff(int);
+  public void encodePredictedValue(int, int);
+  public int decodePredictedValue(int);
+  public void encodeSortedArray(int[], int, int, int, int);
+  public void decodeSortedArray(int[], int, int, int, int);
+  static {};
+}
+== javap -p btools.codec.NoisyDiffCoder
+Compiled from "NoisyDiffCoder.java"
+public final class btools.codec.NoisyDiffCoder {
+  private int tot;
+  private int[] freqs;
+  private int noisybits;
+  private btools.codec.StatCoderContext bc;
+  private int pass;
+  public btools.codec.NoisyDiffCoder(btools.codec.StatCoderContext);
+  public btools.codec.NoisyDiffCoder();
+  public void encodeSignedValue(int);
+  public int decodeSignedValue();
+  public void encodeDictionary(btools.codec.StatCoderContext);
+  private void count(int);
+}
+== javap -p btools.codec.TagValueCoder
+Compiled from "TagValueCoder.java"
+public final class btools.codec.TagValueCoder {
+  private java.util.Map<btools.codec.TagValueCoder$TagValueSet, btools.codec.TagValueCoder$TagValueSet> identityMap;
+  private java.lang.Object tree;
+  private btools.util.BitCoderContext bc;
+  private int pass;
+  private int nextTagValueSetId;
+  public void encodeTagValueSet(byte[]);
+  public btools.codec.TagValueWrapper decodeTagValueSet();
+  public void encodeDictionary(btools.util.BitCoderContext);
+  public btools.codec.TagValueCoder(btools.util.BitCoderContext, btools.codec.DataBuffers, btools.codec.TagValueValidator);
+  public btools.codec.TagValueCoder();
+  private java.lang.Object decodeTree(btools.util.BitCoderContext, btools.codec.DataBuffers, btools.codec.TagValueValidator);
+}
+== javap -p btools.codec.TagValueCoder$TagValueSet
+Compiled from "TagValueCoder.java"
+public final class btools.codec.TagValueCoder$TagValueSet {
+  public byte[] data;
+  public int frequency;
+  public int code;
+  public int range;
+  public btools.codec.TagValueCoder$TagValueSet child1;
+  public btools.codec.TagValueCoder$TagValueSet child2;
+  private int id;
+  public btools.codec.TagValueCoder$TagValueSet(int);
+  public void encode(btools.util.BitCoderContext, int, int);
+  public boolean equals(java.lang.Object);
+  public int hashCode();
+}
+== javap -p btools.codec.MicroCache
+Compiled from "MicroCache.java"
+public class btools.codec.MicroCache extends btools.util.ByteDataWriter {
+  protected int[] faid;
+  protected int[] fapos;
+  protected int size;
+  private int delcount;
+  private int delbytes;
+  private int p2size;
+  public boolean virgin;
+  public boolean ghost;
+  public static boolean debug;
+  public static final btools.codec.MicroCache emptyNonVirgin;
+  protected btools.codec.MicroCache(byte[]);
+  public static btools.codec.MicroCache emptyCache();
+  protected void init(int);
+  public final void finishNode(long);
+  public final void discardNode();
+  public final int getSize();
+  public final int getDataSize();
+  public final boolean getAndClear(long);
+  protected final int startPos(int);
+  public final int collect(int);
+  public final void unGhost();
+  public final long getIdForIndex(int);
+  public long expandId(int);
+  public int shrinkId(long);
+  public boolean isInternal(int, int);
+  public int encodeMicroCache(byte[]);
+  public java.lang.String compareWith(btools.codec.MicroCache);
+  private java.lang.String summary();
+  private java.lang.String _compareWith(btools.codec.MicroCache);
+  public void calcDelta(btools.codec.MicroCache, btools.codec.MicroCache);
+  public void addDelta(btools.codec.MicroCache, btools.codec.MicroCache, boolean);
+  static {};
+}
+== javap -p btools.codec.MicroCache2
+Compiled from "MicroCache2.java"
+public final class btools.codec.MicroCache2 extends btools.codec.MicroCache {
+  private int lonBase;
+  private int latBase;
+  private int cellsize;
+  public btools.codec.MicroCache2(int, byte[], int, int, int);
+  public byte[] readUnified(int, btools.util.IByteArrayUnifier);
+  public btools.codec.MicroCache2(btools.codec.StatCoderContext, btools.codec.DataBuffers, int, int, int, btools.codec.TagValueValidator, btools.codec.WaypointMatcher);
+  public long expandId(int);
+  public int shrinkId(long);
+  public boolean isInternal(int, int);
+  public int encodeMicroCache(byte[]);
+}
+== javap -p btools.codec.DataBuffers
+Compiled from "DataBuffers.java"
+public final class btools.codec.DataBuffers {
+  public byte[] iobuffer;
+  public byte[] tagbuf1;
+  public btools.util.BitCoderContext bctx1;
+  public byte[] bbuf1;
+  public int[] ibuf1;
+  public int[] ibuf2;
+  public int[] ibuf3;
+  public int[] alon;
+  public int[] alat;
+  public btools.codec.DataBuffers();
+  public btools.codec.DataBuffers(byte[]);
+}
+== javap -p btools.codec.TagValueValidator
+Compiled from "TagValueValidator.java"
+public interface btools.codec.TagValueValidator {
+  public abstract int accessType(byte[]);
+  public abstract byte[] unify(byte[], int, int);
+  public abstract boolean isLookupIdxUsed(int);
+  public abstract void setDecodeForbidden(boolean);
+  public abstract boolean checkStartWay(byte[]);
+}
+== javap -p btools.codec.TagValueWrapper
+Compiled from "TagValueWrapper.java"
+public final class btools.codec.TagValueWrapper {
+  public byte[] data;
+  public int accessType;
+  public btools.codec.TagValueWrapper();
+}
+== javap -p btools.codec.WaypointMatcher
+Compiled from "WaypointMatcher.java"
+public interface btools.codec.WaypointMatcher {
+  public abstract boolean start(int, int, int, int, boolean);
+  public abstract void transferNode(int, int);
+  public abstract void end();
+  public abstract boolean hasMatch(int, int);
+}
