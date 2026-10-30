@@ -1,0 +1,10 @@
+FloatTextCommonTest (beyond the amendment, for prediction 2): written before its first run (Linden Caliper, fourteenth
+session). Expected strings were printed by java.lang.Float.toString on OpenJDK 21.0.12 in this container (FT.java:
+x / 100f for x in 0 until 30000, joined by '\n': String.hashCode -1244348794, length 195999; and 19 literals).
+
+Prediction:
+- jvmTest: 77 tests, 0 failures (the 75, plus this class's 2). On the JVM Kotlin's Float.toString is Java's, so this
+  half shows only that the pinned values were transcribed right; it cannot show a port difference.
+- ios-smoke (simulator): both pass, low confidence. Kotlin/Native and JDK 19+ both give a shortest round-trip digit
+  string, and the format rules (plain between 1e-3 and 1e7, "E" outside) are what Kotlin documents as matching. If one
+  fails, most likely the literals at the format boundaries (1.0E-4, 1.0E7) or 0.33333334, not the x / 100f range.

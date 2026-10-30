@@ -1,0 +1,314 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:compileTestKotlinJvm
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/expressions/AsteriskUnsupportedTest.kt:27:9 Inferred return type 'BExpressionLookupValue!' for 'addLookupValue' is not visible in this scope. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KTLC-14.
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/expressions/AsteriskUnsupportedTest.kt:31:9 Inferred return type 'BExpressionLookupValue!' for 'addLookupValue' is not visible in this scope. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KTLC-14.
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/expressions/AsteriskUnsupportedTest.kt:48:20 Inferred return type 'BExpressionLookupValue!' for 'addLookupValue' is not visible in this scope. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KTLC-14.
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/util/JavaLangTest.kt:18:41 This class is not recommended for use in Kotlin. Use 'kotlin.String' instead.
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/util/JavaLangTest.kt:55:32 This class is not recommended for use in Kotlin. Use 'kotlin.String' instead.
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/util/JavaTextTest.kt:25:52 This class is not recommended for use in Kotlin. Use 'kotlin.String' instead.
+
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+
+> Task :brouter:jvmTest
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=46617 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+ToolchainSmokeTest[jvm] > okioSplitsATilePathOnThisTarget[jvm] PASSED
+
+DataBuffersTest[jvm] > buffersHaveTheOraclesSizes[jvm] PASSED
+
+DataBuffersTest[jvm] > givenIobufferIsKeptAndBctx1WritesTagbuf1[jvm] PASSED
+
+MicroCacheTest[jvm] > emptyCacheIsTheOraclesEmptyCache[jvm] PASSED
+
+MicroCacheTest[jvm] > filledCachesFollowTheOracleUnderSeededOperations[jvm] PASSED
+
+NoisyDiffCoderTest[jvm] > threePassStreamsDecodeIdentically[jvm] PASSED
+
+StatCoderContextTest[jvm] > oracleEncodedStreamsDecodeIdentically[jvm] PASSED
+
+StatCoderContextTest[jvm] > noisyBitsTableEqualsTheOracles[jvm] PASSED
+
+TagValueCoderTest[jvm] > oracleEncodedTreesAndCodesDecodeIdentically[jvm] PASSED
+
+AsteriskUnsupportedTest[jvm] > withoutAnAsteriskAnUnknownValueIsRecordedAsUnknownOnBoth[jvm] PASSED
+
+AsteriskUnsupportedTest[jvm] > theOracleRecordsTheValueAndThePortThrowsTheNamedUnsupported[jvm] PASSED
+
+FloatTextCommonTest[jvm] > literalsFormatAsJavaDoes[jvm] STANDARD_OUT
+    FloatTextCommonTest: literals [0.0, 1.0, -1.0, 0.5, 3.5, 0.01, 0.07, 0.001, 1.0E-4, 9999.0, 10000.0, 1.0E7, 1.2345678E7, 100000.0, Infinity, NaN, -0.0, 299.99, 0.33333334]
+
+FloatTextCommonTest[jvm] > literalsFormatAsJavaDoes[jvm] PASSED
+
+FloatTextCommonTest[jvm] > rawValuesAboveOneThousandFormatAsJavaDoes[jvm] STANDARD_OUT
+    FloatTextCommonTest: range hash -1244348794 length 195999; samples 0.07=0.07 1.0E-4=1.0E-4
+
+FloatTextCommonTest[jvm] > rawValuesAboveOneThousandFormatAsJavaDoes[jvm] PASSED
+
+MalformedProfileTest[jvm] > malformedProfilesFailWithTheOraclesExceptionAndMessage[jvm] STANDARD_OUT
+    MalformedProfileTest: the oracle threw on 17 of 26 texts
+    MalformedProfileTest: text 0, oracle threw java.lang.IllegalArgumentException: malformed0.brf does not contain expressions for context way (old version?)
+    MalformedProfileTest: text 1, oracle threw java.lang.IllegalArgumentException: malformed1.brf does not contain expressions for context way (old version?)
+    MalformedProfileTest: text 2, oracle threw java.lang.IllegalArgumentException: ParseException malformed2.brf at line 5: unknown expression: nosuchvariable
+    MalformedProfileTest: text 3, oracle threw java.lang.IllegalArgumentException: ParseException malformed3.brf at line 5: unknown lookup value: nosuchvalue
+    MalformedProfileTest: text 4, oracle threw java.lang.IllegalArgumentException: ParseException malformed4.brf at line 5: unknown lookup name: nosuchkey
+    MalformedProfileTest: text 5, oracle threw java.lang.IllegalArgumentException: ParseException malformed5.brf at line 5: unknown expression: 1.2.3
+    MalformedProfileTest: text 6, oracle threw java.lang.IllegalArgumentException: ParseException malformed6.brf at line 7: unexpected end of file
+    MalformedProfileTest: text 7, oracle threw java.lang.IllegalArgumentException: ParseException malformed7.brf at line 7: unexpected end of file
+    MalformedProfileTest: text 8, oracle threw java.lang.IllegalArgumentException: ParseException malformed8.brf at line 4: variable name cannot contain '=': =
+    MalformedProfileTest: text 9, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 10, oracle threw java.lang.IllegalArgumentException: ParseException malformed10.brf at line 4: operator nosuchkeyword is invalid on toplevel (only 'assign' allowed)
+    MalformedProfileTest: text 11, oracle threw java.lang.IllegalArgumentException: ParseException malformed11.brf at line 7: unexpected end of file
+    MalformedProfileTest: text 12, oracle threw java.lang.IllegalArgumentException: ParseException malformed12.brf at line 5: unknown lookup name: 
+    MalformedProfileTest: text 13, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 14, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 15, oracle threw java.lang.IllegalArgumentException: ParseException malformed15.brf at line 5: unknown expression: 1e5x
+    MalformedProfileTest: text 16, oracle threw java.lang.IllegalArgumentException: ParseException malformed16.brf at line 5: unknown expression: -
+    MalformedProfileTest: text 17, oracle parsed: way [typ=31 ops=([1.0]), typ=31 ops=([2.0])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 18, oracle threw java.lang.IllegalArgumentException: ParseException malformed18.brf at line 4: cannot assign to readonly variable x
+    MalformedProfileTest: text 19, oracle threw java.lang.IllegalArgumentException: ParseException malformed19.brf at line 6: unexpected end of file
+    MalformedProfileTest: text 20, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([typ=35 ops=()])]
+    MalformedProfileTest: text 21, oracle threw java.lang.IllegalArgumentException: ParseException malformed21.brf at line 6: unknown variable: nosuchvariable
+    MalformedProfileTest: text 22, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 23, oracle parsed: way [typ=31 ops=([Infinity])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 24, oracle parsed: way [typ=31 ops=([typ=32 ops=()])]; node [typ=31 ops=([0.0])]
+    MalformedProfileTest: text 25, oracle parsed: way [typ=31 ops=([typ=32 ops=()])]; node [typ=31 ops=([0.0])]
+
+MalformedProfileTest[jvm] > malformedProfilesFailWithTheOraclesExceptionAndMessage[jvm] PASSED
+
+ProfileEvaluateTest[jvm] > everyProfileEvaluatesTheOraclesVectorsToTheOraclesBits[jvm] PASSED
+
+ProfileParseTest[jvm] > theLookupsVersionsAreTheOracles[jvm] PASSED
+
+ProfileParseTest[jvm] > everyProfileParsesToTheOraclesExpressions[jvm] PASSED
+
+MsunAgainstCTest[jvm] > atan2EqualsTheCBuildAndStrictMathPairByPair[jvm] PASSED
+
+MsunAgainstCTest[jvm] > cosEqualsTheCBuildRowByRow[jvm] PASSED
+
+MsunAgainstCTest[jvm] > cosDiffersFromStrictMathAtTheResearchsThirteenRows[jvm] PASSED
+
+MsunAtan2PairsTest[jvm] > atan2OverThePairsHashesAsBionicsDoes[jvm] PASSED
+
+MsunCosTableTest[jvm] > latitudesAreTheTables[jvm] PASSED
+
+MsunCosTableTest[jvm] > cosEqualsBionicAtEveryTableRow[jvm] PASSED
+
+MsunEdgesTest[jvm] > theRefusalIsNamedAndCarriesItsArgument[jvm] PASSED
+
+MsunEdgesTest[jvm] > cosEdges[jvm] PASSED
+
+MsunEdgesTest[jvm] > atan2Edges[jvm] PASSED
+
+MsunReferenceCommittedTest[jvm] > committedEdgesAreTheCBuilds[jvm] PASSED
+
+MsunReferenceCommittedTest[jvm] > committedCosRowsAreTheCBuilds[jvm] PASSED
+
+OracleFailureKindsTest[jvm] > fk6DataMissingAFolderWithoutTheTile[jvm] PASSED
+
+OraclePinTest[jvm] > routingEngineLoadsFromThePinnedReadOnlyJar[jvm] STANDARD_OUT
+    oracle JVM: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; jar /home/user/forager-ios/brouter/build/oracle/brouter-1.7.10-ro.jar
+
+OraclePinTest[jvm] > routingEngineLoadsFromThePinnedReadOnlyJar[jvm] PASSED
+
+BitCoderContextTest[jvm] > rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm] STANDARD_OUT
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 1: 4125 ops, reading position 32645
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 2: 4013 ops, reading position 32647
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 3: 4097 ops, reading position 32655
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 4: 3976 ops, reading position 32659
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 5: 4142 ops, reading position 32642
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 6: 4224 ops, reading position 32641
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 7: 4079 ops, reading position 32644
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 8: 4080 ops, reading position 32644
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 9: 4066 ops, reading position 32643
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 10: 4076 ops, reading position 32645
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 11: 4250 ops, reading position 32648
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 12: 4061 ops, reading position 32644
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 13: 4076 ops, reading position 32658
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 14: 4191 ops, reading position 32652
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 15: 4118 ops, reading position 32641
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 16: 4100 ops, reading position 32663
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 17: 3976 ops, reading position 32643
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 18: 4041 ops, reading position 32649
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 19: 4188 ops, reading position 32642
+    rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle seed 20: 4090 ops, reading position 32650
+
+BitCoderContextTest[jvm] > rawBitReadsWithoutResetsToThePositionBoundMatchTheOracle[jvm] PASSED
+
+BitCoderContextTest[jvm] > varBitsLookupTablesEqualTheOracles[jvm] PASSED
+
+BitCoderContextTest[jvm] > encodedStreamsAreByteIdenticalAndDecodeIdenticallyBothWays[jvm] PASSED
+
+BitCoderContextTest[jvm] > rawBitReadsOnRandomBytesMatchTheOracle[jvm] STANDARD_OUT
+    rawBitReadsOnRandomBytesMatchTheOracle seed 1: 1000000 ops, reading position 1101
+    rawBitReadsOnRandomBytesMatchTheOracle seed 2: 1000000 ops, reading position 836
+    rawBitReadsOnRandomBytesMatchTheOracle seed 3: 1000000 ops, reading position 179
+    rawBitReadsOnRandomBytesMatchTheOracle seed 4: 1000000 ops, reading position 283
+    rawBitReadsOnRandomBytesMatchTheOracle seed 5: 1000000 ops, reading position 9135
+    rawBitReadsOnRandomBytesMatchTheOracle seed 6: 1000000 ops, reading position 4094
+    rawBitReadsOnRandomBytesMatchTheOracle seed 7: 1000000 ops, reading position 3631
+    rawBitReadsOnRandomBytesMatchTheOracle seed 8: 1000000 ops, reading position 343
+    rawBitReadsOnRandomBytesMatchTheOracle seed 9: 1000000 ops, reading position 504
+    rawBitReadsOnRandomBytesMatchTheOracle seed 10: 1000000 ops, reading position 907
+    rawBitReadsOnRandomBytesMatchTheOracle seed 11: 1000000 ops, reading position 800
+    rawBitReadsOnRandomBytesMatchTheOracle seed 12: 1000000 ops, reading position 498
+    rawBitReadsOnRandomBytesMatchTheOracle seed 13: 1000000 ops, reading position 2414
+    rawBitReadsOnRandomBytesMatchTheOracle seed 14: 1000000 ops, reading position 542
+    rawBitReadsOnRandomBytesMatchTheOracle seed 15: 1000000 ops, reading position 1487
+    rawBitReadsOnRandomBytesMatchTheOracle seed 16: 1000000 ops, reading position 3750
+    rawBitReadsOnRandomBytesMatchTheOracle seed 17: 1000000 ops, reading position 8644
+    rawBitReadsOnRandomBytesMatchTheOracle seed 18: 1000000 ops, reading position 868
+    rawBitReadsOnRandomBytesMatchTheOracle seed 19: 1000000 ops, reading position 481
+    rawBitReadsOnRandomBytesMatchTheOracle seed 20: 1000000 ops, reading position 420
+
+BitCoderContextTest[jvm] > rawBitReadsOnRandomBytesMatchTheOracle[jvm] PASSED
+
+ByteArrayUnifierTest[jvm] > constructsAndRefusesUnifyAsUnsupported[jvm] PASSED
+
+ByteDataTest[jvm] > aNullArrayHasNoDataOnBoth[jvm] PASSED
+
+ByteDataTest[jvm] > fixedWidthReadsOnRandomBytesMatchTheOracle[jvm] PASSED
+
+ByteDataTest[jvm] > varLengthStreamsAreByteIdenticalAndReadIdenticallyBothWays[jvm] PASSED
+
+CheapLogicRunTest[jvm] > calcAngleEqualsTheOraclesWithItsTable[jvm] STANDARD_OUT
+    calcAngle branches (dd==0, +90, -90, cosp<0, plain): [20166, 39680, 39456, 50453, 50245]
+
+CheapLogicRunTest[jvm] > calcAngleEqualsTheOraclesWithItsTable[jvm] PASSED
+
+CheapLogicRunTest[jvm] > portTableArithmeticGivesTheOraclesTableFromTheOraclesCos[jvm] PASSED
+
+CheapLogicRunTest[jvm] > theJvmRunsWithLibmIntrinsicsOff[jvm] STANDARD_OUT
+    JVM: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; [-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts, -Djavax.net.ssl.trustStoreType=JKS, -Dhttps.proxyHost=127.0.0.1, -Dhttps.proxyPort=46617, -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local, -Djdk.http.auth.tunneling.disabledSchemes=, -Djdk.http.auth.proxying.disabledSchemes=, -Dbrouter.msunref.dir=/home/user/forager-ios/brouter/build/msun-ref, -Dbrouter.oracle.dir=/home/user/forager-ios/brouter/build/oracle, -Dorg.gradle.internal.worker.tmpdir=/home/user/forager-ios/brouter/build/tmp/jvmTest/work, -XX:+UnlockDiagnosticVMOptions, -XX:-UseLibmIntrinsic, -Xmx512m, -Dfile.encoding=UTF-8, -Duser.country=US, -Duser.language=en, -Duser.variant, -ea]
+
+CheapLogicRunTest[jvm] > theJvmRunsWithLibmIntrinsicsOff[jvm] PASSED
+
+CheapLogicRunTest[jvm] > distanceEqualsTheOraclesWithItsTable[jvm] PASSED
+
+CheapLogicRunTest[jvm] > angleFunctionsEqualTheOracles[jvm] PASSED
+
+CheapProductionRecordTest[jvm] > productionAnglesEqualTheOraclesAtEveryPair[jvm] STANDARD_OUT
+    record: production getDirection differs from the oracle's at 0 of 1199896
+
+CheapProductionRecordTest[jvm] > productionAnglesEqualTheOraclesAtEveryPair[jvm] PASSED
+
+CheapProductionRecordTest[jvm] > productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm] STANDARD_OUT
+    # production vs oracle: row, cos (msun, oracle, ulps), kx (msun, oracle, ulps), ky (msun, oracle, ulps)
+    record 474 3fe792f1a5f1a301 3fe792f1a5f1a302 -1 3fb506d9d464f388 3fb506d9d464f389 -1 3fbc6fe80e97c2ba 3fbc6fe80e97c2ba 0
+    record 488 3fe8187d4df026e7 3fe8187d4df026e6 1 3fb57d834d0d241c 3fb57d834d0d241b 1 3fbc6e1b3c7c650d 3fbc6e1b3c7c650d 0
+    record 502 3fe89a5a2f91abe3 3fe89a5a2f91abe4 -1 3fb5f0dfc9b78999 3fb5f0dfc9b7899a -1 3fbc6c51a397a2ad 3fbc6c51a397a2ad 0
+    record 663 3fed4ffa843680f9 3fed4ffa843680f8 1 3fba1e6d8426d0e1 3fba1e6d8426d0e0 1 3fbc59fd27d9c980 3fbc59fd27d9c980 0
+    record 675 3fed93276ca82f5f 3fed93276ca82f5e 1 3fba59f08baa7fdd 3fba59f08baa7fdc 1 3fbc58e03a2da9db 3fbc58e03a2da9db 0
+    record 1046 3feef5ab2285fb8b 3feef5ab2285fb8c -1 3fbb93db33dd6d36 3fbb93db33dd6d37 -1 3fbc52d7bffa21b1 3fbc52d7bffa21b1 0
+    record 1053 3feedbc3d50ec941 3feedbc3d50ec940 1 3fbb7ced92cef1e7 3fbb7ced92cef1e6 1 3fbc534aeb6ed1dc 3fbc534aeb6ed1dc 0
+    record 1079 3fee7142d9d7473f 3fee7142d9d74740 -1 3fbb1ea472a72d6a 3fbb1ea472a72d6b -1 3fbc55209bf5e309 3fbc55209bf5e309 0
+    record 1295 3fe8ac99543503a1 3fe8ac99543503a0 1 3fb60114bab6e1fe 3fb60114bab6e1fd 1 3fbc6c10983ff7f4 3fbc6c10983ff7f4 0
+    record 1297 3fe89a5a2f91abe3 3fe89a5a2f91abe4 -1 3fb5f0dfc9b78999 3fb5f0dfc9b7899a -1 3fbc6c51a397a2ad 3fbc6c51a397a2ad 0
+    record 1310 3fe821e371511239 3fe821e37151123a -1 3fb585dcfe3549c8 3fb585dcfe3549c9 -1 3fbc6dfa6e4ffc42 3fbc6dfa6e4ffc42 0
+    record 1311 3fe8187d4df026e7 3fe8187d4df026e6 1 3fb57d834d0d241c 3fb57d834d0d241b 1 3fbc6e1b3c7c650d 3fbc6e1b3c7c650d 0
+    record 1318 3fe7d62c0f81771d 3fe7d62c0f81771e -1 3fb54297186f120a 3fb54297186f120b -1 3fbc6f014fe5ad29 3fbc6f014fe5ad29 0
+    record: cos differs at 13 rows, kx or ky at 13: [474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297, 1310, 1311, 1318]
+
+CheapProductionRecordTest[jvm] > productionTableDiffersFromTheOraclesOnlyAtTheThirteenRows[jvm] PASSED
+
+CheapProductionTableTest[jvm] > scalesAreLookedUpByIlatOver100000AsJavaDoes[jvm] PASSED
+
+CheapProductionTableTest[jvm] > productionTableIsMsunsAtEveryRow[jvm] PASSED
+
+Crc32Test[jvm] > crcOfSeededSlicesEqualsTheOracles[jvm] PASSED
+
+JavaLangCommonTest[jvm] > javaRoundGivesJavasAnswers[jvm] PASSED
+
+JavaLangCommonTest[jvm] > javaIsWhitespaceGivesJavasAnswers[jvm] PASSED
+
+JavaLangCommonTest[jvm] > javaSplitGivesJavasAnswers[jvm] PASSED
+
+JavaLangTest[jvm] > javaIsWhitespaceEqualsCharacterIsWhitespaceOnEveryChar[jvm] PASSED
+
+JavaLangTest[jvm] > javaSplitEqualsStringSplitForEveryRegexTheReachedCodePasses[jvm] PASSED
+
+JavaLangTest[jvm] > theCommonCasesExpectedValuesAreTheJdks[jvm] PASSED
+
+JavaLangTest[jvm] > javaRoundEqualsMathRound[jvm] PASSED
+
+JavaTextCommonTest[jvm] > javaTrimGivesJavasAnswers[jvm] PASSED
+
+JavaTextCommonTest[jvm] > javaReadLinesGivesJavasLines[jvm] PASSED
+
+JavaTextCommonTest[jvm] > javaStringTokenizerGivesJavasTokens[jvm] PASSED
+
+JavaTextTest[jvm] > javaReadLinesEqualsBufferedReaderReadLine[jvm] PASSED
+
+JavaTextTest[jvm] > theCommonCasesExpectedValuesAreTheJdks[jvm] PASSED
+
+JavaTextTest[jvm] > javaTrimEqualsStringTrimOnEveryCharAndOnSeededStrings[jvm] PASSED
+
+JavaTextTest[jvm] > javaStringTokenizerEqualsStringTokenizer[jvm] PASSED
+
+LongMapTest[jvm] > duplicateKeysFailAsTheOracleFails[jvm] PASSED
+
+LongMapTest[jvm] > compactAndFrozenMapsAnswerAsTheOracleDoes[jvm] PASSED
+
+LruMapTest[jvm] > cacheTrafficHitsAndEvictsAsTheOracleDoes[jvm] PASSED
+
+PlatformInvariantsExpectedTest[jvm] > tableConstantsAreMsunsCosThroughTheOraclesArithmetic[jvm] STANDARD_OUT
+    internal val EXPECTED_TABLE_CHUNKS: List<String> = listOf(
+        "ea4210e831972a74", "daf50cffc1163a72", "4d8db266992ec9c0", "08d2b644a387ce5a",
+        "3e8a28495737234f", "8dc9c2991cebf9e8", "f6f06909e13a8363", "2376e0e833ce758a",
+        "2e6d23ce0cd4a60d", "33d899c52a32b689", "a415bd6caf03de51", "0d47a4aacf924679",
+        "1fb130b5d3d95d40", "cbf66173f950da2d", "45b319af5e2d51d8", "98f14df8061117d7",
+        "09c804733ff1e5e8", "2d49237ccc68520d",
+    )
+
+PlatformInvariantsExpectedTest[jvm] > tableConstantsAreMsunsCosThroughTheOraclesArithmetic[jvm] PASSED
+
+PlatformInvariantsExpectedTest[jvm] > angleConstantsAreTheOraclesOwn[jvm] STANDARD_OUT
+    internal val EXPECTED_ANGLE_CHUNKS: List<String> = listOf(
+        "97891f18c709d33c", "c5b083337e7bda1c", "97e823e03d0a770c", "1d2d159102d15cd5",
+        "8c7267420d8cd1a6", "bc9123ef7f85be55", "4dddf67c81a43c1c", "4f25f73f5f8deeb3",
+        "b010fa208317b1f9", "1dc3820d0ad353cb", "22885ad1432321f4", "8ec7b9af3182f1fb",
+        "544f01e5f7e34943", "d261ccb31e136089", "077760113e0535d2", "55522d437d05db70",
+        "fd5aee52b40b4110", "880cf56bf6072bb1", "780064a5c33275e3", "a70708ca159aed93",
+        "37a6fc5c0860583f", "e49ec9771f676c3e", "1346e5f2b4520ada", "c6f60f7885b04c16",
+        "2a0ba60fa62b7d51", "5a5ee2b367bf6a47", "e3cc80e436c97474", "e2dd80bca492bdd1",
+        "d082b71a5442b107", "a410b7aaa9df8ba1",
+    )
+
+PlatformInvariantsExpectedTest[jvm] > angleConstantsAreTheOraclesOwn[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > remainderIsJavas[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > doubleToIntIsJavas[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > productionAnglesMatchTheJvmDigests[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > multiplyThenAddIsNeverFused[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > oneUlpInOneRowChangesItsChunksDigest[jvm] PASSED
+
+PlatformInvariantsTest[jvm] > productionTableMatchesTheJvmDigests[jvm] PASSED
+
+SortedHeapTest[jvm] > fewDistinctKeysPopInTheOraclesOrder[jvm] PASSED
+
+SortedHeapTest[jvm] > allKeysEqualPopInTheOraclesOrder[jvm] PASSED
+
+SortedHeapTest[jvm] > aLargeHeapThroughManyBinsPopsInTheOraclesOrder[jvm] PASSED
+
+SortedHeapTest[jvm] > clearAndEmptyPopsMatchTheOracle[jvm] PASSED
+
+BUILD SUCCESSFUL in 19s
+7 actionable tasks: 3 executed, 4 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

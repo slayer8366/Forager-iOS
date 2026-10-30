@@ -896,6 +896,14 @@ text case in the malformed set.
   tests, 0 failures, 0 errors, 0 skipped, in 33 files, read from the JUnit XML after the results folder was deleted
   before the run. The sample: `forEveryProfile` fails unless 26 profiles were checked (`ExpressionsEngines.kt:90`)
   [R], and `MalformedProfileTest` prints "the oracle threw on 17 of 26 texts", as on the stubs [R].
+- **Beyond the amendment: `FloatTextCommonTest` (commonTest), for prediction 2.** Without it the simulator runs no
+  test that reaches `Float.toString`, since every step 4 test needs the oracle and is JVM-only. It pins Java's strings,
+  printed by `java.lang.Float.toString` on OpenJDK 21.0.12 here (`step4/10-floattext-FT.java`), not by Kotlin: `x / 100f`
+  for x below 30,000 (the raw values 1000 + x `getKeyValueDescription` formats) as one hash and length, and 19
+  literals. Prediction at `step4/9-floattext-prediction.txt`. Locally [C: `step4/11-floattext-jvmTest.log`,
+  `step4/12-floattext-junit.txt`]: 0 compile errors, 77 tests, 0 failures. On the JVM it shows only that the values
+  were transcribed right; it cannot fail there for a port reason. Never seen failing: it tests the platform, not port
+  code, so there is no stub to fail it on.
 
 ## Confirmed vs inferred
 
