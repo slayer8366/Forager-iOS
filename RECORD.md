@@ -1691,3 +1691,53 @@ The watcher read 181,440 tokens at 00:46:38Z. The harness's final count was 198,
 - **Its test calls `addLookupValue(name, value, int[])` directly,** with a non-null array, on both engines: the oracle
   records the value, and the port throws the named "unsupported". A made-up lookups file is not needed.
 **Notes:** Written by Cedar Datum by hand. Next: step 4 continued, from `18e8386`. Next free ID -41.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-41
+**Timestamp:** 2026-10-30T01:03:52Z
+**Continues:** 2026-10-28-3, 2026-10-28-40
+**Title:** Step 4: Java's text helpers ported, stubs compile, and step 4's six tests seen failing; the port is next
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `090d2e5`: the report's sizes corrected;
+- `c350bda`: `util/JavaText.kt`, tests first;
+- `0c17b17`: the stubs;
+- `b70987e`: a CI change;
+- `35dea70`: step 4's tests and evidence, with the test list in the report.
+
+The watcher read 180,254 tokens at 01:02:11Z. The harness's final count was 192,868.
+- **The test list had lived only in a message.** The twelfth session's items 5 and 6 were not in the report. The planner
+  sent them verbatim, with -40's correction, at the coder's request, and they are now in the report's step 4 section.
+- **`JavaText`:** 6 of 7 failed on the stubs, each on its own helper, then 7 of 7 passed. Its common cases also run on
+  the simulator. No revert yet.
+- **The stubs:** the module compiles; locally 69 tests, 0 failures.
+- **Step 4's tests,** with a prediction written first:
+  - locally 75 tests, 6 failures, the six step 4 tests, all on the stub `setForeignContext`;
+  - the 26-profile tests read "26 of 26 … setForeignContext=26";
+  - the oracle threw `IllegalArgumentException` on 17 of the 26 malformed texts.
+  - **Limit, disclosed:** every test fails in the shared setup, not at the member it exists for. Which tests bite where
+    is shown only once the port lands.
+- **The CI change (`b70987e`):** the `jvm` job's iOS klibs step runs after a red JVM step too (`if: !cancelled()`), so
+  a tests-first commit still shows whether iOS compiles. The job still fails when the JVM step does.
+- **CI read by the planner:**
+  - `c350bda` and `b70987e`: `success`;
+  - `090d2e5`: `failure`, as expected for a docs-only commit on `18e8386`'s uncompiled tree;
+  - `35dea70`: in progress at recording, expected red on the stubs.
+- **Calls beyond the amendment:**
+  - a placeholder `BExpressionContext` so `JavaText` could compile;
+  - `readMetaData(FileSystem, Path)`;
+  - one extra test, for an unknown value without an asterisk;
+  - the asterisk test first adds a `*` value through Java's own `addLookupValue(…, null)`;
+  - the port's message "unsupported: addLookupValue's asterisk block".
+- **Unverified:**
+  - every CI count;
+  - the iOS klibs locally (Maven Central 429);
+  - `parseFile`'s `RuntimeException` branch;
+  - text decoding, okio against Java's `FileReader`.
+
+**The planner's call (technical):**
+- The b70987e CI change stands. It shows more and hides nothing.
+- **Step 4's revert, after the port, adds a second check.** It changes the parser, not only the evaluator's `min`, so the
+  parse tests are shown to bite at their own member.
+**Notes:** Written by Cedar Datum by hand. Next: step 4's port. Next free ID -42.
