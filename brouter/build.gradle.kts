@@ -33,6 +33,30 @@ val msunReference by tasks.registering(Exec::class) {
     commandLine("bash", refTools.file("build-ref.sh").asFile.absolutePath, msunRefDir.get().asFile.absolutePath)
 }
 
+// Item I, step 1 (Amendment 3 Part B; RECORD -45): the four brouter.de tiles and F0's fixture, fetched from the
+// Forager-iOS release by tools/fetch-tiles.sh into build/tiles, each refused unless its size and SHA-256 match
+// tools/tile-pins.tsv (a byte-for-byte copy of the release's own pin file). Nothing is committed. jvmTest is the first
+// task whose tests read a tile (tiles/TilePinsTest), so the fetch hangs off it; only jvmTest sees the tiles.
+val tilesRelease = "https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30"
+val tilesDir = layout.buildDirectory.dir("tiles")
+val tilePins = rootProject.layout.projectDirectory.file("tools/tile-pins.tsv")
+val fetchTiles by tasks.registering(Exec::class) {
+    description = "Fetches the pinned tiles from the brouter-tiles-2026-10-30 release, refusing any that differs from its pin."
+    val scripts = rootProject.layout.projectDirectory.dir("tools")
+    inputs.file(scripts.file("fetch-tiles.sh"))
+    inputs.file(scripts.file("fetch-pinned.sh"))
+    inputs.file(tilePins)
+    inputs.property("release", tilesRelease)
+    outputs.dir(tilesDir)
+    commandLine(
+        "bash",
+        scripts.file("fetch-tiles.sh").asFile.absolutePath,
+        tilesDir.get().asFile.absolutePath,
+        tilesRelease,
+        tilePins.asFile.absolutePath,
+    )
+}
+
 kotlin {
     jvm {
         compilerOptions {
@@ -57,8 +81,10 @@ kotlin {
 }
 
 tasks.named<Test>("jvmTest") {
-    dependsOn(fetchOracle, msunReference)
+    dependsOn(fetchOracle, msunReference, fetchTiles)
     systemProperty("brouter.oracle.dir", oracleDir.get().asFile.absolutePath)
+    systemProperty("brouter.tiles.dir", tilesDir.get().asFile.absolutePath)
+    systemProperty("brouter.tiles.pins", tilePins.asFile.absolutePath)
     systemProperty("brouter.msunref.dir", msunRefDir.get().asFile.absolutePath)
     // The planner's call (RECORD -24): the oracle runs with libm's intrinsics off, so HotSpot's Math.cos is fdlibm's.
     // -XX:-UseLibmIntrinsic exists only on x86 (RECORD -21). An aarch64 HotSpot refuses it and does not start: seen on
