@@ -1,0 +1,21 @@
+107:    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+108:    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+110:CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+114:    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+116:CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+175:    5b hmap order: seed 1 refused at op 9213, an equal-hash tree bucket
+176:    5b hmap order: seed 2 refused at op 15389, an equal-hash tree bucket
+177:    5b hmap order: seed 3 refused at op 21335, an equal-hash tree bucket
+178:    5b hmap order: seed 4 refused at op 9087, an equal-hash tree bucket
+179:    5b hmap order: seed 7 refused at op 13792, an equal-hash tree bucket
+180:    5b hmap order: seed 8 refused at op 17160, an equal-hash tree bucket
+181:    5b hmap order: seed 9 refused at op 20611, an equal-hash tree bucket
+182:    5b hmap order: seed 11 refused at op 7063, an equal-hash tree bucket
+183:    5b hmap order: 12 seeds; ops 273650, order_checks 1368, tree_bins 137, put_into_tree 713, remove_from_tree 620, resize_with_tree 14, tree_to_list 13, equal_hash_list_bins 552, max_size 78949, refused 8
+185:NodeHashMapOrderTest[jvm] > iterationOrderAndAnswersEqualJavaUtilHashMapsOnSeededOsmNodeKeys[jvm] FAILED
+189:    5b tie-break determinism: 3 maps, 3025 keys at the end; numbers given 50; tie-break calls 156, 156, 324, 369
+457:101 tests completed, 3 failed
+459:> Task :brouter:jvmTest FAILED
+470:BUILD FAILED in 6m 9s
+473:real	6m9.959s
+476:gradle exit 1

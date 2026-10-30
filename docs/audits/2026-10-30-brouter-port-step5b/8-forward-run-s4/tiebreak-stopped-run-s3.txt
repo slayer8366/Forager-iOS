@@ -1,0 +1,7 @@
+The third session's tie-break count run (scratch /tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/5b/tiebreak/runs/), as found by the fourth session on 2026-10-30
+after the planner stopped that session and its run with it:
+- status.txt: "regions exit 0", "routes exit 0"; no "decode exit" line and no "done" line. The decode did not finish.
+- decode.txt: 14348 lines (the full run writes 25,072 cache lines plus its # lines).
+- '# tie' lines in it: 1, the same one the third session reported:
+  # tie W75_N40 (106,130) sub 740 (105494 bytes) | known seeding | OsmNode treeify 19 putTreeVal 0 | other 0 0
+Not cited as a total. The planner's instruction: re-run after the map is written (third session's handoff, step 1).

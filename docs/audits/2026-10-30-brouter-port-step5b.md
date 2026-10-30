@@ -5,7 +5,11 @@ the owner's to choose), second session. Branch `brouter-port-5b`, cut from `orig
 planner's merge of 5a. The base was checked against the remote first: `git ls-remote` gave `brouter-port` at
 `9f41799dc20a`, so the primary had not pushed since [C]. Evidence in `2026-10-30-brouter-port-step5b/`.
 
-**Status (2026-10-30, third session, Plumb Ledger): partial. Handed off at the planner's request** (180,380 tokens at
+**Status (2026-10-30, fourth session, Plumb Ledger): partial, red. Handed off at the planner's request** (182k tokens,
+08:00Z). The map is written (`1a5a25f`); the forward run is 101 tests with 3 failures. See "Fourth session" and its
+handoff, which replace the third session's.
+
+**Earlier status (third session): partial. Handed off at the planner's request** (180,380 tokens at
 07:40Z), after RECORD -50's answer. This session wrote no code. It traced `put`'s callers and counted `tieBreakOrder` on
 the regions, the routes and part of the decodes; see "Third session" and the handoff at the end, which replaces the
 second session's. Done and pushed by the second session:
@@ -288,7 +292,72 @@ planner's clone.
 
 **Nothing else was built.** No `NodeHashMap`, no test, no `cleanupPeninsulas` change, and no revert run.
 
-## Handoff: what remains, in order (third session's, replacing the second's)
+## Fourth session: the map written; the forward run red on 3; handed off
+Base: `brouter-port-5b` at `7ce67e2`, equal to `origin/brouter-port-5b` after a fetch [C]. RECORD -50 and -53 read.
+
+**Done, in `1a5a25f` (pushed):**
+- `NodeHashMap` in three files, from the pinned `HashMap.java` (SHA-256 `71c8d822…` re-checked [C]), keys and values
+  separate: `NodeHashMap.kt` (core, iterator, stand-in), `NodeHashMapTreeInsert.kt`, `NodeHashMapTreeRemove.kt`.
+- The stand-in as -50 and -53 answer: `OsmNode.tieBreakId`, one counter per map (`tieBreakIdsAssigned`), and a named
+  "unsupported" in `tieBreakOrder` when the classes differ. The guard has no test [unverified].
+- **Calls beyond the handoff's design (for the planner to confirm):**
+  - a second counter, `tieBreakCalls`, read only by the new test, so it can show ties in `treeifyBin`/`putTreeVal`, in
+    `split`'s `treeify` and after the removes;
+  - the JVM's "log when it fires" is one `System.err` line; the port has no logging facility;
+  - `revert-runner.sh` takes an optional file, forward line and reverted line, with its defaults unchanged.
+- `cleanupPeninsulas`: `expect`/`actual` `runCatchingStackOverflow` (new `jvmMain` and `iosMain` source sets; the first
+  `actual`s in this module). The klibs were not compiled locally [unverified]; CI on `1a5a25f` was not read.
+- `NodeHashMapTieBreakTest` in `commonTest`.
+- Predictions pushed before any revert: `7-tiebreak-revert-prediction.md`, and an addendum to `4-revert-prediction.md`
+  (its total was 10; its own per-class lines sum to 7).
+
+**The forward run** (step 5), `:brouter:jvmTest --max-workers=2 --offline` from an emptied results folder, 6 min 10 s,
+0 `e:` lines: **101 tests, 3 failures, 0 errors** [C: `8-forward-run-s4/`].
+- **Passed:** `NodeHashMapTieBreakTest` (3 maps, 3,025 keys, 50 numbers given, tie-break calls 156, 156, 324, 369, so
+  ties were seen at the group inserts, in `split` and after the removes); `GraphDecodeTest` 5 of 5, with the real map.
+- **`CollectOutreachersTest`, 2 of 2 fail,** both at segments/W75_N40 around (105, 130) sub 735, 6 caches: mode 1
+  `oracle [C 38715 41099 41099] port [C 39396 37387 37387]`, mode 2 `oracle [C 21909 41099 41099] port [C 22106 39455
+  39455]`, each at line 1 of the transcript. **The port's catch fired 3 times** in that class (log lines 107, 108, 114).
+  - Whether the oracle overflowed there too is [?]: its catch is silent.
+  - **Not diagnosed; no fix tried.** [I], untested: on one thread, the port's recursion frame may be larger than the
+    oracle's, so the port overflows where the oracle does not, or at another point. If so, RECORD -50's premise that
+    the JVM catch "keeps logic runs equal" fails on this region. That is a question for the planner, not a fix to choose.
+- **`NodeHashMapOrderTest` fails its own refusal assertion:** 8 of 12 seeds refused for an equal-hash tree bucket
+  (seeds 1, 2, 3, 4, 7, 8, 9, 11; log lines 175-183). This test had never run past the stub. Its generator does not keep
+  equal-hash tree buckets out. No order or answer mismatch was reported before a refusal [I: `runSeed` not re-read].
+  Not touched: RECORD -50 says the order test "keeps refusing" these buckets, so changing the generator or the
+  assertion is the planner's call.
+
+**Not done:** both reverts, the tie-break count, CI, and closing the report. The third session's count run was stopped
+with its session, incomplete (`8-forward-run-s4/tiebreak-stopped-run-s3.txt`).
+
+## Handoff: what remains, in order (fourth session's, replacing the third's)
+Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`. First check that `origin/brouter-port-5b` is the commit that
+added this section. Scratch is `/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/5b/`.
+1. **Read CI on that commit:** `jvm` (expect 101 with these 3 failures), both klibs' `e:` lines (the first `actual`s),
+   the simulator count (24 with the new test, simulator-checked), and arm64 with its gate.
+2. **Two questions go to the planner** (sent by the planner, from this report): the `CollectOutreachersTest` overflow
+   and the order test's refusals, both above.
+3. **Data before any fix, on the overflow:** re-run only `CollectOutreachersTest` with a larger test stack from a
+   scratch init script, never committed (`allprojects { tasks.withType<Test>().configureEach { jvmArgs("-Xss1g") } }`,
+   `./gradlew --max-workers=2 --offline -I <init> :brouter:jvmTest --tests '*CollectOutreachersTest*'`). Write the
+   prediction first. Read whether the catch line still prints, and whether the oracle's `C` line changes from the
+   values above (if it does, the oracle overflowed on the default stack too). That `-Xss` reaches the test worker
+   thread is [I].
+4. **The reverts,** only once the forward is green, or after their predictions are restated for a red forward:
+   - `bash docs/audits/2026-10-30-brouter-port-step5b/revert-runner.sh /home/user/forager-ios-5a <scratch>/revert-dw`
+     against `4-revert-prediction.md` (7 failures of 101);
+   - `bash docs/audits/2026-10-30-brouter-port-step5b/revert-runner.sh /home/user/forager-ios-5a <scratch>/revert-tb
+     brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/NodeHashMap.kt
+     'node.tieBreakId = tieBreakIdsAssigned' 'node.tieBreakId = kotlin.random.Random.nextInt(1, Int.MAX_VALUE)'`
+     against `7-tiebreak-revert-prediction.md` (1 failure of 101);
+   - after each, the runner's `restore.txt` must show `cmp` identical and the forward line, and `git diff --stat`
+     must still show the forward change.
+5. **The tie-break count:** move scratch `tiebreak/runs` aside, then rebuild and run as the third session's handoff,
+   step 1, below, says. Report the totals, every `# tie` line, and the cache-line SHA-256 check.
+6. **Close:** a section answering RECORD -50 point by point; mark this report done; push; tell the planner.
+
+## Handoff: what remains, in order (third session's, superseded by the fourth's above)
 A fresh session reads this handoff, RECORD -50, and the files named here. It works in clone `/home/user/forager-ios-5a`,
 branch `brouter-port-5b`, and first checks that `origin/brouter-port-5b` is the commit that added this section.
 Scratch is `/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/5b/`; check it before relying on
