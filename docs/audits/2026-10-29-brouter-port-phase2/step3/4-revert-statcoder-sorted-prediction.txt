@@ -1,0 +1,15 @@
+Step 3, RECORD -38's first revert: one in a decoder. Written and committed before the run.
+
+Site: StatCoderContext.kt:72, the port of StatCoderContext.java:250, decodeSortedArray's second branch:
+    decodeSortedArray(values, offset + size1, size2, nextbitpos - 1, v or (1 shl nextbitpos))
+ -> decodeSortedArray(values, offset + size1, size2, nextbitpos - 1, v)
+The decoder then reads the same bits but never sets the bit of a right-hand branch.
+
+Prediction:
+- StatCoderContextTest.oracleEncodedStreamsDecodeIdentically fails at seed 1, at the first kind-3 op whose n >= 2 with
+  two distinct values, on the oracle-against-port line: the message starts "seed 1 op <i> kind 3" with no
+  ": round trip" after it. (n = 1 takes the last-choice shortcut and n = 0 decodes nothing, so neither can fail.)
+- The other 7 pass: noisyBitsTableEqualsTheOracles; NoisyDiffCoderTest and TagValueCoderTest, which never call
+  decodeSortedArray (grep: its only callers outside StatCoderContext.kt are StatCoderContextTest.kt:100-101); both
+  DataBuffersTest; both MicroCacheTest.
+- So 1 of 8 fails, with 0 compile errors.

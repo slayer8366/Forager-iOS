@@ -1,0 +1,17 @@
+Step 3, RECORD -38: "DataBuffers is allocation only; say whether a revert can bite there at all." Written and
+committed before the run.
+
+The answer by reading: DataBuffers has two things a revert can change: the nine allocations' sizes, which
+DataBuffersTest.buffersHaveTheOraclesSizes compares one by one against the oracle's, and one aliasing, bctx1 writing
+into tagbuf1 (DataBuffers.java:11), which givenIobufferIsKeptAndBctx1WritesTagbuf1 checks. So a revert can bite there,
+but only in DataBuffersTest: the one codec reader of bctx1, TagValueCoder, calls ctx.reset(tagbuf1) before writing
+(TagValueCoder.kt:41; TagValueCoder.java:97), so the aliasing is invisible to it.
+
+The run, to make that computed rather than read. Site: DataBuffers.kt:9:
+    var bctx1: BitCoderContext = BitCoderContext(tagbuf1)   ->   var bctx1: BitCoderContext = BitCoderContext(ByteArray(256))
+
+Prediction:
+- DataBuffersTest.givenIobufferIsKeptAndBctx1WritesTagbuf1 fails on assertContentEquals(j.tagbuf1, k.tagbuf1): the
+  port's tagbuf1 stays all zero. The encoded-length line before it passes (the same values into a 256-byte buffer).
+- buffersHaveTheOraclesSizes passes; TagValueCoderTest passes (the reset above); the other 5 pass.
+- So 1 of 8 fails, with 0 compile errors.

@@ -1,0 +1,16 @@
+Step 3, RECORD -38's second revert: one in MicroCache, so that MicroCacheTest is shown to bite. Written and committed
+before the run.
+
+Site: MicroCache.kt:57, the port of MicroCache.java:103, getAndClear's binary search:
+    if (nn < size && a[nn] <= id) {   ->   if (nn < size && a[nn] < id) {
+The search then stops at the last id strictly below the probe, so an id held at any index >= 1 is never found.
+
+Prediction:
+- MicroCacheTest.filledCachesFollowTheOracleUnderSeededOperations fails at "n 2", the first size with an index >= 1
+  (size 0 returns before the search; size 1 has p2size 1, so the loop never moves n off 0), at the first probe of
+  ids[1]: the message "n 2 op <i>: getAndClear(<id>) expected:<true> but was:<false>". The getAndClear line comes
+  before the state line, so the state line is not reached.
+- MicroCacheTest.emptyCacheIsTheOraclesEmptyCache passes (size 0).
+- The other 6 pass (StatCoderContextTest x2, NoisyDiffCoderTest, TagValueCoderTest, DataBuffersTest x2): none of
+  them constructs a MicroCache.
+- So 1 of 8 fails, with 0 compile errors.
