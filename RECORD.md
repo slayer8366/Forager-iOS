@@ -1655,3 +1655,39 @@ The watcher read 183,144 tokens at 00:34:11Z. The harness's final count was 205,
 - **The asterisk block becomes the named "unsupported" unit,** tested with a made-up lookups file that has a `*` value.
 - **The next session first brings the Phase 2 report up to date:** a step 3 section and a current status line.
 **Notes:** Written by Cedar Datum by hand. Next: step 4 continued. Next free ID -40.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-40
+**Timestamp:** 2026-10-30T00:48:28Z
+**Continues:** 2026-10-28-3, 2026-10-28-39
+**Title:** Step 4 in progress: the report brought up to date, port drafts written outside the build; the asterisk
+ruling corrected
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `c90f440`: the Phase 2 report's step 3 section and status line, as -39 asked;
+- `18e8386`: step 4 work in progress.
+
+The watcher read 181,440 tokens at 00:46:38Z. The harness's final count was 198,123.
+- **Step 4's state:**
+  - the mechanism prediction, written before any code;
+  - drafts of `BExpressionContext` (split into three files of 379, 113 and 166 lines) and `BExpression` (365), kept in the
+    evidence folder, outside `commonMain`, so the tests can still be seen failing on stubs.
+  - **Never compiled.** Not yet written: the stubs, `BExpressionMetaData`, the two contexts, the text helpers, and every
+    test.
+  - The module under `brouter/` is unchanged since `599dd40` and does not compile.
+- **The report's status line gives wrong draft sizes** (346, 117, 175, 338; `wc -l` reads 379, 113, 166, 365). The coder
+  found this after its last push; the next session corrects it.
+- **A finding that corrects -39's reasoning,** checked by the planner at source:
+  - `addLookupValue(String, String, int[])` (`BExpressionContext.java:540`) has three callers, all in the same class
+    (`:299`, `:300`, `:304`), and all pass `null` for the array;
+  - a grep of all of `btools` finds no other caller;
+  - the asterisk block sits under `if (lookupData2 != null)` (`:572`).
+  - **So no lookups file reaches it through Forager's calls.** The pinned file's lack of a `*` value is true but is not
+    the reason. T2 lists the method, not the block, so the block came in with the method.
+
+**The planner's ruling, corrected (technical):**
+- **The block stays a named "unsupported",** now because it is unreachable through Forager's calls.
+- **Its test calls `addLookupValue(name, value, int[])` directly,** with a non-null array, on both engines: the oracle
+  records the value, and the port throws the named "unsupported". A made-up lookups file is not needed.
+**Notes:** Written by Cedar Datum by hand. Next: step 4 continued, from `18e8386`. Next free ID -41.
