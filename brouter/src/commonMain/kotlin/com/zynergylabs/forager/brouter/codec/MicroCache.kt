@@ -1,11 +1,14 @@
 package com.zynergylabs.forager.brouter.codec
 
 import com.zynergylabs.forager.brouter.util.ByteDataWriter
+import kotlin.jvm.JvmField
 
 /** BRouter 1.7.10's `btools.codec.MicroCache`, its reached methods. STUB (step 3, tests first). */
 internal open class MicroCache protected constructor(ab: ByteArray?) : ByteDataWriter(ab) {
     protected var faid: IntArray? = null
     protected var fapos: IntArray? = null
+    // A field, as in Java: a Kotlin property's getter would clash with getSize() on the JVM.
+    @JvmField
     protected var size: Int = 0
     var virgin: Boolean = true
     var ghost: Boolean = false
