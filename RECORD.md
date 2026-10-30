@@ -2010,3 +2010,62 @@ not on the laptop, so take up what you want".
 - **Checked:** the primary has already re-run F0 and R on `hiking-mountain` on Temurin 21.0.13+9 (`2ada78c`): 0 of 2 and 0
   of 59 unstable, as on the local JDK.
 **Notes:** Written by Cedar Datum by hand. Next free ID -49.
+
+**ID:** 2026-10-28-49
+**Timestamp:** 2026-10-30T05:50:00Z
+**Continues:** 2026-10-28-28, 2026-10-28-32, 2026-10-28-34, 2026-10-28-38, 2026-10-28-48
+**Title:** Step 5a (`mapaccess`, the file layer) verified and merged into `brouter-port`; its file layer has not yet
+run on iOS; the secondary coder's three names go to the owner; 5b next, on the secondary
+**Decision:** the secondary coder's first session ported step 5a on `brouter-port-5a` (`26d0224`, `6770b86`,
+`fe0546c`, `2a8ba5e`). It handed off at the planner's request (183,796 tokens at 05:37Z), with everything done except
+reading CI. Report: `docs/audits/2026-10-30-brouter-port-step5a.md`, still marked partial.
+- **The coder's evidence (not re-run here):**
+  - **tests first:** 10 over stubs. Run 1 failed 9 on `NotImplementedError`, and `fk8` on its own count (E170_S50 has 3
+    squares with data, not 5); the test was fixed. Run 2 failed 10 of 10, with 0 compile errors;
+  - **the port:** `ReadOnlyFile` on okio's `FileHandle`, `PhysicalFile` with `checkFileIntegrity`, `OsmFile`,
+    `StorageConfigHelper`, `NodesCache`'s file half and `checkDataFile`;
+  - **the revert:** in `readFully`, `throw EOFException()` became `break`. It was predicted and pushed before the run
+    (`fe0546c`). The result was exactly 1 failure, `fk7DataCorruptShort` at cut 1, expected `EOFException`, actual `file
+    of size 1 too short, should be 112`. The file was restored from a saved copy, `cmp` showed it identical to that
+    copy, and the forward run read 91 of 91.
+- **Checked by the planner:**
+  - **CI on `2a8ba5e`,** run 41009615362, read from both job logs:
+    - `jvm` 91 tests, 0 failures, 41 files. That is the earlier 81 plus 5a's 10;
+    - `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, with 0 ` e: ` lines in either log;
+    - the simulator ran 23 tests with 0 failures;
+    - arm64 ran 7 of 7, and the gate read "OK: all 2 classes ran".
+  - **The revert's evidence** in `3-revert-prediction.md` and `4-revert-result.txt` reads as reported: 0 compile errors,
+    and a failure only this edit could produce.
+  - **The correction to Phase 1** holds at source: `NodesCache.java:197-198`, Forager's `third_party` copy, catches
+    `IOException` and rethrows `new RuntimeException(re.getMessage())`, so FK 7 and 8 never reach `:202`.
+- **Merged** by the planner into `brouter-port` as `9f41799`, a merge commit with `--no-ff`; its tree is identical to
+  `2a8ba5e`. The primary was told first, with the instruction to pull by merge on a rejected push and never rebase.
+- **A gap, recorded as unverified:** all ten 5a tests are `jvmTest`, because they compare against the oracle. The
+  simulator count is unchanged at 23, so the file layer compiles for iOS and has not run there. okio's Native messages,
+  `EOFException`'s name on Native, and the handle a failed `PhysicalFile` constructor leaves open are all [?] or [I].
+  **Step 10's simulator run must open and read a real tile through this layer.**
+- **The conditions:**
+  - **-38** (the largest noisy-bit count on real tiles) and **-34** (whether `fillBuffer`'s end-of-array branch runs)
+    move to 5b. 5a decodes no cell: `checkFileIntegrity` passes `reallyDecode = false`, and every `loadSegmentFor`
+    probe stops before a decode. That is read from the tests; the call sites at `BitCoderContext.kt:72, 97, 174, 184,
+    191` are as reported [I];
+  - **-32** (whether `OsmNode.java:134`'s `readUnified` runs) stays with 5b.
+- **The coder's calls beyond the amendment, accepted:**
+  - `NodesCache` split, with its graph half waiting for 5b and 5c;
+  - two declaration-only stubs;
+  - `OsmFile`'s decode as a `TODO` for 5b;
+  - `checkFileIntegrity` ported for the integrity test;
+  - `posIdx` made `internal`.
+- **One call to revisit at step 8:** `StorageConfigHelper` catches only `IOException`, where Java catches every
+  `Exception`. On a route this can change what fails and how.
+- **The names, for the owner:** "Tally Gauge", "Feeler Gauge" and "Plumb Ledger". The first two share "Gauge" with
+  the researcher, Madrone Gauge.
+
+**The planner's calls (technical):**
+- **Step 5b goes to the secondary coder, in a fresh session,** because the primary is still on 1b. It uses the same
+  clone, `/home/user/forager-ios-5a`, on a new branch `brouter-port-5b` cut from `brouter-port` at `9f41799`, and
+  writes its own report file.
+- **The session's first act:** it reads CI on `9f41799` itself, closes 5a's report with those counts, and pushes.
+- **Then 5b up to its sizing stop.** It sizes option (i)'s `hmap` from the pinned JDK's own source, with the tests
+  over stubs seen failing, then reports the count and stops before writing the map (Amendment 3).
+**Notes:** Written by Cedar Datum by hand. Next free ID -50.
