@@ -1110,6 +1110,14 @@ Each mutation in `E3Jvm.report`, restored from a copy saved before editing and t
 - **B, the log:** R5's collection lines dropped. R: exactly the 8 predicted cases unstable, each tuple-stable and log-unstable;
   "R-hiking-mountain: 8 of 59 unstable, over E3's 5%: a stop for Phase 2", as predicted (`7b-mutation-log-r.log`). The same 59 cases were generated.
 
+### CI [R: job logs]
+
+- **Run 41002963294 on `8eea3fc` and run 41003465269 on `525448b`: both `success`.** On `525448b`, `jvm`: "TOTAL: tests 81,
+  failures 0, errors 0, skipped 0 in 37 files", the same 81 as `d32f2c3`, so `jvmTest` ran no stratum test, as intended. `ios-smoke`
+  `success` by its job and step conclusions; its counts not read.
+- **On CI's Temurin, E3ControlTest's R1 and R4 each repeated themselves across fresh JVMs** ("R1 repeats across fresh JVMs: true;
+  R4: true"), with the changed launcher. The control only; no case has run on CI.
+
 ### Calls beyond the amendment (mine; for the planner)
 
 - **The strata run in a new `e3Strata` task, outside CI,** on E1's "not per push". R1's repeatability on CI's Temurin is
