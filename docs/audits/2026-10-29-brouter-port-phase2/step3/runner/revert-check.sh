@@ -8,9 +8,10 @@ set -u
 here=$(cd "$(dirname "$0")" && pwd); name=$1; F=$2; old=$3; new=$4
 out="$here/../4-revert-$name.txt"; log="$here/../4-revert-$name-jvmTest.log"; saved="$here/saved-$name"
 cd /home/user/forager-ios
+before=$(git status --porcelain) # read before this script writes its own output files
 {
 echo "# Step 3, revert check '$name', local, $(date -u +%FT%TZ)"
-echo "# HEAD $(git rev-parse --short HEAD); tree clean before: $( [ -z "$(git status --porcelain)" ] && echo yes || echo NO)"
+echo "# HEAD $(git rev-parse --short HEAD); tree clean before: $( [ -z "$before" ] && echo yes || echo "NO: $before")"
 echo "# prediction, committed before this run: $(git log -1 --format=%h -- "$here/../4-revert-$name-prediction.txt")"
 cp "$F" "$saved"
 echo "# saved copy of $F: sha256 $(sha256sum < "$saved" | cut -c1-16)"
