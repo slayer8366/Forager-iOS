@@ -1,0 +1,15 @@
+Step 1b, item I's revert: the control's 997-object perturbation removed. Written before the run, 2026-10-30.
+
+The edit: E3Jvm.kt, "const val PERTURBATION = 997" -> "const val PERTURBATION = 0". Nothing else changes, so R4's
+thread does what R1's does.
+
+Seen before the edit (forward, this container, OpenJDK 21.0.12.1): R1 4,0,11,1,9,2,3,5,10,6,7,8, (twice);
+R4 4,2,0,1,3,9,5,6,7,10,8,11, (twice). Each regime repeated itself across fresh JVMs.
+
+Predicted (filter --tests '*E3ControlTest'): 1 test, 1 failure, at the assertNotEquals:
+  "R1 and R4 gave the control one order: E3 has not been run. Illegal value: <4,0,11,1,9,2,3,5,10,6,7,8,>."
+All four runs print R1's forward order; the permutation checks pass.
+
+What would refute it: a pass (something besides the 997 calls moves R4's hashes); a failure at the permutation check;
+an order other than R1's forward one (fresh-JVM identity hashes are not repeatable here, which would also void the
+forward run's "repeats" line).

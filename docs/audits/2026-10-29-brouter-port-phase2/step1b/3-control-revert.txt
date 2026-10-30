@@ -1,0 +1,21 @@
+== the edit
+9c9
+<     const val PERTURBATION = 997
+---
+>     const val PERTURBATION = 0
+gradle exit 1
+restored from the saved copy
+file matches HEAD after restore
+compile errors in the log: 0
+com.zynergylabs.forager.brouter.oracle.e3.E3ControlTest: tests 1, failures 1, errors 0, skipped 0
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+E3ControlTest.r1AndR4GiveTheControlDifferentOrders[jvm]: FAIL: java.lang.AssertionError: R1 and R4 gave the control one order: E3 has not been run. Actual: 4,0,11,1,9,2,3,5,10,6,7,8,
+system-out: R1: control 4,0,11,1,9,2,3,5,10,6,7,8,
+R1: control 4,0,11,1,9,2,3,5,10,6,7,8,
+R4: control 4,0,11,1,9,2,3,5,10,6,7,8,
+R4: control 4,0,11,1,9,2,3,5,10,6,7,8,
+R1 repeats across fresh JVMs: true; R4: true
+
+Read after the run: failed as predicted at the assertNotEquals, all four runs on R1's forward order, 0 compile
+errors, compileTestKotlinJvm re-ran. The predicted message wording was wrong: kotlin.test prints "... E3 has not been
+run. Actual: 4,0,11,1,9,2,3,5,10,6,7,8,", not "Illegal value: <...>." (guessed from memory). The value is the predicted one.
