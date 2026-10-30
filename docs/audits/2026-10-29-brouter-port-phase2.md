@@ -43,6 +43,13 @@ close" below). CI run 40970686102 on `9ce54ee` succeeded: `jvm` 26 tests, 0 fail
 Locally, jvmTest gives 54 tests and 0 failures. CI run 40975094092 on `073851b` succeeded: `jvm` 54 tests, 0 failures, klibs compiled; `ios-smoke` 18 tests, 0 failures (simulator-checked). The arm64 HotSpot step did not run its tests (below). Wrapped up on the planner's word, at about
 180k tokens.
 
+**Status (2026-10-30, tenth and eleventh sessions, Linden Caliper, Amendment 3 Part B, step 3):** `codec`'s decoders are
+ported and green (CI `jvm` 62 tests, 0 failures, on `4436711`), and all four reverts failed as predicted. The arm64 JVM
+step runs under `-XX:DisableIntrinsic=_dcos` and read 7 of 7 on `7bf6a3d` (section "Step 3" below).
+
+**Status (2026-10-30, twelfth session, Linden Caliper, Amendment 3 Part B, step 4):** in progress from `599dd40`; this line
+is updated at each push of the session.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -780,6 +787,55 @@ Base: `brouter-port` at `b7543f3`, equal to the remote at the start [R: `git sta
   The first callers are in `mapaccess`: `OsmNode.calcDistance` (`OsmNode.java:103`, which needs `javaRound`) and
   `WaypointMatcherImpl` (`:52`, `:61`, `:80`, `:189-212`). Each will need a `LibmSeam` passed in. Runners are in
   `step2b-2/runner/`. Give them absolute out-paths.
+
+## Amendment 3, Part B, step 3: `codec` (tenth and eleventh sessions, Linden Caliper; written up in the twelfth)
+
+This section was written after the fact, in the twelfth session, on the planner's ruling at RECORD -39. Its sources are
+RECORD -38 and -39 on `main` at `b945259` [R], the logs in `2026-10-29-brouter-port-phase2/step3/` [C, read again in the
+twelfth session], and `gh run list` on 2026-10-30 [R]. Commits: `f034bb0` (the arm64 probe), `b3182d8` (stubs and tests),
+`4436711` (the port), `a0b04e1` (the arm64 flags), `d99cc46` (logs and the first revert); then `2215741` (the runner and
+three predictions, committed before any run), `db53413` (a runner fix), `0f4fe0b` (the results), `7bf6a3d` (the
+arch-aware flag test). That the two halves were two sessions is inferred from RECORD -38 and -39 each giving its own
+harness count [I].
+
+- **The arm64 test JVM, cause seen before the fix [R: RECORD -38].** On `macos-26` (aarch64, Temurin 21.0.13+9),
+  `-XX:-UseLibmIntrinsic` is an unrecognised option and the JVM does not start. The probe (`f034bb0`) measured, over
+  200,000 inputs, `Math.cos` differing from `StrictMath.cos` at 11,628 by default and at 0 under
+  `-XX:DisableIntrinsic=_dcos`, with and without the JIT; `atan2` at 0. `brouter/build.gradle.kts` now picks the flag by
+  `os.arch` (x86_64 `-XX:-UseLibmIntrinsic`; aarch64 `-XX:DisableIntrinsic=_dcos`; any other architecture fails the
+  build).
+- **The port [R: RECORD -38]:** the decoder halves of `DataBuffers`, `StatCoderContext`, `NoisyDiffCoder`,
+  `TagValueCoder` and `MicroCache`. One compile error on the stubs, a JVM name clash (`size` against `getSize()`), fixed
+  with `@JvmField`.
+- **Failing first [C: `1-stubs-jvmTest.log`]:** 8 of 8 codec tests failed on the stubs' `TODO`s.
+- **Green [C: `2-port-jvmTest.log`; R: RECORD -38]:** 8 of 8 locally; CI on `4436711`, `jvm` 62 tests, 0 failures.
+- **Two test expectations corrected, beyond "compile errors only", both upheld at RECORD -38:** `StatCoderContextTest`'s
+  predictors kept under 2^25 (the oracle itself misdecodes beyond 24 noisy bits), and `TagValueCoderTest`'s validator
+  check applied only to a non-empty set (the oracle does not call it on the empty one). Condition on the first: steps 5a
+  and 5b log the largest noisy-bit count the decoders meet on the captured tiles.
+- **The four reverts, each predicted first [C]:**
+  - item I's, in `BitCoderContext.fillBuffer`'s byte read (`codec` has no sign-extension site of its own): 3 of 8 failed
+    as predicted (`3-revert-sign-extension.txt`);
+  - RECORD -38's three, run with `runner/revert-check.sh`, which refuses to read results after a compile error, restores
+    from a copy saved before the edit, and checks afterwards that the forward line is still present. Each failed 1 of 8,
+    as predicted at `2215741`, with 0 compile errors:
+    - **a decoder,** `StatCoderContext.kt:72` (Java `:250`) dropping the right branch's bit: failed at seed 1, op 3,
+      kind 3 (`4-revert-statcoder-sorted.txt`);
+    - **`MicroCache`,** `MicroCache.kt:57` (Java `:103`), `<=` to `<`: failed at "n 2 op 0: getAndClear(247) expected
+      true but was false", so `MicroCacheTest` bites (`4-revert-microcache-search.txt`);
+    - **`DataBuffers`,** `bctx1` given its own array: failed `DataBuffersTest` only, since `TagValueCoder` repoints
+      `bctx1` before writing (`4-revert-databuffers-alias.txt`). So a revert can bite in `DataBuffers`, but only in its
+      own test.
+- **The flag test, arch-aware (`7bf6a3d`) [C: `5-flag-test-x86_64.txt`; R: RECORD -39, `gh run list`]:**
+  `theJvmRunsWithLibmIntrinsicsOff` checks the flag of the architecture it runs on. CI run 40980103184 on `7bf6a3d` is
+  `success` in both jobs; by the planner's reading of its `ios-smoke` log, the simulator ran 18 of 18
+  (**simulator-checked**) and the arm64 JVM step ran 7 tests, 0 failures, gate "OK: all 2 classes ran". So arm64
+  HotSpot under `_dcos` builds the same table as x86_64 without the intrinsic: Phase 1 part 6's open question is
+  answered for this setting.
+- **CI on the step 4 work in progress:** run 40980560784 on `599dd40` is `failure` [R: `gh run list`], as its commit
+  message said it would be: the commit does not compile.
+- **Unverified:** the twelfth session did not reread the CI logs of 40978865021 or 40980103184; their counts above are
+  the planner's reading at RECORD -38 and -39 [R of the record, not of the logs].
 
 ## Confirmed vs inferred
 
