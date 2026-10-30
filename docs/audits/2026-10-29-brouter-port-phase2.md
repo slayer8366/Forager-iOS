@@ -925,6 +925,29 @@ text case in the malformed set.
     expressionNodeCount`, the port's count higher (469 expected, 489 read; 659 expected, 1002 read). `ProfileEvaluateTest`
     passed, as predicted: collapse does not change these profiles' values, so only the parse check can see it.
     Restored; the file matched HEAD.
+- **CI for `94b769e` (run 40984156792) [R: job logs]:** `success`. `jvm`: 77 tests, 0 failures, in 34 files; both iOS
+  klibs compiled. `ios-smoke`: `iosSimulatorArm64Test` ran, 23 tests, 0 failures, in 9 files (simulator-checked); the
+  arm64 JVM step `success`, 7 tests, 0 failures, in 2 files; the gate "OK: all 2 classes ran".
+- **Prediction 2, `Float.toString`, on the simulator (simulator-checked):** `FloatTextCommonTest` passed there, printing
+  the same range hash and length as Java (-1244348794, 195999) and the same 19 literals, `1.0E-4`, `1.0E7`, `NaN`,
+  `-0.0` and `0.33333334` among them [R: the ios-smoke counts step's XML]. So Kotlin/Native's `Float.toString` gave
+  Java's strings for every value `getKeyValueDescription` formats from a raw value below 31,000, and for these literals.
+  Not shown: any other float, `Float.parseFloat` (the profile reader's numbers) and `Short.parseShort` on Native, and
+  the `HashMap` order of item 4 there; no step 4 test runs on the simulator.
+
+### Step 4: the handoff (fourteenth session)
+
+Step 4's parts in Amendment 3 Part B, as dispatched to this session, are done: the port (`aa0d918`), prediction 2's
+`Float.toString` on the simulator (`94b769e`), and the two reverts (`f03a4c2`). Nothing is partial.
+- **Open, for the planner:**
+  - the named way getters (`getTurncost` to `getDownhillmaxslopecost`) and the node's `getInitialcost` are not called
+    by any test: the tests read `getBuildInVariable(i)` by index, and only `getCostfactor` is reached, through
+    `accessType`. Their indices were checked by reading against `BExpressionContextWay.java`, not by a test;
+  - `Float.parseFloat` and `Short.parseShort` on Native, and the `HashMap` orders, as above;
+  - `parseFile`'s `RuntimeException(e)` branch is still not reached by any test; text decoding, okio against
+    `FileReader`, is still unverified for anything but UTF-8;
+  - `FloatTextCommonTest` has never been seen failing: it tests the platform, so there is no stub for it.
+- **Next:** the planner's call. No step after 4 was dispatched to this session.
 
 ## Confirmed vs inferred
 
