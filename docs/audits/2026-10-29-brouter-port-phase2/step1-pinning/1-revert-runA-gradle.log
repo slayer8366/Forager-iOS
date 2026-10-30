@@ -1,0 +1,31 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+Starting a Gradle Daemon, 2 incompatible and 1 stopped Daemons could not be reused, use --status for details
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+
+> Task :brouter:fetchTiles
+W75_N40.rd5: fetched from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W75_N40.rd5, matches its pins (119765681 bytes, SHA-256 c94a4d34c364ddbd082d5ce68bfd24aca1756035b66e485aff4486ea5c1fd6fb)
+W75_N35.rd5: fetched from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W75_N35.rd5, matches its pins (3572520 bytes, SHA-256 a7113b6c2aaedce4325bc0002c9aadaa29feb20f3808df863c71735d7b0cdb1b)
+REFUSED W70_N40.rd5 from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W70_N40.rd5: W70_N40.rd5 is 5292622 bytes, pinned 5292623
+
+> Task :brouter:fetchTiles FAILED
+> Task :brouter:compileKotlinJvm
+w: file:///home/user/forager-ios/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/expressions/BExpressionContextWay.kt:16:10 Names 'ab' and 'tagValueSet' of parameter #0 conflict in the following members of supertypes: 'fun unify(ab: ByteArray, offset: Int, len: Int): ByteArray' defined in 'com.zynergylabs.forager.brouter.expressions.BExpressionContext', 'fun unify(tagValueSet: ByteArray, offset: Int, len: Int): ByteArray' defined in 'com.zynergylabs.forager.brouter.codec.TagValueValidator'. This may cause problems when calling this function with named arguments.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:fetchTiles'.
+> Process 'command 'bash'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 27s
+4 actionable tasks: 3 executed, 1 up-to-date

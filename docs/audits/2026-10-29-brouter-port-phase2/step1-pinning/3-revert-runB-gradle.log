@@ -1,0 +1,45 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:jvmTest FAILED
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+TilePinsTest[jvm] > pinFileIsTheReleasesOwn[jvm] FAILED
+    org.junit.ComparisonFailure at TilePinsTest.kt:27
+
+TilePinsTest[jvm] > eachFetchedTileMatchesItsPin[jvm] STANDARD_OUT
+    W75_N40.rd5: 119765681 bytes, SHA-256 c94a4d34c364ddbd082d5ce68bfd24aca1756035b66e485aff4486ea5c1fd6fb, at segments/W75_N40.rd5
+    W75_N35.rd5: 3572520 bytes, SHA-256 a7113b6c2aaedce4325bc0002c9aadaa29feb20f3808df863c71735d7b0cdb1b, at segments/W75_N35.rd5
+    W70_N40.rd5: 5292622 bytes, SHA-256 0c305efb144b419b1083422a5b62301615f9023fcd67ea77f8342f3cd0906149, at segments/W70_N40.rd5
+    E170_S50.rd5: 1061705 bytes, SHA-256 f1710c3285d037d676bcfe6a87964b66e2e2d20dd1bd964b7d0a71e98458cf5c, at segments/E170_S50.rd5
+    forager-fixture-W75_N40.rd5: 152665 bytes, SHA-256 ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990, at f0/W75_N40.rd5
+
+TilePinsTest[jvm] > eachFetchedTileMatchesItsPin[jvm] PASSED
+
+2 tests completed, 1 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 3s
+7 actionable tasks: 2 executed, 5 up-to-date

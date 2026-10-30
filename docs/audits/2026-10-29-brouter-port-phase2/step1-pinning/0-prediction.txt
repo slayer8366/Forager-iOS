@@ -1,0 +1,19 @@
+Step 1 pinning, item I's revert: one tile's size in the pin file off by one. Written before either run, 2026-10-30.
+
+The edit: tools/tile-pins.tsv, W70_N40.rd5's bytes 5292622 -> 5292623 (the third data row; one character).
+
+Run A, the fetch (build/tiles absent, so every file is downloaded; filter --tests '...tiles.*'):
+  - W75_N40.rd5 and W75_N35.rd5 print "fetched from <release>/<asset>, matches its pins".
+  - W70_N40.rd5 is downloaded to .part and refused, the script exiting 1 with exactly:
+    REFUSED W70_N40.rd5 from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W70_N40.rd5: W70_N40.rd5 is 5292622 bytes, pinned 5292623
+  - E170_S50.rd5 and F0's fixture are never reached (set -e).
+  - Gradle fails at ':brouter:fetchTiles'; jvmTest does not run, so the results folder (deleted first) stays absent.
+  - No 'e: ' line: nothing Kotlin changed.
+
+Run B, the test (after restoring and one green forward run, so all five files are present; same edit; -x fetchTiles):
+  - TilePinsTest: 2 tests, 1 failure.
+  - pinFileIsTheReleasesOwn fails on the row comparison: expected W70_N40.rd5 ... 5292622, actual ... 5292623.
+  - eachFetchedTileMatchesItsPin passes: the files and the test's own pins are unchanged.
+
+What would refute it: any other tile refused; a refusal on SHA-256 rather than bytes; Run A reaching jvmTest; Run B
+failing eachFetchedTileMatchesItsPin, or failing pinFileIsTheReleasesOwn on anything but W70_N40's bytes.

@@ -1,0 +1,18 @@
+== the edit
+7c7
+< W70_N40.rd5	segments/W70_N40.rd5	5292622	0c305efb144b419b1083422a5b62301615f9023fcd67ea77f8342f3cd0906149	https://brou
+---
+> W70_N40.rd5	segments/W70_N40.rd5	5292623	0c305efb144b419b1083422a5b62301615f9023fcd67ea77f8342f3cd0906149	https://brou
+gradle exit 1
+restored from the saved copy
+file matches HEAD after restore
+compile errors in the log: 0
+== fetch lines
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:jvmTest FAILED
+Execution failed for task ':brouter:jvmTest'.
+com.zynergylabs.forager.brouter.tiles.TilePinsTest: tests 2, failures 1, errors 0, skipped 0
+TOTAL: tests 2, failures 1, errors 0, skipped 0 in 1 files
+TilePinsTest.pinFileIsTheReleasesOwn[jvm]: FAIL: org.junit.ComparisonFailure: tools/tile-pins.tsv's asset, path, bytes and sha256 against the release's (RECORD -45) expected:<...s/W70_N40.rd5	529262[2]	0c305efb144b419b108...> but was:<...s/W70_N40.rd5	529262[3]	0c305efb144b419b108...>
+TilePinsTest.eachFetchedTileMatchesItsPin[jvm]: PASS

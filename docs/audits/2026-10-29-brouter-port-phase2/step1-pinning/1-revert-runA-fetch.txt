@@ -1,0 +1,17 @@
+== the edit
+7c7
+< W70_N40.rd5	segments/W70_N40.rd5	5292622	0c305efb144b419b1083422a5b62301615f9023fcd67ea77f8342f3cd0906149	https://brou
+---
+> W70_N40.rd5	segments/W70_N40.rd5	5292623	0c305efb144b419b1083422a5b62301615f9023fcd67ea77f8342f3cd0906149	https://brou
+gradle exit 1
+restored from the saved copy
+file matches HEAD after restore
+compile errors in the log: 0
+== fetch lines
+> Task :brouter:fetchTiles
+W75_N40.rd5: fetched from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W75_N40.rd5, matches its pins (119765681 bytes, SHA-256 c94a4d34c364ddbd082d5ce68bfd24aca1756035b66e485aff448
+W75_N35.rd5: fetched from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W75_N35.rd5, matches its pins (3572520 bytes, SHA-256 a7113b6c2aaedce4325bc0002c9aadaa29feb20f3808df863c71735
+REFUSED W70_N40.rd5 from https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30/W70_N40.rd5: W70_N40.rd5 is 5292622 bytes, pinned 5292623
+> Task :brouter:fetchTiles FAILED
+Execution failed for task ':brouter:fetchTiles'.
+no results folder: jvmTest did not run
