@@ -1936,3 +1936,53 @@ The watcher read 182,796 tokens at 04:09:02Z. The harness's final count was 194,
 **The planner's call (technical):** R6's JaCoCo agent is pinned at the latest release read from Maven Central's metadata,
 by SHA-256, as the oracle jar is. The coder reports the version and its source.
 **Notes:** Written by Cedar Datum by hand. Next: step 1b continued. Next free ID -47.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-47
+**Timestamp:** 2026-10-30T04:39:03Z
+**Continues:** 2026-10-28-3, 2026-10-28-46
+**Title:** Step 1b: E3's six regimes run over case lists; F0 0 of 2 and R on `hiking-mountain` 0 of 59 unstable (local JDK);
+the planner's rulings
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `8eea3fc`: E3 over a case list, `e3Strata` and JaCoCo;
+- `525448b`: R's generator, the tile-node reader, and R on `hiking-mountain`;
+- `e0b5f90`, `240cff5` and `0265239`: the report, the comparator's bite checks and CI.
+
+The watcher read 182,370 tokens at 04:37:45Z. The harness's final count was 187,708.
+- **Regimes:** R1 to R6 as E3 defines them, R6 under JaCoCo `org.jacoco.agent` 0.8.16.
+  - The version was read from Maven Central's metadata on 2026-10-30, the jar pinned at 314,470 bytes by a computed
+    SHA-256. Its SHA-1 and MD5 match Central's.
+  - F0's coverage file names 57 `btools` classes, so the agent did instrument the oracle.
+- **F0: 0 of 2 unstable.** R1's routes are 226 nodes and 5,047 m, and 306 nodes and 6,713 m, matching Forager's recorded
+  geojson in length and cost. F0 logged no collections.
+- **R on `hiking-mountain`: 0 of 59 unstable.**
+  - The 59 come from 67 candidates; 8 were rejected with no node near the target.
+  - All 59 are routes.
+  - 8 logged collections, so the log comparison was tested on real data.
+  - No case crosses 40°N or 70°W.
+- **The positive control moved in every JVM.**
+- **The comparator bites, predicted first:**
+  - R5's end moved north: F0 2 of 2 unstable;
+  - R5's collection lines dropped: exactly the 8 predicted R cases unstable.
+- **Time:** `e3Strata` about 11 s for F0 and 3 min 13 s for R on one profile. It is not on CI; `jvmTest` still runs 81 tests.
+- **CI:** run 41003465269 on `525448b` `success`. On CI's Temurin the control's R1 and R4 each repeat themselves across
+  fresh JVMs.
+- **E3's 5% stop:** not reached in either stratum.
+
+**Two gaps the planner finds:**
+- **The stability runs used the container's OpenJDK 21.0.12.1, not the oracle's pinned JDK.** That is CI's Temurin
+  21.0.13+9 (Amendment 3, -46). The table equals on both (-46), but identity-hash order, which E3 exists to test, is a
+  property of the running JVM.
+- **R's generator was committed in the same commit as its results** (`525448b`). E's rule "fixed before data" can
+  then not be shown for it.
+
+**The planner's rulings (technical):**
+- **From here, `e3Strata` and every expected value run on the oracle's JDK:** Temurin 21.0.13+9 amd64. Fetch it into the
+  container and pin it by SHA-256 from Adoptium's own published checksum. Say where it came from.
+- **F0 and R on `hiking-mountain` are re-run on it first.** That run comes after the generator was committed, so it
+  also closes the second gap for this stratum.
+- **Each new generator and its seed is committed and pushed before any run of it.**
+- **The order stays the coder's:** R's other 25 profiles, then DL-lat and DL-lon, then MP64, ML5 and PM5.
+**Notes:** Written by Cedar Datum by hand. Next free ID -48.
