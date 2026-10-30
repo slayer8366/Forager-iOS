@@ -1,0 +1,26 @@
+# CI on 9f41799 (the planner's merge of step 5a into brouter-port), read by the secondary coder, 2026-10-30.
+# Run 41010445171, workflow brouter.yml, branch brouter-port, head_sha 9f41799dc20a50429a1c8f0eeafc9985815ac249,
+# conclusion of both jobs: success. Logs fetched with: gh api repos/slayer8366/Forager-iOS/actions/jobs/<id>/logs
+# Lines below are copied from those logs with their line numbers (grep -n); nothing is edited.
+
+## job jvm, id 123914875566 (ubuntu-24.04), 1281 log lines
+701:2026-10-30T05:50:31.6874736Z TOTAL: tests 91, failures 0, errors 0, skipped 0 in 41 files
+# iOS klibs step:
+626:2026-10-30T05:49:50.9807794Z ##[group]Run ./gradlew --no-daemon :brouter:compileKotlinIosArm64 :brouter:compileKotlinIosSimulatorArm64
+642:2026-10-30T05:50:27.2192617Z > Task :brouter:compileKotlinIosArm64
+646:2026-10-30T05:50:31.4230606Z > Task :brouter:compileKotlinIosSimulatorArm64
+648:2026-10-30T05:50:31.4231818Z BUILD SUCCESSFUL in 40s
+# lines containing ' e: ' in the whole jvm log: 0
+# lines starting 'w: ' after the timestamp in the klib step (626-648):
+2
+
+## job ios-smoke, id 123914875841 (macos-26), 685 log lines
+353:2026-10-30T05:51:13.5695980Z > Task :brouter:iosSimulatorArm64Test
+377:2026-10-30T05:51:14.7213500Z TOTAL: tests 23, failures 0, errors 0, skipped 0 in 9 files
+566:2026-10-30T05:51:54.3972050Z [36;1mecho "arm64 JVM step outcome: $OUTCOME (a failure there is a recorded difference only if every class ran)"[0m
+578:2026-10-30T05:51:54.5428260Z arm64 JVM step outcome: success (a failure there is a recorded difference only if every class ran)
+620:2026-10-30T05:51:54.7487120Z TOTAL: tests 7, failures 0, errors 0, skipped 0 in 2 files
+621:2026-10-30T05:51:54.8016050Z com.zynergylabs.forager.brouter.util.CheapLogicRunTest: 5 test cases, 5 ran, 0 failed (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+622:2026-10-30T05:51:54.8018690Z com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: 2 test cases, 2 ran, 0 failed (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProduction
+623:2026-10-30T05:51:54.8020400Z OK: all 2 classes ran
+# lines containing ' e: ' in the whole ios-smoke log: 0
