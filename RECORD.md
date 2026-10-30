@@ -1833,3 +1833,26 @@ commit on `main` (`GITHUB_SHA`), which by definition modifies no workflow file r
 - Linden makes the change on `brouter-port` and its dry run must pass. The planner then copies the file to `main`
   unchanged, and the owner runs it again.
 **Notes:** Written by Cedar Datum by hand. Next free ID -44.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-44
+**Timestamp:** 2026-10-30T02:50:00Z
+**Continues:** 2026-10-28-30, 2026-10-28-43
+**Title:** The release target fixed and copied to `main`; the owner's second run is next
+**Observed:** Linden Caliper (Opus), `ae8ec40` on `brouter-port`. The harness counted 111,084 tokens.
+- **The change:** `gh release create` targets `"$GITHUB_SHA"`, the `workflow_dispatch` run's own commit on `main`, in place of
+  `"$TOOLS_SHA"`. The step's name and the comments say so and cite -43. Every file the run executes still comes from
+  `TOOLS_SHA` `5d00761`.
+- **Dry run 40993755473 on `ae8ec40`: success.** `capture` checked out `5d00761`, the four tiles and the F0 control each
+  printed PASS, and `publish` was skipped. **The dry run cannot test the target itself;** only the owner's run can.
+- **Checked by the planner:**
+  - the diff's only non-comment changes are the step's name and `--target` (`git diff b706c4e ae8ec40`);
+  - the new file's SHA-256 is `6b0bedba…a54fe7ae`;
+  - the public README and release-notes templates at `5d00761` say nothing about the target, so they stay true.
+- **The copy:** `.github/workflows/publish-tiles.yml` is copied byte for byte to `main` in this commit (SHA-256
+  `6b0bedba3c02a8b941ed01e9bddd1d022ef4807592897eeb1d06877ea54fe7ae`). This is within the owner's word at -30 for this
+  one file.
+- **Unverified:** whether `GITHUB_SHA` clears the 403. That rests on GitHub's REST text quoted in -43.
+**Notes:** Written by Cedar Datum by hand. Next free ID -45.

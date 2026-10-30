@@ -13,7 +13,8 @@ on:
 permissions: {}
 
 env:
-  # brouter-port's commit holding tools/: the check, the fetch scripts, the README and notes. The release targets it.
+  # brouter-port's commit holding tools/: the check, the fetch scripts, the README and notes. Every file the run
+  # executes comes from it. The release does not target it; it targets the run's own commit on main (RECORD -43).
   TOOLS_SHA: 5d0076179af84f0dd88b57ae83898ee6db86f1b9
   # F0, Forager's test fixture, refused unless it matches these pins (Phase 2, step 1).
   F0_URL: https://raw.githubusercontent.com/slayer8366/Forager/e2969abe4f98674c24ce3913ce97be568184a4de/app/src/test/resources/routing/segments/W75_N40.rd5
@@ -78,9 +79,13 @@ jobs:
           refs=$(git ls-remote --tags origin "refs/tags/$tag")
           releases=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[].tag_name')
           if [ -n "$refs" ] || grep -qxF "$tag" <<< "$releases"; then echo "REFUSED: $tag already exists"; exit 1; fi
-      - name: Create a draft release targeting TOOLS_SHA, with the seven assets
+      # The target is GITHUB_SHA, this run's own commit. The guard admits only a workflow_dispatch run from main, so
+      # it is main's commit, which modifies no file under .github/workflows/ relative to main, the default branch.
+      # TOOLS_SHA does (it holds brouter.yml, main holds publish-tiles.yml), and GitHub refuses a release whose target
+      # does unless the token may modify workflows, which GITHUB_TOKEN cannot be: run 40993150859's 403 (RECORD -43).
+      - name: Create a draft release targeting this run's commit on main, with the seven assets
         run: |
-          gh release create "$TAG" --draft --target "$TOOLS_SHA" --title "BRouter test tiles, ${TAG#brouter-tiles-}" \
+          gh release create "$TAG" --draft --target "$GITHUB_SHA" --title "BRouter test tiles, ${TAG#brouter-tiles-}" \
             --notes-file out/release-notes.md out/assets/*
       - name: Download every asset back and compare it with the pins
         run: |
