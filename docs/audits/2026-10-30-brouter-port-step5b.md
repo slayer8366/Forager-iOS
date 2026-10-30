@@ -5,7 +5,10 @@ the owner's to choose), second session. Branch `brouter-port-5b`, cut from `orig
 planner's merge of 5a. The base was checked against the remote first: `git ls-remote` gave `brouter-port` at
 `9f41799dc20a`, so the primary had not pushed since [C]. Evidence in `2026-10-30-brouter-port-step5b/`.
 
-**Status (2026-10-30): partial, waiting on the planner's answer to the `hmap` sizing.** Done and pushed:
+**Status (2026-10-30, third session, Plumb Ledger): partial. Handed off at the planner's request** (180,380 tokens at
+07:40Z), after RECORD -50's answer. This session wrote no code. It traced `put`'s callers and counted `tieBreakOrder` on
+the regions, the routes and part of the decodes; see "Third session" and the handoff at the end, which replaces the
+second session's. Done and pushed by the second session:
 - 5a closed (`4cc7f20`);
 - the sizing (`3495f64`, sent to the planner);
 - the tests seen failing on their stubs (`c53fd51`);
@@ -237,7 +240,131 @@ The data agrees [C]:
   compare with the oracle.
 - `GraphDecodeTest`'s CI time [?].
 
-## Handoff: what remains, in order
+## Third session: RECORD -50's answer, before the handoff
+Base: `brouter-port-5b` at `508121e`, equal to `origin/brouter-port-5b` after a fetch [C]. RECORD -50 was read from the
+planner's clone.
+
+**`put`'s callers (RECORD -50: "check the callers of `put` first") [R, Forager's `third_party` 1.7.10]:**
+- `OsmNodesMap.put` (`OsmNodesMap.java:238-239`, `hmap.put(node, node)`) is the map's only `put`. Its callers:
+  - `OsmNode.java:177-179`: `new OsmNode(linklon, linklat)`, reached from `DirectWeaver.java:163` for each new link target;
+  - `NodesCache.java:282-284` (`getGraphNode`): `new OsmNode(template.ilon, template.ilat)`. The template may be a
+    waypoint's node, but only its coordinates are copied;
+  - `NodesCache.java:288`: `existing`, the value `put` just returned, which is already in the map;
+  - `NodesCache.java:271-273` (`getStartNode`, from `RoutingEngine.java:605`): `new OsmNode(id)`;
+  - `AreaReader.java:155-174`: its own map, with `new OsmNode(id)`. T2 does not reach it.
+- `get`'s key is `testKey`, a plain `new OsmNode()` (`OsmNodesMap.java:20`). `remove`'s keys come from `get`
+  (`DirectWeaver.java:43-48`) or are `this` in `parseNodeBody2` (`OsmNode.java:152`, unreachable, RECORD -32).
+- `OsmNode` has subclasses: `OsmNodeNamed` (`OsmNodeNamed.java:12`) and `OsmNogoPolygon` (`OsmNogoPolygon.java:16`).
+  **Neither can reach the map** by any path above.
+- **So every key is exactly `btools.mapaccess.OsmNode`.** `tieBreakOrder`'s class-name comparison (`HashMap.java:2061`)
+  always reads 0, so it is not ported. The port's `OsmNode` is `open` (`OsmNode.kt:19`) and has no subclass yet.
+- **Not a wrong premise:** RECORD -50 foresaw the one-class case ("if more than one class can ever be a key").
+
+**`tieBreakOrder` on the oracle (RECORD -50's "data owed"), partial** [C: `6-tiebreak/`]:
+- **Method:**
+  - Temurin 21.0.13+9's own `HashMap.java` (SHA-256 `71c8d822…`, as sized), with counters added at its two call sites,
+    `treeify` (`:2095`) and `putTreeVal` (`:2158`), split by whether both keys are `btools.mapaccess.OsmNode`
+    (`patch_hashmap.py`);
+  - patched into `java.base` with `--patch-module`, under the plain 1.7.10 `-ro` jar and the oracle's flags;
+  - the probe is `5-probe`'s, copied, with each scenario's counter delta written as a `# tie` line
+    (`patch_probe.py`). It adds `CollectOutreachersTest`'s region loads: the first square with data, its largest
+    cache, the 3 by 3 block, modes 0 to 2;
+  - `run.sh` runs the regions, then the routes, then the decodes.
+- **Why the probe and not `jvmTest`:** `jvmTest` runs on the container's JDK, 21.0.12.1 (`java -version`; `executable` is
+  set only for `e3Strata`, `brouter/build.gradle.kts:138`). Patching 21.0.13's `HashMap` into it would not be sound.
+- **The region loads: 0.** 4 tiles times 3 modes, each 6 caches, and no key of any class tie-broken (`regions.txt`).
+  Each of `CollectOutreachersTest`'s two tests makes these same 12 loads.
+- **F0's two routes, on both folders: 0** (`routes.txt`). The routes reproduce E3's (226, 5047) and (306, 6713).
+- **The decodes: not finished at the handoff.** 8,756 of 25,072 cache lines were copied while the run was still going
+  (`decode-partial-at-handoff.txt`). So far there is **one tie-break site:**
+  - W75_N40 (106, 130) sub 740, in the "known" scenario's seeding, `treeify` 19 times, `putTreeVal` 0, and no other key
+    class. That is the equal-hash tree bin the second session's probe found there;
+  - **the counter reads non-zero,** so the zeros above are not a dead counter.
+- **Not yet known:**
+  - the decode total;
+  - whether the patched run's 25,072 cache lines equal jarA's. Check with
+    `grep -E '^(W75_N40|W75_N35|W70_N40|E170_S50|F0) ' decode.txt | sha256sum`, which must read `282555f9…6685a`. That
+    command reproduces jarA's digest from `jarA.txt` [C].
+
+**Nothing else was built.** No `NodeHashMap`, no test, no `cleanupPeninsulas` change, and no revert run.
+
+## Handoff: what remains, in order (third session's, replacing the second's)
+A fresh session reads this handoff, RECORD -50, and the files named here. It works in clone `/home/user/forager-ios-5a`,
+branch `brouter-port-5b`, and first checks that `origin/brouter-port-5b` is the commit that added this section.
+Scratch is `/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/5b/`; check it before relying on
+anything there.
+
+1. **Finish the `tieBreakOrder` count.**
+   - If `<scratch>/5b/tiebreak/runs/status.txt` reads `decode exit 0` and `done`, copy `runs/decode.txt`, without its
+     `# classpath` line, to `6-tiebreak/decode.txt`.
+   - Otherwise rebuild and re-run from `6-tiebreak/`:
+     - copy the pinned `HashMap.java` (`<scratch>/5b/jdksrc/java.base/java/util/`) to `tiebreak/hm/java/util/`;
+     - run `patch_hashmap.py` on it;
+     - `javac --patch-module java.base=hm -d out/patch` it;
+     - run `patch_probe.py` on a copy of `5-probe/src/ProbeMain.java`;
+     - `javac -cp <oracle jar>` it, with `Probe.java`, into `out/probe`;
+     - `run.sh all`. It takes about 7 minutes, single-threaded.
+   - Report:
+     - the `# total` and `# grand total` lines;
+     - every `# tie` line;
+     - the cache-line SHA-256 check above.
+2. **Write `NodeHashMap`** as RECORD -50 answers, replacing the stub `mapaccess/NodeHashMap.kt`. The design worked out in
+   this session, ready to type:
+   - **Three files:**
+     - `NodeHashMap.kt`: constants, `hash`, `tableSizeFor`, the constructor, `get`/`getNode`, `put`/`putVal`, `resize`,
+       `treeifyBin`, `remove`/`removeNode`, the value iterator, the nested `Node` and `TreeNode` classes, and
+       `tieBreakOrder` with its stand-in;
+     - `NodeHashMapTreeInsert.kt`: `root`, `moveRootToFront`, `find`, `getTreeNode`, `treeify`, `putTreeVal`,
+       `balanceInsertion`, `rotateLeft`, `rotateRight`, as extension or top-level functions;
+     - `NodeHashMapTreeRemove.kt`: `untreeify`, `removeTreeNode`, `balanceDeletion`, `split`.
+   - `DEFAULT_INITIAL_CAPACITY` (`HashMap.java:238`) is needed by `resize`. The sizing's table omits it.
+   - **`comparableClassFor` is always null** (`OsmNode` is not `Comparable`), so in `treeify` and `putTreeVal` the
+     equal-hash branch goes straight to `tieBreakOrder` (after `putTreeVal`'s one-time child search), and `find` goes
+     straight to `pr.find(...) ?: pl`.
+   - `treeify` and `split` take the map, which Java's do not, so they can reach the stand-in's counter.
+   - **The stand-in (RECORD -50):**
+     - a field on the port's `OsmNode`, `var tieBreakId: Int = 0`, and one counter per map;
+     - `identityStandIn(node)`: if `tieBreakId` is 0, increment the map's `tieBreakIdsAssigned` and assign it;
+     - `tieBreakOrder(a, b) = if (identityStandIn(a) <= identityStandIn(b)) -1 else 1`. `a` is evaluated before `b`, as
+       Java's `:2063`.
+     - **Why on the node, not the entry:** HotSpot's identity hash belongs to the object. `untreeify`, `treeifyBin` and
+       `split` replace entries, and the number must survive that.
+     - Put the reasoning comment at the site, citing RECORD -50.
+   - **A call for the planner, not yet made:** a guard in `tieBreakOrder` that throws
+     `UnsupportedOperationException("unsupported: ...")` (the port's form, e.g. `JavaLang.kt:56`) when
+     `a::class != b::class`. That is the only case where Java's class-name step would order differently. It never fires
+     on today's callers.
+3. **The new test** goes in `commonTest`, so it runs on the JVM and the simulator. It needs one equal-hash tree bin of
+   about 30 or more nodes on one anti-diagonal (`ilon + ilat` constant), enough ordinary keys to force a resize (and so
+   `split` and re-`treeify`), and some removes.
+   - It builds three or more fresh maps, each from fresh `OsmNode` objects, with the same inserts, and asserts:
+     - every map's full `valuesIterator()` order equals the first's;
+     - `tieBreakIdsAssigned > 0` in each, so it saw a tie.
+   - **The revert, one line:** `node.tieBreakId = tieBreakIdsAssigned` becomes
+     `node.tieBreakId = kotlin.random.Random.nextInt(1, Int.MAX_VALUE)`. That is an arbitrary value fixed at first
+     request, as HotSpot's is.
+   - Keep the counter's increment on its own line, so the coverage assertion still passes and the failure is the order's.
+   - Write and push the prediction before the run, with its odds of a false pass estimated.
+4. **`cleanupPeninsulas`** (RECORD -50):
+   - on the JVM, keep Java's `StackOverflowError` catch (`OsmNodesMap.java:62-64`) and log when it fires;
+   - on iOS there is no catch, recorded as a known difference;
+   - this needs a small `expect`/`actual`. The comment at `OsmNodesMap.kt:13-16` and `:64` changes with it.
+5. **Run `:brouter:jvmTest --max-workers=2 --offline`** from an emptied `brouter/build/test-results/jvmTest`. Expect
+   100 tests plus the new one, 0 failures, counted from the XML.
+6. **The `DirectWeaver` revert:**
+   - run `bash docs/audits/2026-10-30-brouter-port-step5b/revert-runner.sh /home/user/forager-ios-5a <scratch-out>`;
+   - compare its result with `4-revert-prediction.md`: 10 failures, now plus 0 from the new test, which decodes no tile;
+   - then the new test's revert, the same way.
+   - The runner reads the compile log first, restores from a saved copy, and checks with `cmp` and the forward line.
+7. **Read CI** on the final push:
+   - `jvm`'s count and job time. Propose a split if it is over 20 of its 30 minutes;
+   - both klibs' `e:` lines;
+   - the simulator count, now 24 if the new test is in `commonTest` (simulator-checked);
+   - arm64 with its gate line.
+8. **Mark this report done,** with a section answering RECORD -50 point by point. Push, and tell the planner the branch
+   is ready.
+
+## Handoff of the second session (superseded by the one above)
 1. **Read the planner's answer to the sizing** (RECORD, or its message). It decides `NodeHashMap` and, in particular,
    what the port does at `tieBreakOrder`, which the test's "known" seeding reaches once in W75_N40 (above).
 2. **Write `NodeHashMap` as answered**, replacing the stub in `mapaccess/NodeHashMap.kt`, in three files under about

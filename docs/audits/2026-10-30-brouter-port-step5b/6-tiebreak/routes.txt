@@ -1,0 +1,15 @@
+# java Eclipse Adoptium 21.0.13+9-LTS amd64
+route f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457]: nodes 226 distance 5047; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+route f0 route [41.2772811, -74.0422743, 41.292043, -73.996678]: nodes 306 distance 6713; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+route segments route [41.2742564, -73.9978932, 41.3036912, -74.0159457]: nodes 226 distance 5047; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+route segments route [41.2772811, -74.0422743, 41.292043, -73.996678]: nodes 306 distance 6713; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+## tieBreakOrder totals by scenario (OsmNode keys: treeify, putTreeVal; other keys: treeify, putTreeVal)
+# total route [0, 0, 0, 0]
+# grand total [0, 0, 0, 0]
+## counters (zero unless the shadowed classes are first on the classpath)
+endOfArray 0: in the cache stream's StatCoderContext 0 (first at -); in other contexts 0 (-, arrays up to 0 bytes); the first of those at -
+noisy: decodeNoisyNumber max -1 at -
+noisy: decodeNoisyDiff (not from decodePredictedValue) max -1 at -
+noisy: decodeNoisyDiff from decodePredictedValue max -1 at -; calls over 24: 0
+cleanupPeninsulas: StackOverflowError caught 0; max recursion depth 0 at -
+OsmNode.parseNodeBody 0, parseNodeBody2 0, readUnified at :134 0
