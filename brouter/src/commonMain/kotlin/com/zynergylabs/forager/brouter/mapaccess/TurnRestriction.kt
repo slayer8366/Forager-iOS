@@ -1,6 +1,6 @@
 package com.zynergylabs.forager.brouter.mapaccess
 
-/** Port of BRouter 1.7.10's `btools.mapaccess.TurnRestriction`. Step 5b's stub (item I): signatures only. */
+/** Port of BRouter 1.7.10's `btools.mapaccess.TurnRestriction`. `toString` is not reached (T2) and not ported. */
 internal class TurnRestriction {
     var isPositive: Boolean = false
     var exceptions: Short = 0
@@ -10,9 +10,9 @@ internal class TurnRestriction {
     var toLat: Int = 0
     var next: TurnRestriction? = null
 
-    fun exceptBikes(): Boolean = TODO("step 5b")
+    fun exceptBikes(): Boolean = (exceptions.toInt() and 1) != 0
 
-    fun exceptMotorcars(): Boolean = TODO("step 5b")
+    fun exceptMotorcars(): Boolean = (exceptions.toInt() and 2) != 0
 
     companion object {
         fun isTurnForbidden(
@@ -23,6 +23,31 @@ internal class TurnRestriction {
             toLat: Int,
             bikeMode: Boolean,
             carMode: Boolean,
-        ): Boolean = TODO("step 5b")
+        ): Boolean {
+            var hasAnyPositive = false
+            var hasPositive = false
+            var hasNegative = false
+            var tr = first
+            while (tr != null) {
+                if ((tr.exceptBikes() && bikeMode) || (tr.exceptMotorcars() && carMode)) {
+                    tr = tr.next
+                    continue
+                }
+                if (tr.fromLon == fromLon && tr.fromLat == fromLat) {
+                    if (tr.isPositive) {
+                        hasAnyPositive = true
+                    }
+                    if (tr.toLon == toLon && tr.toLat == toLat) {
+                        if (tr.isPositive) {
+                            hasPositive = true
+                        } else {
+                            hasNegative = true
+                        }
+                    }
+                }
+                tr = tr.next
+            }
+            return !hasPositive && (hasAnyPositive || hasNegative)
+        }
     }
 }

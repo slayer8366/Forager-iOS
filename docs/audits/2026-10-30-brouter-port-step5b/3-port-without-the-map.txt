@@ -1,0 +1,20 @@
+# Step 5b, the port except the map (NodeHashMap still its stub, waiting for the planner's answer).
+# Local :brouter:jvmTest (--max-workers=2 --offline), results folder emptied first.
+# compile errors (lines starting 'e: ') in the log: 0
+100 tests completed, 8 failed
+com.zynergylabs.forager.brouter.mapaccess.CollectOutreachersTest: tests 2, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.CollectOutreachersTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.GraphDecodeTest: tests 5, failures 5, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.GraphDecodeTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.NodeHashMapOrderTest: tests 1, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.NodeHashMapOrderTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.OsmNodePairSetTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.OsmNodePairSetTest.xml)
+TOTAL: tests 100, failures 8, errors 0, skipped 0 in 45 files
+# Each failure, from the JUnit XML: type, message, first frame in com.zynergylabs:
+CollectOutreachersTest.collectOutreachersWithoutADestination[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.get(NodeHashMap.kt:10)
+CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.get(NodeHashMap.kt:10)
+GraphDecodeTest.f0Fixture[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.put(NodeHashMap.kt:13)
+GraphDecodeTest.w70n40[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.put(NodeHashMap.kt:13)
+GraphDecodeTest.w75n35[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.put(NodeHashMap.kt:13)
+GraphDecodeTest.w75n40[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.put(NodeHashMap.kt:13)
+GraphDecodeTest.e170s50[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.put(NodeHashMap.kt:13)
+NodeHashMapOrderTest.iterationOrderAndAnswersEqualJavaUtilHashMapsOnSeededOsmNodeKeys[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: hmap, option (i): waits for the planner | at com.zynergylabs.forager.brouter.mapaccess.NodeHashMap.put(NodeHashMap.kt:13)
+# OsmNodePairSetTest's own line: 5b OsmNodePairSet: 20 seeds, hasPair true 13766 times, temporary pairs past capacity 4411
+# Local iOS klibs on this commit's tree (online, with the dispatch's mirror init script, not committed): compileKotlinIosSimulatorArm64 and compileKotlinIosArm64 ran, BUILD SUCCESSFUL, 0 lines starting 'e: ', no warning in mapaccess.

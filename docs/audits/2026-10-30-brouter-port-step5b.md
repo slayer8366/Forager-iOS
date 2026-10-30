@@ -5,8 +5,10 @@ the owner's to choose), second session. Branch `brouter-port-5b`, cut from `orig
 planner's merge of 5a. The base was checked against the remote first: `git ls-remote` gave `brouter-port` at
 `9f41799dc20a`, so the primary had not pushed since [C]. Evidence in `2026-10-30-brouter-port-step5b/`.
 
-**Status (2026-10-30): in progress.** Part 1 (5a closed) is pushed at `4cc7f20`. The `hmap` sizing is below. **The map
-is not written until the planner answers** (Amendment 3, "size it ... and report the count before writing it").
+**Status (2026-10-30): in progress.** Part 1 (5a closed) is pushed at `4cc7f20`; the `hmap` sizing at `3495f64` (the
+planner was sent the count); the tests over stubs at `c53fd51`; the port without the map at this section's commit.
+**The map is not written until the planner answers** (Amendment 3, "size it ... and report the count before writing
+it"), so the decode tests and the revert wait on it.
 
 Tags: [R] read (file and line), [C] computed (log in the evidence folder), [I] inferred, [?] could not determine.
 
@@ -112,3 +114,27 @@ the harness was fixed and that run is not counted.
   list, and equal hashes in list bins. This needs `--add-opens java.base/java.util` on `jvmTest` (a call beyond the
   dispatch, below).
 - **`OsmNodePairSetTest` (1):** 20 seeds of 5,000 operations on both engines, every answer compared.
+
+## The port, except the map
+Ported line for line from 1.7.10 (Forager's `third_party` copy): `OsmLink`, `OsmNode`, `OsmPos`, `OsmLinkHolder`,
+`OsmTransferNode`, `TurnRestriction`, `OsmNodePairSet`, `GeometryDecoder`, `DirectWeaver`, and `OsmNodesMap` with its
+`hmap` behind `NodeHashMap`, still a stub. `OsmFile.createMicroCache`'s `TODO` is now Java's two lines (weave, return
+`MicroCache.emptyNonVirgin`).
+- **Local `jvmTest`: 0 compile errors; 100 tests, 8 failures, every one a `NotImplementedError` from `NodeHashMap`'s
+  stub; `OsmNodePairSetTest` passes** (13,766 `hasPair` hits, 4,411 temporary pairs past capacity). Both iOS klibs
+  compile with no `e:` lines [C: `3-port-without-the-map.txt`]. **`OsmNodePairSetTest` is the only 5b test shown to
+  pass on the port so far;** the other eight cannot run past the map.
+- **A test changed after the stub run:** `CollectOutreachersTest`'s destination case now also calls `canEscape` after
+  the collection, and fails unless `canEscape` answers both ways. The case without a destination samples only nodes
+  that reach a hollow node, so it could only ever see `true`. It was still failing on a stub when changed.
+- Java-identity comparisons (`==` on nodes and links) are Kotlin's `===`, because `OsmNode` overrides `equals`.
+
+**Calls beyond the dispatch, for the planner:**
+- **`calcDistance` and `collectOutreachers` take the `LibmSeam`,** as `CheapRuler.distance` does, so the engine can carry
+  the table (step 8). Java's signatures have no parameter.
+- **`cleanupPeninsulas` has no `StackOverflowError` catch.** Java swallows an overflow there (`OsmNodesMap.java:62-64`);
+  common Kotlin has no such type, and a Kotlin/Native thread cannot catch a stack overflow. The port lets an overflow
+  end the search. The recursion depth on the captured tiles is measured below.
+- **`parseNodeBody`'s `MicroCache2` branch is a named "unsupported"** (RECORD -32's condition, answered below), and
+  `parseNodeBody2`, `OsmNode(long)` and the `toString`s are not ported (not reached).
+- **`jvmTest` opens `java.util` to reflection** (`brouter/build.gradle.kts`), for the order test only.

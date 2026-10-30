@@ -73,12 +73,14 @@ class CollectOutreachersTest {
     fun collectOutreachersWithADestinationVanishesFarNodes() {
         var regions = 0
         var vanished = 0L
+        val escapes = IntArray(2)
         forEachRegion { where, o, p ->
             regions++
             // The destination is the region's first hollow node by position; the bound is the median distance to it.
             val oh = OracleGraph.hollowNodes(o.map).sortedWith(compareBy({ it.ilon }, { it.ilat }))
             val ph = PortGraph.hollowNodes(p.map).sortedWith(compareBy({ it.ilon }, { it.ilat }))
             val oNodes = reachableNodes(OracleGraph, oh)
+            val pNodes = reachableNodes(PortGraph, ph)
             val distances = oNodes.map { it.calcDistance(oh[0]) }.sorted()
             o.map.destination = oh[0]
             p.map.destination = ph.getOrNull(0)
@@ -93,11 +95,25 @@ class CollectOutreachersTest {
             val pt = GraphTranscript(PortGraph)
             ot.reachable(ot.mapState(o.map), holders = false)
             pt.reachable(pt.mapState(p.map), holders = false)
-            compare(where, ot, pt)
             vanished += oNodes.size - ot.counts[GraphTranscript.Count.NODES.ordinal]
+
+            // canEscape on every 37th node reached before the collection: vanished ones may now be cut off.
+            for (i in oNodes.indices step 37) {
+                val oe = o.map.canEscape(oNodes[i])
+                val pe = if (i < pNodes.size) p.map.canEscape(pNodes[i]) else null
+                escapes[if (oe) 1 else 0]++
+                ot.line("E $i $oe ${o.map.nodesCreated} ${o.map.lastVisitID}")
+                pt.line("E $i $pe ${p.map.nodesCreated} ${p.map.lastVisitID}")
+            }
+            o.map.clearTemp()
+            p.map.clearTemp()
+            ot.reachable(ot.mapState(o.map), holders = false)
+            pt.reachable(pt.mapState(p.map), holders = false)
+            compare(where, ot, pt)
         }
-        println("5b collectOutreachers with destination: $regions regions, nodes no longer reachable after it $vanished")
+        println("5b collectOutreachers with destination: $regions regions, nodes no longer reachable after it $vanished, canEscape false/true ${escapes[0]}/${escapes[1]}")
         assertTrue(vanished > 0, "the vanish branch was never taken: the cost bound cut nothing off")
+        assertTrue(escapes[0] > 0 && escapes[1] > 0, "canEscape did not answer both ways: false/true ${escapes[0]}/${escapes[1]}")
     }
 
     private class Loaded<M>(val map: M)

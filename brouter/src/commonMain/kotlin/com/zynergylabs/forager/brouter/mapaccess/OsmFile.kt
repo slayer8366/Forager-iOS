@@ -142,7 +142,8 @@ internal class OsmFile(rafile: PhysicalFile?, var lonDegree: Int, var latDegree:
                 // -DdisableDirectWeaving, which Forager never sets.
                 throw UnsupportedOperationException("unsupported: MicroCache2's decoder is not on T2's port list")
             }
-            TODO("DirectWeaver, item I step 5b")
+            DirectWeaver(bc, dataBuffers, lonIdx, latIdx, divisor, wayValidator, waypointMatcher, hollowNodes)
+            return MicroCache.emptyNonVirgin
         } finally {
             // crc check only if the buffer has not been fully read
             val readBytes = (bc.getReadingBitPosition() + 7) shr 3
