@@ -1986,3 +1986,27 @@ The watcher read 182,370 tokens at 04:37:45Z. The harness's final count was 187,
 - **Each new generator and its seed is committed and pushed before any run of it.**
 - **The order stays the coder's:** R's other 25 profiles, then DL-lat and DL-lon, then MP64, ML5 and PM5.
 **Notes:** Written by Cedar Datum by hand. Next free ID -48.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-48
+**Timestamp:** 2026-10-30T05:20:55Z
+**Continues:** 2026-10-28-3, 2026-10-28-10, 2026-10-28-47
+**Title:** Use the container's resources freely (owner); the secondary coder starts on step 5a alongside step 1b
+**Decision:** told that R's other 25 profiles would take about 80 minutes of computer time, the owner, verbatim: "You're
+not on the laptop, so take up what you want".
+- The container has 4 cores, 15 GB of memory and 22 GB of free disk (`nproc`, `free`, `df` at 05:20Z).
+
+**The planner's calls, following it (technical):**
+- **Step 1b's `e3Strata` runs up to 3 profiles at a time,** with each regime still in its own fresh JVMs. No 1b result
+  depends on timing. K's timing, at step 11, runs alone.
+- **The secondary coder starts now, on step 5a** (`mapaccess`, the file layer), while the primary is busy with 1b. This
+  is the role the owner set at -10, "the other secondary when the primary is busy".
+  - It works in its own clone, `/home/user/forager-ios-5a`, on its own branch `brouter-port-5a`, cut from `brouter-port`.
+  - It writes its own report file, so the two coders never edit the same file: Forager's lesson on serialization
+    points. When green, the branch is merged into `brouter-port` by a merge commit, never a rebase.
+  - It proposes three names on its first run.
+- **Checked:** the primary has already re-run F0 and R on `hiking-mountain` on Temurin 21.0.13+9 (`2ada78c`): 0 of 2 and 0
+  of 59 unstable, as on the local JDK.
+**Notes:** Written by Cedar Datum by hand. Next free ID -49.
