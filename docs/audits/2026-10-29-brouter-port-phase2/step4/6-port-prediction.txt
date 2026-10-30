@@ -1,0 +1,15 @@
+Step 4 (expressions), the port: prediction written before the drafts were moved into commonMain (fourteenth session,
+Linden Caliper, 2026-10-30). Base: 35dea70.
+
+What lands: the four drafts in port-draft/ replace their stubs; BExpressionMetaData (readMetaData through okio,
+javaReadLines and javaTrim), BExpressionContextWay (the 20 getters, accessType, setDecodeForbidden) and
+BExpressionContextNode are written from the Java. One change to a draft: the asterisk message is shortened to start
+"unsupported: addLookupValue's asterisk block", the prefix AsteriskUnsupportedTest asserts (report, step 4 section).
+
+Prediction, jvmTest:
+- 0 compile errors;
+- 75 tests, 0 failures: the 69 that passed on the stubs and the six step 4 tests;
+- if one goes red, it is most likely a text-handling case in MalformedProfileTest (0-prediction.txt, item 1), or a
+  message difference there (file name vs path in parseFile's ParseException), not an evaluation value.
+iOS: the klibs compile; ios-smoke runs commonTest only, which has no expressions test, so the simulator says nothing
+about the port's Float.toString unless a common test is added for it.

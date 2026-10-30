@@ -1,0 +1,35 @@
+Step 4's port, read from the JUnit XML in brouter/build/test-results/jvmTest after 7-port-jvmTest.log's run (local, 2026-10-30T01:07:45Z); compile errors in the log: 0.
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.DataBuffersTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.MicroCacheTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.NoisyDiffCoderTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.StatCoderContextTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.TagValueCoderTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.expressions.AsteriskUnsupportedTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.expressions.MalformedProfileTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.expressions.ProfileEvaluateTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.expressions.ProfileParseTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.msun.MsunAgainstCTest: tests 3, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 4, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.JavaTextCommonTest: tests 3, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.JavaTextTest: tests 4, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0
+TOTAL: tests 75, failures 0, errors 0, skipped 0 in 33 files

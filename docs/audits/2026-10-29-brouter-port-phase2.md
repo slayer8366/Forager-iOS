@@ -882,6 +882,21 @@ block". A companion test, beyond item 6, checks that without a `*` both engines 
   `step4/4-tests-prediction.txt`, the 26-profile tests 26 of 26 by that one cause. So every test fails at the shared
   construction path, not at the member it exists for; that member is first reached when the port lands.
 
+## Step 4: the port (fourteenth session, Linden Caliper)
+
+Prediction first, at `step4/6-port-prediction.txt`: 0 compile errors and 75 of 75 passing; a red, if any, most likely a
+text case in the malformed set.
+- **What landed:** the four drafts moved from `step4/port-draft/` into `commonMain`, replacing their stubs, with one
+  change: the asterisk message now starts "unsupported: addLookupValue's asterisk block", the prefix
+  `AsteriskUnsupportedTest` asserts. Written from the Java: `BExpressionMetaData` (okio read, `javaReadLines`,
+  `javaTrim`, listeners in a `HashMap` as Java's), `BExpressionContextWay` (the 20 getters in Java's index order,
+  `accessType`, `setDecodeForbidden`) and `BExpressionContextNode`. The largest file is `BExpressionContext.kt`, 379
+  lines. The drafts directory is removed, so there is one copy.
+- **Locally [C: `step4/7-port-jvmTest.log`, `step4/8-port-junit.txt`]:** 0 compile errors (`^e: ` in the log); 75
+  tests, 0 failures, 0 errors, 0 skipped, in 33 files, read from the JUnit XML after the results folder was deleted
+  before the run. The sample: `forEveryProfile` fails unless 26 profiles were checked (`ExpressionsEngines.kt:90`)
+  [R], and `MalformedProfileTest` prints "the oracle threw on 17 of 26 texts", as on the stubs [R].
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
