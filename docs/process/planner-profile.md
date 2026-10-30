@@ -26,9 +26,11 @@ Until the owner rules otherwise:
   pre-main-to-main gate covers the Forager app only.
 - **Work runs in a cloud container,** not the owner's laptop. Gradle may run there (RECORD -3). Forager's
   memory caps for the laptop do not apply.
-- **Helpers hand off earlier than Forager's 200k tokens:** at about 150k (RECORD -8), and at about 110k by
-  the helper's own estimate since part 3's estimate ran low against the harness's count (RECORD -9, the part 4
-  prompt). The planner's call.
+- **Helpers hand off before Forager's 200k tokens.** First at about 150k by their own estimate (RECORD -8, -9).
+  Since RECORD -15 the planner watches each helper's context from outside and asks for a handoff past 180k. After a
+  restart, the planner reads every watcher's output file, not only the tasks the harness lists (RECORD -54). The
+  planner's call.
+- **A planner session that stops writes `docs/process/planner-handoff.md`** for the next one (RECORD -54).
 - **Keeping iOS level with Android is the planner's duty,** not a separate role. At the start of each phase,
   Cedar checks Forager's `pre-main` for changes the iOS app should match, and raises them with the owner or
   with Rowan. Forager's `pre-main` moved 32 commits during one part of the BRouter port (RECORD -9). The

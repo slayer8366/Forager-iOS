@@ -2293,3 +2293,62 @@ proposals
 - **Accepted: the new determinism test goes in `commonTest`,** so it also runs on the simulator (23 to 24,
   simulator-checked). It is the first 5b behaviour to run on iOS.
 **Notes:** Written by Cedar Datum by hand. Next free ID -54.
+
+**ID:** 2026-10-28-54
+**Timestamp:** 2026-10-30T08:02:01Z
+**Continues:** 2026-10-28-15, 2026-10-28-50, 2026-10-28-52, 2026-10-28-53
+**Title:** The owner's stop: both coders handed off cleanly; 5b's branch is red on two questions for the planner; a
+missed watcher alert let one session run to 453k tokens; the planner's handoff is written
+**Decision:** the owner, verbatim: "Find a place to stop and write a handoff". Both coders were asked to finish the piece
+in hand, start nothing new, and hand off. The planner's handoff is `docs/process/planner-handoff.md` on `main`.
+
+**Where each branch stands (08:01Z, `git rev-parse` on origin):**
+- **`main`:** `d0d0f5e` before this entry.
+- **`brouter-port`: `82d310a`, Linden, session 19.** Clean tree.
+  - `fa54097` compiled locally, and CI on it passed.
+  - **R's 1,534-case sequence** was pinned by digest before `RGenerator` was edited, and is unchanged after (`437e047`). No
+    revert was run for that test.
+  - **`E3Select`, `E3Targeted`, `E3DLTest` and `E3MemoryTest`, with the seeds** 20261201 to 20261204, were pushed
+    before any run (`85008b1`). CI on it read `jvm` 91, simulator 23, arm64 7 [R, as reported]. Those are 5a's counts,
+    so they show only that the code compiles: the strata package is outside `jvmTest`.
+  - **No targeted stratum has run.** No expected values have been written. The handoff is the Phase 2 report's "Step 1b:
+    the handoff (nineteenth session)".
+- **`brouter-port-5b`: `279194d`, Plumb, session 4.** Clean tree. **Red locally:** 101 tests, 3 failures.
+  - **The map is written** (`1a5a25f`), from the pinned `HashMap.java` (SHA-256 `71c8d822…`), with the stand-in on
+    `OsmNode` as -50 and -53 ruled.
+  - `NodeHashMapTieBreakTest` (`commonTest`) passes, with ties met in all three places it checks.
+  - `GraphDecodeTest` passes 5 of 5 with the real map.
+  - **Question A, `CollectOutreachersTest` 2 of 2 failing** at W75_N40 near (105,130) sub 735. The port's new JVM
+    stack-overflow catch fired 3 times. Whether the oracle's silent catch fired is [?].
+    - Plumb's untested guess [I]: the port's frames are larger, so it overflows where the oracle does not.
+    - If that is right, -50's premise that keeping the catch "keeps logic runs equal" fails on this region. It also
+      means the oracle's own result there depends on the thread's stack size.
+  - **Question B, `NodeHashMapOrderTest` failing its own refusal assertion:** 8 of 12 seeds were refused for an
+    equal-hash tree bucket. The generator does not keep such buckets out, and -50 said the test "keeps refusing" them.
+  - **Not done:** CI on `1a5a25f` and `279194d` (so the new `iosMain` `actual`s have not been compiled for iOS), both
+    reverts, and the tie-break decode total. Session 3's count run stopped partway and is recorded as incomplete.
+  - **A slip, corrected before any run:** the `DirectWeaver` revert's predicted total was 10, but its own per-class lines
+    add up to 7. The addendum was pushed before any run.
+- **`brouter-port-5a`: `2a8ba5e`.** Merged as `9f41799`; kept, not deleted.
+
+**A missed watcher alert, disclosed.** Plumb's second session (5b, started 05:50Z) passed 180k at 05:56:14Z. The
+watcher wrote "LIMIT 184347" at 05:56:33Z, but the planner never acted on it. The alert was most likely among the
+notifications the 06:30Z restart lost, and on resuming the planner checked only the tasks the harness listed. The session
+ran unchecked until 06:52Z and ended at **453,403** tokens of context. Its work was verified at -50, and none of it is
+in doubt. **The rule now (the planner's call):** after any restart, read every watcher's output file, not only the
+tasks the harness lists.
+
+**Token counts, each session's final context [C: the transcripts' last usage]:**
+
+| Session | Tokens |
+|---|---:|
+| Plumb 1 (5a) | 190,217 |
+| Plumb 2 (5b) | 453,403 |
+| Plumb 3 | 217,165 |
+| Plumb 4 | 193,387 |
+| Linden 17 | 148,299 |
+| Linden 18 | 205,562 |
+| Linden 19 | 178,000 |
+
+Each session spent about 60k before its first action. The trimmed dispatches did not shrink that much.
+**Notes:** Written by Cedar Datum by hand. Next free ID -55.
