@@ -904,6 +904,27 @@ text case in the malformed set.
   `step4/12-floattext-junit.txt`]: 0 compile errors, 77 tests, 0 failures. On the JVM it shows only that the values
   were transcribed right; it cannot fail there for a port reason. Never seen failing: it tests the platform, not port
   code, so there is no stub to fail it on.
+- **CI for `aa0d918` (run 40983982019) [R: job logs]:** `success`. `jvm`: JVM tests 75, 0 failures, 0 errors, 0
+  skipped, in 33 files; iOS klibs `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, build
+  successful. `ios-smoke`: `iosSimulatorArm64Test` ran, 21 tests, 0 failures, in 8 files (simulator-checked; commonTest
+  only, no step 4 class among them); the arm64 JVM step's outcome `success`, 7 tests, 0 failures, in 2 files; the gate
+  "OK: all 2 classes ran".
+- **The reverts, both predicted first at `step4/14-reverts-prediction.txt`, run by `step4/13-revert.sh`** (a copy saved
+  before editing and restored from, never git; the results folder deleted before each run; the log's `^e: ` count
+  checked before any result is read; after each, the file compared to the saved copy and to HEAD). Each ran the
+  expressions package, 8 tests in 5 files.
+  - **Revert 1, item I's (`max` for `min`, `BExpression.kt:41`) [C: `step4/15-revert1-min-max-jvmTest.log`]:** 0
+    compile errors; 2 of 8 failed, as predicted ("1 or 2"). `ProfileEvaluateTest` on 20 of 26 profiles (predicted at
+    most 21, the files containing "min"), by raw-bits mismatches on built-in variables 0 (`costfactor`) and 11
+    (`maxspeed`); `ProfileParseTest`'s expressions check on 4 of 26, at `way expressionList`, where a constant `min`
+    folds to a different number (`...[0].0...` expected, `...[9999].0...` read: min against max of 0 and 9999). Both
+    messages are ones this edit can produce. Restored; the file matched HEAD.
+  - **Revert 2, the parser (RECORD -41; `e = e.tryCollapse()` removed from `BExpression.parse`, `:183`) [C:
+    `step4/16-revert2-no-collapse-jvmTest.log`]:** 0 compile errors; 1 of 8 failed, as predicted:
+    `everyProfileParsesToTheOraclesExpressions`, 23 of 26 profiles, every cause at its own member `way
+    expressionNodeCount`, the port's count higher (469 expected, 489 read; 659 expected, 1002 read). `ProfileEvaluateTest`
+    passed, as predicted: collapse does not change these profiles' values, so only the parse check can see it.
+    Restored; the file matched HEAD.
 
 ## Confirmed vs inferred
 

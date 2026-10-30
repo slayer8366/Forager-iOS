@@ -1,0 +1,22 @@
+Step 4's two reverts, predicted before either ran (Linden Caliper, fourteenth session; base 94b769e, forward change
+committed). Runner: 13-revert.sh (saved copy, results folder deleted, compile errors refused, restore from the copy,
+file checked against HEAD after). Each runs the expressions package only (6 step 4 tests + FloatTextCommonTest's 2 =
+8 tests in 6 classes).
+
+Revert 1, item I's: BExpression.kt:41, MIN_EXP evaluates max(...) instead of min(...).
+- ProfileEvaluateTest fails, on a built-in variable compared by raw bits, on some of the 26 profiles: 21 of 26 profile
+  files contain the word "min" (grep -w, comments included), so at most 21, at least 1.
+- ProfileParseTest's expressions check may also fail, but only where a profile's min has two constant operands at
+  parse time, so tryEvaluateConstant folds it to a different number: could not determine without reading each profile.
+- The lookups-versions test, MalformedProfileTest, the asterisk tests and FloatTextCommonTest pass.
+- So: 1 or 2 failures of 8.
+
+Revert 2, the parser (RECORD -41): BExpression.kt:183, `e = e.tryCollapse()` removed from BExpression.parse, so
+OR/AND/ADD/SWITCH with one constant operand are no longer collapsed.
+- ProfileParseTest.everyProfileParsesToTheOraclesExpressions fails at its own member: the first assertion that sees the
+  difference is expressionNodeCount (the uncollapsed tree has more nodes; it is asserted before expressionList), on
+  most of the 26 profiles (any profile with a switch on a constant-valued variable).
+- ProfileEvaluateTest passes: collapse is value-preserving for SWITCH and ADD 0; OR/AND collapse returns the constant
+  or the other operand instead of 1/0, which differs only for operands other than 0 and 1 (not expected in these
+  profiles; if it fails, that is why).
+- Everything else passes. So: 1 failure of 8, on "expressionNodeCount".
