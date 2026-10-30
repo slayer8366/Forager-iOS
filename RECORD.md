@@ -1895,3 +1895,44 @@ commit on `main` (`GITHUB_SHA`), which by definition modifies no workflow file r
   - read CI.
 - **Then step 1b,** the oracle's own runs, the first of the milestones the owner asked to hear about.
 **Notes:** Written by Cedar Datum by hand. Next free ID -46.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-46
+**Timestamp:** 2026-10-30T04:16:37Z
+**Continues:** 2026-10-28-3, 2026-10-28-45
+**Title:** Step 1 closed: the release pinned on `brouter-port`; the oracle's JDK equals Phase 1's table; step 1b's control
+works on CI
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `adc8065` and `490d0ae`: the pinning and its revert;
+- `fa89911` and `8305898`: `OracleJdkTableTest` and its revert;
+- `4be79f0` and `d32f2c3`: E3's control and its revert;
+- `f156946`: the report and handoff.
+
+The watcher read 182,796 tokens at 04:09:02Z. The harness's final count was 194,434.
+- **Pinning:**
+  - `tools/tile-pins.tsv` is the release's own, byte for byte.
+  - A `fetchTiles` task fetches the five files from the release into the build, and `jvmTest` depends on it.
+  - `TilePinsTest` checks each file against its own copy of the pins.
+  - Item I's revert (W70_N40's pinned size off by one) failed as predicted, and was restored from a saved copy.
+- **The anonymous download (-45's open point):** both CI jobs fetch the five files with a `curl` that carries no
+  credentials. The coder infers that no token reaches it.
+- **The oracle's JDK (Amendment 3's stop condition):** `OracleJdkTableTest` rebuilds Phase 1's no-intrinsic table with the
+  test JVM's `Math.cos` and asserts Phase 1's SHA-256, `ee004dc0…b379`.
+  - It **passed on CI's Temurin 21.0.13+9 amd64**, so the table equals Phase 1's. **Not a stop.**
+  - Its revert, the flag dropped, gave Phase 1's default-flags hash, as predicted. The test stays permanent.
+- **E3's positive control** (part 7's `TreeBinOrder`, R1 and R4 in fresh JVMs): locally the two orders differ, and each
+  regime repeats itself. Its revert, the 997-object perturbation removed, made R4 take R1's order, as predicted.
+- **CI, read by the planner:**
+  - run 41001173265 on `d32f2c3`, `success`: `jvm` 81 tests, 0 failures. The log shows `OracleJdkTableTest`,
+    `E3ControlTest.r1AndR4GiveTheControlDifferentOrders` and both `TilePinsTest` cases passing.
+  - The coder read run 41000692626 (simulator 23 of 23, arm64 step 7 of 7, gate OK).
+- **Not started in 1b:** the case generators, any stratum, and regimes R2, R3, R5 and R6. **E3's 5% stop has not yet been
+  tested.**
+- **Calls beyond the amendment:** the pin file taken verbatim; the fetch hung off `jvmTest`, so `ios-smoke`'s arm64 step
+  downloads about 130 MB too; `OracleJdkTableTest` kept permanently.
+
+**The planner's call (technical):** R6's JaCoCo agent is pinned at the latest release read from Maven Central's metadata,
+by SHA-256, as the oracle jar is. The coder reports the version and its source.
+**Notes:** Written by Cedar Datum by hand. Next: step 1b continued. Next free ID -47.
