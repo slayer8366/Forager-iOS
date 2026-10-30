@@ -1741,3 +1741,60 @@ The watcher read 180,254 tokens at 01:02:11Z. The harness's final count was 192,
 - **Step 4's revert, after the port, adds a second check.** It changes the parser, not only the evaluator's `min`, so the
   parse tests are shown to bite at their own member.
 **Notes:** Written by Cedar Datum by hand. Next: step 4's port. Next free ID -42.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-42
+**Timestamp:** 2026-10-30T01:27:05Z
+**Continues:** 2026-10-28-3, 2026-10-28-41
+**Title:** Milestone: steps 3 and 4 complete (`codec`, `expressions`); the port now waits on the tile release
+**Observed:** Linden Caliper (Opus), on `brouter-port`:
+- `aa0d918`: the port;
+- `94b769e`: `FloatTextCommonTest`;
+- `f03a4c2`: the reverts;
+- `b706c4e`: the handoff, written into the report.
+
+The harness counted 167,253 tokens, under the watcher's limit.
+- **CI, all `success`** (the planner read the conclusions through the API; the counts are the coder's, read from the logs):
+  - **40983982019 on `aa0d918`:** `jvm` 75 tests, 0 failures, iOS klibs compiled; `ios-smoke` 21 of 21
+    (**simulator-checked**); arm64 JVM step 7 of 7, gate OK.
+  - **40984156792 on `94b769e`:** `jvm` 77 of 77; simulator 23 of 23.
+  - **40984413979 and 40984753472:** the same counts.
+- **The port:**
+  - the four drafts moved in;
+  - `BExpressionMetaData` and the way and node contexts written;
+  - the largest file 379 lines;
+  - all 26 profiles checked in every pass.
+- **`Float.toString` on the simulator** (the coder's prediction 2): a new common test with Java's strings as expected values
+  passed there, with the same hash and length over 30,000 values and 19 literals. **Kotlin/Native printed Java's strings
+  for every value tried.**
+- **Reverts, both predicted first:**
+  - **`max` for `min` (`BExpression.kt:41`):** 2 of 8 failed. The evaluate test failed on 20 of 26 profiles, and the
+    parse test on 4, where a constant `min` folds differently.
+  - **The parser, `tryCollapse` removed (`:183`):** 1 of 8 failed, at `expressionNodeCount` on 23 of 26 profiles. Only the
+    parse test sees it.
+- **Unverified:**
+  - 19 of the 20 named way getters and the node's `getInitialcost` are never called by a test. The tests read by index.
+    Step 6's path model calls them.
+  - `parseFloat`, `parseShort` and `HashMap` order on Native;
+  - the `RuntimeException` branch;
+  - UTF-8 only.
+- **Checked by the planner:**
+  - the tree is clean at `b706c4e`;
+  - the four runs' conclusions;
+  - the ten `expressions` files exist;
+  - `brouter/src/commonMain` holds 3,589 Kotlin lines over its packages.
+
+**Milestone:** steps 2a to 4 are done. That is `util`, the maths, `codec` and `expressions`, about 3,570 of the 10,759
+Java lines (computed from item I's sizes: 1,302 + 156 + 550 + 1,562).
+
+**Cost, counted from this record:**
+- Phase 2's sessions so far total about 2.96 million tokens. Steps 0 and 1 took about 0.43 million; steps 2a to 4 and
+  the release workflow, about 2.53 million.
+- At that rate the remaining ~7,200 lines would take roughly 5 million more (inferred, linear). That puts the
+  continuation above the 3 to 6 million estimate the owner was given at -28. The planner reports this to the owner.
+
+**Blocked:** steps 1b and 5a onward need the tiles, so they wait on the owner's run of `publish-tiles` (-30, -31). No
+session is started until then.
+**Notes:** Written by Cedar Datum by hand. Next free ID -43.
