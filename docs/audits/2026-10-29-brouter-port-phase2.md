@@ -67,6 +67,12 @@ planner's word** (context past 180k). Pushed: the draft sizes corrected (`090d2e
 failing on the stubs, 75 tests, 6 failures, 0 compile errors, read from the JUnit XML (`step4/5-tests-stubs-junit.txt`).
 **CI on these commits was not read.** Next: the port of the drafts into `commonMain` (section "Step 4: the test list").
 
+**Status (2026-10-30, fifteenth session, Linden Caliper, Amendment 3 Part B, step 1 pinning and step 1b's start):** the
+release `brouter-tiles-2026-10-30` is pinned on `brouter-port` (`adc8065`), its revert seen failing as predicted
+(`490d0ae`), and CI read green on both jobs. Step 1b's JDK check is a test (`fa89911`, revert `8305898`), and E3's
+positive control runs R1 and R4 in fresh JVMs (`4be79f0`, revert `d32f2c3`). **Step 1b is partial:** no case generator,
+no stratum and no R2, R3, R5 or R6 yet. See "Step 1 pinning and step 1b's start" below, and its handoff.
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -948,6 +954,102 @@ Step 4's parts in Amendment 3 Part B, as dispatched to this session, are done: t
     `FileReader`, is still unverified for anything but UTF-8;
   - `FloatTextCommonTest` has never been seen failing: it tests the platform, so there is no stub for it.
 - **Next:** the planner's call. No step after 4 was dispatched to this session.
+
+## Step 1 pinning and step 1b's start (fifteenth session, Linden Caliper)
+
+Dispatched by Cedar Datum under Amendment 3 Part B after RECORD -45. **Bases [R]:** `brouter-port` at `ae8ec40` on pull, as
+the dispatch said; `main` at `44038c8` after fetch. Evidence is in `2026-10-29-brouter-port-phase2/step1-pinning/` and
+`step1b/`.
+
+### Pinning (item I, step 1)
+
+- **`tools/tile-pins.tsv`** is now the release's own `tile-pins.tsv`, byte for byte (SHA-256 `ccfc380e…`) **[C]**. Same
+  eight columns; its header is the release's shorter one, so the column notes moved to `tools/fetch-tiles.sh`'s header.
+- **The build:** a `fetchTiles` Exec task runs `tools/fetch-tiles.sh` against
+  `https://github.com/slayer8366/Forager-iOS/releases/download/brouter-tiles-2026-10-30` into `brouter/build/tiles`, and
+  `jvmTest` depends on it, passing `brouter.tiles.dir` and `brouter.tiles.pins` (`adc8065`).
+- **The test:** `tiles/TilePinsTest` holds the five pins itself, as `OraclePinTest` holds the jar's. It checks the pin file's
+  rows and each fetched file's size and SHA-256 against them. `tiles/TestTiles` is the helper later steps read tiles through.
+- **Item I's revert, predicted first** (`step1-pinning/0-prediction.txt`): W70_N40's pinned bytes 5292622 → 5292623.
+  - **Run A** (fresh `build/tiles`): the fetch refused that tile with the predicted line, "REFUSED W70_N40.rd5 from …: W70_N40.rd5
+    is 5292622 bytes, pinned 5292623"; jvmTest never ran **[C]**.
+  - **Run B** (`-x fetchTiles`, all five present): TilePinsTest 2 tests, 1 failure, `pinFileIsTheReleasesOwn` on W70_N40's bytes
+    alone **[C]**.
+  - 0 compile errors in either log. The pin file was restored from its saved copy and equalled HEAD after each run. A forward run
+    between A and B: 2 of 2 **[C]**.
+- **CI run 41000692626 on `490d0ae`, `success` [R: job logs]:**
+  - `jvm`: 79 tests, 0 failures (77 earlier plus these 2); iOS klibs built, no `e:` line.
+  - `ios-smoke`: simulator 23 of 23 (**simulator-checked**); arm64 JVM step `success`, 7 of 7, gate "OK: all 2 classes ran".
+  - **Both jobs fetched all five files from the release** with `curl` and no credentials (`fetch-pinned.sh` passes none), on
+    ubuntu-24.04 and macos-26 **[R]**. This is the anonymous download RECORD -45 left unproven **[I: no token reaches
+    that curl; not checked against a request log]**.
+
+### The JDK check (Amendment 3 Part B, "The oracle's JDK")
+
+- **`CheapLogicRunTest`'s CI pass does not show it [R: the test].** `theJvmRunsWithLibmIntrinsicsOff` compares `Math.cos` with
+  `StrictMath.cos` inside one JVM. Equality with Phase 1's table would follow only if `StrictMath.cos` gave the same bits on both
+  JDKs, which nothing here checks.
+- **So `oracle/OracleJdkTableTest` (`fa89911`)** writes Phase 1's `math-nointrinsic.txt` again, in `TableRows.java`'s form, with the
+  test JVM's `Math.cos`. It asserts the SHA-256 is Phase 1's `ee004dc0…b379` (`10-tests/logs/table-run.log` at `20e1f92`), and
+  that every row's kx and ky equal the oracle's own `SCALE_CACHE` in that process.
+- **Its revert, predicted first** (`step1b/0-jdk-check-prediction.txt`): `-XX:-UseLibmIntrinsic` was dropped on this container's
+  OpenJDK 21.0.12.1. The SHA-256 was `4ab07de6…`, Phase 1's default-flags table, as predicted. 1 test, 1 failure, 0 compile errors,
+  restored and equal to HEAD (`8305898`) **[C]**.
+- **CI run 41000916401 on `8305898`, `jvm` [R: job log]:** "oracle JDK: Eclipse Adoptium 21.0.13+9-LTS amd64; 1800 rows;
+  no-intrinsic Math.cos table SHA-256 ee004dc0…b379". Passed, so it equals Phase 1's. 80 tests, 0 failures. **Not a stop.**
+
+### E3's positive control
+
+- **Built:**
+  - `oracle/e3/TreeBinControl` ports part 7's `TreeBinOrder.java` line for line;
+  - `E3Jvm` runs one regime on a new thread, where R4 first asks `identityHashCode` of 997 fresh objects;
+  - `E3Launcher` starts it in a fresh JVM with the test JVM's `-XX:` flags and classpath. Output goes to a file, so the 120 s
+    timeout applies even to a hung child.
+- **`E3ControlTest` (`4be79f0`):** R1 and R4 must differ. Each runs twice. Locally: R1 `4,0,11,1,9,2,3,5,10,6,7,8,` and R4
+  `4,2,0,1,3,9,5,6,7,10,8,11,`. **Each regime repeated itself exactly across fresh JVMs** **[C]**.
+- **Item I's revert, predicted first** (`step1b/2-control-prediction.txt`): `PERTURBATION` 997 → 0 gave R1's order in all four runs.
+  The test failed at its `assertNotEquals`, 0 compile errors, restored and equal to HEAD (`d32f2c3`) **[C]**. The predicted
+  message wording was wrong: I guessed it from memory, and kotlin.test prints "Actual:". The value was right.
+- **Only R1 and R4 exist.** R2 (repeated in R1's JVM), R3 (the shuffled suite), R5 (with `debug.txt`) and R6 (under JaCoCo) are
+  not built.
+
+### Step 1b's state: partial
+
+- **Done:** the JDK check, and the positive control for R1 and R4.
+- **Not started:**
+  - the case generators and their seeds;
+  - any stratum, and so no E3 stability count. **E3's 5% stop has not been tested on any stratum;**
+  - the expected digests and R1 times.
+
+### Calls beyond the amendment (mine; for the planner)
+
+- `tile-pins.tsv` taken verbatim rather than keeping the old header, so its SHA-256 can be checked against the release asset.
+- The fetch hangs off `jvmTest`, so `ios-smoke`'s arm64 JVM step fetches the 130 MB too. Item I says both jobs fetch; this is how
+  `ios-smoke` does it. `iosSimulatorArm64Test` does not depend on the fetch: no common test reads a tile yet.
+- `OracleJdkTableTest` is a permanent test, not a one-off run, so a JDK change on CI is caught on every push.
+- E3's control uses Kotlin and a fresh-JVM launcher in `jvmTest`, not part 7's Java file.
+
+### Could not determine, and unverified
+
+- **Whether R1's repeatability holds on CI's Temurin.** It was seen only in this container. `E3ControlTest`'s first CI run is on
+  `d32f2c3` and was not read by this session unless noted in the final message.
+- **Which oracle class reads a tile's nodes** for E4's "start and end drawn on the tile's own nodes": not looked at **[?]**.
+- **R6 needs a JaCoCo agent jar.** That is a new pinned download, so its version and SHA-256 are a call to make. Not priced.
+
+### Step 1b: the handoff (fifteenth session)
+
+For the next session, in order:
+1. **Read** this section, E3 to E5 (Phase 1 report at `20e1f92`, lines 806-965), and item I's 1b row (line 1693).
+2. **Extend `E3Jvm`** from the control alone to a case list, adding:
+   - R2 (a second new thread in R1's JVM);
+   - R3 (one JVM, the whole list, a fixed shuffle seed in source);
+   - R5 (`debug.txt` in the folder above the profile folder: `RoutingEngine.java:111-121`).
+   R6 waits for the planner's call on JaCoCo. Keep each fresh JVM's control line in every regime.
+3. **First stratum: F0** (2 cases, Forager's two routes and profile on `TestTiles.f0`). It needs no generator, so it brings
+   the harness up end to end. **Then R on one profile:** the generator with its seed, air distance log-uniform from 100 m to
+   100 km, ends moved 0 to 100 m, six decimals.
+4. **Report each stratum's instability count against E3's 5% stop.** More than 5% unstable is a stop: report it to the
+   planner and do not go on.
 
 ## Confirmed vs inferred
 
