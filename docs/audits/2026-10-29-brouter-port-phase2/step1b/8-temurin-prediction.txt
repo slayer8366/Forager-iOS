@@ -1,0 +1,18 @@
+Step 1b, seventeenth session (Linden Caliper). Predictions written before any e3Strata run on Temurin 21.0.13+9,
+after 970df90 was pushed (RECORD -47).
+
+1. Every stratum's log opens with: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64,
+   and java.home under the scratch Temurin. Every regime's JVM is that java (E3Launcher starts java.home/bin/java).
+   Confidence: high.
+2. F0 on Temurin: 0 of 2 unstable; R1 226 nodes / 5,047 m and 306 / 6,713 m, costs 5,302 and 7,405, as on OpenJDK
+   21.0.12.1. Confidence: high.
+3. R-hiking-mountain on Temurin: the same 59 cases from 67 candidates, 8 rejected (the generator is java.util.Random
+   and the oracle's tile reader; nothing in it reads identity hashes). Confidence: high.
+4. R-hiking-mountain on Temurin: 0 of 59 unstable, and every case's R1 tuple equal to the OpenJDK run's
+   (6-r-hiking-mountain-stability.tsv): same jar, same -XX:-UseLibmIntrinsic, so Math.cos is fdlibm on both.
+   Confidence: moderate. A different tuple on the other JDK would not by itself be instability (E3 compares within
+   one JDK), but it would be a finding for the planner.
+5. The control's R1 and R4 orders differ in every JVM. Confidence: high.
+6. R on the 25 other profiles: no profile over 5%; most likely 0 unstable in each (moderate). No stratum short
+   (rejection is geometric, about 8 in 67 on hiking-mountain's seed). Kinds: rail and river give mostly non-route
+   outcomes (low confidence on the exact mix).
