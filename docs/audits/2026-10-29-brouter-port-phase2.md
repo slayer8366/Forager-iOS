@@ -1373,6 +1373,115 @@ put a fixed-message outcome into the stratum J predicts by collections."
 5. **Then** E3's 5% stop per stratum, the expected values (part 7 step 4's digest form, with unstable cases marked, including
    `R-shortest-025`), and 1b's milestone report: total against 2,118. NT, LB, CR and FK are not built.
 
+## Step 1b continued: the selector, DL's, MP64's, ML5's and PM5's tests, seeds pushed; no stratum run (nineteenth session, Linden Caliper): PARTIAL
+
+Dispatched by Cedar Datum after RECORD -52. **Base [R]:** `brouter-port` at `fa54097` after fetch, as the dispatch said.
+**Stopped at the planner's request (07:58Z, the owner's call to stop the team) with no run underway.** No stratum ran.
+
+### `fa54097` first [C]
+
+- **It compiles:** `./gradlew :brouter:compileTestKotlinJvm` green locally before any edit.
+- **CI on `fa54097`, run 41021809372:** completed, conclusion success (both jobs) [R: the run's job list]. Counts not read from
+  its log; the counts below are `85008b1`'s.
+
+### What was built (`437e047`, `85008b1`)
+
+- **R's sequence pinned before `RGenerator` was edited (`437e047`).** `E3RSequenceTest` (strata package, so `e3Strata`
+  only) generates R's 26 lists exactly as `E3R` does and holds the SHA-256 of their lines (id, the four ends, profile,
+  `memoryclass`, time limit; not the tile folder) to `ed378c85…e43d6c`.
+  - **Before the edit [C]:** 1,534 cases, that digest; the test failed on its placeholder, as predicted, and printed it
+    (`step1b/11-r-sequence-before-edit-e3Strata.log`). The list is saved whole: `step1b/11-r-sequence-before-edit.tsv`, whose
+    `sha256sum` is the same value.
+  - **After the edit [C]:** the test passed with the same digest, and `cmp` of the new list against the saved one found them
+    byte-identical (`step1b/11-r-sequence-after-edit-e3Strata.log`). Both on Temurin 21.0.13+9.
+  - **Not seen to bite on a changed sequence [stated]:** no revert was run. What stands outside the check is the `cmp` of the
+    whole list against the copy saved before the edit.
+- **`E3Select` (new):** the selector under RECORD -51 and -52.
+  - Each candidate runs in E3's own `R1R2` JVM (`E3Stability.launch`, now `internal`), as many at once as `E3Strata.workers` (cores - 1), and is taken
+    strictly in draw order.
+  - Reach counts only when R2's tuple equals R1's; otherwise the candidate is rejected as "R2's tuple differs from R1's".
+  - The first 59 per stratum are taken; a candidate for a full stratum of a shared sequence is "already full", counted.
+  - **The cap is 1,180 draws per sequence,** a draw rejected before routing counting toward it, as R's generator counts its
+    candidates (`RGenerator.generate`). **A call (mine):** the alternative, 1,180 routed candidates, is looser.
+  - Draws still running when every stratum is full are neither counted nor written; the pool is shut down without interrupting,
+    so no child JVM is left unwatched.
+  - Every counted draw is a row of `<work>/<label>-select/select.tsv`: draw, id, R1 and R2 tuples, R2 = R1, R1's extent,
+    R2's collected lines, R2's panic line, R1's ms, `memoryclass`, the reach reading, the result. A check holds rows to draws.
+  - `E3Select.PANIC` is "enabled memory panic mode": the panic line at `:2031` **also contains "memory limit reached"**
+    [R: `RoutingEngine.java:2031` at v1.7.10], so the two are told apart by that part. "memory limit reached" is thrown at one
+    site only, `:2028` [R: grep].
+- **`E3Targeted` (new, strata):** `hiking-mountain`, n 59, cap 1,180, 600 s per JVM. After selection it runs E3's six regimes
+  on the taken cases with `E3Stability.run` unchanged, which **re-runs R1R2** (the handoff's second option), and compares each
+  case's selection R1 tuple and R2 lines with E3's, printing every difference and the count of agreements. All strata of one
+  sequence are reported before the first E3 failure is thrown; a short stratum fails after E3 has run on what it has.
+- **`DLGenerator`:** `generate` replaced by `draws`, an endless numbered sequence; draw 7 is `DL-lat-0007`.
+- **`E3DLTest` (new, two tests):** seeds **20261201** (DL-lat) and **20261202** (DL-lon). Before a case is routed, it asserts
+  that the case's ends lie in the two tiles, one in each, by tile names computed from the degrees, independent of the
+  generator's cell test. Reach: R1's extent has `min < line <= max`, with the line at ilat 130,000,000 or ilon 110,000,000.
+- **`RGenerator`:** optional `only` (one tile), `minMetres` and `ratio` (distance `minMetres × ratio^u`); the defaults are R's
+  expression unchanged. `draws(prefix, profile, memoryclass, …)` beside `generate`.
+- **`E3MemoryTest` (new, two tests):**
+  - **MP64,** seed **20261203:** `W75_N40` only, both ends in it, 20 to 100 km log-uniform (`20 km × 5^u`), `memoryclass` 64.
+    Reach: at least one "collected" line in R2. Taken cases with the limit or panic mode are counted and printed (E4).
+  - **ML5 and PM5,** one sequence, seed **20261204,** `memoryclass` 5, ids `M5-nnnn`. ML5: R1's kind is "memory limit
+    reached". PM5: R2 shows the panic line and the kind is not the limit. Neither: rejected. ML5 cases that also showed panic
+    are counted.
+  - **Calls (mine):** "in `W75_N40`" read as both ends in that tile (the route may leave it), and "20 to 100 km" read as R's
+    log-uniform law over that range.
+- **`E3Jvm`:** the `R1` regime is dropped, as the eighteenth handoff said.
+
+### CI [R: job logs]
+
+- **`437e047`, run 41022631752:** success.
+- **`85008b1`, run 41023085025:** success. `jvm` TOTAL tests 91, failures 0, in 41 files; `ios-smoke` 23, failures 0
+  (simulator-checked); the arm64 JVM step 7, failures 0.
+- **These counts equal 5a's (91, 23, 7) and say nothing about the new code beyond compiling:** every new test is in the strata
+  package, which `jvmTest` excludes.
+
+### Mechanism predictions, written before any run [I unless marked]
+
+- **DL-lat:** fills 59 within the cap. About half of all draws are rejected before routing (a uniform bearing points away
+  from the line about half the time). Land on both sides of 40°N in these tiles is New Jersey, roughly 75°W to 74°W [I:
+  geography]. Some routed candidates fail with no route.
+- **DL-lon:** fills, with more rejects before routing than DL-lat (Maine and Cape Cod only).
+- **MP64:** most routed candidates collect at least once (20 km and more on `hiking-mountain` in the New York area); it fills
+  early. 0 limit and 0 panic at `memoryclass` 64.
+- **ML5 and PM5** [?]: most routed candidates reach a collection. In pass 0, `maxTotalCost` is 1e9, so the first out-of-bounds
+  collection enables panic; a later pass with a bound throws the limit (`:2027-2028`). So ML5 should hold many cases that
+  also showed panic, and **PM5 is the one that may come up short.**
+- **E3:** 0 unstable in each stratum (Phase 1's prediction; R missed it by 1 of 1,534).
+
+### Could not determine, and unverified
+
+- **Not run:** the selector, DL's, MP64's and the ML5/PM5 tests. Nothing about what they select, or how long they take, is
+  known. A 20 to 100 km `hiking-mountain` run may take tens of seconds; R's 59 on that profile took 3 minutes in all.
+- **`E3Select` has no unit test of its own** (draw order, the cap, a full stratum in a shared sequence). Its one internal
+  check is rows against counted draws. The first run's `select.tsv` is the evidence to read: draw numbers 1 to n with no gap,
+  taken ids in rising order, and rejected counts summing to draws minus taken.
+- `E3RSequenceTest` has not been seen to fail on a changed sequence (above).
+
+### Step 1b: the handoff (nineteenth session)
+
+1. **Read** this section, RECORD -51 and -52, and E4 (Phase 1 at `20e1f92`, lines 839-932). Base: `brouter-port` at the
+   commit carrying this section or later; fetch first.
+2. **The JDK:** `bash tools/fetch-temurin.sh <scratch>` (now executable too). It prints the home to pass below.
+3. **Run DL, one test at a time, nothing edited first** (the seeds are pushed in `85008b1`):
+   `./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<home> --tests '*E3DLTest.dlLat*' --console=plain > <scratch>/12-dl-lat.log 2>&1`,
+   then `--tests '*E3DLTest.dlLon*'` into `12-dl-lon.log`.
+   - **Before citing anything:** the log has no `e: ` line; its JDK line is Temurin 21.0.13+9; `select.tsv` passes the checks
+     under "Could not determine" above.
+   - Copy into `step1b/`: the log, `brouter/build/e3/<stratum>-select/select.tsv`, and `brouter/build/e3/<stratum>/stability.tsv`.
+   - Record per stratum: draws, routed, rejected by reason, taken (59 or short), the last draw taken, unstable of 59, and
+     selection-vs-E3 agreements. Compare with the predictions above. **More than 5% unstable (over 2 of 59) is a stop.**
+   - Commit and push after each stratum.
+4. **Then** `--tests '*E3MemoryTest.mp64*'`, then `--tests '*E3MemoryTest.ml5*'`, the same way. For ML5/PM5 also record
+   ML5-with-panic. MP64: the printed counts of taken cases with the limit or panic at 64.
+5. **Then** E3's 5% stop per stratum, the expected values (part 7 step 4's digest form, unstable cases marked, including
+   `R-shortest-025`), and 1b's milestone report: total against 2,118. NT, LB, CR and FK are not built.
+
+**Left in scratch:** nothing a fresh session needs. The R list saved before the edit and both logs are in `step1b/11-*`.
+`brouter/build/e3/` is build output and is regenerated.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
