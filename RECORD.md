@@ -1798,3 +1798,38 @@ Java lines (computed from item I's sizes: 1,302 + 156 + 550 + 1,562).
 **Blocked:** steps 1b and 5a onward need the tiles, so they wait on the owner's run of `publish-tiles` (-30, -31). No
 session is started until then.
 **Notes:** Written by Cedar Datum by hand. Next free ID -43.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-43
+**Timestamp:** 2026-10-30T02:46:13Z
+**Continues:** 2026-10-28-30, 2026-10-28-31
+**Title:** The owner's run of `publish-tiles` failed at the draft release, with a 403; the cause seen at source; nothing
+published
+**Observed:** the owner ran `publish-tiles` from `main` (run 40993150859, `workflow_dispatch`, 2026-10-30T02:41:27Z) and
+reported "Exit code 1". Read by the planner from the run's jobs and log:
+- **`capture`: success.** F0 was fetched and pinned, the four tiles were downloaded fresh and each passed the 1.7.10
+  check, and the artifact was uploaded.
+- **`publish`: failure at "Create a draft release targeting TOOLS_SHA".** `gh release create` got "HTTP 403: Resource not
+  accessible by integration (https://api.github.com/repos/slayer8366/Forager-iOS/releases)".
+- **The token held "Contents: write"** (the log's "GITHUB_TOKEN Permissions").
+- **Afterwards:** 0 releases and 0 tags; no rulesets.
+- **The cause, read at source:** GitHub's REST reference for creating a release (`/en/rest/releases/releases`, fetched
+  2026-10-30), verbatim: "If the commit identified by target_commitish … adds or modifies any file under
+  .github/workflows/ relative to the repository's default branch, the authenticating token must be authorized to modify
+  workflows. Otherwise, this endpoint returns 404 Not Found; some authentication paths surface 403 Resource not
+  accessible by integration instead." And: "The GITHUB_TOKEN available to GitHub Actions cannot be authorized for this."
+- **Confirmed for this run by `git`:** the target, `TOOLS_SHA` `5d00761` on `brouter-port`, holds `.github/workflows/brouter.yml`
+  and not `publish-tiles.yml`. `main` holds only `publish-tiles.yml`. So the target modifies workflow files relative to
+  `main`.
+- **A slip shared by coder and planner:** the workflow targeted the tools commit by design (-31), and neither checked
+  the endpoint's rule. Linden had listed whether workflows may create releases as unverified.
+
+**The planner's call (technical, within the owner's word at -30 for this one file):** the release targets the run's own
+commit on `main` (`GITHUB_SHA`), which by definition modifies no workflow file relative to `main`.
+- Everything the run executes still comes from `TOOLS_SHA`.
+- The pins file already records the tools commit in its header, so provenance is unchanged.
+- Linden makes the change on `brouter-port` and its dry run must pass. The planner then copies the file to `main`
+  unchanged, and the owner runs it again.
+**Notes:** Written by Cedar Datum by hand. Next free ID -44.
