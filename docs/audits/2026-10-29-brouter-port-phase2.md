@@ -1051,6 +1051,92 @@ For the next session, in order:
 4. **Report each stratum's instability count against E3's 5% stop.** More than 5% unstable is a stop: report it to the
    planner and do not go on.
 
+## Step 1b continued: the harness, F0 and R on one profile (sixteenth session, Linden Caliper)
+
+Dispatched by Cedar Datum under Amendment 3 Part B after RECORD -46. **Bases [R]:** `brouter-port` at `f156946` on pull, as the
+dispatch said; `main` at `b723190` after fetch. Evidence is in `2026-10-29-brouter-port-phase2/step1b/`, files 3 to 7.
+Predictions were written before each run (`3-strata-prediction.txt`, `7-comparator-bite-prediction.txt`).
+
+### What was built (`8eea3fc`, `525448b`)
+
+- **`E3Jvm` runs a case list** under every regime. Each regime's thread prints its own control line before its case:
+  - `R1R2`: one fresh JVM. R1 runs with no `debug.txt`; then `debug.txt` is created and R2 runs the case again on a new thread.
+  - `R3`: one JVM, the stratum's whole list, one thread, shuffled by `R3_SEED` (20261030) in source, with `debug.txt`.
+  - `R4`: 997 identity hashes, then the control, then the case, with `debug.txt`. `R5`: the same without the perturbation.
+  - `R6`: no `debug.txt`, under JaCoCo's agent (`includes=btools.*`), one `.exec` per case.
+- **`E3CaseRun`** drives the oracle through Forager's calls (E1), and reads the collection lines (`RoutingEngine.java:2025`, `:2031`)
+  the run appended to `debug.txt`. Every JVM gets its own copy of `profiles2/`, so no `debug.txt` reaches another run.
+- **`E3Stability`** compares, per case, the six tuples (kind, node count, cost, distance, FNV-1a over every `(ilon, ilat)`) and
+  the four logged runs' collection lines, and holds the stratum to the 5% stop. The digest stands in for pair-by-pair
+  comparison up to a 2^-64 collision; it is E3's comparison only, not the stored form's digest.
+- **`TileNodes`** reads a tile's nodes with the oracle's own reader: `PhysicalFile`, `OsmFile`, `createMicroCache(…, true, …)`,
+  as step 1's `TileCheck` decoded them, but with absolute cell indices so a node id is `ilon << 32 | ilat`. This answers step
+  1b's open question "which oracle class reads a tile's nodes" **[C: the R run's ends routed on all four tiles]**.
+- **`RGenerator`**: one `java.util.Random(seed)`; a tile uniform over the four, a start uniform over its nodes; air distance
+  `100 m × 1000^u`; the end is the node nearest the target in its 3 × 3 cells; each end moved `100 m × v` and rounded to six
+  decimals. Rejections are counted. Its case list (coordinates) stays in `build/e3`, never committed (E1).
+- **The `e3Strata` task.** E1 [FBD]: "the expensive runs are not per push". `jvmTest` now excludes `oracle.e3.strata.*`, and
+  `e3Strata` runs only them, with the same JVM flags and properties. **CI does not run it.**
+- **R6's agent (RECORD -46):** `org.jacoco.agent` **0.8.16**, classifier `runtime`, from
+  `https://repo1.maven.org/maven2/org/jacoco/org.jacoco.agent/maven-metadata.xml`, whose `<release>` and `<latest>` were 0.8.16
+  on 2026-10-30 (`lastUpdated` 20261026104303; `5-jacoco-maven-metadata.xml`) **[R]**. Pinned in `tools/fetch-jacoco.sh`:
+  314,470 bytes, SHA-256 `37ae2f374ad77e85c59c6e5b46565226c3ac3cb460ac19de0bcb844ac2f43e33` **[C: computed]**. Central has no
+  `.sha256` for it (404); the jar's SHA-1 `4325ec32…3ce` and MD5 equal Central's `.sha1` and `.md5` **[C]**.
+  - Central answered several fetches here with **429**. The task's own fetch failed on it once; the jar already downloaded
+    and checked was placed at the task's destination, where `fetch-pinned.sh` accepted it against the pin.
+  - The agent did instrument the oracle: F0's `.exec` names 57 `btools` classes, `RoutingEngine` among them **[C]**.
+
+### Results, locally (OpenJDK 21.0.12.1, amd64, 4 cores) [C]
+
+| Stratum | n (E5) | Unstable | Over 5%? | R1 kinds | `e3Strata` wall time |
+|---|---|---|---|---|---|
+| **F0** | 2 (2) | **0 of 2** | no | 2 routes | about 11 s |
+| **R, `hiking-mountain`** | 59 (59) | **0 of 59** | no | 59 routes | about 3 min 13 s |
+
+- **F0's reach evidence holds:** R1 gives 226 nodes and 5,047 m, and 306 nodes and 6,713 m, as Forager's geojson. The costs, 5,302
+  and 7,405, also equal the geojson's, as predicted at low confidence. No collection line on F0: its log comparison is vacuous.
+- **R:** 59 cases from 67 candidates (cap 1,180); 8 rejected for no node near the target. Starts: 16 in `E170_S50`, the rest in
+  the three northern tiles. **No case crosses 40°N or 70°W** **[C]**, so R's "across a 5° line" is not exercised by this seed;
+  DL-lat and DL-lon are built for it. **8 of 59 cases logged collections** (up to 67 lines), so the log comparison was not
+  vacuous there. R1 times: 78.5 s in all, 19.3 s the longest.
+- **The control moved in every JVM:** R1's order differed from R4's for every case of both strata.
+- **No stop.** Both strata are under E3's 5%. Prediction 3 (0 of 59, low confidence) held.
+
+### The comparator bites (`7-comparator-bite-prediction.txt`) [C]
+
+Each mutation in `E3Jvm.report`, restored from a copy saved before editing and then equal to HEAD; 0 `e:` lines in both logs:
+- **A, the tuple:** R5 routed to an end 0.0001° north. F0: 2 of 2 unstable, tuple-stable false and log-stable true on both;
+  failed with "F0: 2 of 2 unstable, over E3's 5%: a stop for Phase 2", as predicted (`7a-mutation-tuple-f0.log`).
+- **B, the log:** R5's collection lines dropped. R: exactly the 8 predicted cases unstable, each tuple-stable and log-unstable;
+  "R-hiking-mountain: 8 of 59 unstable, over E3's 5%: a stop for Phase 2", as predicted. The same 59 cases were generated.
+
+### Calls beyond the amendment (mine; for the planner)
+
+- **The strata run in a new `e3Strata` task, outside CI,** on E1's "not per push". R1's repeatability on CI's Temurin is
+  therefore still unseen for cases (E3ControlTest shows it for the control only).
+- **R3 runs per stratum,** not over one list of every stratum: only two strata exist. When more do, R3 should take the union.
+- **The generator's details** (tile uniform, then node uniform; nearest node to the target; rejection rules; spherical metres)
+  are mine; E4 fixes the distance law, the move and the six decimals only.
+- **`hiking-mountain` first,** as Forager's own profile.
+- **Every regime's thread runs the control before its case,** so the control is part of each regime's identity-hash history.
+
+### Could not determine, and unverified
+
+- **Whether these strata are stable on CI's Temurin, or on aarch64:** not run there **[?]**.
+- **E3's stop on R's other 25 profiles,** and every targeted stratum: not run.
+- **The `.exec` files are not analysed;** R and F0 need no reach evidence (E4). Nothing reads coverage yet.
+- **Expected values were not written,** though both strata are shown stable here: the stored form needs part 7 step 4's digest,
+  not read this session.
+
+### Step 1b: the handoff (sixteenth session)
+
+1. **Read** this section, and E1, E3 to E5 as before.
+2. **R on the other 25 profiles,** one test per profile or one parameterised over them, each with its own seed and 59 cases.
+   About 3 min a profile here, so about 80 min for all 25 at 3 workers: run it as `e3Strata`, not on CI.
+3. **Report each against the 5% stop;** more than 5% is a stop for the owner.
+4. **Then DL-lat and DL-lon,** which need a generator forcing ends to opposite sides; then MP64, ML5, PM5.
+5. **Expected values** once a stratum is stable: read part 7 step 4's digest first.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the

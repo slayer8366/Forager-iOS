@@ -1,0 +1,59 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:msunReference UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=43063 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3F0Test > f0IsStableUnderE3AndR1IsTheCommandLineRoute STANDARD_OUT
+    E3 F0: 2 cases; unstable 2 of 2; over 5%: true
+    E3 F0 F0-inside-across-the-degree-line: UNSTABLE; R1 route|226|5302|5047|9ca48d05a90f4dcd; collection lines 0; R1 466 ms; control R1 0,2,1,3,4,10,5,6,7,11,8,9, R4 6,0,1,9,2,3,4,11,5,7,10,8,
+      R1 route|226|5302|5047|9ca48d05a90f4dcd log null
+      R2 route|226|5302|5047|9ca48d05a90f4dcd log null
+      R3 route|226|5302|5047|9ca48d05a90f4dcd log null
+      R4 route|226|5302|5047|9ca48d05a90f4dcd log null
+      R5 route|227|5314|5058|1f2e1f357468a7f7 log null
+      R6 route|226|5302|5047|9ca48d05a90f4dcd log null
+      kinds agree in all six: true
+    E3 F0 F0-inside-long: UNSTABLE; R1 route|306|7405|6713|7d242f8dd2c428b4; collection lines 0; R1 471 ms; control R1 0,2,1,3,4,10,5,6,7,11,8,9, R4 6,0,1,9,2,3,4,11,5,7,10,8,
+      R1 route|306|7405|6713|7d242f8dd2c428b4 log null
+      R2 route|306|7405|6713|7d242f8dd2c428b4 log null
+      R3 route|306|7405|6713|7d242f8dd2c428b4 log null
+      R4 route|306|7405|6713|7d242f8dd2c428b4 log null
+      R5 route|306|7409|6717|73c4283971809121 log null
+      R6 route|306|7405|6713|7d242f8dd2c428b4 log null
+      kinds agree in all six: true
+
+E3F0Test > f0IsStableUnderE3AndR1IsTheCommandLineRoute FAILED
+    java.lang.AssertionError at E3F0Test.kt:25
+
+1 test completed, 1 failed
+
+> Task :brouter:e3Strata FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:e3Strata'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/e3Strata/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 6s
+9 actionable tasks: 3 executed, 6 up-to-date
