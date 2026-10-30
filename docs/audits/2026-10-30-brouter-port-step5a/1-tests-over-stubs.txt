@@ -1,0 +1,16 @@
+# Step 5a tests over the stubs, run 2 (after fk8's test fix). Compile errors in the build log: 0
+com.zynergylabs.forager.brouter.mapaccess.CheckDataFileTest: tests 2, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.CheckDataFileTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelperTest: tests 2, failures 2, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelperTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.TileHeaderTest: tests 3, failures 3, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.TileHeaderTest.xml)
+TOTAL: tests 10, failures 10, errors 0, skipped 0 in 4 files
+CheckDataFileTest aMissingFileGivesTheOraclesMessage[jvm] -> kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+CheckDataFileTest eachCapturedTileReadsOnBothEngines[jvm] -> kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+FileFailureKindsTest fk6DataMissing[jvm] -> kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.NodesCache.<init>(NodesCache.kt:30)']
+FileFailureKindsTest fk7DataCorruptShort[jvm] -> kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+FileFailureKindsTest fk8DataCorruptChecksum[jvm] -> kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+StorageConfigHelperTest theSecondaryFolderIsReadAsTheOracleReadsIt[jvm] -> kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelper.getSecondarySegmentDir(StorageConfigHelper.kt:8)']
+StorageConfigHelperTest aTileOnlyInTheSecondaryFolderIsOpenedByBoth[jvm] -> kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.NodesCache.<init>(NodesCache.kt:30)']
+TileHeaderTest eachCapturedTilePassesTheIntegrityCheckOnBothEngines[jvm] -> kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.PhysicalFile$Companion.checkFileIntegrity(PhysicalFile.kt:26)']
+TileHeaderTest eachCapturedTilesHeaderEqualsTheOracles[jvm] -> kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.PhysicalFile.<init>(PhysicalFile.kt:19)']
+TileHeaderTest eachCapturedTilesSubIndexesEqualTheOracles[jvm] -> kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.PhysicalFile.<init>(PhysicalFile.kt:19)']
