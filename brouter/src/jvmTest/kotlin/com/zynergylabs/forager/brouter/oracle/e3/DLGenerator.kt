@@ -68,24 +68,25 @@ class DLGenerator(segments: File, private val line: Line, private val seed: Long
 
     val nodeCountsNearTheLine: Map<String, Long> get() = sides.indices.associate { sides[it].file.name to rowCum[it].last() }
 
-    class Generated(val cases: List<E3Case>, val candidates: Int, val rejected: Map<String, Int>)
-
-    fun generate(profile: String, n: Int, maxCandidates: Int, segments: File): Generated {
+    /**
+     * The candidate sequence, endless, in generation order: draw `k` is `DL-lat-%04d` (or `DL-lon-…`) with its number, so a
+     * selected case's id says how many draws it took ([E3Select], RECORD -51). The sequence depends on [seed] alone: nothing
+     * routed takes part in drawing it.
+     */
+    fun draws(profile: String, segments: File): Iterator<E3Select.Draw> = iterator {
         val rnd = Random(seed)
-        val cases = ArrayList<E3Case>()
-        val rejected = LinkedHashMap<String, Int>()
-        var candidates = 0
-        while (cases.size < n && candidates < maxCandidates) { // ends: candidates rises by one each pass
-            candidates++
-            val why = candidate(rnd)
-            if (why is String) {
-                rejected.merge(why, 1, Int::plus)
-                continue
+        var k = 0
+        while (true) { // ends: the caller takes at most its cap
+            k++
+            when (val c = candidate(rnd)) {
+                is String -> yield(E3Select.Draw(k, null, c))
+                else -> {
+                    val e = c as DoubleArray
+                    val id = "%s-%04d".format(line.stratum, k)
+                    yield(E3Select.Draw(k, E3Case(id, segments, e[0], e[1], e[2], e[3], profile), null))
+                }
             }
-            val e = why as DoubleArray
-            cases += E3Case("%s-%03d".format(line.stratum, cases.size + 1), segments, e[0], e[1], e[2], e[3], profile)
         }
-        return Generated(cases, candidates, rejected)
     }
 
     /** The side ([sides] index) whose tile holds the point, or null when neither does. */

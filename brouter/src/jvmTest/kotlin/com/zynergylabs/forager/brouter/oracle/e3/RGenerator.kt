@@ -21,9 +21,20 @@ import kotlin.math.sin
  *    rejects the candidate.
  * Distances use a sphere of radius 6,371 km with longitude scaled by the cosine of latitude. They choose points only;
  * nothing asserts them.
+ *
+ * MP64's, ML5's and PM5's generator is this one (E4: "R's generator, `memoryclass` 64, 20 to 100 km in `W75_N40`"): [only]
+ * keeps one tile, so both ends are drawn in it, and the distance is `minMetres × ratio^u`, `20 km × 5^u` for them. The
+ * defaults are R's, and R's sequence is pinned by `E3RSequenceTest`.
  */
-class RGenerator(segments: File, private val seed: Long) {
-    private val tiles: List<TileNodes> = segments.listFiles { f -> f.name.endsWith(".rd5") }!!.sortedBy { it.name }.map { TileNodes(it) }
+class RGenerator(
+    segments: File,
+    private val seed: Long,
+    only: String? = null,
+    private val minMetres: Double = 100.0,
+    private val ratio: Double = 1000.0,
+) {
+    private val tiles: List<TileNodes> = segments.listFiles { f -> f.name.endsWith(".rd5") && (only == null || f.name == only) }!!
+        .sortedBy { it.name }.map { TileNodes(it) }.also { require(it.isNotEmpty()) { "no tile ${only ?: "*.rd5"} in $segments" } }
 
     /** Per tile, the cumulative node count over its cells in (lon, lat) order: decoded once, for the uniform draw. */
     private val cumulative: List<LongArray> = tiles.map { t ->
@@ -59,13 +70,33 @@ class RGenerator(segments: File, private val seed: Long) {
         return Generated(cases, candidates, rejected)
     }
 
+    /**
+     * The candidate sequence for a targeted stratum ([E3Select], RECORD -51), endless, in generation order: draw `k` is
+     * `<prefix>-%04d` with its number, at [memoryclass]. Its draws are [generate]'s, one per pass.
+     */
+    fun draws(prefix: String, profile: String, memoryclass: Int, segments: File): Iterator<E3Select.Draw> = iterator {
+        val rnd = Random(seed)
+        var k = 0
+        while (true) { // ends: the caller takes at most its cap
+            k++
+            when (val c = candidate(rnd)) {
+                is String -> yield(E3Select.Draw(k, null, c))
+                else -> {
+                    val e = c as DoubleArray
+                    val id = "%s-%04d".format(prefix, k)
+                    yield(E3Select.Draw(k, E3Case(id, segments, e[0], e[1], e[2], e[3], profile, memoryclass), null))
+                }
+            }
+        }
+    }
+
     /** One candidate: the four rounded coordinates (startLat, startLon, endLat, endLon), or why it was rejected. */
     private fun candidate(rnd: Random): Any {
         val t = rnd.nextInt(tiles.size)
         val total = cumulative[t].last()
         val k = (rnd.nextDouble() * total).toLong().coerceAtMost(total - 1)
         val start = pick(t, k)
-        val d = 100.0 * 1000.0.pow(rnd.nextDouble())
+        val d = minMetres * ratio.pow(rnd.nextDouble())
         val (tLat, tLon) = offset(lat(start), lon(start), d, 2 * PI * rnd.nextDouble())
         val end = nearest(tLat, tLon) ?: return "no node in the target's 3 x 3 cells, or the target is outside every tile"
         val (sLat, sLon) = offset(lat(start), lon(start), 100.0 * rnd.nextDouble(), 2 * PI * rnd.nextDouble())

@@ -63,7 +63,8 @@ object E3Stability {
         }
     }
 
-    private fun launch(regime: String, id: String, caseFile: File, work: File, agent: List<String>, seconds: Long): List<String> {
+    /** One regime's fresh JVM over case [id] of [caseFile], with its own copy of `profiles2/`; also [E3Select]'s R1R2 run. */
+    internal fun launch(regime: String, id: String, caseFile: File, work: File, agent: List<String>, seconds: Long): List<String> {
         val base = File(work, "base-$regime-$id")
         File(OracleCalls.oracleDir, "profiles2").copyRecursively(File(base, "profiles2"), overwrite = true)
         try {

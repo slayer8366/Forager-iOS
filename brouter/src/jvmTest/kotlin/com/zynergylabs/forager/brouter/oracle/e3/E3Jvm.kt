@@ -9,9 +9,9 @@ import java.util.Random
  * kept in every regime.
  *
  * - `E3Jvm R1|R4` alone: the control only ([E3ControlTest]).
- * - `E3Jvm <regime> <base> <caseFile> <caseId>`, one case: `R1` alone (no `debug.txt`: a targeted stratum's selection run,
- *   [E3Select]), `R1R2` (R1 on a new thread with no `debug.txt` in [base];
- *   then `debug.txt` is created and R2 runs the case again on another new thread), `R4` (997 identity hashes first),
+ * - `E3Jvm <regime> <base> <caseFile> <caseId>`, one case: `R1R2` (R1 on a new thread with no `debug.txt` in [base];
+ *   then `debug.txt` is created and R2 runs the case again on another new thread; also a targeted stratum's selection
+ *   run, [E3Select]), `R4` (997 identity hashes first),
  *   `R5` (`debug.txt` present) or `R6` (no `debug.txt`; the launcher adds JaCoCo's agent).
  * - `E3Jvm R3 <base> <caseFile> all`: the whole list on one thread, shuffled by [R3_SEED], with `debug.txt`.
  *
@@ -46,10 +46,9 @@ object E3Jvm {
                     for (c in order) report("R3", c, base)
                 }
             }
-            "R1", "R1R2", "R4", "R5", "R6" -> {
+            "R1R2", "R4", "R5", "R6" -> {
                 val case = cases.single { it.id == args[3] }
                 when (regime) {
-                    "R1" -> { check(!debug.exists()) { "R1 runs without debug.txt" }; onNewThread { println(control("R1", false)); report("R1", case, base) } }
                     "R1R2" -> {
                         check(!debug.exists()) { "R1 runs without debug.txt" }
                         onNewThread { println(control("R1", false)); report("R1", case, base) }
