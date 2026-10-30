@@ -37,8 +37,11 @@ class StatCoderContextTest {
             0 -> Op(kind, r.nextInt(0, 17), signed(r).let { if (it < 0) -it else it }, 0, IntArray(0), 0)
             1 -> Op(kind, r.nextInt(0, 15), signed(r), 0, IntArray(0), 0)
             2 -> {
-                // Predictors above 1023 reach decodePredictedValue's shift loop.
-                val predictor = signed(r) shr r.nextInt(0, 8)
+                // Predictors above 1023 reach decodePredictedValue's shift loop. Below 2^25, so the encoder's noisy-bit
+                // count stays at most 24: the oracle's own encode/decode pair does not round-trip from 25 (predictor
+                // 2^26 - 1, checked against the -ro jar), and its decode then leaves the stream misaligned for every
+                // later op. Seen at 9fe7a70's bound, 2^28: seed 1 op 607, then every round trip after it.
+                val predictor = signed(r) shr r.nextInt(3, 8)
                 Op(kind, 0, predictor + (signed(r) shr r.nextInt(4, 20)), predictor, IntArray(0), 0)
             }
             else -> {

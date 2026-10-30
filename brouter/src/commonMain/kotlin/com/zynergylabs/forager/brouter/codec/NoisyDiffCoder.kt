@@ -1,10 +1,13 @@
 package com.zynergylabs.forager.brouter.codec
 
-/** BRouter 1.7.10's `btools.codec.NoisyDiffCoder`, the decoder half. STUB (step 3, tests first). */
+/**
+ * Port of BRouter 1.7.10's `btools.codec.NoisyDiffCoder`, the decoder half: the decoding constructor reads the noisy-bit
+ * count, and [decodeSignedValue] reads each value with it. The encoder's passes (`encodeSignedValue`,
+ * `encodeDictionary`, `count`, `tot`, `freqs`, `pass`) and the no-argument constructor are write-side only.
+ */
 internal class NoisyDiffCoder(bc: StatCoderContext) {
-    init {
-        TODO("step 3: NoisyDiffCoder")
-    }
+    private val noisybits: Int = bc.decodeVarBits()
+    private val bc: StatCoderContext = bc
 
-    fun decodeSignedValue(): Int = TODO("step 3: decodeSignedValue")
+    fun decodeSignedValue(): Int = bc.decodeNoisyDiff(noisybits)
 }

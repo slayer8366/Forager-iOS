@@ -85,7 +85,9 @@ class TagValueCoderTest {
             val ck = TagValueCoder(dk, DataBuffers(), if (withValidator) KValidator(Rule(logK)) else null)
             assertEquals(dj.readingBitPosition, dk.getReadingBitPosition(), "seed $seed: after the tree")
             assertEquals(logJ, logK, "seed $seed: validator calls")
-            if (withValidator) assertEquals(true, logK.isNotEmpty(), "seed $seed: the validator was never called")
+            // Seed 2 encodes no set: its tree is the encoder's dummy leaf, an empty set, which returns before any
+            // validator call, in the oracle too (logJ is empty there). Every other validator seed must call it.
+            if (withValidator && n > 0) assertEquals(true, logK.isNotEmpty(), "seed $seed: the validator was never called")
             calls += logK.size
             for (i in 0 until n) {
                 val at = "seed $seed code $i"
