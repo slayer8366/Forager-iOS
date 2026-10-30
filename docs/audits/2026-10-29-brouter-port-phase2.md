@@ -1108,7 +1108,7 @@ Each mutation in `E3Jvm.report`, restored from a copy saved before editing and t
 - **A, the tuple:** R5 routed to an end 0.0001° north. F0: 2 of 2 unstable, tuple-stable false and log-stable true on both;
   failed with "F0: 2 of 2 unstable, over E3's 5%: a stop for Phase 2", as predicted (`7a-mutation-tuple-f0.log`).
 - **B, the log:** R5's collection lines dropped. R: exactly the 8 predicted cases unstable, each tuple-stable and log-unstable;
-  "R-hiking-mountain: 8 of 59 unstable, over E3's 5%: a stop for Phase 2", as predicted. The same 59 cases were generated.
+  "R-hiking-mountain: 8 of 59 unstable, over E3's 5%: a stop for Phase 2", as predicted (`7b-mutation-log-r.log`). The same 59 cases were generated.
 
 ### Calls beyond the amendment (mine; for the planner)
 
