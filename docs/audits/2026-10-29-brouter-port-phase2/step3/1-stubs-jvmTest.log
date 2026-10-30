@@ -1,0 +1,56 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+
+> Task :brouter:jvmTest FAILED
+
+DataBuffersTest[jvm] > buffersHaveTheOraclesSizes[jvm] FAILED
+    kotlin.NotImplementedError at DataBuffersTest.kt:14
+
+DataBuffersTest[jvm] > givenIobufferIsKeptAndBctx1WritesTagbuf1[jvm] FAILED
+    kotlin.NotImplementedError at DataBuffersTest.kt:29
+
+MicroCacheTest[jvm] > emptyCacheIsTheOraclesEmptyCache[jvm] FAILED
+    kotlin.NotImplementedError at MicroCacheTest.kt:22
+
+MicroCacheTest[jvm] > filledCachesFollowTheOracleUnderSeededOperations[jvm] FAILED
+    kotlin.NotImplementedError at MicroCacheTest.kt:69
+
+NoisyDiffCoderTest[jvm] > threePassStreamsDecodeIdentically[jvm] FAILED
+    kotlin.NotImplementedError at NoisyDiffCoderTest.kt:45
+
+StatCoderContextTest[jvm] > oracleEncodedStreamsDecodeIdentically[jvm] FAILED
+    kotlin.NotImplementedError at StatCoderContextTest.kt:80
+
+StatCoderContextTest[jvm] > noisyBitsTableEqualsTheOracles[jvm] FAILED
+    kotlin.NotImplementedError at StatCoderContextTest.kt:18
+
+TagValueCoderTest[jvm] > oracleEncodedTreesAndCodesDecodeIdentically[jvm] FAILED
+    kotlin.NotImplementedError at TagValueCoderTest.kt:85
+
+8 tests completed, 8 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 14s
+6 actionable tasks: 2 executed, 4 up-to-date

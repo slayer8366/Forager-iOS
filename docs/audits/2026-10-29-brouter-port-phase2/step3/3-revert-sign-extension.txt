@@ -1,0 +1,25 @@
+Step 3 (codec), item I's revert: "a sign extension dropped (`and 0xff` removed at one byte read)".
+
+Site. btools/codec has none: `grep -n '0xff' third_party/brouter/src/main/java/btools/codec/*.java` finds only
+MicroCache.java:109 and :125 (0x80000000, 0x7fffffff: flag masks, not byte reads), and the only byte-array reads in
+the package are comparisons at MicroCache.java:259 and :293, in methods not ported. So a site of the same kind is
+chosen: the byte read every codec decoder goes through, BitCoderContext.fillBuffer (util, ported at step 1):
+    b = b or ((ab[idx].toInt() and 0xff) shl bits)   ->   b = b or (ab[idx].toInt() shl bits)
+
+Prediction, before the run: StatCoderContextTest.oracleEncodedStreamsDecodeIdentically, NoisyDiffCoderTest and
+TagValueCoderTest fail on a port-against-oracle line (not a round trip), since a byte >= 0x80 ORs ones into the bit
+buffer; DataBuffersTest, MicroCacheTest and noisyBitsTableEqualsTheOracles pass (they decode no bits). So this revert
+does not cover MicroCache.
+
+Runner (by hand, at 4436711 + a0b04e1): the file copied to a scratch copy (SHA-256 b2677728421942e5...) before the
+edit; the results directory deleted; ./gradlew :brouter:jvmTest -x msunReference --tests
+'com.zynergylabs.forager.brouter.codec.*'; restored from the copy, not git (git diff empty after; the forward line
+present once). Build log (3-revert-sign-extension-jvmTest.log): compileKotlinJvm ran, 0 lines starting "e:".
+
+JUnit XML: 8 tests, 3 failed, as predicted:
+- NoisyDiffCoderTest threePassStreamsDecodeIdentically: "seed 2 value 0: coder A expected:<-191660> but was:<8020>"
+- StatCoderContextTest oracleEncodedStreamsDecodeIdentically: "seed 1 op 0 kind 0 expected:<168518454> but
+  was:<268435254>" (the oracle-against-port line; the round-trip line says ": round trip")
+- TagValueCoderTest oracleEncodedTreesAndCodesDecodeIdentically: "seed 1 code 7: marker expected:<3> but was:<6>"
+- passed: both DataBuffersTest, both MicroCacheTest, noisyBitsTableEqualsTheOracles.
+The forward run before it (2-port-jvmTest.log): 8 tests, 0 failed.
