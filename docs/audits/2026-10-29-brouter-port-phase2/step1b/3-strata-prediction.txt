@@ -1,0 +1,20 @@
+Step 1b, sixteenth session (Linden Caliper): predictions written before the stratum harness ran.
+
+F0 (2 cases, Forager's sparse W75_N40, hiking-mountain, Forager's params, memoryclass 64, maxRunningTime 0):
+- R1 gives a route on both. inside-across-the-degree-line: 226 nodes, distance 5047 (step 1's harness and
+  Forager's brouter-cli geojson). inside-long: 306 nodes, distance 6713 (the geojson at Forager e2969abe,
+  brouter-cli/inside-long.geojson, last changed in 994b4384).
+- Cost: the geojson carries cost 5302 and 7405. Predicted equal to R1's OsmTrack.cost, low confidence (the
+  command-line run's params are make-expected.sh's, not read this session).
+- All six regimes (R1..R6) give R1's tuple on both cases: 0 of 2 unstable.
+- The logged runs (R2, R3, R4, R5) show no "collected" line: F0's searches are far under 4,000,000 bytes of
+  nodes (OsmNodesMap.java:24). So the collection-count comparison is vacuous on F0; recorded as such.
+- Each JVM's control: R1's order differs from R4's, as E3ControlTest saw.
+
+R on hiking-mountain (59 cases, the generator's seed in source):
+- 59 cases filled well inside 20 x 59 = 1,180 candidates.
+- Kinds: a mix of routes, "not mapped" ends (nodes far from any way the profile uses are possible
+  after a 0-100 m move, but the catching range is 250 m, so few), and some "no track found" / islands.
+- Unstable: 0 of 59, low confidence. The mechanism that could move a result is hmap's tree-bin order,
+  which needs nine or more nodes sharing one ilon+ilat bucket AND an iteration of hmap that feeds the search;
+  neither was read this session. A count of 1 or 2 would not surprise; 3 or more (over 5%) would be a stop.

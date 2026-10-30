@@ -80,7 +80,20 @@ kotlin {
     }
 }
 
-tasks.named<Test>("jvmTest") {
+// Step 1b (Amendment 3 Part B; RECORD -46): R6's JaCoCo agent, the latest org.jacoco.agent release in Maven Central's
+// metadata on 2026-10-30, pinned by size and SHA-256 in tools/fetch-jacoco.sh. Only the e3Strata task reads it.
+val jacocoDir = layout.buildDirectory.dir("jacoco-agent")
+val fetchJacoco by tasks.registering(Exec::class) {
+    description = "Fetches JaCoCo's runtime agent for E3's R6, refusing it unless it matches its pin."
+    val scripts = rootProject.layout.projectDirectory.dir("tools")
+    inputs.file(scripts.file("fetch-jacoco.sh"))
+    inputs.file(scripts.file("fetch-pinned.sh"))
+    outputs.dir(jacocoDir)
+    commandLine("bash", scripts.file("fetch-jacoco.sh").asFile.absolutePath, jacocoDir.get().asFile.absolutePath)
+}
+
+// The oracle's test JVM, shared by jvmTest and e3Strata.
+fun Test.oracleJvm() {
     dependsOn(fetchOracle, msunReference, fetchTiles)
     systemProperty("brouter.oracle.dir", oracleDir.get().asFile.absolutePath)
     systemProperty("brouter.tiles.dir", tilesDir.get().asFile.absolutePath)
@@ -101,4 +114,23 @@ tasks.named<Test>("jvmTest") {
         events("passed", "skipped", "failed")
         showStandardStreams = true
     }
+}
+
+// Phase 1 report, E1 [FBD]: "The expensive runs are not per push." E3's stratum runs (the e3.strata package) belong to a
+// task run when expected values are written or rewritten, so jvmTest leaves them out and e3Strata runs only them.
+val e3StrataPackage = "com.zynergylabs.forager.brouter.oracle.e3.strata.*"
+val jvmTestTask = tasks.named<Test>("jvmTest") {
+    oracleJvm()
+    filter { excludeTestsMatching(e3StrataPackage) }
+}
+tasks.register<Test>("e3Strata") {
+    description = "E3's six-regime oracle runs over the built strata (Phase 1 report, E3). Not part of check."
+    group = "verification"
+    oracleJvm()
+    dependsOn(fetchJacoco)
+    testClassesDirs = jvmTestTask.get().testClassesDirs
+    classpath = jvmTestTask.get().classpath
+    systemProperty("brouter.jacoco.agent", jacocoDir.get().file("jacocoagent-0.8.16-runtime.jar").asFile.absolutePath)
+    systemProperty("brouter.e3.work", layout.buildDirectory.dir("e3").get().asFile.absolutePath)
+    filter { includeTestsMatching(e3StrataPackage) }
 }
