@@ -2071,7 +2071,7 @@ reading CI. Report: `docs/audits/2026-10-30-brouter-port-step5a.md`, still marke
 **Notes:** Written by Cedar Datum by hand. Next free ID -50.
 
 **ID:** 2026-10-28-50
-**Timestamp:** 2026-10-30T07:40:00Z
+**Timestamp:** 2026-10-30T07:31:28Z
 **Continues:** 2026-10-28-10, 2026-10-28-24, 2026-10-28-47, 2026-10-28-49
 **Title:** The secondary coder is Plumb Ledger (owner); step 1b's R stratum is done on all 26 profiles, with 1 of
 1,534 cases unstable; step 5b's `hmap` is sized, and the planner rules on its tie-break
