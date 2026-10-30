@@ -17,6 +17,7 @@ import kotlin.test.assertEquals
 class E3F0Test {
     @Test
     fun f0IsStableUnderE3AndR1IsTheCommandLineRoute() {
+        E3Strata.jdk("F0")
         val cases = listOf(
             E3Case("F0-inside-across-the-degree-line", TestTiles.f0, 41.2742564, -73.9978932, 41.3036912, -74.0159457, PROFILE),
             E3Case("F0-inside-long", TestTiles.f0, 41.2772811, -74.0422743, 41.292043, -73.996678, PROFILE),

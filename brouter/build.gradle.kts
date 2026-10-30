@@ -123,10 +123,21 @@ val jvmTestTask = tasks.named<Test>("jvmTest") {
     oracleJvm()
     filter { excludeTestsMatching(e3StrataPackage) }
 }
+// RECORD -47: e3Strata runs on the oracle's JDK, Temurin 21.0.13+9 amd64 (CI's, RECORD -46), never on whatever JDK runs
+// Gradle: identity-hash order, which E3 tests, is the running JVM's. tools/fetch-temurin.sh fetches it pinned and prints
+// its home; pass that as -Pbrouter.e3.jdk=<home>. Every regime's JVM is started from the test JVM's java.home
+// (E3Launcher), so it is this JDK too. E3Strata.jdk checks vendor, version and arch inside the run and prints them.
+val e3Jdk = providers.gradleProperty("brouter.e3.jdk")
 tasks.register<Test>("e3Strata") {
     description = "E3's six-regime oracle runs over the built strata (Phase 1 report, E3). Not part of check."
     group = "verification"
     oracleJvm()
+    if (e3Jdk.isPresent) executable = File(e3Jdk.get(), "bin/java").absolutePath
+    doFirst {
+        if (!e3Jdk.isPresent) {
+            throw GradleException("e3Strata runs on the oracle's JDK only (RECORD -47): run tools/fetch-temurin.sh and pass -Pbrouter.e3.jdk=<home>")
+        }
+    }
     dependsOn(fetchJacoco)
     testClassesDirs = jvmTestTask.get().testClassesDirs
     classpath = jvmTestTask.get().classpath
