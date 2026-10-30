@@ -4,11 +4,11 @@ package com.zynergylabs.forager.brouter.expressions
 internal class BExpression {
     var doNotChange: Boolean = false
 
-    fun evaluate(ctx: BExpressionContext?): Float = TODO("step 4")
+    fun evaluate(ctx: BExpressionContext?): Float = TODO("step 4: BExpression.evaluate")
 
     companion object {
-        fun parse(ctx: BExpressionContext, level: Int): BExpression? = TODO("step 4")
+        fun parse(ctx: BExpressionContext, level: Int): BExpression? = TODO("step 4: BExpression.parse")
 
-        fun createAssignExpressionFromKeyValue(ctx: BExpressionContext, key: String, value: String): BExpression = TODO("step 4")
+        fun createAssignExpressionFromKeyValue(ctx: BExpressionContext, key: String, value: String): BExpression = TODO("step 4: createAssignExpressionFromKeyValue")
     }
 }
