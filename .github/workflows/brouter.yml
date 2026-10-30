@@ -25,7 +25,10 @@ jobs:
           java-version: '21.0.13+9'
       - name: JVM tests (the oracle is fetched and checked by the build, tools/fetch-oracle.sh)
         run: ./gradlew --no-daemon :brouter:jvmTest
+      # Runs after a red JVM step too (step 4, thirteenth session): on a tests-over-stubs commit the JVM step is red by
+      # design, and without this the klibs went unchecked exactly when new commonMain code had just landed.
       - name: iOS klibs
+        if: ${{ !cancelled() }}
         run: ./gradlew --no-daemon :brouter:compileKotlinIosArm64 :brouter:compileKotlinIosSimulatorArm64
       - name: Counts from the JUnit XML, and the XML itself
         if: always()
