@@ -60,6 +60,13 @@ been compiled. Not written: the stubs, `BExpressionMetaData`'s port, `BExpressio
 so the asterisk block (`BExpressionContext.java:576-693`) cannot run from Forager's calls whatever the lookups file.
 Its test has to call `addLookupValue(name, value, int[])` directly.
 
+**Status (2026-10-30, thirteenth session, Linden Caliper, Amendment 3 Part B, step 4):** **partial, handed off on the
+planner's word** (context past 180k). Pushed: the draft sizes corrected (`090d2e5`); `util/JavaText.kt`, tests first, 6 of
+7 seen failing on stubs, then 7 of 7 locally (`c350bda`); stubs for every class step 4 ports, the module compiling, jvmTest
+69 of 69 locally (`0c17b17`); CI's iOS klibs step running after a red JVM step (`b70987e`); step 4's six tests, all seen
+failing on the stubs, 75 tests, 6 failures, 0 compile errors, read from the JUnit XML (`step4/5-tests-stubs-junit.txt`).
+**CI on these commits was not read.** Next: the port of the drafts into `commonMain` (section "Step 4: the test list").
+
 Tags: **[R]** read (file and line at a stated commit, or URL and date); **[C]** computed, with its log in
 `2026-10-29-brouter-port-phase2/`; **[I]** inferred; **[?]** could not determine. iOS results are "simulator-checked".
 
@@ -846,6 +853,34 @@ harness count [I].
   message said it would be: the commit does not compile.
 - **Unverified:** the twelfth session did not reread the CI logs of 40978865021 or 40980103184; their counts above are
   the planner's reading at RECORD -38 and -39 [R of the record, not of the logs].
+
+## Step 4: the test list (thirteenth session, Linden Caliper)
+
+The twelfth session's handoff items 5 and 6 reached the planner only in its final message; the planner sent them on at
+01:0xZ on 2026-10-30, with RECORD -40's correction, and asked for them to be written here [R: the planner's message]:
+- **5. Build the contexts as `ProfileCache.java:88-95` does:** the way context with hash size `memoryclass * 512`, read
+  from the oracle's `RoutingContext`; the node context with 0; `node.setForeignContext(way)`; then `readMetaData`, then
+  `parseFile(profile, "global", keyValues)` for each.
+- **6. Tests:** vectors from the oracle's `generateRandomValues(Random(seed))`, some keys forced to 1000+x, encoded with
+  the oracle's `encode`; the built-in variables compared by raw bits in both directions, with `getKeyValueDescription`,
+  `accessType` and `checkStartWay`; parse checks on the oracle's private `nBuildInVars`, `expressionList` (through its
+  `toString`) and `expressionNodeCount`, by reflection; malformed text, exception class and message; the asterisk test,
+  corrected by -40: `addLookupValue(name, value, int[])` called directly with a non-null array on both engines, the
+  oracle recording the value and the port throwing the named "unsupported". From -39: all 26 profiles in the oracle zip.
+
+As written (jvmTest, `expressions/`): `ExpressionsEngines` (item 5; `memoryclass` and `keyValues` from the oracle's
+`RoutingContext` after `setParams` with `OracleCalls`' parameters); `ProfileParseTest` (lookups versions; the three parse
+checks, way and node, 26 profiles); `ProfileEvaluateTest` (300 vectors a context a profile, from a third oracle instance,
+every third with 1 to 3 keys at 1000 + x below 31,000); `MalformedProfileTest` (26 texts; the oracle throws on 17, all
+`IllegalArgumentException` [C], so `parseFile`'s `RuntimeException(e)` branch is not reached by this set);
+`AsteriskUnsupportedTest`. The pinned `lookups.dat` has no `*` value, so the asterisk test first adds one to `maxspeed`
+through `addLookupValue(name, "*", null)`, the path BRouter reaches; then the oracle records 1350 for "3.5" (`:687`) and
+the port must throw `UnsupportedOperationException` with a message starting "unsupported: addLookupValue's asterisk
+block". A companion test, beyond item 6, checks that without a `*` both engines record 1 for an unknown value.
+- **On the stubs [C: `step4/4-tests-stubs-jvmTest.log`, `step4/5-tests-stubs-junit.txt`]:** 0 compile errors; 75 tests, 6
+  failures; each of the six on `NotImplementedError` "step 4: setForeignContext", as predicted at
+  `step4/4-tests-prediction.txt`, the 26-profile tests 26 of 26 by that one cause. So every test fails at the shared
+  construction path, not at the member it exists for; that member is first reached when the port lands.
 
 ## Confirmed vs inferred
 

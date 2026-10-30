@@ -1,0 +1,10 @@
+Step 4's tests on the stubs, prediction, thirteenth session (Linden Caliper). Written before the first run of these tests.
+
+Tests (jvmTest, com.zynergylabs.forager.brouter.expressions): ProfileParseTest (2), ProfileEvaluateTest (1),
+MalformedProfileTest (1), AsteriskUnsupportedTest (2). Six tests; jvmTest as a whole 75, of which 69 pass as at 0c17b17.
+
+Prediction: 0 compile errors; all six fail; each on kotlin.NotImplementedError "step 4: setForeignContext", because
+ExpressionsEngines.port calls node.setForeignContext(way) before any other port member, and the stub constructors do
+nothing. So on the stubs every test fails at the same stub, the first one its shared construction path reaches; the
+member each test exists for is reached only once the port lands. Before that point, ProfileEvaluateTest builds its vectors
+from the oracle alone, so its vector-count check runs on this run too and must not be what fails it.

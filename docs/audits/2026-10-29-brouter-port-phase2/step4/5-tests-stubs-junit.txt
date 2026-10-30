@@ -1,0 +1,40 @@
+Step 4's tests on the stubs, read from the JUnit XML in brouter/build/test-results/jvmTest after 4-tests-stubs-jvmTest.log's run
+(local, 2026-10-30T01:02:34Z); compile errors in the log: 0.
+TOTAL: tests 75, failures 6, errors 0, skipped 0 in 33 files
+com.zynergylabs.forager.brouter.expressions.AsteriskUnsupportedTest tests 2 failures 2 errors 0 timestamp 2026-10-30T01:02:00.427Z
+   withoutAnAsteriskAnUnknownValueIsRecordedAsUnknownOnBoth[jvm] FAIL: kotlin.NotImplementedError: An operation is not implemented: step 4: setForeignContext
+   theOracleRecordsTheValueAndThePortThrowsTheNamedUnsupported[jvm] FAIL: kotlin.NotImplementedError: An operation is not implemented: step 4: setForeignContext
+com.zynergylabs.forager.brouter.expressions.MalformedProfileTest tests 1 failures 1 errors 0 timestamp 2026-10-30T01:02:00.547Z
+   malformedProfilesFailWithTheOraclesExceptionAndMessage[jvm] FAIL: kotlin.NotImplementedError: An operation is not implemented: step 4: setForeignContext
+  system-out: MalformedProfileTest: the oracle threw on 17 of 26 texts
+  system-out: MalformedProfileTest: text 0, oracle threw java.lang.IllegalArgumentException: malformed0.brf does not contain expressions for context way (old version?)
+  system-out: MalformedProfileTest: text 1, oracle threw java.lang.IllegalArgumentException: malformed1.brf does not contain expressions for context way (old version?)
+  system-out: MalformedProfileTest: text 2, oracle threw java.lang.IllegalArgumentException: ParseException malformed2.brf at line 5: unknown expression: nosuchvariable
+  system-out: MalformedProfileTest: text 3, oracle threw java.lang.IllegalArgumentException: ParseException malformed3.brf at line 5: unknown lookup value: nosuchvalue
+  system-out: MalformedProfileTest: text 4, oracle threw java.lang.IllegalArgumentException: ParseException malformed4.brf at line 5: unknown lookup name: nosuchkey
+  system-out: MalformedProfileTest: text 5, oracle threw java.lang.IllegalArgumentException: ParseException malformed5.brf at line 5: unknown expression: 1.2.3
+  system-out: MalformedProfileTest: text 6, oracle threw java.lang.IllegalArgumentException: ParseException malformed6.brf at line 7: unexpected end of file
+  system-out: MalformedProfileTest: text 7, oracle threw java.lang.IllegalArgumentException: ParseException malformed7.brf at line 7: unexpected end of file
+  system-out: MalformedProfileTest: text 8, oracle threw java.lang.IllegalArgumentException: ParseException malformed8.brf at line 4: variable name cannot contain '=': =
+  system-out: MalformedProfileTest: text 9, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 10, oracle threw java.lang.IllegalArgumentException: ParseException malformed10.brf at line 4: operator nosuchkeyword is invalid on toplevel (only 'assign' allowed)
+  system-out: MalformedProfileTest: text 11, oracle threw java.lang.IllegalArgumentException: ParseException malformed11.brf at line 7: unexpected end of file
+  system-out: MalformedProfileTest: text 12, oracle threw java.lang.IllegalArgumentException: ParseException malformed12.brf at line 5: unknown lookup name: 
+  system-out: MalformedProfileTest: text 13, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 14, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 15, oracle threw java.lang.IllegalArgumentException: ParseException malformed15.brf at line 5: unknown expression: 1e5x
+  system-out: MalformedProfileTest: text 16, oracle threw java.lang.IllegalArgumentException: ParseException malformed16.brf at line 5: unknown expression: -
+  system-out: MalformedProfileTest: text 17, oracle parsed: way [typ=31 ops=([1.0]), typ=31 ops=([2.0])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 18, oracle threw java.lang.IllegalArgumentException: ParseException malformed18.brf at line 4: cannot assign to readonly variable x
+  system-out: MalformedProfileTest: text 19, oracle threw java.lang.IllegalArgumentException: ParseException malformed19.brf at line 6: unexpected end of file
+  system-out: MalformedProfileTest: text 20, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([typ=35 ops=()])]
+  system-out: MalformedProfileTest: text 21, oracle threw java.lang.IllegalArgumentException: ParseException malformed21.brf at line 6: unknown variable: nosuchvariable
+  system-out: MalformedProfileTest: text 22, oracle parsed: way [typ=31 ops=([1.0])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 23, oracle parsed: way [typ=31 ops=([Infinity])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 24, oracle parsed: way [typ=31 ops=([typ=32 ops=()])]; node [typ=31 ops=([0.0])]
+  system-out: MalformedProfileTest: text 25, oracle parsed: way [typ=31 ops=([typ=32 ops=()])]; node [typ=31 ops=([0.0])]
+com.zynergylabs.forager.brouter.expressions.ProfileEvaluateTest tests 1 failures 1 errors 0 timestamp 2026-10-30T01:02:00.729Z
+   everyProfileEvaluatesTheOraclesVectorsToTheOraclesBits[jvm] FAIL: java.lang.AssertionError: 26 of 26 profiles failed (26 expected, RECORD -39); by cause: {kotlin.NotImplementedError: An operation is not implemented: step 4: setForeignContext=26}
+com.zynergylabs.forager.brouter.expressions.ProfileParseTest tests 2 failures 2 errors 0 timestamp 2026-10-30T01:02:01.127Z
+   theLookupsVersionsAreTheOracles[jvm] FAIL: java.lang.AssertionError: 26 of 26 profiles failed (26 expected, RECORD -39); by cause: {kotlin.NotImplementedError: An operation is not implemented: step 4: setForeignContext=26}
+   everyProfileParsesToTheOraclesExpressions[jvm] FAIL: java.lang.AssertionError: 26 of 26 profiles failed (26 expected, RECORD -39); by cause: {kotlin.NotImplementedError: An operation is not implemented: step 4: setForeignContext=26}
