@@ -1,0 +1,26 @@
+profile	n	candidates	unstable	over5	kinds	logged_cases	max_lines	control_moved	cross40N	cross70W	R1_s_total	R1_s_max
+car-eco	59	70	0	False	{'route': 51, 'to-position not mapped in existing datafile': 4, 'from-position not mapped in existing datafile': 4}	4	7	59	0	0	40.9	5.7
+car-eco-nocost	59	65	0	False	{'route': 50, 'to-position not mapped in existing datafile': 7, 'target island detected for section 0': 1, 'from-position not mapped in existing datafile': 1}	3	8	59	1	1	40.1	4.1
+car-fast	59	62	0	False	{'route': 54, 'to-position not mapped in existing datafile': 3, 'from-position not mapped in existing datafile': 2}	3	17	59	1	1	55.8	9.0
+car-fast-nocost	59	68	0	False	{'route': 52, 'to-position not mapped in existing datafile': 3, 'no track found at pass=0': 1, 'from-position not mapped in existing datafile': 2, 'error re-tracking track': 1}	6	69	59	1	1	71.1	18.5
+car-vario	59	68	0	False	{'route': 50, 'to-position not mapped in existing datafile': 5, 'from-position not mapped in existing datafile': 4}	7	33	59	1	1	60.8	9.8
+car-vario-nocost	59	66	0	False	{'route': 43, 'from-position not mapped in existing datafile': 7, 'to-position not mapped in existing datafile': 8, 'target island detected for section 0': 1}	5	10	59	1	1	42.8	4.6
+fastbike	59	63	0	False	{'to-position not mapped in existing datafile': 5, 'route': 53, 'from-position not mapped in existing datafile': 1}	10	19	59	1	1	63.3	9.0
+fastbike-asia-pacific	59	62	0	False	{'route': 55, 'to-position not mapped in existing datafile': 4}	8	41	59	1	1	68.7	15.2
+fastbike-lowtraffic	59	61	0	False	{'route': 57, 'from-position not mapped in existing datafile': 1, 'to-position not mapped in existing datafile': 1}	4	36	59	0	1	67.5	12.9
+fastbike-verylowtraffic	59	66	0	False	{'route': 57, 'to-position not mapped in existing datafile': 2}	18	62	59	3	1	101.2	16.0
+gravel	59	68	0	False	{'route': 56, 'to-position not mapped in existing datafile': 3}	14	35	59	1	0	95.6	12.7
+moped	59	69	0	False	{'route': 48, 'to-position not mapped in existing datafile': 9, 'from-position not mapped in existing datafile': 1, 'no track found at pass=0': 1}	6	5	59	1	0	37.5	3.2
+mtb	59	66	0	False	{'route': 54, 'from-position not mapped in existing datafile': 2, 'to-position not mapped in existing datafile': 2, 'target island detected for section 0': 1}	8	89	59	0	0	108.6	25.7
+rail	59	65	0	False	{'from-position not mapped in existing datafile': 52, 'to-position not mapped in existing datafile': 4, 'route': 2, 'datafile W70_N45.rd5 not found': 1}	0	0	59	0	0	13.6	0.4
+river	59	65	0	False	{'from-position not mapped in existing datafile': 53, 'route': 2, 'datafile W80_N40.rd5 not found': 1, 'to-position not mapped in existing datafile': 3}	0	0	59	1	0	13.7	0.4
+safety	59	69	0	False	{'route': 54, 'to-position not mapped in existing datafile': 5}	7	28	59	2	1	83.0	11.8
+shortest	59	68	1	False	{'route': 55, 'to-position not mapped in existing datafile': 4}	6	38	59	0	1	61.2	14.5
+skating	59	64	0	False	{'route': 43, 'to-position not mapped in existing datafile': 8, 'target island detected for section 0': 2, 'from-position not mapped in existing datafile': 6}	3	67	59	0	1	66.2	22.8
+trekking	59	67	0	False	{'route': 52, 'to-position not mapped in existing datafile': 6, 'from-position not mapped in existing datafile': 1}	5	26	59	1	1	67.5	11.6
+trekking-ignore-cr	59	71	0	False	{'route': 55, 'to-position not mapped in existing datafile': 2, 'from-position not mapped in existing datafile': 1, 'no track found at pass=0': 1}	12	70	59	2	0	99.3	19.6
+trekking-noferries	59	65	0	False	{'route': 53, 'to-position not mapped in existing datafile': 5, 'no track found at pass=0': 1}	7	9	59	1	1	55.7	5.4
+trekking-nosteps	59	65	0	False	{'route': 54, 'to-position not mapped in existing datafile': 1, 'from-position not mapped in existing datafile': 3, 'no track found at pass=0': 1}	13	72	59	4	1	127.5	24.3
+trekking-steep	59	68	0	False	{'route': 57, 'from-position not mapped in existing datafile': 1, 'to-position not mapped in existing datafile': 1}	9	74	59	0	0	97.6	26.1
+vm-forum-liegerad-schnell	59	66	0	False	{'route': 51, 'datafile E170_S45.rd5 not found': 1, 'to-position not mapped in existing datafile': 5, 'no track found at pass=0': 1, 'target island detected for section 0': 1}	8	114	59	2	1	74.2	24.0
+vm-forum-velomobil-schnell	59	69	0	False	{'route': 51, 'from-position not mapped in existing datafile': 2, 'to-position not mapped in existing datafile': 6}	5	22	59	0	1	67.1	10.9

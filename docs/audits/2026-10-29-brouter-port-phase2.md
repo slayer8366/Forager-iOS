@@ -1145,6 +1145,118 @@ Each mutation in `E3Jvm.report`, restored from a copy saved before editing and t
 4. **Then DL-lat and DL-lon,** which need a generator forcing ends to opposite sides; then MP64, ML5, PM5.
 5. **Expected values** once a stratum is stable: read part 7 step 4's digest first.
 
+## Step 1b continued: the oracle's JDK, and R on all 26 profiles (seventeenth session, Linden Caliper)
+
+Dispatched by Cedar Datum under Amendment 3 Part B after RECORD -47. **Bases [R]:** `brouter-port` at `0265239` on pull, as the
+dispatch said; `main` at `699125d` after fetch. Evidence is in `2026-10-29-brouter-port-phase2/step1b/`, files 8 to 10. The
+predictions (`8-temurin-prediction.txt`) were pushed in `8cf8be4`, before any run on Temurin.
+
+### The oracle's JDK (`970df90`)
+
+- **Source [R]:** Adoptium's GitHub release `adoptium/temurin21-binaries`, tag `jdk-21.0.13+9`, asset
+  `OpenJDK21U-jdk_x64_linux_hotspot_21.0.13_9.tar.gz`. `api.adoptium.net/v3/assets/release_name/eclipse/jdk-21.0.13%2B9`
+  (linux, x64, jdk, hotspot, normal heap) names that link, release timestamp 2026-10-22T08:58:06Z.
+- **Pin:** 207,858,352 bytes, SHA-256 `d7f5d5cf865a2902b70ff549b97586a7d3f234e016f041ab447ea740c7d66d1c`. That is Adoptium's
+  published checksum, read from two of its own sources that agree: the release's `.sha256.txt` and the API's
+  `package.checksum` and `package.size` **[R]**. The SHA-256 computed from the download equals both **[C]**. Adoptium's
+  GPG signature was **not** checked.
+- **`tools/fetch-temurin.sh <dir>`** fetches it through `fetch-pinned.sh` (size, then SHA-256), extracts it fresh, and refuses
+  it unless its `release` file reads `IMPLEMENTOR="Eclipse Adoptium"` and `JAVA_RUNTIME_VERSION="21.0.13+9-LTS"` **[C]**. The
+  JDK was fetched into the session's scratch directory; nothing is committed.
+- **`e3Strata` runs on it only:** `-Pbrouter.e3.jdk=<home>` sets the test JVM's `executable`. Without it the task refuses
+  before any case runs ("e3Strata runs on the oracle's JDK only (RECORD -47)…") **[C: run]**. Every regime's JVM starts from
+  the test JVM's `java.home` (`E3Launcher.kt:32`) **[R]**. During the `hiking-mountain` run, `ps` showed R1R2, R3 and R4 JVMs
+  started as Temurin's `bin/java -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic` **[C]**. R5 and R6 were not in that
+  snapshot; they use the same launcher **[R]**.
+- **The head of every stratum's log** (`E3Strata.jdk`) prints `java.vendor`, `java.runtime.version`, `os.arch`,
+  `java.vm.name` and `java.home`. It refuses any JDK other than Eclipse Adoptium 21.0.13+9-LTS amd64. All 27 stratum logs here
+  read `java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64` **[C]**.
+- **R's body moved to `E3R`, unchanged**, so the 25 profiles share it. `E3RTest` keeps `hiking-mountain`'s seed 20261030.
+  `E3RProfilesTest` holds the other 25 profiles' seeds, 20261101 to 20261125 in alphabetical order. They were committed and
+  pushed in `970df90`, before any run of them. The test checks that the 26 profiles are the oracle's `profiles2/*.brf`.
+
+### F0 and R on `hiking-mountain`, re-run on Temurin (`2ada78c`) [C]
+
+| Stratum | JDK | Unstable | Over 5%? | Earlier (OpenJDK 21.0.12.1, `525448b`) |
+|---|---|---|---|---|
+| **F0** | Temurin 21.0.13+9 amd64 | **0 of 2** | no | 0 of 2 |
+| **R, `hiking-mountain`** | Temurin 21.0.13+9 amd64 | **0 of 59** | no | 0 of 59 |
+
+- **Same cases, same answers.** R generated the same 59 case ids from 67 candidates (8 rejected). **Every R1 tuple equals
+  the OpenJDK run's: 59 of 59, and F0's 2 of 2** (`9-*-stability.tsv` against `6-` and `4-`). The control moved in every JVM.
+  Predictions 1 to 5 held.
+- **The second gap closes for this stratum:** the generator was pushed (`525448b`, `970df90`) before this run.
+
+### R on the other 25 profiles (`10-r-25-profiles-temurin-*`) [C]
+
+All on Temurin 21.0.13+9 amd64. The profiles ran **one after another in one `e3Strata` run** (04:48:18Z to 06:00:53Z, 1 h 12 min),
+3 regime JVMs at a time. **Not in parallel:** see the calls below. Each stratum has n = 59 (E5), with 61 to 71 candidates, and
+none is short. The control moved in all 1,475 cases.
+
+| Profile | Unstable (of 59) | Routes (R1) | Logged cases |
+|---|---|---|---|
+| car-eco / car-eco-nocost | 0 / 0 | 51 / 50 | 4 / 3 |
+| car-fast / car-fast-nocost | 0 / 0 | 54 / 52 | 3 / 6 |
+| car-vario / car-vario-nocost | 0 / 0 | 50 / 43 | 7 / 5 |
+| fastbike / -asia-pacific / -lowtraffic / -verylowtraffic | 0 / 0 / 0 / 0 | 53 / 55 / 57 / 57 | 10 / 8 / 4 / 18 |
+| gravel / moped / mtb | 0 / 0 / 0 | 56 / 48 / 54 | 14 / 6 / 8 |
+| rail / river | 0 / 0 | 2 / 2 | 0 / 0 |
+| safety / **shortest** / skating | 0 / **1** / 0 | 54 / 55 / 43 | 7 / 6 / 3 |
+| trekking / -ignore-cr / -noferries / -nosteps / -steep | 0 / 0 / 0 / 0 / 0 | 52 / 55 / 53 / 54 / 57 | 5 / 12 / 7 / 13 / 9 |
+| vm-forum-liegerad-schnell / vm-forum-velomobil-schnell | 0 / 0 | 51 / 51 | 8 / 5 |
+
+- **No profile passes E3's 5%: no stop.** The highest is `shortest`, at 1 of 59 (1.7%). Over all 26 profiles, R is **1 of
+  1,534** unstable.
+- **The one unstable case, `R-shortest-025`:** R1 to R5 agree on `route|217|5102|5102|5413e0b4fd811f2e`, and the logged runs
+  agree on one collection ("collected, nodes/paths before=48326/395 after=19174/303 maxTotalCost=5194"). **R6, under JaCoCo's
+  agent, routed `route|188|5103|5103|a72dd9fe13d1c2c1`:** a different route 1 m longer. The kinds agree in all six. Under E3 it
+  is kept out of every exact assertion and compared on kind only. **Why R6 differed was not determined [?].**
+  - **[I]** `shortest`'s cost equals its distance, so two routes 1 m apart are a near-tie. A collection ran at maxTotalCost
+    5,194 in the logged runs. R6 has no `debug.txt`, so whether it collected, or when, is not visible.
+  - **This also bears on E3's own rule:** the coverage run must give R1's tuple. For this case it did not, so its `.exec` does
+    not describe the expected-value run.
+- **Kinds:** non-routes are the oracle's own errors: "to/from-position not mapped", "target island", "no track found",
+  "datafile … not found" for tiles not captured, and once "error re-tracking track" (car-fast-nocost). `rail` and `river` give
+  52 and 53 "from-position not mapped" respectively, as predicted.
+- **Crossings:** 25 cases have ends on opposite sides of 40°N, and 17 of 70°W, in 21 of the 25 profiles. These are ends only,
+  not routes **[C: `10-…-summary.tsv`]**.
+- **Prediction 6 partly failed:** "most likely 0 unstable in each" was wrong for `shortest`. "No profile over 5%", "none short"
+  and "rail and river mostly non-route" held.
+
+### Calls beyond the amendment (mine; for the planner)
+
+- **The JDK is given to `e3Strata` by a property, not fetched by a Gradle task,** because the dispatch said "into scratch".
+  The task refuses without the property, and the run refuses any other JDK.
+- **The in-run check includes the arch, amd64,** as RECORD -47 names it. The libm flag is still chosen from Gradle's own JVM's
+  `os.arch` (`build.gradle.kts`), which is amd64 here, as Temurin's is.
+- **The seeds, 20261101 to 20261125 in alphabetical order, are mine.** E4 fixes only that each seed is in the source.
+- **One test runs the 25 in sequence, and stops at the first profile over 5%.**
+- **The planner allowed up to 3 profiles at a time during the run. I did not take it.** The one run already held the machine
+  at load about 7 on 4 cores, 2% idle **[C: `/proc/loadavg`, `top`, at profile 15]**. More profiles at once would not have
+  finished sooner, and would have taken the core left for the second coder. The run was not restarted.
+- **`R-shortest-025` is recorded, not investigated:** under the stop, and outside this dispatch.
+- **Commit trailers follow the dispatch** (`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name), as this branch's
+  history does.
+
+### Could not determine, and unverified
+
+- **Why R6 gave `R-shortest-025` another route [?].** Whether R1 repeats it on CI's Temurin, or on aarch64: no case has run
+  there.
+- **Whether `shortest`'s instability is Temurin's:** `shortest` never ran on OpenJDK 21.0.12.1 **[?]**.
+- **Adoptium's GPG signature on the tarball:** not checked. The pin rests on Adoptium's two published checksums.
+- **The `.exec` files are not analysed;** no expected value is written (dispatch).
+
+### Step 1b: the handoff (seventeenth session)
+
+1. **Read** this section and RECORD -47. Run `tools/fetch-temurin.sh <scratch>`, then
+   `./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<scratch>/jdk-21.0.13+9 --tests <class>`. Filter by class: the 25-profile run
+   alone takes about 73 min.
+2. **R is done on all 26 profiles:** 1 of 1,534 unstable, `R-shortest-025`. The planner may want R6's disagreement looked at
+   before any coverage is read as reach evidence.
+3. **Next, in the planner's order:** DL-lat and DL-lon (a generator forcing ends to opposite sides; seeds pushed before any
+   run), then MP64, ML5, PM5. Each through `E3Strata.jdk` and `E3Strata.report`.
+4. **Expected values** once a stratum is stable: read part 7 step 4's digest first.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
