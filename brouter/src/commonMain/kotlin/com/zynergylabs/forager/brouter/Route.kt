@@ -1,5 +1,9 @@
 package com.zynergylabs.forager.brouter
 
+import com.zynergylabs.forager.brouter.codec.DataBuffers
+import com.zynergylabs.forager.brouter.mapaccess.PhysicalFile
+import okio.FileSystem
+import okio.IOException
 import okio.Path
 
 // The port's public surface, all of it (Phase 1 report, item C, "what the port exposes"): exactly what Forager's adapter
@@ -43,4 +47,11 @@ fun route(request: RouteRequest, cancel: RouteCancel): RouteOutcome =
     TODO("ported with RoutingEngine, item I step 8")
 
 /** The header check Forager's `RoutingDataFolder.headerProblem` makes: null when the file reads, else the reason. */
-fun checkDataFile(file: Path): String? = TODO("ported with PhysicalFile, item I step 5a")
+fun checkDataFile(file: Path): String? = try {
+    // Forager's RoutingDataFolder.headerProblem (RoutingDataFolder.kt:48-53 at Forager e2969abe): the header and footer
+    // read as PhysicalFile's constructor reads them, without the lookup-version check.
+    PhysicalFile(FileSystem.SYSTEM, file, DataBuffers(), -1, -1).close()
+    null
+} catch (e: IOException) {
+    e.message ?: (e::class.simpleName ?: "IOException")
+}

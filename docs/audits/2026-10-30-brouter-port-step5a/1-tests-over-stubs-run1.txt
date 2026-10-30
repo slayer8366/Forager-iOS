@@ -1,0 +1,14 @@
+com.zynergylabs.forager.brouter.mapaccess.CheckDataFileTest tests 2 failures 2 errors 0
+   aMissingFileGivesTheOraclesMessage[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+   eachCapturedTileReadsOnBothEngines[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest tests 3 failures 3 errors 0
+   fk6DataMissing[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.NodesCache.<init>(NodesCache.kt:30)']
+   fk7DataCorruptShort[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: ported with PhysicalFile, item I step 5a ['at com.zynergylabs.forager.brouter.RouteKt.checkDataFile(Route.kt:46)']
+   fk8DataCorruptChecksum[jvm] -> java.lang.AssertionError: java.lang.AssertionError: expected:<10> but was:<8> ['at com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest.fk8DataCorruptChecksum(FileFailureKindsTest.kt:77)']
+com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelperTest tests 2 failures 2 errors 0
+   theSecondaryFolderIsReadAsTheOracleReadsIt[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelper.getSecondarySegmentDir(StorageConfigHelper.kt:8)']
+   aTileOnlyInTheSecondaryFolderIsOpenedByBoth[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.NodesCache.<init>(NodesCache.kt:30)']
+com.zynergylabs.forager.brouter.mapaccess.TileHeaderTest tests 3 failures 3 errors 0
+   eachCapturedTilePassesTheIntegrityCheckOnBothEngines[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.PhysicalFile$Companion.checkFileIntegrity(PhysicalFile.kt:26)']
+   eachCapturedTilesHeaderEqualsTheOracles[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.PhysicalFile.<init>(PhysicalFile.kt:19)']
+   eachCapturedTilesSubIndexesEqualTheOracles[jvm] -> kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: item I step 5a ['at com.zynergylabs.forager.brouter.mapaccess.PhysicalFile.<init>(PhysicalFile.kt:19)']

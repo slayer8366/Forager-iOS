@@ -1,0 +1,71 @@
+# Step 5a port, full jvmTest. Compile errors in the build log: 0
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.codec.DataBuffersTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.codec.DataBuffersTest.xml)
+com.zynergylabs.forager.brouter.codec.MicroCacheTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.codec.MicroCacheTest.xml)
+com.zynergylabs.forager.brouter.codec.NoisyDiffCoderTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.codec.NoisyDiffCoderTest.xml)
+com.zynergylabs.forager.brouter.codec.StatCoderContextTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.codec.StatCoderContextTest.xml)
+com.zynergylabs.forager.brouter.codec.TagValueCoderTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.codec.TagValueCoderTest.xml)
+com.zynergylabs.forager.brouter.expressions.AsteriskUnsupportedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.expressions.AsteriskUnsupportedTest.xml)
+com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest.xml)
+com.zynergylabs.forager.brouter.expressions.MalformedProfileTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.expressions.MalformedProfileTest.xml)
+com.zynergylabs.forager.brouter.expressions.ProfileEvaluateTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.expressions.ProfileEvaluateTest.xml)
+com.zynergylabs.forager.brouter.expressions.ProfileParseTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.expressions.ProfileParseTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.CheckDataFileTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.CheckDataFileTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelperTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.StorageConfigHelperTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.TileHeaderTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.TileHeaderTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAgainstCTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAgainstCTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.msun.MsunReferenceCommittedTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleFailureKindsTest.xml)
+com.zynergylabs.forager.brouter.oracle.OracleJdkTableTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OracleJdkTableTest.xml)
+com.zynergylabs.forager.brouter.oracle.OraclePinTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.OraclePinTest.xml)
+com.zynergylabs.forager.brouter.oracle.e3.E3ControlTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.oracle.e3.E3ControlTest.xml)
+com.zynergylabs.forager.brouter.tiles.TilePinsTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.tiles.TilePinsTest.xml)
+com.zynergylabs.forager.brouter.util.BitCoderContextTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.BitCoderContextTest.xml)
+com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteArrayUnifierTest.xml)
+com.zynergylabs.forager.brouter.util.ByteDataTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.ByteDataTest.xml)
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionRecordTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml)
+com.zynergylabs.forager.brouter.util.Crc32Test: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.Crc32Test.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaLangTest.xml)
+com.zynergylabs.forager.brouter.util.JavaTextCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaTextCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaTextTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.JavaTextTest.xml)
+com.zynergylabs.forager.brouter.util.LongMapTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LongMapTest.xml)
+com.zynergylabs.forager.brouter.util.LruMapTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.LruMapTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsExpectedTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml)
+com.zynergylabs.forager.brouter.util.SortedHeapTest: tests 4, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.SortedHeapTest.xml)
+TOTAL: tests 91, failures 0, errors 0, skipped 0 in 41 files
+
+# The step's printed cases (system-out of the four mapaccess classes)
+5a FK 7, cut to 1 of 1061705: checkDataFile=EOFException | integrity=threw java.io.EOFException: null | loadSegmentFor=threw java.lang.RuntimeException: null
+5a FK 7, cut to 100 of 1061705: checkDataFile=EOFException | integrity=threw java.io.EOFException: null | loadSegmentFor=threw java.lang.RuntimeException: null
+5a FK 7, cut to 199 of 1061705: checkDataFile=EOFException | integrity=threw java.io.EOFException: null | loadSegmentFor=threw java.lang.RuntimeException: null
+5a FK 7, cut to 200 of 1061705: checkDataFile=file of size 200 too short, should be 1061704 | integrity=threw java.io.IOException: file of size 200 too short, should be 1061704 | loadSegmentFor=threw java.lang.RuntimeException: file of size 200 too short, should be 1061704
+5a FK 7, cut to 201 of 1061705: checkDataFile=file of size 201 too short, should be 1061704 | integrity=threw java.io.IOException: file of size 201 too short, should be 1061704 | loadSegmentFor=threw java.lang.RuntimeException: file of size 201 too short, should be 1061704
+5a FK 7, cut to 530796 of 1061705: checkDataFile=file of size 530796 too short, should be 1061704 | integrity=threw java.io.IOException: file of size 530796 too short, should be 1061704 | loadSegmentFor=threw java.lang.RuntimeException: file of size 530796 too short, should be 1061704
+5a FK 7, cut to 1061591 of 1061705: checkDataFile=file of size 1061591 too short, should be 1061704 | integrity=threw java.io.IOException: file of size 1061591 too short, should be 1061704 | loadSegmentFor=threw java.lang.RuntimeException: file of size 1061591 too short, should be 1061704
+5a FK 7, cut to 1061592 of 1061705: checkDataFile=null | integrity=skipped | loadSegmentFor=ok:0
+5a FK 7, cut to 1061593 of 1061705: checkDataFile=file of size 1061593 too short, should be 1061704 | integrity=threw java.io.IOException: file of size 1061593 too short, should be 1061704 | loadSegmentFor=threw java.lang.RuntimeException: file of size 1061593 too short, should be 1061704
+5a FK 7, cut to 1061704 of 1061705: checkDataFile=null | integrity=ok:null | loadSegmentFor=ok:0
+5a FK 8, byte 1 flipped: checkDataFile=top index checksum error | integrity=threw java.io.IOException: top index checksum error | loadSegmentFor=threw java.lang.RuntimeException: lookup version mismatch (old rd5?) lookups.dat=11 E170_S50.rd5=244
+5a FK 8, byte 37 flipped: checkDataFile=top index checksum error | integrity=threw java.io.IOException: top index checksum error | loadSegmentFor=threw java.lang.RuntimeException: top index checksum error
+5a FK 8, byte 100 flipped: checkDataFile=top index checksum error | integrity=threw java.io.IOException: top index checksum error | loadSegmentFor=threw java.lang.RuntimeException: top index checksum error
+5a FK 8, byte 150 flipped: checkDataFile=top index checksum error | integrity=threw java.io.IOException: top index checksum error | loadSegmentFor=threw java.lang.RuntimeException: top index checksum error
+5a FK 8, byte 199 flipped: checkDataFile=top index checksum error | integrity=threw java.io.IOException: top index checksum error | loadSegmentFor=threw java.lang.RuntimeException: top index checksum error
+5a FK 8, byte 207 flipped: checkDataFile=null | integrity=threw java.io.IOException: sub index checksum error | loadSegmentFor=threw java.lang.RuntimeException: sub index checksum error
+5a FK 8, byte 33804 flipped: checkDataFile=null | integrity=threw java.io.IOException: sub index checksum error | loadSegmentFor=threw java.lang.RuntimeException: sub index checksum error
+5a FK 8, byte 1052052 flipped: checkDataFile=null | integrity=threw java.io.IOException: sub index checksum error | loadSegmentFor=threw java.lang.RuntimeException: sub index checksum error
+5a FK 8, byte 219 flipped: checkDataFile=null | integrity=threw java.io.IOException: sub index checksum error | loadSegmentFor=threw java.lang.RuntimeException: sub index checksum error
+5a FK 8, byte 33816 flipped: checkDataFile=null | integrity=threw java.io.IOException: sub index checksum error | loadSegmentFor=threw java.lang.RuntimeException: sub index checksum error
+5a header segments/W75_N40.rd5: divisor 32, elevationType 3, creationTime 1793328211201, fileIndex[24] 119765568
+5a header segments/W75_N35.rd5: divisor 32, elevationType 3, creationTime 1793328211204, fileIndex[24] 3572407
+5a header segments/W70_N40.rd5: divisor 32, elevationType 3, creationTime 1793328211204, fileIndex[24] 5292509
+5a header segments/E170_S50.rd5: divisor 32, elevationType 3, creationTime 1793328211204, fileIndex[24] 1061592
+5a header f0/W75_N40.rd5: divisor 32, elevationType 3, creationTime 1792643406028, fileIndex[24] 152552
+5a sub-indexes: 125 degree squares compared, 40 with data
