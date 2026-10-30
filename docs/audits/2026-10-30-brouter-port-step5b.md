@@ -5,10 +5,17 @@ the owner's to choose), second session. Branch `brouter-port-5b`, cut from `orig
 planner's merge of 5a. The base was checked against the remote first: `git ls-remote` gave `brouter-port` at
 `9f41799dc20a`, so the primary had not pushed since [C]. Evidence in `2026-10-30-brouter-port-step5b/`.
 
-**Status (2026-10-30): in progress.** Part 1 (5a closed) is pushed at `4cc7f20`; the `hmap` sizing at `3495f64` (the
-planner was sent the count); the tests over stubs at `c53fd51`; the port without the map at this section's commit.
-**The map is not written until the planner answers** (Amendment 3, "size it ... and report the count before writing
-it"), so the decode tests and the revert wait on it.
+**Status (2026-10-30): partial, waiting on the planner's answer to the `hmap` sizing.** Done and pushed:
+- 5a closed (`4cc7f20`);
+- the sizing (`3495f64`, sent to the planner);
+- the tests seen failing on their stubs (`c53fd51`);
+- the port except the map (`a8e0231`);
+- the revert's prediction (`6cf89c8`);
+- the three conditions from data (`966d810`).
+
+**The map is not written** (Amendment 3: "size it ... and report the count before writing it"). So the decode tests
+cannot pass yet, the revert cannot run, and the branch is red in CI on the map's stub alone. The handoff at the end
+says what remains.
 
 Tags: [R] read (file and line), [C] computed (log in the evidence folder), [I] inferred, [?] could not determine.
 
@@ -206,3 +213,41 @@ The data agrees [C]:
   [?]**: no iOS thread has run it. A secondary iOS thread's default stack is smaller than a JVM thread's [I]. The port
   has no catch (above), so an overflow there would end the search, where Java on Android may survive it. This is for
   step 10's simulator run, and for the planner.
+
+## CI, read from the runs
+- **`4cc7f20`, run 41011251736, and `3495f64`, run 41011525077: `success`.** These are before any 5b test (conclusions
+  read through the API).
+- **`6cf89c8`, run 41014149582: `jvm` failure, `ios-smoke` success** [C: job logs]:
+  - `jvm`: 100 tests, 8 failures, every one at `NodeHashMap`'s stub. The log names the `hmap` stub in the
+    `NotImplementedError` on 8 lines;
+  - both iOS klibs compiled after the tests, with 0 ` e: ` lines;
+  - `ios-smoke`: simulator 23 of 23 (**simulator-checked**), and the arm64 JVM step 7 of 7 with "OK: all 2 classes ran".
+  - `c53fd51` (run 41012954617) and `a8e0231` (run 41014086817) are `failure`, as expected over stubs. Their logs were
+    not read.
+- **Not yet known: `GraphDecodeTest`'s time in CI.** The oracle alone took 6 min 48 s for W75_N40's four decodes per
+  cache [C: `5-probe/stability.txt`], and the test does that on both engines and writes longer texts, so it may take
+  about 15 minutes [I]. The `jvm` job's limit is 30 minutes (`brouter.yml:18`). Whether W75_N40's decode belongs in
+  every push's `jvmTest`, or in a separate task as E3's strata are, is the planner's call. Nothing was moved.
+
+## Unverified
+- **Every 5b test except `OsmNodePairSetTest` has yet to run on the port:** the decode, region and order tests cannot
+  get past the map's stub.
+- The revert: predicted and pushed (`4-revert-prediction.md`), not run.
+- Kotlin/Native at a recursion depth of 5,679 [?]; iOS has run no 5b code. All 5b tests are `jvmTest`, because they
+  compare with the oracle.
+- `GraphDecodeTest`'s CI time [?].
+
+## Handoff: what remains, in order
+1. **Read the planner's answer to the sizing** (RECORD, or its message). It decides `NodeHashMap` and, in particular,
+   what the port does at `tieBreakOrder`, which the test's "known" seeding reaches once in W75_N40 (above).
+2. **Write `NodeHashMap` as answered**, replacing the stub in `mapaccess/NodeHashMap.kt`, in three files under about
+   400 lines each (sizing above). Keys and values stay separate (`HashMap.java:660-667`).
+3. **Run `:brouter:jvmTest --max-workers=2`** from an emptied `brouter/build/test-results/jvmTest`. Expect 100 tests and
+   0 failures. Read the counts from the XML, and check each 5b test's printed coverage line: the order test must have
+   seen every kind it asserts. A decode difference names its tile, cache, scenario and first differing line.
+4. **Run the revert:** `bash docs/audits/2026-10-30-brouter-port-step5b/revert-runner.sh <repo> <scratch-dir>`. It saves
+   `DirectWeaver.kt`, inverts `:165`, refuses on any compile error, restores from the saved copy and checks it with
+   `cmp`. Compare its failures with `4-revert-prediction.md` (10 failures, each at an `L` line differing only in the
+   reverse flag). Copy its outputs into the evidence folder, and push.
+5. **Read CI on that push:** `jvm`'s count and time, both klibs' `e:` lines, the simulator count, and the arm64 gate.
+6. **Set this report's status to done**, and tell the planner the branch is ready to merge into `brouter-port`.
