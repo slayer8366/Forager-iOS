@@ -55,8 +55,9 @@ jobs:
         with:
           distribution: temurin
           java-version: '21.0.13+9'
-      # RECORD -37: the arm64 JVM step's test executor exits 1 before any test. This prints the job's own java started
-      # with the test JVM's flags, and Math.cos against StrictMath.cos under each candidate flag. It never fails the job.
+      # RECORD -37: why the test JVM's libm flag depends on the arch (brouter/build.gradle.kts). This prints the job's own
+      # java started with x86's flag, which aarch64 refuses, and with aarch64's, and Math.cos against StrictMath.cos under
+      # each. It never fails the job.
       - name: Probe - this job's java with the test JVM's flags
         if: always()
         run: bash tools/jvm-probe/probe.sh
@@ -73,8 +74,9 @@ jobs:
         run: |
           python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
           for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
-      # H step 4: the JVM half on HotSpot for arm64. It answers whether arm64 HotSpot with -XX:-UseLibmIntrinsic builds the
-      # same table and angles as the oracle's x86_64 JVM. A test that fails here is a difference, recorded and not gating.
+      # H step 4: the JVM half on HotSpot for arm64. It answers whether arm64 HotSpot with libm's cos intrinsic off
+      # (-XX:DisableIntrinsic=_dcos, aarch64's switch; RECORD -37) builds the same table and angles as the oracle's x86_64
+      # JVM (-XX:-UseLibmIntrinsic). A test that fails here is a difference, recorded and not gating.
       # RECORD -36: without -x msunReference this step never reached its tests (bionic's C does not compile against the
       # macOS SDK) and read green. So it runs only the two classes that do not read the C build, and the step after it
       # fails the job if any of them left no XML or ran no test: continue-on-error never masks a step that did not run.

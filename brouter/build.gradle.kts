@@ -61,7 +61,16 @@ tasks.named<Test>("jvmTest") {
     systemProperty("brouter.oracle.dir", oracleDir.get().asFile.absolutePath)
     systemProperty("brouter.msunref.dir", msunRefDir.get().asFile.absolutePath)
     // The planner's call (RECORD -24): the oracle runs with libm's intrinsics off, so HotSpot's Math.cos is fdlibm's.
-    jvmArgs("-XX:+UnlockDiagnosticVMOptions", "-XX:-UseLibmIntrinsic")
+    // -XX:-UseLibmIntrinsic exists only on x86 (RECORD -21). An aarch64 HotSpot refuses it and does not start: seen on
+    // macos-26 (RECORD -37; tools/jvm-probe/probe.sh): "Unrecognized VM option 'UseLibmIntrinsic'", exit 1. aarch64's own
+    // switch is -XX:DisableIntrinsic=_dcos (RECORD -21); on that runner it takes Math.cos from 11,628 of 200,000 inputs
+    // unequal to StrictMath.cos (fdlibm) to 0, interpreted and JIT-compiled alike. The test JVM is the JVM running Gradle
+    // (no toolchain is set), so that JVM's os.arch picks. Any other arch is refused rather than run with a guessed flag.
+    when (val arch = providers.systemProperty("os.arch").get()) {
+        "amd64", "x86_64" -> jvmArgs("-XX:+UnlockDiagnosticVMOptions", "-XX:-UseLibmIntrinsic")
+        "aarch64" -> jvmArgs("-XX:+UnlockDiagnosticVMOptions", "-XX:DisableIntrinsic=_dcos")
+        else -> throw GradleException("brouter jvmTest: no libm intrinsic setting for os.arch '$arch' (RECORD -37)")
+    }
     testLogging {
         events("passed", "skipped", "failed")
         showStandardStreams = true
