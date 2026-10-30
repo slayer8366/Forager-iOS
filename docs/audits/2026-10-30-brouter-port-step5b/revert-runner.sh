@@ -5,18 +5,21 @@
 # - the build log is read for compile errors before any result, and a run with any is refused;
 # - afterwards the restored file must equal the saved copy byte for byte and hold the forward line.
 #
-#   revert-runner.sh <repo> <out-dir>
+#   revert-runner.sh <repo> <out-dir> [<file> <forward line> <reverted line>]
+#
+# With three arguments more, it reverts that line of that file instead of DirectWeaver's (fourth session: the
+# tie-break stand-in's revert, 7-tiebreak-revert-prediction.md). The rules above are the same for both.
 set -uo pipefail
 
-repo=${1:?usage: revert-runner.sh <repo> <out-dir>}
-out=${2:?usage: revert-runner.sh <repo> <out-dir>}
-file=brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/DirectWeaver.kt
-forward='node.addLink(link, isReverse, node2)'
-reverted='node.addLink(link, !isReverse, node2)'
+repo=${1:?usage: revert-runner.sh <repo> <out-dir> [<file> <forward> <reverted>]}
+out=${2:?usage: revert-runner.sh <repo> <out-dir> [<file> <forward> <reverted>]}
+file=${3:-brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/DirectWeaver.kt}
+forward=${4:-'node.addLink(link, isReverse, node2)'}
+reverted=${5:-'node.addLink(link, !isReverse, node2)'}
 
 cd "$repo"
 mkdir -p "$out"
-saved="$out/DirectWeaver.kt.saved"
+saved="$out/$(basename "$file").saved"
 cp "$file" "$saved"
 [ "$(grep -c -F "$forward" "$file")" = 1 ] || { echo "REFUSED: the forward line is not in $file exactly once"; exit 1; }
 

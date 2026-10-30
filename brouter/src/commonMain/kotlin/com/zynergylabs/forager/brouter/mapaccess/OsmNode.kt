@@ -33,6 +33,12 @@ internal open class OsmNode : OsmLink, OsmPos {
 
     var visitID: Int = 0
 
+    /**
+     * Not in Java: [NodeHashMap]'s stand-in for `System.identityHashCode`, given at this node's first tie-break in a
+     * tree bin and kept for the object's life, as HotSpot keeps an identity hash (RECORD -50, -53). 0 means not yet given.
+     */
+    var tieBreakId: Int = 0
+
     /** The links to other nodes. */
     var firstlink: OsmLink? = null
 

@@ -8,12 +8,12 @@ import com.zynergylabs.forager.brouter.util.LibmSeam
  * counts and prunes the woven graph. `main` and its `addLinks` helper are Java's own test code and are not ported.
  *
  * Three differences from Java, each named:
- * - [hmap] is option (i) of RECORD -24, `java.util.HashMap`'s order in common code ([NodeHashMap]). **Its body waits for
- *   the planner's answer** to the step 5b sizing.
- * - `cleanupPeninsulas` catches `StackOverflowError` in Java (`OsmNodesMap.java:62-64`) and carries on. Common Kotlin
- *   has no such type, and a Kotlin/Native thread cannot catch a stack overflow at all, so the port has no catch: an
- *   overflow ends the search instead of being swallowed. How deep the recursion goes on the captured tiles is measured
- *   in the step 5b report.
+ * - [hmap] is option (i) of RECORD -24, `java.util.HashMap`'s order in common code ([NodeHashMap]), as RECORD -50
+ *   answers it.
+ * - `cleanupPeninsulas` catches `StackOverflowError` in Java (`OsmNodesMap.java:62-64`) and carries on. The port keeps
+ *   that catch on the JVM and logs it; on iOS there is no catch, and an overflow ends the process
+ *   ([runCatchingStackOverflow], RECORD -50). How deep the recursion goes on the captured tiles is measured in the step
+ *   5b report.
  * - [collectOutreachers] takes the [LibmSeam] for `calcDistance`, as `CheapRuler.distance` does.
  */
 internal class OsmNodesMap {
@@ -61,8 +61,8 @@ internal class OsmNodesMap {
             val n = nodes[i]
             if (n.firstlink != null) {
                 if (n.visitID == 1) {
-                    // Java: try { ... } catch (StackOverflowError soe) { } -- not portable; see the class comment.
-                    minVisitIdInSubtree(null, n)
+                    // Java: try { ... } catch (StackOverflowError soe) { }. JVM only; see the class comment.
+                    runCatchingStackOverflow { minVisitIdInSubtree(null, n) }
                 }
             }
         }

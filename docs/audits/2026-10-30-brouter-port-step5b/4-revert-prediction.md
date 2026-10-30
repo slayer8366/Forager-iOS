@@ -32,3 +32,9 @@ A failure of any other shape is not this revert's, and the result is not cited.
 
 **Restore:** from a copy of `DirectWeaver.kt` saved before the edit, never from git. Afterwards `cmp` against the
 saved copy, a `grep` for the forward line, and a forward re-run.
+
+## Addendum, fourth session, before the run
+**The total above is wrong by its own lines.** The per-class predictions sum to 7 (`GraphDecodeTest` 5,
+`CollectOutreachersTest` 2), not 10. The "10" is an arithmetic slip of the second session's, carried into both
+handoffs. The per-class lines are the prediction; its total is **7 failures of 101**, with RECORD -50's new test in
+`commonTest`, which decodes no tile and so passes. Nothing else in the prediction changes.
