@@ -1,0 +1,16 @@
+# Revert run: compile errors in the build log: 0; test-results emptied before the run
+# Diff applied (scratch branch, not pushed):
+-            if (count <= 0) throw EOFException()
++            if (count <= 0) break
+com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest: tests 3, failures 1, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest.xml)
+TOTAL: tests 91, failures 1, errors 0, skipped 0 in 41 files
+FAILED com.zynergylabs.forager.brouter.mapaccess.FileFailureKindsTest fk7DataCorruptShort[jvm] -> org.junit.ComparisonFailure: FK 7, cut to 1 of 1061705: checkDataFile expected:<[EOFException]> but was:<[file of size 1 too short, should be 112]>
+
+# After restore (from the copy saved before the edit, not from git)
+branch: brouter-port-5a
+git status --short: []
+cmp with saved copy: identical
+forward line present: 1
+
+# Forward re-run after the restore: compile errors 0
+TOTAL: tests 91, failures 0, errors 0, skipped 0 in 41 files
