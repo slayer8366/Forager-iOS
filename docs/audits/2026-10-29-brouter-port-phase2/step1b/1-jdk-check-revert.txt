@@ -1,0 +1,13 @@
+== the edit
+96c96
+<         "amd64", "x86_64" -> jvmArgs("-XX:+UnlockDiagnosticVMOptions", "-XX:-UseLibmIntrinsic")
+---
+>         "amd64", "x86_64" -> jvmArgs("-XX:+UnlockDiagnosticVMOptions")
+gradle exit 1
+restored from the saved copy
+file matches HEAD after restore
+compile errors in the log: 0
+com.zynergylabs.forager.brouter.oracle.OracleJdkTableTest: tests 1, failures 1, errors 0, skipped 0
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+OracleJdkTableTest.noIntrinsicCosTableEqualsPhase1sMeasurement[jvm]: FAIL: org.junit.ComparisonFailure: STOP (Amendment 3 Part B): the table differs from Phase 1's expected:<[ee004dc088a12bfa64fdba242a02f12f138bb994d86a73a846d97c22da87b379]> but was:<[4ab07de64a89ad90d491fed6f0336d5f21b768758c1009942ae69906196cf85a]>
+system-out: oracle JDK: Ubuntu 21.0.12.1+1-1-24.04.4-Ubuntu amd64; 1800 rows; no-intrinsic Math.cos table SHA-256 4ab07de64a89ad90d491fed6f0336d5f21b768758c1009942ae69906196cf85a

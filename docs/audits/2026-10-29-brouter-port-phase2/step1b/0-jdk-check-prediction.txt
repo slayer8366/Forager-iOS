@@ -1,0 +1,14 @@
+Step 1b, the JDK check: OracleJdkTableTest's revert. Written before the run, 2026-10-30.
+
+The edit: brouter/build.gradle.kts, the amd64/x86_64 branch's jvmArgs loses "-XX:-UseLibmIntrinsic" (the diagnostic
+unlock stays). The test JVM is this container's OpenJDK 21.0.12.1 (Phase 1's own JDK), with Math.cos the intrinsic.
+
+Predicted (filter --tests '*OracleJdkTableTest'): 1 test, 1 failure, at the SHA assertion:
+  expected ee004dc088a12bfa64fdba242a02f12f138bb994d86a73a846d97c22da87b379 (Phase 1, no intrinsic)
+  actual   4ab07de64a89ad90d491fed6f0336d5f21b768758c1009942ae69906196cf85a (Phase 1's math.txt, default flags, the
+           same table -Xint gave; table-run.log at 20e1f92).
+The kx/ky assertion against the oracle's SCALE_CACHE passes: the oracle's table is built in the same JVM with the same
+Math.cos (and Phase 1 saw the interpreter give the default table too, so its static initialiser cannot escape it).
+
+What would refute it: any other actual hash (a third table); the oracle-row assertion failing (the oracle's table and
+this one built with different cos); a pass (the flag is not what moves the table).
