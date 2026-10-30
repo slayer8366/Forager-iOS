@@ -1,0 +1,13 @@
+Written before either mutation ran (sixteenth session). Two one-line mutations in E3Jvm.report, each restored
+from a copy saved before editing, each run's build log checked for "e: " lines before its results are read.
+
+A (the tuple comparison): R5 routes to an end 0.0001 deg north of the case's own (end latitude + 1e-4).
+  Run: e3Strata --tests '*E3F0Test'. Predicted: both F0 cases UNSTABLE with tuple-stable false and log-stable true
+  (F0 has no collection lines anywhere); the test fails at E3Strata.report's stop assertion with
+  "F0: 2 of 2 unstable, over E3's 5%: a stop for Phase 2". Not at the geojson assertions, which read R1.
+
+B (the log comparison): R5's collection lines are dropped (an empty list printed in their place).
+  Run: e3Strata --tests '*E3RTest'. Predicted: exactly the 8 cases whose R2-collection-lines is above 0 in
+  6-r-hiking-mountain-stability.tsv go UNSTABLE, each with tuple-stable true and log-stable false;
+  8 of 59 is over 5%, so the test fails with "R-hiking-mountain: 8 of 59 unstable, over E3's 5%: a stop for Phase 2".
+  The generator's draws do not depend on E3Jvm, so the same 59 cases are generated.
