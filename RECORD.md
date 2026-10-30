@@ -2069,3 +2069,108 @@ reading CI. Report: `docs/audits/2026-10-30-brouter-port-step5a.md`, still marke
 - **Then 5b up to its sizing stop.** It sizes option (i)'s `hmap` from the pinned JDK's own source, with the tests
   over stubs seen failing, then reports the count and stops before writing the map (Amendment 3).
 **Notes:** Written by Cedar Datum by hand. Next free ID -50.
+
+**ID:** 2026-10-28-50
+**Timestamp:** 2026-10-30T07:40:00Z
+**Continues:** 2026-10-28-10, 2026-10-28-24, 2026-10-28-47, 2026-10-28-49
+**Title:** The secondary coder is Plumb Ledger (owner); step 1b's R stratum is done on all 26 profiles, with 1 of
+1,534 cases unstable; step 5b's `hmap` is sized, and the planner rules on its tie-break
+**Decision:** asked which of the secondary coder's three names to use, the owner, verbatim: "Plumb Ledger
+(Recommended)". The option read: "Its reason: \"the work is checking what lines up against the oracle, and writing
+down what does not.\" The only one of the three that doesn't share a word with the researcher, Madrone Gauge."
+Rejected: "Tally Gauge", "Feeler Gauge". Written into `docs/process/coder-profile.md` and the planner profile's team
+table.
+
+**A restart, disclosed.** The session's worker restarted between about 06:30Z and 07:28Z. Both coders finished in that
+window, and their final messages reached the planner only from their transcripts.
+- Plumb Ledger's two messages carrying the `hmap` count never reached the planner. It waited without an answer and
+  handed off at partial.
+- Nothing was lost from the repository: both branches were pushed, and their trees were clean.
+
+**Step 1b, Linden's seventeenth session (`970df90` to `db3b133` on `brouter-port`):**
+- **The oracle's JDK:**
+  - Temurin 21.0.13+9 x64, from Adoptium's GitHub release.
+  - Pinned at 207,858,352 bytes, SHA-256 `d7f5d5cf…66d1c`, matching both of Adoptium's published checksums.
+  - `tools/fetch-temurin.sh` fetches it into scratch. `e3Strata` refuses to run without it, and every stratum log
+    prints the JDK it ran on.
+- **R on all 26 profiles: 1 of 1,534 cases unstable,** `R-shortest-025`. In it, R1 to R5 agree, and R6, the coverage
+  run under JaCoCo, routed a route 1 m longer.
+  - That is 1.7% of `shortest`, under E3's 5% stop.
+  - Phase 1 predicted 0 unstable in every stratum, and that prediction missed for this stratum.
+  - Why R6 differed is [?].
+- **The parallel allowance was not taken.** One stratum run already held the load at about 7 on 4 cores.
+- **Checked by the planner:**
+  - `origin/brouter-port` is `db3b133`;
+  - the 25-profile evidence log shows 24 lines reading "0 of 59" and one reading "R-shortest: 1 of 59";
+  - the merge of 5a, `83cba83`, was a pull by merge, never a rebase.
+- **The planner's calls:**
+  - **`R-shortest-025` is treated as Phase 1's E3 rule says** (Phase 1 report at `20e1f92`, line 831): counted and
+    named, kept out of every exact assertion, and compared on kind only;
+  - **coverage counts as reach evidence only for a case whose R6 tuple equals its R1 tuple.** That excludes this case's
+    `.exec`;
+  - **the cause is not investigated now.** It is under the stop, and the rule above already keeps it out of evidence.
+
+**Step 5b, Plumb Ledger's session (`4cc7f20` to `508121e` on `brouter-port-5b`, cut from `9f41799`):**
+- **5a closed** with Plumb's own reading of run 41010445171 on `9f41799`: 91, both klibs with 0 `e:` lines, simulator 23
+  (simulator-checked), arm64 7 with its gate.
+- **Everything but the map is ported.** On `6cf89c8`, run 41014149582, `jvm` read 100 tests with 8 failures.
+  - **Checked by the planner from the job log:** all 8 stop at the map's stub, 2 at `NodeHashMap.get` and 6 at `put`.
+    The failing classes are `GraphDecodeTest` (5), `CollectOutreachersTest` (2) and `NodeHashMapOrderTest` (1).
+- **The `hmap` sizing:** `get`, `put`, `remove` and `values()` reach 823 lines of `HashMap.java`, from the pinned
+  Temurin's `lib/src.zip`. 575 of those lines are tree bins. The Kotlin estimate is about 950 code lines (range 850 to
+  1,200), in three files.
+- **Tree bins can occur.** `OsmNode.hashCode` is `ilon + ilat` (`OsmNode.java:260`, read by the planner). Inside a tree
+  bin, nodes with equal hashes are ordered by `tieBreakOrder`, which uses `System.identityHashCode` (`HashMap.java:2063`
+  as reported). That makes their order differ from one JVM run to the next. Phase 1 part 7 knew this, which is why item
+  I's test refuses equal-hash tree buckets.
+- **The re-put is real:** `NodesCache.getGraphNode` puts `existing` back (`NodesCache.java:284-288`, read by the
+  planner). So keys and values stay separate.
+- **The three conditions, answered from data:**
+  - all 25,072 caches were decoded twice on the oracle, in separate JVMs, with identical results;
+  - **-38:** the largest noisy-bit count is 19, under the port's 24;
+  - **-34:** `fillBuffer`'s end-of-array branch runs 40,772 times, all on way tag bitmaps, and never in a cache stream;
+  - **-32:** `readUnified` is unreachable in Forager's configuration. It needs `MicroCache2`, which exists only under
+    `-DdisableDirectWeaving`. It ran 0 times, so it stays a named "unsupported".
+
+**The planner's answer on `hmap` (technical, within the owner's option (i)):**
+- **Write option (i) as sized,** with keys and values kept separate.
+- **At `tieBreakOrder`, the port uses a fixed stand-in for the identity hash.** Each node gets a sequence number from
+  one counter per map, assigned at its first tie-break, just as HotSpot assigns an identity hash at first request.
+  - **Why this is sound:** an identity hash is an arbitrary value fixed at first request. So any consistent order of the
+    nodes is one the oracle could produce in some run, and the stand-in always picks the same one.
+  - **What it gives:**
+    - wherever `HashMap`'s order is fixed, the port matches it bit for bit;
+    - where the oracle's order changes from run to run, the port gives one of its possible outcomes, and the same
+      one every time. Android's runtime is in the same position, with its own identity hashes.
+  - **Rejected:**
+    - a named "unsupported" at the tie-break, which would fail real routes at a point the oracle passes through;
+    - leaving the order to Kotlin's own hash, which is unpinned and differs between the JVM and iOS.
+- **The class-name comparison before the identity hash** is ported with Java's class names, if more than one class can
+  ever be a key. The coder checks the callers of `put` first.
+- **Data owed:** how many times `tieBreakOrder` runs on the oracle across 5b's decodes and both F0 routes, counted on
+  the instrumented copy as for -34.
+- **Tests:**
+  - the order test keeps refusing equal-hash tree buckets;
+  - one more test shows that equal-hash bins come out in the same order from fresh maps given the same inserts, and is
+    seen failing by a revert of the stand-in.
+
+**The planner's calls on Plumb's other items:**
+- **Accepted:**
+  - `LibmSeam` passed into `calcDistance` and `collectOutreachers`;
+  - `jvmTest` opening `java.util` to reflection, as a test-only change;
+  - `CollectOutreachersTest` strengthened while still on its stub.
+- **`cleanupPeninsulas`:** Java catches `StackOverflowError` there and drops that subtree's cleanup silently
+  (`OsmNodesMap.java:62-64`, read by the planner).
+  - **On the JVM,** the port keeps the catch so logic runs stay equal, and logs when it fires.
+  - **On iOS,** the catch is not possible. The measured depth is 5,679 frames, and **step 10's simulator run measures
+    the router's real stack at that depth.**
+  - If iOS overflows, the app must run the router on a thread with an explicit stack size. That decision is for later
+    and is recorded here.
+- **`GraphDecodeTest`'s CI time** is read on its first green run. If the `jvm` job passes 20 of its 30 minutes, a split
+  goes to the planner.
+
+**Next (the planner's calls):**
+- **Plumb Ledger** writes the map as answered, runs the revert, reads CI, and closes 5b.
+- **Linden** continues 1b: DL-lat and DL-lon, then MP64, ML5 and PM5, each generator pushed before its run, then the
+  expected values. Then 1b's milestone report.
+**Notes:** Written by Cedar Datum by hand. Next free ID -51.
