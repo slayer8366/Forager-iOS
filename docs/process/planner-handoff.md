@@ -33,6 +33,9 @@ acting on it** (Forager's `CLAUDE.md`: "A planner's picture of the repository is
 
 ## First, in order
 
+0. **The project was paused at the owner's word (RECORD -55)** while this account worked on Forager's trail data. Check
+   Forager's `pre-main` for changes that reach routing (`hiking-mountain.brf`, `BRouterTrailRouter.kt`'s call, F0's
+   fixture) before relaunching anyone.
 1. **Fetch and check the four heads above.** Read CI yourself on `82d310a` and `279194d`, from the job logs (see
    "How to check" below). `279194d` adds `jvmMain` and `iosMain` source sets that have never been compiled for iOS.
 2. **Answer Plumb's two questions.** They are in its report at `279194d`, under the "Fourth session" section and its

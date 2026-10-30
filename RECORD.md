@@ -2352,3 +2352,18 @@ tasks the harness lists.
 
 Each session spent about 60k before its first action. The trimmed dispatches did not shrink that much.
 **Notes:** Written by Cedar Datum by hand. Next free ID -55.
+
+**ID:** 2026-10-28-55
+**Timestamp:** 2026-10-30T08:05:13Z
+**Continues:** 2026-10-28-54
+**Title:** Forager-iOS paused: the owner moves this account to the trail data
+**Decision:** the owner, verbatim: "I'm going to have this account work on the trail data instead, it needs to get pushed
+out fast."
+- **The iOS work is paused at -54's stop.** All four branches are pushed, all three clones are clean, and nothing is
+  left running. `docs/process/planner-handoff.md` is the starting point on resume.
+- **The planner's call for resuming (technical):** before relaunching any coder, check Forager's `pre-main` for
+  trail-data changes that reach routing. These are `hiking-mountain.brf`, the routing call in
+  `BRouterTrailRouter.kt`, and F0's fixture at SHA-256 `ff6d9d8e…`. The port is measured against Android's
+  behaviour, so a change there moves its oracle, its F0 stratum or its pins. This is the profile's "keeping iOS level
+  with Android" duty, due anyway at the next phase.
+**Notes:** Written by Cedar Datum by hand. Next free ID -56.
