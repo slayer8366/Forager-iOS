@@ -9,12 +9,14 @@ import java.util.Random
  * kept in every regime.
  *
  * - `E3Jvm R1|R4` alone: the control only ([E3ControlTest]).
- * - `E3Jvm <regime> <base> <caseFile> <caseId>`, one case: `R1R2` (R1 on a new thread with no `debug.txt` in [base];
+ * - `E3Jvm <regime> <base> <caseFile> <caseId>`, one case: `R1` alone (no `debug.txt`: a targeted stratum's selection run,
+ *   [E3Select]), `R1R2` (R1 on a new thread with no `debug.txt` in [base];
  *   then `debug.txt` is created and R2 runs the case again on another new thread), `R4` (997 identity hashes first),
  *   `R5` (`debug.txt` present) or `R6` (no `debug.txt`; the launcher adds JaCoCo's agent).
  * - `E3Jvm R3 <base> <caseFile> all`: the whole list on one thread, shuffled by [R3_SEED], with `debug.txt`.
  *
- * Prints `outcome <regime> <id> <tuple>`, `log <regime> <id> <line>` for each collection line, `millis <regime> <id> <ms>`.
+ * Prints `outcome <regime> <id> <tuple>`, `log <regime> <id> <line>` for each collection line, `millis <regime> <id> <ms>`,
+ * and for a route `extent <regime> <id> <minIlon> <maxIlon> <minIlat> <maxIlat>`.
  */
 object E3Jvm {
     const val PERTURBATION = 997
@@ -44,9 +46,10 @@ object E3Jvm {
                     for (c in order) report("R3", c, base)
                 }
             }
-            "R1R2", "R4", "R5", "R6" -> {
+            "R1", "R1R2", "R4", "R5", "R6" -> {
                 val case = cases.single { it.id == args[3] }
                 when (regime) {
+                    "R1" -> { check(!debug.exists()) { "R1 runs without debug.txt" }; onNewThread { println(control("R1", false)); report("R1", case, base) } }
                     "R1R2" -> {
                         check(!debug.exists()) { "R1 runs without debug.txt" }
                         onNewThread { println(control("R1", false)); report("R1", case, base) }
@@ -74,6 +77,7 @@ object E3Jvm {
         val ms = (System.nanoTime() - t0) / 1_000_000
         println("outcome $regime ${case.id} ${r.outcome.toField()}")
         for (line in r.collections) println("log $regime ${case.id} $line")
+        r.extent?.let { println("extent $regime ${case.id} ${it.joinToString(" ")}") }
         println("millis $regime ${case.id} $ms")
     }
 

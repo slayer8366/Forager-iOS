@@ -17,11 +17,16 @@ import java.io.RandomAccessFile
  * file's length before the run.
  */
 object E3CaseRun {
-    class Result(val outcome: E3Outcome, val collections: List<String>)
+    /**
+     * [extent] is a route's node extent, `minIlon, maxIlon, minIlat, maxIlat`, or null when no route was found: DL's reach
+     * evidence ("the found route has nodes on both sides", E4) reads it against the line.
+     */
+    class Result(val outcome: E3Outcome, val collections: List<String>, val extent: IntArray?)
 
     fun run(case: E3Case, base: File): Result {
         val debug = File(base, "debug.txt")
         val logStart = if (debug.exists()) debug.length() else -1L
+        var extent: IntArray? = null
         val outcome = try {
             val collector = RoutingParamCollector()
             val waypoints = collector.getWayPointList(
@@ -41,12 +46,15 @@ object E3CaseRun {
             val message = engine.getErrorMessage()
             val track = engine.getFoundTrack()
             val pairs = track?.nodes?.map { it.getILon() to it.getILat() } ?: emptyList()
+            if (message == null && pairs.isNotEmpty()) {
+                extent = intArrayOf(pairs.minOf { it.first }, pairs.maxOf { it.first }, pairs.minOf { it.second }, pairs.maxOf { it.second })
+            }
             E3Outcome(E3Outcome.kindOf(message), pairs.size, track?.cost ?: -1, track?.distance ?: -1, E3Outcome.fnv1a(pairs))
         } catch (e: Exception) {
             // The constructor parses the profile; doRun catches what routing throws. Recorded as its own kind.
             E3Outcome("threw:" + (e.message ?: e.javaClass.simpleName), 0, -1, -1, E3Outcome.fnv1a(emptyList()))
         }
-        return Result(outcome, if (logStart < 0) emptyList() else collectionLines(debug, logStart))
+        return Result(outcome, if (logStart < 0) emptyList() else collectionLines(debug, logStart), extent)
     }
 
     /** The log's collection lines (`RoutingEngine.java:2025`, `:2031`) that this run appended after [from]. */

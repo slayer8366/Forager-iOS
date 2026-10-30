@@ -1265,6 +1265,114 @@ none is short. The control moved in all 1,475 cases.
    run), then MP64, ML5, PM5. Each through `E3Strata.jdk` and `E3Strata.report`.
 4. **Expected values** once a stratum is stable: read part 7 step 4's digest first.
 
+## Step 1b continued: RECORD -50's rulings, the planner's rulings on E4's targeted strata, and DL's generator (eighteenth session, Linden Caliper): PARTIAL
+
+Dispatched by Cedar Datum under Amendment 3 Part B after RECORD -50. **Bases [R]:** `brouter-port` at `db3b133` after fetch, as
+the dispatch said. **Handed off at the planner's request (07:41Z) before any run.** No stratum ran this session.
+
+### RECORD -50's two rulings, as they apply here
+
+- **`R-shortest-025` is unstable under E3's rule** (Phase 1 report at `20e1f92`, line 831). It is counted and named (1 of 59 in
+  `shortest`, 1 of 1,534 in R), kept out of every exact assertion, and compared on kind only: all six runs agree on kind `route`.
+  When expected values are written, it is marked unstable.
+- **Coverage counts as reach evidence only for a case whose R6 tuple equals its R1 tuple.** **No code reads coverage today
+  [R: `git grep` for jacoco, `.exec` and coverage]:** R6 writes one `.exec` per case (`E3Stability.kt:45,52`), and nothing parses
+  one. So no code was changed for this rule. Its first reader will be NT's or CR's selector, which applies it, seen failing first
+  (the planner, ruling below).
+
+### The planner's rulings on E4's targeted strata (2026-10-30, to be recorded as RECORD -51)
+
+I asked two questions: whether E4's reach column selects cases or counts them over the first 59, and which profile these strata
+use. While DL was being built, I reported two more things: R1 has no log, and one run can show both panic mode and the limit
+(`RoutingEngine.java:1739-1749`, `:1796-1799`, `:1893`, `:1997-1998`, `:2026-2031` at v1.7.10 **[R]**; whether data does is
+not known).
+
+**First answer (Q1, Q2), the planner, verbatim in its operative parts:**
+- Q1: "(b), selected. ... each stratum is the first 59 candidates, in generation order, whose reach evidence holds. ... The rest
+  are rejected candidates, counted;
+- ML5 and PM5 share one candidate sequence, MP64's generator with memoryclass 5. ...
+- the cap is 20 × 59 = 1,180 candidates per stratum. For the shared ML5/PM5 sequence, the cap is 1,180 for each stratum. A
+  stratum still not full is reported short, with its n, and never filled from another generator;
+- E3's six runs and the instability count are then taken over the selected 59, as for R. ...
+- Where reach is coverage (NT's comparator line, CR's StdPath lines), the selector is the first code that reads coverage.
+  RECORD -50's rule applies there: a case counts only if its R6 tuple equals its R1 tuple. Seen failing first when you build it."
+  (The planner corrected its own citation: "Cases are kept in generation order" is line 885, not 889.)
+- Q2: "hiking-mountain, your default, for DL-lat, DL-lon, MP64, ML5 and PM5. ... Rejected: the uniform draw. Say in the report
+  that hiking-mountain switches off turn restrictions, so these strata do not exercise them; R does." **So stated:**
+  `hiking-mountain` switches off turn restrictions (Phase 1, E4: 24 of 26 profiles switch them on, all but `hiking-mountain` and
+  `shortest`), so DL-lat, DL-lon, MP64, ML5 and PM5 do not exercise them. R does.
+
+**Ruling 1, the reach source, verbatim:** "You are right that R1 has no log; my "R1's log" was a wrong premise, and I will record
+it. Option (i): R2, the same case at once in R1's own JVM with debug.txt. The selection pass is E3's R1R2 JVM run over the
+candidates, in generation order. A candidate's reach counts only if R2's tuple equals R1's, the same rule as RECORD -50's for
+coverage. R3 to R6 then run on the selected 59 only. ML5's mark is R1's kind; MP64's and PM5's marks are R2's log lines (:2025,
+:2031). Rejected: (ii) R5, which reads reach after selection should already be done, and (iii) a separate run, which costs a JVM
+per candidate for nothing (i) lacks."
+
+**Ruling 2, a run that shows both panic mode and "memory limit reached", verbatim:** "(a), ML5 by its outcome. The strata stay
+disjoint, and the outcome decides. ML5 = the run's kind is "memory limit reached", whatever came before. PM5 = R2's log shows
+panic mode enabled, and the kind is not the limit. Count and report how many ML5 cases also showed panic. Rejected: (c) both,
+which puts one case in two strata and breaks E5's per-stratum sizes; (d) neither, which drops a real path; (b) PM5, which would
+put a fixed-message outcome into the stratum J predicts by collections."
+
+### What was written (work in progress, uncompiled, never run)
+
+- **`DLGenerator.kt` (new):** the geometric candidate sequence for DL-lat (40°N: `W75_N35` below, `W75_N40` above) and DL-lon
+  (70°W: `W75_N40` west, `W70_N40` east). Per candidate, from one `java.util.Random(seed)`:
+  - the start's side, uniform;
+  - R's distance law, `100 m × 1000^u`;
+  - a start node, uniform over the start tile's nodes in the rows (columns) of cells within that distance of the line;
+  - a uniform bearing, and a target, rejected unless it lies inside the other tile;
+  - the end, the nearest node to the target in its 3 × 3 cells in the other tile;
+  - both ends moved 0 to 100 m and rounded to six decimals, then rejected unless each is still on its own side.
+
+  Its details are my calls; E4 fixes the line, the tiles, node-drawn ends, the move and the six decimals. **It was written before
+  ruling 1 and still numbers kept cases `DL-lat-001`…**: under selection, ids should carry the candidate's draw number, so the
+  count to the 59th selected case can be read from them.
+- **`E3CaseRun`:** `Result.extent`, a route's `minIlon, maxIlon, minIlat, maxIlat` (null when there is no route). This is DL's reach:
+  nodes on both sides is `min < line <= max`, with the line at ilat 130,000,000 or ilon 110,000,000, and a node on the line counted
+  in the tile above it, as the tiles hold it.
+- **`E3Jvm`:** prints `extent <regime> <id> …` for a route, and has an `R1`-alone single-case regime. **Under ruling 1 the `R1`
+  regime is not needed:** selection is the `R1R2` JVM. The next session should remove it rather than build on it.
+- **Not written:** the seeds, the DL test class, the selector, and MP64's, ML5's and PM5's generators. **Nothing was pushed
+  before a run, because nothing ran.**
+
+### Could not determine, and unverified
+
+- Whether `DLGenerator` compiles, and what it generates: not compiled, not run.
+- Whether any real run shows both panic mode and the limit: code reading only.
+- **My slip:** `tools/fetch-temurin.sh` is committed `100644`, not executable. The seventeenth handoff said to run it directly;
+  `bash tools/fetch-temurin.sh <dir>` works. This session re-checked the JDK through it: present, 207,858,352 bytes, SHA-256
+  `d7f5d5cf…66d1c`, re-extracted fresh.
+
+### Step 1b: the handoff (eighteenth session)
+
+1. **Read** this section, RECORD -50 and -51 (when written), and E4 (Phase 1 at `20e1f92`, lines 839-932). Then
+   `bash tools/fetch-temurin.sh <scratch>` and `./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<scratch>/jdk-21.0.13+9 --tests <class>`.
+2. **Finish the selector (`E3Select`, new file) under ruling 1:**
+   - run the `R1R2` JVM over each stratum's candidates in generation order (parallel is fine; keep order when taking);
+   - a candidate's reach counts only if R2's tuple equals R1's;
+   - keep the first 59 that reach; the rest are rejected and counted; cap 1,180 per stratum; short is reported, never filled;
+   - write each candidate's row (id, draw number, R1 and R2 tuples, extent, reach) to a TSV;
+   - then run R3 to R6 on the 59. `E3Stability` currently runs all six itself. Either feed it the selection's R1R2 output, or
+     re-run R1R2 and also record that the selection's R1 equals E3's.
+3. **Before any run:**
+   - drop the `R1` regime;
+   - give DL ids their draw numbers;
+   - write `E3DLTest` (two tests) with the seeds. My proposal is 20261201 (DL-lat) and 20261202 (DL-lon). Not yet fixed;
+   - assert in the test, before routing, that every case's ends are in the two tiles, one each;
+   - **commit and push. Only then run.**
+4. **MP64, ML5 and PM5,** as ruled:
+   - MP64 is R's generator in `W75_N40`, 20 to 100 km, `memoryclass` 64; reach is at least one "collected" line in R2's log (`:2025`).
+     `RGenerator` must not change R's sequence; check that it does not, against a list saved before any edit.
+   - ML5 and PM5 are one sequence at `memoryclass` 5:
+     - ML5 is R1's kind "memory limit reached";
+     - PM5 is panic mode in R2's log (`:2031`), with a kind other than the limit;
+     - count the ML5 cases that also showed panic.
+   - Seeds pushed before runs.
+5. **Then** E3's 5% stop per stratum, the expected values (part 7 step 4's digest form, with unstable cases marked, including
+   `R-shortest-025`), and 1b's milestone report: total against 2,118. NT, LB, CR and FK are not built.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
