@@ -1,0 +1,37 @@
+# Step 3, revert check 'statcoder-sorted', local, 2026-10-30T00:28:45Z
+# HEAD db53413; tree clean before: yes
+# prediction, committed before this run: 2215741
+# saved copy of brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/codec/StatCoderContext.kt: sha256 001d61e17d8e0532
+# occurrences of the old text: 1
+# the edit (diff saved -> reverted):
+72c72
+<             decodeSortedArray(values, offset + size1, size2, nextbitpos - 1, v or (1 shl nextbitpos))
+---
+>             decodeSortedArray(values, offset + size1, size2, nextbitpos - 1, v)
+# lines differing: 1
+# summary (JUnit XML)
+# JDK: openjdk version "21.0.12.1" 2026-08-18
+# compile tasks in the build log: :brouter:compileKotlinJvm UP-TO-DATE, :brouter:compileJvmMainJava NO-SOURCE, :brouter:compileTestKotlinJvm UP-TO-DATE, :brouter:compileJvmTestJava NO-SOURCE
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.codec.DataBuffersTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.MicroCacheTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.NoisyDiffCoderTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.StatCoderContextTest: tests 2, failures 1, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.TagValueCoderTest: tests 1, failures 0, errors 0, skipped 0
+TOTAL: tests 8, failures 1, errors 0, skipped 0 in 5 files
+
+# Each test case: outcome | failure type | message (first line) | first frame in the port's main code
+PASS DataBuffersTest.buffersHaveTheOraclesSizes[jvm]
+PASS DataBuffersTest.givenIobufferIsKeptAndBctx1WritesTagbuf1[jvm]
+PASS MicroCacheTest.emptyCacheIsTheOraclesEmptyCache[jvm]
+PASS MicroCacheTest.filledCachesFollowTheOracleUnderSeededOperations[jvm]
+PASS NoisyDiffCoderTest.threePassStreamsDecodeIdentically[jvm]
+FAIL StatCoderContextTest.oracleEncodedStreamsDecodeIdentically[jvm] | java.lang.AssertionError | java.lang.AssertionError: seed 1 op 3 kind 3. Array elements differ at index 1. Expected element <248127798>, actual element <54>. | 
+PASS StatCoderContextTest.noisyBitsTableEqualsTheOracles[jvm]
+PASS TagValueCoderTest.oracleEncodedTreesAndCodesDecodeIdentically[jvm]
+
+# summarize exit: 0 (2 = refused: compile errors or no XML)
+# restored from the saved copy; cmp saved vs file: identical
+# file vs HEAD (the forward change is committed): identical
+# forward line present after: 1 occurrence(s)
+# git status after: clean outside docs/

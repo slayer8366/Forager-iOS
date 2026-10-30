@@ -1,0 +1,40 @@
+# Step 3, revert check 'databuffers-alias', local, 2026-10-30T00:29:09Z
+# HEAD db53413; tree clean before: NO: ?? docs/audits/2026-10-29-brouter-port-phase2/step3/4-revert-microcache-search-jvmTest.log
+?? docs/audits/2026-10-29-brouter-port-phase2/step3/4-revert-microcache-search.txt
+?? docs/audits/2026-10-29-brouter-port-phase2/step3/4-revert-statcoder-sorted-jvmTest.log
+?? docs/audits/2026-10-29-brouter-port-phase2/step3/4-revert-statcoder-sorted.txt
+# prediction, committed before this run: 2215741
+# saved copy of brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/codec/DataBuffers.kt: sha256 0e7b7028261e6dbe
+# occurrences of the old text: 1
+# the edit (diff saved -> reverted):
+9c9
+<     var bctx1: BitCoderContext = BitCoderContext(tagbuf1)
+---
+>     var bctx1: BitCoderContext = BitCoderContext(ByteArray(256))
+# lines differing: 1
+# summary (JUnit XML)
+# JDK: openjdk version "21.0.12.1" 2026-08-18
+# compile tasks in the build log: :brouter:compileKotlinJvm, :brouter:compileJvmMainJava NO-SOURCE, :brouter:compileTestKotlinJvm UP-TO-DATE, :brouter:compileJvmTestJava NO-SOURCE
+# compile errors in the build log (lines starting 'e: '): 0
+com.zynergylabs.forager.brouter.codec.DataBuffersTest: tests 2, failures 1, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.MicroCacheTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.NoisyDiffCoderTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.StatCoderContextTest: tests 2, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.codec.TagValueCoderTest: tests 1, failures 0, errors 0, skipped 0
+TOTAL: tests 8, failures 1, errors 0, skipped 0 in 5 files
+
+# Each test case: outcome | failure type | message (first line) | first frame in the port's main code
+PASS DataBuffersTest.buffersHaveTheOraclesSizes[jvm]
+FAIL DataBuffersTest.givenIobufferIsKeptAndBctx1WritesTagbuf1[jvm] | java.lang.AssertionError | java.lang.AssertionError: Array elements differ at index 0. Expected element <52>, actual element <0>. | 
+PASS MicroCacheTest.emptyCacheIsTheOraclesEmptyCache[jvm]
+PASS MicroCacheTest.filledCachesFollowTheOracleUnderSeededOperations[jvm]
+PASS NoisyDiffCoderTest.threePassStreamsDecodeIdentically[jvm]
+PASS StatCoderContextTest.oracleEncodedStreamsDecodeIdentically[jvm]
+PASS StatCoderContextTest.noisyBitsTableEqualsTheOracles[jvm]
+PASS TagValueCoderTest.oracleEncodedTreesAndCodesDecodeIdentically[jvm]
+
+# summarize exit: 0 (2 = refused: compile errors or no XML)
+# restored from the saved copy; cmp saved vs file: identical
+# file vs HEAD (the forward change is committed): identical
+# forward line present after: 1 occurrence(s)
+# git status after: clean outside docs/

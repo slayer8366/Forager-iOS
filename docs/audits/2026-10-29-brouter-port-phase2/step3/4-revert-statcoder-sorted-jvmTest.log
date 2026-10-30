@@ -1,0 +1,48 @@
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+
+> Task :brouter:jvmTest FAILED
+
+DataBuffersTest[jvm] > buffersHaveTheOraclesSizes[jvm] PASSED
+
+DataBuffersTest[jvm] > givenIobufferIsKeptAndBctx1WritesTagbuf1[jvm] PASSED
+
+MicroCacheTest[jvm] > emptyCacheIsTheOraclesEmptyCache[jvm] PASSED
+
+MicroCacheTest[jvm] > filledCachesFollowTheOracleUnderSeededOperations[jvm] PASSED
+
+NoisyDiffCoderTest[jvm] > threePassStreamsDecodeIdentically[jvm] PASSED
+
+StatCoderContextTest[jvm] > oracleEncodedStreamsDecodeIdentically[jvm] FAILED
+    java.lang.AssertionError at StatCoderContextTest.kt:102
+
+StatCoderContextTest[jvm] > noisyBitsTableEqualsTheOracles[jvm] PASSED
+
+TagValueCoderTest[jvm] > oracleEncodedTreesAndCodesDecodeIdentically[jvm] PASSED
+
+8 tests completed, 1 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 3s
+6 actionable tasks: 2 executed, 4 up-to-date
+gradle exit: 1
