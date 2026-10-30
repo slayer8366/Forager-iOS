@@ -55,6 +55,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21.0.13+9'
+      # RECORD -37: the arm64 JVM step's test executor exits 1 before any test. This prints the job's own java started
+      # with the test JVM's flags, and Math.cos against StrictMath.cos under each candidate flag. It never fails the job.
+      - name: Probe - this job's java with the test JVM's flags
+        if: always()
+        run: bash tools/jvm-probe/probe.sh
       - name: Select Xcode 26.0.1 (Kotlin 2.3.10's published Xcode is 26.0)
         run: |
           sudo xcode-select -s /Applications/Xcode_26.0.1.app
