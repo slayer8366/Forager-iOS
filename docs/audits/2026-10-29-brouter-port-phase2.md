@@ -1544,10 +1544,36 @@ and routes; F0h fails at its reach assertion with every digest `cbf29ce484222325
 the reach assertion's own message. Restored from the copy; then byte-equal to the copy and to HEAD, `git diff` empty, and
 `:66` reads `fnv1aShorts(heights)` again.
 
-### R on all 26 profiles under the new tuple (`16-*`): IN PROGRESS
+### R on all 26 profiles under the new tuple (`16-*`) [C]
 
-Started 19:46:39Z on `14ba69d`'s tree, one `e3Strata` run (sequence check, `hiking-mountain`, the other 25).
+One `e3Strata` run on `14ba69d`'s tree, 19:46:39Z to 20:47:20Z (`BUILD SUCCESSFUL in 1h 40s`), 0 ` e: ` lines, JUnit XML
+3 tests (`E3RSequenceTest`, `E3RTest`, `E3RProfilesTest`), 0 failures. Load about 8 on 4 cores (another session shares
+the container); no case has a time limit, so load moves no outcome.
 
+- **Sequence unchanged:** 1,534 cases, SHA-256 `ed378c85…3d6c`, the pinned value (`E3RSequenceTest`).
+- **Unstable: 0 of 1,534,** 0 of 59 in every profile, `shortest` and `hiking-mountain` included.
+- **`R-shortest-025` was stable this time.** Its R1 tuple's first five fields, `route|217|5102|5102|5413e0b4…`, equal
+  the old run's, and all six regimes agreed. In `10-*` its R6 alone routed 1 m longer. So that instability did not
+  recur in one more run [C]; why it happened once is still [?]. **This misses the planner's prediction ("stable apart
+  from `R-shortest-025`") and my own (item 4, "1 at most").** The miss is towards stability, and it does not lift -50's
+  ruling: that ruling keeps the case out of exact assertions because it was seen unstable once, and that is still true.
+- **Old against new:** each case's new R1 tuple, without its heights digest, equals the old R1 tuple (`10-*`, `9-r-*`) in
+  **1,534 of 1,534** [C: `16-r-summary.txt`]. Adding the digest moved no other field.
+- **R1 kinds:** 1,268 routes, 144 `from-position not mapped`, 106 `to-position not mapped`, 16 others.
+- **The data -58 owes, nodes with a height on R's 1,268 R1 routes, per tile** [C]:
+
+| Tile | Nodes with a height | Nodes | Share |
+|---|---|---|---|
+| E170_S50 | 97,521 | 97,558 | 99.96% |
+| W70_N40 | 62,271 | 62,364 | 99.85% |
+| W75_N35 | 58,824 | 58,874 | 99.92% |
+| W75_N40 | 209,308 | 209,481 | 99.92% |
+
+  So the brouter.de tiles do exercise the new field, on every tile. The planner's third prediction held. 353 nodes on
+  30 routes have no height, at most 79 in one route. Where they are (voids in the source DEM, or water) is [?], not read.
+  Counted from the `heights` line R1's JVM prints, not from the digest.
+
+Progress as recorded during the run:
 - **19:58Z, progress:** 5 of 26 profiles done (car-eco, car-eco-nocost, car-fast, car-fast-nocost, car-vario), 0 of 295
   unstable; R1's first five fields equal the old run's (`10-*`) in 295 of 295. Heights on their 257 R1 routes: E170_S50
   13,324 of 13,327 nodes, W70_N40 8,033 of 8,045, W75_N35 5,304 of 5,304, W75_N40 28,694 of 28,729 [C, partial]. Load
@@ -1555,6 +1581,94 @@ Started 19:46:39Z on `14ba69d`'s tree, one `e3Strata` run (sequence check, `hiki
 - **20:19Z, progress:** 14 of 26 profiles done (through `mtb`), 0 of 826 unstable; first five fields equal the old run's
   in 826 of 826. Heights on 682 R1 routes: E170_S50 40,753 of 40,758; W70_N40 28,427 of 28,439; W75_N35 30,851 of
   30,860; W75_N40 98,277 of 98,327 [C, partial].
+
+### Mechanism predictions against results (`13-heights-predictions.txt`, pushed in `d971358` before any run)
+
+| Item | Predicted | Observed |
+|---|---|---|
+| F0h | 8 stable, 8 routes, count and heights equal on all eight, every node heighted | as predicted |
+| F0 | 2 stable, tuples as before, heights `afc27854…` and `4f6849ea…`, 0 heighted | as predicted |
+| Revert | compiles; jvmTest 93/0; F0h stable but fails at the reach assertion, digests `cbf29ce4…` | as predicted |
+| R | sequence unchanged; at most 1 unstable (`R-shortest-025`); first five fields unchanged | 0 unstable; otherwise as predicted |
+| R heights | most nodes heighted [I] | 99.85% to 99.96% per tile |
+
+### What this does and does not show
+
+- **Shown:** E3's tuple now carries each node's height, and a check exists that a wrong one fails (F0h, by the revert).
+  On the heighted square, the oracle as E3 calls it gives the command-line router's heights on all eight routes. The
+  brouter.de tiles carry heights, so R's expected values, once written, will test them too.
+- **Not shown:** anything about the port's heights. The port has no path model yet (step 6), so no port output is
+  compared. The revert -57 named, breaking the `short` cast in `interpolateEle` (`OsmPath.java:392`), would be a change
+  inside the oracle jar. -58 replaced it with the digest revert, which shows that the comparison sees heights, not that
+  the cut-end interpolation is covered. Whether F0h's or R's routes have interpolated end heights at all is [?]; I did
+  not separate the end nodes.
+
+### Could not determine, and unverified
+
+- Why `R-shortest-025`'s R6 differed once (`10-*`) and not now.
+- Where R's 353 height-less nodes lie, and why they have no height.
+- Whether any F0h or R route end is a cut point with an interpolated height (above).
+- That `showspeed` is off for the command-line router's run of these GeoJSON files: inferred from Forager's README and
+  from every value being a whole number of quarter metres, not from the run's own parameters.
+- The iOS targets for this change: read in CI only (below).
+
+### Premises that were wrong
+
+- **None of -58's premises about the tree** were wrong where I checked them: `origin/brouter-port` was `82d310a`;
+  `E3Case.kt:54` and `E3CaseRun.kt:~52` were the tuple and its fill; the blob at `d6e2a0415` has the pinned size and
+  SHA-256; R is 26 profiles and 1,534 cases; F0 is 2 cases.
+- **One prediction missed:** `R-shortest-025` was stable (above).
+- **-57 and -58 name different reverts.** -58 is the dispatch, so its revert ran; -57's is recorded above as not run.
+- **The dispatch's commit trailer** (`Co-Authored-By: Claude <noreply@anthropic.com>`, no model named) differs from the
+  session's own attribution line. I followed the dispatch.
+
+### Calls beyond scope (mine; for the planner)
+
+- **`E3OutcomeTest`** in `jvmTest` (so it runs in CI): `fromField` with a kind holding `|`, and the heights digest pinned
+  to the Python tool's output on a fixed vector, so the Kotlin and Python digests cannot drift.
+- **The per-tile height count** is a new child output line (`heights`) and a new last column in `stability.tsv`, not
+  part of the compared tuple.
+- **`fetchF0h` hangs off every oracle test JVM,** as F0's fetch does, so CI's `jvm` job fetches 178,867 bytes from
+  raw.githubusercontent.com on each run (seen working in CI).
+- **The pins sit in `tools/fetch-f0h.sh`,** as JaCoCo's do in `tools/fetch-jacoco.sh`, since `tile-pins.tsv` is the release's.
+- **F0h forward ran before the revert,** so the revert's failure is read against a pass on the same data. The order was
+  in the pushed prediction.
+- **F0h's distances** were checked against `track-length` by reading, not asserted. The reach assertion is the count and
+  heights only, as -58 says.
+- **F0's all-`Short.MIN_VALUE` heights are predicted and observed, not asserted.** Asserting them would be cheap, but it
+  would add a second failure to -58's revert and so change the prediction -58 fixed.
+- **`R-sequence` ran in R's `e3Strata` call,** to confirm the sequence under the new code.
+- **`.gitignore` gained `__pycache__/`,** after a stray `.pyc` went into `d52e08c`; `66d345f` removes it, without amending.
+
+### CI [R: job log, partial]
+
+- **Read on `9302765`, run 41900384198:** success. `jvm` TOTAL tests 93, failures 0, in 42 files; 0 ` e: ` lines;
+  `fetchF0h` ran and fetched F0h's fixture; `E3OutcomeTest` 2 of 2.
+- **Not read, because the planner asked for the handoff first:** both `compileKotlinIos*`, the simulator count and
+  arm64 with its gate, on this or any later head. **The final head's CI is unread.** The change is `jvmTest` and `tools`
+  only, so iOS compiles nothing new [I].
+
+### Step 1b: the handoff (twentieth session)
+
+The next step is the targeted strata, **as the nineteenth session's handoff gives them** (above), with these changes:
+
+1. Base: `brouter-port` at the commit carrying this section or later; fetch first. Every tuple is now
+   `kind|nodes|cost|distance|nodeDigest|heightDigest`. `stability.tsv` has a last column, `R1-heights-by-tile`.
+   `E3Targeted`'s "selection's R1 equals E3's" now compares heights too.
+2. Number the logs from `17-*` in `step1b/`; `12-*` to `16-*` are this session's.
+3. Run DL (`dlLat`, then `dlLon`), then MP64, then ML5, exactly as the nineteenth handoff's items 2 to 4 say, with its
+   checks before citing anything and its 5% stop. Commit and push after each stratum.
+4. Then the expected values (part 7 step 4's digest form), now carrying heights. `R-shortest-025` stays under -50's
+   ruling, although it was stable in this session's run.
+5. **First, before step 3:** read CI on the head carrying this section (`gh run list --repo slayer8366/Forager-iOS
+   --branch brouter-port`, then `gh api repos/slayer8366/Forager-iOS/actions/jobs/<id>/logs` for `jvm` and `ios-smoke`):
+   `jvm` 93 tests expected, 0 ` e: ` lines, both `compileKotlinIos*`, the simulator count (simulator-checked), arm64 and
+   its gate. That is -58's item 5, left open.
+6. **Running: nothing.** R finished at 20:47:20Z (`16-*`); no Gradle or JVM of mine is left running.
+7. **Scratch,** `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/`: the
+   Temurin home `temurin/jdk-21.0.13+9`, the revert's saved copy `revert/E3CaseRun.kt.forward`, the R summary script
+   `scripts/rsum.py`, the CI log `ci/9302765-jvm.log`. Every log that matters is copied into `step1b/`. Nothing there is
+   needed: the JDK comes again from `bash tools/fetch-temurin.sh <dir>`.
 
 ## Confirmed vs inferred
 
