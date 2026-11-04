@@ -49,3 +49,19 @@ A failure of any other shape is not this revert's, and the result is not cited.
 
 **Restore:** by `revert-runner.sh` from its saved copy, never from git; `restore.txt` (`cmp`, the forward line) and
 `git diff --stat` read after it.
+
+## Addendum, fifth session, after the forward run and before the revert
+**The forward, observed** (`10-forward-run-s5/`): 0 compile errors; 101 tests, 2 failures, 0 errors. B as predicted:
+`NodeHashMapOrderTest` passes; the 8 seeds were refused at draw 1 at exactly the 8 predicted ops; redraws 15 (seed 3: 3,
+seed 7: 2, seed 8: 2, seed 9: 4, the other four refused seeds 1 each); every seed accepted by draw 5.
+
+**One forward line of mine was wrong:** "with the fourth session's messages". `collectOutreachersWithoutADestination`
+failed as before (`:141`, mode 1, the same `C` lines), but `collectOutreachersWithADestinationVanishesFarNodes` did
+not: all 12 of its regions compared equal, and it failed its own coverage assertion at `:116`, "canEscape did not
+answer both ways: false/true 0/3587". The port's catch printed 2 lines, where the fourth session's run printed 3. So
+whether the port overflows at the default stack differs between runs of the same code (A, `11-question-a-prediction.md`).
+
+**Restated for the revert:** `CollectOutreachersTest`'s failures are not this revert's, and its messages vary from run
+to run, so they are not compared. It is predicted to fail 1 or 2 tests (test 1 fails only if the port overflows on a
+region; test 2 fails either way, at a region or at `:116`). **So 2 or 3 failures of 101, of which exactly one is
+`NodeHashMapOrderTest`'s, on order, as above.** That one message is the revert's only evidence.

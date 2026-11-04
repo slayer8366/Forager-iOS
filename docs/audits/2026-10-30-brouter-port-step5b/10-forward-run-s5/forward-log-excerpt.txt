@@ -1,0 +1,35 @@
+137:    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+138:    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+140:CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+146:CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+205:    5b hmap order: seed 1 draw 1 refused at op 9213, an equal-hash tree bucket
+206:    5b hmap order: seed 1 accepted at draw 2, redraws 1
+207:    5b hmap order: seed 2 draw 1 refused at op 15389, an equal-hash tree bucket
+208:    5b hmap order: seed 2 accepted at draw 2, redraws 1
+209:    5b hmap order: seed 3 draw 1 refused at op 21335, an equal-hash tree bucket
+210:    5b hmap order: seed 3 draw 2 refused at op 12225, an equal-hash tree bucket
+211:    5b hmap order: seed 3 draw 3 refused at op 14156, an equal-hash tree bucket
+212:    5b hmap order: seed 3 accepted at draw 4, redraws 3
+213:    5b hmap order: seed 4 draw 1 refused at op 9087, an equal-hash tree bucket
+214:    5b hmap order: seed 4 accepted at draw 2, redraws 1
+215:    5b hmap order: seed 5 accepted at draw 1, redraws 0
+216:    5b hmap order: seed 6 accepted at draw 1, redraws 0
+217:    5b hmap order: seed 7 draw 1 refused at op 13792, an equal-hash tree bucket
+218:    5b hmap order: seed 7 draw 2 refused at op 11128, an equal-hash tree bucket
+219:    5b hmap order: seed 7 accepted at draw 3, redraws 2
+220:    5b hmap order: seed 8 draw 1 refused at op 17160, an equal-hash tree bucket
+221:    5b hmap order: seed 8 draw 2 refused at op 9339, an equal-hash tree bucket
+222:    5b hmap order: seed 8 accepted at draw 3, redraws 2
+223:    5b hmap order: seed 9 draw 1 refused at op 20611, an equal-hash tree bucket
+224:    5b hmap order: seed 9 draw 2 refused at op 11482, an equal-hash tree bucket
+225:    5b hmap order: seed 9 draw 3 refused at op 14866, an equal-hash tree bucket
+226:    5b hmap order: seed 9 draw 4 refused at op 13136, an equal-hash tree bucket
+227:    5b hmap order: seed 9 accepted at draw 5, redraws 4
+228:    5b hmap order: seed 10 accepted at draw 1, redraws 0
+229:    5b hmap order: seed 11 draw 1 refused at op 7063, an equal-hash tree bucket
+230:    5b hmap order: seed 11 accepted at draw 2, redraws 1
+231:    5b hmap order: seed 12 accepted at draw 1, redraws 0
+232:    5b hmap order: 12 seeds, redraws 15; accepted draws: ops 480000, order_checks 2412, tree_bins 231, put_into_tree 1513, remove_from_tree 1518, resize_with_tree 19, tree_to_list 21, equal_hash_list_bins 1654, max_size 111097
+507:> Task :brouter:jvmTest FAILED
+518:BUILD FAILED in 3m 25s
+520:gradle exit 1
