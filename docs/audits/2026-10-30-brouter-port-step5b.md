@@ -5,7 +5,11 @@ the owner's to choose), second session. Branch `brouter-port-5b`, cut from `orig
 planner's merge of 5a. The base was checked against the remote first: `git ls-remote` gave `brouter-port` at
 `9f41799dc20a`, so the primary had not pushed since [C]. Evidence in `2026-10-30-brouter-port-step5b/`.
 
-**Status (2026-10-30, fourth session, Plumb Ledger): partial, red. Handed off at the planner's request** (182k tokens,
+**Status (2026-11-04, fifth session, Plumb Ledger): open, red on `CollectOutreachersTest` only (2 of 101).** B is
+done and passes; A's data is in; all three reverts ran as predicted. Open until the planner answers A. See "Fifth
+session" and its handoff, which replace the fourth's.
+
+**Earlier status (2026-10-30, fourth session, Plumb Ledger): partial, red. Handed off at the planner's request** (182k tokens,
 08:00Z). The map is written (`1a5a25f`); the forward run is 101 tests with 3 failures. See "Fourth session" and its
 handoff, which replace the third session's.
 
@@ -331,7 +335,150 @@ Base: `brouter-port-5b` at `7ce67e2`, equal to `origin/brouter-port-5b` after a 
 **Not done:** both reverts, the tie-break count, CI, and closing the report. The third session's count run was stopped
 with its session, incomplete (`8-forward-run-s4/tiebreak-stopped-run-s3.txt`).
 
-## Handoff: what remains, in order (fourth session's, replacing the third's)
+## Fifth session: B redraws and passes; A's data at two stacks; all three reverts as predicted (Plumb, RECORD -59)
+Base: clone `/home/user/forager-ios-5a`, `brouter-port-5b` at `279194d`, equal to `origin/brouter-port-5b` after a fetch
+[C]. Read: this repository's `CLAUDE.md`, Forager's (pre-main `d6e2a0415`, "Testing" and "Known pitfalls"), the coder
+profile, RECORD -54, -56 and -59. Marks: [R] read in a file, [C] counted or computed here, [I] inferred, [?] not known.
+
+**Step 1, CI on `279194d`:** read by the planner at RECORD -56, not re-read: run 41023633806, `jvm` 101 with these 3
+failures, 0 ` e: ` lines in both klibs, simulator 24 (simulator-checked), arm64 7 with its gate [R: RECORD -56].
+
+### B: `NodeHashMapOrderTest` redraws (RECORD -59)
+- **The change** (`9991929`): `runSeed` became `runDraw(seed, draw, r)`, returning null for a refused draw. Each seed keeps
+  one `Random(seed)`; a redraw continues that stream on fresh maps, up to `MAX_DRAWS = 20`. Every redraw is printed and
+  totalled. Order equality is asserted on every accepted draw; a seed not accepted within its cap fails the test
+  (`NodeHashMapOrderTest.kt`, the test body and `runDraw`). The old "refused 0" assertion is gone, as -59 says.
+- **Forward, predicted and observed** (`9-filter-revert-prediction.md`; `10-forward-run-s5/`): passes [C]. The 8 seeds
+  were refused at draw 1 at exactly the 8 ops predicted (9213, 15389, 21335, 9087, 13792, 17160, 20611, 7063). Redraws
+  15: seeds 1, 2, 4, 11 one each, 7 and 8 two, 3 three, 9 four; all 12 accepted by draw 5. Coverage on accepted draws
+  only: tree bins 231, puts into a tree 1513, removes from a tree 1518, resizes with a tree 19, tree to list 21,
+  equal-hash list bins 1654 [C: log].
+- **The filter's revert** (`if (refused) return null` to `if (false) return null`), predicted before the run: **observed
+  as predicted** [C: `13-reverts-s5/filter/`]: 0 compile errors; 3 of 101; `NodeHashMapOrderTest` fails with "seed 1
+  draw 1 op 9400: iteration order", the first order check after seed 1's refusal at 9213, the most likely case the
+  prediction named. The other 2 failures are `CollectOutreachersTest`'s forward ones. `restore.txt`: `cmp` identical,
+  the forward line at `:194`; `git status` and `git diff --stat` empty afterwards (the forward is committed, so the
+  tree equals `HEAD`) [C].
+
+### A: `CollectOutreachersTest`'s overflow, data only (no fix chosen)
+**The counting copy** (`12-question-a/oracle-catch-counter.diff`): Forager's `third_party` `OsmNodesMap.java`, compiled
+`--release 11` against the jar, is bytecode-identical to the jar's own class (`javap -c -p`, constant-pool numbers and
+spacing normalised, 0 lines differ) [C]. Patched with a counter and a `System.err` line in the catch and a load marker,
+it differs only in `cleanupPeninsulas`, the new field and `<clinit>`; `minVisitIdInSubtree` is byte-identical [C].
+
+| Run | JVM, stack | Oracle's catch | Port's catch | Result |
+|---|---|---:|---:|---|
+| Probe, `ProbeMain regions` (as -53's count) | Temurin 21.0.13+9, main thread, `ThreadStackSize` 1024 (default) | **0** | (not run) | 12 region loads; `tieBreakOrder` grand total `[0, 0, 0, 0]` |
+| Probe, same | same, `-Xss1g` (`ThreadStackSize` 1048576) | **0** | (not run) | every region line identical to the 1024 run, `C` values included |
+| Forward `jvmTest` (whole suite) | container JDK 21.0.12.1, default (`ThreadStackSize` 1024) | not counted | 2 | test 1 fails `:141`; test 2 fails `:116` |
+| `CollectOutreachersTest` only, counting copy first | same, default | **0** | 4 | test 1 fails `:141`; test 2 fails `:141` at mode 2 |
+| `CollectOutreachersTest` only, counting copy first | same, `-Xss1g` | **0** | **0** | **test 1 passes** (12 regions equal); test 2 fails `:116` |
+
+[C: `12-question-a/`, `10-forward-run-s5/`.] The load marker printed in both `jvmTest` runs, and the init script's own
+line shows the copy first on the classpath and `-Xss1g` in the second, so each ran what it claims [C].
+
+**The `C` lines at W75_N40 (105,130) sub 735** (`nodesCreated lastVisitID baseID`, after `collectOutreachers`):
+- **oracle, default stack:** mode 1 `C 38715 41099 41099`, mode 2 `C 21909 41099 41099`, the same in every run that
+  reached them: the fourth session's, the forward and the counting run [C]. **At 1g:** not printed, since no line
+  differed. Both tests compared all 12 regions equal (test 2 reached `:116`), so the oracle's lines at 1g equal the
+  port's there [C]; that they equal the default-stack values is [I], backed by the probe, whose after-load `C` lines
+  (a different point, before `collectOutreachers`) are identical at both stacks [C].
+- **port, default stack:** mode 1 `C 39396 37387 37387` in all three runs [C]; mode 2 `C 22106 39455 39455` (fourth
+  session), `C 22157 37375 37375` (counting run), and not reached in the forward [C]. **At 1g:** equal to the oracle's
+  in all 12 regions of both tests [C].
+
+**What the data says:**
+- **The oracle did not overflow at the default stack** on these loads, in its own JVM or in the test's [C]. So nothing
+  here shows the oracle's own result depending on the stack: -59's stop did not trigger.
+- **The port overflows at the default stack and not at 1g,** and at 1g it equals the oracle on every region [C]. So the
+  red test 1 is the overflow alone. My fourth session's guess (the port's frames are larger, so it overflows where the
+  oracle does not) fits this [I: frame sizes not measured].
+- **Where and how often the port overflows differs between runs of the same code** (catches 3, 2, 4; mode-2 `C` lines
+  two ways; test 2 failing at a region in two runs and not in the forward) [C]. The likely cause is JIT timing: an
+  interpreted frame is larger than a compiled one, so the depth reached on 1 MB depends on whether the recursion has
+  been compiled by then [I, not tested]. So -50's premise that keeping the catch "keeps logic runs equal" fails on this
+  region at the default stack, and the port's result there is not even repeatable [C for the second, from the runs].
+- **For the owner** (-59 sends this there only if the oracle depends on the stack, which it did not here): Android runs
+  the engine at ART's default stack (-56), which is [?]. These runs say nothing about ART. Whether the oracle overflows
+  on Android, on these regions or larger ones, is not shown by any of this.
+
+**A finding beside A, not touched** (Forager's rule on silencing tests): **`collectOutreachersWithADestinationVanishesFarNodes`
+fails its own coverage assertion whenever its regions all compare equal:** "canEscape did not answer both ways:
+false/true 0/3587" at `:116`, at the default stack (forward) and at 1g [C]. The counts are the oracle's answers (`:104`),
+so on these 12 regions the oracle's `canEscape` never answers false. The check never saw the data that could fail it
+on that branch. The test had never run past its regions before this session (the fourth session's run failed it at a
+region). Test 1 has no such assertion and passed at 1g with the same 0/3587. Changing the regions or the assertion is
+the planner's call.
+
+### Both older reverts, restated for the red forward and pushed before they ran (`d8ccf2a`)
+- **`DirectWeaver`, predicted 7 of 101 with every one carrying the revert's own message; observed 7** [C:
+  `13-reverts-s5/dw/`]: 0 compile errors; `GraphDecodeTest` 5 of 5 at the "known" scenario on an `L` line;
+  `CollectOutreachersTest` 2 of 2 at **mode 0** (line 1435 of 186617 and of 201671), where the forward never fails, on an
+  `L` line. Field by field, the oracle and port `L` lines differ only in the fourth field after `L`, the reverse flag,
+  for both `CollectOutreachersTest` failures and for `GraphDecodeTest` W70_N40, W75_N35 and W75_N40 [C]. For F0 and
+  E170_S50 the runner's 400-character cut ends inside the oracle's half, and the XML was overwritten by the next revert,
+  so their field is [?]; their first line and scenario match the prediction. `restore.txt`: identical, forward line at
+  `:165`; tree clean afterwards [C].
+- **Tie-break stand-in, predicted 2 or 3 of 101 with exactly one `NodeHashMapTieBreakTest`; observed 3** [C:
+  `13-reverts-s5/tb/`]: 0 compile errors; `NodeHashMapTieBreakTest` fails "map 1's order after the tie group differs from
+  map 0's"; `NodeHashMapOrderTest` passes, redraws 15 as forward; the other 2 are `CollectOutreachersTest`'s forward ones
+  (mode 1 `:141` and `:116`). `restore.txt`: identical, forward line at `:340`; tree clean afterwards [C].
+
+### The tie-break decode total (third session's handoff, step 1, re-run in full)
+Rebuilt in fresh scratch as that step says (the pinned `HashMap.java` re-hashed `71c8d822…` [C], `patch_hashmap.py`,
+`--patch-module`, `patch_probe.py`, `run.sh all`), on Temurin 21.0.13+9 fetched by `tools/fetch-temurin.sh`. All three
+parts exit 0; the decode took 4 min 16 s [C: `6-tiebreak/decode.txt`, now complete].
+- **Every `# tie` line (one):** `# tie W75_N40 (106,130) sub 740 (105494 bytes) | known seeding | OsmNode treeify 19
+  putTreeVal 0 | other 0 0`, the site the third session's partial run had found.
+- **Totals:** fresh modes 0, 1 and 2 `[0, 0, 0, 0]`; known decode `[0, 0, 0, 0]`; known seeding `[19, 0, 0, 0]`; whole
+  tile mode 1 `[0, 0, 0, 0]`; **grand total `[19, 0, 0, 0]`**. No key of another class was ever tie-broken.
+- **The cache-line check:** 25,072 cache lines, SHA-256 `282555f9…6685a`, equal to jarA's, so the patched `HashMap`
+  changed no decode [C].
+- `regions.txt` and `routes.txt` re-ran identical to the third session's (grand totals `[0, 0, 0, 0]`) [C].
+
+### CI on this session's head
+CI_PLACEHOLDER
+
+### Unverified
+- ART's default stack, and whether the oracle overflows on Android [?].
+- That the port's run-to-run variation is JIT timing [I]; frame sizes of either engine were not measured.
+- The oracle's own `C` lines at 1g inside `jvmTest` were not printed; equal to the default stack's is [I] (above).
+- The reverse-flag field of two `DirectWeaver` revert messages (F0, E170_S50) [?].
+- The `jvmTest` JVM is the container's OpenJDK 21.0.12.1, the probe's Temurin 21.0.13+9 [C]; the oracle's catch was 0 on
+  both, but they are different JVMs.
+
+### Wrong premises
+- **RECORD -50's "keeps logic runs equal"** (already raised at -54): it does not hold on W75_N40 (105,130) at the
+  default stack, and the port's result there is not repeatable [C].
+- **Mine, corrected before the run it bore on:** the forward prediction that `CollectOutreachersTest` would fail "with
+  the fourth session's messages" (`9-filter-revert-prediction.md`, addendum). None found in -59 itself.
+
+### Calls beyond scope (for the planner to confirm)
+- A's two `CollectOutreachersTest` runs put the counting oracle class first on the test classpath (scratch init
+  scripts, not committed), so the oracle's catch was counted in the test's own JVM at both stacks, beyond the probe -59
+  asks for. The default-stack one is an extra run.
+- The probe was also run at `-Xss1g`.
+- The `DirectWeaver` and tie-break predictions were restated so that only failures carrying the revert's own message
+  count, since the forward's `CollectOutreachersTest` failures vary.
+
+**Status: open.** 5b closes once the planner answers A. Nothing here is a fix.
+
+## Handoff: what remains, in order (fifth session's, replacing the fourth's)
+Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`; first check `origin/brouter-port-5b` is the commit that
+added this section. Scratch (gone with the container): `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/plumb/`.
+Everything cited above is committed under `2026-10-30-brouter-port-step5b/` (`9-` to `13-`, and `6-tiebreak/decode.txt`).
+1. **Wait for the planner's answer to A** (above, "What the data says"), and to the `:116` finding. Choose no fix
+   before it.
+2. If the answer needs A re-run: the counting class is built from `12-question-a/oracle-catch-counter.diff` applied to
+   Forager's `third_party/brouter/src/main/java/btools/mapaccess/OsmNodesMap.java`, `javac --release 11 -cp <oracle jar>`;
+   the scratch init script is ~6 lines (`allprojects { afterEvaluate { tasks.withType(Test).matching { it.name ==
+   'jvmTest' }.configureEach { t -> t.classpath = files('<dir>') + t.classpath; t.jvmArgs('-Xss1g') } } }`), passed
+   with `-I`, never committed. The probe is `6-tiebreak`'s with one extra print of `C` per region.
+3. Whatever fix is chosen, its revert and prediction go first, as before; the three reverts here are done, and their
+   predictions hold for a forward that is red only on `CollectOutreachersTest`.
+4. **Close:** a section answering RECORD -50 point by point; mark this report done; push; tell the planner.
+
+## Handoff: what remains, in order (fourth session's, superseded by the fifth's above)
 Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`. First check that `origin/brouter-port-5b` is the commit that
 added this section. Scratch is `/tmp/claude-0/-home-user/c9851708-fbbe-5ce6-a5f8-ed278a238cce/scratchpad/5b/`.
 1. **Read CI on that commit:** `jvm` (expect 101 with these 3 failures), both klibs' `e:` lines (the first `actual`s),
