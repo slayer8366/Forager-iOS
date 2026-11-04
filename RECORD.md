@@ -2528,3 +2528,50 @@ with their predictions restated for a red forward and pushed before they run); t
 **Finish line:** pushed, CI read by the planner, A's data reported. 5b stays open until A is answered.
 **Abort conditions:** -3's.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -60.
+
+**Kind:** outcome
+**ID:** 2026-10-28-60
+**Timestamp:** 2026-11-04T20:05:52Z
+**Continues:** 2026-10-28-50, 2026-10-28-59
+**Title:** 5b, Plumb's fifth session: B fixed and its revert bites; A's data shows the port overflowing where the oracle
+does not; a test that cannot see its own false branch; handed off at 180k
+**Observed:** Plumb Ledger, `brouter-port-5b` `279194d` to `98c01e6` (seven commits; clean tree). It handed off at the
+planner's message after the watcher read 181,610 at 20:03:38Z. Report: `docs/audits/2026-10-30-brouter-port-step5b.md`,
+"Fifth session". Still open, as -59 said.
+- **B:** `NodeHashMapOrderTest` redraws refused draws (`9991929`, the only source change in the session: `git diff
+  --stat 279194d 98c01e6 -- brouter/src`, one file). It passes, with 15 redraws, and every seed accepted by draw 5. The
+  filter's revert was predicted at 3 of 101 and observed at 3, with "iteration order" [R, as reported].
+- **Both older reverts, as restated before they ran** (`d8ccf2a`, then `84aafc7`): `DirectWeaver` 7 of 7. The
+  tie-break revert was predicted at 2 or 3 and observed at 3, its own failure being `NodeHashMapTieBreakTest`. For two
+  of the seven `DirectWeaver` failures the runner cut the message before the port's half [R, as reported].
+- **The tie-break decode total, complete:** `[19, 0, 0, 0]`, all of it `treeify` at W75_N40 (106,130) sub 740. The
+  25,072 cache lines hash equal to the plain jar's [R, as reported].
+- **A, the data:**
+  - **In the test's own JVM, the oracle did not overflow** at the default stack or at `-Xss1g`. Checked by the
+    planner in `12-question-a/jvmtest-default.txt` and `jvmtest-1g.txt`: the counting class's load line prints in
+    both, and its per-firing line (`oracle-catch-counter.diff`, line +67) appears in neither.
+  - **The port did overflow at the default stack,** 2 to 4 times a run, and its mode 2 `C` line differed between
+    runs (`22106 39455 39455` and `22157 37375 37375`). That run-to-run variation is JIT timing [I, untested].
+  - **At 1g the port did not overflow,** and `collectOutreachersWithoutADestination` passes over all 12 regions
+    (`jvmtest-1g.txt`).
+  - **So -50's premise fails** at the default stack on this region: keeping the catch does not keep logic runs equal,
+    because the port overflows where the oracle does not. The oracle's own result showed no dependence on stack size,
+    so -59's stop did not trigger.
+- **A weaker piece of evidence, discounted by the planner:** the standalone probe (`probe-regions-*.txt`) reports 0
+  catches at both stacks. But its `C` values at sub 735 (`37435 41098 32946`) are not the test's (`38715 41099
+  41099`), and its last line reads "max recursion depth 0". It did not run the computation in question, so its zeros
+  are not evidence for A. The test-JVM runs above carry A.
+- **A new finding:** `collectOutreachersWithADestinationVanishesFarNodes` fails its coverage assertion (`:116`) once
+  its regions all agree: "canEscape did not answer both ways: false/true 0/3587" (`jvmtest-1g.txt`). The oracle's
+  `canEscape` never answers false on these regions, so the assertion's false branch cannot be satisfied there.
+- **CI, read by the planner** (run 41900695206 on `84c6fc2`, the same source as the head): `jvm` 101 tests, 2
+  failures, both `CollectOutreachersTest`; 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24
+  of 24 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2 classes ran". The head's own run
+  (41903010654) was still queued.
+- **Calls beyond scope, accepted:** the counting class in both test-JVM runs, through scratch init scripts; the probe
+  at 1g; revert predictions counting only failures that carry the revert's own message.
+
+**For the owner: how the port should handle the deep recursion in `cleanupPeninsulas`** (not decided here).
+**Planner's call (technical):** before any fix, check who calls `canEscape` and whether its false branch is reachable on
+Forager's path. Then either choose regions that reach it, or record it as unreachable rather than demand coverage.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -61.
