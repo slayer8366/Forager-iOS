@@ -2367,3 +2367,60 @@ out fast."
   behaviour, so a change there moves its oracle, its F0 stratum or its pins. This is the profile's "keeping iOS level
   with Android" duty, due anyway at the next phase.
 **Notes:** Written by Cedar Datum by hand. Next free ID -56.
+
+**Kind:** outcome
+**ID:** 2026-10-28-56
+**Timestamp:** 2026-11-04T04:41:56Z
+**Continues:** 2026-10-28-3, 2026-10-28-54, 2026-10-28-55
+**Title:** The resume checks: Forager's `pre-main` moved one premise of Phase 1 (Android now reads each node's
+height); 5b's CI read and equal to the coder's local run; no coder relaunched
+**Decision:** the owner, verbatim: "Yes, start the resume checks", after being told the port was paused at -55 and
+what the resume would check first. Nothing was relaunched, and no branch but `main` was written.
+
+**Forager's `pre-main`, `e2969abe4` (every pin on `brouter-port`) to `d6e2a0415` (338 commits, read 2026-11-04):**
+- **Unchanged** (`git diff --stat`, empty): `third_party/brouter` (the engine source) and every profile under
+  `app/src/main/assets/routing`, `hiking-mountain.brf` among them.
+- **F0's fixture is unchanged:** `app/src/test/resources/routing/segments/W75_N40.rd5` still hashes to `ff6d9d8e…5990`
+  [C: `sha256sum`]. F0 stays valid.
+- **The routing call is unchanged:** the engine's construction and `setParams` (`profile`, `alternativeidx`,
+  `profile:use_dynamic_range`) have no hunk in the diff.
+- **Changed: what Android reads from the result.** `ba6a52d7` (2026-10-30, Forager's "trail heights" dispatch
+  2026-10-30-06) adds `heightsMetres` to each route, read from `OsmPathElement.getSElev()`, with `Short.MIN_VALUE` as
+  "no height" (`BRouterTrailRouter.kt`, `trailRouteOf` and `heightMetresOf`, at `d6e2a0415`) [R].
+- **Why that moves a premise:** Phase 1 put elevations under "recorded, not asserted" because "Forager reads none of
+  them" (Phase 1 report at `brouter-port`, line 755). That was true at `e2969abe4` and is false at `d6e2a0415`. E3's
+  compared tuple is kind, node count, cost, distance and a digest over each node's (ilon, ilat) (`E3Case.kt:54`), so no
+  stratum can see a wrong height.
+- **Why the current tuple would not catch one either:** `hiking-mountain.brf:13` sets `consider_elevation = false`, so
+  its hill costs are 0 (`:73-77`), and Forager does not override it [R]. A wrong height on Forager's profile would
+  most likely leave the route, cost and distance unchanged [I: from the profile, `StdPath`'s use of `delta_h` not
+  read]. The check would pass without ever seeing the data that could fail it.
+- **Heights are not only copied:** at a route's cut ends the engine interpolates in `double` and casts to `short`
+  (`OsmPath.java:244-266` and `interpolateEle` at `:388-393`, Forager's `third_party` copy) [R]. The port must match
+  that cast.
+- **Also new in Forager, for use later:** a second fixture with 3″ heights, `segments-heighted/W75_N40.rd5` (178,867
+  bytes, SHA-256 `14f595e8…a965c`), and the release jar's output on it for eight routes,
+  `brouter-cli/heighted/*.geojson`, with every point carrying a height (Forager's `app/src/test/resources/routing/README.md`)
+  [R, not re-run]. Forager's production squares carry heights since its elevation run (that README, and
+  `server/pmtiles-worker/test/fixtures/rd5/README.md`) [R, as written there].
+- **This is -3's abort condition "a moved base that changes a premise".** The planner's lean, technical, as distance
+  was added at Phase 1 (line 753): add each node's `selev` to the compared outcome, and add a heighted F0 stratum from
+  Forager's new fixture. It needs the expected values re-derived for the strata already run (F0 and R), and the owner
+  is asked before anything is built.
+
+**Step 5b's CI, read by this planner session** (run 41023633806 on `279194d`, both job logs):
+- `jvm`: 101 tests, 3 failures, 0 errors; the failures are `CollectOutreachersTest` (both, at `:141`) and
+  `NodeHashMapOrderTest` (at `:42`). That equals Plumb's local run (-54).
+- `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, with 0 ` e: ` lines in either log. The
+  `jvmMain` and `iosMain` `actual`s from `1a5a25f` compile for iOS.
+- Simulator: 24 tests, 0 failures (**simulator-checked**). That is 23 plus `NodeHashMapTieBreakTest`, as -53 said.
+- arm64: 7 of 7, and the gate read "OK: all 2 classes ran".
+
+**Question A, the read-only half (handoff, step 2):** Android starts the engine on
+`Thread(r, "brouter-engine")`, with no stack size given (`BRouterTrailRouter.kt:206` at `d6e2a0415`), and runs
+`engine.doRun` there (`:167`) [R]. So it gets the runtime's default stack. ART's default is [?], not read. The
+data half (the oracle's catch counted; both engines at two stack sizes) is not started.
+
+**Still open:** questions A and B (-54), and the heights premise above. Both coders stay stopped.
+**Notes:** Written by a new planner session (a cloud session; not Cedar Datum) by hand, after reading this
+repository's `CLAUDE.md` and Forager's on `pre-main` at `d6e2a0415`. Next free ID -57.
