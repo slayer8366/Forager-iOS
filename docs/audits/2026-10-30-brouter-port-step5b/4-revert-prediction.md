@@ -38,3 +38,16 @@ saved copy, a `grep` for the forward line, and a forward re-run.
 `CollectOutreachersTest` 2), not 10. The "10" is an arithmetic slip of the second session's, carried into both
 handoffs. The per-class lines are the prediction; its total is **7 failures of 101**, with RECORD -50's new test in
 `commonTest`, which decodes no tile and so passes. Nothing else in the prediction changes.
+
+## Addendum, fifth session: restated for a red forward, before the run (RECORD -59)
+The forward is red on `CollectOutreachersTest` (`10-forward-run-s5/`): test 1 at `:141`, mode 1 of segments/W75_N40,
+where the port's catch fires and the oracle's does not (`12-question-a/`); test 2 at a region or at its own `:116`
+coverage assertion, varying between runs. So that class's failures count toward the revert only where they are this
+revert's own:
+- **`GraphDecodeTest`: 5 of 5 fail,** as above (an `L` line, the reverse flag);
+- **`CollectOutreachersTest`: 2 of 2 fail at segments/W75_N40 mode 0,** the first region each test compares, on an `L`
+  line differing only in its fourth field. Mode 0 runs no peninsula cleanup (`OsmNodesMap.java:38-39`, `justCount`), so
+  no overflow precedes it, and the forward never fails at mode 0. A failure of this class at mode 1 or 2, or at `:116`,
+  is the forward's, not the revert's, and is not counted as confirming it;
+- **every other test passes** (`NodeHashMapOrderTest` and `NodeHashMapTieBreakTest` decode no tile);
+- **so 7 failures of 101**, the same total, now with every one of the 7 required to carry the revert's own message.

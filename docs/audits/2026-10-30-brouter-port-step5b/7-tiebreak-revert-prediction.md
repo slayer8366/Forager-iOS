@@ -36,3 +36,14 @@ A failure of any other shape is not this revert's, and the result is not cited.
 
 **Restore:** from the copy saved before the edit, never from git. Afterwards `cmp` against the saved copy and a `grep`
 for the forward line.
+
+## Addendum, fifth session: restated for a red forward and for B's redraws, before the run (RECORD -59)
+- **`NodeHashMapTieBreakTest`: 1 of 1 fails,** as above;
+- **`NodeHashMapOrderTest` passes,** with redraws 15 as forward: an accepted draw holds no equal-hash tree bucket, so the
+  port never calls `tieBreakOrder` in it; a refused draw does, but is discarded before its next order check. The draws
+  come from `Random(seed)`, which the revert's `kotlin.random.Random` default instance does not touch;
+- **`CollectOutreachersTest` fails 1 or 2 tests, the forward's failures, not this revert's** (its 12 region loads make 0
+  tie-breaks: `12-question-a/probe-regions-default.txt`, grand total `[0, 0, 0, 0]`, re-counted this session);
+- `GraphDecodeTest` passes, as above;
+- **so 2 or 3 failures of 101, of which exactly one is `NodeHashMapTieBreakTest`'s,** with the message above. That one is
+  the revert's only evidence.
