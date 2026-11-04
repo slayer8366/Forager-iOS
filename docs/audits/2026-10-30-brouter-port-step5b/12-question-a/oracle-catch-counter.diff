@@ -1,0 +1,21 @@
+--- src-plain/btools/mapaccess/OsmNodesMap.java	2026-11-04 19:44:44.067469474 +0000
++++ src-patched/btools/mapaccess/OsmNodesMap.java	2026-11-04 19:46:49.824985229 +0000
+@@ -51,6 +51,10 @@
+     }
+   }
+ 
++  /** Scratch probe (step 5b, fifth session, RECORD -59 A): the catch's firings. Not in the oracle. */
++  public static int probeStackOverflows = 0;
++  static { System.err.println("5b oracle catch: the catch-counting OsmNodesMap is loaded (scratch, not the oracle's own class file)"); }
++
+   private void cleanupPeninsulas(OsmNode[] nodes) {
+     baseID = lastVisitID++;
+     for (int i = 0; i < nodes.length; i++) { // loop over nodes again just for housekeeping
+@@ -60,6 +64,7 @@
+           try {
+             minVisitIdInSubtree(null, n);
+           } catch (StackOverflowError soe) {
++            probeStackOverflows++; System.err.println("5b oracle catch: OsmNodesMap.cleanupPeninsulas caught StackOverflowError, number " + probeStackOverflows + " in this JVM (cleanupMode " + cleanupMode + ", node " + i + " of " + nodes.length + ")");
+             // System.out.println( "+++++++++++++++ StackOverflowError ++++++++++++++++" );
+           }
+         }
