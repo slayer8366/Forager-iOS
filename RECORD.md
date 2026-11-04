@@ -2450,3 +2450,81 @@ and open the PR".
 - **Not yet dispatched.** The work goes on `brouter-port`, and this planner session can push only its own branch. It is
   dispatched once the record is on `main` and a session can write `brouter-port`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -58.
+
+**Kind:** intent
+**ID:** 2026-10-28-58
+**Timestamp:** 2026-11-04T19:35:15Z
+**Continues:** 2026-10-28-56, 2026-10-28-57
+**Title:** Heights in E3's comparison, a heighted F0 stratum, and F0 and R re-run (Linden, session 20)
+**Decision first:** the owner, verbatim: "You may push to brouter-port and brouter-port-5b".
+
+**Two corrections to -57, both the planner's own wrong premises:**
+- **"Expected values for F0 and R are re-derived."** None were ever written (the planner's handoff: "expected values:
+  none written"). So there is nothing to re-derive. They will carry heights from the start. What does need repeating
+  is F0's and R's stability under the new tuple.
+- **"Pinned in the tile release like F0."** The release is fixed once published, and a new one needs the owner's run of
+  `publish-tiles` (-43 to -45). Forager's raw file at commit `d6e2a0415` is just as fixed, being addressed by commit,
+  and `publish-tiles` fetched F0 itself that way (`F0_URL`, `.github/workflows/publish-tiles.yml:20` on
+  `brouter-port`). So the heighted fixture is fetched from there through `tools/fetch-pinned.sh`, by size and SHA-256.
+  No new release is made.
+
+**Change** (on `brouter-port`, `jvmTest` and `tools` only):
+- `E3Outcome` gains a heights digest: 64-bit FNV-1a over each node's `getSElev()`, in order, `Short.MIN_VALUE`
+  included. It is compared exactly, like the node digest. The stored form changes, so every stratum log from before
+  is marked as written under the old tuple.
+- **Stratum F0h:** Forager's `app/src/test/resources/routing/segments-heighted/W75_N40.rd5` at `d6e2a0415` (178,867
+  bytes, SHA-256 `14f595e8469455bcdcc600239102cb7d60641185759fcae29cfed444af8a965c`), into its own folder. The routes
+  are the eight that Forager's `brouter-cli/heighted/*.geojson` cover, with ends as Forager's tests give them. Its
+  reach evidence: R1's point count, and a digest of its heights, equal those of the command-line router's GeoJSON.
+  Only counts and digests are committed, never coordinates beyond Forager's own ends (E1, as F0).
+- **F0 and R are re-run** under the new tuple: F0 at 2 cases, R at 1,534 over 26 profiles, with instability counted.
+- **Data owed:** on R's R1 routes, how many nodes have a height (not `Short.MIN_VALUE`), per tile. That says whether the
+  brouter.de tiles exercise the new field at all.
+- **The check bites:** a one-line revert in `E3CaseRun` that drops the heights from the digest must fail F0h's reach
+  assertion and nothing else. The prediction is pushed before the run.
+
+**Scope boundary:** writes only `brouter-port`. No `commonMain` change: the port's own heights come with step 6's path
+model. It does not touch `brouter-port-5b`, `main`, slayer8366/Forager, the tile release or accounts.
+**Baseline:** `brouter-port` `82d310a`; Forager `pre-main` `d6e2a0415` for the heighted fixture and its GeoJSON, and
+`e2969abe4` for every other pin.
+**Prediction (planner):**
+- F0h's eight R1 routes match the command-line router on count and heights, all eight;
+- F0, F0h and R are stable under the new tuple, apart from `R-shortest-025` (-50);
+- the brouter.de tiles carry heights on most route nodes [I: not read].
+**Finish line:** pushed, CI on the head read by the planner, the revert seen failing as predicted, F0h, F0 and R reported
+in the Phase 2 report, and a handoff. Then the targeted strata (DL, MP64, ML5, PM5) resume as Linden's session 19
+handed off.
+**Abort conditions:** -3's, plus a height disagreement between R1 and the command-line router (a finding, not a fix).
+**Notes:** Written by the planner session of -56 by hand. Next free ID -59.
+
+**Kind:** intent
+**ID:** 2026-10-28-59
+**Timestamp:** 2026-11-04T19:35:15Z
+**Continues:** 2026-10-28-50, 2026-10-28-53, 2026-10-28-54, 2026-10-28-58
+**Title:** The planner's answers to Plumb's questions A and B; 5b resumes, without closing (Plumb, session 5)
+**Answers (technical; the owner may overrule):**
+- **A, `CollectOutreachersTest`'s overflow: data before any fix.** No fix is chosen in this session.
+  - Count the oracle's own `StackOverflowError` catch (`OsmNodesMap.java:62-64`) on a patched copy, as
+    `tieBreakOrder` was counted (-53), on this test's region loads at the default stack.
+  - Re-run only this class with `-Xss1g` from a scratch init script, never committed, as Plumb's handoff step 3 says.
+    The prediction is pushed first.
+  - Report whether the oracle overflowed at the default stack, and whether either engine's counts change at 1g.
+  - If the oracle's own result depends on the stack, that goes to the owner. It bears on what "Android's behaviour"
+    means, since Android runs the engine at the default stack (-56).
+- **B, `NodeHashMapOrderTest`'s refusals.** "Refuse" (-50) meant that such a draw is discarded and drawn again, not
+  that the test fails.
+  - The generator redraws a seed's keys until no equal-hash tree bucket forms, up to 20 draws per seed, with every
+    redraw counted.
+  - The test asserts order equality on every accepted seed, and fails if any of the 12 seeds is not accepted within
+    its cap.
+  - Equal-hash buckets stay covered by `NodeHashMapTieBreakTest`.
+  - A revert of the filter must make the test fail, with the prediction pushed first.
+- **Plumb's four calls beyond the handoff (fourth session) are accepted:** `tieBreakCalls`, the one `System.err` line,
+  the runner's optional arguments, and `expect`/`actual` for the catch. Their compile on iOS was confirmed at -56.
+
+**Change:** on `brouter-port-5b` only: B as above; A's data; both reverts (`DirectWeaver` at 7 and the tie-break at 1,
+with their predictions restated for a red forward and pushed before they run); the tie-break decode total re-run.
+**Scope boundary:** writes only `brouter-port-5b`. No fix for A.
+**Finish line:** pushed, CI read by the planner, A's data reported. 5b stays open until A is answered.
+**Abort conditions:** -3's.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -60.
