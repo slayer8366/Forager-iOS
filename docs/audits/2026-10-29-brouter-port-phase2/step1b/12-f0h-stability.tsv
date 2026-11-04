@@ -1,0 +1,9 @@
+id	verdict	tuple-stable	log-stable	control-R1-ne-R4	R1-tuple	R2-collection-lines	R1-ms	R1-heights-by-tile
+F0h-inside-across-the-degree-line	stable	true	true	true	route|226|5302|5047|9ca48d05a90f4dcd|602d4109bb916eca	0	676	W75_N40:226/226
+F0h-inside-short	stable	true	true	true	route|167|2889|2573|80ed7bc76cd49b14|7dd5bc2f418a942e	0	442	W75_N40:167/167
+F0h-inside-long	stable	true	true	true	route|306|7405|6713|7d242f8dd2c428b4|81ca705bd6652037	0	576	W75_N40:306/306
+F0h-edge-north-a	stable	true	true	true	route|485|11142|10253|80b91e6cdecbca6b|44ac5ed74f690531	0	540	W75_N40:485/485
+F0h-edge-north-b	stable	true	true	true	route|522|12137|11107|9a6e1ba76433eb26|3bf34cc4b7d132bb	0	622	W75_N40:522/522
+F0h-detour-west	stable	true	true	true	route|445|9274|7619|8e7413e4588b005a|78f521e1799fa575	0	494	W75_N40:445/445
+F0h-outside-west-island	stable	true	true	true	route|737|15203|13997|724a6e49733ac0d2|144b2f26f2ecec83	0	612	W75_N40:737/737
+F0h-outside-west-moved	stable	true	true	true	route|742|15494|13908|3b0c5f82536d5789|ee68cd97a2dfa1b5	0	582	W75_N40:742/742
