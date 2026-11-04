@@ -1548,6 +1548,11 @@ the reach assertion's own message. Restored from the copy; then byte-equal to th
 
 Started 19:46:39Z on `14ba69d`'s tree, one `e3Strata` run (sequence check, `hiking-mountain`, the other 25).
 
+- **19:58Z, progress:** 5 of 26 profiles done (car-eco, car-eco-nocost, car-fast, car-fast-nocost, car-vario), 0 of 295
+  unstable; R1's first five fields equal the old run's (`10-*`) in 295 of 295. Heights on their 257 R1 routes: E170_S50
+  13,324 of 13,327 nodes, W70_N40 8,033 of 8,045, W75_N35 5,304 of 5,304, W75_N40 28,694 of 28,729 [C, partial]. Load
+  about 8 on 4 cores (another session shares the container); no case has a time limit.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
