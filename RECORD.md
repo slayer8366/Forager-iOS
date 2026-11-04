@@ -2575,3 +2575,29 @@ planner's message after the watcher read 181,610 at 20:03:38Z. Report: `docs/aud
 **Planner's call (technical):** before any fix, check who calls `canEscape` and whether its false branch is reachable on
 Forager's path. Then either choose regions that reach it, or record it as unreachable rather than demand coverage.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -61.
+
+**Kind:** decision
+**ID:** 2026-10-28-61
+**Timestamp:** 2026-11-04T20:12:15Z
+**Continues:** 2026-10-28-50, 2026-10-28-60
+**Title:** The deep recursion in `cleanupPeninsulas` is decided after step 10 (owner); 5b stays red and unmerged
+**Decision:** asked how the port should handle the recursion in `cleanupPeninsulas` that overflows where the oracle does not
+(-60), the owner chose, verbatim: "Decide after step 10". The option read: "Leave CollectOutreachersTest red, close the
+rest of 5b, and choose once the simulator run measures real stack use on iOS. 5b can't merge into brouter-port while
+the test is red."
+- **Rejected:** "Walk it without recursion (Recommended)", an explicit-stack rewrite of the port's subtree walk; and
+  "Keep recursion, big stack", an explicit large stack on the engine thread in the tests and the app.
+- **What follows:**
+  - `CollectOutreachersTest` stays red. It is reported at every CI read, never silenced, skipped or weakened (Forager's
+    CLAUDE.md, Testing).
+  - 5b closes everything else: the report is marked done except A.
+  - **5b is not merged into `brouter-port`.** The planner's call (technical): 5c and the steps after it are cut from
+    `brouter-port-5b`, so they build on the graph half. Each later merge into `brouter-port` waits on this decision.
+  - Step 10's simulator run measures the recursion depth on the router's thread on iOS (-50), and this question comes
+    back to the owner with that number.
+- **`canEscape`'s false branch (-60) is reachable** [R]: its only caller is `RoutingEngine.java:2016`, inside the
+  memory collection (`:2005-2020`: direct weaving, not in panic mode, out of memory bounds). That is the path MP64
+  targets (-51). The planner's call: the assertion stays. The coder looks for a region where the oracle answers false
+  (an island with no hollow link), and if none is found among the pinned tiles, MP64's runs are read for one. The
+  finding goes to the planner either way.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -62.
