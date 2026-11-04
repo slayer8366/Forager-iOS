@@ -18,7 +18,11 @@ import kotlin.test.assertTrue
  *   `OsmNode.java:260`). They are refused if their spread hash would join a forced bin.
  * - **The generator refuses equal-hash tree buckets** (H step 4): a tree bin holding two keys of equal hash breaks the
  *   tie on `System.identityHashCode` (`HashMap.java:2063`), which no port can reproduce. After every operation the
- *   reference's table is read, and a tree bin holding equal hashes stops the seed as refused, never as passed.
+ *   reference's table is read, and a tree bin holding equal hashes refuses the draw, never passes it.
+ * - **A refused draw is drawn again** (RECORD -59, B: "refuse" in -50 means discarded and redrawn): each seed's
+ *   `Random(seed)` stream carries on into a fresh draw of keys and operations on fresh maps, up to [MAX_DRAWS] draws
+ *   per seed. Every redraw is counted and printed. Order equality is asserted on every accepted draw, and a seed with
+ *   no draw accepted within its cap fails the test. Equal-hash tree buckets stay covered by `NodeHashMapTieBreakTest`.
  *
  * The operations: `put` of new keys and of a second object equal to a present key (which keeps the old key and returns
  * the old value, `HashMap.java:660-667`, as `NodesCache.java:284-288` relies on), `get` and `remove` of present and
@@ -29,28 +33,43 @@ class NodeHashMapOrderTest {
     @Test
     fun iterationOrderAndAnswersEqualJavaUtilHashMapsOnSeededOsmNodeKeys() {
         val totals = LongArray(Seen.entries.size)
+        var redraws = 0
+        val unaccepted = ArrayList<Int>()
         for (seed in 1..12) {
-            val seen = runSeed(seed)
-            for (i in totals.indices) totals[i] += seen[i]
+            val r = Random(seed)
+            var accepted: LongArray? = null
+            var draws = 0
+            while (accepted == null && draws < MAX_DRAWS) {
+                draws++
+                accepted = runDraw(seed, draws, r)
+            }
+            redraws += draws - 1
+            println("5b hmap order: seed $seed ${if (accepted != null) "accepted at draw $draws" else "not accepted in $draws draws"}, redraws ${draws - 1}")
+            if (accepted == null) unaccepted.add(seed) else for (i in totals.indices) totals[i] += accepted[i]
         }
         val text = Seen.entries.joinToString(", ") { "${it.name.lowercase()} ${totals[it.ordinal]}" }
-        println("5b hmap order: 12 seeds; $text")
+        println("5b hmap order: 12 seeds, redraws $redraws; accepted draws: $text")
+        assertTrue(unaccepted.isEmpty(), "seeds with no draw accepted within $MAX_DRAWS: $unaccepted (redraws $redraws)")
         // The check is evidence only if it saw what could fail it.
         for (s in listOf(Seen.TREE_BINS, Seen.PUT_INTO_TREE, Seen.REMOVE_FROM_TREE, Seen.RESIZE_WITH_TREE, Seen.TREE_TO_LIST, Seen.EQUAL_HASH_LIST_BINS)) {
             assertTrue(totals[s.ordinal] > 0, "never seen: $s ($text)")
         }
-        assertEquals(0L, totals[Seen.REFUSED.ordinal], "seeds refused for an equal-hash tree bucket ($text)")
     }
 
-    private enum class Seen { OPS, ORDER_CHECKS, TREE_BINS, PUT_INTO_TREE, REMOVE_FROM_TREE, RESIZE_WITH_TREE, TREE_TO_LIST, EQUAL_HASH_LIST_BINS, MAX_SIZE, REFUSED }
+    private enum class Seen { OPS, ORDER_CHECKS, TREE_BINS, PUT_INTO_TREE, REMOVE_FROM_TREE, RESIZE_WITH_TREE, TREE_TO_LIST, EQUAL_HASH_LIST_BINS, MAX_SIZE }
+
+    private companion object {
+        /** Draws per seed before the seed fails (RECORD -59, B). */
+        const val MAX_DRAWS = 20
+    }
 
     private class Key(val id: Int, val ilon: Int, val ilat: Int, val oracle: btools.mapaccess.OsmNode, val port: OsmNode)
 
     private fun spread(h: Int) = h xor (h ushr 16)
 
-    private fun runSeed(seed: Int): LongArray {
+    /** One draw of [seed]'s keys and operations from [r], on fresh maps: its counts if accepted, null if refused. */
+    private fun runDraw(seed: Int, draw: Int, r: Random): LongArray? {
         val seen = LongArray(Seen.entries.size)
-        val r = Random(seed)
         val reference = HashMap<btools.mapaccess.OsmNode, btools.mapaccess.OsmNode>(4096)
         val port = NodeHashMap(4096)
         val oracleIds = IdentityHashMap<btools.mapaccess.OsmNode, Int>()
@@ -111,14 +130,14 @@ class NodeHashMapOrderTest {
             seen[Seen.ORDER_CHECKS.ordinal]++
             val expected = reference.values.map { idOf(it) }
             val actual = port.valuesIterator().asSequence().map { idOfPort(it) }.toList()
-            assertEquals(expected, actual, "seed $seed $where: iteration order")
+            assertEquals(expected, actual, "$where: iteration order")
         }
 
         val totalOps = 40_000
         for (op in 1..totalOps) {
             seen[Seen.OPS.ordinal]++
             val kind = r.nextInt(100)
-            val where = "seed $seed op $op"
+            val where = "seed $seed draw $draw op $op"
             // The bin this operation changes, if it changes one: only there can a new tree bin, or a tree turning back
             // into a list, appear without a resize.
             var touched: Int? = null
@@ -171,11 +190,8 @@ class NodeHashMapOrderTest {
                     seen[Seen.TREE_TO_LIST.ordinal]++
                 }
             }
-            if (refused) {
-                seen[Seen.REFUSED.ordinal]++
-                println("5b hmap order: seed $seed refused at op $op, an equal-hash tree bucket")
-                return seen
-            }
+            if (refused) println("5b hmap order: seed $seed draw $draw refused at op $op, an equal-hash tree bucket")
+            if (refused) return null // the filter (RECORD -59, B): this draw is discarded and the seed drawn again
             if (op % 200 == 0) {
                 val trees = Inspect.treeBins(reference)
                 lastTreeCount = trees.size
@@ -184,7 +200,7 @@ class NodeHashMapOrderTest {
             }
         }
         seen[Seen.EQUAL_HASH_LIST_BINS.ordinal] += Inspect.equalHashListBins(reference).toLong()
-        checkOrder("seed $seed end")
+        checkOrder("seed $seed draw $draw end")
         return seen
     }
 
