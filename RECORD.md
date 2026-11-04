@@ -2644,3 +2644,16 @@ under `commonMain` or `iosMain`, by `git diff --stat`). It handed off at the pla
 **Next:** Linden's twenty-first session reads CI on the head first, then runs the targeted strata (DL, MP64, ML5/PM5)
 under the new tuple. MP64 is also read for `canEscape` answering false (-61).
 **Notes:** Written by the planner session of -56 by hand. Next free ID -63.
+
+**Kind:** outcome
+**ID:** 2026-10-28-63
+**Timestamp:** 2026-11-04T20:55:16Z
+**Continues:** 2026-10-28-62
+**Title:** CI on `brouter-port`'s head `3688c9f`: green
+**Observed:** run 41910184631, `success`, both job logs read by the planner:
+- `jvm`: 93 tests, 0 failures; `fetchF0h` ran; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` ran, with 0
+  ` e: ` lines in either log.
+- Simulator: 23 tests, 0 failures (**simulator-checked**). That is `brouter-port`'s count; 5b's 24th test lives on
+  `brouter-port-5b`.
+- arm64: 7 of 7, and the gate read "OK: all 2 classes ran".
+**Notes:** Written by the planner session of -56 by hand. Next free ID -64.
