@@ -22,6 +22,8 @@ object E3Stability {
         val logs: Map<String, List<String>>,
         val r1Millis: Long,
         val controls: Map<String, String>,
+        /** R1's `heights` line after the id: per tile, nodes with a height over nodes; "-" when R1 found no route. */
+        val r1Heights: String = "-",
     ) {
         val tupleStable get() = REGIMES.map { outcomes[it] }.distinct().size == 1
         val logStable get() = LOGGED.map { logs[it] ?: emptyList() }.distinct().size == 1
@@ -90,18 +92,19 @@ object E3Stability {
                 if (next.split(' ')[2] == case.id) controls[f[1]] = f[2]
             }
         }
-        return Verdict(case, outcomes, logs, r1Millis, controls)
+        val r1Heights = mine("heights").singleOrNull { it[1] == "R1" }?.get(3) ?: "-"
+        return Verdict(case, outcomes, logs, r1Millis, controls, r1Heights)
     }
 
     private fun writeReport(r: Result, file: File) {
         val rows = r.verdicts.map { v ->
             listOf(
                 v.case.id, if (v.stable) "stable" else "UNSTABLE", v.tupleStable, v.logStable, v.controlMoves,
-                v.outcomes["R1"]!!.toField(), v.logs["R2"]?.size ?: 0, v.r1Millis,
+                v.outcomes["R1"]!!.toField(), v.logs["R2"]?.size ?: 0, v.r1Millis, v.r1Heights,
             ).joinToString("\t")
         }
         file.writeText(
-            "id\tverdict\ttuple-stable\tlog-stable\tcontrol-R1-ne-R4\tR1-tuple\tR2-collection-lines\tR1-ms\n" +
+            "id\tverdict\ttuple-stable\tlog-stable\tcontrol-R1-ne-R4\tR1-tuple\tR2-collection-lines\tR1-ms\tR1-heights-by-tile\n" +
                 rows.joinToString("\n") + "\n",
         )
     }

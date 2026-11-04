@@ -16,7 +16,8 @@ import java.util.Random
  * - `E3Jvm R3 <base> <caseFile> all`: the whole list on one thread, shuffled by [R3_SEED], with `debug.txt`.
  *
  * Prints `outcome <regime> <id> <tuple>`, `log <regime> <id> <line>` for each collection line, `millis <regime> <id> <ms>`,
- * and for a route `extent <regime> <id> <minIlon> <maxIlon> <minIlat> <maxIlat>`.
+ * and for a route `extent <regime> <id> <minIlon> <maxIlon> <minIlat> <maxIlat>` and
+ * `heights <regime> <id> <tile>:<with a height>/<nodes> ...` ([E3CaseRun.Result.heightsByTile]).
  */
 object E3Jvm {
     const val PERTURBATION = 997
@@ -77,6 +78,7 @@ object E3Jvm {
         println("outcome $regime ${case.id} ${r.outcome.toField()}")
         for (line in r.collections) println("log $regime ${case.id} $line")
         r.extent?.let { println("extent $regime ${case.id} ${it.joinToString(" ")}") }
+        r.heightsByTile?.let { t -> println("heights $regime ${case.id} ${t.entries.joinToString(" ") { "${it.key}:${it.value[0]}/${it.value[1]}" }}") }
         println("millis $regime ${case.id} $ms")
     }
 

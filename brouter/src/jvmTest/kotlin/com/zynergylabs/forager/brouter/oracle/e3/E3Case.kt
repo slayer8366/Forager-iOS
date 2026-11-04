@@ -47,19 +47,34 @@ class E3Case(
 
 /**
  * E1's compared tuple for one run: the kind (the message, null for a route; the two timing families by family only),
- * the node count, cost and distance, and a 64-bit FNV-1a digest over every node's (ilon, ilat) in order. Comparing the
- * digest stands in for comparing the node list pair by pair, up to a 2^-64 collision. It is E3's comparison only, not
- * the stored form's digest, which is written with the expected values.
+ * the node count, cost and distance, a 64-bit FNV-1a digest over every node's (ilon, ilat) in order, and (RECORD -57,
+ * -58) a second over every node's height as the engine holds it, `OsmPathElement.getSElev()` in quarter metres, in
+ * order, `Short.MIN_VALUE` ("no height") included. Comparing a digest stands in for comparing the list pair by pair, up
+ * to a 2^-64 collision. It is E3's comparison only, not the stored form's digest, which is written with the expected
+ * values. Logs written before the heights digest was added (`step1b/` up to `11-*`) carry the old five-field tuple.
  */
-data class E3Outcome(val kind: String, val nodes: Int, val cost: Int, val distance: Int, val nodeDigest: String) {
-    fun toField(): String = "$kind|$nodes|$cost|$distance|$nodeDigest"
+data class E3Outcome(
+    val kind: String,
+    val nodes: Int,
+    val cost: Int,
+    val distance: Int,
+    val nodeDigest: String,
+    val heightDigest: String,
+) {
+    fun toField(): String = "$kind|$nodes|$cost|$distance|$nodeDigest|$heightDigest"
 
     companion object {
+        /** The fields after the kind: nodes, cost, distance and the two digests. */
+        private const val TAIL = 5
+
         fun fromField(s: String): E3Outcome {
             val f = s.split('|')
             val n = f.size
-            // The kind is a message and may hold '|'; the last four fields are numbers.
-            return E3Outcome(f.subList(0, n - 4).joinToString("|"), f[n - 4].toInt(), f[n - 3].toInt(), f[n - 2].toInt(), f[n - 1])
+            require(n > TAIL) { "an outcome field has the kind and $TAIL more, not ${n - 1} more: $s" }
+            // The kind is a message and may hold '|'; the last five fields hold no '|'.
+            return E3Outcome(
+                f.subList(0, n - TAIL).joinToString("|"), f[n - 5].toInt(), f[n - 4].toInt(), f[n - 3].toInt(), f[n - 2], f[n - 1],
+            )
         }
 
         /** E1's failure-kind table: the timeout and watchdog messages compare by family; every other message exactly. */
@@ -81,6 +96,22 @@ data class E3Outcome(val kind: String, val nodes: Int, val cost: Int, val distan
             for ((lon, lat) in pairs) {
                 mix(lon)
                 mix(lat)
+            }
+            return java.lang.Long.toHexString(h)
+        }
+
+        /**
+         * 64-bit FNV-1a over [heights] in order, each short's two bytes low byte first (as [fnv1a] takes an int's four).
+         * `tools/geojson-heights.py` computes the same digest from a GeoJSON's heights; the two must stay one function.
+         */
+        fun fnv1aShorts(heights: List<Short>): String {
+            var h = -0x340d631b7bdddcdbL // 0xcbf29ce484222325
+            for (s in heights) {
+                val v = s.toInt()
+                for (shift in 0 until 16 step 8) {
+                    h = h xor ((v ushr shift) and 0xff).toLong()
+                    h *= 0x100000001b3L
+                }
             }
             return java.lang.Long.toHexString(h)
         }

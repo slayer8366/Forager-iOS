@@ -1,0 +1,10 @@
+Written 2026-11-04 (Linden Caliper, session 20; RECORD -57, -58). The files in this folder are not edited.
+
+Every E3 tuple written in this folder before the heights digest was added, files 4-* to 10-* (the 11-* files hold case lists, no tuple), is the OLD tuple:
+  kind|nodes|cost|distance|nodeDigest
+From commit "E3: heights digest in the compared tuple" on, E3Outcome.toField writes the NEW tuple:
+  kind|nodes|cost|distance|nodeDigest|heightDigest
+with heightDigest a 64-bit FNV-1a over every node's OsmPathElement.getSElev(), in order, Short.MIN_VALUE included
+(E3Case.kt, E3Outcome.fnv1aShorts). An old line read by the new E3Outcome.fromField would misread its fields: it is
+evidence of the run that wrote it, under the old tuple, and nothing reads it back. The stability.tsv files written from
+then on also gain a last column, R1-heights-by-tile. Files 12-* and later are written under the new tuple.
