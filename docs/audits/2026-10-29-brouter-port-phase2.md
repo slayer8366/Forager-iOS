@@ -1482,6 +1482,72 @@ Dispatched by Cedar Datum after RECORD -52. **Base [R]:** `brouter-port` at `fa5
 **Left in scratch:** nothing a fresh session needs. The R list saved before the edit and both logs are in `step1b/11-*`.
 `brouter/build/e3/` is build output and is regenerated.
 
+## Step 1b continued: heights in E3's tuple, stratum F0h, and F0 and R re-run (twentieth session, Linden Caliper)
+
+Dispatch RECORD -58 (with -56, -57). Base `brouter-port` `82d310a`, fetched and equal to `origin/brouter-port` before any
+write [C]. Forager read-only at `pre-main` `d6e2a0415` for the heighted fixture, its GeoJSON and its routes; nothing else
+re-pinned. Oracle JDK: Temurin 21.0.13+9 amd64, every stratum log's first `E3` line [C]. Evidence in `step1b/12-*` to `16-*`.
+
+### What changed (`d52e08c`, `66d345f`)
+
+- **`E3Outcome` gains `heightDigest`** (`E3Case.kt:56-64`): 64-bit FNV-1a over every node's `OsmPathElement.getSElev()`
+  in order, `Short.MIN_VALUE` included, each short's two bytes low byte first (`fnv1aShorts`, `E3Case.kt:107-117`). The
+  tuple's line form is now `kind|nodes|cost|distance|nodeDigest|heightDigest`. `fromField` takes the last five fields
+  and joins the rest as the kind, so a kind holding `|` reads back whole (`E3Case.kt:70-79`); `E3OutcomeTest` holds that
+  and pins the digest to the Python tool's output on a fixed vector [C: jvmTest].
+- **`E3CaseRun` fills it** from `track.nodes` (`E3CaseRun.kt:57`, `:66`), and for a found route also counts, per 5°
+  tile, the nodes with a height and all nodes (`E3CaseRun.kt:58-63`, `tileOf` at `:82-86`). The child prints that as a
+  `heights` line (`E3Jvm.kt:81`); `stability.tsv` gains a last column `R1-heights-by-tile` (`E3Stability.kt:95`, `:103`), and the
+  stratum report prints it per case (`E3Strata.kt:40`).
+- **Old logs:** `step1b/00-tuple-note.txt` says which files carry the old five-field tuple (4-* to 10-*), unedited.
+- **F0h's fixture:** `tools/fetch-f0h.sh` fetches Forager's `segments-heighted/W75_N40.rd5` from raw.githubusercontent.com
+  at commit `d6e2a0415e5fc50a43210f78120ceedb9e2e6de4` through `tools/fetch-pinned.sh` (178,867 bytes, SHA-256
+  `14f595e8…a965c`) into `build/tiles-f0h/f0h/` alone. The build wires it as F0: an `Exec` task (`fetchF0h`) the oracle's
+  test JVM depends on, and a folder property, `brouter.tiles.f0h.dir` (`TestTiles.f0h`). The tile release and
+  `tools/tile-pins.tsv` are untouched [C: `git diff --stat 82d310a`]. The blob at that commit hashes to the pin [C:
+  `git show | sha256sum`], and the fetch accepted it [C].
+- **F0h's routes** (`E3F0hTest.kt`): the eight of `server/pmtiles-worker/test/fixtures/rd5/routes.json` at `d6e2a0415`,
+  `from` and `to` as written there. `BRouterHeightedRouteTest.kt:90-99` there carries the same sixteen ends [R].
+- **F0h's expected values:** `tools/geojson-heights.py` reads each `brouter-cli/heighted/<name>.geojson` at `d6e2a0415`
+  and prints the point count and heights digest; its output is `step1b/12-f0h-expected.tsv`. Only counts and digests are
+  committed. Over the eight: 3,630 points, all with a height, 5.75 to 413.75 m [C], which equals Forager's README and
+  `BRouterHeightedRouteTest.kt` (3,630; 5.75; 413.75) [R].
+- **The height rule used** [R: source]: BRouter's GeoJSON writes a third value only when `getSElev() != Short.MIN_VALUE`,
+  and writes `getElev()`, which is `selev / 4.` (`FormatJson.java:109`, `OsmPathElement.java:43-44`, Forager's
+  `third_party` copy at `d6e2a0415`), by Java's `Double.toString`. A quarter is exact in binary and `Double.toString`
+  reads back to the same double, so selev = value × 4. The tool checks, in decimal, that every value × 4 is a whole
+  number in a short's range, and refuses the file otherwise; a missing third value is `Short.MIN_VALUE`. All 3,630
+  passed. (`FormatJson.java:110` writes speed there instead when the profile sets `showspeed`; Forager's README says
+  these are heights, and the quarter-metre check would very likely refuse speeds [I].)
+
+### F0h forward (`12-f0h-*`) [C]
+
+8 cases, **0 of 8 unstable**, 8 of 8 `route`. R1's point count and heights digest equal the command-line router's on
+**all eight**, so the test passed (JUnit XML: 1 test, 0 failures; 0 ` e: ` lines). Every R1 node has a height
+(`W75_N40:n/n` on each). R1's distances also equal each GeoJSON's `track-length` (5047, 2573, 6713, 10253, 11107, 7619,
+13997, 13908) [C: read, not asserted]. `inside-across-the-degree-line` and `inside-long` have the same node digest, cost
+and distance on both squares, as Forager's README says of their points [C]. **No height disagreement** with the
+command-line router, so the stop on one did not arise. The planner's first prediction held.
+
+### F0 forward (`14-f0-*`) [C]
+
+2 of 2 stable. R1 as before (226, 5302, 5047, `9ca48d05…`; 306, 7405, 6713, `7d242f8d…`), and the heights digests
+are the two predicted for all-`Short.MIN_VALUE` lists, `afc27854ee968af5` and `4f6849ea59b5f775`, with
+`W75_N40:0/226` and `W75_N40:0/306`.
+
+### The revert (`13-heights-predictions.txt` item 3, `15-*`) [C]
+
+Prediction pushed in `d971358` before the run. `E3CaseRun.kt:66` `fnv1aShorts(heights)` → `fnv1aShorts(emptyList())`,
+the file copied to scratch first; old XML deleted. **Predicted:** compiles; jvmTest 93, 0 failures; F0h 8 of 8 stable
+and routes; F0h fails at its reach assertion with every digest `cbf29ce484222325` and counts equal; nothing else.
+**Observed:** exactly that. 0 ` e: ` lines in both logs; jvmTest 93, 0; F0h 1 test, 1 failure at `E3F0hTest.kt:33`,
+the reach assertion's own message. Restored from the copy; then byte-equal to the copy and to HEAD, `git diff` empty, and
+`:66` reads `fnv1aShorts(heights)` again.
+
+### R on all 26 profiles under the new tuple (`16-*`): IN PROGRESS
+
+Started 19:46:39Z on `14ba69d`'s tree, one `e3Strata` run (sequence check, `hiking-mountain`, the other 25).
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
