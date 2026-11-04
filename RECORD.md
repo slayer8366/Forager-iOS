@@ -2601,3 +2601,46 @@ the test is red."
   (an island with no hollow link), and if none is found among the pinned tiles, MP64's runs are read for one. The
   finding goes to the planner either way.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -62.
+
+**Kind:** outcome
+**ID:** 2026-10-28-62
+**Timestamp:** 2026-11-04T20:50:14Z
+**Continues:** 2026-10-28-50, 2026-10-28-57, 2026-10-28-58
+**Title:** Heights in E3's comparison: F0h 8 of 8 equal to the command-line router; R 0 of 1,534 unstable under the new
+tuple; the revert bites; handed off at 180k
+**Observed:** Linden Caliper, session 20, `brouter-port` `82d310a` to `3688c9f` (ten commits; clean tree; no change
+under `commonMain` or `iosMain`, by `git diff --stat`). It handed off at the planner's message after the watcher read
+181,440 at 20:48:09Z. Report: the Phase 2 report, its twentieth-session section and handoff.
+- **The tuple:** `E3Outcome` carries a heights digest (`E3Case.kt`, filled at `E3CaseRun.kt:66`). `fromField` reads
+  the last five fields, so a kind containing `|` survives. `step1b/00-tuple-note.txt` marks the earlier logs as written
+  under the old tuple.
+- **F0h** (Forager's heighted fixture at `d6e2a0415`, fetched by `tools/fetch-f0h.sh`, size and SHA-256 checked; ends
+  from `server/pmtiles-worker/test/fixtures/rd5/routes.json`):
+  - all 8 cases routed and are stable;
+  - **checked by the planner:** each of the eight digests in `step1b/12-f0h-expected.tsv`, computed from Forager's
+    `brouter-cli/heighted/*.geojson` by `tools/geojson-heights.py`, appears in exactly one R1 tuple of
+    `12-f0h-stability.tsv`, with the same point count;
+  - the counts add to 3,630, every point with a height, 5.75 to 413.75 m, as Forager's README says;
+  - **the height rule:** `FormatJson.java:109` writes `selev / 4.`, and omits the value for `Short.MIN_VALUE` [R, as
+    reported].
+- **F0:** 2 of 2 stable, tuples unchanged, and no node has a height (0 of 226, 0 of 306).
+- **R:** 26 profiles, 1,534 cases, **0 unstable** (`16-r-summary.txt`, read by the planner). Every case's first five
+  fields equal the old run's. `R-shortest-025`, unstable once at -50, was stable this time. The cause is [?], and -50's
+  ruling on it stands.
+- **Do the brouter.de tiles exercise heights?** Yes. Over R's 1,268 R1 routes, 427,924 of 428,277 nodes carry a height.
+  The 353 without one fall on 30 routes. Where they are is [?].
+- **The revert** (`fnv1aShorts(heights)` to `fnv1aShorts(emptyList())` at `E3CaseRun.kt:66`) was predicted and pushed
+  first (`d971358`). **Checked by the planner** in `15-heights-revert.txt`: 0 ` e: ` lines; `jvmTest` 93 of 93; the
+  one failure is at `E3F0hTest.kt:33`, with every digest reading the FNV offset basis; nothing else failed. It was
+  restored from a saved copy, with `git diff` empty afterwards.
+- **CI:** run 41900384198 on `9302765`, as the coder read it: `jvm` 93 tests, 0 ` e: `, `fetchF0h` ran. The run on the
+  head (41910184631) was in progress when this was written.
+- **A gap, the planner's own:** -57 named a revert of `interpolateEle`'s `short` cast, and -58 named a different one.
+  -57's would mean editing the oracle jar, and the port has no `OsmPath` until step 6. So **nothing yet shows that the
+  cut-end interpolation is covered.** It is owed at step 6, when the port's `OsmPath` is compared on F0h, whose
+  heighted routes end partway along ways [I: not checked per route].
+- **Calls beyond scope, accepted:** `E3OutcomeTest`; the per-tile height count; F0h's fetch running with every oracle
+  test; F0's no-height digests predicted but not asserted; the sequence check inside R's run; `__pycache__` ignored.
+**Next:** Linden's twenty-first session reads CI on the head first, then runs the targeted strata (DL, MP64, ML5/PM5)
+under the new tuple. MP64 is also read for `canEscape` answering false (-61).
+**Notes:** Written by the planner session of -56 by hand. Next free ID -63.
