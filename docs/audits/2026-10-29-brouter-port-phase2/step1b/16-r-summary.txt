@@ -1,0 +1,36 @@
+R over 26 profiles, 2026-11-04 19:46:39Z to 20:47:20Z (BUILD SUCCESSFUL in 1h 40s), new tuple.
+Summary by a scratch script over brouter/build/e3/R-*/stability.tsv, against 10-* and 9-r-* (old tuple's first five fields).
+profiles 26 cases 1534 unstable 0 []
+  car-eco-nocost 59 0
+  car-eco 59 0
+  car-fast-nocost 59 0
+  car-fast 59 0
+  car-vario-nocost 59 0
+  car-vario 59 0
+  fastbike-asia-pacific 59 0
+  fastbike-lowtraffic 59 0
+  fastbike-verylowtraffic 59 0
+  fastbike 59 0
+  gravel 59 0
+  hiking-mountain 59 0
+  moped 59 0
+  mtb 59 0
+  rail 59 0
+  river 59 0
+  safety 59 0
+  shortest 59 0
+  skating 59 0
+  trekking-ignore-cr 59 0
+  trekking-noferries 59 0
+  trekking-nosteps 59 0
+  trekking-steep 59 0
+  trekking 59 0
+  vm-forum-liegerad-schnell 59 0
+  vm-forum-velomobil-schnell 59 0
+R1 first five fields vs old: same 1534 differ 0 no old row 0
+R1 routes 1268
+  E170_S50	97521 of 97558 nodes with a height	100.0%
+  W70_N40	62271 of 62364 nodes with a height	99.9%
+  W75_N35	58824 of 58874 nodes with a height	99.9%
+  W75_N40	209308 of 209481 nodes with a height	99.9%
+30 R1 routes have at least one node with no height: 353 nodes in all, at most 79 in one route.

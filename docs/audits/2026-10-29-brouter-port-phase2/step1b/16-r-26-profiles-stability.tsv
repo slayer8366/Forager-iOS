@@ -1,0 +1,1535 @@
+id	verdict	tuple-stable	log-stable	control-R1-ne-R4	R1-tuple	R2-collection-lines	R1-ms	R1-heights-by-tile
+R-hiking-mountain-001	stable	true	true	true	route|407|54141|20042|ad512d3230dd77bb|c5524eb925994b2	1	1036	W75_N35:407/407
+R-hiking-mountain-002	stable	true	true	true	route|8|1122|876|e951e05206941a3b|2d1b7d659a3c627c	0	390	W70_N40:8/8
+R-hiking-mountain-003	stable	true	true	true	route|35|578|448|54d7618ed9fe2c68|f84a5fb10611c992	0	545	E170_S50:35/35
+R-hiking-mountain-004	stable	true	true	true	route|287|33005|23783|823118ec21422fcf|85bf362701d07caf	0	750	W70_N40:287/287
+R-hiking-mountain-005	stable	true	true	true	route|4|338|256|5cb24b9c0af632b|f21a3cd75121b30d	0	320	W75_N35:4/4
+R-hiking-mountain-006	stable	true	true	true	route|164|4760|3757|eb31e0dfe5cea005|1b2b1f14a3e8c8a	0	447	E170_S50:164/164
+R-hiking-mountain-007	stable	true	true	true	route|90|17841|9040|665bc84a3944047a|ff38583593c11d43	0	459	E170_S50:90/90
+R-hiking-mountain-008	stable	true	true	true	route|96|3192|2339|65bf394515a67030|e9da4fd9676f9ba6	0	427	W75_N40:96/96
+R-hiking-mountain-009	stable	true	true	true	route|43|1903|911|8843036f37f5e36e|3fbbc4d67503ab90	0	214	E170_S50:43/43
+R-hiking-mountain-010	stable	true	true	true	route|14|429|344|8dde35a383938d41|17e0b737e77acab	0	348	E170_S50:14/14
+R-hiking-mountain-011	stable	true	true	true	route|115|4822|4085|b56ccc459b5132bd|36035be3c64a19b7	0	398	W75_N35:115/115
+R-hiking-mountain-012	stable	true	true	true	route|1090|54584|35699|8d636660942844c4|15ac89c8229f2c4a	2	1241	W75_N40:1090/1090
+R-hiking-mountain-013	stable	true	true	true	route|64|4110|2461|2d7059ad66602542|d84864b644ab371f	0	541	W75_N40:64/64
+R-hiking-mountain-014	stable	true	true	true	route|294|8559|6637|580d2a05d7f886a9|838221914599b10e	1	1310	W75_N40:294/294
+R-hiking-mountain-015	stable	true	true	true	route|44|1341|1069|a70afdb31b9fad38|7b508a8c6e31f2cb	0	458	E170_S50:44/44
+R-hiking-mountain-016	stable	true	true	true	route|306|24600|9602|bb43b5bff3b3a0c8|e54d370015719c3d	0	556	W75_N35:306/306
+R-hiking-mountain-017	stable	true	true	true	route|28|4677|1457|a879a3c92ba818a4|101ef9a37d069db	0	293	W70_N40:28/28
+R-hiking-mountain-018	stable	true	true	true	route|14|445|336|dd504c9b4b8f622b|12380f45972e95e6	0	270	W70_N40:14/14
+R-hiking-mountain-019	stable	true	true	true	route|3886|192274|128892|e1872f42b75333e5|69ca92f790271ec6	52	9196	W75_N40:3886/3886
+R-hiking-mountain-020	stable	true	true	true	route|1554|52290|39099|2d84b2a1afc45915|a8e23036b9340dcc	5	1932	W75_N40:1554/1554
+R-hiking-mountain-021	stable	true	true	true	route|36|1464|707|a6372327f71a339f|ef50ae9e177f8ce1	0	259	W70_N40:36/36
+R-hiking-mountain-022	stable	true	true	true	route|90|2453|1652|be1fd75572f55b0|9a687b921d568ae8	0	468	E170_S50:90/90
+R-hiking-mountain-023	stable	true	true	true	route|93|4464|2642|cc090b28c412f5af|e31ca7da4d946031	0	513	W75_N40:93/93
+R-hiking-mountain-024	stable	true	true	true	route|27|7675|5814|bc917ba1a226a268|dbd224a35b3d44de	0	258	W70_N40:27/27
+R-hiking-mountain-025	stable	true	true	true	route|4319|167575|121620|13a36d2dd72403f3|1bef13cff2e1b957	67	10521	W75_N40:4319/4319
+R-hiking-mountain-026	stable	true	true	true	route|15|670|293|f4c69d019945b6d5|6ef43a39f035c249	0	252	W75_N40:15/15
+R-hiking-mountain-027	stable	true	true	true	route|9|3924|1308|490bbc80eec65869|dcd1e371c4e87fd2	0	183	E170_S50:9/9
+R-hiking-mountain-028	stable	true	true	true	route|117|10887|6773|ea0c826c4f9c6326|d10afaf2d2473cc5	0	256	W70_N40:117/117
+R-hiking-mountain-029	stable	true	true	true	route|80|4387|2331|950296348a64b643|4a0d33608a2c576a	0	347	W75_N40:80/80
+R-hiking-mountain-030	stable	true	true	true	route|3|756|63|f72112372d18fbbf|ee0f9e7bf6bc9f08	0	283	W75_N40:3/3
+R-hiking-mountain-031	stable	true	true	true	route|557|66627|34561|2154fef04bc8ce61|5828aaab9ee43afd	0	529	W70_N40:557/557
+R-hiking-mountain-032	stable	true	true	true	route|818|25228|20874|b52b3063d6ccc432|d6f730ed2c00cee3	0	976	E170_S50:818/818
+R-hiking-mountain-033	stable	true	true	true	route|60|2068|1248|62e44b210f6cee0e|6c14f508601343ed	0	267	W70_N40:60/60
+R-hiking-mountain-034	stable	true	true	true	route|242|23110|11599|1d556864df5ef905|dd8c8c45c67f983f	0	564	W70_N40:242/242
+R-hiking-mountain-035	stable	true	true	true	route|214|3838|2993|6647b8dd2358cf2b|bac726c587ebfd6e	0	539	E170_S50:214/214
+R-hiking-mountain-036	stable	true	true	true	route|17|324|247|346696b705b8d53c|2801e653fb38a862	0	414	W75_N35:17/17
+R-hiking-mountain-037	stable	true	true	true	route|2358|114604|69436|1ac12bc7caaa7aac|dc2659426f029d9c	0	990	W75_N40:2358/2358
+R-hiking-mountain-038	stable	true	true	true	route|804|42895|22673|49dc66371bcfcc82|9f9b1e983981a834	0	736	E170_S50:804/804
+R-hiking-mountain-039	stable	true	true	true	route|66|1994|1494|efa388188507c24|432ad6fc5b3f816a	0	330	W75_N40:66/66
+R-hiking-mountain-040	stable	true	true	true	route|57|1312|1038|527dc614f935d2c9|bbee3238b0dabc12	0	432	E170_S50:57/57
+R-hiking-mountain-041	stable	true	true	true	route|17|344|274|d6bfcabcb619adb5|e4ae24a57ebd0b3e	0	208	W75_N35:17/17
+R-hiking-mountain-042	stable	true	true	true	route|1528|84959|66908|52f09d95968eb11b|53e9d91725e2bd66	1	917	W75_N35:1528/1528
+R-hiking-mountain-043	stable	true	true	true	route|423|35567|21197|c798d984e50d4611|ad227145d78ea025	0	913	W75_N35:423/423
+R-hiking-mountain-044	stable	true	true	true	route|74|4242|2448|76f9934e49d9c5c6|4e817416e46bc4f7	0	313	W75_N35:74/74
+R-hiking-mountain-045	stable	true	true	true	route|3|29|22|8947386f59201a09|2ee5c95c630d513d	0	302	W70_N40:3/3
+R-hiking-mountain-046	stable	true	true	true	route|538|55754|19459|e93e2094a98918e7|597b690d9ea72934	0	906	E170_S50:538/538
+R-hiking-mountain-047	stable	true	true	true	route|1973|112174|72433|d8aaf24efc2a8fd6|cd87c06709e9488d	0	1067	E170_S50:1973/1973
+R-hiking-mountain-048	stable	true	true	true	route|62|6147|4074|918c3d66d9d02284|79e19a2ebde1d72b	0	479	W75_N35:62/62
+R-hiking-mountain-049	stable	true	true	true	route|19|776|615|3d1afa23f7ad7be0|602226df0a3f1dec	0	316	W70_N40:19/19
+R-hiking-mountain-050	stable	true	true	true	route|9|204|162|7b8372744d305bc6|7a6d4ee47dce8e92	0	353	W75_N40:9/9
+R-hiking-mountain-051	stable	true	true	true	route|13|379|289|38b11cde27abea53|e96d67d37a350692	0	444	W75_N40:13/13
+R-hiking-mountain-052	stable	true	true	true	route|11|835|631|e5554942bc26c4aa|3ccecbb022adfb1e	0	240	W75_N35:11/11
+R-hiking-mountain-053	stable	true	true	true	route|970|40735|27034|231287fa9379f747|8787c39a47504a87	0	779	E170_S50:970/970
+R-hiking-mountain-054	stable	true	true	true	route|43|2140|1073|2e3609e3e2ff1566|1a5632f40a45bd7c	0	380	W75_N40:43/43
+R-hiking-mountain-055	stable	true	true	true	route|573|41245|23221|2a0eb44dae11b109|15d81e486df4d519	0	635	W70_N40:573/573
+R-hiking-mountain-056	stable	true	true	true	route|143|12325|4801|e7bf4bf5745cdb7a|f5f070adb932b04d	0	583	W70_N40:143/143
+R-hiking-mountain-057	stable	true	true	true	route|3140|402344|210643|636a89d48bfb1da5|de956c3e0d873c90	5	3364	W70_N40:3140/3140
+R-hiking-mountain-058	stable	true	true	true	route|926|30686|22114|e05a9e4674845759|e05a5f5594f407bb	0	832	E170_S50:926/926
+R-hiking-mountain-059	stable	true	true	true	route|309|41573|19198|d8c3e4cb96e3e50|891411f056e9bfcf	0	528	W75_N35:309/309
+R-car-eco-nocost-001	stable	true	true	true	route|8|1210|467|875b2f1767a2bfe9|a15b6fd888f5909d	0	403	W75_N35:8/8
+R-car-eco-nocost-002	stable	true	true	true	route|14|1081|256|3ccb9b1461d8ba95|c3381aac6d329b4a	0	458	W75_N40:14/14
+R-car-eco-nocost-003	stable	true	true	true	route|63|12809|3088|4245ac3baf4d0a1d|9bcad68c8c6589f2	0	883	E170_S50:63/63
+R-car-eco-nocost-004	stable	true	true	true	route|104|7416|3792|a978d015cead1fb0|bafed73f4050f195	0	765	W75_N40:104/104
+R-car-eco-nocost-005	stable	true	true	true	route|53|3984|1746|e1e9fa631575bb18|342f0b2a374d22e7	0	772	W75_N35:53/53
+R-car-eco-nocost-006	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	363	-
+R-car-eco-nocost-007	stable	true	true	true	route|167|19579|11587|ea1ea637d6e66a7d|b21d25c5d101948b	0	397	W70_N40:167/167
+R-car-eco-nocost-008	stable	true	true	true	route|25|2310|1164|b0f6d455859d428|6b4f6f0f4b80c504	0	431	W70_N40:25/25
+R-car-eco-nocost-009	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	340	-
+R-car-eco-nocost-010	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	228	-
+R-car-eco-nocost-011	stable	true	true	true	route|256|9020|5242|24be72d9b128f2ea|334b0d9bd014ba21	0	623	W75_N40:256/256
+R-car-eco-nocost-012	stable	true	true	true	route|39|2980|992|2739d464fee9ab6c|61b871a7f0200848	0	370	W75_N35:39/39
+R-car-eco-nocost-013	stable	true	true	true	route|100|12674|9554|1c55e5d9215ad27c|c649a25cec307cd3	0	322	W70_N40:100/100
+R-car-eco-nocost-014	stable	true	true	true	route|2|78|7|4d925f5e487c5067|ccfa7dd8e11c4d95	0	230	W70_N40:2/2
+R-car-eco-nocost-015	stable	true	true	true	route|168|15167|9546|ec962a89622d39d3|1ebe06b7c4b833ec	0	367	W70_N40:168/168
+R-car-eco-nocost-016	stable	true	true	true	route|97|16214|14125|331281349e5a72b9|fcbe3f021bb01498	0	377	W70_N40:97/97
+R-car-eco-nocost-017	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	590	-
+R-car-eco-nocost-018	stable	true	true	true	route|473|36047|22180|4ed393007209eb81|c9ce592b4e261a5e	0	997	W70_N40:404/404 W75_N40:69/69
+R-car-eco-nocost-019	stable	true	true	true	route|442|41680|35552|e46fbb89ee8a1cc9|3b123d7d3b329d82	0	1457	W75_N40:440/442
+R-car-eco-nocost-020	stable	true	true	true	route|45|1690|625|8a3b53f97c7f3cb2|ebb8db6c95112aa	0	847	E170_S50:45/45
+R-car-eco-nocost-021	stable	true	true	true	route|129|9768|5883|1b7b598f06442f95|e85fdcd839df564c	0	462	W75_N35:129/129
+R-car-eco-nocost-022	stable	true	true	true	route|72|57603|6025|abef6ec23f0a9cfe|23439d062cf3172e	0	398	W70_N40:72/72
+R-car-eco-nocost-023	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	244	-
+R-car-eco-nocost-024	stable	true	true	true	route|125|9085|4977|53dc54f629c6aa41|ba12f3e52dc88c95	0	556	W70_N40:125/125
+R-car-eco-nocost-025	stable	true	true	true	route|649|44828|34495|40e9babead62e7c5|4e23ae322e183660	2	1769	W75_N40:649/649
+R-car-eco-nocost-026	stable	true	true	true	route|15|1359|461|3216d4e2fae148a4|858c3bd758a9d665	0	597	E170_S50:15/15
+R-car-eco-nocost-027	stable	true	true	true	route|36|2666|1691|ff7206e22612094c|6005e1d91b61446a	0	428	E170_S50:36/36
+R-car-eco-nocost-028	stable	true	true	true	route|1|29|0|87983d5e088463ef|9d12407b64bb177	0	283	W75_N35:1/1
+R-car-eco-nocost-029	stable	true	true	true	route|44|3274|1486|cb00481bc98a9220|5f9b09f8c6d18ad2	0	219	E170_S50:44/44
+R-car-eco-nocost-030	stable	true	true	true	route|9|1014|216|4a45caa6764013be|4ea75d2afc501db0	0	249	E170_S50:9/9
+R-car-eco-nocost-031	stable	true	true	true	route|89|14169|4928|3c3fcda6e8dff99b|fb66d465ac892218	0	433	E170_S50:89/89
+R-car-eco-nocost-032	stable	true	true	true	route|32|1903|760|825b55ed138accb|3143e77c07e7b411	0	303	E170_S50:32/32
+R-car-eco-nocost-033	stable	true	true	true	route|146|9944|6548|247758b91547c3ec|e934d1e078ef39c8	0	209	E170_S50:146/146
+R-car-eco-nocost-034	stable	true	true	true	route|5|513|270|c65228b5c67060ed|4c186a403f96c691	0	133	E170_S50:5/5
+R-car-eco-nocost-035	stable	true	true	true	route|216|12968|7754|ffcb6bbb2dc1d16c|c4cfda774f618124	0	616	W75_N35:216/216
+R-car-eco-nocost-036	stable	true	true	true	route|287|17896|8826|1e6727110027ac12|45e9b96590d218bd	0	674	W70_N40:287/287
+R-car-eco-nocost-037	stable	true	true	true	route|36|3845|2598|a1995c9583b6a985|ca660e997c44f964	0	437	W70_N40:36/36
+R-car-eco-nocost-038	stable	true	true	true	route|13|1008|382|a513c8fdf808d7fb|2276affbc0a6184d	0	280	W75_N35:13/13
+R-car-eco-nocost-039	stable	true	true	true	route|17|1382|333|da7b9919cf04e8f4|b9868ee883f4f702	0	268	W75_N40:17/17
+R-car-eco-nocost-040	stable	true	true	true	route|9|348|94|f99e8a33e9864411|8f5f14a52ffb2781	0	267	E170_S50:9/9
+R-car-eco-nocost-041	stable	true	true	true	route|612|39817|28535|111cf86832a7c760|288237f341c79257	8	2447	W75_N40:612/612
+R-car-eco-nocost-042	stable	true	true	true	route|183|47790|6226|5a568ee44dae5d51|a8d0481580eb9af3	0	728	E170_S50:183/183
+R-car-eco-nocost-043	stable	true	true	true	route|12|1151|384|892fa729fa437306|f840a58aeb8355eb	0	282	W75_N40:12/12
+R-car-eco-nocost-044	stable	true	true	true	route|95|4884|2550|7526a70e75bf18f5|4dcfe124aa24c48	0	579	W75_N40:95/95
+R-car-eco-nocost-045	stable	true	true	true	route|14|2612|1416|7059b7262fb21a4d|4b57532a8edef6d2	0	348	W70_N40:14/14
+R-car-eco-nocost-046	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	231	-
+R-car-eco-nocost-047	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	244	-
+R-car-eco-nocost-048	stable	true	true	true	route|2020|117624|92682|2b4fcb87a625500f|1938596f192f89ee	3	2535	W75_N40:2020/2020
+R-car-eco-nocost-049	stable	true	true	true	route|362|18237|12746|21323b785855da5a|cfd5b24c957e9418	0	583	W75_N40:362/362
+R-car-eco-nocost-050	stable	true	true	true	route|48|2956|1448|a817495827325246|14c0ab7ecf0e93bc	0	526	W75_N40:48/48
+R-car-eco-nocost-051	stable	true	true	true	route|27|1603|344|8c23be582daad49a|f69f079634fdf2be	0	558	W70_N40:27/27
+R-car-eco-nocost-052	stable	true	true	true	route|86|5821|4491|9db851d18f45d956|3231786888c8c1c	0	425	W75_N35:86/86
+R-car-eco-nocost-053	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	171	-
+R-car-eco-nocost-054	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	271	-
+R-car-eco-nocost-055	stable	true	true	true	route|30|3157|1061|e17e787c908750cc|305425bbd62d7e03	0	481	W75_N35:30/30
+R-car-eco-nocost-056	stable	true	true	true	route|262|11841|7545|4187061145f8a472|237b5d7cec3908ca	0	495	W75_N40:262/262
+R-car-eco-nocost-057	stable	true	true	true	route|1024|221197|36422|6d87149ee794270c|4568cfe8233fdfbe	0	1014	E170_S50:1024/1024
+R-car-eco-nocost-058	stable	true	true	true	route|2|29|1|4ecd7eba7f95420c|4d1606c24f9311c5	0	269	W75_N35:2/2
+R-car-eco-nocost-059	stable	true	true	true	route|176|84798|3701|b3bfb1b626e69056|c5ca08ef95277419	0	476	W70_N40:176/176
+R-car-eco-001	stable	true	true	true	route|161|19680|3691|d92da840a40c7664|b6e52d1b46242064	0	675	W70_N40:161/161
+R-car-eco-002	stable	true	true	true	route|3|245|59|e1c87c83aa86a99a|22fde50b35f8899	0	625	W75_N35:3/3
+R-car-eco-003	stable	true	true	true	route|7|264|87|1b3645de923a6c|fa31f9bd4f13b7d0	0	400	W75_N40:7/7
+R-car-eco-004	stable	true	true	true	route|462|22922|15473|8bb198a324ebf7c1|d6431040e464599d	0	1245	W75_N40:462/462
+R-car-eco-005	stable	true	true	true	route|94|4488|1451|e13de7dbe8a1217f|dc3e37f0ec785f8a	0	520	E170_S50:94/94
+R-car-eco-006	stable	true	true	true	route|98|6463|3227|429d2ff737c5f89f|4475cd9383768d6d	0	406	W75_N40:98/98
+R-car-eco-007	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	251	-
+R-car-eco-008	stable	true	true	true	route|3|498|208|143ca84f02f495a8|ddfd7425f2874d9b	0	323	E170_S50:3/3
+R-car-eco-009	stable	true	true	true	route|543|21287|12427|28941683da65395e|a2ddba52555dcdf3	0	657	E170_S50:543/543
+R-car-eco-010	stable	true	true	true	route|2|330|14|e47eec986ff07439|2dc536c036345a96	0	366	W75_N40:2/2
+R-car-eco-011	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	183	-
+R-car-eco-012	stable	true	true	true	route|36|2635|1065|63f46cd3449ab49f|ae10b40b585255a2	0	549	E170_S50:36/36
+R-car-eco-013	stable	true	true	true	route|2016|138195|111433|25f31b6705442cdc|d23e5cf91d3e28e	7	4290	W75_N40:2016/2016
+R-car-eco-014	stable	true	true	true	route|331|27869|21846|56b0768e3e6fdd4b|27ee7c885d95fd6e	0	344	W70_N40:331/331
+R-car-eco-015	stable	true	true	true	route|8|2389|145|f6cd8a2e4972d6a|a2fdc13acf53aa65	0	394	W70_N40:0/8
+R-car-eco-016	stable	true	true	true	route|9|257|58|1dfd4d17f773f694|2cf176694b1fd72f	0	308	W75_N40:9/9
+R-car-eco-017	stable	true	true	true	route|22|1881|1029|1d11139438181ff5|239f258951c1aa9d	0	438	W70_N40:22/22
+R-car-eco-018	stable	true	true	true	route|339|21998|14549|dc1e9d8555787c6a|ddf041fa59292038	0	685	E170_S50:339/339
+R-car-eco-019	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	272	-
+R-car-eco-020	stable	true	true	true	route|55|3322|1912|3f3ec35d5a44cef6|cc30fb50571c80b4	0	322	W75_N40:55/55
+R-car-eco-021	stable	true	true	true	route|9|438|116|8cf32520282585df|d31db980cf14010d	0	276	W75_N35:9/9
+R-car-eco-022	stable	true	true	true	route|51|2126|765|4cf71647b4315188|3f39a5303172aa98	0	436	E170_S50:51/51
+R-car-eco-023	stable	true	true	true	route|138|8995|5694|714e6e63a30f3b45|6a9dd20d289c4f1	0	539	W75_N35:138/138
+R-car-eco-024	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	292	-
+R-car-eco-025	stable	true	true	true	route|187|45919|9180|431b210318d4b928|3fe9c0dbc693275a	0	610	E170_S50:187/187
+R-car-eco-026	stable	true	true	true	route|250|31041|24353|27544c3904885cba|1f1128cbc5a690e5	0	352	W70_N40:250/250
+R-car-eco-027	stable	true	true	true	route|4|8174|356|fa6816219f265431|d774d544662bc83	0	235	W75_N35:4/4
+R-car-eco-028	stable	true	true	true	route|41|4619|2992|e0a885d0115010b7|458df9fa96f769be	0	375	W75_N35:41/41
+R-car-eco-029	stable	true	true	true	route|2|1729|75|d5ad7dbb1a9e1998|8d1197ddc34c415b	0	211	E170_S50:2/2
+R-car-eco-030	stable	true	true	true	route|133|9667|5030|9ef4c87fba5dc69e|374bec297d48dc8d	0	717	W75_N35:133/133
+R-car-eco-031	stable	true	true	true	route|35|2415|1105|c165eec6b6312bd6|4936d3806f2e778f	0	298	W70_N40:35/35
+R-car-eco-032	stable	true	true	true	route|85|9921|1716|8e04d094f4821aa5|3b01d8f64a017503	0	302	W70_N40:85/85
+R-car-eco-033	stable	true	true	true	route|14|1743|521|d01c0c60a0393f11|6de444f8be8bedc4	0	381	W75_N40:14/14
+R-car-eco-034	stable	true	true	true	route|13|713|269|49ccb54e5f956020|a226700243738628	0	298	W70_N40:13/13
+R-car-eco-035	stable	true	true	true	route|350|35142|30650|ce5766e136fae72a|c43681067ff2f47f	1	1354	W75_N40:350/350
+R-car-eco-036	stable	true	true	true	route|40|2855|1169|96c841f72bc37547|579ee60ad644d473	0	482	W75_N35:40/40
+R-car-eco-037	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	526	-
+R-car-eco-038	stable	true	true	true	route|12|984|220|d3cf2b3707fb7312|9222a55fd0bda5a5	0	303	W75_N40:12/12
+R-car-eco-039	stable	true	true	true	route|14|706|216|8dd1bee9f1e59c79|92ff8430a5ddcfea	0	197	W75_N35:14/14
+R-car-eco-040	stable	true	true	true	route|42|2263|1258|277c95996e467f09|342b1d0f9a262454	0	246	W70_N40:42/42
+R-car-eco-041	stable	true	true	true	route|322|23129|15787|480c3dbcdf5e49ea|51f3e99543c6f6d4	0	629	W75_N40:322/322
+R-car-eco-042	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	234	-
+R-car-eco-043	stable	true	true	true	route|13|312|89|50e2469891c35826|2fffe32467cc3f58	0	264	W75_N40:13/13
+R-car-eco-044	stable	true	true	true	route|37|3268|1279|6060014a101c866f|17e28dec753667ea	0	315	W75_N35:37/37
+R-car-eco-045	stable	true	true	true	route|4|611|127|af5f4d53af55f95c|c72fcc77f9b33998	0	253	W70_N40:4/4
+R-car-eco-046	stable	true	true	true	route|473|30888|19687|357240353580618|2708a6978f00d10	0	384	W75_N40:473/473
+R-car-eco-047	stable	true	true	true	route|242|9925|5081|38cfbcfee9478f3f|bea987714f5f0aa2	0	575	W75_N40:242/242
+R-car-eco-048	stable	true	true	true	route|88|4676|2069|6635c7de1e54be2b|b4625a1eb2eab9da	0	495	E170_S50:88/88
+R-car-eco-049	stable	true	true	true	route|139|8479|4515|b7f8353a1ee801f3|c8b4f68b4433d13c	0	547	E170_S50:139/139
+R-car-eco-050	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	460	-
+R-car-eco-051	stable	true	true	true	route|14|1191|290|e585d2387991a03d|b8ac9420d8fb1ef0	0	350	W75_N35:14/14
+R-car-eco-052	stable	true	true	true	route|91|12855|8113|91b936dc5d57a19d|5c195364fc2f9808	0	298	W75_N35:91/91
+R-car-eco-053	stable	true	true	true	route|12|1237|341|b5a5299ac6ac8170|f79232ef1c29eb8e	0	319	W75_N40:12/12
+R-car-eco-054	stable	true	true	true	route|82|4521|2621|c8ee3ab950b0639b|56489156cc5813b1	0	390	W75_N40:82/82
+R-car-eco-055	stable	true	true	true	route|265|27493|9858|c572bae651fd8792|7dd0e06bbb38fe39	3	1551	W75_N40:265/265
+R-car-eco-056	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	185	-
+R-car-eco-057	stable	true	true	true	route|1224|63329|48020|9cb8a62a64a3a5da|26619edff22477cc	5	2356	W75_N40:1224/1224
+R-car-eco-058	stable	true	true	true	route|19|3797|3409|644bc99b1adf1607|89519fd20f87f3ed	0	259	W75_N40:19/19
+R-car-eco-059	stable	true	true	true	route|246|21318|18621|84ad60f4a2d95058|4a7f50fafef1bc17	0	634	W75_N35:246/246
+R-car-fast-nocost-001	stable	true	true	true	route|71|9782|3021|aa7f563f85b61e3e|2e7830f6fff2658a	0	564	W75_N35:71/71
+R-car-fast-nocost-002	stable	true	true	true	route|28|5794|906|ea29ba2e7405d8c8|117f813a476169b	0	832	W75_N35:28/28
+R-car-fast-nocost-003	stable	true	true	true	route|13|1350|246|5578b80684dffab2|b986fe2a3fdf31fb	0	459	W70_N40:13/13
+R-car-fast-nocost-004	stable	true	true	true	route|60|10324|5467|6caa99538bb59917|b336f00340ea6def	0	325	W70_N40:60/60
+R-car-fast-nocost-005	stable	true	true	true	route|606|60005|35232|88346f6558ba1a66|b650014839694d60	5	3373	W75_N40:606/606
+R-car-fast-nocost-006	stable	true	true	true	route|63|6157|1169|da784f5e81929ad1|29d04f841cc49e4a	0	703	E170_S50:63/63
+R-car-fast-nocost-007	stable	true	true	true	route|8|1028|271|d008f2bc5496e88a|decf39d9d64509e3	0	373	W75_N35:8/8
+R-car-fast-nocost-008	stable	true	true	true	route|238|18284|6610|eee68c683db93f56|b2e214c15ad48059	0	804	W75_N40:238/238
+R-car-fast-nocost-009	stable	true	true	true	route|425|36522|9305|be999de12f227f52|676ab45bdbaffde4	0	946	E170_S50:425/425
+R-car-fast-nocost-010	stable	true	true	true	route|239|40183|10523|d762d0bce76826d6|c248b8046d8958ce	0	470	W70_N40:239/239
+R-car-fast-nocost-011	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	368	-
+R-car-fast-nocost-012	stable	true	true	true	route|80|12372|2676|3ea9f18309853d67|abd4377e2e11d052	0	590	W70_N40:80/80
+R-car-fast-nocost-013	stable	true	true	true	route|8|1103|83|f62cfa4bf791d73e|f9e88f6a0dbe39d8	0	638	W75_N35:8/8
+R-car-fast-nocost-014	stable	true	true	true	route|7|1390|250|18750741d7447cd4|bc6f6df06e326d02	0	406	W75_N35:7/7
+R-car-fast-nocost-015	stable	true	true	true	route|18|4906|1416|c461c82740e90011|90a0172cb8d1cf53	0	597	W70_N40:18/18
+R-car-fast-nocost-016	stable	true	true	true	route|170|32866|5814|bed5c42e7ec714c1|d62bd38518eaf85f	0	567	E170_S50:170/170
+R-car-fast-nocost-017	stable	true	true	true	route|192|116838|6366|86efe788efb19f68|3065f2628a7a9466	0	1670	W75_N40:192/192
+R-car-fast-nocost-018	stable	true	true	true	route|451|42277|20866|6be9365b1dc7529|96cdf8537ffe21bf	0	1458	W75_N40:451/451
+R-car-fast-nocost-019	stable	true	true	true	route|328|227304|19112|17f54655fba098ca|9f32a6f0af595558	16	12050	W75_N35:328/328
+R-car-fast-nocost-020	stable	true	true	true	route|18|2250|894|1ac8d9312824bd21|7d1e43c2ab58f22d	0	612	W75_N40:18/18
+R-car-fast-nocost-021	stable	true	true	true	route|344|45039|28308|f2d9a40a145d58e4|c4adccd06d495798	0	1679	W75_N35:344/344
+R-car-fast-nocost-022	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	850	-
+R-car-fast-nocost-023	stable	true	true	true	route|75|12678|3058|f50d04ccfce56db|18980119ef1693be	0	934	W70_N40:75/75
+R-car-fast-nocost-024	stable	true	true	true	route|85|8987|1461|f5a28f8750368cc2|9381f1c69b2fd79a	0	1070	E170_S50:85/85
+R-car-fast-nocost-025	stable	true	true	true	route|4|266|22|518c62fab511e322|af8e534a483c3aab	0	550	E170_S50:4/4
+R-car-fast-nocost-026	stable	true	true	true	route|709|80849|43622|bb8f915fde7768e7|7e2e34f9c7cdb4f8	1	1477	W75_N35:709/709
+R-car-fast-nocost-027	stable	true	true	true	route|90|23452|7211|d4b9b5d4f3143751|5177ddaebb4fc8b0	0	639	W70_N40:90/90
+R-car-fast-nocost-028	stable	true	true	true	route|169|23331|8576|353e1ba928c5a9a9|ebd913cfdd0cb4da	0	1206	W70_N40:169/169
+R-car-fast-nocost-029	stable	true	true	true	route|119|10215|2584|54d6cc333c59cce6|d94cbfa0b6c35c6	0	1363	E170_S50:119/119
+R-car-fast-nocost-030	stable	true	true	true	route|2916|285156|209590|9cf50af05bc57758|c37d8e808df7f466	69	24853	W75_N40:2916/2916
+R-car-fast-nocost-031	stable	true	true	true	route|14|2189|207|518a4338083b65cb|88a002ad9c451e4b	0	766	E170_S50:14/14
+R-car-fast-nocost-032	stable	true	true	true	route|123|9589|2868|4afea660bda22b61|8dd99306b7b047aa	0	394	W75_N35:123/123
+R-car-fast-nocost-033	stable	true	true	true	route|78|9139|3660|f023e6ca9a04fb4a|da55781ee1e46bc6	0	457	W75_N35:78/78
+R-car-fast-nocost-034	stable	true	true	true	route|100|5349|1532|547cd02437f69026|c99c016e87d3bfbd	0	498	E170_S50:100/100
+R-car-fast-nocost-035	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	255	-
+R-car-fast-nocost-036	stable	true	true	true	route|209|46156|21611|817ad80ef0258a1b|7f4ef313481879a4	0	416	W70_N40:209/209
+R-car-fast-nocost-037	stable	true	true	true	route|43|7112|1822|9f14c7ee2803a2c2|ae3c2470b0e61354	0	650	W75_N35:43/43
+R-car-fast-nocost-038	stable	true	true	true	route|193|43227|27823|9a23f3f631c76739|b665ef3822e04b95	0	503	W70_N40:193/193
+R-car-fast-nocost-039	stable	true	true	true	route|26|4905|1206|d13b84b5672e1c22|d65a0e0cb5faea1f	0	420	E170_S50:26/26
+R-car-fast-nocost-040	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	235	-
+R-car-fast-nocost-041	stable	true	true	true	route|30|4282|638|9a50f26beb0f99c3|efac988408969342	0	629	W75_N40:30/30
+R-car-fast-nocost-042	stable	true	true	true	route|195|16272|5749|9f58090a468ffc8c|4424ca37cae22ccc	0	774	E170_S50:195/195
+R-car-fast-nocost-043	stable	true	true	true	route|23|6206|820|602a051173e2f486|82623cc23090d907	0	458	E170_S50:23/23
+R-car-fast-nocost-044	stable	true	true	true	route|134|10377|2949|15b0ca3b18ac9a3a|677ca6e871d581c1	0	683	W75_N40:134/134
+R-car-fast-nocost-045	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	294	-
+R-car-fast-nocost-046	stable	true	true	true	route|6|1633|583|cdd9aedacfc8ac84|7b9d0cd71fde325c	0	351	W75_N35:6/6
+R-car-fast-nocost-047	stable	true	true	true	route|915|69098|31462|7a744648bb6f02e3|89883325fa4eaf18	1	1560	W75_N40:915/915
+R-car-fast-nocost-048	stable	true	true	true	route|36|5083|1158|e5a6029b0625c0f1|1349d2c7959e1478	0	521	W75_N40:36/36
+R-car-fast-nocost-049	stable	true	true	true	route|79|9953|2272|e1b4191bc1c31dde|fa9d1a92235c01fe	0	916	W75_N40:79/79
+R-car-fast-nocost-050	stable	true	true	true	route|129|19933|6644|ba28f0b9e0dd3abd|eee6b939f389d4d5	0	866	W75_N35:112/112 W75_N40:17/17
+R-car-fast-nocost-051	stable	true	true	true	error re-tracking track|0|0|0|cbf29ce484222325|cbf29ce484222325	6	7320	-
+R-car-fast-nocost-052	stable	true	true	true	route|452|81367|34311|e942543511def75d|7bad1bcc4316b871	0	879	W70_N40:452/452
+R-car-fast-nocost-053	stable	true	true	true	route|39|4185|830|b1b8cf030f3b76a0|b960adcd1ce67b10	0	622	W75_N40:39/39
+R-car-fast-nocost-054	stable	true	true	true	route|183|15276|5842|292acfaf0db5274f|974d81dcfce15ab5	0	610	W75_N40:183/183
+R-car-fast-nocost-055	stable	true	true	true	route|8|1732|417|d5f8834c215356ef|e39bcfec63439a46	0	457	W75_N35:8/8
+R-car-fast-nocost-056	stable	true	true	true	route|197|33353|18994|f751ee9fd5d5d5fc|f17db1e464adc299	0	619	W70_N40:197/197
+R-car-fast-nocost-057	stable	true	true	true	route|27|4826|751|daef11a294f54807|e123e926f0f2af52	0	520	W75_N35:27/27
+R-car-fast-nocost-058	stable	true	true	true	route|18|2329|477|a43b92a1cb28e535|a03239e4e29c49dc	0	291	W75_N35:18/18
+R-car-fast-nocost-059	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	351	-
+R-car-fast-001	stable	true	true	true	route|13|3608|805|8daff70f9b6a6439|b73f0f448edd5c04	0	500	W75_N35:13/13
+R-car-fast-002	stable	true	true	true	route|1866|178640|115901|a14b5282a9b4254f|c8399c6ec631cd8c	0	2643	E170_S50:1866/1866
+R-car-fast-003	stable	true	true	true	route|126|13426|3814|c0084ae5786ab8bf|44f3068c5414c2ce	0	1235	E170_S50:126/126
+R-car-fast-004	stable	true	true	true	route|299|25227|9650|a68bd08053aa7a6a|e079ed8d92351656	0	1250	W75_N40:299/299
+R-car-fast-005	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	706	-
+R-car-fast-006	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	252	-
+R-car-fast-007	stable	true	true	true	route|56|135935|9522|b976d01641637db|cd01455a8708574f	0	764	E170_S50:56/56
+R-car-fast-008	stable	true	true	true	route|21|4403|675|3d658e89471ed6e|7ae95e84ee630df8	0	452	W75_N35:21/21
+R-car-fast-009	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	274	-
+R-car-fast-010	stable	true	true	true	route|127|12608|4874|e0478097eadc1c60|23c066e5f49cacec	0	658	W75_N35:127/127
+R-car-fast-011	stable	true	true	true	route|118|15949|5685|cdfabf317dbe068d|8f238161f758e625	0	864	E170_S50:118/118
+R-car-fast-012	stable	true	true	true	route|286|30251|8969|c70e15081287da86|ca5da21f5f51f593	0	897	W75_N40:286/286
+R-car-fast-013	stable	true	true	true	route|119|11173|3631|27e71567f93a531d|4ed5c093b82ab03a	0	1102	W75_N40:119/119
+R-car-fast-014	stable	true	true	true	route|337|35231|7900|a1f33b75d8cd84b1|fbc43d359dcd654c	0	676	E170_S50:337/337
+R-car-fast-015	stable	true	true	true	route|390|32246|9257|ac6e7667f8e4515c|8d6dc8fdadb1c716	0	1059	E170_S50:390/390
+R-car-fast-016	stable	true	true	true	route|115|9610|3528|fc884d57092aee82|8e3b7aa8c6d4845b	0	685	E170_S50:115/115
+R-car-fast-017	stable	true	true	true	route|3|357|33|64a94bc9201979bb|1859c7c9c99fe756	0	353	W70_N40:3/3
+R-car-fast-018	stable	true	true	true	route|52|16545|2510|4c4a129a4fd489de|e15f592b4cda6ef3	0	349	W70_N40:48/52
+R-car-fast-019	stable	true	true	true	route|50|6841|1901|381bb57c48f8123d|204d3f88bfa9780d	0	700	E170_S50:50/50
+R-car-fast-020	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	272	-
+R-car-fast-021	stable	true	true	true	route|73|9748|3618|bff845f8f80c787c|f877aa568e7cbab4	0	631	W75_N35:73/73
+R-car-fast-022	stable	true	true	true	route|28|2557|454|438bd2934864a35d|efb8543c41c635d0	0	551	E170_S50:28/28
+R-car-fast-023	stable	true	true	true	route|28|4003|694|50579e62cd563c88|48299289a098e2d6	0	418	E170_S50:28/28
+R-car-fast-024	stable	true	true	true	route|39|13921|4037|ae061ebd15b32e36|24b6f95d78672fe	0	420	W75_N35:39/39
+R-car-fast-025	stable	true	true	true	route|200|15466|4154|e1276979b1ce9be1|74c500b2a52b293f	0	856	E170_S50:200/200
+R-car-fast-026	stable	true	true	true	route|393|27945|8631|655f50d911177c3d|b67c910632b96576	0	679	E170_S50:393/393
+R-car-fast-027	stable	true	true	true	route|12|1576|209|af23fb3ebf91ee89|22cd9f8898d289ae	0	531	E170_S50:12/12
+R-car-fast-028	stable	true	true	true	route|14|1358|142|11ef83ef49321bb2|579ec684d80d32d5	0	470	E170_S50:14/14
+R-car-fast-029	stable	true	true	true	route|372|37033|22240|666a7551405263c0|e04406a99c5faf57	0	930	W70_N40:372/372
+R-car-fast-030	stable	true	true	true	route|14|2456|354|1c364be9c3752537|dbb78d04fb26e8b	0	736	E170_S50:14/14
+R-car-fast-031	stable	true	true	true	route|13|3859|529|ff941148036fa9bf|41cadf49fd37d3f9	0	553	W70_N40:13/13
+R-car-fast-032	stable	true	true	true	route|22|6799|593|f6273efbe1254310|d3f438e54499374b	0	315	E170_S50:22/22
+R-car-fast-033	stable	true	true	true	route|538|49703|21780|6deb97d586855c83|7478a60f0068943	8	3483	W75_N40:538/538
+R-car-fast-034	stable	true	true	true	route|120|11313|2622|8e8512b7a41881d7|e1f4ca87302112a8	0	970	W75_N40:120/120
+R-car-fast-035	stable	true	true	true	route|32|3335|709|1aafefeeb5fa5f90|fa8ba1abd478b5f	0	447	W70_N40:32/32
+R-car-fast-036	stable	true	true	true	route|25|4341|1347|b1e0d4854898de0c|54c7bb7e7e3987e0	0	358	W70_N40:25/25
+R-car-fast-037	stable	true	true	true	route|26|5999|1936|3ee2c663fcc60397|f741a3b8b72a4b89	0	405	W70_N40:26/26
+R-car-fast-038	stable	true	true	true	route|79|9730|3370|2bb88822bdef6de1|7f9949e964225743	0	406	W70_N40:79/79
+R-car-fast-039	stable	true	true	true	route|27|1709|322|8f57512fa3c844d5|95a19c10768d8486	0	395	W75_N40:27/27
+R-car-fast-040	stable	true	true	true	route|723|49699|17677|ecbbf8ac474c0a4a|3304920df838b12e	0	963	E170_S50:720/723
+R-car-fast-041	stable	true	true	true	route|2|278|20|25df7bf333b123f|ae62709e1a5d39c	0	294	W70_N40:2/2
+R-car-fast-042	stable	true	true	true	route|2180|223232|140196|71ead9ee84fc709e|9a9573db6d61119c	17	8772	W75_N40:2180/2180
+R-car-fast-043	stable	true	true	true	route|1|62|0|7f562080528d1663|846ec07b4fcc2e3	0	443	W75_N35:1/1
+R-car-fast-044	stable	true	true	true	route|15|1898|381|57d9ccac693bae87|5963fe667d0722cf	0	453	W70_N40:15/15
+R-car-fast-045	stable	true	true	true	route|519|59992|31561|ab48219b8745ff7b|1294b83a184855ed	0	1006	W70_N40:421/421 W75_N40:98/98
+R-car-fast-046	stable	true	true	true	route|20|2058|338|8ebaa37576921012|d9a0f1f777d59dda	0	356	E170_S50:20/20
+R-car-fast-047	stable	true	true	true	route|401|34650|11213|64e54b12dbf32361|f36c38dd3cea915f	0	1115	E170_S50:401/401
+R-car-fast-048	stable	true	true	true	route|4|586|87|59def52f722ed147|59b054df957fefff	0	475	W75_N35:4/4
+R-car-fast-049	stable	true	true	true	route|32|4229|769|94fe0e358669f28b|dec5fa1fed56fd30	0	511	E170_S50:32/32
+R-car-fast-050	stable	true	true	true	route|62|15185|4503|4325ae724f768c34|424d97d7e5b3df1f	0	283	W70_N40:62/62
+R-car-fast-051	stable	true	true	true	route|937|120455|23538|ad4a1b2b83bbdc18|9026a59a210a631a	0	1037	E170_S50:937/937
+R-car-fast-052	stable	true	true	true	route|620|61423|33285|efb913cfed7e9fbd|472b5540061dc8d5	0	1409	W75_N40:620/620
+R-car-fast-053	stable	true	true	true	route|60|14455|1961|ad992a037289ab96|d8b2a43c9fe8ccfe	0	1164	W75_N40:60/60
+R-car-fast-054	stable	true	true	true	route|962|103869|78654|604b8fb53536238c|cff88b5b905934ce	8	5726	W75_N35:291/291 W75_N40:671/671
+R-car-fast-055	stable	true	true	true	route|164|26562|13068|9581c2a9b20eebcb|cef43e4eb6dfb1e8	0	631	W70_N40:164/164
+R-car-fast-056	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	422	-
+R-car-fast-057	stable	true	true	true	route|492|67285|16685|f8c29df12f8979|dee176fce5dffcbf	0	1169	E170_S50:492/492
+R-car-fast-058	stable	true	true	true	route|10|1127|177|4af7f27b42e3eeb1|d62b67f5a8c27256	0	511	W70_N40:10/10
+R-car-fast-059	stable	true	true	true	route|36|2858|963|56907c1358fd4cb8|10afa0a51842c643	0	324	W75_N40:36/36
+R-car-vario-nocost-001	stable	true	true	true	route|541|39988|29327|b2095d1b4d1a894d|571bd02ef24f949e	0	1953	W75_N35:541/541
+R-car-vario-nocost-002	stable	true	true	true	route|14|1245|471|d6f644c1ff6a45cf|a85bd9c31c38cc52	0	616	W70_N40:14/14
+R-car-vario-nocost-003	stable	true	true	true	route|119|9759|6040|d4fd86ce5d46d1d0|c8800d5fb6da568f	0	781	W75_N35:119/119
+R-car-vario-nocost-004	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	389	-
+R-car-vario-nocost-005	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	329	-
+R-car-vario-nocost-006	stable	true	true	true	route|183|17367|6962|84f6d2bae6d6dd39|5a67102859450a58	0	431	W70_N40:183/183
+R-car-vario-nocost-007	stable	true	true	true	route|874|71432|58047|cec9b3f1a70fdf2e|9f095fbf1d2db7fc	1	1750	W75_N35:874/874
+R-car-vario-nocost-008	stable	true	true	true	route|106|4942|3434|eee625e0e03ec2de|7bd67c047f1c5610	0	346	E170_S50:106/106
+R-car-vario-nocost-009	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	284	-
+R-car-vario-nocost-010	stable	true	true	true	route|1796|216272|129793|f8edd456ce7d0f16|3d9e73306d329259	5	5288	W75_N40:1796/1796
+R-car-vario-nocost-011	stable	true	true	true	route|113|6895|3917|667a4e1df43d6d1c|61102084f038bb19	0	671	W75_N35:113/113
+R-car-vario-nocost-012	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	301	-
+R-car-vario-nocost-013	stable	true	true	true	route|1095|87415|72082|34aa50e6977967a1|a19718ab8dee667c	0	1572	W70_N40:719/719 W75_N40:376/376
+R-car-vario-nocost-014	stable	true	true	true	route|4|486|52|80e3af4624c6175e|a114a352cf847cc6	0	304	W75_N40:4/4
+R-car-vario-nocost-015	stable	true	true	true	route|48|3764|1982|8faa18fb123aba22|e6924c6b29b549bb	0	331	W70_N40:48/48
+R-car-vario-nocost-016	stable	true	true	true	route|5|4271|186|92591ae6e5225ea|3d9aae2d02efeec8	0	306	W70_N40:5/5
+R-car-vario-nocost-017	stable	true	true	true	route|163|11192|7672|5ca32228920fe33f|80a81e136d606c21	0	839	W75_N35:163/163
+R-car-vario-nocost-018	stable	true	true	true	route|102|8003|5385|db9bccd03c219801|27c3c94006c221	0	606	W75_N35:102/102
+R-car-vario-nocost-019	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	231	-
+R-car-vario-nocost-020	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	367	-
+R-car-vario-nocost-021	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	444	-
+R-car-vario-nocost-022	stable	true	true	true	route|14|1001|334|8935c0aac4b1e3ac|81bae2251bf3015c	0	384	W70_N40:14/14
+R-car-vario-nocost-023	stable	true	true	true	route|88|4026|1114|c14721450841add0|5dbab2f08eb0a9a6	0	535	E170_S50:88/88
+R-car-vario-nocost-024	stable	true	true	true	route|108|9476|5065|26ce6a5761e7535|f46186486f4c348e	0	447	W70_N40:108/108
+R-car-vario-nocost-025	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	283	-
+R-car-vario-nocost-026	stable	true	true	true	route|770|49052|36236|828351056d68f70d|598f01ca50c2b944	0	973	W75_N35:770/770
+R-car-vario-nocost-027	stable	true	true	true	route|143|40814|8071|78b2c14b4667a6bf|d84900795e1742b8	0	600	W75_N35:143/143
+R-car-vario-nocost-028	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	267	-
+R-car-vario-nocost-029	stable	true	true	true	route|734|39843|28058|6e273be102e566a9|5ce6db3bc44f06a1	1	1590	W75_N40:734/734
+R-car-vario-nocost-030	stable	true	true	true	route|163|13774|10350|93881ff908a1a72b|1947d31f009b516d	0	447	W75_N40:163/163
+R-car-vario-nocost-031	stable	true	true	true	route|20|1158|337|9694473b547daec7|a777ebe287eb2082	0	597	E170_S50:20/20
+R-car-vario-nocost-032	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	296	-
+R-car-vario-nocost-033	stable	true	true	true	route|22|2352|934|b71845b479d70992|70aabd28f939e33e	0	508	W75_N35:22/22
+R-car-vario-nocost-034	stable	true	true	true	route|15|1157|433|46576c552fbc16f|fdf9bb7cff4db275	0	395	W70_N40:15/15
+R-car-vario-nocost-035	stable	true	true	true	route|575|36892|32107|e0f0e1fc5e74e58b|f28fc523dd2de0e2	10	5835	W75_N40:572/575
+R-car-vario-nocost-036	stable	true	true	true	route|397|35816|30821|cfef641c8e2db7ea|d72a5f34ad31f47f	0	906	W75_N35:397/397
+R-car-vario-nocost-037	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	415	-
+R-car-vario-nocost-038	stable	true	true	true	route|1244|71663|61580|c73ee2fbf6f7c2e|b3ff46d60d689e97	6	4847	W75_N40:1244/1244
+R-car-vario-nocost-039	stable	true	true	true	route|27|2424|753|ff1b1ea5749f98f4|7c2c287ead5b857b	0	775	W75_N40:27/27
+R-car-vario-nocost-040	stable	true	true	true	route|6|526|187|d9b31b343698c9ce|93fa972aea997a6f	0	387	W70_N40:6/6
+R-car-vario-nocost-041	stable	true	true	true	route|31|8704|560|10482a8cf75b241d|ed993ff64b7c7f09	0	292	W70_N40:31/31
+R-car-vario-nocost-042	stable	true	true	true	route|19|1511|561|d4d47872dd566688|1fa43f7f4cd90d7d	0	644	E170_S50:19/19
+R-car-vario-nocost-043	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	194	-
+R-car-vario-nocost-044	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	276	-
+R-car-vario-nocost-045	stable	true	true	true	route|146|10256|7381|d895093cbc3ddeab|6882661731f408b5	0	550	W70_N40:146/146
+R-car-vario-nocost-046	stable	true	true	true	route|44|3869|1360|a6a00832382cca03|124dc17fbdcce2d9	0	612	W75_N35:44/44
+R-car-vario-nocost-047	stable	true	true	true	route|46|3512|1490|8e335aa7d5bb1dd2|b92c9dd6def52073	0	474	W75_N40:46/46
+R-car-vario-nocost-048	stable	true	true	true	route|13|1151|262|ff2d16e029ddd0cf|32c73b518023f765	0	465	W70_N40:13/13
+R-car-vario-nocost-049	stable	true	true	true	route|32|2948|1294|55e789a28faca908|de09819e580286ee	0	370	W75_N40:32/32
+R-car-vario-nocost-050	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	481	-
+R-car-vario-nocost-051	stable	true	true	true	route|67|3332|1686|28222a7e8b3a0c16|e2337bc28735bb2a	0	499	W75_N35:67/67
+R-car-vario-nocost-052	stable	true	true	true	route|11|2062|725|7b15a8bebe88f740|a72134f9c299e50	0	462	W75_N35:11/11
+R-car-vario-nocost-053	stable	true	true	true	route|2|97|10|fb7a6c10f811be8|6d6f81e137b9fbea	0	394	W75_N35:2/2
+R-car-vario-nocost-054	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	579	-
+R-car-vario-nocost-055	stable	true	true	true	route|103|17434|2600|f5c570e89b1a25b4|13853345e32c8098	0	1185	W75_N40:103/103
+R-car-vario-nocost-056	stable	true	true	true	route|321|26674|17366|1269205bb88f8396|6d55af35d6b5014b	0	1316	W75_N35:211/211 W75_N40:110/110
+R-car-vario-nocost-057	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	512	-
+R-car-vario-nocost-058	stable	true	true	true	route|13|1636|204|becd6e6a4f1c6d9b|30fe96db6d9cdecf	0	322	W70_N40:13/13
+R-car-vario-nocost-059	stable	true	true	true	route|10|709|150|f67f20f28b330e7b|24dc090e6f8b0ec8	0	328	W70_N40:10/10
+R-car-vario-001	stable	true	true	true	route|17|2385|1041|60dddb487687fdfb|d4328791b8ca439	0	461	W75_N35:17/17
+R-car-vario-002	stable	true	true	true	route|4|401|62|fb9cb49a7ac8a609|b1d1f254dfa45702	0	425	E170_S50:4/4
+R-car-vario-003	stable	true	true	true	route|33|2228|1185|90acecf289850f0f|994d96a40f65ed7d	0	452	W75_N40:33/33
+R-car-vario-004	stable	true	true	true	route|25|11029|830|552a4eb60499e214|eafe90910c758695	0	428	E170_S50:25/25
+R-car-vario-005	stable	true	true	true	route|30|3381|1389|323556beaaf8ca8f|a1962af158ab2f65	0	722	W70_N40:30/30
+R-car-vario-006	stable	true	true	true	route|138|9179|7064|8485c4137bcf345f|69af7fdfeacf798d	0	499	W70_N40:138/138
+R-car-vario-007	stable	true	true	true	route|39|2856|1037|fc432b8324c7428|283368e97957eaff	0	575	W75_N40:39/39
+R-car-vario-008	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	787	-
+R-car-vario-009	stable	true	true	true	route|121|6775|3354|22c9c8fabb399185|51f434b251c2a605	0	654	E170_S50:121/121
+R-car-vario-010	stable	true	true	true	route|28|4773|2115|4a33717e16e01cdd|19d68d68e92f2657	0	422	E170_S50:28/28
+R-car-vario-011	stable	true	true	true	route|742|40647|31845|b7815972848ea788|e434527651af491a	4	3084	W75_N40:742/742
+R-car-vario-012	stable	true	true	true	route|26|2407|1320|78668482f3476a3b|2fe8619000a03994	0	476	W75_N40:26/26
+R-car-vario-013	stable	true	true	true	route|244|14385|8722|b7ecec8423909181|3aa41413719fdb68	0	972	W75_N40:244/244
+R-car-vario-014	stable	true	true	true	route|83|5766|3492|1b63de087b8f02be|87cbcd25ef2f0f9b	0	647	E170_S50:83/83
+R-car-vario-015	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	234	-
+R-car-vario-016	stable	true	true	true	route|223|13972|7757|99c8f7b9cca728f6|917b1b4f4bdfb28a	0	642	W75_N35:223/223
+R-car-vario-017	stable	true	true	true	route|388|26254|18317|a110df87f26962cb|c481a07bb1d029e1	0	1126	W75_N40:388/388
+R-car-vario-018	stable	true	true	true	route|41|3039|1356|c5f601bd685fa4c3|fcf1fbb5062cb443	0	466	W70_N40:41/41
+R-car-vario-019	stable	true	true	true	route|53|7844|4620|6cf2334510633504|f11ed50c87b0b2f4	0	615	W70_N40:53/53
+R-car-vario-020	stable	true	true	true	route|220|12387|6294|c0f017d85c8159dc|d14a74c223958031	0	942	E170_S50:220/220
+R-car-vario-021	stable	true	true	true	route|31|2790|1034|b024979959132719|ed48403de438df82	0	706	W75_N35:31/31
+R-car-vario-022	stable	true	true	true	route|109|3948|1785|3bc0108f63ec3d65|86cffe5182aee0dd	0	715	E170_S50:109/109
+R-car-vario-023	stable	true	true	true	route|1282|117389|98800|51b31d0e6bc13777|e50edda98a8a3682	11	7466	W75_N35:558/558 W75_N40:724/724
+R-car-vario-024	stable	true	true	true	route|192|10039|6756|7736b9ce3127ad6c|dc91b43d1f2cea8	0	999	W75_N35:192/192
+R-car-vario-025	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	482	-
+R-car-vario-026	stable	true	true	true	route|26|2035|671|3ab85a77df312f7f|7f533c8a7d9d627f	0	664	W75_N40:26/26
+R-car-vario-027	stable	true	true	true	route|36|2923|1084|de892da12ca0a792|1d3e34588907b170	0	528	W75_N35:36/36
+R-car-vario-028	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	244	-
+R-car-vario-029	stable	true	true	true	route|382|33688|24837|3e90ef86f20e9f72|1d85deb4ad143492	0	1016	W70_N40:382/382
+R-car-vario-030	stable	true	true	true	route|21|1836|795|c8092dce777030fb|4f22bfe9e5e27896	0	386	W75_N35:21/21
+R-car-vario-031	stable	true	true	true	route|861|81814|69272|9605726f95c8c95d|343b7f29736c6cac	0	1004	W70_N40:861/861
+R-car-vario-032	stable	true	true	true	route|53|2318|1298|aebcc8c988b8a347|4c709561a2669105	0	513	E170_S50:53/53
+R-car-vario-033	stable	true	true	true	route|132|7955|4928|bd9b2e5fa362868|18719062f9e5ebb8	0	511	W75_N40:132/132
+R-car-vario-034	stable	true	true	true	route|294|22103|16486|3d75e3bdef8f49c0|85cb81587144380c	3	2085	W75_N40:261/294
+R-car-vario-035	stable	true	true	true	route|308|29267|21857|2cc982b56e3505a7|4ab6dcb8eb50ce96	0	551	W70_N40:308/308
+R-car-vario-036	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	290	-
+R-car-vario-037	stable	true	true	true	route|681|43742|36066|b8527b489facccc6|d24b3f69a51a85e6	6	4429	W75_N40:681/681
+R-car-vario-038	stable	true	true	true	route|93|12540|6650|dd10e24ae4f60db5|c31d8919ff2f603d	0	1128	W75_N35:93/93
+R-car-vario-039	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	335	-
+R-car-vario-040	stable	true	true	true	route|29|1508|637|3357465c77a2283d|60ae8d62b2e88252	0	419	W70_N40:29/29
+R-car-vario-041	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	442	-
+R-car-vario-042	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	746	-
+R-car-vario-043	stable	true	true	true	route|7|367|161|edf264d00348b63b|479c11aa12c5b9de	0	431	W75_N35:7/7
+R-car-vario-044	stable	true	true	true	route|21|2615|1156|f5536062d320cddb|86a0e8431c6ecd39	0	344	W70_N40:21/21
+R-car-vario-045	stable	true	true	true	route|64|5405|2782|d71d5584156551dc|ec6fc543868bfebd	0	347	W70_N40:64/64
+R-car-vario-046	stable	true	true	true	route|196|16247|10796|78d8456dee044e0d|21de42927bd93c76	0	690	W75_N35:196/196
+R-car-vario-047	stable	true	true	true	route|99|9446|5900|62d298f2d4a44352|757fd45de72f1561	0	331	W70_N40:99/99
+R-car-vario-048	stable	true	true	true	route|804|177766|36953|8d3926a3de43e4ca|2cce3221e09edcac	0	377	E170_S50:804/804
+R-car-vario-049	stable	true	true	true	route|635|41479|33780|d948e3261f74ef77|a9fe81e3c51e2045	1	1529	W75_N40:635/635
+R-car-vario-050	stable	true	true	true	route|392|29304|19487|8ecc2018d065e860|40c232623725bcca	0	622	W70_N40:216/216 W75_N40:176/176
+R-car-vario-051	stable	true	true	true	route|31|2175|857|57c391d4ae2b572e|80b3ff1187f8e7e7	0	480	W75_N40:31/31
+R-car-vario-052	stable	true	true	true	route|1556|102775|91176|b5c61e9c32794c85|89e7e2302c603441	33	7270	W75_N40:1556/1556
+R-car-vario-053	stable	true	true	true	route|96|5106|2840|2759d0433f88f034|e1cdaa786ab7822f	0	524	W75_N35:96/96
+R-car-vario-054	stable	true	true	true	route|821|215187|49157|931fc6cea03e405d|364d3d4cd900c324	0	671	E170_S50:821/821
+R-car-vario-055	stable	true	true	true	route|1341|106865|95751|bb379329382b0d39|faaa63e8df9a1ce8	6	3494	W75_N40:1341/1341
+R-car-vario-056	stable	true	true	true	route|114|5471|2590|631e2e2f3df587e6|b0191c2a7b991cab	0	623	W75_N40:114/114
+R-car-vario-057	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	176	-
+R-car-vario-058	stable	true	true	true	route|81|11614|5741|eaea0c9e9f7613a|9708f0937c92ecce	0	383	W70_N40:81/81
+R-car-vario-059	stable	true	true	true	route|279|16796|10695|fcda8e1286f5e893|a2a908cd769a3837	0	426	E170_S50:279/279
+R-fastbike-asia-pacific-001	stable	true	true	true	route|150|10287|7387|cc157e494102610f|efe52de90f4088d3	0	555	W75_N35:150/150
+R-fastbike-asia-pacific-002	stable	true	true	true	route|11|982|122|1397b1499a593237|efe8105a663efc5f	0	617	W75_N40:11/11
+R-fastbike-asia-pacific-003	stable	true	true	true	route|47|2668|1916|99e9ed215c6cc053|9b6c3c039e69920f	0	377	W75_N35:47/47
+R-fastbike-asia-pacific-004	stable	true	true	true	route|24|970|707|65ccad9648eb08a3|695337d7da2616bf	0	334	W75_N40:24/24
+R-fastbike-asia-pacific-005	stable	true	true	true	route|18|978|281|b35fc21972185273|845ecfed43724d0	0	273	W70_N40:18/18
+R-fastbike-asia-pacific-006	stable	true	true	true	route|41|4286|3128|b988f5dbe06ce35|67962db9f85776c8	0	390	W75_N35:41/41
+R-fastbike-asia-pacific-007	stable	true	true	true	route|295|25480|20702|50031ba822f2612f|c81bbf59acd85c81	0	844	W75_N35:295/295
+R-fastbike-asia-pacific-008	stable	true	true	true	route|71|8145|1455|3d08b956fcba6228|14244b14bce2aaa0	0	529	E170_S50:71/71
+R-fastbike-asia-pacific-009	stable	true	true	true	route|448|27938|24299|84c7250c48ed1142|939bf256b2a3d764	0	1035	W75_N35:448/448
+R-fastbike-asia-pacific-010	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	376	-
+R-fastbike-asia-pacific-011	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	263	-
+R-fastbike-asia-pacific-012	stable	true	true	true	route|1579|135962|86625|cb7ba5988d9efcbd|c1c62dc427e8e5b	8	4551	W75_N40:1579/1579
+R-fastbike-asia-pacific-013	stable	true	true	true	route|62|2249|1201|1edee128d841588b|bd59a951038423b7	0	625	W75_N40:62/62
+R-fastbike-asia-pacific-014	stable	true	true	true	route|1231|145772|38787|68cdc286b7a6c56c|8cce3e6c8d933a3	0	791	W70_N40:1231/1231
+R-fastbike-asia-pacific-015	stable	true	true	true	route|207|21382|13689|880feba1ab7c429a|bd46b262ca82546f	0	706	E170_S50:207/207
+R-fastbike-asia-pacific-016	stable	true	true	true	route|14|2443|408|af187d49fbcb91c7|6a2d2307dcf1796a	0	526	E170_S50:14/14
+R-fastbike-asia-pacific-017	stable	true	true	true	route|28|2556|1189|1e1302200666fcce|d56caee57180abd2	0	390	E170_S50:28/28
+R-fastbike-asia-pacific-018	stable	true	true	true	route|142|12475|9869|c44a6a3309c19683|e33649a3ac9ea1a	0	359	W70_N40:142/142
+R-fastbike-asia-pacific-019	stable	true	true	true	route|649|30404|23022|2a461c92fe7e5cbd|f9d9fabe770e27aa	0	859	E170_S50:649/649
+R-fastbike-asia-pacific-020	stable	true	true	true	route|1110|108930|46112|16704b30013d3237|6b68af6aef5c520f	0	1413	E170_S50:1110/1110
+R-fastbike-asia-pacific-021	stable	true	true	true	route|636|99144|36753|7929a41ca718bfd6|7ef3f8b03e5fa902	0	957	E170_S50:636/636
+R-fastbike-asia-pacific-022	stable	true	true	true	route|3|27|24|da9432d82ec9b920|2f4a04daca760b9d	0	299	W70_N40:3/3
+R-fastbike-asia-pacific-023	stable	true	true	true	route|6|230|105|52a2b3dfd6f7a1a|6c88ad8b10b068a2	0	241	W75_N40:6/6
+R-fastbike-asia-pacific-024	stable	true	true	true	route|785|48159|42971|6303b141f59c30b2|9106f28c126eafc2	1	912	W75_N35:785/785
+R-fastbike-asia-pacific-025	stable	true	true	true	route|50|4515|2146|2bbd3bf19e1a7832|2695bf3ca53f5e23	0	306	W70_N40:50/50
+R-fastbike-asia-pacific-026	stable	true	true	true	route|42|2019|989|8191ba872edfd3ec|1279d340c5c0610d	0	418	W75_N40:42/42
+R-fastbike-asia-pacific-027	stable	true	true	true	route|473|23341|17659|ef3f04cdac4c1abc|5b2a738cad3187af	3	1796	W75_N40:473/473
+R-fastbike-asia-pacific-028	stable	true	true	true	route|10|506|242|e2650e4e0555f47d|e8799385ee9df9bc	0	261	W75_N40:10/10
+R-fastbike-asia-pacific-029	stable	true	true	true	route|248|18572|4943|d5e9dbff78ec8b9e|1edd1059c0d81199	0	900	E170_S50:248/248
+R-fastbike-asia-pacific-030	stable	true	true	true	route|18|1972|513|fd58ecf91ad3c86a|af7a45eeaaadc8ae	0	560	E170_S50:18/18
+R-fastbike-asia-pacific-031	stable	true	true	true	route|15|717|503|87584861723b8b97|e5dcd872cca9b319	0	240	W75_N40:15/15
+R-fastbike-asia-pacific-032	stable	true	true	true	route|191|9925|7364|e0852d9cdb2198ac|a2aafbc1c1be096e	0	886	W75_N40:191/191
+R-fastbike-asia-pacific-033	stable	true	true	true	route|15|630|367|bd1ffd2129e232aa|2e18feb1c82a1cc0	0	334	W75_N35:15/15
+R-fastbike-asia-pacific-034	stable	true	true	true	route|51|22333|2151|1d7a04486c32558a|480917632496c818	0	440	W75_N35:51/51
+R-fastbike-asia-pacific-035	stable	true	true	true	route|69|4093|1127|794ca34ebb947f95|1ba5534f921137f8	0	541	W75_N40:69/69
+R-fastbike-asia-pacific-036	stable	true	true	true	route|29|1974|1273|e745dcdeb2899a99|24dd9e03b56b50ce	0	300	W70_N40:29/29
+R-fastbike-asia-pacific-037	stable	true	true	true	route|278|25251|20985|c8c7ec340a84fe42|880cc0794197cb25	0	1193	W75_N35:278/278
+R-fastbike-asia-pacific-038	stable	true	true	true	route|1412|81373|66595|b91bab9c83ff9c29|1bba86654dd2d4e1	7	3721	W75_N40:1412/1412
+R-fastbike-asia-pacific-039	stable	true	true	true	route|25|1677|1139|2fa41b3bac776c41|1cf9107e4c72bd84	0	291	W70_N40:25/25
+R-fastbike-asia-pacific-040	stable	true	true	true	route|5|514|279|10e115544309ae34|f94f9a5cc7da1555	0	444	W75_N40:5/5
+R-fastbike-asia-pacific-041	stable	true	true	true	route|134|7887|5935|408db6f78acaa758|a53a2dc0821ead7a	0	451	W75_N40:134/134
+R-fastbike-asia-pacific-042	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	409	-
+R-fastbike-asia-pacific-043	stable	true	true	true	route|103|6290|3514|36a5f3a7e7aa040d|cf1765ba93f7b350	1	992	W75_N40:103/103
+R-fastbike-asia-pacific-044	stable	true	true	true	route|41|3097|2750|9f2c971620aec8f1|d2b849bbefa03052	0	334	E170_S50:41/41
+R-fastbike-asia-pacific-045	stable	true	true	true	route|2|232|21|e179cc83f9404237|c91a93706524bfa	0	351	E170_S50:2/2
+R-fastbike-asia-pacific-046	stable	true	true	true	route|4|739|194|7c07d535d92c64c|e532c5d0f4b3ddde	0	230	W75_N35:4/4
+R-fastbike-asia-pacific-047	stable	true	true	true	route|422|25298|20887|4f2f7b2346abd8d9|1059757a521a6472	0	800	W75_N40:422/422
+R-fastbike-asia-pacific-048	stable	true	true	true	route|735|65460|49216|2bd0d26bdcae80ad|3ce400e35e913fa1	0	957	W70_N40:131/131 W75_N40:604/604
+R-fastbike-asia-pacific-049	stable	true	true	true	route|16|854|363|266b699dfbfd31e5|b39b4204f1f676ba	0	401	W75_N35:10/16
+R-fastbike-asia-pacific-050	stable	true	true	true	route|7|242|102|21026c6e5befd945|491897902d1bfa41	0	246	W75_N35:7/7
+R-fastbike-asia-pacific-051	stable	true	true	true	route|2742|127636|98034|2e484a269ac9131|5ec189968e7fb9a6	41	9483	W75_N40:2742/2742
+R-fastbike-asia-pacific-052	stable	true	true	true	route|67|15026|7766|2cf033d4e8f70641|7edf194677efd7b	0	318	E170_S50:67/67
+R-fastbike-asia-pacific-053	stable	true	true	true	route|1201|50704|36655|a2c9d95d219467fa|7b5353164bd8cc06	6	1966	W75_N40:1201/1201
+R-fastbike-asia-pacific-054	stable	true	true	true	route|55|5164|3039|e30bf2815e25c99a|8e14796dbb86e67a	0	404	E170_S50:55/55
+R-fastbike-asia-pacific-055	stable	true	true	true	route|10|701|400|9ad9cfc9a7d0405f|6a33f5fd469ff447	0	280	W75_N35:10/10
+R-fastbike-asia-pacific-056	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	318	-
+R-fastbike-asia-pacific-057	stable	true	true	true	route|245|13161|6403|846a67fcc326a7ad|69524a633ab5d113	3	2164	W75_N40:245/245
+R-fastbike-asia-pacific-058	stable	true	true	true	route|4|1158|919|5b7c5b2ea79b1b5a|f9bef2ef699fff00	0	344	E170_S50:4/4
+R-fastbike-asia-pacific-059	stable	true	true	true	route|12|1114|753|278bd640cf50a376|ab6be397cafd7d00	0	297	W75_N35:12/12
+R-fastbike-lowtraffic-001	stable	true	true	true	route|37|5085|2053|5663f6652918e358|77324c026f9d4da9	0	364	W75_N35:37/37
+R-fastbike-lowtraffic-002	stable	true	true	true	route|30|2119|973|9d4b3715aec95ddb|b247bf6e0fc990b3	0	430	W70_N40:30/30
+R-fastbike-lowtraffic-003	stable	true	true	true	route|25|2059|195|f4e2e641e60cc761|7b1c147081f1b372	0	336	W70_N40:25/25
+R-fastbike-lowtraffic-004	stable	true	true	true	route|22|1461|790|53b87c8e65080d50|de2bc7aba3f5220f	0	353	W75_N40:22/22
+R-fastbike-lowtraffic-005	stable	true	true	true	route|55|14187|3875|5e6243e5b1e3868d|9c93121ded799ef1	0	541	E170_S50:55/55
+R-fastbike-lowtraffic-006	stable	true	true	true	route|453|32594|22555|31f523d44031ef9a|8820c7cefd1a11b	0	752	E170_S50:453/453
+R-fastbike-lowtraffic-007	stable	true	true	true	route|28|2256|1882|8f71d6756e8be496|7a707b93c5504c3c	0	303	W70_N40:28/28
+R-fastbike-lowtraffic-008	stable	true	true	true	route|145|16221|5993|c8ba6580533b2bc9|847b23cba07a97b	0	405	W75_N35:145/145
+R-fastbike-lowtraffic-009	stable	true	true	true	route|101|5381|1879|269f4c38da31c8f2|2ea643fff04c4d1d	0	711	E170_S50:101/101
+R-fastbike-lowtraffic-010	stable	true	true	true	route|24|1596|717|a691e40436ad2802|f2211bdf4fead415	0	781	E170_S50:24/24
+R-fastbike-lowtraffic-011	stable	true	true	true	route|8|391|214|5d568c5fb4932b46|4f0603f0cc0e9f9d	0	278	W70_N40:8/8
+R-fastbike-lowtraffic-012	stable	true	true	true	route|126|6478|2877|41be52663b3d94c2|ac697f5c985d8531	0	617	W75_N35:126/126
+R-fastbike-lowtraffic-013	stable	true	true	true	route|11|478|211|963c5df6d34d15c9|45277b2c5cdd4de0	0	324	W75_N35:11/11
+R-fastbike-lowtraffic-014	stable	true	true	true	route|43|3193|1277|828aa1ebf1914b23|ad56674347e9dca9	0	380	W75_N35:43/43
+R-fastbike-lowtraffic-015	stable	true	true	true	route|754|73170|26807|9268cd9db9eda8da|e8fcf7ec837089b	0	1336	E170_S50:754/754
+R-fastbike-lowtraffic-016	stable	true	true	true	route|101|21958|2752|f71f4f7d45722773|99c0cdb18004453b	0	271	W70_N40:101/101
+R-fastbike-lowtraffic-017	stable	true	true	true	route|78|4678|3524|807712f5058548f5|16e4b114f9ba2329	0	463	W75_N40:78/78
+R-fastbike-lowtraffic-018	stable	true	true	true	route|34|2705|854|1aafa1198b346fd7|412924daf6d6da0f	0	457	W75_N40:34/34
+R-fastbike-lowtraffic-019	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	353	-
+R-fastbike-lowtraffic-020	stable	true	true	true	route|27|3895|1680|1b96da213fbdfeae|9abe8e629370cf93	0	370	W75_N35:27/27
+R-fastbike-lowtraffic-021	stable	true	true	true	route|438|29866|19157|470743859efac574|97d1b15a247f1032	0	845	W75_N40:438/438
+R-fastbike-lowtraffic-022	stable	true	true	true	route|11|716|258|70691adb2767176d|3116022b650905e5	0	339	W75_N35:11/11
+R-fastbike-lowtraffic-023	stable	true	true	true	route|164|14038|4976|8572eb64deca7a79|b40f5a62de29f95b	0	518	E170_S50:164/164
+R-fastbike-lowtraffic-024	stable	true	true	true	route|8|797|281|9890425d5773245f|b59121502b8ce4b0	0	276	W75_N35:8/8
+R-fastbike-lowtraffic-025	stable	true	true	true	route|513|62874|40718|535bc468783c3aef|7f08db6e893e499d	0	802	W70_N40:232/232 W75_N40:281/281
+R-fastbike-lowtraffic-026	stable	true	true	true	route|388|42962|30275|c6c0e81e63c9e022|9115c09aea0f9e18	0	890	W70_N40:388/388
+R-fastbike-lowtraffic-027	stable	true	true	true	route|1111|111050|29693|7b56b0870e36221|c3451e8a4da25293	0	1392	E170_S50:1111/1111
+R-fastbike-lowtraffic-028	stable	true	true	true	route|1854|193115|126701|3cabdf6f0cf55ce8|b2d80ec1bb5008b4	0	1378	E170_S50:1854/1854
+R-fastbike-lowtraffic-029	stable	true	true	true	route|181|16796|3982|e16249e46d838698|2d85499eee8666b5	0	567	W75_N40:181/181
+R-fastbike-lowtraffic-030	stable	true	true	true	route|25|1697|1345|54d6f881dff1992e|f6683169be0af2fd	0	223	W75_N35:25/25
+R-fastbike-lowtraffic-031	stable	true	true	true	route|193|6172|3399|4ac34c4997455826|3a8122649e3f91e6	0	722	E170_S50:193/193
+R-fastbike-lowtraffic-032	stable	true	true	true	route|169|13068|10874|61d1892c1e6b9414|34821489b49b7681	0	356	W70_N40:169/169
+R-fastbike-lowtraffic-033	stable	true	true	true	route|82|9235|3927|64a999a170272263|3196ef59363f4368	0	493	W75_N40:82/82
+R-fastbike-lowtraffic-034	stable	true	true	true	route|10|705|357|ca520267519ec55|c05b05807d3973e6	0	355	W75_N40:10/10
+R-fastbike-lowtraffic-035	stable	true	true	true	route|15|1770|1376|919e27993093b267|bbde63be9b063a5e	0	244	W70_N40:15/15
+R-fastbike-lowtraffic-036	stable	true	true	true	route|421|24430|10729|f3686e73aa7ec2df|3903e7326daf897d	0	987	E170_S50:421/421
+R-fastbike-lowtraffic-037	stable	true	true	true	route|177|13409|9607|a9c53ffc80a9f465|2276105d4937516	0	507	W70_N40:177/177
+R-fastbike-lowtraffic-038	stable	true	true	true	route|147|14042|7466|82d30b1d5e9826d0|2637f8dfde2fe6b0	0	554	W75_N40:147/147
+R-fastbike-lowtraffic-039	stable	true	true	true	route|8|902|530|6da826e88fad95ac|dd67e2aff2460629	0	338	W75_N40:8/8
+R-fastbike-lowtraffic-040	stable	true	true	true	route|1449|97719|60504|fcd4e3044ebb9f0b|d07981e4974b8b90	21	6508	W75_N40:1449/1449
+R-fastbike-lowtraffic-041	stable	true	true	true	route|185|9015|5097|b01f8dde8531587b|d64ab1de06dae403	2	1091	W75_N40:185/185
+R-fastbike-lowtraffic-042	stable	true	true	true	route|71|5961|1610|15b83ce94da176a2|a705ddaadf8f9e4c	0	482	W75_N40:71/71
+R-fastbike-lowtraffic-043	stable	true	true	true	route|9|600|361|20106b4f433196ac|cfa59e420ba4a456	0	309	W75_N35:9/9
+R-fastbike-lowtraffic-044	stable	true	true	true	route|1835|100529|66273|b2aa0e7664db01b6|49cc5373ecb03250	12	4688	W75_N40:1835/1835
+R-fastbike-lowtraffic-045	stable	true	true	true	route|160|41530|3200|60f6153ac487796a|361851340796acfc	0	303	W70_N40:160/160
+R-fastbike-lowtraffic-046	stable	true	true	true	route|34|23665|4810|abdbe66e15ee2b38|aa95c9b42a449ea9	0	409	W75_N40:34/34
+R-fastbike-lowtraffic-047	stable	true	true	true	route|186|9451|5048|5f77fdbae0a67911|4dab87efda234206	0	740	E170_S50:184/186
+R-fastbike-lowtraffic-048	stable	true	true	true	route|272|28260|19687|42ae97c58456f5bd|f3e710a634106a3e	0	445	W70_N40:272/272
+R-fastbike-lowtraffic-049	stable	true	true	true	route|460|88018|14972|27fd9b83a22c2ddb|a4ebdccf01f96ea4	0	511	W70_N40:460/460
+R-fastbike-lowtraffic-050	stable	true	true	true	route|530|34485|27513|6e51adb3e42de59|18574f8a1736f673	0	847	W75_N35:530/530
+R-fastbike-lowtraffic-051	stable	true	true	true	route|135|7458|3570|3f0b9fb239309e11|4f35f58a64d74a83	0	495	W75_N40:135/135
+R-fastbike-lowtraffic-052	stable	true	true	true	route|79|4496|3601|2cc70bfb2cabaaf9|e5b101f4f8686513	0	443	W75_N35:79/79
+R-fastbike-lowtraffic-053	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	282	-
+R-fastbike-lowtraffic-054	stable	true	true	true	route|67|2889|2073|a3521161e732a80b|e470595f8d309167	0	331	W75_N35:67/67
+R-fastbike-lowtraffic-055	stable	true	true	true	route|2836|160487|94519|b99c40a34bf482cd|59b3f9af29a872a7	36	7286	W75_N40:2836/2836
+R-fastbike-lowtraffic-056	stable	true	true	true	route|229|10729|5296|648d0de4a1fdf384|370719b4799a38e2	0	803	E170_S50:229/229
+R-fastbike-lowtraffic-057	stable	true	true	true	route|55|4607|2054|724cc6b1220412a|bbc8bb4f40a3d1e9	0	274	W70_N40:55/55
+R-fastbike-lowtraffic-058	stable	true	true	true	route|3|69|58|4105066216189c0b|641c4bb0496f0d35	0	324	W75_N35:3/3
+R-fastbike-lowtraffic-059	stable	true	true	true	route|101|8080|5389|30fb52af9523dc87|777682feb61daa8d	0	622	W75_N35:101/101
+R-fastbike-verylowtraffic-001	stable	true	true	true	route|12|3853|297|bcea861778870eb3|f91e0e12abbb8c81	0	283	W75_N35:12/12
+R-fastbike-verylowtraffic-002	stable	true	true	true	route|22|935|681|9915c577751d6c03|54a8de215a4a47a8	0	461	W75_N40:22/22
+R-fastbike-verylowtraffic-003	stable	true	true	true	route|832|35722|21748|ae17cc3e22eebe74|89b28a140a7a112d	7	2571	W75_N40:832/832
+R-fastbike-verylowtraffic-004	stable	true	true	true	route|141|9719|2475|94a469a35ab6dc41|97dbc4d62ed881b6	0	521	E170_S50:141/141
+R-fastbike-verylowtraffic-005	stable	true	true	true	route|170|10423|3732|3d9a758f6915f41a|510780d5aa71e437	0	643	E170_S50:170/170
+R-fastbike-verylowtraffic-006	stable	true	true	true	route|770|69584|25670|2492e083ccf6508a|5421f9ae97a953ff	36	5556	W75_N40:770/770
+R-fastbike-verylowtraffic-007	stable	true	true	true	route|236|14079|7173|5c8e431f4f1adbf9|65c83a66369ebaeb	8	1776	W75_N40:236/236
+R-fastbike-verylowtraffic-008	stable	true	true	true	route|7|2158|177|51bc0ab0af3208f7|969885e777167389	0	422	E170_S50:7/7
+R-fastbike-verylowtraffic-009	stable	true	true	true	route|46|15423|2406|d8dc11fc79ddd86d|cfac2ddac88f27b2	0	390	W75_N35:46/46
+R-fastbike-verylowtraffic-010	stable	true	true	true	route|619|36027|23697|1cee8a1556eb39b1|9eefbfe6572e8142	4	1640	W75_N40:619/619
+R-fastbike-verylowtraffic-011	stable	true	true	true	route|1465|245738|114443|aceed70d41b9b840|b02a183118c6a6b6	3	3156	W70_N40:1465/1465
+R-fastbike-verylowtraffic-012	stable	true	true	true	route|40|4876|3467|b8e39b88db7b787d|27015e20a31c613a	0	329	W70_N40:40/40
+R-fastbike-verylowtraffic-013	stable	true	true	true	route|1625|264203|92285|46116d6757d53565|4af773f6064e4723	0	508	E170_S50:1625/1625
+R-fastbike-verylowtraffic-014	stable	true	true	true	route|575|247139|36004|a7f4143a08cfc993|2162ea36cdd7bae7	62	10225	W75_N35:575/575
+R-fastbike-verylowtraffic-015	stable	true	true	true	route|1395|96051|81267|1b61bcfc19e39419|c3806555fc3f16a5	3	1526	W70_N40:83/83 W75_N40:1312/1312
+R-fastbike-verylowtraffic-016	stable	true	true	true	route|16|713|303|5fd615b03e5fd57|674a8622372d9820	0	314	W75_N40:16/16
+R-fastbike-verylowtraffic-017	stable	true	true	true	route|87|6357|4765|bc5bfed82eb23e89|c23c2e30f7ebf40d	0	398	W75_N35:87/87
+R-fastbike-verylowtraffic-018	stable	true	true	true	route|36|3501|1418|90b51ac1b9599580|41c362e1c120009b	0	310	E170_S50:36/36
+R-fastbike-verylowtraffic-019	stable	true	true	true	route|206|10787|8109|9a4d0552462de2|b747036df3c7caa5	0	368	W75_N35:206/206
+R-fastbike-verylowtraffic-020	stable	true	true	true	route|22|1486|840|82229842b8ee2d8b|acad2edbf2da1db0	0	322	W75_N35:22/22
+R-fastbike-verylowtraffic-021	stable	true	true	true	route|34|33490|8323|ade768afc6ac4760|11d95d529c4fb493	0	395	E170_S50:34/34
+R-fastbike-verylowtraffic-022	stable	true	true	true	route|97|4008|2998|8fb3c2f0d5d1abbe|4043859a1bb58c93	0	399	W75_N35:97/97
+R-fastbike-verylowtraffic-023	stable	true	true	true	route|320|20204|16323|e081e6634f77fcc6|b89fd1c740a63ee5	0	658	W75_N40:320/320
+R-fastbike-verylowtraffic-024	stable	true	true	true	route|52|2030|1329|1499963ad2d982be|edc87bfb4346c17a	0	516	W75_N40:52/52
+R-fastbike-verylowtraffic-025	stable	true	true	true	route|291|190911|8337|9abffde235a0979e|807985dd4078564f	0	1102	E170_S50:291/291
+R-fastbike-verylowtraffic-026	stable	true	true	true	route|188|27475|6161|3ba4264fc4705e57|5b2cb5313db04ef4	0	870	E170_S50:188/188
+R-fastbike-verylowtraffic-027	stable	true	true	true	route|1262|67868|44789|2c44fbbd651844b1|d5a59a5bea66f6	11	4213	W75_N40:1262/1262
+R-fastbike-verylowtraffic-028	stable	true	true	true	route|31|1778|1151|33af059af6ec5d8d|bc2cff51adb26789	0	220	W70_N40:31/31
+R-fastbike-verylowtraffic-029	stable	true	true	true	route|22|26883|266|1da7bd926634c5f0|1d5d11253f3cc92f	0	291	W70_N40:22/22
+R-fastbike-verylowtraffic-030	stable	true	true	true	route|98|6350|5122|a53eeb1e615a697c|f9e32a9d8a319a46	0	309	W70_N40:98/98
+R-fastbike-verylowtraffic-031	stable	true	true	true	route|716|50070|39821|b592dfc2f76e0847|b09ed62f5376e323	1	986	W75_N35:716/716
+R-fastbike-verylowtraffic-032	stable	true	true	true	route|51|2674|2121|7fd254057103900e|c9b4278b9f28f76f	0	285	W75_N35:51/51
+R-fastbike-verylowtraffic-033	stable	true	true	true	route|258|17992|11413|3a5031c5cdd53acd|fd6a866507b94592	0	773	W75_N35:182/182 W75_N40:76/76
+R-fastbike-verylowtraffic-034	stable	true	true	true	route|31|4093|363|cf095d839819b3c7|f36e0955fb00562d	0	608	E170_S50:31/31
+R-fastbike-verylowtraffic-035	stable	true	true	true	route|170|16124|5788|88144dc00dda7a1|7238ab896ed4e661	0	705	E170_S50:170/170
+R-fastbike-verylowtraffic-036	stable	true	true	true	route|19|1920|1162|c8e333cdfe1168e6|be3842efef8ae9c6	0	372	W75_N35:19/19
+R-fastbike-verylowtraffic-037	stable	true	true	true	route|207|9635|6778|58049bc467065585|2c118b73da360680	0	696	W75_N40:207/207
+R-fastbike-verylowtraffic-038	stable	true	true	true	route|56|2343|1271|127b105e39a1fe78|d7d57c95fcb30ef9	0	437	W70_N40:56/56
+R-fastbike-verylowtraffic-039	stable	true	true	true	route|12|854|614|e32b035ae27a08d|b6cb8ded59b44778	0	245	W70_N40:12/12
+R-fastbike-verylowtraffic-040	stable	true	true	true	route|32|27282|538|9b9e2874d6a99350|5bd7e30e1deb7c1d	0	245	E170_S50:32/32
+R-fastbike-verylowtraffic-041	stable	true	true	true	route|1135|348746|33609|476c0a6355400d41|5f8a4ab8dc745692	2	1198	E170_S50:1135/1135
+R-fastbike-verylowtraffic-042	stable	true	true	true	route|766|66811|44746|b0110685b84127ca|c0473f843dd28f09	3	1656	W75_N35:221/221 W75_N40:545/545
+R-fastbike-verylowtraffic-043	stable	true	true	true	route|10|11315|131|a6fff3592f4144a1|510d6c5a568a6c68	0	787	W75_N40:10/10
+R-fastbike-verylowtraffic-044	stable	true	true	true	route|780|107546|88633|7fa8e4164015ec96|8f4979c399893683	0	890	W70_N40:780/780
+R-fastbike-verylowtraffic-045	stable	true	true	true	route|2162|273558|76061|662462d990cecdec|23fa2aae5f673840	0	1267	E170_S50:2162/2162
+R-fastbike-verylowtraffic-046	stable	true	true	true	route|597|50339|25056|56635d8c4bff6541|fb72d9f8ce422371	1	1697	W75_N35:237/237 W75_N40:360/360
+R-fastbike-verylowtraffic-047	stable	true	true	true	route|56|2298|1622|fbef17aac6a9d97f|58c9b8c7cbe5e77a	0	438	W75_N40:56/56
+R-fastbike-verylowtraffic-048	stable	true	true	true	route|157|116910|9699|6b728d21c4a67652|22f0ddb3b950d89d	1	975	W70_N40:157/157
+R-fastbike-verylowtraffic-049	stable	true	true	true	route|100|71673|4141|b22da1bca04a1db6|d4400646a6692beb	4	2027	W75_N35:100/100
+R-fastbike-verylowtraffic-050	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	222	-
+R-fastbike-verylowtraffic-051	stable	true	true	true	route|958|96564|85105|be83c5149e8bd74c|f12ae3ce37af44c3	4	2204	W75_N35:958/958
+R-fastbike-verylowtraffic-052	stable	true	true	true	route|953|85865|64157|eaf9d8c1ac69e556|ac27ae46424d3bb0	1	720	W70_N40:953/953
+R-fastbike-verylowtraffic-053	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	317	-
+R-fastbike-verylowtraffic-054	stable	true	true	true	route|144|7591|6435|2243ebcd1a948a3d|42d13efd9d7f7949	0	503	W75_N35:144/144
+R-fastbike-verylowtraffic-055	stable	true	true	true	route|151|9108|7439|fa6de84f19e00c71|ccab67be9df7af74	0	298	W70_N40:151/151
+R-fastbike-verylowtraffic-056	stable	true	true	true	route|195|71214|4754|3c5c7904becec25c|82ba4740919f45f1	15	3741	W75_N40:195/195
+R-fastbike-verylowtraffic-057	stable	true	true	true	route|97|20109|2069|ab688b8043285c42|e68092e3a7d3074b	0	1138	E170_S50:97/97
+R-fastbike-verylowtraffic-058	stable	true	true	true	route|1668|138899|99808|4154a851419fc7f4|a4ecc8b95f8db7ad	12	4372	W75_N35:1668/1668
+R-fastbike-verylowtraffic-059	stable	true	true	true	route|10|2940|536|efc7dcb66a435bf2|f4d4be6ebe81d59e	0	324	W70_N40:10/10
+R-fastbike-001	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	345	-
+R-fastbike-002	stable	true	true	true	route|31|2812|649|940be338bb89e602|d87c3ac8ed65b379	0	819	E170_S50:31/31
+R-fastbike-003	stable	true	true	true	route|50|10916|2192|a375c3e381279b8c|c58e1f39f618b03	0	840	W75_N35:50/50
+R-fastbike-004	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	345	-
+R-fastbike-005	stable	true	true	true	route|45|27782|2756|2e45865e77e326f8|755939e348e89d6a	0	390	E170_S50:45/45
+R-fastbike-006	stable	true	true	true	route|276|16067|11262|2401d2416ac29c12|d82ab4f7ac930f66	0	899	W75_N35:276/276
+R-fastbike-007	stable	true	true	true	route|1040|64929|46207|7e3fc61d2837c83e|d535f3f3d897e50	1	1391	W75_N35:1040/1040
+R-fastbike-008	stable	true	true	true	route|334|58526|12985|ee810008596396ff|b4f33398023043a4	11	5109	W75_N40:322/334
+R-fastbike-009	stable	true	true	true	route|1|5|0|b588d2ea087ab59b|8dc7407b57bcdef	0	224	W75_N35:1/1
+R-fastbike-010	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	493	-
+R-fastbike-011	stable	true	true	true	route|112|5660|4173|5b2d5d57d0b343ee|696baddbe7cb95e	0	742	W75_N35:112/112
+R-fastbike-012	stable	true	true	true	route|1638|76843|60406|680848490afb73ba|f7ed3c88b22b4830	4	3307	W75_N40:1638/1638
+R-fastbike-013	stable	true	true	true	route|26|1887|822|27c1ae282650b83d|95ecee3b4fd9f3eb	0	455	E170_S50:26/26
+R-fastbike-014	stable	true	true	true	route|42|846|690|773fc5c652057593|5715a6364badf3c	0	326	W75_N35:42/42
+R-fastbike-015	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	345	-
+R-fastbike-016	stable	true	true	true	route|1952|114624|96527|87b0e4fca9258d0c|7deea9091abd893d	19	7589	W75_N35:214/214 W75_N40:1738/1738
+R-fastbike-017	stable	true	true	true	route|5|270|88|73a900236e4a81ee|dae25e428f97618f	0	375	W70_N40:5/5
+R-fastbike-018	stable	true	true	true	route|5|390|121|946d8625e255a1a5|87afb1d0e0189b74	0	409	W75_N35:5/5
+R-fastbike-019	stable	true	true	true	route|28|1419|694|557fdd0adba45e54|e4de109f27d57aa7	0	498	W75_N35:28/28
+R-fastbike-020	stable	true	true	true	route|462|48479|26813|e7c9e6bd52cb0b67|ed9b530a4dbde868	1	1176	W75_N35:462/462
+R-fastbike-021	stable	true	true	true	route|9|2283|740|da890d1742a4beae|3cf8b7d7cffeca41	0	442	W70_N40:3/3 W75_N40:6/6
+R-fastbike-022	stable	true	true	true	route|151|14217|2260|8981a142495b8d0e|b87e7a843e5f8d47	0	380	W70_N40:151/151
+R-fastbike-023	stable	true	true	true	route|242|23055|15700|cd5ef8caca145e5e|f6bb485e2732a23f	0	458	W70_N40:242/242
+R-fastbike-024	stable	true	true	true	route|355|51791|28839|c69966f8d6bc6ca9|1f51bc5679be1347	1	1392	W75_N35:355/355
+R-fastbike-025	stable	true	true	true	route|19|1915|1500|fb272d755e471f96|fa5edfd0fce88486	0	530	E170_S50:19/19
+R-fastbike-026	stable	true	true	true	route|109|5554|3540|592f2d0be1bd8bd7|12c40af76cd8a66	0	531	W75_N40:109/109
+R-fastbike-027	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	310	-
+R-fastbike-028	stable	true	true	true	route|2097|81225|66700|a3ef7d9e5410ac1e|8ed427966302b771	14	8117	W75_N40:2097/2097
+R-fastbike-029	stable	true	true	true	route|48|4896|1840|f0aa2cc3103b0596|d590d74d7a32b293	0	511	W70_N40:48/48
+R-fastbike-030	stable	true	true	true	route|89|3758|2738|8476b594d3c9d31d|77c79ba4239afa40	0	618	W75_N40:89/89
+R-fastbike-031	stable	true	true	true	route|1604|409805|50372|5ecc972c8c09f9a1|bb74d49b53372493	0	1885	E170_S50:1604/1604
+R-fastbike-032	stable	true	true	true	route|18|930|482|925be6ef580a3268|253ac89cfba1eb83	0	439	W75_N35:18/18
+R-fastbike-033	stable	true	true	true	route|26|12789|1271|969360211542d258|7cf777023b143351	0	435	E170_S50:26/26
+R-fastbike-034	stable	true	true	true	route|220|10856|6096|23d0d384a5860991|4a981286ec492264	0	579	E170_S50:220/220
+R-fastbike-035	stable	true	true	true	route|343|16299|13303|a66093ed13a5e390|9afbb486afbb1e6c	0	871	W75_N35:343/343
+R-fastbike-036	stable	true	true	true	route|46|2193|1488|21d6bbf200d11379|5cd1a84ce969fe4e	0	679	W75_N40:46/46
+R-fastbike-037	stable	true	true	true	route|143|4814|2757|838d22f68fe08e49|72f72d174ae0af0	0	642	E170_S50:143/143
+R-fastbike-038	stable	true	true	true	route|423|50318|34256|63d125e054ba4de2|eb1337f756987dc6	1	1618	W75_N35:423/423
+R-fastbike-039	stable	true	true	true	route|76|4426|3382|8bc63f7c2456481|ff07edd3a50c24a6	0	664	W75_N40:76/76
+R-fastbike-040	stable	true	true	true	route|317|22622|16498|bb118794b21b463e|8b615711760b1494	1	1186	W75_N35:317/317
+R-fastbike-041	stable	true	true	true	route|8|1092|176|6309067962d65fcc|30f5c91b155ba32b	0	394	E170_S50:8/8
+R-fastbike-042	stable	true	true	true	route|26|2109|1316|3afd30911daf259a|acb8cb571387d514	0	421	W75_N35:26/26
+R-fastbike-043	stable	true	true	true	route|92|5934|4922|8cceb86e65440800|ed9d198366e526b4	0	383	E170_S50:92/92
+R-fastbike-044	stable	true	true	true	route|25|2367|1643|32c871247ae041c6|1d2def83aad2fac6	0	337	W75_N35:25/25
+R-fastbike-045	stable	true	true	true	route|323|28284|21915|b8029cf8afbe3039|fa43baf6993cf11d	0	329	W70_N40:323/323
+R-fastbike-046	stable	true	true	true	route|635|60993|17892|884cc3bc9335ae72|97030db7ff946f2e	0	409	E170_S50:635/635
+R-fastbike-047	stable	true	true	true	route|73|1472|1080|901b21e27f553f18|b8c1a298b540d02f	0	304	E170_S50:73/73
+R-fastbike-048	stable	true	true	true	route|73|3344|1841|4dec939f3a874c6c|4603eaa3c480b4ac	0	322	W75_N40:73/73
+R-fastbike-049	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	383	-
+R-fastbike-050	stable	true	true	true	route|160|4518|3703|593a5402f09df466|fb6b1261ad8c20d8	0	450	W75_N35:157/160
+R-fastbike-051	stable	true	true	true	route|60|2448|1514|1b448d59d296edb3|62a53bbf442de587	0	395	W75_N40:60/60
+R-fastbike-052	stable	true	true	true	route|373|21070|10384|5809c3aa1f0dcdfb|7f0756aefdb31838	0	592	W75_N40:373/373
+R-fastbike-053	stable	true	true	true	route|1216|84509|53438|1237a19f964b9f7e|854705c2084c9789	2	1464	W75_N40:1216/1216
+R-fastbike-054	stable	true	true	true	route|644|182728|43674|c9835110d0525c84|ff25f67366b3bafb	0	1679	E170_S50:644/644
+R-fastbike-055	stable	true	true	true	route|147|8744|7228|499b6fe236e3c442|422b68983b308815	0	730	W75_N35:147/147
+R-fastbike-056	stable	true	true	true	route|10|447|371|39ab337eedb53358|b5ca73060ff3289f	0	304	W75_N40:10/10
+R-fastbike-057	stable	true	true	true	route|94|3425|1425|247dd58191bae1b|786a6d9754430eb2	0	801	E170_S50:94/94
+R-fastbike-058	stable	true	true	true	route|36|1721|705|5874388eebae813d|10a7657de2b2065	0	470	E170_S50:36/36
+R-fastbike-059	stable	true	true	true	route|16|3570|992|ff5f55c3ec16c2f1|d94f21a49a448953	0	413	W75_N35:16/16
+R-gravel-001	stable	true	true	true	route|565|127998|30264|fd632c5509a94c5a|9ef3a910310c9939	1	1330	W75_N35:565/565
+R-gravel-002	stable	true	true	true	route|23|2314|418|a43d30550f33574b|44a95a2b8fa2a06a	0	356	W70_N40:23/23
+R-gravel-003	stable	true	true	true	route|459|73167|15302|13159944062c08b|ca7e849faa272e77	1	788	W75_N40:459/459
+R-gravel-004	stable	true	true	true	route|20|4028|786|b8db7d81f4065e7a|4ae137b1c191ce8e	0	225	E170_S50:20/20
+R-gravel-005	stable	true	true	true	route|361|107616|26912|b08e5f5534c24011|55cf050e03939b8c	0	532	W75_N35:361/361
+R-gravel-006	stable	true	true	true	route|4|68|31|8037aa09f7d5e562|26aacd89f169665	0	295	E170_S50:4/4
+R-gravel-007	stable	true	true	true	route|13|3541|296|dcd8632684a114c4|7aa7e435d209394e	0	395	W75_N40:13/13
+R-gravel-008	stable	true	true	true	route|23|2960|630|159b8b1e8df6433|e16559f8a3f3ac32	0	343	W75_N35:23/23
+R-gravel-009	stable	true	true	true	route|29|1749|401|25f60c859e4a44fe|50eb744e1b6b4b46	0	405	E170_S50:29/29
+R-gravel-010	stable	true	true	true	route|154|30831|11518|ef2a2394e42effdf|ef606a3989f594f3	0	285	W70_N40:154/154
+R-gravel-011	stable	true	true	true	route|8|2830|537|7e05567dc2dd775e|721eccc19fe2edaf	0	247	W70_N40:8/8
+R-gravel-012	stable	true	true	true	route|389|47828|10380|4073c6bb22760826|5fcf6ddcf560896a	0	505	E170_S50:389/389
+R-gravel-013	stable	true	true	true	route|244|36529|9181|7e20f6e404bce404|1bcc7f42135df53c	1	971	W75_N40:244/244
+R-gravel-014	stable	true	true	true	route|24|3897|767|4db5bb593357f002|d30f50a6bf0be196	0	465	E170_S50:24/24
+R-gravel-015	stable	true	true	true	route|6|1385|494|13bf149f3dd93038|3af8960066a724e1	0	280	W70_N40:6/6
+R-gravel-016	stable	true	true	true	route|2909|360336|109938|201a8bcaaab70503|c3d03c84c3ee129	35	7765	W75_N40:2909/2909
+R-gravel-017	stable	true	true	true	route|17|1546|518|6bcf981499cf1393|9ddb63e6fba0215a	0	273	W70_N40:17/17
+R-gravel-018	stable	true	true	true	route|2200|347416|94131|71f5a72c93fbaed7|5b1eafe95db5ec6	14	3955	W75_N35:341/341 W75_N40:1859/1859
+R-gravel-019	stable	true	true	true	route|626|55174|13011|d21152d47aceaeba|ca44d8603bebf9a9	0	1105	E170_S50:626/626
+R-gravel-020	stable	true	true	true	route|489|63875|19223|94cfcdb15564091d|d10e47f08812ff21	1	961	W75_N35:489/489
+R-gravel-021	stable	true	true	true	route|372|54375|14381|d236b814b44d2b04|bda7fa58cb7fd05f	0	640	W70_N40:356/356 W75_N40:16/16
+R-gravel-022	stable	true	true	true	route|2|34|4|9257eb887ac5aa9b|6d19ff2c7611c071	0	253	E170_S50:2/2
+R-gravel-023	stable	true	true	true	route|10|1551|584|d17d2e6286b644a5|bb8ffeb08f104160	0	203	W70_N40:10/10
+R-gravel-024	stable	true	true	true	route|57|7648|2404|966d10188ce21b5b|96d18993eb879f15	0	466	W75_N40:57/57
+R-gravel-025	stable	true	true	true	route|25|2470|573|af4b284032cba61f|58e3866706a30213	0	336	W75_N35:25/25
+R-gravel-026	stable	true	true	true	route|984|86675|28528|f045d43c18eab322|192d55281dc9d5f8	8	2626	W75_N40:984/984
+R-gravel-027	stable	true	true	true	route|97|32339|8462|d2bc07a66763c829|8406d9c984d032a8	0	397	W70_N40:97/97
+R-gravel-028	stable	true	true	true	route|16|4333|672|6e6ea52f0681876b|89d2ad5abe3763f2	0	330	W75_N40:16/16
+R-gravel-029	stable	true	true	true	route|115|15513|4436|c3df42b394a3a973|57fe383f4e6f4e51	0	448	W75_N35:115/115
+R-gravel-030	stable	true	true	true	route|17|2191|636|f949bea064dfcede|cd0aad5ea6c2004a	0	351	W75_N35:17/17
+R-gravel-031	stable	true	true	true	route|92|30561|7854|5d1e758f3e4db477|c6084c035f7e5c64	0	176	E170_S50:92/92
+R-gravel-032	stable	true	true	true	route|243|21816|4123|625440de0e7a3267|a2e40fa89446abaf	0	336	E170_S50:243/243
+R-gravel-033	stable	true	true	true	route|1844|199752|46627|8860fae4ac747b4d|28d2405855fb7778	30	6868	W75_N40:1844/1844
+R-gravel-034	stable	true	true	true	route|457|44922|14096|22456724bf9f3eb5|3e4ab913a7c513d0	9	2749	W75_N40:457/457
+R-gravel-035	stable	true	true	true	route|60|8440|2053|b3b507ad23860973|ee2f8c9672390217	0	462	W75_N35:60/60
+R-gravel-036	stable	true	true	true	route|2138|314055|85401|45a33bc05b97d59e|12a5ab2dd2ed8c25	11	4499	W75_N40:2138/2138
+R-gravel-037	stable	true	true	true	route|842|123101|30249|c6639770fd3f507a|da57d8b4a4cd327d	0	1019	E170_S50:842/842
+R-gravel-038	stable	true	true	true	route|426|100000|26135|62e2033392999e6e|8e34f86e6b949bae	0	539	E170_S50:426/426
+R-gravel-039	stable	true	true	true	route|872|180309|31687|76d7d77610b0fff9|adaf27d3403ab7a2	6	3619	W75_N40:872/872
+R-gravel-040	stable	true	true	true	route|190|47278|10061|b723c7c56d6e5cbf|7cc557765868b02d	0	379	W70_N40:190/190
+R-gravel-041	stable	true	true	true	route|681|260224|52691|edb787a0c6d77677|65322f93ee731532	0	553	W70_N40:681/681
+R-gravel-042	stable	true	true	true	route|19|6600|1118|76d5da1c1e99ec49|5c5d34d40fbb26e9	0	313	W70_N40:19/19
+R-gravel-043	stable	true	true	true	route|37|9383|2794|3b29121b56899537|f55da06199c6b18a	0	231	W70_N40:37/37
+R-gravel-044	stable	true	true	true	route|72|6540|1479|c5467a196f15d313|7679e4ba7942d3da	0	625	E170_S50:72/72
+R-gravel-045	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	260	-
+R-gravel-046	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	247	-
+R-gravel-047	stable	true	true	true	route|371|57220|11115|76b874e4b795f6ff|d66062bff03058ae	0	587	E170_S50:371/371
+R-gravel-048	stable	true	true	true	route|62|8033|2429|ec11f0281f366f43|63d99fbcefc85ad0	0	475	W75_N40:62/62
+R-gravel-049	stable	true	true	true	route|1755|354827|88887|ce6666ef61b1555e|b490dc7ffbc9f9a0	3	2367	W70_N40:1755/1755
+R-gravel-050	stable	true	true	true	route|1539|438843|88750|a5eeedc2098cfd6e|9ed60c4c2282bbd0	8	4303	W75_N35:1539/1539
+R-gravel-051	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	256	-
+R-gravel-052	stable	true	true	true	route|4|296|112|df34d265630a21ea|1efade7d2ec0b5be	0	331	W75_N35:4/4
+R-gravel-053	stable	true	true	true	route|22|3821|848|897256f90f4f490d|faaeab0c89add7f9	0	251	W75_N40:22/22
+R-gravel-054	stable	true	true	true	route|94|7597|1903|2bbf71770eb6802|783a815e7d60afdb	0	476	W75_N40:94/94
+R-gravel-055	stable	true	true	true	route|730|193112|56646|8724b120ab1cde24|d9365632fadf8508	0	690	W70_N40:730/730
+R-gravel-056	stable	true	true	true	route|2197|419624|73574|5f6b3a9941a93914|75483c9a51d1a6	0	1287	E170_S50:2197/2197
+R-gravel-057	stable	true	true	true	route|136|17904|4662|d2aa423721473946|8fb821e94dd183f8	0	549	W75_N40:136/136
+R-gravel-058	stable	true	true	true	route|1463|240888|66222|dc937bbb19139e64|f7b215280137a949	8	3872	W75_N40:1463/1463
+R-gravel-059	stable	true	true	true	route|21|1391|486|27ce736e1b948fc7|d8c7e6738d8832e7	0	302	W75_N40:21/21
+R-moped-001	stable	true	true	true	route|36|1328|783|b7ce1c136aea1e8f|4e37b12f5c7b3a06	0	396	W75_N40:36/36
+R-moped-002	stable	true	true	true	route|11|873|413|f455e2a7b618cd73|42dd2584918b8eab	0	424	W75_N40:11/11
+R-moped-003	stable	true	true	true	route|5|493|336|7293f30129ec9c2|caf10cc2f58f01db	0	273	E170_S50:5/5
+R-moped-004	stable	true	true	true	route|162|15182|8245|abc3a822e5076f5e|7c069c3a6bfbe44b	0	492	W75_N40:162/162
+R-moped-005	stable	true	true	true	route|2|48|24|bccb237c0ca8da97|4e26303cecd61684	0	258	W70_N40:2/2
+R-moped-006	stable	true	true	true	route|523|31846|23375|323e739e91a5fc6|e833551608cd5464	1	865	W75_N40:523/523
+R-moped-007	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	201	-
+R-moped-008	stable	true	true	true	route|1437|74857|50386|dd89b024e95c1ed0|d1029da598a613b7	2	1423	W75_N40:1437/1437
+R-moped-009	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	205	-
+R-moped-010	stable	true	true	true	route|8|659|243|a71711f797f1f04e|df64bd0d9a821eee	0	312	W70_N40:8/8
+R-moped-011	stable	true	true	true	route|321|10476|7054|960051e858c0d5ff|8294a7637e43a881	0	482	E170_S50:321/321
+R-moped-012	stable	true	true	true	route|85|7363|4905|81779157b4d008d3|13b7ed97b5775dd9	0	426	W75_N35:85/85
+R-moped-013	stable	true	true	true	route|1277|75108|50647|f9ed86635afb9bc3|d6df9654ac9e3701	1	1750	W75_N40:1277/1277
+R-moped-014	stable	true	true	true	route|4|758|288|642fbe31fa58fb8f|65d7a913b6db0d03	0	305	W75_N35:4/4
+R-moped-015	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	231	-
+R-moped-016	stable	true	true	true	route|51|10822|5277|36f93439cd7d22f8|a3dfae1bfc1e466b	0	350	W70_N40:51/51
+R-moped-017	stable	true	true	true	route|12|941|439|3e7c363741bcf36d|fb1929f0d2844a16	0	209	E170_S50:12/12
+R-moped-018	stable	true	true	true	route|380|16066|11051|1a3c9814d551bfb4|9f094e0e170b346e	0	556	E170_S50:380/380
+R-moped-019	stable	true	true	true	route|201|7154|4422|54ea6481c682351|5acd30ad5cfc61ba	0	483	E170_S50:201/201
+R-moped-020	stable	true	true	true	route|360|23143|17353|865a07549191a265|2fe28becbc4b0d2a	0	1042	W75_N35:360/360
+R-moped-021	stable	true	true	true	route|25|2312|1366|4dc539eaaff8c5e9|47cdf34008839c50	0	397	W75_N35:25/25
+R-moped-022	stable	true	true	true	route|17|1113|442|75aa6b5b9b7a4db2|59a1c2370efb4dbd	0	266	W75_N40:17/17
+R-moped-023	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	235	-
+R-moped-024	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	404	-
+R-moped-025	stable	true	true	true	route|87|5668|3250|b1763103a663517b|bcbbba4bd485e175	0	423	W75_N40:87/87
+R-moped-026	stable	true	true	true	route|60|7081|5443|793905ad616c1ebf|7422271059d7cfd0	0	336	W70_N40:60/60
+R-moped-027	stable	true	true	true	route|585|32289|23209|f4f5f4685ca56442|cf7ee7b449d6b763	0	301	W70_N40:585/585
+R-moped-028	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	189	-
+R-moped-029	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	1	655	-
+R-moped-030	stable	true	true	true	route|40|8035|4580|8d300a54f866744f|351127a88648f188	0	449	W70_N40:40/40
+R-moped-031	stable	true	true	true	route|58|2945|1989|4fe4144de1a2b846|839dc99c4f845bd9	0	329	E170_S50:58/58
+R-moped-032	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	228	-
+R-moped-033	stable	true	true	true	route|23|1701|616|91787d45c0d60dca|b588dd5a20cfe984	0	320	E170_S50:23/23
+R-moped-034	stable	true	true	true	route|66|8227|4797|ad481a27e683a494|474b5b77d61b525	0	259	W70_N40:66/66
+R-moped-035	stable	true	true	true	route|812|75874|54262|f28ccb294f7ded4b|e6b955277c715ff8	3	2125	W75_N35:760/760 W75_N40:52/52
+R-moped-036	stable	true	true	true	route|9|242|81|d43db00b295f9690|5fa4d5bceb539013	0	312	W70_N40:9/9
+R-moped-037	stable	true	true	true	route|612|45861|31801|49dc76af3bb8124e|43747f6303924359	0	1006	W75_N35:612/612
+R-moped-038	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	278	-
+R-moped-039	stable	true	true	true	route|15|608|187|d519e7af14db0935|20d87f04a244f097	0	203	E170_S50:15/15
+R-moped-040	stable	true	true	true	route|40|1892|1051|142fe2fb6e3b1b77|3c4a6386e213b53f	0	474	E170_S50:40/40
+R-moped-041	stable	true	true	true	route|27|879|539|37962f87c1db141a|5b29cff81e0ed701	0	419	E170_S50:27/27
+R-moped-042	stable	true	true	true	route|313|23035|16642|a665a8c3b5ea941d|b3b7872d32a6317	0	529	W75_N35:313/313
+R-moped-043	stable	true	true	true	route|4|277|89|1cacbf8c16f08e23|446435d67781928c	0	303	E170_S50:4/4
+R-moped-044	stable	true	true	true	route|194|25969|20205|cd3b42e4966662ac|9d763ee2ed23d130	0	318	E170_S50:194/194
+R-moped-045	stable	true	true	true	route|1405|84861|60506|783e9ce56f0c3e|d254c1b2ac7c7bd0	5	2714	W75_N35:614/614 W75_N40:791/791
+R-moped-046	stable	true	true	true	route|35|1478|1115|3027a53b51402590|8e0da0c1f2a1340c	0	328	W70_N40:35/35
+R-moped-047	stable	true	true	true	route|9|520|134|2dd3ec1f0dfe0522|1961111a5ef652ac	0	209	W70_N40:9/9
+R-moped-048	stable	true	true	true	route|50|1663|1085|24b828db134641e|98e70a4984bdd6dd	0	356	E170_S50:50/50
+R-moped-049	stable	true	true	true	route|79|4932|2863|7bc0ede59fb59b37|b1063c82d9b3218f	0	414	W70_N40:79/79
+R-moped-050	stable	true	true	true	route|16|758|332|795c1333e0fbf21|71317ceb0f34ae2a	0	255	W70_N40:16/16
+R-moped-051	stable	true	true	true	route|120|5834|3538|53046ac1461ad03a|cf329ddda56f4c19	0	482	W75_N40:120/120
+R-moped-052	stable	true	true	true	route|6|609|210|b8ac7224f8ed08dc|9878f885e9b6ce4e	0	223	W70_N40:6/6
+R-moped-053	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	232	-
+R-moped-054	stable	true	true	true	route|2|85|71|4fa5a0f208c09f1d|d29e5642a14e45f	0	188	W70_N40:2/2
+R-moped-055	stable	true	true	true	route|90|5317|3591|2de863bef815b413|a6014eeb412de7f8	0	375	W75_N40:90/90
+R-moped-056	stable	true	true	true	route|57|2554|1130|b54420efa6526b14|191d11cb61dc3e8a	0	345	E170_S50:57/57
+R-moped-057	stable	true	true	true	route|174|19242|13459|130a064db6ca46d7|ead494d124c60516	0	613	W75_N35:174/174
+R-moped-058	stable	true	true	true	route|202|10282|6464|8644295c0b8da087|c54740219bac1c83	0	496	W75_N40:202/202
+R-moped-059	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	219	-
+R-mtb-001	stable	true	true	true	route|320|140302|11389|b12592a354a118f8|5dba266cef9c60cd	0	731	W75_N35:320/320
+R-mtb-002	stable	true	true	true	route|3|1438|105|a3b9ce84256c4fb9|3408710e9b20fc65	0	495	W75_N40:3/3
+R-mtb-003	stable	true	true	true	route|40|10292|994|a39c5aa3cd6ef408|99f0f39940c4ab5b	0	540	W75_N35:40/40
+R-mtb-004	stable	true	true	true	route|1137|1228197|72421|24b37eebc82f8986|52c89aef8433e33b	0	958	W70_N40:1137/1137
+R-mtb-005	stable	true	true	true	route|620|306704|26561|3028186ccea8ee29|c36cb4eab8734f38	2	1337	W75_N35:620/620
+R-mtb-006	stable	true	true	true	route|13|15417|758|2289910b42c69335|eea4a1939fcbc6ac	0	295	W75_N35:13/13
+R-mtb-007	stable	true	true	true	route|118|173316|7891|e3653689810f009c|8ad3fe15547db3a1	0	442	W75_N35:118/118
+R-mtb-008	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	179	-
+R-mtb-009	stable	true	true	true	route|4853|1251055|129410|a4c98945619ea0fa|6bb45cc46f20005	89	18815	W75_N40:4853/4853
+R-mtb-010	stable	true	true	true	route|59|79119|4871|bd5b8cf42b36d620|3e9c2e645cb8b1fe	0	338	W75_N35:59/59
+R-mtb-011	stable	true	true	true	route|267|191448|13419|6b9ba8be77ae3fec|99caff3797cbd546	0	490	W70_N40:267/267
+R-mtb-012	stable	true	true	true	route|194|298465|15970|8497316d4e111a6b|3a20df92670493d4	0	400	W70_N40:194/194
+R-mtb-013	stable	true	true	true	route|2|109|5|4568249964a94a94|207fd1ccfd3de1af	0	262	E170_S50:2/2
+R-mtb-014	stable	true	true	true	route|223|41955|3629|1a87e241881a4218|2d437a3153878a5d	0	531	W75_N40:223/223
+R-mtb-015	stable	true	true	true	route|57|101186|5031|e81f2b6ec3c8790e|3be5d84e7def4d60	0	371	E170_S50:57/57
+R-mtb-016	stable	true	true	true	route|884|1237535|57437|85a3158f24636942|12614d3be3e52e4c	0	1183	E170_S50:884/884
+R-mtb-017	stable	true	true	true	route|371|245056|24438|73c44659230aa04b|4631bc7c6825b9c6	0	755	W75_N35:371/371
+R-mtb-018	stable	true	true	true	route|2565|712872|73045|27df3544ea87cfcb|8d61232a0aa034fb	41	9423	W75_N40:2565/2565
+R-mtb-019	stable	true	true	true	route|26|7817|535|a44e115e0e014e1|dc768fdcfd3e5d27	0	400	E170_S50:26/26
+R-mtb-020	stable	true	true	true	route|139|168916|11436|64b083a18a39da06|478b5e645c851a45	0	369	W70_N40:139/139
+R-mtb-021	stable	true	true	true	route|931|568007|37905|f9bc92c6f7c71418|9d539da1d177f7c8	9	3434	W75_N40:931/931
+R-mtb-022	stable	true	true	true	route|32|5522|446|e2d01f879e8f9c4d|69af9c0711bc0a39	0	395	W75_N40:32/32
+R-mtb-023	stable	true	true	true	route|138|82495|6109|a42554907eb00477|e936b2b8b4893f40	0	552	W70_N40:138/138
+R-mtb-024	stable	true	true	true	route|11|3850|344|1b13346ed62406b4|505b8691d3dd8744	0	403	E170_S50:11/11
+R-mtb-025	stable	true	true	true	route|18|17548|856|4aa9fb43ab9a6440|58396702c7f8aaa7	0	406	W75_N35:18/18
+R-mtb-026	stable	true	true	true	route|341|88314|8308|5ecef16505bb1076|1b4e4c13bdc50727	0	445	W75_N35:341/341
+R-mtb-027	stable	true	true	true	route|4|216|14|e65ab4ca31b2bbc6|b40e74a1507f3a1d	0	350	E170_S50:4/4
+R-mtb-028	stable	true	true	true	route|124|49253|3775|5f8d582e63178209|9c97c2a18033e77a	0	468	W75_N40:124/124
+R-mtb-029	stable	true	true	true	route|213|136390|7612|f4aeb51de299139b|32c90b975d3fdf2	0	574	W70_N40:213/213
+R-mtb-030	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	301	-
+R-mtb-031	stable	true	true	true	route|778|715960|35115|d922139d471082d5|3e03971ba9364a2d	0	667	W70_N40:778/778
+R-mtb-032	stable	true	true	true	route|9|5106|293|eff43da22f262fce|6facdec574593589	0	379	W70_N40:9/9
+R-mtb-033	stable	true	true	true	route|2199|1844615|144630|371367e764d39db6|4d00261b9aed5231	4	3340	W70_N40:2199/2199
+R-mtb-034	stable	true	true	true	route|4|959|70|6d8b75ac2787fc9|c9f5d0b4e8325bd3	0	448	W75_N35:4/4
+R-mtb-035	stable	true	true	true	route|388|257291|27797|8df26c44aec98b98|e8b78a089227a43	0	525	W70_N40:388/388
+R-mtb-036	stable	true	true	true	route|59|17408|1339|72acfdc7eb2cd281|750976c89240d84c	0	480	W75_N35:59/59
+R-mtb-037	stable	true	true	true	route|85|15725|1407|b40b6efc4751a834|1e2884dda6b3a3d0	0	502	E170_S50:85/85
+R-mtb-038	stable	true	true	true	route|26|5286|477|ffff7b159da275e0|c1245b6b1eb001c6	0	292	W75_N40:26/26
+R-mtb-039	stable	true	true	true	route|97|24652|1780|91adb02d31dcacdb|c7692b7820467257	0	408	E170_S50:97/97
+R-mtb-040	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	273	-
+R-mtb-041	stable	true	true	true	route|702|501733|39198|de187100cbfe934b|c1226cb33d40cf23	2	1974	W75_N35:702/702
+R-mtb-042	stable	true	true	true	route|115|59825|4148|7b8f4d9094b1a6ea|7377fa05fe130561	0	458	W70_N40:115/115
+R-mtb-043	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	399	-
+R-mtb-044	stable	true	true	true	route|1229|433817|29241|c7fe76a83e9a89ad|49e515187c0785c8	0	588	W75_N40:1229/1229
+R-mtb-045	stable	true	true	true	route|146|74876|5210|c692dea2a066e786|c9f9e9824d16c000	0	418	W75_N40:146/146
+R-mtb-046	stable	true	true	true	route|254|270416|12337|796e98b2f5fbc898|e7ef5601c8b88b59	0	379	E170_S50:254/254
+R-mtb-047	stable	true	true	true	route|199|88265|6784|c65c0d5424bd3396|b6fe61e89a91f7aa	0	536	W75_N40:199/199
+R-mtb-048	stable	true	true	true	route|2931|835748|84818|a95ba17c7820a635|d33ee46d0d0b7cf4	80	15387	W75_N40:2931/2931
+R-mtb-049	stable	true	true	true	route|6|2135|129|58a2762114152c0a|b78701b2e8e246f7	0	406	W75_N40:6/6
+R-mtb-050	stable	true	true	true	route|697|308492|32254|f572289585acaac6|a5d84ffb44ab04d4	5	1649	W75_N40:697/697
+R-mtb-051	stable	true	true	true	route|4|930|63|7388b0f0313dd9c7|ba7294a5051ca4cb	0	310	W75_N35:4/4
+R-mtb-052	stable	true	true	true	route|60|43577|3335|79836972030e90a4|9bcdec2b77c744d8	0	220	W70_N40:60/60
+R-mtb-053	stable	true	true	true	route|21|12556|574|b0f4828c5cfba7d5|e945b4ef817e4a4c	0	266	W75_N40:21/21
+R-mtb-054	stable	true	true	true	route|22|4295|546|cf9cb90b5a3786dc|91d7e46171f55614	0	267	E170_S50:22/22
+R-mtb-055	stable	true	true	true	route|40|7209|623|980c0d7cba9b879c|2da09da591422ebc	0	308	W75_N35:40/40
+R-mtb-056	stable	true	true	true	route|2|69|5|a37acd9d22f3d84c|25d1ac72b0748a1	0	225	W70_N40:2/2
+R-mtb-057	stable	true	true	true	route|140|28903|2221|2aa08d8ed4271007|fc2f27f8e9473364	0	594	E170_S50:140/140
+R-mtb-058	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	256	-
+R-mtb-059	stable	true	true	true	route|375|454487|25423|810e460aa1264b9b|a57bcab32d35bea1	0	836	E170_S50:375/375
+R-rail-001	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	217	-
+R-rail-002	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	165	-
+R-rail-003	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	165	-
+R-rail-004	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	152	-
+R-rail-005	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	134	-
+R-rail-006	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	151	-
+R-rail-007	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	169	-
+R-rail-008	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	129	-
+R-rail-009	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	156	-
+R-rail-010	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	170	-
+R-rail-011	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	164	-
+R-rail-012	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	178	-
+R-rail-013	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	144	-
+R-rail-014	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	160	-
+R-rail-015	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	200	-
+R-rail-016	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	233	-
+R-rail-017	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	188	-
+R-rail-018	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	227	-
+R-rail-019	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	211	-
+R-rail-020	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	169	-
+R-rail-021	stable	true	true	true	route|5|523|523|1108b4b508e34e3d|bcc7d868c672065f	0	217	E170_S50:5/5
+R-rail-022	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	199	-
+R-rail-023	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	195	-
+R-rail-024	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	140	-
+R-rail-025	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	214	-
+R-rail-026	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	176	-
+R-rail-027	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	176	-
+R-rail-028	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	138	-
+R-rail-029	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	155	-
+R-rail-030	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	194	-
+R-rail-031	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	175	-
+R-rail-032	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	196	-
+R-rail-033	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	100	-
+R-rail-034	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	162	-
+R-rail-035	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	167	-
+R-rail-036	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	200	-
+R-rail-037	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	175	-
+R-rail-038	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	258	-
+R-rail-039	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	273	-
+R-rail-040	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	164	-
+R-rail-041	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	91	-
+R-rail-042	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	135	-
+R-rail-043	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	174	-
+R-rail-044	stable	true	true	true	datafile W70_N45.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	138	-
+R-rail-045	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	162	-
+R-rail-046	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	253	-
+R-rail-047	stable	true	true	true	route|2|5|5|726f2cf372431061|575cba91aaa6f266	0	316	E170_S50:2/2
+R-rail-048	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	271	-
+R-rail-049	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	116	-
+R-rail-050	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	241	-
+R-rail-051	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	187	-
+R-rail-052	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	220	-
+R-rail-053	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	268	-
+R-rail-054	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	138	-
+R-rail-055	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	153	-
+R-rail-056	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	140	-
+R-rail-057	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	147	-
+R-rail-058	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	161	-
+R-rail-059	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	178	-
+R-river-001	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	127	-
+R-river-002	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	153	-
+R-river-003	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	143	-
+R-river-004	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	131	-
+R-river-005	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	133	-
+R-river-006	stable	true	true	true	route|22|1760|1760|9854c7d8d9f76a4b|830167bd5315f74b	0	159	W75_N40:17/22
+R-river-007	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	189	-
+R-river-008	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	184	-
+R-river-009	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	206	-
+R-river-010	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	154	-
+R-river-011	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	156	-
+R-river-012	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	116	-
+R-river-013	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	182	-
+R-river-014	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	155	-
+R-river-015	stable	true	true	true	route|46|1163|1162|903604b29e24639a|dfa2d92a9cdb2eac	0	215	W75_N40:46/46
+R-river-016	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	219	-
+R-river-017	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	249	-
+R-river-018	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	170	-
+R-river-019	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	185	-
+R-river-020	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	162	-
+R-river-021	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	184	-
+R-river-022	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	165	-
+R-river-023	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	228	-
+R-river-024	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	189	-
+R-river-025	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	165	-
+R-river-026	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	158	-
+R-river-027	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	225	-
+R-river-028	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	123	-
+R-river-029	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	100	-
+R-river-030	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	132	-
+R-river-031	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	177	-
+R-river-032	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	136	-
+R-river-033	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	135	-
+R-river-034	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	115	-
+R-river-035	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	131	-
+R-river-036	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	138	-
+R-river-037	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	179	-
+R-river-038	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	139	-
+R-river-039	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	109	-
+R-river-040	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	168	-
+R-river-041	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	304	-
+R-river-042	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	194	-
+R-river-043	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	176	-
+R-river-044	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	187	-
+R-river-045	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	161	-
+R-river-046	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	185	-
+R-river-047	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	178	-
+R-river-048	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	144	-
+R-river-049	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	126	-
+R-river-050	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	162	-
+R-river-051	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	204	-
+R-river-052	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	222	-
+R-river-053	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	195	-
+R-river-054	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	134	-
+R-river-055	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	175	-
+R-river-056	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	207	-
+R-river-057	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	192	-
+R-river-058	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	171	-
+R-river-059	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	303	-
+R-safety-001	stable	true	true	true	route|2|253|50|c0f71ae0077827e5|ccc97a73d327b9ac	0	250	W75_N35:2/2
+R-safety-002	stable	true	true	true	route|8|393|184|ab3dfe54490876eb|27965cf7d31ae42a	0	387	W70_N40:8/8
+R-safety-003	stable	true	true	true	route|538|96382|17953|e941a8bf569cd6c3|9ef1b43f5469438d	0	317	E170_S50:538/538
+R-safety-004	stable	true	true	true	route|578|27952|16464|84641a2e88177d51|7eae2216ec348fad	0	710	W75_N40:578/578
+R-safety-005	stable	true	true	true	route|40|2302|902|c34085b94744c3d7|450d4a3c0c7e19ed	0	438	W75_N40:40/40
+R-safety-006	stable	true	true	true	route|63|4644|2506|17e6de2ec91b647a|76b65265f7c494fa	0	406	W75_N35:63/63
+R-safety-007	stable	true	true	true	route|4|157|101|dccd1912dccee1fe|51a3f07ffa7535c1	0	236	W75_N40:4/4
+R-safety-008	stable	true	true	true	route|2289|103009|56844|67483afb9366e4a9|7fd2efa5c1dcfce3	27	7772	W75_N40:2289/2289
+R-safety-009	stable	true	true	true	route|5|820|277|40a536abc8a8099d|763e27af913abfcc	0	266	W70_N40:5/5
+R-safety-010	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	225	-
+R-safety-011	stable	true	true	true	route|69|4366|2137|d74e03331cd68f4e|b1a27e9603d13075	0	531	W75_N40:69/69
+R-safety-012	stable	true	true	true	route|18|586|355|355510b13c556fc4|8237ae409cb74902	0	304	W70_N40:18/18
+R-safety-013	stable	true	true	true	route|3290|195477|152735|e286d48c7f241815|20610f8552439674	28	7542	W75_N35:822/822 W75_N40:2468/2468
+R-safety-014	stable	true	true	true	route|10|2228|641|b54ccdd2f271eb4d|e5b34ae6b75bc40	0	284	E170_S50:10/10
+R-safety-015	stable	true	true	true	route|215|31794|18696|fdcd37d4964c538a|5edc66776703240f	0	436	W70_N40:215/215
+R-safety-016	stable	true	true	true	route|37|2394|958|b9ab02928c2315da|fc9ba7889c67180b	0	357	W75_N35:21/37
+R-safety-017	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	256	-
+R-safety-018	stable	true	true	true	route|326|20244|15229|8d288071a7a6edbd|7827ac98011afd8a	0	842	W75_N35:105/105 W75_N40:221/221
+R-safety-019	stable	true	true	true	route|1568|197860|100871|6fbcca1af1837510|5b7f9a4b8da06b39	0	955	W70_N40:1568/1568
+R-safety-020	stable	true	true	true	route|2242|269869|156256|f49d081adf07e559|9fe3ca8aa86186b1	4	2450	W70_N40:1279/1279 W75_N40:963/963
+R-safety-021	stable	true	true	true	route|2798|172291|140564|1ef11bc4f91e090d|65b2468a1b6e06f8	13	6154	W75_N35:2798/2798
+R-safety-022	stable	true	true	true	route|1064|129960|87343|8a4b2803aa365e08|2831239e8e1d686a	1	1096	W70_N40:1064/1064
+R-safety-023	stable	true	true	true	route|182|54928|21340|f54bceed2dc1b45b|a577459ba60ce599	0	446	E170_S50:182/182
+R-safety-024	stable	true	true	true	route|3|23|19|10d0dbdf44228adc|b3b4e7e6da40e4a6	0	169	W70_N40:3/3
+R-safety-025	stable	true	true	true	route|163|23932|11534|a4223998ecbedae|28e3af29e90b540d	0	675	W75_N35:163/163
+R-safety-026	stable	true	true	true	route|71|3542|1316|b09e2cd399e76fae|b14e32bed1ca8231	0	538	W75_N40:71/71
+R-safety-027	stable	true	true	true	route|12|859|459|e261d711fbcfcf27|969898a1183884	0	237	W75_N35:12/12
+R-safety-028	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	349	-
+R-safety-029	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	207	-
+R-safety-030	stable	true	true	true	route|98|9222|3951|72fd66529861abc6|55693b6b7820a30d	0	627	W75_N40:98/98
+R-safety-031	stable	true	true	true	route|157|20961|7743|fd5a9effa96964c6|69e974e6bc8f43d9	0	398	E170_S50:157/157
+R-safety-032	stable	true	true	true	route|161|11526|4965|22a584e7cb28046|4c68e8253695e926	0	375	W75_N40:161/161
+R-safety-033	stable	true	true	true	route|268|32779|10332|3217b39ecebd9c0f|7580641ece44e323	0	572	E170_S50:268/268
+R-safety-034	stable	true	true	true	route|412|23709|14320|6c90402212bb6e2|b5b8a7378e71e7a3	0	735	W75_N40:412/412
+R-safety-035	stable	true	true	true	route|37|2534|1062|8dda4f92e84f241|92b985963d4b912	0	421	E170_S50:37/37
+R-safety-036	stable	true	true	true	route|141|4151|2701|c346e018c05da53c|788e7d02f0c52fa9	0	324	W75_N40:141/141
+R-safety-037	stable	true	true	true	route|34|3597|1280|550551d273b47965|6ce4b9da663e39f2	0	460	W75_N35:34/34
+R-safety-038	stable	true	true	true	route|167|9063|4405|84c0c04af6af8dda|58d9d6a717d14729	0	653	W75_N40:167/167
+R-safety-039	stable	true	true	true	route|50|1337|897|e51f12cd6e462398|46ecbf7cca59a461	0	454	W75_N40:50/50
+R-safety-040	stable	true	true	true	route|177|32550|13656|734e50df19db083|e61f9a9b1c093f9c	0	466	W75_N35:177/177
+R-safety-041	stable	true	true	true	route|140|21110|6864|908098096a4c8c85|3de1d892ed0739e0	0	575	E170_S50:140/140
+R-safety-042	stable	true	true	true	route|360|39083|29533|cc1498eebb29ffae|607ae53753e6f49c	0	790	W75_N35:360/360
+R-safety-043	stable	true	true	true	route|524|36519|21553|355c58228abfa280|a5d33c51c16d3fa2	3	1833	W75_N40:524/524
+R-safety-044	stable	true	true	true	route|2|15|13|da9a2988413d8d87|c912e5c1491aa293	0	311	W75_N35:2/2
+R-safety-045	stable	true	true	true	route|2788|236139|121881|fd2c6ab9026ec3f4|16f9d88c73b6cf50	5	3184	W75_N40:2788/2788
+R-safety-046	stable	true	true	true	route|850|58154|26372|b8641de6b5f5ea26|41fc3d51431f2da	0	1355	E170_S50:850/850
+R-safety-047	stable	true	true	true	route|10|3225|417|f005d646ad477cb4|6a70968bf4c84975	0	351	W75_N35:10/10
+R-safety-048	stable	true	true	true	route|19|2353|593|57f37c8a9619d311|2f485acda3a88097	0	378	W75_N40:19/19
+R-safety-049	stable	true	true	true	route|14|653|258|92a215c56f3c7ef|4711d8ae381746d6	0	290	W75_N35:14/14
+R-safety-050	stable	true	true	true	route|20|3861|1098|de1f78c886cdb23|3bf795df5635df	0	394	W75_N35:20/20
+R-safety-051	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	191	-
+R-safety-052	stable	true	true	true	route|50|2061|1512|fc0440fe248eb1f5|4029c4eb64d2d7f2	0	392	W75_N40:50/50
+R-safety-053	stable	true	true	true	route|74|6917|1094|5b7950c09fe87cbd|1facae79bb5a95d4	0	281	W70_N40:74/74
+R-safety-054	stable	true	true	true	route|60|1991|1096|89493adb8939f786|ca6415b6402eedc7	0	350	E170_S50:60/60
+R-safety-055	stable	true	true	true	route|22|3190|1178|f8da541c0cd64981|cc28f69af59a4106	0	325	W75_N35:22/22
+R-safety-056	stable	true	true	true	route|49|1464|1118|af1df8490b000344|a52d2ef4b47d30b5	0	249	W75_N35:49/49
+R-safety-057	stable	true	true	true	route|5|570|148|a52d46964d2e753f|afa986e7f731fbf8	0	237	W75_N40:5/5
+R-safety-058	stable	true	true	true	route|285|22848|12280|91cc09bad987100a|ac42e48f6eace1b0	0	995	W75_N35:285/285
+R-safety-059	stable	true	true	true	route|9|480|118|f0f169d415c78375|e8588ba0878da293	0	412	E170_S50:9/9
+R-shortest-001	stable	true	true	true	route|582|24766|24766|682f2ed0bb3fcc75|3a0a4518b391d415	0	767	W75_N35:582/582
+R-shortest-002	stable	true	true	true	route|51|1585|1585|9050ac62f2ae965d|5deedbc0524de8ea	0	303	E170_S50:51/51
+R-shortest-003	stable	true	true	true	route|1045|52400|52399|2e8e90a9467a7e26|ace0679c76fab4a2	0	479	E170_S50:1045/1045
+R-shortest-004	stable	true	true	true	route|304|13650|13650|e893ce57e4af8c9|45c190256897effb	0	448	W75_N35:304/304
+R-shortest-005	stable	true	true	true	route|108|2143|2142|55b42ef0668ebff4|9ccc494fc6aea0fe	0	319	E170_S50:108/108
+R-shortest-006	stable	true	true	true	route|42|5055|5055|558218d6a3c97380|1bcd6ece6fa7bcf7	0	212	W70_N40:42/42
+R-shortest-007	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	191	-
+R-shortest-008	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	246	-
+R-shortest-009	stable	true	true	true	route|159|5601|5601|8f435d7979132919|b45a65a592186414	0	320	W70_N40:159/159
+R-shortest-010	stable	true	true	true	route|29|337|337|df388c17fa82a9ac|ead210353f819f33	0	244	W75_N40:29/29
+R-shortest-011	stable	true	true	true	route|3008|106443|100638|d47c963164e2f423|53f6ae8ec2e6c43c	38	7893	W75_N40:3008/3008
+R-shortest-012	stable	true	true	true	route|506|19599|19599|aedd8438156dfb2d|64f2bc16cfa47964	0	732	W75_N40:506/506
+R-shortest-013	stable	true	true	true	route|274|19487|19486|17a5b5dea2e0a1f9|dadc0705e85e1787	0	510	W70_N40:274/274
+R-shortest-014	stable	true	true	true	route|733|36308|36308|4871ec9dfc3578c7|d54c4432ed219a5b	0	631	W75_N35:733/733
+R-shortest-015	stable	true	true	true	route|254|12690|12690|fb82c1f1b487f9e2|31c51d9ff13948db	0	278	E170_S50:254/254
+R-shortest-016	stable	true	true	true	route|1683|60889|60889|fe67f25397ba5084|2a75e9d776553b10	5	2453	W75_N40:1683/1683
+R-shortest-017	stable	true	true	true	route|139|7242|7242|3f042f6e356cc57c|51db6510c01f2cfc	0	309	W75_N35:139/139
+R-shortest-018	stable	true	true	true	route|12|1229|1229|df667fcb8ed01342|ebc97991f28da751	0	317	W70_N40:12/12
+R-shortest-019	stable	true	true	true	route|19|722|722|7a4d09cc905ee867|fbf7af037a8ff2b6	0	319	E170_S50:19/19
+R-shortest-020	stable	true	true	true	route|39|957|957|9893ff55255b55bd|7fcf0284a7b56e81	0	280	W75_N40:39/39
+R-shortest-021	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	267	-
+R-shortest-022	stable	true	true	true	route|30|696|696|d6751a34511f744a|af30fb058845b815	0	249	W75_N35:30/30
+R-shortest-023	stable	true	true	true	route|60|2199|2199|fa8241cb792306dc|805fac284149febd	0	255	W75_N40:60/60
+R-shortest-024	stable	true	true	true	route|611|15715|15715|d204ad265dab6e34|ca6ce5ff8d3e1c86	2	1215	W75_N40:611/611
+R-shortest-025	stable	true	true	true	route|217|5102|5102|5413e0b4fd811f2e|3a755ae68e2e71d0	1	960	W75_N40:217/217
+R-shortest-026	stable	true	true	true	route|2357|109091|109090|fe7d89eeff83fb71|b1e52a5c9f6e1120	0	996	E170_S50:2357/2357
+R-shortest-027	stable	true	true	true	route|52|1296|1296|88395985534a9011|ac2a046635dffb0d	0	552	W75_N40:52/52
+R-shortest-028	stable	true	true	true	route|1189|47053|47053|8a9afeca546cd75|c4198128fdff9a4	0	676	W75_N40:1189/1189
+R-shortest-029	stable	true	true	true	route|30|1643|1643|1d3e2a12220449ca|66bd7633b8a5e077	0	196	W70_N40:30/30
+R-shortest-030	stable	true	true	true	route|10|295|295|eb6709bd8b62103b|666d79e26c19e3cc	0	249	E170_S50:10/10
+R-shortest-031	stable	true	true	true	route|2|92|92|326633619db15ae3|316db90670a011b8	0	278	W75_N40:2/2
+R-shortest-032	stable	true	true	true	route|230|5267|5266|c1e0a46db50e4d90|8e43a8403c5fd553	0	726	E170_S50:230/230
+R-shortest-033	stable	true	true	true	route|569|8710|8710|e1520cb404d7ac37|8cbed6e50dbe390e	0	718	E170_S50:569/569
+R-shortest-034	stable	true	true	true	route|265|10849|10849|449e33ed8c6e450c|9ccdbb495a208f5a	0	744	W75_N35:265/265
+R-shortest-035	stable	true	true	true	route|47|2081|2081|c8f8d2492467d006|6366edbacbbdca5c	0	552	E170_S50:47/47
+R-shortest-036	stable	true	true	true	route|336|24980|24980|c9b631aab12ba794|ada2d83f2b6d6806	0	644	W75_N35:336/336
+R-shortest-037	stable	true	true	true	route|51|1477|1477|66b6b409da704c43|86ba5a34d2c85ebe	0	502	E170_S50:25/51
+R-shortest-038	stable	true	true	true	route|60|1588|1588|8de7bc77115dde53|190a54d2f52fd1c8	0	232	W75_N35:60/60
+R-shortest-039	stable	true	true	true	route|191|14466|14466|3b784b598597751a|10566821e11886e4	0	498	W75_N35:191/191
+R-shortest-040	stable	true	true	true	route|192|10896|10895|c8fb8e86fa8c0a92|2fc3cc9cb4157319	0	360	W70_N40:192/192
+R-shortest-041	stable	true	true	true	route|43|1032|1032|9d723b649420b4cb|7f28a8cd5abd0574	0	495	E170_S50:43/43
+R-shortest-042	stable	true	true	true	route|12|703|703|a99d81697298ba59|db527b8f519c8a1d	0	263	W70_N40:12/12
+R-shortest-043	stable	true	true	true	route|35|2091|2091|cdf9b84202be7530|1b7e76e822d67a64	0	267	E170_S50:35/35
+R-shortest-044	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	215	-
+R-shortest-045	stable	true	true	true	route|82|1747|1747|28d034d99dcb900a|4ad558c38b193e34	0	255	E170_S50:82/82
+R-shortest-046	stable	true	true	true	route|902|24134|24134|ea71de642a4bf2da|be95cc1407650a1d	4	1495	W75_N40:902/902
+R-shortest-047	stable	true	true	true	route|378|9056|9056|84e2261d291f760b|3c5bd49e382066ba	0	765	W75_N40:378/378
+R-shortest-048	stable	true	true	true	route|3|119|119|b09790daf06cf689|bc7e7cd44ae7f75a	0	237	W75_N35:3/3
+R-shortest-049	stable	true	true	true	route|8|174|174|e53b2494316013ad|d05cf0cab723386	0	339	W75_N35:8/8
+R-shortest-050	stable	true	true	true	route|165|8838|8838|b5c644944d897da1|4dcf6b06d9940a77	0	481	W70_N40:165/165
+R-shortest-051	stable	true	true	true	route|911|153213|67389|7ec1b5e702c6b037|9668cbfbccab41e1	0	805	W70_N40:875/911
+R-shortest-052	stable	true	true	true	route|71|3079|3079|e0150cd58d508d72|5ed4f28037d4ee9f	0	388	W75_N35:71/71
+R-shortest-053	stable	true	true	true	route|194|4157|4157|958ebcabf50502cf|d3c3048f8ec8d3bd	0	781	E170_S50:194/194
+R-shortest-054	stable	true	true	true	route|383|9107|9107|8e962337914c8a5f|721d22f941ca42c2	0	713	E170_S50:383/383
+R-shortest-055	stable	true	true	true	route|1456|59759|59759|bdbf3d194375e8b5|cfe794627cf2157	1	1234	W75_N40:1456/1456
+R-shortest-056	stable	true	true	true	route|434|18925|18925|cc220fc197ec9980|855dbab9b6e35982	0	711	W75_N40:434/434
+R-shortest-057	stable	true	true	true	route|124|5941|5941|74dcdd6aa739b8e0|ac58f250b096cd75	0	281	W75_N40:124/124
+R-shortest-058	stable	true	true	true	route|19|856|856|1581fb2e985a80ed|6629c009097f73f3	0	402	W75_N35:19/19
+R-shortest-059	stable	true	true	true	route|173|8763|8763|f260442824dc0e48|6b82aafccb1a5890	0	332	W70_N40:173/173
+R-skating-001	stable	true	true	true	route|48|5071|2548|3d5210cff19424bc|6650e8d9f815aa71	0	358	W75_N35:48/48
+R-skating-002	stable	true	true	true	route|3|64|44|1d325baf48a5eefa|144f42e4ec39d6a5	0	292	W70_N40:3/3
+R-skating-003	stable	true	true	true	route|23|984|656|4e4c40eb53a002a6|6839b2f5319861f6	0	520	W70_N40:23/23
+R-skating-004	stable	true	true	true	route|897|69740|41023|f5e3ddebdbc11c87|7eecf541fbb65f7a	1	1528	W75_N40:897/897
+R-skating-005	stable	true	true	true	route|77|2898|1511|dc757c944f7515c1|9f9e09b750802ba	0	307	W75_N35:77/77
+R-skating-006	stable	true	true	true	route|680|53217|28874|eb10675fa9bdac90|128b217c6bee9693	0	631	W75_N40:680/680
+R-skating-007	stable	true	true	true	route|1010|80416|38509|604ce88dbf7231cd|1b6a9fe5d2bd4fdc	0	804	W75_N40:1010/1010
+R-skating-008	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	402	-
+R-skating-009	stable	true	true	true	route|420|43711|28953|e680a62632803476|1147155fdc054bf	0	362	W75_N35:420/420
+R-skating-010	stable	true	true	true	route|58|2523|1293|ea0bebfaa6bd03d9|9f1ed3c1e6a01d06	0	370	W75_N40:58/58
+R-skating-011	stable	true	true	true	route|443|33831|18404|15cafd1a1709ebcb|b677d1ba000464e0	0	686	W70_N40:443/443
+R-skating-012	stable	true	true	true	route|23|664|375|4bdd02c26b59588f|c53a1139636d6d9c	0	570	W75_N40:23/23
+R-skating-013	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	409	-
+R-skating-014	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	198	-
+R-skating-015	stable	true	true	true	route|13|187|106|54d8d0884d02f06a|b8bf49f89576acbd	0	424	W75_N40:13/13
+R-skating-016	stable	true	true	true	route|2|166|39|67c20c123c0293d0|2d121498a06c667f	0	236	W75_N35:2/2
+R-skating-017	stable	true	true	true	route|263|12089|8278|df8141156e6ff609|f52cf3b57b5e859c	0	371	W75_N40:263/263
+R-skating-018	stable	true	true	true	route|2|20|6|767fa6faad887fda|dae72cb306921c97	0	335	W75_N40:2/2
+R-skating-019	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	206	-
+R-skating-020	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	273	-
+R-skating-021	stable	true	true	true	route|315|51668|23460|c6e0c5d9e67c8ccc|7e1e72b95d29be98	0	628	W75_N35:315/315
+R-skating-022	stable	true	true	true	route|38|2461|1894|2e3784f77fd8492d|c134516950cbac63	0	263	W70_N40:38/38
+R-skating-023	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	160	-
+R-skating-024	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	175	-
+R-skating-025	stable	true	true	true	route|279|15817|10923|59f96ae14f99f3c2|4aa880ce2dd3b05d	0	586	W75_N35:279/279
+R-skating-026	stable	true	true	true	route|3|53|51|e48dd843d7d9f40c|438f5e52a3754414	0	245	W70_N40:3/3
+R-skating-027	stable	true	true	true	route|16|2361|1222|993855f051e0643e|6a118c244f5474d9	0	257	W75_N40:16/16
+R-skating-028	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	264	-
+R-skating-029	stable	true	true	true	route|137|27898|14847|4751da544cdce013|e119312783fe9919	0	482	W70_N40:137/137
+R-skating-030	stable	true	true	true	route|2|8|1|413519a8001ce9f4|af1e767540ad5239	0	248	W70_N40:2/2
+R-skating-031	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	227	-
+R-skating-032	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	338	-
+R-skating-033	stable	true	true	true	route|650|41468|14007|8a6e0be027071e21|792188385b23e063	0	811	E170_S50:650/650
+R-skating-034	stable	true	true	true	route|158|8286|3408|4451095d3f730e50|6758b8c643f61f70	0	345	E170_S50:158/158
+R-skating-035	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	264	-
+R-skating-036	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	319	-
+R-skating-037	stable	true	true	true	route|6|970|759|ea981ae644b6fa5e|cfe6e66aac60b738	0	209	W75_N35:6/6
+R-skating-038	stable	true	true	true	route|4|158|98|20b97dfd39d3bd73|f30cab0cce58abf0	0	199	W70_N40:4/4
+R-skating-039	stable	true	true	true	route|49|15576|6799|3438675acbc82092|8cac52344e5700c1	0	333	W70_N40:49/49
+R-skating-040	stable	true	true	true	route|33|1688|328|3cb25f14c590eaf3|3496a5c02a401e58	0	386	E170_S50:33/33
+R-skating-041	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	189	-
+R-skating-042	stable	true	true	true	route|155|24852|13797|e4c744f394217363|edfb6ab974e05258	0	450	W75_N35:155/155
+R-skating-043	stable	true	true	true	route|755|86838|50902|e7a11fc02d95247c|2566f19a6c42ef13	1	1071	W75_N40:755/755
+R-skating-044	stable	true	true	true	route|30|1869|1005|f812ff762998ed56|906149560c144e73	0	234	W70_N40:30/30
+R-skating-045	stable	true	true	true	route|206|16522|4162|af332ec06316d907|a1d1dc9fae228f2d	0	874	E170_S50:206/206
+R-skating-046	stable	true	true	true	route|360|27117|11276|5714a737e9197d7e|2f0a572dd7b6c97f	0	653	W75_N40:360/360
+R-skating-047	stable	true	true	true	route|111|13434|1340|6a22314ceacb86cd|887fbddb30309a3c	0	604	E170_S50:111/111
+R-skating-048	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	366	-
+R-skating-049	stable	true	true	true	route|38|8307|2152|bfcebeeac8e744ea|4a27ab8710b1fadb	0	356	E170_S50:38/38
+R-skating-050	stable	true	true	true	route|35|2207|1029|a2c9996da1f2f70d|fb35bad7a1925c5d	0	554	W75_N40:35/35
+R-skating-051	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	307	-
+R-skating-052	stable	true	true	true	route|1420|218085|60002|c2277f8f54f15ebb|665b07f310505aa9	67	14404	W75_N40:1341/1420
+R-skating-053	stable	true	true	true	route|145|29130|16719|88d7e3fc3e4743fc|111ab9a149ff22ed	0	629	W70_N40:145/145
+R-skating-054	stable	true	true	true	route|145|22145|6564|60193a9feedafc8f|755ef1d346060a55	0	296	W75_N40:145/145
+R-skating-055	stable	true	true	true	route|9|503|244|1c5dfaf1a2522201|a479c7eefaa4db10	0	240	W75_N40:9/9
+R-skating-056	stable	true	true	true	route|12|1528|255|d880e6e6fa721878|d763cc59380c10da	0	432	E170_S50:12/12
+R-skating-057	stable	true	true	true	route|147|8636|1991|2a6198424a7f447|e09bd7d7ea83b728	0	565	E170_S50:147/147
+R-skating-058	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	262	-
+R-skating-059	stable	true	true	true	route|45|4718|2704|280559536a3ba127|2806b41b635f5fa1	0	319	W70_N40:45/45
+R-trekking-ignore-cr-001	stable	true	true	true	route|641|48429|29452|34d458449966368c|141f0b5286080c02	1	1844	W75_N35:89/89 W75_N40:548/552
+R-trekking-ignore-cr-002	stable	true	true	true	route|2227|155075|109744|cecd9d2a5f98b6e4|3a9d00b74cf1cae	15	4905	W75_N40:2227/2227
+R-trekking-ignore-cr-003	stable	true	true	true	route|25|1336|469|974a5e86cfdee11a|c238aa938c0b66fa	0	341	W70_N40:25/25
+R-trekking-ignore-cr-004	stable	true	true	true	route|39|2567|1719|13edff05d225a2db|48ab1321d2440e49	0	396	W75_N35:39/39
+R-trekking-ignore-cr-005	stable	true	true	true	route|21|1728|1121|1ad603f748a246ec|a9d0dd07da5aace9	0	528	W75_N40:21/21
+R-trekking-ignore-cr-006	stable	true	true	true	route|5|347|131|65005cc3bf7c8c3d|2f34d55262f7f32c	0	288	W75_N35:5/5
+R-trekking-ignore-cr-007	stable	true	true	true	route|14|771|150|753c763c46e38beb|ac747085a97fcb19	0	271	W75_N40:14/14
+R-trekking-ignore-cr-008	stable	true	true	true	route|78|5330|3012|4dee71673a66bb14|44427d66c033bc43	0	680	E170_S50:78/78
+R-trekking-ignore-cr-009	stable	true	true	true	route|690|134435|43185|661660d8292ac343|5b3e67754b32c1f0	0	854	W70_N40:690/690
+R-trekking-ignore-cr-010	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	279	-
+R-trekking-ignore-cr-011	stable	true	true	true	route|66|4508|2276|d197d819e9d11771|10296cdd1bc035e5	0	454	E170_S50:66/66
+R-trekking-ignore-cr-012	stable	true	true	true	route|28|1670|981|af412df95fd90c05|7e8b876c0cba0071	0	458	W70_N40:28/28
+R-trekking-ignore-cr-013	stable	true	true	true	route|11|399|284|d38c180a5b75e711|157ab473c8b061ad	0	374	W75_N35:11/11
+R-trekking-ignore-cr-014	stable	true	true	true	route|9|425|98|3e34d17dd83eb5da|2ad398bfe86b195e	0	233	W75_N35:9/9
+R-trekking-ignore-cr-015	stable	true	true	true	route|24|1351|650|e5306978ddd81e3d|153f5870a61c4b4c	0	325	W75_N35:24/24
+R-trekking-ignore-cr-016	stable	true	true	true	route|261|26965|14759|92b8cc1fb1c3a7d4|e489c80086a3aafd	0	806	W75_N35:261/261
+R-trekking-ignore-cr-017	stable	true	true	true	route|19|1033|606|614d2899c1c94fb4|69547dc2f4ca5bff	0	264	E170_S50:19/19
+R-trekking-ignore-cr-018	stable	true	true	true	route|111|6094|4433|f17f4ebcd28de547|fb35fcaf78b7a0fe	0	364	W70_N40:111/111
+R-trekking-ignore-cr-019	stable	true	true	true	route|519|32849|22960|867cbb73760029d6|fe127694e29eccfe	6	2659	W75_N40:519/519
+R-trekking-ignore-cr-020	stable	true	true	true	route|1587|67489|36422|1bca0a643a236840|3c82869a060f8684	0	1207	E170_S50:1587/1587
+R-trekking-ignore-cr-021	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	370	-
+R-trekking-ignore-cr-022	stable	true	true	true	route|229|13791|8164|e6e5cf394106a629|a08d21b076a77f8a	3	1883	W75_N40:229/229
+R-trekking-ignore-cr-023	stable	true	true	true	route|560|37927|18755|8feccd5dee43620b|de98d21a2f723ec4	1	1242	W75_N40:560/560
+R-trekking-ignore-cr-024	stable	true	true	true	route|281|12195|6145|7a855af7f3d8c7d6|468a28704299e642	0	979	E170_S50:281/281
+R-trekking-ignore-cr-025	stable	true	true	true	route|57|3602|1481|ad3af7f5522d0d73|8b273c0909f84da4	0	567	E170_S50:57/57
+R-trekking-ignore-cr-026	stable	true	true	true	route|359|53738|33120|4d4852b7d6e5f337|e83fc992dd0fbd11	0	637	W70_N40:359/359
+R-trekking-ignore-cr-027	stable	true	true	true	route|73|13266|6163|47b61fd19f79aa1b|2801e166edd19ad0	0	392	W70_N40:73/73
+R-trekking-ignore-cr-028	stable	true	true	true	route|913|48833|36118|84c894f289de746f|7b63d7c84328b50b	1	1288	W75_N35:908/913
+R-trekking-ignore-cr-029	stable	true	true	true	route|111|4335|3269|d05dbda0fef15633|ba71ba5aaceee391	0	537	W75_N35:111/111
+R-trekking-ignore-cr-030	stable	true	true	true	route|14|476|198|97e45af9cae3a8de|a614fe9eda21a1f9	0	375	W70_N40:14/14
+R-trekking-ignore-cr-031	stable	true	true	true	route|1939|125360|86430|c19ce3152fcc6805|d5b5190be87eff8a	32	7464	W75_N40:1939/1939
+R-trekking-ignore-cr-032	stable	true	true	true	route|1403|96757|68966|cb5c537cb68c5654|691a0bffc4479a91	13	4466	W75_N35:319/319 W75_N40:1084/1084
+R-trekking-ignore-cr-033	stable	true	true	true	route|640|90215|58575|5c9e0b7bcc394924|412c044796573a8c	0	1151	W70_N40:640/640
+R-trekking-ignore-cr-034	stable	true	true	true	route|365|30560|14556|61f4e9b4c30f30fd|226cb9de26603f3	0	568	W70_N40:365/365
+R-trekking-ignore-cr-035	stable	true	true	true	route|7|124|105|b637aacfb1925fbe|7c7c9565ac73a4eb	0	206	W75_N40:7/7
+R-trekking-ignore-cr-036	stable	true	true	true	route|1229|81681|64957|15ff0ec595187b09|780ea3b0edb3c160	3	1461	W75_N40:1229/1229
+R-trekking-ignore-cr-037	stable	true	true	true	route|7|895|397|9ad0db0045aee6db|faad05d1b8200d20	0	225	W75_N35:7/7
+R-trekking-ignore-cr-038	stable	true	true	true	route|26|1892|1098|1635663297b8b77f|412d190aa53b79c3	0	376	W75_N35:26/26
+R-trekking-ignore-cr-039	stable	true	true	true	route|39|3520|1524|c9f14a84dd5c5c70|dad83d220b9fa16	0	263	W75_N35:39/39
+R-trekking-ignore-cr-040	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	453	-
+R-trekking-ignore-cr-041	stable	true	true	true	route|2961|320945|136485|74ef658fcf6292ac|c886c3d120ed3975	70	12510	W75_N40:2961/2961
+R-trekking-ignore-cr-042	stable	true	true	true	route|428|57285|33584|1c3b47e426eafe8b|dd6231cd3e25f0ed	1	1140	W75_N35:428/428
+R-trekking-ignore-cr-043	stable	true	true	true	route|14|1165|268|380c01ee374dc8f|16718cb6756088e3	0	307	W75_N35:10/14
+R-trekking-ignore-cr-044	stable	true	true	true	route|211|49639|21190|571b68d2b6257cda|a5429214b1e0e650	0	413	W70_N40:211/211
+R-trekking-ignore-cr-045	stable	true	true	true	route|639|33290|24984|44682067b75918be|d909a9211cdab76b	0	651	W75_N40:639/639
+R-trekking-ignore-cr-046	stable	true	true	true	route|9|592|437|aca6e2ca82d350ef|1680a2dc28ed5066	0	376	E170_S50:9/9
+R-trekking-ignore-cr-047	stable	true	true	true	route|1597|87616|61031|ccc940da13caabcb|54e5a7cbbd629ad5	23	7035	W75_N40:1597/1597
+R-trekking-ignore-cr-048	stable	true	true	true	route|24|1504|498|9b04b39c6cb06f21|dd9755361a6ceebe	0	453	W75_N35:24/24
+R-trekking-ignore-cr-049	stable	true	true	true	route|25|1847|781|4ada544e6680e66f|e3a151fffd83c0cf	0	287	W75_N40:25/25
+R-trekking-ignore-cr-050	stable	true	true	true	route|293|15732|9632|6fa92d9378575a42|18d66ff661cd568e	0	888	W75_N40:293/293
+R-trekking-ignore-cr-051	stable	true	true	true	route|61|5862|4169|1e9754c7c86849a5|bcf447f4bf5905fa	0	435	W75_N40:61/61
+R-trekking-ignore-cr-052	stable	true	true	true	route|20|1430|537|4dc2e636970db727|60f183fb865bbd6d	0	258	E170_S50:20/20
+R-trekking-ignore-cr-053	stable	true	true	true	route|29|2493|609|6da7f3eddb121e83|b65b00b5bfadda09	0	322	W70_N40:29/29
+R-trekking-ignore-cr-054	stable	true	true	true	route|25|1567|332|16792604f98040f8|dcf5035fe0999b5	0	279	E170_S50:25/25
+R-trekking-ignore-cr-055	stable	true	true	true	route|225|10785|5479|a5633be559ea906d|7e72f89b161b1817	0	960	E170_S50:225/225
+R-trekking-ignore-cr-056	stable	true	true	true	route|1026|81619|49177|429b8e09852f3a1c|4e8f23638b90d646	0	605	E170_S50:1026/1026
+R-trekking-ignore-cr-057	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	275	-
+R-trekking-ignore-cr-058	stable	true	true	true	route|12|625|332|3aeb96a15fc871f0|5844ec47e71cf683	0	231	E170_S50:12/12
+R-trekking-ignore-cr-059	stable	true	true	true	route|95|5756|3470|113a34f4760221c4|db3c072fe89ee293	0	595	W75_N40:95/95
+R-trekking-noferries-001	stable	true	true	true	route|138|9291|6457|934f026fcdf4354|af6dc266afb7afc0	0	524	W75_N35:138/138
+R-trekking-noferries-002	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	351	-
+R-trekking-noferries-003	stable	true	true	true	route|272|23560|22028|44629940776f7ce1|2010a9236a3fc2e6	0	636	W70_N40:272/272
+R-trekking-noferries-004	stable	true	true	true	route|958|78618|59436|2cf5465fb13f06c1|be0f58cd0d816a83	0	870	W70_N40:958/958
+R-trekking-noferries-005	stable	true	true	true	route|82|6463|4391|c672a24a3a6e0e75|b7a315a81b0f8c7d	0	455	W75_N35:82/82
+R-trekking-noferries-006	stable	true	true	true	route|20|574|204|248b279753b6ea13|452211168d16c82	0	473	E170_S50:20/20
+R-trekking-noferries-007	stable	true	true	true	route|580|27469|15720|6f6bb451dad89afc|f5840999c03e105e	1	1476	W75_N40:580/580
+R-trekking-noferries-008	stable	true	true	true	route|42|2032|1295|d108e6ddac55f26c|b456f57016816236	0	394	W75_N35:42/42
+R-trekking-noferries-009	stable	true	true	true	route|15|862|417|6e294f42bc56d9d3|9ef1c75196e23922	0	297	W70_N40:10/15
+R-trekking-noferries-010	stable	true	true	true	route|25|1335|921|fc9e88f62851c454|35ceba096298e851	0	274	W75_N40:25/25
+R-trekking-noferries-011	stable	true	true	true	route|7|418|149|3cdfd2aed3d24a54|3a23f310c2c15da4	0	320	W75_N40:7/7
+R-trekking-noferries-012	stable	true	true	true	route|3|251|75|19300c5d92070654|3af0032a6e79d7d0	0	252	W70_N40:3/3
+R-trekking-noferries-013	stable	true	true	true	route|1142|99104|60653|5494eba8cdf40671|6841fa9f82ade383	1	1038	W75_N40:1142/1142
+R-trekking-noferries-014	stable	true	true	true	route|166|8554|6673|a7601e2f1f747716|e28e46b401134355	0	652	W75_N35:166/166
+R-trekking-noferries-015	stable	true	true	true	route|234|48335|13864|e4a57b74d96b5e1f|ce038709222e3db9	0	517	W70_N40:234/234
+R-trekking-noferries-016	stable	true	true	true	route|1174|27964|24088|234f75a0ec7be591|73748bae9fd3664e	0	939	E170_S50:1174/1174
+R-trekking-noferries-017	stable	true	true	true	route|215|14547|8982|fc0a159d1071063b|7cdd4ae91e63e185	0	625	W75_N40:215/215
+R-trekking-noferries-018	stable	true	true	true	route|82|3680|1758|57180c94d53fef6c|883b721780dcafc4	0	467	W75_N35:82/82
+R-trekking-noferries-019	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	196	-
+R-trekking-noferries-020	stable	true	true	true	route|3|96|83|5e29f614913a7d3b|9996f316ca069848	0	215	W70_N40:3/3
+R-trekking-noferries-021	stable	true	true	true	route|2681|107747|68640|bd422cc88d4598d7|1466b9b73beb21c1	0	1082	E170_S50:2681/2681
+R-trekking-noferries-022	stable	true	true	true	route|1161|71909|61943|c7e7791c9142595b|7e19664e72ab76ea	7	3210	W75_N35:156/156 W75_N40:1005/1005
+R-trekking-noferries-023	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	424	-
+R-trekking-noferries-024	stable	true	true	true	route|47|4177|2863|7dea777951878a15|bd1acbbfce26b101	0	463	W75_N35:47/47
+R-trekking-noferries-025	stable	true	true	true	route|11|558|349|e6d2a06e2bfa071|32a6e1a09ca06e0e	0	234	W70_N40:11/11
+R-trekking-noferries-026	stable	true	true	true	route|97|14329|8057|157c8cda5432f9e2|926050cbab3ddbc2	0	232	E170_S50:97/97
+R-trekking-noferries-027	stable	true	true	true	route|57|7189|4125|60fc63b8504e6cf0|d27324ced12b1d05	0	325	W75_N35:57/57
+R-trekking-noferries-028	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	172	-
+R-trekking-noferries-029	stable	true	true	true	route|764|21249|16537|46bd6b9ad0b543ee|f657377194bef304	9	3663	W75_N40:764/764
+R-trekking-noferries-030	stable	true	true	true	route|186|12167|6702|68a508f739186247|7b8173df67d6b9f	0	811	W75_N40:186/186
+R-trekking-noferries-031	stable	true	true	true	route|22|1376|424|a8fa3f70e61d5656|dc989db516da8daf	0	436	W75_N35:22/22
+R-trekking-noferries-032	stable	true	true	true	route|298|13418|7851|5d97b67368006823|c7873eaf43d9da7c	0	867	W75_N40:298/298
+R-trekking-noferries-033	stable	true	true	true	route|293|14481|10487|4b3f4fce7295ba15|51732f6348366f47	0	867	W75_N35:293/293
+R-trekking-noferries-034	stable	true	true	true	route|147|49831|12505|1f817b943a0e91c3|f1cad61c9debd0be	0	378	E170_S50:147/147
+R-trekking-noferries-035	stable	true	true	true	route|15|851|552|fd360361b762e4a0|337906044cc07215	0	286	W75_N40:15/15
+R-trekking-noferries-036	stable	true	true	true	route|18|2035|407|22854dddb81a556d|4d7963e3885a8ae8	0	377	W75_N35:18/18
+R-trekking-noferries-037	stable	true	true	true	route|638|27914|12784|3a25dd723b9ba33b|6cfec96546e14e62	0	1230	E170_S50:638/638
+R-trekking-noferries-038	stable	true	true	true	route|105|7397|5028|75cc4438ae16e454|d4a5bafa7556d1fd	0	444	W75_N35:105/105
+R-trekking-noferries-039	stable	true	true	true	route|510|28990|21929|c47d2f6f4d7a361|688c304fd738bdbf	0	806	W70_N40:72/72 W75_N40:438/438
+R-trekking-noferries-040	stable	true	true	true	route|6|198|118|45128a74e7f38e35|b1311157ecea69d4	0	296	W75_N35:6/6
+R-trekking-noferries-041	stable	true	true	true	route|1705|122442|114673|f742a818edb4d27f|37637ee4b81efaf7	3	2089	W75_N35:1705/1705
+R-trekking-noferries-042	stable	true	true	true	route|12|15051|2835|c50db74d07422565|dd073eb19e506cf	0	297	E170_S50:12/12
+R-trekking-noferries-043	stable	true	true	true	route|468|28856|11990|3c1f04dd69ba23bf|71192594c07ed8e9	0	706	E170_S50:468/468
+R-trekking-noferries-044	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	176	-
+R-trekking-noferries-045	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	216	-
+R-trekking-noferries-046	stable	true	true	true	route|46|1957|782|5fe3e21ec003b51c|e54d6fcddf8c2e53	0	419	E170_S50:46/46
+R-trekking-noferries-047	stable	true	true	true	route|108|4613|1626|8bd1d3348173e56a|2ea3d7b150591cd2	0	331	E170_S50:108/108
+R-trekking-noferries-048	stable	true	true	true	route|40|3557|2442|572873c10c9c421a|c67d21fd1d956c7	0	319	W70_N40:40/40
+R-trekking-noferries-049	stable	true	true	true	route|7|425|217|9c888fb2ec2e0a5e|b95ceacf5963f4c0	0	308	W70_N40:7/7
+R-trekking-noferries-050	stable	true	true	true	route|249|9283|7574|dbcdb54d90b39ae5|6d85b03976172dad	0	375	W75_N40:249/249
+R-trekking-noferries-051	stable	true	true	true	route|188|14099|7373|a5d16af8e293b95|6f478dd10daca3d1	0	320	W75_N40:188/188
+R-trekking-noferries-052	stable	true	true	true	route|57|3611|2511|d1716fc8a35a8ee9|6aa712a7446ca727	0	532	W75_N40:57/57
+R-trekking-noferries-053	stable	true	true	true	route|411|18761|12277|ac800ea5e7bfa9f1|961c91147e4e06a0	1	880	W75_N40:411/411
+R-trekking-noferries-054	stable	true	true	true	route|37|2140|378|22f39bda404fa23a|3cb301c33949e3ba	0	488	E170_S50:37/37
+R-trekking-noferries-055	stable	true	true	true	route|656|27847|18609|443d521b940f33b7|883f5bff7e145864	3	1864	W75_N40:656/656
+R-trekking-noferries-056	stable	true	true	true	route|67|4389|1699|d663ee6b7a57cd6a|d9e8f0aac6c74032	0	569	W75_N40:67/67
+R-trekking-noferries-057	stable	true	true	true	route|2384|150165|89863|5114cd419b80b87e|1200a48244c6f1c2	0	1295	E170_S50:2384/2384
+R-trekking-noferries-058	stable	true	true	true	route|1536|304850|98531|472c02ca01277df4|84bb4c1e199db8ed	0	1382	E170_S50:1536/1536
+R-trekking-noferries-059	stable	true	true	true	route|2384|160535|69944|724a3ca0bfdcdf4b|18c8a0d6fcf1c5e3	0	1544	E170_S50:2384/2384
+R-trekking-nosteps-001	stable	true	true	true	route|38|6072|2245|a5a210aa2fa54579|fbfce568a8c1b30e	0	276	W75_N35:38/38
+R-trekking-nosteps-002	stable	true	true	true	route|1536|128761|101144|34c8120e2c0bcb36|7e19d69d865451bd	5	3817	W75_N35:1204/1204 W75_N40:332/332
+R-trekking-nosteps-003	stable	true	true	true	route|66|2079|1420|a6d6f3237c4890f8|deea590938658ae6	0	464	E170_S50:66/66
+R-trekking-nosteps-004	stable	true	true	true	route|10|712|242|56e00a12152ebf3e|77f9243eac342f37	0	371	W75_N35:10/10
+R-trekking-nosteps-005	stable	true	true	true	route|30|1803|720|d5c3b281e459b9ff|7479f0f0de4a4897	0	364	W75_N35:30/30
+R-trekking-nosteps-006	stable	true	true	true	route|54|2848|1519|6de283e7053e1fd6|bdbe1d1a69c6905b	0	706	W75_N40:54/54
+R-trekking-nosteps-007	stable	true	true	true	route|1744|75750|64944|2cce44658cc2ce85|acb095ab81d7c198	2	1586	W75_N40:1737/1744
+R-trekking-nosteps-008	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	215	-
+R-trekking-nosteps-009	stable	true	true	true	route|103|6215|4439|4eef11c30218a420|66b9c675f962a3f0	0	414	W75_N35:103/103
+R-trekking-nosteps-010	stable	true	true	true	route|13|1373|422|251f6632980694a3|6de06a33d888b755	0	379	E170_S50:13/13
+R-trekking-nosteps-011	stable	true	true	true	route|166|9405|4709|6041a46e1d8ebf40|e9c4ba0501c68769	0	825	E170_S50:164/166
+R-trekking-nosteps-012	stable	true	true	true	route|35|1639|1095|69591ce9f5232c7b|cb80e22dcabfe69c	0	178	W75_N40:35/35
+R-trekking-nosteps-013	stable	true	true	true	route|14|1388|455|aafe1d4c8313415e|13ef70f71d184fd7	0	265	E170_S50:14/14
+R-trekking-nosteps-014	stable	true	true	true	route|2283|160180|84656|46cb699b00c3bdad|1cc38d365a46e22b	0	1076	E170_S50:2283/2283
+R-trekking-nosteps-015	stable	true	true	true	route|676|78502|39997|d21c431c079bff74|1082dd2cdc3758c3	0	896	E170_S50:676/676
+R-trekking-nosteps-016	stable	true	true	true	route|1336|309490|132802|98550426c3214d6b|10c75e88183ccf7c	9	5354	W70_N40:1327/1336
+R-trekking-nosteps-017	stable	true	true	true	route|24|369|272|e303292973ac52b9|1a43c626234535ba	0	401	E170_S50:24/24
+R-trekking-nosteps-018	stable	true	true	true	route|4133|174384|128443|7cbd0e6c7075ed46|5973be04deb79e4a	61	11767	W75_N40:4133/4133
+R-trekking-nosteps-019	stable	true	true	true	route|2007|126903|106104|dee77d1d3e7a6b45|e57194edc019e52c	11	3586	W75_N35:638/638 W75_N40:1369/1369
+R-trekking-nosteps-020	stable	true	true	true	route|8|202|137|c1c34344ae06589f|e618b094bd2b93	0	188	W75_N35:8/8
+R-trekking-nosteps-021	stable	true	true	true	route|1443|134879|99330|29b0248dcad0e824|b6322af2910bac7b	2	1780	W70_N40:1443/1443
+R-trekking-nosteps-022	stable	true	true	true	route|58|8017|4212|c5ed13a162ac6124|74be84f017570b8b	0	402	W70_N40:58/58
+R-trekking-nosteps-023	stable	true	true	true	route|66|3775|2247|49bb489c2e278408|bcf3561eab0f3b86	0	581	E170_S50:66/66
+R-trekking-nosteps-024	stable	true	true	true	route|108|8100|5167|3780f1adc3a267a|ba500c61ab2bbaa5	0	723	W75_N40:108/108
+R-trekking-nosteps-025	stable	true	true	true	route|111|7122|3673|674c2044d8c05cb8|46eb0a0e327e6b6d	0	501	W75_N40:111/111
+R-trekking-nosteps-026	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	282	-
+R-trekking-nosteps-027	stable	true	true	true	route|20|1365|771|339809ea59f8d828|1516975542680cb5	0	293	W75_N35:20/20
+R-trekking-nosteps-028	stable	true	true	true	route|2|12|9|e2db3a6c8f0bc4e0|47a513701e676e5	0	211	W70_N40:2/2
+R-trekking-nosteps-029	stable	true	true	true	route|2500|167237|94012|375045f948ae736c|5e9703f74fbf8e5e	72	16162	W75_N40:2500/2500
+R-trekking-nosteps-030	stable	true	true	true	route|11|525|195|1b1facad38e83aeb|7c46a919ce0db169	0	462	W75_N35:11/11
+R-trekking-nosteps-031	stable	true	true	true	route|1238|101143|77831|46c9a7e7f8fd413d|c4f7e80e908266	0	607	W70_N40:1238/1238
+R-trekking-nosteps-032	stable	true	true	true	route|31|1510|836|f8cd2afc5f9ad394|3aa7ad358ba51e5f	0	315	W75_N40:31/31
+R-trekking-nosteps-033	stable	true	true	true	route|1121|52381|38293|5990e63c2396bf20|d9225c8cab3ed764	7	2541	W75_N40:1121/1121
+R-trekking-nosteps-034	stable	true	true	true	route|315|14207|9148|6ce446b7e3ca2dd9|c160ff1bd6e86d19	6	2154	W75_N40:315/315
+R-trekking-nosteps-035	stable	true	true	true	route|6|550|321|140aee114faffd77|a2755fc0135e2585	0	338	E170_S50:6/6
+R-trekking-nosteps-036	stable	true	true	true	route|1358|71922|52210|df6c9705b468bc89|b3f01b2b28ab4008	2	1618	W75_N40:1358/1358
+R-trekking-nosteps-037	stable	true	true	true	route|1275|59826|49068|e9bba4060a867fe0|1e9dd8765f35979e	9	4350	W75_N40:1275/1275
+R-trekking-nosteps-038	stable	true	true	true	route|193|11116|7760|e6ad2b6238567a4a|e591d57cad3e1c11	0	658	W75_N35:193/193
+R-trekking-nosteps-039	stable	true	true	true	route|48|1326|537|1524feb19721552d|9389197d866e2c8	0	497	E170_S50:48/48
+R-trekking-nosteps-040	stable	true	true	true	route|11|909|224|8a8b268ae11beb88|86d99663500e522e	0	306	W75_N40:11/11
+R-trekking-nosteps-041	stable	true	true	true	route|41|2413|1409|7eba9f0629c1bb29|20fd1d3a4918ef79	0	354	W75_N40:41/41
+R-trekking-nosteps-042	stable	true	true	true	route|1185|70118|47772|72cdf39b9f4cc48f|258fc923ac5ec78a	13	4962	W75_N40:1185/1185
+R-trekking-nosteps-043	stable	true	true	true	route|375|33689|23485|a1602aa3034d3c7e|961c3edf85de1acc	0	979	W75_N35:375/375
+R-trekking-nosteps-044	stable	true	true	true	route|22|1264|403|521a8bb190b19cde|a98a99bc9cecd354	0	447	E170_S50:22/22
+R-trekking-nosteps-045	stable	true	true	true	route|91|3930|3140|56823ecb0427f4ad|6024e8fd4d0d18ab	0	535	W75_N40:91/91
+R-trekking-nosteps-046	stable	true	true	true	route|37|3697|1970|3c828094ca08578c|8b34a35ecf21f186	0	276	W75_N35:37/37
+R-trekking-nosteps-047	stable	true	true	true	route|11|429|222|7facf2e53714374d|2f8681ba3beaacaf	0	224	W70_N40:11/11
+R-trekking-nosteps-048	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	240	-
+R-trekking-nosteps-049	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	154	-
+R-trekking-nosteps-050	stable	true	true	true	route|1575|124590|90172|d4552292c8566111|e999f841bd790d7d	13	5562	W75_N35:1003/1003 W75_N40:572/572
+R-trekking-nosteps-051	stable	true	true	true	route|113|4340|2786|fac571d8a7a42d44|f8268a5b339a860e	0	612	W75_N40:113/113
+R-trekking-nosteps-052	stable	true	true	true	route|496|25067|17841|74d4abaa686f0127|daf4c93aeba5fea9	0	763	W75_N35:496/496
+R-trekking-nosteps-053	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	829	-
+R-trekking-nosteps-054	stable	true	true	true	route|411|21230|11495|f2f13aebd6505448|4a7963aaa8fcb5a1	0	608	W75_N40:411/411
+R-trekking-nosteps-055	stable	true	true	true	route|14|436|189|b66d5122b81c1d99|f0d248c5b806f504	0	449	W75_N40:14/14
+R-trekking-nosteps-056	stable	true	true	true	route|9|655|458|2d18a8df0145a9c|d1eb5cc8b3c95b6f	0	223	W75_N35:9/9
+R-trekking-nosteps-057	stable	true	true	true	route|16|1179|338|3ed134ec72da6b7c|ec99740f5983f7ac	0	336	E170_S50:16/16
+R-trekking-nosteps-058	stable	true	true	true	route|14|743|146|f98f2b40f791b2|bb45083ae8778e26	0	396	E170_S50:14/14
+R-trekking-nosteps-059	stable	true	true	true	route|560|55507|34398|d6762ac35f3d8925|a1f1ddad615b3ce2	0	681	W70_N40:560/560
+R-trekking-steep-001	stable	true	true	true	route|19|940|616|8fa821b876d6726e|d4beed8e824199b1	0	345	W70_N40:17/19
+R-trekking-steep-002	stable	true	true	true	route|28|1516|911|521d1ee619ef1bc8|5e5e04edc6253b51	0	394	W70_N40:28/28
+R-trekking-steep-003	stable	true	true	true	route|130|6853|4638|e014681c4ab0e9e5|2c5747da09c44c52	0	762	W75_N40:130/130
+R-trekking-steep-004	stable	true	true	true	route|248|25154|19833|1aeeb535ff1c9caf|3c09c842a67312da	0	1006	W75_N35:248/248
+R-trekking-steep-005	stable	true	true	true	route|1033|41959|32999|73d4aa24ed96dc14|e3136a2661a7656	3	1930	W75_N40:1033/1033
+R-trekking-steep-006	stable	true	true	true	route|801|69667|38116|f543925bf14689cd|926dca6c236f9aa3	0	1013	W70_N40:801/801
+R-trekking-steep-007	stable	true	true	true	route|5|431|140|bb446db0f6be908|321dbe566d3b6004	0	356	W75_N35:5/5
+R-trekking-steep-008	stable	true	true	true	route|360|15628|9411|f8fa2dd1955192fa|9d16903f10577edf	0	446	W75_N40:360/360
+R-trekking-steep-009	stable	true	true	true	route|1350|148887|117217|8cf425a22bb5d4dc|ee4af94af4d3367a	1	1577	W70_N40:1350/1350
+R-trekking-steep-010	stable	true	true	true	route|72|8088|2280|de4c8da5dede5d54|a3848b90319db22c	0	306	W70_N40:72/72
+R-trekking-steep-011	stable	true	true	true	route|5|143|124|404fc9099e688e24|e6d4de858890ba68	0	254	W75_N40:5/5
+R-trekking-steep-012	stable	true	true	true	route|8|598|309|83bc33d0276f5971|19b082fe88e35690	0	212	W75_N35:8/8
+R-trekking-steep-013	stable	true	true	true	route|18|1093|650|b1fc7c487170186c|adbce34a56abc2e0	0	352	W70_N40:18/18
+R-trekking-steep-014	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	266	-
+R-trekking-steep-015	stable	true	true	true	route|15|672|285|9e75970f27b515b0|bd7ce08b63abbeae	0	636	E170_S50:15/15
+R-trekking-steep-016	stable	true	true	true	route|78|5540|3688|88b7faa5ffb8edb8|5098f28685a598ac	0	451	W70_N40:78/78
+R-trekking-steep-017	stable	true	true	true	route|177|17228|9968|8c7e6b7d899b5e8c|3874bd7b762bc2de	0	293	W70_N40:177/177
+R-trekking-steep-018	stable	true	true	true	route|56|3822|2116|79482dfd393616e5|33d0eba3f633549d	0	308	W70_N40:56/56
+R-trekking-steep-019	stable	true	true	true	route|23|1744|859|a16a2efbcbeea420|8a32bb93e8b343b1	0	417	W75_N40:23/23
+R-trekking-steep-020	stable	true	true	true	route|1164|63783|56328|4087ea90fcdb9c91|f67ff573ac3cac6f	5	3098	W75_N40:1164/1164
+R-trekking-steep-021	stable	true	true	true	route|41|3555|838|c5fa537b6e903f25|84cc2176388b8247	0	373	W75_N35:41/41
+R-trekking-steep-022	stable	true	true	true	route|94|7298|5067|251a685a013673ac|c23466e095d75fd7	0	610	W70_N40:94/94
+R-trekking-steep-023	stable	true	true	true	route|18|1622|411|48201dca150feb4f|c9edd2d8a354e2d3	0	494	W75_N35:18/18
+R-trekking-steep-024	stable	true	true	true	route|280|25589|12971|69fe08cb04adb5e9|eba9bd17bf8bb21d	0	399	W75_N35:280/280
+R-trekking-steep-025	stable	true	true	true	route|10|254|228|14117716ad9f359f|c73bc42335fa39e2	0	355	W75_N40:10/10
+R-trekking-steep-026	stable	true	true	true	route|5|339|216|ea176462603d456b|6450d5f0225fc01d	0	218	W70_N40:5/5
+R-trekking-steep-027	stable	true	true	true	route|152|8629|4687|18e244e7340f97d9|c91cc7e0226d5a07	0	380	W75_N40:152/152
+R-trekking-steep-028	stable	true	true	true	route|51|4503|861|590e863c828d3454|42fd6e4e73584758	0	392	E170_S50:51/51
+R-trekking-steep-029	stable	true	true	true	route|177|9822|7440|61d48fcd2bf95633|c8cec355595d90d6	0	530	W70_N40:177/177
+R-trekking-steep-030	stable	true	true	true	route|28|1081|701|901860778f935d0e|1c46c3bb2c30d652	0	252	W75_N40:28/28
+R-trekking-steep-031	stable	true	true	true	route|1609|102767|94781|f8dae49f9d10426f|772c8151741040cf	4	3063	W75_N40:1609/1609
+R-trekking-steep-032	stable	true	true	true	route|66|6918|1792|c8fc254f32273763|4a81550fd8263394	0	333	E170_S50:66/66
+R-trekking-steep-033	stable	true	true	true	route|81|2613|1278|30290ad36ded0f54|fc93e5c73a1540d4	0	544	W75_N40:81/81
+R-trekking-steep-034	stable	true	true	true	route|8|405|179|4440a313999ab048|7d2f1c6afc434bd9	0	286	W75_N35:8/8
+R-trekking-steep-035	stable	true	true	true	route|13|466|263|572699400dc6e83d|31d429575dcd2ca9	0	414	W75_N40:13/13
+R-trekking-steep-036	stable	true	true	true	route|818|46067|23337|b47eba6ae4151dc6|1d31f9cc43fe5a57	24	5928	W75_N40:818/818
+R-trekking-steep-037	stable	true	true	true	route|1332|43756|34817|d6bd2a4b34c99bd0|872c8065e76300ba	0	960	E170_S50:1332/1332
+R-trekking-steep-038	stable	true	true	true	route|4|391|93|18421a3b95dd70dc|d8fb80fc6b7ec246	0	278	W70_N40:4/4
+R-trekking-steep-039	stable	true	true	true	route|937|30148|21541|352d416e1ee1127d|b90a691b48056fc6	0	934	E170_S50:937/937
+R-trekking-steep-040	stable	true	true	true	route|21|1431|887|b3deabe88c52f880|221d9c42d4293952	0	343	W75_N35:21/21
+R-trekking-steep-041	stable	true	true	true	route|24|1342|865|fc7e742a04f63a59|8f0b230b7f1b789d	0	505	E170_S50:24/24
+R-trekking-steep-042	stable	true	true	true	route|64|2177|1545|7407550728ccfd5e|a13b12fc85521c63	0	292	W75_N40:64/64
+R-trekking-steep-043	stable	true	true	true	route|6|430|84|633b96cee8a2bdec|d2743e27c48a28bb	0	254	W70_N40:6/6
+R-trekking-steep-044	stable	true	true	true	route|1251|111223|100444|5607d44668dd3e61|2578e4225ba1d019	1	975	W70_N40:1225/1251
+R-trekking-steep-045	stable	true	true	true	route|5|508|80|be788511e1a6bdc8|c3b0f5d86a92f3f5	0	306	W70_N40:5/5
+R-trekking-steep-046	stable	true	true	true	route|157|12460|5078|e47f7fdd09694aca|8cb99e2a3b24d1e6	0	337	W70_N40:157/157
+R-trekking-steep-047	stable	true	true	true	route|1418|98088|49734|c6fc559fbf27016e|2e74239906adc17	52	9703	W75_N40:1390/1418
+R-trekking-steep-048	stable	true	true	true	route|3|140|46|b13020d94c73357b|d53167bdf5e86ebd	0	322	W70_N40:0/3
+R-trekking-steep-049	stable	true	true	true	route|137|7543|4272|eac5f5aeb6ea96ed|f316ab8633e33419	0	470	W75_N40:137/137
+R-trekking-steep-050	stable	true	true	true	route|156|8365|5193|b4af4a30fa61d3a2|fd387d668a30e8b4	0	331	E170_S50:156/156
+R-trekking-steep-051	stable	true	true	true	route|42|1156|463|8e6420418206867a|51a19c435e0d0483	0	548	E170_S50:42/42
+R-trekking-steep-052	stable	true	true	true	route|774|35452|29647|26dfe897aef8132d|f65aaa9e277c30de	0	874	E170_S50:774/774
+R-trekking-steep-053	stable	true	true	true	route|5073|212759|166804|2b6ab6ce6a2fa471|3c6351dc517995b9	74	16136	W75_N40:5073/5073
+R-trekking-steep-054	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	195	-
+R-trekking-steep-055	stable	true	true	true	route|321|34913|21983|22aaeaaff65fcfa6|fdc99704f950927f	0	291	E170_S50:321/321
+R-trekking-steep-056	stable	true	true	true	route|49|7253|6307|659bd7c80038ebe1|473978509be7310c	0	233	W75_N35:49/49
+R-trekking-steep-057	stable	true	true	true	route|27|1172|487|bf5082da81d7ec33|9a87f57a7d3a3dc8	0	214	E170_S50:27/27
+R-trekking-steep-058	stable	true	true	true	route|163|8124|5234|83775591ac2c13f6|5e11abb1a861388d	0	508	E170_S50:163/163
+R-trekking-steep-059	stable	true	true	true	route|1482|275535|112838|f57f2943183dd8a7|328d422ded52695b	1	751	W70_N40:1482/1482
+R-trekking-001	stable	true	true	true	route|6|572|447|58dcef4918653cc4|61192acd0735304b	0	294	W75_N35:6/6
+R-trekking-002	stable	true	true	true	route|5|378|70|cff29351309b3f5e|768b332a0c331c66	0	392	W75_N40:5/5
+R-trekking-003	stable	true	true	true	route|698|53392|43501|d0e3ceae77a77dc4|2fc7bd90e1d1abc7	0	453	E170_S50:698/698
+R-trekking-004	stable	true	true	true	route|30|3023|2242|50d9cae120e025d1|f6a710d678a9bc7e	0	469	W75_N35:30/30
+R-trekking-005	stable	true	true	true	route|575|38052|22804|a683886c043fae8a|aba4d90a32eaee4a	0	653	W75_N40:575/575
+R-trekking-006	stable	true	true	true	route|19|1013|286|670659bdbcc6a03b|db0682855d4beed6	0	465	E170_S50:19/19
+R-trekking-007	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	123	-
+R-trekking-008	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	327	-
+R-trekking-009	stable	true	true	true	route|52|12568|2716|9e7d719fb29d7e6e|fc5731e894347228	0	433	E170_S50:52/52
+R-trekking-010	stable	true	true	true	route|2|12|4|720459f814645f56|264186394f43614d	0	248	E170_S50:2/2
+R-trekking-011	stable	true	true	true	route|384|48433|20726|1b0b525db8d8ed88|eb097a0300c3439a	0	474	E170_S50:384/384
+R-trekking-012	stable	true	true	true	route|640|63078|33134|e6313c633d8b5aa4|1b07e3276053d4d2	2	1671	W75_N35:640/640
+R-trekking-013	stable	true	true	true	route|103|14197|3107|f65fcd2c2b2fa310|8fc5c4482ea2aac4	0	492	W75_N35:103/103
+R-trekking-014	stable	true	true	true	route|34|3927|2304|4514c6e0964707aa|4933a6868e036a6b	0	273	W70_N40:34/34
+R-trekking-015	stable	true	true	true	route|2|17|15|d7afbb0dd3a08875|6a00b386ee4cd50f	0	270	W75_N35:2/2
+R-trekking-016	stable	true	true	true	route|26|1830|1316|1d286de840f7e956|7dfe5fa09bb25747	0	356	W75_N35:26/26
+R-trekking-017	stable	true	true	true	route|269|16882|8830|a154a903f56819e7|108971ec46d0280e	0	462	E170_S50:267/269
+R-trekking-018	stable	true	true	true	route|986|55332|32046|fdde810d88c9baea|c4714ffc25b1f54c	5	2406	W75_N40:986/986
+R-trekking-019	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	255	-
+R-trekking-020	stable	true	true	true	route|4123|289058|147386|c8ac2ec9d2c07543|3ffdb5c4745b4609	0	1123	E170_S50:4123/4123
+R-trekking-021	stable	true	true	true	route|19|1776|326|7afcf8eb751727b1|3585c93c920ad491	0	344	W75_N35:19/19
+R-trekking-022	stable	true	true	true	route|382|26908|21703|9bb5ec1f68a16e61|320a32aa5eee807d	0	473	E170_S50:382/382
+R-trekking-023	stable	true	true	true	route|1451|114960|79956|b5ce1ce848a89672|c245deaf2e5077cb	0	508	W70_N40:1451/1451
+R-trekking-024	stable	true	true	true	route|33|6077|2187|1803e648eb8e8a18|1aef3d8db08034a	0	327	E170_S50:33/33
+R-trekking-025	stable	true	true	true	route|39|1624|815|a1ecb3794689ffed|e429e05792d10474	0	601	E170_S50:39/39
+R-trekking-026	stable	true	true	true	route|6|228|118|c5612758772d6389|f4a881132b3b9e29	0	245	W70_N40:6/6
+R-trekking-027	stable	true	true	true	route|8|313|114|6a9d3bbed0ac876|3a7a3a336ef0422f	0	248	W75_N35:8/8
+R-trekking-028	stable	true	true	true	route|32|1467|700|d0219811f004f1a2|e2f5f90c232c8b8	0	317	W70_N40:32/32
+R-trekking-029	stable	true	true	true	route|755|39291|30608|396ba4ee879a018c|c3f0bf84a6d7fa2d	0	690	E170_S50:755/755
+R-trekking-030	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	223	-
+R-trekking-031	stable	true	true	true	route|128|14328|9373|12362804df476760|40ae16adadbbbb3f	0	388	W70_N40:128/128
+R-trekking-032	stable	true	true	true	route|25|1060|249|64d31c22f006bd5a|dd9d68beba273bb8	0	326	W70_N40:25/25
+R-trekking-033	stable	true	true	true	route|17|1034|507|da0405be8a2e9037|ecde488c0de8bbae	0	359	W75_N40:17/17
+R-trekking-034	stable	true	true	true	route|208|15779|7685|63d2f3bae552aaab|2c1cf5b686c7ca58	0	400	W70_N40:208/208
+R-trekking-035	stable	true	true	true	route|13|1296|724|d1f671ba3feb83f4|74e433886e458a7	0	195	W70_N40:13/13
+R-trekking-036	stable	true	true	true	route|906|62839|22063|ae21e9b0d1ba664f|3d8842450bca28bf	0	972	E170_S50:904/906
+R-trekking-037	stable	true	true	true	route|9|520|161|3e0b7ed3f7fb9c71|f0a8310776c3d492	0	413	W75_N40:9/9
+R-trekking-038	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	172	-
+R-trekking-039	stable	true	true	true	route|108|17108|6440|810a4a3d426dd276|50fe925fff741d34	0	350	W75_N35:108/108
+R-trekking-040	stable	true	true	true	route|18|1029|357|326c15c3591fec6c|9d6e880699570d64	0	356	W75_N40:18/18
+R-trekking-041	stable	true	true	true	route|2554|137557|82526|7c96d71e9f3e7806|24874769bd566c0b	22	6528	W75_N40:2554/2554
+R-trekking-042	stable	true	true	true	route|20|1193|842|fd8e5c7a1ff3937f|376c981cb3c1ddb3	0	212	W75_N35:20/20
+R-trekking-043	stable	true	true	true	route|90|10317|7081|1fccfc7ce185fb28|62a5f975dcd42906	0	342	W75_N40:90/90
+R-trekking-044	stable	true	true	true	route|2113|87837|65258|ebacd39a7d33155f|6362195f2736c04	26	7456	W75_N40:2113/2113
+R-trekking-045	stable	true	true	true	route|49|5534|3283|6eeb1cf68e32286e|58c27379ec270c89	0	228	W75_N35:49/49
+R-trekking-046	stable	true	true	true	route|244|14637|11155|e1f6075b854e4084|6a36da6d5282914d	0	959	W75_N40:244/244
+R-trekking-047	stable	true	true	true	route|43|3982|3335|30658114e1b4d41e|21799448507bada	0	497	W70_N40:29/29 W75_N40:14/14
+R-trekking-048	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	302	-
+R-trekking-049	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	228	-
+R-trekking-050	stable	true	true	true	route|4|135|115|69634933536a3170|b10fa3a37c2933fe	0	265	W70_N40:4/4
+R-trekking-051	stable	true	true	true	route|123|5215|1841|a907a700338c61b2|97cfb9ca0477a4bd	0	294	E170_S50:123/123
+R-trekking-052	stable	true	true	true	route|536|109496|33759|e8e3a0db0320fee|369726227dff61fe	0	1017	E170_S50:536/536
+R-trekking-053	stable	true	true	true	route|156|8287|3487|102c7d1c7a964505|376d1dee537db327	0	878	E170_S50:156/156
+R-trekking-054	stable	true	true	true	route|858|37750|29486|110618005a6cdfa8|9dbce20a9319a1c5	2	1538	W75_N40:858/858
+R-trekking-055	stable	true	true	true	route|169|8774|4781|46a2c7fa9e44a6c5|eea9fbd1eb0efab7	0	756	W75_N40:169/169
+R-trekking-056	stable	true	true	true	route|41|2361|1257|d32b75750fc55abd|a54d37af5c5db167	0	341	W75_N40:41/41
+R-trekking-057	stable	true	true	true	route|200|6873|6442|11efc7decacdedc6|19e0ff0aab88347f	0	400	W75_N35:158/158 W75_N40:42/42
+R-trekking-058	stable	true	true	true	route|27|876|473|bd5b86d0840a305f|6fe3b5e848c2e725	0	250	W75_N40:27/27
+R-trekking-059	stable	true	true	true	route|8|566|356|65d9d419b2045e68|1823ced2509c5c78	0	322	W75_N40:8/8
+R-vm-forum-liegerad-schnell-001	stable	true	true	true	route|3613|300006|150375|ba6d839975fdc7ef|9ccc0275582ae963	114	17050	W75_N35:122/122 W75_N40:3491/3491
+R-vm-forum-liegerad-schnell-002	stable	true	true	true	route|26|1303|1080|848a43ff376ede46|43b247806c61563d	0	244	W75_N35:26/26
+R-vm-forum-liegerad-schnell-003	stable	true	true	true	route|712|109181|60136|6ca4febcdd6a2bf|bc64b6443f4133ec	1	526	W70_N40:712/712
+R-vm-forum-liegerad-schnell-004	stable	true	true	true	route|109|8101|2154|32333e6db69a1d57|feb4295a289b18f8	0	560	W75_N40:109/109
+R-vm-forum-liegerad-schnell-005	stable	true	true	true	route|455|35866|27278|7f0c04e42e132ddc|2a98f502ec353847	0	548	W75_N35:455/455
+R-vm-forum-liegerad-schnell-006	stable	true	true	true	datafile E170_S45.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	162	-
+R-vm-forum-liegerad-schnell-007	stable	true	true	true	route|120|14151|11800|b100056c8febe0d5|de62b18363a4ed39	0	427	W75_N35:120/120
+R-vm-forum-liegerad-schnell-008	stable	true	true	true	route|324|34631|30221|bbef21b2317ff39e|ea97486b7b542770	0	922	W75_N35:324/324
+R-vm-forum-liegerad-schnell-009	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	336	-
+R-vm-forum-liegerad-schnell-010	stable	true	true	true	route|11|5772|239|aea6a3ebd0cbe1ff|176a6a67e711b515	0	211	W75_N35:11/11
+R-vm-forum-liegerad-schnell-011	stable	true	true	true	route|33|15178|2894|d75ed08871d21e4d|2ac1f0e09d08519f	0	269	E170_S50:33/33
+R-vm-forum-liegerad-schnell-012	stable	true	true	true	route|10|1133|573|c5ba1e23a93dda21|aedf177ab7fa6314	0	321	W70_N40:10/10
+R-vm-forum-liegerad-schnell-013	stable	true	true	true	route|20|13450|461|28ddfd8cb23f1d7b|6d6d642e6a0b3d5d	0	358	W75_N40:20/20
+R-vm-forum-liegerad-schnell-014	stable	true	true	true	route|1299|235480|128715|da0458ae703b7b65|22dc966a8e657767	2	1569	W70_N40:1194/1194 W75_N40:105/105
+R-vm-forum-liegerad-schnell-015	stable	true	true	true	route|33|2140|784|86596ce6457fb87a|4fa759ea35df0675	0	340	W75_N40:33/33
+R-vm-forum-liegerad-schnell-016	stable	true	true	true	route|421|28866|11288|365ec29701144f03|f18bbbf4e6e0f805	0	664	E170_S50:421/421
+R-vm-forum-liegerad-schnell-017	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	292	-
+R-vm-forum-liegerad-schnell-018	stable	true	true	true	route|94|46361|1460|eccd7c4699d12c83|a98ca9ae09ec74bc	0	392	W75_N40:94/94
+R-vm-forum-liegerad-schnell-019	stable	true	true	true	route|223|26638|14981|a73fd594293d3da1|ad848eea7df44cb8	0	397	W70_N40:223/223
+R-vm-forum-liegerad-schnell-020	stable	true	true	true	route|70|9384|1591|2cca6b06dd2f53c5|57c8563912d23f4f	0	517	W75_N40:70/70
+R-vm-forum-liegerad-schnell-021	stable	true	true	true	route|31|6612|793|e3c897401a29c82c|82587a22bbcd15b7	0	484	W75_N40:31/31
+R-vm-forum-liegerad-schnell-022	stable	true	true	true	route|289|60207|9319|8e32552b9950ab7a|d94801608a6330e9	0	903	E170_S50:289/289
+R-vm-forum-liegerad-schnell-023	stable	true	true	true	route|79|16337|1524|4f8908de47df3d72|cedf43543a233fc7	0	497	E170_S50:79/79
+R-vm-forum-liegerad-schnell-024	stable	true	true	true	route|5|442|74|741734140cfdffe8|6a5bee8dc997d228	0	277	W70_N40:5/5
+R-vm-forum-liegerad-schnell-025	stable	true	true	true	route|6|451|133|b3ed642ae5f682b2|dbcaf4990342afde	0	216	W75_N35:6/6
+R-vm-forum-liegerad-schnell-026	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	314	-
+R-vm-forum-liegerad-schnell-027	stable	true	true	true	route|34|6302|690|edaacf910ad85c93|e788f2a00a1d94f4	0	407	E170_S50:34/34
+R-vm-forum-liegerad-schnell-028	stable	true	true	true	route|117|8865|2407|ff51c61c3205ee10|5dfbbe78604dada8	0	572	E170_S50:117/117
+R-vm-forum-liegerad-schnell-029	stable	true	true	true	route|740|35652|25648|4aba19501b517d63|cd68b8b978c5f2c0	1	1078	W75_N40:740/740
+R-vm-forum-liegerad-schnell-030	stable	true	true	true	route|4|567|223|38c57dfd8e51bf55|df9d2342bef6fab	0	345	W70_N40:4/4
+R-vm-forum-liegerad-schnell-031	stable	true	true	true	route|40|6149|2833|2ab76835ffb3a37b|50129ffd79147b3e	0	312	E170_S50:40/40
+R-vm-forum-liegerad-schnell-032	stable	true	true	true	route|2|212|40|d944db6f63214621|6acebcbed9859026	0	330	W75_N35:2/2
+R-vm-forum-liegerad-schnell-033	stable	true	true	true	route|147|31926|4229|8d5e463ed106c9c5|d7af7afe1d5042b2	0	676	W75_N40:147/147
+R-vm-forum-liegerad-schnell-034	stable	true	true	true	route|425|64574|12810|745f6f45cea3bc05|360c639fa83ca7ba	0	728	E170_S50:425/425
+R-vm-forum-liegerad-schnell-035	stable	true	true	true	route|719|100956|47854|6498827453481d4|eac13271c20d4b35	1	1165	W70_N40:719/719
+R-vm-forum-liegerad-schnell-036	stable	true	true	true	route|684|57749|33926|8606006d804b3b97|93654097d2054ffb	3	2032	W75_N35:292/292 W75_N40:392/392
+R-vm-forum-liegerad-schnell-037	stable	true	true	true	route|570|47608|19537|d6591c7588cf0a9d|3180de00f9555221	1	1118	W75_N40:570/570
+R-vm-forum-liegerad-schnell-038	stable	true	true	true	route|92|5720|2027|7065c19403cfe7a7|bc7daeef1db1a412	0	615	E170_S50:92/92
+R-vm-forum-liegerad-schnell-039	stable	true	true	true	route|218|122815|7350|2ffea4889ead8d35|33835b2defa0346a	0	1421	E170_S50:218/218
+R-vm-forum-liegerad-schnell-040	stable	true	true	true	route|20|3888|629|1d29ae99d6814aad|b2a0da225eb2c996	0	351	W75_N40:20/20
+R-vm-forum-liegerad-schnell-041	stable	true	true	true	route|40|9136|1957|a58e2bdefec96a28|f2c39c09e89be6ee	0	280	E170_S50:40/40
+R-vm-forum-liegerad-schnell-042	stable	true	true	true	route|27|3724|353|a12db1e389854f|60911ffe40cbde27	0	435	E170_S50:27/27
+R-vm-forum-liegerad-schnell-043	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	332	-
+R-vm-forum-liegerad-schnell-044	stable	true	true	true	route|84|24573|1299|1bf2ce50f4b62069|19502d4d1e8d2405	0	332	W75_N40:84/84
+R-vm-forum-liegerad-schnell-045	stable	true	true	true	route|5|571|224|2934832109dacf03|f8a0b5eda73bc5be	0	234	W75_N35:5/5
+R-vm-forum-liegerad-schnell-046	stable	true	true	true	route|39|90888|4074|87b50b1245f8a979|3088c862cbc70fa0	0	298	W70_N40:39/39
+R-vm-forum-liegerad-schnell-047	stable	true	true	true	route|47|9218|4652|cdcc17004a74cc7a|d4976158ffd9eee2	0	315	E170_S50:47/47
+R-vm-forum-liegerad-schnell-048	stable	true	true	true	route|168|14031|7841|c35d19cb963fc3e9|881bf852a16a9240	0	687	W75_N35:163/168
+R-vm-forum-liegerad-schnell-049	stable	true	true	true	route|675|151308|45715|3c20a5aa81343691|fbfc3c0340693618	11	4446	W75_N35:675/675
+R-vm-forum-liegerad-schnell-050	stable	true	true	true	route|99|40463|11263|bf9d8dc16ea720e6|a99bf180dbcc24e3	0	388	W70_N40:99/99
+R-vm-forum-liegerad-schnell-051	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	249	-
+R-vm-forum-liegerad-schnell-052	stable	true	true	true	route|25|2613|1328|7995c29847b637f1|301ab901eea1d415	0	230	W70_N40:25/25
+R-vm-forum-liegerad-schnell-053	stable	true	true	true	route|281|21955|14736|54a52a93ecc96b61|e43c993ceb47a270	0	523	W75_N40:281/281
+R-vm-forum-liegerad-schnell-054	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	259	-
+R-vm-forum-liegerad-schnell-055	stable	true	true	true	route|31|9157|1146|de7e7ae711eb4a85|2a3724f919c6c2c	0	551	E170_S50:31/31
+R-vm-forum-liegerad-schnell-056	stable	true	true	true	route|341|81387|8400|251a0088c6947dfb|ae9253fb0f33bc8c	0	681	E170_S50:341/341
+R-vm-forum-liegerad-schnell-057	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	260	-
+R-vm-forum-liegerad-schnell-058	stable	true	true	true	route|298|38127|19507|e978518d8a55e3e0|73034704f026c889	0	668	W70_N40:298/298
+R-vm-forum-liegerad-schnell-059	stable	true	true	true	route|3|104|86|7fc2cdbef4aad533|ff60fc5ba2d8a399	0	308	W75_N40:3/3
+R-vm-forum-velomobil-schnell-001	stable	true	true	true	route|14|613|556|cb325a746944e146|fcbc453bafc1051d	0	273	W75_N35:14/14
+R-vm-forum-velomobil-schnell-002	stable	true	true	true	route|21|3837|494|8e3cb45d066de221|b4a5065abdf0ce07	0	573	W75_N40:21/21
+R-vm-forum-velomobil-schnell-003	stable	true	true	true	route|183|14143|9742|95f0f4e85915203|8107236ba1e6ea4b	0	518	W75_N35:183/183
+R-vm-forum-velomobil-schnell-004	stable	true	true	true	route|133|13085|5320|f4b55b9c9c3b8b9|a1474680c86186c3	0	459	W70_N40:133/133
+R-vm-forum-velomobil-schnell-005	stable	true	true	true	route|10|2123|246|fc40e4d802bd1adc|b326d304fc8c277b	0	500	W75_N35:10/10
+R-vm-forum-velomobil-schnell-006	stable	true	true	true	route|629|50971|24741|6842bc129ded19bd|e4e8b10470ef7239	0	657	W75_N35:618/629
+R-vm-forum-velomobil-schnell-007	stable	true	true	true	route|81|6452|2240|ba3953ccba922693|3e1f569b1a10edbc	0	424	W75_N35:81/81
+R-vm-forum-velomobil-schnell-008	stable	true	true	true	route|1030|92663|48939|8371d4e3ad639bb3|54646b6c8c5f4cb4	4	2424	W75_N40:1030/1030
+R-vm-forum-velomobil-schnell-009	stable	true	true	true	route|12|1667|227|e8a23edca6826c6f|6949b3e0e4a4bff0	0	286	W70_N40:12/12
+R-vm-forum-velomobil-schnell-010	stable	true	true	true	route|16|2970|824|50f952b74ffcbdbf|c20068e3c512ec38	0	335	W70_N40:16/16
+R-vm-forum-velomobil-schnell-011	stable	true	true	true	route|2714|199585|106947|9ebd3d6877b86575|d8fe966dd8167b22	19	5709	W75_N40:2714/2714
+R-vm-forum-velomobil-schnell-012	stable	true	true	true	route|400|31413|15898|123d9dd1840cb597|31917dea4933afde	0	595	W75_N40:400/400
+R-vm-forum-velomobil-schnell-013	stable	true	true	true	route|251|25438|8060|dfa315646e072cf1|896a6bbd009e9e50	0	522	W75_N40:251/251
+R-vm-forum-velomobil-schnell-014	stable	true	true	true	route|571|36557|20815|c18b9d998892760|ba38b83ef7451c20	1	1056	W75_N40:571/571
+R-vm-forum-velomobil-schnell-015	stable	true	true	true	route|72|6699|2042|e1fc7a7b5ae668b8|215d9180b7216339	0	582	W75_N40:72/72
+R-vm-forum-velomobil-schnell-016	stable	true	true	true	route|196|15897|5395|868ed8c436ffe3f7|5093f0106a6f29cd	0	653	W70_N40:196/196
+R-vm-forum-velomobil-schnell-017	stable	true	true	true	route|197|13624|5782|cb940106be1d8988|54066a69a7c0d07b	0	526	W75_N40:197/197
+R-vm-forum-velomobil-schnell-018	stable	true	true	true	route|24|10155|842|6fa806cc28454840|f24669c8b9dfe513	0	233	E170_S50:24/24
+R-vm-forum-velomobil-schnell-019	stable	true	true	true	route|54|4919|2682|9490db4d344b8df5|3b7a6651781bf9b5	0	256	W75_N35:54/54
+R-vm-forum-velomobil-schnell-020	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	310	-
+R-vm-forum-velomobil-schnell-021	stable	true	true	true	route|132|8736|5018|49299bb688ef5959|b5010995b774ff46	0	616	W75_N40:132/132
+R-vm-forum-velomobil-schnell-022	stable	true	true	true	route|314|58810|20051|5fc2205361917349|b356f7d70602497e	0	362	W70_N40:314/314
+R-vm-forum-velomobil-schnell-023	stable	true	true	true	route|28|10781|812|bfdf1c926a79fabd|79c4a230e6073e16	0	403	W75_N40:28/28
+R-vm-forum-velomobil-schnell-024	stable	true	true	true	route|1983|1615882|97479|c98a1878b90b374|50fce04d29fdc902	0	1038	E170_S50:1983/1983
+R-vm-forum-velomobil-schnell-025	stable	true	true	true	route|153|43343|7136|169d8d8fc43ef7a9|92197273976fc0fe	0	654	W70_N40:153/153
+R-vm-forum-velomobil-schnell-026	stable	true	true	true	route|77|2808|1284|f553212f13ff49a|38fa1557611e7afd	0	447	W75_N40:77/77
+R-vm-forum-velomobil-schnell-027	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	210	-
+R-vm-forum-velomobil-schnell-028	stable	true	true	true	route|15|5253|445|4fd18c8344e19752|f439038c74314396	0	329	W75_N40:15/15
+R-vm-forum-velomobil-schnell-029	stable	true	true	true	route|146|9053|4320|bec7bc7405cfc0cb|f723dcd51ef41dac	0	606	W75_N40:146/146
+R-vm-forum-velomobil-schnell-030	stable	true	true	true	route|39|6311|1664|c5bf8e3dd5b6c2fe|436faa80f37515e4	0	452	W75_N35:39/39
+R-vm-forum-velomobil-schnell-031	stable	true	true	true	route|318|23865|16981|4764844f034b451b|5e4bd6af5e21f7f7	0	669	W75_N35:318/318
+R-vm-forum-velomobil-schnell-032	stable	true	true	true	route|25|5044|847|a2d0e9ebcbf8cde7|9864e7ca90aaf44e	0	637	W75_N40:25/25
+R-vm-forum-velomobil-schnell-033	stable	true	true	true	route|139|8873|3310|4c4fcb19f7d67848|941261901d523e15	0	665	W75_N40:139/139
+R-vm-forum-velomobil-schnell-034	stable	true	true	true	route|45|3469|2041|28f4b87bb9ce2f8b|a8631d8891a10086	0	361	W70_N40:45/45
+R-vm-forum-velomobil-schnell-035	stable	true	true	true	route|57|2441|1499|942d59a296d092b0|e769807dca19f61d	0	240	W70_N40:57/57
+R-vm-forum-velomobil-schnell-036	stable	true	true	true	route|3|110|44|718378eafd6f9b48|520eed4b669078de	0	197	E170_S50:3/3
+R-vm-forum-velomobil-schnell-037	stable	true	true	true	route|668|97230|36532|15b431d6a3cf963|18fef9865be987ce	0	569	W70_N40:668/668
+R-vm-forum-velomobil-schnell-038	stable	true	true	true	route|32|2718|1401|f38be042bcfd0b3b|69105f98548c2ef4	0	325	W75_N35:32/32
+R-vm-forum-velomobil-schnell-039	stable	true	true	true	route|34|2313|989|87ef4341639cdf30|f4c4272b89e0c7e0	0	273	W75_N40:34/34
+R-vm-forum-velomobil-schnell-040	stable	true	true	true	route|124|12855|4916|b385d7b19d6ee1ad|b3c72649f3d9f5d8	0	612	W75_N40:124/124
+R-vm-forum-velomobil-schnell-041	stable	true	true	true	route|6|2596|206|2dc8b8c771aff8fe|df8ea1a609c6d8c	0	281	W70_N40:6/6
+R-vm-forum-velomobil-schnell-042	stable	true	true	true	route|96|23561|8464|f1598fec6cd1155c|56fd28a1c3d571cc	0	351	W70_N40:96/96
+R-vm-forum-velomobil-schnell-043	stable	true	true	true	route|246|58035|11266|2b64c4d60bdd83c0|86662eceec21326f	1	1096	W75_N40:246/246
+R-vm-forum-velomobil-schnell-044	stable	true	true	true	route|43|2556|730|acf62a4a25b0221c|c9ca87ca933374	0	422	E170_S50:43/43
+R-vm-forum-velomobil-schnell-045	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	373	-
+R-vm-forum-velomobil-schnell-046	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	300	-
+R-vm-forum-velomobil-schnell-047	stable	true	true	true	route|863|204656|58428|2e4eacc1e8eb546f|1443e1b463cd3891	22	6941	W75_N35:863/863
+R-vm-forum-velomobil-schnell-048	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	329	-
+R-vm-forum-velomobil-schnell-049	stable	true	true	true	route|2360|284586|85221|e8ddb5d5398d191e|1fbcfef00ed8e6fa	0	1064	E170_S50:2360/2360
+R-vm-forum-velomobil-schnell-050	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	245	-
+R-vm-forum-velomobil-schnell-051	stable	true	true	true	route|2122|362130|59065|167491a2bc8a3ab8|d1d0251077ea0916	0	1618	E170_S50:2122/2122
+R-vm-forum-velomobil-schnell-052	stable	true	true	true	route|18|5239|501|280cb134a840e014|26049048e4b6ea38	0	694	W75_N40:18/18
+R-vm-forum-velomobil-schnell-053	stable	true	true	true	route|12|1680|979|3770784e6e2d8bda|cb4c81c80404a02d	0	421	W75_N40:12/12
+R-vm-forum-velomobil-schnell-054	stable	true	true	true	route|46|2724|1145|48c1e427408273ba|7cead153754337f0	0	322	E170_S50:46/46
+R-vm-forum-velomobil-schnell-055	stable	true	true	true	route|414|35078|10442|579cf406061187f3|47fe365f87630650	0	943	E170_S50:414/414
+R-vm-forum-velomobil-schnell-056	stable	true	true	true	route|34|14957|1473|701b3a131ec52fdd|de664b15b83831a5	0	304	W75_N35:34/34
+R-vm-forum-velomobil-schnell-057	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	348	-
+R-vm-forum-velomobil-schnell-058	stable	true	true	true	route|762|217060|63757|cb4c29b322a12f36|da2ad56cc773ddfc	0	1143	E170_S50:762/762
+R-vm-forum-velomobil-schnell-059	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	320	-
