@@ -1552,6 +1552,9 @@ Started 19:46:39Z on `14ba69d`'s tree, one `e3Strata` run (sequence check, `hiki
   unstable; R1's first five fields equal the old run's (`10-*`) in 295 of 295. Heights on their 257 R1 routes: E170_S50
   13,324 of 13,327 nodes, W70_N40 8,033 of 8,045, W75_N35 5,304 of 5,304, W75_N40 28,694 of 28,729 [C, partial]. Load
   about 8 on 4 cores (another session shares the container); no case has a time limit.
+- **20:19Z, progress:** 14 of 26 profiles done (through `mtb`), 0 of 826 unstable; first five fields equal the old run's
+  in 826 of 826. Heights on 682 R1 routes: E170_S50 40,753 of 40,758; W70_N40 28,427 of 28,439; W75_N35 30,851 of
+  30,860; W75_N40 98,277 of 98,327 [C, partial].
 
 ## Confirmed vs inferred
 
