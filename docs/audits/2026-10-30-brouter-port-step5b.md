@@ -437,7 +437,11 @@ parts exit 0; the decode took 4 min 16 s [C: `6-tiebreak/decode.txt`, now comple
 - `regions.txt` and `routes.txt` re-ran identical to the third session's (grand totals `[0, 0, 0, 0]`) [C].
 
 ### CI on this session's head
-CI_PLACEHOLDER
+**Not read: handed off at the planner's request (180k, 20:03Z) before reading.** Runs at the handoff (`gh run list`):
+41899702393 (`9991929`), 41900500383 (`4b59309`) and 41900695206 (`84c6fc2`) completed, conclusion failure, which is
+expected while `CollectOutreachersTest` is red, but their logs were not read; 41900758869 (`d8ccf2a`), 41902138332
+(`84aafc7`) and 41902961718 (`c8fcdc6`) queued. Code changed only in `9991929` (the test), so any of these reads the
+same code. What to read is the handoff's step 0.
 
 ### Unverified
 - ART's default stack, and whether the oracle overflows on Android [?].
@@ -467,6 +471,11 @@ CI_PLACEHOLDER
 Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`; first check `origin/brouter-port-5b` is the commit that
 added this section. Scratch (gone with the container): `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/plumb/`.
 Everything cited above is committed under `2026-10-30-brouter-port-step5b/` (`9-` to `13-`, and `6-tiebreak/decode.txt`).
+0. **Read CI** on the newest run of this branch (`gh run list -R slayer8366/Forager-iOS -b brouter-port-5b`, then
+   `gh api repos/slayer8366/Forager-iOS/actions/jobs/<id>/logs` per job): `jvm` should read 101 tests, 2 failures (both
+   `CollectOutreachersTest`; which messages may vary, see A), 0 ` e: ` lines in both klibs, simulator 24
+   (simulator-checked; `NodeHashMapOrderTest` is `jvmTest` only), arm64 7 with its gate line. Write it into "CI on this
+   session's head" above.
 1. **Wait for the planner's answer to A** (above, "What the data says"), and to the `:116` finding. Choose no fix
    before it.
 2. If the answer needs A re-run: the counting class is built from `12-question-a/oracle-catch-counter.diff` applied to
