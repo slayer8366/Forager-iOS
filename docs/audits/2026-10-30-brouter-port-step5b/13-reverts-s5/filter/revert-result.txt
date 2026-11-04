@@ -1,0 +1,5 @@
+compile errors in the revert's build log: 0
+TOTAL: tests 101, failures 3, errors 0, skipped 0 in 46 files
+FAILED CollectOutreachersTest.collectOutreachersWithoutADestination[jvm]: java.lang.AssertionError: java.lang.AssertionError: segments/W75_N40.rd5 around degree (105, 130) sub 735 (lonIdx 3391, latIdx 4182, 154239 bytes, 15406 nodes), 6 caches, mode 1: line 1 of 172529/174955: oracle [C 38715 41099 41099] port [C 39396 37387 37387]
+FAILED CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes[jvm]: java.lang.AssertionError: java.lang.AssertionError: canEscape did not answer both ways: false/true 0/3587
+FAILED NodeHashMapOrderTest.iterationOrderAndAnswersEqualJavaUtilHashMapsOnSeededOsmNodeKeys[jvm]: java.lang.AssertionError: java.lang.AssertionError: seed 1 draw 1 op 9400: iteration order expected:<[9251, 3384, 8840, 6137, 8134, 5729, 10554, 7175, 6732, 7762, 11970, 13072, 6247, 13319, 11292, 8735, 5022, 8431, 6988, 14121, 1615, 4930, 7070, 4171, 5954, 7734, 9177, 6336, 7251, 5703, 10132, 10650, 7732, 3379, 4904, 4892, 14620, 5671, 14616, 1203, 2021, 4780, 9327, 11202, 14519, 8154, 1347, 8007, 10579, 2116, 4435, 4037,

@@ -1,0 +1,1 @@
+git status --short and git diff --stat after the restore: [] (empty: the tree equals HEAD, which holds the forward)
