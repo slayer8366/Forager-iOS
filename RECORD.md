@@ -2424,3 +2424,29 @@ data half (the oracle's catch counted; both engines at two stack sizes) is not s
 **Still open:** questions A and B (-54), and the heights premise above. Both coders stay stopped.
 **Notes:** Written by a new planner session (a cloud session; not Cedar Datum) by hand, after reading this
 repository's `CLAUDE.md` and Forager's on `pre-main` at `d6e2a0415`. Next free ID -57.
+
+**Kind:** decision
+**ID:** 2026-10-28-57
+**Timestamp:** 2026-11-04T05:18:00Z
+**Continues:** 2026-10-28-3, 2026-10-28-56
+**Title:** Heights join the comparison (owner)
+**Decision:** asked, at -56, whether to add each point's height to what the differential tests compare, or keep heights
+out and accept that a wrong height on iOS would pass every test, the owner, verbatim: "Add heights to the comparison,
+and open the PR".
+- **What it changes:** Phase 1's "recorded, not asserted" for elevations (Phase 1 report, line 755) no longer holds for
+  heights. Each node's `selev` joins E3's compared outcome, beside the node list, cost and distance, and is compared
+  exactly, `Short.MIN_VALUE` ("no height") included.
+- **The planner's calls (technical; the owner may overrule):**
+  - **A heighted F0 stratum** from Forager's `segments-heighted/W75_N40.rd5` (SHA-256 `14f595e8…a965c`, at Forager
+    `pre-main` `d6e2a0415`), pinned in the tile release like F0. F0's own fixture has no heights, so without it the
+    new field could fail only where the brouter.de tiles carry heights, and whether they do is [?]. The new stratum is
+    data that can fail the check.
+  - **Expected values for F0 and R** are re-derived with the new field, and the 1,534 R cases re-run for stability. A
+    case whose heights differ between E3's six runs is counted as unstable, under E3's own rule.
+  - **The test is seen biting first:** a revert that breaks the `short` cast in `interpolateEle` (`OsmPath.java:392`)
+    must fail it, with the prediction pushed before the run.
+  - **Forager's pins move only for this:** the new fixture is read at `d6e2a0415`; every other pin stays at
+    `e2969abe4`, since -56 found nothing else on the port's path changed.
+- **Not yet dispatched.** The work goes on `brouter-port`, and this planner session can push only its own branch. It is
+  dispatched once the record is on `main` and a session can write `brouter-port`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -58.
