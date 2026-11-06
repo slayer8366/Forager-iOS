@@ -5,6 +5,23 @@ package com.zynergylabs.forager.brouter.util
  * var-length writers T2 reaches.
  */
 internal open class ByteDataWriter(byteArray: ByteArray?) : ByteDataReader(byteArray) {
+    // STUBS (step 5d, item 3)
+    fun writeInt(v: Int) {}
+
+    fun writeBoolean(v: Boolean) {}
+
+    fun writeShort(v: Int) {}
+
+    fun write(sa: ByteArray, offset: Int, len: Int) {}
+
+    fun writeVarBytes(sa: ByteArray?) {}
+
+    fun writeModeAndDesc(isReverse: Boolean, sa: ByteArray?) {}
+
+    fun writeSizePlaceHolder(): Int = 0
+
+    fun injectSize(sizeoffset: Int) {}
+
     fun writeVarLengthSigned(v: Int) {
         writeVarLengthUnsigned(if (v < 0) ((-v) shl 1) or 1 else v shl 1)
     }

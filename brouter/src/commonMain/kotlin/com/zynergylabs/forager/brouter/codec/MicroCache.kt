@@ -125,6 +125,12 @@ internal open class MicroCache protected constructor(ab: ByteArray?) : ByteDataW
         }
     }
 
+    /** STUB (step 5d): Java's `getIdForIndex`. */
+    fun getIdForIndex(i: Int): Long = 0L
+
+    /** STUB (step 5d): Java's `expandId`. */
+    open fun expandId(id32: Int): Long = 0L
+
     open fun shrinkId(id64: Long): Int {
         throw IllegalArgumentException("shrinkId for empty cache")
     }

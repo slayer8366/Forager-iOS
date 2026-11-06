@@ -49,6 +49,9 @@ internal open class OsmNode : OsmLink, OsmPos {
         this.ilat = ilat
     }
 
+    /** STUB (step 5d): Java's `OsmNode(long)`. */
+    constructor(id: Long)
+
     fun addTurnRestriction(tr: TurnRestriction) {
         tr.next = firstRestriction
         firstRestriction = tr
@@ -97,11 +100,14 @@ internal open class OsmNode : OsmLink, OsmPos {
      */
     fun parseNodeBody(mc: MicroCache, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier) {
         if (mc is MicroCache2) {
-            throw UnsupportedOperationException("unsupported: OsmNode.parseNodeBody2 (MicroCache2, disableDirectWeaving)")
+            parseNodeBody2(mc, hollowNodes, expCtxWay)
         } else {
             throw IllegalArgumentException("unknown cache version: " + mc::class)
         }
     }
+
+    /** STUB (step 5d): Java's `parseNodeBody2`. */
+    fun parseNodeBody2(mc: MicroCache2, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier) {}
 
     open fun addLink(
         linklon: Int,

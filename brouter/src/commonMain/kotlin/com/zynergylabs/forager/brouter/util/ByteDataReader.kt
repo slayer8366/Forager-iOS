@@ -78,6 +78,17 @@ internal open class ByteDataReader {
         return v
     }
 
+    // STUBS (step 5d, item 3)
+    fun readBoolean(): Boolean = false
+
+    fun readShort(): Short = 0
+
+    fun getEndPointer(): Int = 0
+
+    fun readDataUntil(endPointer: Int): ByteArray? = null
+
+    fun readFully(ta: ByteArray) {}
+
     fun hasMoreData(): Boolean {
         return aboffset < aboffsetEnd
     }
