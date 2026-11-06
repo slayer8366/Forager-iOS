@@ -3507,3 +3507,407 @@ in any trailer; checked by the planner).
 **Next:** the port's own router (steps 6 to 8) on `brouter-port-5b`'s line, the graph half being there (-61), unmerged until
 step 10 answers -61. The draft milestone report is in the Phase 2 report, under "Step 1b finished".
 **Notes:** Written by the planner session of -56 by hand. Next free ID -90.
+
+**Kind:** intent
+**ID:** 2026-10-28-90
+**Timestamp:** 2026-11-06T13:06:39Z
+**Continues:** 2026-10-28-24, 2026-10-28-50, 2026-10-28-61, 2026-10-28-62, 2026-10-28-68, 2026-10-28-89
+**Title:** The plan for steps 6 to 8, the port's router (planner; not yet dispatched)
+**Decision first:** the owner, verbatim: "Plan 6 to 8".
+
+**What the steps are** (Phase 1's item I, report at `20e1f92`, lines 1701-1703; Java line counts [C] there):
+- **6, the path model,** 2,068 lines in 15 classes: `RoutingContext`, `OsmPath`, `StdPath`, `OsmPathElement`, `ProfileCache`,
+  `RoutingParamCollector` and the rest.
+  - **Test:** `RoutingParamCollector` on Forager's strings; `RoutingContext` read from each profile; each path extension's
+    cost on decoded links compared to the oracle's.
+  - **Revert:** one `(int)` cast moved inside a sum in `StdPath`.
+- **7, the track and hints,** 1,367 lines in 9 classes: `OsmTrack`, `VoiceHint*` and `Format*` as far as reached.
+  - **Test:** exercised through step 8's routes; the hints are recorded, not asserted (E1).
+  - **Revert:** one distance rounding replaced by `roundToLong`.
+- **8, `RoutingEngine` and the entry point,** 2,009 lines, **less 429 for via points, left out by the owner at -24,** so 1,580.
+  It has four sub-steps:
+  - **8a,** matching and the search without memory pressure: F0 first, then R and DL;
+  - **8b,** the memory path: MP64, ML5, PM5. Revert: `isInMemoryBounds`' comparison flipped;
+  - **8c,** terminate, the time limit and the progress count: FK 9 to 11. Revert: `terminated` written but not read;
+  - **8d,** `route()` and `checkDataFile` over the engine.
+- **About 5,000 Java lines in all** (2,068 + 1,367 + 1,580) [C]. That is the largest half of the port. The port has ported
+  about 7,100 Kotlin lines so far (`brouter-port-5b`'s `commonMain`, `wc -l`).
+
+**The branch (the planner's call, technical):**
+- Step 6 needs both lines of work: the graph half, decoders and matcher, on `brouter-port-5b`; and 1b's expected values,
+  heights tuple and harness on `brouter-port`.
+- `brouter-port-5b` may not merge into `brouter-port` until step 10 answers -61. The other direction is free.
+- **So `brouter-port` is merged into `brouter-port-5b`** (by merge, never rebase), and steps 6 to 8 are built there.
+  - `brouter-port` has no `commonMain` change since their base `9f41799` (`git diff --stat`, empty). The merge is
+    therefore expected to touch only tests, tools, build files and docs [I: conflicts in `build.gradle.kts` and
+    `libs.versions.toml` are possible].
+- **That merge is the first act** of step 6's first session, with CI read after it.
+
+**Who does what:**
+- **Plumb Ledger, on `brouter-port-5b`:** 6, then 8a to 8d, step by step, one coder per branch at a time.
+- **Step 7** may go to Linden in parallel only if its files touch none of Plumb's. Otherwise it follows 6. The planner
+  decides from step 6's file list.
+
+**Debts these steps must pay, already recorded:**
+- **-62:** `interpolateEle`'s `short` cast is shown covered on F0h's cut ends, with a revert that bites, at step 6.
+- **-42:** the 19 untested way getters, exercised at step 6.
+- **-49:** `StorageConfigHelper` catches only `IOException`; the choice is reviewed at step 8.
+- **-73:** `canEscape`'s false branch comes from MP64's nodes. 5b's `collectOutreachersWithADestinationVanishesFarNodes` gets
+  a region cut around one of those nodes, so its coverage assertion can be met (-61's planner's call).
+- **-61:** `CollectOutreachersTest` stays red, reported at every CI read, never silenced.
+- **-24:** via points are a named "unsupported", with a test that shows it.
+
+**How sessions are run** (from -78's lesson that output, not reading, fills the context):
+- one sub-step per session where it fits, with stubs and tests seen failing first;
+- the full `:brouter:jvmTest` before any code push, confirmed fresh;
+- E1's coordinate scan before any evidence push;
+- the exact attribution line, never a model name.
+
+**Cost [I, an estimate, not measured]:**
+- Steps 2a to 4 cost about 2.5 million tokens for about 3,570 Java lines (-42), about 0.7 million per 1,000 lines.
+- At that rate steps 6 to 8 would take about **3.5 million**.
+- Later sessions have each run to about 180k in 15 to 40 minutes, so the true figure may be higher. The planner counts it
+  per session and reports it at each milestone.
+**For the owner before step 6 starts:** `ProfileCache`'s lock (Phase 1, item B row 8), which no entry has ruled. Phase 1
+recommends (a), keeping it with atomicfu 0.33.0's `SynchronizedObject`. That is a new dependency in shipped code.
+**Finish line for this plan:** the owner's answer on the lock, then step 6's dispatch.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -91.
+
+**Kind:** decision
+**ID:** 2026-10-28-91
+**Timestamp:** 2026-11-06T13:54:19Z
+**Continues:** 2026-10-28-90
+**Title:** `ProfileCache`'s lock is kept, with atomicfu (owner)
+**Decision:** asked how the port should handle `ProfileCache`'s Java `synchronized` lock (-90; Phase 1, item B row 8), the
+owner, verbatim: "Keep it, with atomicfu (Recommended)". The option read: "Phase 1's recommendation: keep the lock using
+atomicfu 0.33.0's SynchronizedObject, a small, pinned dependency already proven to compile and run in Phase 1's probe. A
+silent race on iOS is ruled out even if the app ever runs two routes at once."
+- **Rejected:** "Drop it, one route at a time".
+- **What follows (the planner's calls, technical):**
+  - atomicfu **0.33.0**, pinned exactly in `gradle/libs.versions.toml` (Forager's CLAUDE.md, Building), `commonMain` only;
+  - step 6 adds it, and checks that both iOS klibs compile with it before `ProfileCache` uses it;
+  - a test shows the lock is held, with two threads on the JVM, and is seen failing with the lock removed by a revert.
+- **-90's plan has no open owner question left.** Step 6's dispatch follows.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -92.
+
+**Kind:** intent
+**ID:** 2026-10-28-92
+**Timestamp:** 2026-11-06T15:43:07Z
+**Continues:** 2026-10-28-61, 2026-10-28-62, 2026-10-28-90, 2026-10-28-91
+**Title:** Step 6, the path model, on `brouter-port-5b`: first the merge from `brouter-port` and atomicfu (Plumb, session 10)
+**Decision first:** the owner, verbatim: "Start step 6".
+**Change** (on `brouter-port-5b` only), in this order:
+1. **The merge:** `git merge --no-ff origin/brouter-port` (`fcd35ff`) into `brouter-port-5b` (`b65548f`), per -90. Conflicts
+   are resolved keeping both sides, and the resolution is named in the message. The full `:brouter:jvmTest` runs fresh
+   before the push. Expected: `brouter-port`'s 101 tests and 5b's 111 combined, less shared ones, with only
+   `CollectOutreachersTest`'s 2 red (-61). Then CI is read.
+2. **atomicfu 0.33.0** (-91): pinned in `gradle/libs.versions.toml`, `commonMain`, with both iOS klibs compiled before use.
+3. **Step 6 itself** (Phase 1's item I, line 1701), in the coder's own order:
+   - stubs first, then tests over them seen failing, then the port, then the revert (one `(int)` cast moved inside a sum
+     in `StdPath`), with its prediction pushed first;
+   - **tests:** `RoutingParamCollector` on Forager's strings; `RoutingContext` read from each profile; each path extension's
+     cost on decoded links compared with the oracle's;
+   - **also owed here:** -62's `interpolateEle` cast, covered on F0h's cut ends; -42's way getters; `ProfileCache`'s lock,
+     with a two-thread test that fails with the lock removed (-91).
+**Scope boundary:** writes only `brouter-port-5b`. `brouter-port` is read, not written. No via points (-24).
+**Finish line:** step 6 closed with its own report (`docs/audits/2026-11-06-brouter-port-step6.md`), or a handoff.
+**Abort conditions:** -3's; a merge conflict in `commonMain` (none is expected, -90); a new red besides
+`CollectOutreachersTest`; any coordinate in a staged diff.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -93.
+
+**Kind:** decision
+**ID:** 2026-10-28-93
+**Timestamp:** 2026-11-06T15:52:58Z
+**Continues:** 2026-10-28-84, 2026-10-28-87, 2026-10-28-92
+**Title:** The merge into `brouter-port-5b` is pushed; its scan hits are Forager's own route ends, under E1's standing
+exception; scans now gate pushes
+**Observed:** Plumb Ledger, session 10, stopped under -92's abort condition "any coordinate in a staged diff".
+- The merge `eac836d` (`origin/brouter-port` into `brouter-port-5b`) was pushed with the scan reading 12. Plumb's command
+  chained the push after the scan without testing its count. Plumb reported this as its own error.
+- **The merge itself:** two conflicts, neither in `commonMain` (`build.gradle.kts`, `TestTiles.kt`). Both were resolved by
+  keeping 5b's side, which already carries `brouter-port`'s F0h wiring. `jvmTest` read 121, with only
+  `CollectOutreachersTest`'s 2 red [R, as reported].
+- **The 12 hits, checked by the planner:**
+  - 10 are endpoint lines in `E3CoverageTest.kt` and `E3F0hTest.kt`, brought in from `brouter-port` byte for byte. Their
+    values equal Forager's `server/pmtiles-worker/test/fixtures/rd5/routes.json` at `a0535ece` [C: matched by value].
+    They are the same points `E3F0Test.kt` has carried since step 1b began;
+  - 2 are false positives: a float-literal list in a test log, and a diff header's timestamp.
+**Decision (the planner's, technical):**
+- **Nothing is removed or rewritten.** These are Forager's own published test ends. Phase 1's practice, written in
+  `E3F0Test.kt`'s header, is "no coordinates beyond Forager's own ends are committed (E1)". -84 and -87 removed positions
+  derived from the pinned tiles, which is a different thing.
+- **The scan from now on excludes Forager's own ends by exact value,** from `routes.json` and `points.json` at `a0535ece`.
+  **It gates the push**: the push runs only if the count is 0.
+**For the owner, information:** these route ends are OpenStreetMap node positions in Forager's own public test data. If
+the owner wants them out of Forager-iOS too, that is a ruling against Phase 1's practice, and it would also touch
+`E3F0Test.kt`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -94.
+
+**Kind:** decision
+**ID:** 2026-10-28-94
+**Timestamp:** 2026-11-06T16:00:54Z
+**Continues:** 2026-10-28-90, 2026-10-28-92
+**Title:** Step 6's file list; `OsmTrack` is a stub in step 6, and step 7 follows 6 on the same branch
+**Observed (Plumb, session 10, as reported):**
+- atomicfu 0.33.0 is pinned (`a9fb1d0`).
+- Step 6's new files are 15 under `brouter/src/commonMain/.../router/`, a package that does not exist yet:
+  `RoutingContext` (perhaps split in two), `OsmPath`, `StdPath`, `OsmPathElement`, `MessageData`, `StdModel`, `OsmPathModel`,
+  `OsmPrePath`, `OsmNodeNamed`, `ProfileCache`, `RoutingParamCollector`, `RoutingIslandException`, `SearchBoundary`,
+  `AreaInfo` and `OsmNogoPolygon`. Tests go under `jvmTest/.../router/`. No existing `commonMain` file is expected to change [I].
+- **One overlap, and a stop:** `OsmPath` takes an `OsmTrack refTrack` (`init`, `addAddionalPenalty`) and calls
+  `refTrack.containsNode` twice (`OsmPath.java:350`). `OsmTrack` is a step 7 class. `RoutingContext.createPath` also takes one.
+**Decision (the planner's, technical):** Plumb's option (a).
+- **Step 6 creates `router/OsmTrack.kt` holding only the type.** `containsNode` throws a named "unsupported"
+  (`NotImplementedError`), never an empty body (-74). Step 7 fills the same file.
+- **So step 7 follows step 6 on `brouter-port-5b`,** and does not run beside it. Step 7's classes all use step 6's types,
+  so they could not compile alone. -90's parallel option is closed.
+- **Reachability** [R for the lines, I for the conclusion]: `refTracks[i]` is created only when `lastTracks[i]` is non-null
+  (`RoutingEngine.java:988-991`), which comes from earlier alternatives. Forager passes `alternativeidx=0`, so on its path
+  `refTrack` is most likely null, and `containsNode` is unreachable at `:350`. **Checked at step 8** with the coverage
+  reader: `:350`'s true branch should read not covered on R's R6 runs.
+- **Rejected:** (b), waiting on step 7 to port `OsmTrack` first. It blocks step 6 on a class it does not need on Forager's
+  path.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -95.
+
+**Kind:** outcome
+**ID:** 2026-10-28-95
+**Timestamp:** 2026-11-06T17:16:27Z
+**Continues:** 2026-10-28-24, 2026-10-28-73, 2026-10-28-89, 2026-10-28-91, 2026-10-28-92, 2026-10-28-94
+**Title:** Step 6, first session: the merge, atomicfu, `ProfileCache` with its lock, and half of `RoutingContext`; the car
+profiles are outside the port, and are refused (owner)
+**Observed:** Plumb Ledger, session 10, `brouter-port-5b` `b65548f` to `46fc891` (six commits; clean tree). It handed off at
+the planner's message after the watcher read 183,589 at 16:15:35Z. Report: `docs/audits/2026-11-06-brouter-port-step6.md`.
+- **Trailers:** the planner found one model name in the range, in `00b9886`. That is -78's commit, brought in by the merge,
+  not a new one.
+- **The merge** `eac836d`: CI read by Plumb (run 42246987233) showed `jvm` 121, only `CollectOutreachersTest`'s 2 red;
+  simulator 24 (**simulator-checked**); arm64 7, with its gate [R, as reported]. -93 covers its scan.
+- **atomicfu 0.33.0** is pinned (`a9fb1d0`). Whether it links into the iOS klibs is first shown by CI on `de4d994`, where
+  `ProfileCache` uses `SynchronizedObject`. That is read after this entry is written.
+- **Ported:** `ProfileCache` with its lock, `OsmPathModel`, `OsmPrePath`, `StdModel`, `RoutingIslandException`, and
+  `RoutingContext`'s configuration half.
+  - `RoutingContextReadTest`: 76 fields equal the oracle's on 20 profiles.
+  - `ProfileCacheLockTest`: two threads; only one is ever inside `parseProfile`.
+  - Both were seen failing over the stubs. The lock's revert fails "expected 1 but was 2". The `maxSpeed` revert fails on
+    the two foot profiles only, as predicted. Its first form did not compile and was not read.
+  - The full run before the push: 123 tests, only `CollectOutreachersTest`'s 2 red [R, as reported].
+- **Still stubs or not started:** `OsmPath`, `StdPath` (stubs); `OsmTrack` (type only, -94); `OsmPathElement`,
+  `MessageData`, `OsmNodeNamed`, `RoutingParamCollector`, `SearchBoundary`, `AreaInfo`, `OsmNogoPolygon`.
+- **The planner's own gap, found through Plumb's refusal of six profiles:**
+  - Phase 1 counted the path model, which is chosen by reflection (`RoutingContext.java:86-97`), as "dead for the pinned
+    profile" (premise 4).
+  - T2's port list keeps 0 lines of `KinematicModel`, `KinematicNoCostModel`, `KinematicPath`, `KinematicNoCostPath` and
+    `KinematicPrePath` (`03-reach/out/T2/port-list.tsv`) [C].
+  - Yet R draws on all 26 profiles, and the six car profiles name `KinematicModel`. So 354 of R's 1,534 cases (6 × 59)
+    and FK kind 5 (`car-fast`, -82) could never be compared. Neither -73, -86 nor -89 saw it.
+**Decision:** asked how the port should treat these profiles, the owner chose, verbatim: "Refuse them, test the rest
+(Recommended)". The option read: "The port refuses Kinematic profiles with a named 'unsupported', and a test shows it. R is
+compared on its 20 foot/bike profiles (1,180 cases; the clean-run bound becomes 0.254% instead of 0.195%), and the 354 car
+cases check the refusal. FK kind 5 is rebuilt on a foot profile. Nothing untested ships."
+- **Rejected:** "Port the car models too".
+- **What follows (the planner's calls, technical):**
+  - **R's figure** is corrected in -89's milestone: compared on 1,180 cases, a clean run bounds the rate below **0.254%**
+    (1 − 0.05^(1/1180) = 0.00254) [C]. The expected values keep all 1,534 rows. The 354 car rows check the refusal at
+    step 9.
+  - **FK kind 5** is rebuilt on a Std-model profile (`hiking-mountain`): an end more than 250 m from any way it can use. It
+    is drawn as -82 drew it, and its expected rows are rewritten. That is Linden's, on `brouter-port`.
+  - **The refusal** is a named "unsupported" with a test on all six profiles, already in Plumb's work [R, as reported].
+**Notes:** Written by the planner session of -56 by hand. Next free ID -96.
+
+**Kind:** outcome
+**ID:** 2026-10-28-96
+**Timestamp:** 2026-11-06T17:16:54Z
+**Continues:** 2026-10-28-91, 2026-10-28-95
+**Title:** atomicfu links into iOS: CI on `de4d994` read; next, step 6 continues (Plumb) and FK kind 5 is rebuilt (Linden)
+**Observed, read by the planner** (run 42250446552 on `de4d994`, where `ProfileCache` first uses `SynchronizedObject`):
+- `jvm` 123 tests, 2 failures, both `CollectOutreachersTest` (-61);
+- 0 ` e: ` lines in either log; both `compileKotlinIos*` ran;
+- **the simulator built, linked and ran 24 of 24** (**simulator-checked**). So atomicfu 0.33.0 links on
+  `iosSimulatorArm64`. `iosArm64` is compiled, not linked, in CI [I];
+- arm64 7 of 7, with the gate reading "OK: all 2 classes ran".
+**Next (within the owner's "Start step 6" and -95's ruling):**
+- **Plumb Ledger, session 11, on `brouter-port-5b`:** step 6's remaining files, by its handoff. Owed: `StdPath`'s cast revert,
+  -62's `interpolateEle` cast and -42's way getters.
+- **Linden Caliper, session 27, on `brouter-port`:** FK kind 5 rebuilt on `hiking-mountain` (-95). That means its generator,
+  its prediction, its run through E3's six regimes, and its 10 rows rewritten in `expected-1b.tsv`, with
+  `E3ExpectedFileTest` green.
+  - The file's other 2,116 rows must be byte-unchanged (`cmp` on the rest).
+  - `brouter-port` is then merged into `brouter-port-5b` again by Plumb, at a step boundary.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -97.
+
+**Kind:** decision
+**ID:** 2026-10-28-97
+**Timestamp:** 2026-11-06T17:26:21Z
+**Continues:** 2026-10-28-24, 2026-10-28-94, 2026-10-28-96
+**Title:** `StdPath`'s `Math.exp` uses `kotlin.math.exp`; `OsmPath`'s start-direction branch is a named "unsupported"
+**Observed (Plumb, session 11, as reported):**
+- `StdPath.computeKinematic` and `calcIncline` call `Math.exp` only in detail mode, and only to set the track's time and
+  energy, not its cost or its path. It is reached on Forager's foot profile (Tobler's speed in `footMode`). `LibmSeam` has no
+  `exp`.
+- `OsmPath`'s start-direction branch (`Math.sin`/`cos`, `OsmPath.java:282-283`) needs `rc.startDirectionValid`. That is set
+  only at `RoutingEngine.java:1931-1932`, and only when `startDirection != null`.
+**Checked by the planner:**
+- Forager reads only the track's nodes, distance and heights (`BRouterTrailRouter.kt:95-114` at `a0535ece`), never its time
+  or energy [R].
+- Its call passes only `profile`, `alternativeidx` and `profile:use_dynamic_range` (`:150-155`), with no heading [R].
+**Decision (the planner's, technical):**
+- **`kotlin.math.exp`.** On the JVM it is `Math.exp`, so the oracle comparison stays exact. On iOS it is Apple's libm,
+  which is [?].
+  - Time and energy are recorded, not asserted (E1; Phase 1 report at `20e1f92`, line ~755).
+  - **If Forager ever reads time or energy** (an ETA, say), `exp` moves behind `LibmSeam` as an msun port, as -24 did
+    for `cos` and `atan2`. The KDoc and the step 6 report say so.
+  - **Rejected now:** an msun `e_exp.c` port. It would add maths code for values Forager does not read.
+- **The start-direction branch is a named "unsupported",** with a test that shows the refusal. **Step 8's coverage check**
+  reads `OsmPath.java:282-283` as not covered on R's R6 runs, as -94 set for `containsNode`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -98.
+
+**Kind:** decision
+**ID:** 2026-10-28-98
+**Timestamp:** 2026-11-06T17:28:08Z
+**Continues:** 2026-10-28-82, 2026-10-28-95, 2026-10-28-96
+**Title:** FK kind 5 on `hiking-mountain` is short at 6 of 10 in construction; its cap is raised to 1,000
+**Observed (Linden, session 27, `brouter-port` `fcd35ff` to `cc01338`, two commits, as reported):**
+- The generator change and the prediction were pushed before the run (`d841cfd`).
+- Kind 5 on `hiking-mountain` (start and end drawn separately, cap 400): 7 starts, all accepted; 393 end draws, 6
+  accepted.
+- **Rejections, all before routing:** 353 had a usable link within 300 m, and 34 had cells leaving the tile.
+- The 6 cases are all "to-position not mapped", all stable.
+- `expected-1b.tsv` was not touched. Linden reports that CI run 42261021182 on `cc01338` passed (`jvm` 101, simulator 23,
+  arm64 7 with its gate).
+**Decision (the planner's, technical):** Linden's option (a).
+- **The cap is raised to 1,000 draws.** At this run's rate, about 1 end in 66 draws, 10 ends need about 660.
+- **The reasoning is -82's:** every rejection is in construction, and none is selected on the oracle's outcome. FK is
+  "constructed, not sampled", so a larger cap does not bias it.
+- **Rejected:**
+  - (b), a 250 m distance of kind 5's own: it would split a constant that kinds 1 and 2 share, for no gain;
+  - (c), keeping 6, as -82 already rejected.
+- **The rest as -96 set it:** kind 5's 10 rows are rewritten and every other row stays byte-identical (`cmp`). The writer's
+  case list (`build/e3/FK/cases.tsv`, which still holds `car-fast`'s kind 5) is regenerated for kind 5 first.
+- **Observed for the record:** kind 5 on a foot profile is now built like kind 2 (an end beyond any usable way), and shares
+  its family, as -80 foresaw.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -99.
+
+**Kind:** outcome
+**ID:** 2026-10-28-99
+**Timestamp:** 2026-11-06T17:41:08Z
+**Continues:** 2026-10-28-24, 2026-10-28-49, 2026-10-28-76, 2026-10-28-95, 2026-10-28-97
+**Title:** Step 6, second session: `RoutingContext`'s nogo half and three small classes ported; `NodesCache`'s graph half
+was never ported, a debt from 5b; the planner's rulings on the path-cost comparison
+**Observed:** Plumb Ledger, session 11, `brouter-port-5b` `46fc891` to `079537f` (two commits; clean tree; no model name;
+checked by the planner).
+- **Ported:**
+  - `RoutingContext`'s second half (the nine methods T2 keeps, in `RoutingContextNogo.kt`);
+  - `OsmNodeNamed`, with `distanceWithinRadius` and `decodeNogo` throwing a named "unsupported";
+  - `OsmNogoPolygon` and `AreaInfo`, as types, with their unreached methods refusing.
+- **`RoutingContextNogoTest`:** 4 tests, seen failing over the stubs, passing on the port. Revert C was predicted at 1 of 4
+  failing on `wf=`, and observed exactly so [R, as reported].
+  - It runs on `OracleLibm`, because `MsunLibm`'s scale table moved one radius's last bits. That is -24's rule: logic runs
+    inject the oracle's table. Accepted.
+- **Still to do:** `OsmPath` and `StdPath` (still stubs), `MessageData`, `OsmPathElement`, `RoutingParamCollector`,
+  `SearchBoundary`. The `(int)` cast revert, -62's `interpolateEle` and the path-cost comparison all wait on them.
+- **CI, read by the planner** (run 42262870661 on `079537f`): `jvm` 127 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7 of
+  7, with the gate reading "OK: all 2 classes ran".
+
+**A debt from 5b, found by Plumb and confirmed by the planner:**
+- `NodesCache`'s graph half was never ported: `getGraphNode`, `obtainNonHollowNode`, `expandHollowLinkTargets`,
+  `hasHollowLinkTargets` and `getStartNode` (Java `NodesCache.java:213-300`, about 90 lines) [R].
+- The port's own header says it "arrives with step 5b" (`NodesCache.kt:14-16`). -49 recorded it as "waiting for 5b and 5c".
+  Neither step ported it, and the planner's checks at -60, -69 and -76 did not see that.
+
+**Decision (the planner's, technical):**
+- **Step 6's next session ports the graph half first,** as 5b's debt, with its own differential test against the oracle:
+  the same nodes on both engines from real tiles, compared field by field. It is seen failing over the stubs, and a revert
+  bites.
+- **The path-cost comparison is then made from Forager's real ends,** by copying `RoutingEngine.getStartPath`'s steps in test
+  code over the ported graph half: F0's and F0h's ends, and a fixed sample of R's ends on the 20 Std profiles.
+  - Plumb's link-midpoint comparison on F0h is **accepted as an addition** for breadth, not instead of the real ends.
+  - A cut at a link midpoint is not a place Forager starts.
+- **The `(int)` cast revert runs on profiles whose `turncost` is above 0,** since `hiking-mountain`'s is 0 and the revert
+  would not bite there. Its prediction names the profiles.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -100.
+
+**Kind:** outcome
+**ID:** 2026-10-28-100
+**Timestamp:** 2026-11-06T18:01:05Z
+**Continues:** 2026-10-28-95, 2026-10-28-96, 2026-10-28-98
+**Title:** FK kind 5 on `hiking-mountain`: 10 of 10, stable; `expected-1b.tsv` byte-unchanged; CI green
+**Observed:** Linden Caliper, session 28, `brouter-port` `cc01338` to `611ba54` (three commits; clean tree; no model name;
+checked by the planner). The cap change and the prediction were pushed before the run (`b5715ec`).
+- **Kind 5:** 10 of 10 after 937 of 1,000 draws; all 927 rejections came before routing. All 10 are "to-position not
+  mapped" and stable through the six regimes [R, as reported].
+  - **Checked by the planner:** `33-fk5-cap1000-stability.tsv` reads 10 "stable".
+- **`expected-1b.tsv` is unchanged:** `git diff --stat fcd35ff 611ba54` on it is empty (planner).
+  - Kind 5's rows store no profile and no ends, and its outcome (`0|0|0`, empty digests) is the same on `hiking-mountain`
+    as on `car-fast`.
+  - What changed is the table its rows are checked against: `E3Expected` now reads `FK5-` rows against kind 5's own table.
+- **E1:** no line added by this session carries a coordinate, by the planner's scan of the added lines. The Phase 2 report
+  holds three older hits: two false positives, and F0's route end rounded to five places (line 238), which is Forager's own
+  (-93).
+- **CI, read by the planner** (run 42265967539 on `11e1e8c`, the last code change, `success`): `jvm` 101 tests, 0 failures;
+  0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with
+  the gate reading "OK: all 2 classes ran".
+- **Unverified:** that session 27's six cases are among these ten (its case list was not kept).
+**So -95's ruling is carried out on `brouter-port`.** Plumb merges `brouter-port` into `brouter-port-5b` again at a step 6
+boundary (-96).
+**Notes:** Written by the planner session of -56 by hand. Next free ID -101.
+
+**Kind:** outcome
+**ID:** 2026-10-28-101
+**Timestamp:** 2026-11-06T18:13:54Z
+**Continues:** 2026-10-28-90, 2026-10-28-97, 2026-10-28-99
+**Title:** Step 6, third session: `NodesCache`'s graph half ported (5b's debt paid), with `MessageData` and `OsmPathElement`;
+two process gaps; a CI run lost to a 503 and re-run once
+**Observed:** Plumb Ledger, session 12, `brouter-port-5b` `079537f` to `a83ff3f` (three commits; clean tree; no model name;
+checked by the planner). The watcher closed at 159,941.
+- **The graph half** (`getGraphNode`, `obtainNonHollowNode`, `expandHollowLinkTargets`, `hasHollowLinkTargets`,
+  `getStartNode`; `NodesCache.java:213-300`) is ported, and `NodesCache.kt`'s header is corrected.
+  - **`GraphHalfTest`** starts from F0's 2 ends, F0h's 8 and 20 of R's on `hiking-mountain`. It covers cleanup modes 1 and
+    2 plus a 64 KiB run.
+  - Over the stubs it failed with `NotImplementedError`. On the port: 90 runs, 1,378,140 transcript lines equal [R, as
+    reported].
+  - Revert D (`obtainNonHollowNode`'s direct-weaving return flipped) was predicted at the first `obtain` line, and observed
+    there.
+- **`MessageData` and `OsmPathElement`** are ported with T2's methods. `PathElementTest` compares them by reflection over
+  Java's field names. Reverts E (`copy` drops `extraTime`) and F (`calcDistance`'s floor) each failed exactly as predicted.
+- **Still to do:** `OsmPath` and `StdPath` (stubs), `RoutingParamCollector`, `SearchBoundary`; the path-cost comparison; the
+  `(int)` and `interpolateEle` reverts. That is 1,019 Java lines left in step 6 (T2's port list, summed by the planner).
+- **CI, read by the planner:**
+  - Run 42266847677 on `f848da4`, first attempt: the `jvm` job failed before any test, on a `curl` 503 in
+    `:brouter:msunReference`. That is infrastructure, not this branch's code. **Re-run once by the planner.**
+  - Attempt 2: `jvm` 130 tests, 2 failures, both `CollectOutreachersTest` (-61); 0 ` e: ` lines; both `compileKotlinIos*`
+    ran. `ios-smoke` passed on attempt 1: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, with its gate.
+
+**Two process gaps:**
+- **`PathElementTest` was written over finished code,** not seen failing over stubs first. Reverts E and F show the test can
+  fail, but Forager's CLAUDE.md asks to "see the failure before writing the fix". From now on, every test is seen failing
+  over stubs before the port it checks. A revert does not stand in for that.
+- **Reverts D, E and F's result files are in scratch only** (`rev/D-*`, `rev/E-*`, `rev/F-*`), cited in the report but not
+  committed. Scratch does not survive a new container. The next session commits them under `step6/`, scanned for E1, as
+  reverts A to C were.
+
+**Cost (the planner's own gap):** -90 said the cost would be counted per session, and it has not been summed. From here,
+each session's final context is recorded in its outcome. This planner run has dispatched 17 coder sessions, each ending
+between 108k and 194k of context. That is the context at the end, not the tokens billed, which the planner cannot see.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -102.
+
+**Kind:** decision
+**ID:** 2026-10-28-102
+**Timestamp:** 2026-11-06T18:17:53Z
+**Continues:** 2026-10-28-54, 2026-10-28-101
+**Title:** The owner's stop: the planner's handoff written, and the scratch tools saved into the repository
+**Decision:** the owner, verbatim: "Write a hand off and save your space to continue work this Sunday".
+- **Nothing is running:** no coder, no stratum run, no watcher.
+- **The heads at handoff** (`git ls-remote`, 18:17Z): `main` `e006c7c`, `brouter-port` `611ba54`, `brouter-port-5b` `a83ff3f`,
+  `brouter-port-5a` `2a8ba5e`. PR #5 is open with -90 to this entry.
+- **`docs/process/planner-handoff.md`** is rewritten, replacing Cedar Datum's of -54, which stays in history. It holds the
+  state, the first steps in order, the rulings since -89, the open items, and how this planner worked.
+- **Saved into `docs/process/tools/`,** because scratch does not survive a new container:
+  - `watch_tokens.py`, the context watcher;
+  - `revert.sh`, Plumb's revert runner;
+  - `scan.sh`, the gated E1 scan;
+  - `make-forager-ends.sh`, which rebuilds the list of Forager's own ends from Forager's files at `a0535ece`, so that no
+    coordinate list is committed. **Checked by the planner:** it reproduces Plumb's 63 values exactly. None of the four files
+    holds a coordinate.
+- **Still in scratch only, and lost with the container:** reverts D, E and F's result files (-101). Plumb's session 13
+  commits them first, or re-runs the three reverts and says so.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -103.
