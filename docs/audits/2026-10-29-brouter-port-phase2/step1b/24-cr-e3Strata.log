@@ -1,0 +1,102 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3CRTest > crIsSelectedByCoverageAndCountedAgainstE3sStop STANDARD_OUT
+    E3 CR JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 CR seed: 20261206; profile trekking-crossing, SHA-256 a9cc214dc418bb6a7e43a77a9c7df0cbc34b19399067eff9668abbad3bc47ebb
+    E3 CR nodes: {E170_S50.rd5=50088, W70_N40.rd5=233165, W75_N35.rd5=260090, W75_N40.rd5=8137833}
+    E3 CR selection: 83 draws counted (cap 1180), 73 routed; table /home/user/forager-ios/brouter/build/e3/CR-select/select.tsv
+    E3 CR rejected: 10 before routing: no node in the target's 3 x 3 cells, or the target is outside every tile
+    E3 CR rejected: 10 reach: not covered (StdPath.java:101-103 0/3 lines; StdPath.java:105-113 0/9 lines)
+    E3 CR rejected: 4 reach: not covered (StdPath.java:101-103 3/3 lines; StdPath.java:105-113 0/9 lines)
+    E3 CR taken: 59 of 59; last taken at draw 83
+    E3 CR coverage stops (R6 differs from R1): 0
+    E3 CR: selection's R1 tuple and R2 lines equal E3's in 59 of 59
+    E3 CR kinds (R1): {route=59}
+    E3 CR: 59 cases; unstable 0 of 59; over 5%: false
+    E3 CR CR-0002: stable; R1 route|400|19848|9714|3793def08a218e1b|d361d2225dd83926; collection lines 0; R1 1272 ms; R1 heights E170_S50:400/400; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0003: stable; R1 route|1405|138174|89546|6bc1e4f2625afc8f|5edc678541f4cf67; collection lines 3; R1 2292 ms; R1 heights W75_N35:1405/1405; control R1 1,0,2,3,9,4,5,6,10,7,11,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0004: stable; R1 route|100|10349|2637|3fa77045783bce27|38183e40d302a8dd; collection lines 0; R1 336 ms; R1 heights W75_N40:100/100; control R1 1,0,2,3,9,4,5,6,10,7,11,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0005: stable; R1 route|194|24255|11380|9523c4b48c832b97|2ca61f9e39747761; collection lines 0; R1 379 ms; R1 heights W70_N40:194/194; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0006: stable; R1 route|22|10104|1531|fe775caf05dca44f|e82982191f83c43b; collection lines 0; R1 351 ms; R1 heights W70_N40:22/22; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0007: stable; R1 route|40|1656|563|8a3e12d037f09cdb|1de5ece1a0aeb53f; collection lines 0; R1 488 ms; R1 heights E170_S50:40/40; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0008: stable; R1 route|71|4846|2240|b78cedff1c701ad4|301f951b62f4a520; collection lines 0; R1 565 ms; R1 heights W75_N35:71/71; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0010: stable; R1 route|51|3084|2241|d6d50b0bdd39a842|25572e4bef8ac7f; collection lines 0; R1 313 ms; R1 heights W70_N40:51/51; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0011: stable; R1 route|71|7575|4155|370323b796983855|37e822f5d960a440; collection lines 0; R1 357 ms; R1 heights W70_N40:71/71; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0012: stable; R1 route|80|3523|1795|a33f87d9ebb539ab|db636bdfdc535b47; collection lines 0; R1 508 ms; R1 heights E170_S50:80/80; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0013: stable; R1 route|66|1698|759|1962d6ebb7dfc18|6050b2113d03d1ee; collection lines 0; R1 548 ms; R1 heights E170_S50:66/66; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0014: stable; R1 route|286|12834|7264|86b851d9582b9cc6|a56cfe620aa15fdd; collection lines 0; R1 868 ms; R1 heights E170_S50:286/286; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0015: stable; R1 route|394|21037|14453|9af6326f2c09315f|ffaa6ebcb3523f48; collection lines 1; R1 1404 ms; R1 heights W75_N40:394/394; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0017: stable; R1 route|77|3517|2648|d943321c88fd616c|58c47a3c023b3740; collection lines 0; R1 536 ms; R1 heights W75_N40:77/77; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0018: stable; R1 route|151|25273|12563|721f7492486d6670|9a3eee44c5d356f5; collection lines 0; R1 428 ms; R1 heights W70_N40:151/151; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0019: stable; R1 route|112|7302|4108|dca478cf389a2901|fe28e990e7b2ccb7; collection lines 0; R1 371 ms; R1 heights W75_N40:112/112; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0021: stable; R1 route|79|4639|1682|e1a520b1b990c645|a31647347421287d; collection lines 0; R1 639 ms; R1 heights E170_S50:79/79; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0024: stable; R1 route|95|6293|2455|b43c1405009ccf3f|a6a424f9206d18b; collection lines 0; R1 454 ms; R1 heights W70_N40:95/95; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0028: stable; R1 route|37|2382|1263|ee7d0e86772b902e|b57d2aefe19b0841; collection lines 0; R1 765 ms; R1 heights W75_N40:37/37; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0029: stable; R1 route|128|5410|3345|f59a2c9346c3f02f|4103912167043bd3; collection lines 0; R1 571 ms; R1 heights W75_N35:128/128; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0030: stable; R1 route|230|40005|26106|87ca75d4778e5268|4678c4b590a8123e; collection lines 0; R1 392 ms; R1 heights W70_N40:230/230; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0031: stable; R1 route|11|1579|614|b88df9842acaa2fd|49c09663a445f1f1; collection lines 0; R1 299 ms; R1 heights E170_S50:11/11; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0032: stable; R1 route|87|5748|2469|88be7a440009440c|79ed7bdc3120c2e3; collection lines 0; R1 284 ms; R1 heights W75_N40:87/87; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0035: stable; R1 route|367|18767|9164|70c16e7511fab7b5|8fb21395ad98581e; collection lines 0; R1 841 ms; R1 heights E170_S50:367/367; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0036: stable; R1 route|1061|131900|34054|90e5e66446638924|f19a6d80f117e666; collection lines 0; R1 1424 ms; R1 heights E170_S50:1061/1061; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0037: stable; R1 route|110|14224|6550|aba9e8b31fdcd0d8|f8b15315ae796d31; collection lines 0; R1 661 ms; R1 heights W70_N40:110/110; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0038: stable; R1 route|1340|92048|52861|dc123f37216c6e98|baf5e34ef00a1924; collection lines 0; R1 2720 ms; R1 heights E170_S50:1340/1340; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0039: stable; R1 route|618|44340|21065|13103fcfce0717a6|e177fb20cf81fc69; collection lines 4; R1 3566 ms; R1 heights W75_N40:618/618; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0043: stable; R1 route|64|17444|3220|8c53d57a565672e0|27ee39e93c78f3e7; collection lines 0; R1 875 ms; R1 heights W75_N35:64/64; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0044: stable; R1 route|83|9948|4197|4778b6d782f707d3|fe5f9468a7f58419; collection lines 0; R1 653 ms; R1 heights W75_N35:83/83; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0046: stable; R1 route|480|22517|12415|ea215da0679a6ad7|270208e28d263715; collection lines 0; R1 1577 ms; R1 heights E170_S50:480/480; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0047: stable; R1 route|80|8921|5184|e26f3485b67e776c|362ab1a26e96d139; collection lines 0; R1 427 ms; R1 heights E170_S50:80/80; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0048: stable; R1 route|80|3659|1727|f1af292029a28ac2|4440d4f15a99af65; collection lines 0; R1 884 ms; R1 heights E170_S50:80/80; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0049: stable; R1 route|250|14813|6694|efda96fa66dd4892|d52320fd25720eee; collection lines 0; R1 948 ms; R1 heights W75_N40:250/250; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0050: stable; R1 route|38|4296|1533|3b461681f2210258|bf84177ec385a397; collection lines 0; R1 818 ms; R1 heights W75_N35:38/38; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0051: stable; R1 route|30|1952|522|d85efee7e2b6ce74|f4b76b1eaa8742b3; collection lines 0; R1 661 ms; R1 heights W75_N40:30/30; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0052: stable; R1 route|1170|170486|86275|2ae8496c79219cf7|fe7bb0a976572b32; collection lines 22; R1 8327 ms; R1 heights W75_N35:1164/1170; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0053: stable; R1 route|284|39237|23245|6d29a0360f17fae1|587e249c32817a10; collection lines 0; R1 635 ms; R1 heights E170_S50:284/284; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0054: stable; R1 route|282|16223|9142|2d578c44de652a85|f175ec93c74080f3; collection lines 1; R1 1559 ms; R1 heights W75_N40:282/282; control R1 1,0,2,3,9,4,5,6,10,7,11,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0055: stable; R1 route|356|19745|9349|315b0b751bcfe39a|50dacf6a8caab274; collection lines 0; R1 1692 ms; R1 heights E170_S50:356/356; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0056: stable; R1 route|661|86194|44312|1fe84cdd782ec839|9c28809f081a94ff; collection lines 0; R1 1192 ms; R1 heights W70_N40:661/661; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0058: stable; R1 route|275|17270|8456|ac65592bd59ac88b|79597c5c0c4e8e31; collection lines 0; R1 998 ms; R1 heights W75_N40:275/275; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0059: stable; R1 route|29|1297|366|34541de911bfa77d|b107b1c22932d419; collection lines 0; R1 589 ms; R1 heights E170_S50:29/29; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0060: stable; R1 route|198|19721|14238|372a18dddd5d6eea|1d00d7abefac7208; collection lines 0; R1 647 ms; R1 heights W75_N35:198/198; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0061: stable; R1 route|134|6720|4237|ae537f73d7a07899|c6aead169940215d; collection lines 0; R1 726 ms; R1 heights W75_N40:134/134; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0064: stable; R1 route|2892|189479|131623|fa98c2799602d3f9|42ad7837c4bd9fcb; collection lines 25; R1 9769 ms; R1 heights W75_N40:2892/2892; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0065: stable; R1 route|509|125369|30005|305700e8ee9a8045|54b9ffa8a82a61f1; collection lines 0; R1 870 ms; R1 heights W70_N40:509/509; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0067: stable; R1 route|182|16143|8999|efcc6611e0dd9a86|d265fd847f201b3c; collection lines 0; R1 345 ms; R1 heights W70_N40:182/182; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0068: stable; R1 route|29|4625|1158|675f0eb979128390|8d66995daded031a; collection lines 0; R1 535 ms; R1 heights W75_N35:29/29; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0069: stable; R1 route|545|65720|36266|1e9dc651f86f9851|24f9a9e36993e97f; collection lines 0; R1 1254 ms; R1 heights E170_S50:545/545; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0070: stable; R1 route|34|3145|1048|ac657256872f5e59|798cc160a545be12; collection lines 0; R1 319 ms; R1 heights W75_N35:34/34; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0073: stable; R1 route|26|1905|573|d9404fd1bb1d49f|1c8f1a01d28f7627; collection lines 0; R1 395 ms; R1 heights E170_S50:26/26; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0075: stable; R1 route|463|67070|42092|abed36d6307919cb|b9910739ef96f01b; collection lines 0; R1 905 ms; R1 heights W70_N40:463/463; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0076: stable; R1 route|51|1904|864|406cb8687f45e930|a238c903fb16a1d7; collection lines 0; R1 768 ms; R1 heights E170_S50:51/51; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0078: stable; R1 route|36|2262|926|a59ff2e7154ee1c6|d31b669c1f682c82; collection lines 0; R1 243 ms; R1 heights W75_N40:36/36; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0079: stable; R1 route|86|4619|2421|84841fdb308dd02d|c8891145b541190c; collection lines 0; R1 353 ms; R1 heights W75_N40:86/86; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0080: stable; R1 route|61|2883|1975|46d91361c8a04be3|9fe939a3621017c5; collection lines 0; R1 307 ms; R1 heights W70_N40:61/61; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0082: stable; R1 route|110|11239|5405|cfcccce20e24ab01|9d327bd0189e8016; collection lines 0; R1 1137 ms; R1 heights W75_N40:110/110; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 CR CR-0083: stable; R1 route|171|26528|15629|765a631a6d14222b|b5b3a399b71965ce; collection lines 0; R1 1096 ms; R1 heights W75_N35:171/171; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+
+E3CRTest > crIsSelectedByCoverageAndCountedAgainstE3sStop PASSED
+
+BUILD SUCCESSFUL in 4m 5s
+10 actionable tasks: 2 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html
+rc=0

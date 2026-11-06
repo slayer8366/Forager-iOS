@@ -1,0 +1,102 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3LBTest > lbIsSelectedByReachAndCountedAgainstE3sStop STANDARD_OUT
+    E3 LB JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 LB seed: 20261207; profile hiking-mountain
+    E3 LB (c) rows: [474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297, 1310, 1311, 1318]; inside the tiles, with their nodes: {1295=17430, 1297=22905, 1310=175492, 1311=157003, 1318=229985}
+    E3 LB selection: 99 draws counted (cap 1180), 91 routed; table /home/user/forager-ios/brouter/build/e3/LB-select/select.tsv
+    E3 LB rejected: 27 reach: route leaves the band
+    E3 LB rejected: 8 before routing: no node in the target's 3 x 3 cells, or the target is outside every tile
+    E3 LB rejected: 4 reach: no route: to-position not mapped in existing datafile
+    E3 LB rejected: 1 reach: no route: from-position not mapped in existing datafile
+    E3 LB taken: 59 of 59; last taken at draw 99
+    E3 LB: selection's R1 tuple and R2 lines equal E3's in 59 of 59
+    E3 LB kinds (R1): {route=59}
+    E3 LB: 59 cases; unstable 0 of 59; over 5%: false
+    E3 LB LB-0001: stable; R1 route|334|11270|8773|5c2c4a0d44e493d|cb81da0c5e6ccfc7; collection lines 0; R1 646 ms; R1 heights W75_N40:330/334; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0002: stable; R1 route|333|15517|10942|7799ca98c695e16b|fe5d5b252f476a9d; collection lines 0; R1 770 ms; R1 heights W75_N40:333/333; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0003: stable; R1 route|33|1193|714|3e7783acf1dbb070|f586dcf4c9dd1117; collection lines 0; R1 331 ms; R1 heights W75_N40:33/33; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0004: stable; R1 route|427|16785|10450|c0cf0f7e2fe720a2|b195e4d597ab9a19; collection lines 1; R1 964 ms; R1 heights W75_N40:427/427; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0015: stable; R1 route|208|15006|8670|1db5d4c01a8bc0aa|172ff19426674611; collection lines 0; R1 998 ms; R1 heights W75_N40:208/208; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0016: stable; R1 route|184|22840|10999|b7cf90f9679c0a2a|f2b3761c9a3ef6b0; collection lines 0; R1 1016 ms; R1 heights W75_N35:184/184; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0017: stable; R1 route|623|24470|15409|77560a54c5a9653|6056f38d93bd908; collection lines 0; R1 1385 ms; R1 heights W75_N40:623/623; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0018: stable; R1 route|28|1625|1240|1d383286bbac0f45|5d3b2b34cbc8167a; collection lines 0; R1 610 ms; R1 heights W75_N40:28/28; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0022: stable; R1 route|103|5841|3682|c87cf13921892755|e4ebb469253c3e2c; collection lines 0; R1 759 ms; R1 heights W75_N40:103/103; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0024: stable; R1 route|21|447|334|9eb05ec0ebad4920|4d2bdaa369e5338b; collection lines 0; R1 407 ms; R1 heights W75_N40:21/21; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0025: stable; R1 route|125|11454|7409|bdc687af6031fba7|1a3a068c2418397b; collection lines 0; R1 470 ms; R1 heights W75_N35:125/125; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0026: stable; R1 route|341|20366|11076|1d280da7fc52da20|b2fbc3c4814acc0a; collection lines 0; R1 651 ms; R1 heights W75_N40:341/341; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0027: stable; R1 route|518|52412|17321|f42602e8faea494a|618bccd7dc03846e; collection lines 0; R1 840 ms; R1 heights W75_N40:518/518; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0028: stable; R1 route|75|3702|2770|926e59cff4ed04de|aefd2c44f5551476; collection lines 0; R1 977 ms; R1 heights W75_N40:75/75; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0029: stable; R1 route|524|22026|15959|b340ca201881ed78|3956f711bef9532b; collection lines 0; R1 1120 ms; R1 heights W75_N40:524/524; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 2,0,1,3,4,5,11,6,7,8,9,10,
+    E3 LB LB-0030: stable; R1 route|306|29057|11416|307d4c3f90d182c9|19b4575eb0cdf1cc; collection lines 0; R1 860 ms; R1 heights W75_N40:306/306; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0033: stable; R1 route|92|6455|3509|d380b2b481b0a05c|5fce631b66d59d2a; collection lines 0; R1 264 ms; R1 heights W75_N40:92/92; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0034: stable; R1 route|78|19095|7429|f47971f665b554c|3164173136fbc4b4; collection lines 0; R1 740 ms; R1 heights W75_N40:44/78; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0035: stable; R1 route|260|9358|6089|6388bba0ace3ed51|84557cdcf464eef2; collection lines 0; R1 649 ms; R1 heights W75_N40:260/260; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0036: stable; R1 route|285|14812|7754|a95d56394fc56424|bb6c52158307b56a; collection lines 0; R1 587 ms; R1 heights W75_N40:285/285; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0037: stable; R1 route|207|19112|8354|4ccc18558975eb25|b3bdf96c18b2ce91; collection lines 0; R1 507 ms; R1 heights W75_N40:207/207; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0038: stable; R1 route|329|13679|8145|2581c94e7965b29c|3badca4874c9d354; collection lines 0; R1 625 ms; R1 heights W75_N40:329/329; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0040: stable; R1 route|47|6825|1821|b2058897589af611|72816e9193c1c3ab; collection lines 0; R1 309 ms; R1 heights W75_N40:47/47; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0041: stable; R1 route|54|4055|2662|66bf1af1324de91a|14019990ce1b86c; collection lines 0; R1 399 ms; R1 heights W75_N40:54/54; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0042: stable; R1 route|7|253|178|87cffcd0075b5054|7aaa5899d5df009f; collection lines 0; R1 236 ms; R1 heights W75_N40:7/7; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0045: stable; R1 route|174|29789|9964|15847f2c347d6782|8515283196f3853a; collection lines 0; R1 411 ms; R1 heights W75_N35:174/174; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0046: stable; R1 route|432|18573|9847|66a830aacd3c5558|a16c5201ef606955; collection lines 0; R1 543 ms; R1 heights W75_N40:432/432; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0047: stable; R1 route|184|9826|3332|92621a62547c2290|28f21982212cc87a; collection lines 0; R1 501 ms; R1 heights W75_N40:184/184; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0048: stable; R1 route|1502|84216|47400|42f5f5ad0c4345d8|af182c7c412928bb; collection lines 3; R1 1365 ms; R1 heights W75_N40:1502/1502; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0050: stable; R1 route|198|14178|6900|3aead9ae14335865|dce66c0d7667887e; collection lines 0; R1 478 ms; R1 heights W75_N40:198/198; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0051: stable; R1 route|462|19286|13175|24ff5988bf965774|11ea69033bd933ed; collection lines 0; R1 605 ms; R1 heights W75_N40:462/462; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0052: stable; R1 route|158|5802|3342|fc96b062fdd8338|10a413c06943ba3c; collection lines 0; R1 383 ms; R1 heights W75_N40:158/158; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0055: stable; R1 route|324|18700|12457|24bc837686d6f509|689adaf766026101; collection lines 0; R1 655 ms; R1 heights W75_N40:324/324; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0056: stable; R1 route|185|12961|8020|4324b6dd5075c515|cb82009d3a6af539; collection lines 0; R1 605 ms; R1 heights W75_N40:185/185; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0057: stable; R1 route|473|15020|10348|9d0536a9b408df91|c5b5f9a4cb211b05; collection lines 0; R1 524 ms; R1 heights W75_N40:473/473; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0059: stable; R1 route|1160|55853|36711|7dbdc89a9b34e013|de648ae96f0a9749; collection lines 1; R1 959 ms; R1 heights W75_N40:1160/1160; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0061: stable; R1 route|239|5839|4164|b0fd563f12211f0b|ee5195e87e9281f2; collection lines 0; R1 715 ms; R1 heights W75_N40:237/239; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0063: stable; R1 route|908|32855|20183|bccc0e28f6b0f131|dea8b6cb5cc5121f; collection lines 0; R1 852 ms; R1 heights W75_N40:908/908; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0064: stable; R1 route|311|18677|9720|279a3f98feec1a36|d4bc40be784f8118; collection lines 0; R1 729 ms; R1 heights W75_N40:311/311; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0065: stable; R1 route|212|12807|8033|e8147237d99717af|a7e98fb1f6b11c9d; collection lines 0; R1 479 ms; R1 heights W75_N40:212/212; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0066: stable; R1 route|109|13146|6028|416067e67f4e963b|a83b1edeccfda882; collection lines 0; R1 369 ms; R1 heights W75_N35:109/109; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0067: stable; R1 route|160|10758|6231|66a8d0eaf3151497|5f6dbf16fbcf0540; collection lines 0; R1 627 ms; R1 heights W75_N40:160/160; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0070: stable; R1 route|104|4024|2715|f1e3823080e98ce6|13df8b9fca155d56; collection lines 0; R1 551 ms; R1 heights W75_N40:104/104; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0071: stable; R1 route|45|3432|1572|3a15d32fa0c42026|d66900aa731cf009; collection lines 0; R1 484 ms; R1 heights W75_N40:45/45; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0072: stable; R1 route|128|4302|3359|b3b75039db17103b|ff4af60dce994d65; collection lines 0; R1 326 ms; R1 heights W75_N35:128/128; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0073: stable; R1 route|158|9787|8632|9421e89ed5601e2a|d2dce0bbf390d0b; collection lines 0; R1 501 ms; R1 heights W75_N40:158/158; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0074: stable; R1 route|383|18252|12493|35dc919bb1d0b41f|86e5a69ee9599af8; collection lines 0; R1 484 ms; R1 heights W75_N40:383/383; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0079: stable; R1 route|321|29606|10534|66b91c6c91ed5fd5|9fd9ee9d9c456244; collection lines 1; R1 1051 ms; R1 heights W75_N40:321/321; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0081: stable; R1 route|496|21103|12451|ea78b2bcce22f5ef|ba037779383a1864; collection lines 0; R1 877 ms; R1 heights W75_N40:496/496; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0083: stable; R1 route|64|3922|3057|4a3998bcccbc5c9c|e73839dd3e61018a; collection lines 0; R1 495 ms; R1 heights W75_N40:64/64; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0084: stable; R1 route|75|3558|1976|efab96d271fb0130|655ba1763eb04753; collection lines 0; R1 307 ms; R1 heights W75_N40:75/75; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0086: stable; R1 route|120|6139|4743|7a7337a4e0f17ab9|9bf55f36425aece8; collection lines 0; R1 471 ms; R1 heights W75_N40:120/120; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0088: stable; R1 route|1787|129332|68965|362e78240e9dd06f|a651ba919466bfbd; collection lines 2; R1 1200 ms; R1 heights W75_N40:1787/1787; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0091: stable; R1 route|245|11718|6139|d993518cfeb51dbf|f8e27b832f49124; collection lines 0; R1 407 ms; R1 heights W75_N40:245/245; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0095: stable; R1 route|205|32937|6867|9523e3b0990613d2|eede31995c538012; collection lines 0; R1 417 ms; R1 heights W75_N40:205/205; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0096: stable; R1 route|26|2110|722|891b27eb903bcb9c|ff8ee1064c917f78; collection lines 0; R1 359 ms; R1 heights W75_N40:26/26; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0097: stable; R1 route|17|949|381|d57ea325e810b221|dd84d33513667a00; collection lines 0; R1 223 ms; R1 heights W75_N40:17/17; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0098: stable; R1 route|341|15199|11478|35b55c2e8a53170e|ef5f9de6a7f4769; collection lines 0; R1 435 ms; R1 heights W75_N40:341/341; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 LB LB-0099: stable; R1 route|829|31531|21143|d88876760d435161|841339014ec46217; collection lines 0; R1 828 ms; R1 heights W75_N40:829/829; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+
+E3LBTest > lbIsSelectedByReachAndCountedAgainstE3sStop PASSED
+
+BUILD SUCCESSFUL in 4m 18s
+10 actionable tasks: 2 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html
+rc=0

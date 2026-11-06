@@ -1,0 +1,23 @@
+Probe outcome counts by message (numbers of 4+ digits shown as N), Linden session 23; scratch probes, not E3 runs.
+water:      15 from-position not mapped in existing datafile
+dm:      12 datafile W80_N40.rd5 not found
+isl:       2 from-position not mapped in existing datafile
+isl:       6 no track found at pass=0
+isl:       1 null
+isl:       6 target island detected for section 0
+isl:       5 to-position not mapped in existing datafile
+isl-rev:       6 from-position not mapped in existing datafile
+isl-rev:      11 no track found at pass=0
+isl-rev:       1 null
+isl-rev:       2 to-position not mapped in existing datafile
+isl2:       1 from-position not mapped in existing datafile
+isl2:       1 no track found at pass=0
+isl2:       1 null
+isl2:       1 target island detected for section 0
+isl2:       8 to-position not mapped in existing datafile
+nt5:       1 from-position not mapped in existing datafile
+nt5:       3 null
+nt5:       6 to-position not mapped in existing datafile
+cut (E170_S50 cut short, 10 lengths, hiking-mountain, one Dunedin case): 5 "file of size N too short, should be 1061704" (200, 201, dataEnd/2, dataEnd-1, dataEnd+1); 1 "Index -399101066 out of bounds for length 65636" (dataEnd); 4 null, routed (1, 100, 199, size-1)
+flip (one byte xor 0xff, 10 offsets): 4 "top index checksum error" (37, 100, 150, 199); 1 "lookup version mismatch (old rd5?) lookups.dat=11 E170_S50.rd5=244" (byte 1); 5 null, routed (sub-index bytes 203, 207, 211, 215, 219)
+Profiles: water, dm hiking-mountain; isl, isl-rev, isl2 trekking-noferries; nt5 car-fast. Run: the oracle jar with Probe.java under Temurin 21.0.13+9, Forager's params, doRun(0). Coordinates kept out (RECORD -80).

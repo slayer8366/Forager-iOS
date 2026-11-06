@@ -1916,6 +1916,101 @@ RECORD -77, item 1 done; item 2 (NT) built in part, not run. Logs `step1b/21-*`.
 7. **Running: nothing.** Scratch as before; `22-jvmTest.log` there is the last full jvmTest (95, 0 failures).
 
 
+## Step 1b continued: NT, CR and LB, and FK's probes (twenty-third session, Linden Caliper)
+
+Dispatch RECORD -77, -78 (rulings -79, -80 by message). Base `brouter-port` `00b9886`, fetched, equal to origin [C]. Oracle JDK
+Temurin 21.0.13+9 amd64, each log's first `E3` line [C]. Tuple -58's. Each prediction was pushed before its run (`f410e02`
+NT, `4d43ea2` CR and LB). jvmTest 95, 0 failures, before each code push (`23-jvmTest*.log` in scratch) [C]. 0 ` e: ` lines in
+each stratum log [C]. `select.tsv` checks by `selcheck.py`, committed as `*-select-check.txt` [C].
+
+### NT (`23-*`; seed 20261205) [C]
+- **Filled:** 59 of 59, last taken at draw **89** of 1,180. 59 routed. **Rejected 30, all before routing:** 27 "no junction
+  with two exactly opposite links in the drawn node's cell", 2 "no node in the target's 3 x 3 cells", 1 "the oracle's
+  matching refused it: to-position not mapped".
+- **Reach (-78):** the oracle's 4-ulp check, repeated by the mark. Every taken case reads **gap 0 ulps**, an exact tie. `:71`
+  reads covered in 59 of 59, recorded only. 0 coverage stops, because R6 equals R1 in every case. R2 equals R1 in every routed
+  case.
+- **Stability:** 0 unstable of 59. The selection's R1 and R2 equal E3's in 59 of 59. R1 kinds: 56 route, 2 "target island
+  detected for section 0", 1 "to-position not mapped".
+- **Against the prediction:** filled as guessed. One taken case's R1 is "to-position not mapped", although the generator's
+  in-JVM matching of the same ends did not throw, while another draw's did. Why the two differ is not traced **[?]**. Any
+  outcome kind is taken, my call (the tie is broken in matching, before routing). For the planner.
+
+### CR (`24-*`; seed 20261206; profile `trekking-crossing`, SHA-256 `a9cc214d…` in the log) [C]
+- **Filled:** 59 of 59, last at draw **83**. 73 routed. **Rejected 24:**
+  - 10 before routing: "no node in the target's 3 x 3 cells";
+  - 10 "not covered" (101-103 0/3, 105-113 0/9);
+  - 4 "not covered" (101-103 3/3, 105-113 0/9).
+- **Reach:** every taken case covers both spans in full, so the captured tiles do carry `estimated_crossing_class`. That
+  answers Phase 1's [?].
+- **Coverage stops:** 0. **Tiles of the 59:** E170_S50 19, W70_N40 13, W75_N35 11, W75_N40 16.
+- **Stability:** 0 unstable of 59. The selection's R1 and R2 equal E3's in 59 of 59. R1 kinds: 59 route.
+- **Code:** `E3Profiles.crossing()` writes E4's assigns into the top of `trekking.brf`'s global context, and checks that
+  `trekking.brf` names none of them. `E3Stability.ownProfiles` writes it into every launch's `profiles2/`, refusing to
+  replace an oracle profile.
+
+### LB (`25-*`; seed 20261207, hiking-mountain) [C]
+- **(c) rows:** the 13 of step 2b (MsunLibm against OracleLibm, asserted). **Inside the tiles: 5**, as computed: 1295, 1297,
+  1310, 1311 and 1318. E170_S50 holds none.
+  - Phase 1's "12 in-tile rows" is another comparison **[I]**. For the planner.
+- **Filled:** 59 of 59, last at draw **99**. 91 routed. **Rejected 40:**
+  - 27 "route leaves the band";
+  - 8 before routing: "no node in the target's 3 x 3 cells";
+  - 4 no route, "to-position not mapped";
+  - 1 no route, "from-position not mapped".
+- **Taken by row:** 1295 1, 1297 4, 1310 13, 1311 18, 1318 23.
+- **Stability:** 0 unstable of 59. The selection's R1 and R2 equal E3's in 59 of 59. R1 kinds: 59 route. Filled far sooner
+  than guessed (draw 600).
+
+### FK: probes only, not built (`26-fk-probes/counts.txt`; scratch probes of the oracle jar, not E3 runs) [C]
+Counts by message, no coordinates (-80).
+- **Kind 1, water starts:** 15 of 15 "from-position not mapped".
+- **Kind 6, ends west of 75°W:** 12 of 12 "datafile W80_N40.rd5 not found".
+- **Islands with trekking-noferries:**
+  - target on the island: 7 of 32 "target island detected";
+  - start on the island: 11 of 20 "no track found at pass=0".
+- **Kind 5's E4 construction (car-fast):** 6 "to-position not mapped", 1 "from-position", 3 routed.
+- **Cuts of E170_S50:**
+  - 5 "file of size N too short, should be 1061704";
+  - at dataEnd, "Index -399101066 out of bounds for length 65636";
+  - 4 routed (cuts at 1, 100, 199 and size-1).
+- **Byte flips:**
+  - 4 "top index checksum error";
+  - byte 1, "lookup version mismatch";
+  - 5 sub-index flips (203 to 219) routed.
+- **"start island detected" is unreachable on Forager's path [R]:** it is thrown only when `inverseRouting` is set
+  (`RoutingEngine.java:954-958`). That comes from a profile assign (`RoutingContext.java:174`), which no oracle profile has.
+  -79 rules kind 3 as "start on a ferry-only island", with its family being the first case's message. On the probes that is
+  "no track found at pass=0".
+- **Shared families on Forager's path:** kinds 3 and 5 as I first proposed them; kinds 2 and 5 under -80.
+
+### CI
+Not read on this session's head: the handoff came first. CI on `00b9886` was read by the planner (-78). **Unverified.**
+
+### Calls beyond scope, and premises that were wrong
+- `E3Stability.ownProfiles` and `E3Profiles` are harness code in jvmTest, inside -77's scope.
+- Wrong premise: Phase 1's "12 in-tile rows" for LB. Under step 2b's (c) rows there are 5.
+- Wrong premise, as -78 already said: `:71` as NT's reach.
+
+### Step 1b: the handoff (twenty-third session)
+1. **Done:** NT, CR and LB, each filled with 0 unstable, evidence committed.
+2. **Next, first: FK per RECORD -80**, on `brouter-port`, generator and prediction pushed before the run.
+   - **Kind 1:** water starts.
+   - **Kind 2:** water ends.
+   - **Kind 3:** a start on a ferry-only island; family is the first case's message (-79).
+   - **Kind 4:** a seeded island generator, cap 200; family "target island detected".
+   - **Kind 5:** an end on a way the profile cannot use, with no usable way within 250 m; family "not mapped", shared
+     with kind 2.
+   - **Kind 6:** W80_N40.
+   - **Kind 7:** 10 cuts reaching "file of size * too short, should be *". Plus FK7-x1, the dataEnd cut, compared by
+     exception class (step 10 must check its text on iOS), and FK7-x2, one routing cut.
+   - **Kind 8:** 10 flips in bytes 8 to 199, family "top index checksum error". Plus FK8-x1, a sub-index flip that routes.
+   - **Kinds 9 to 11:** need harness changes to E3CaseRun: R1 timed, then the 50 ms rerun; the two cancel modes; a
+     links-processed count.
+   - The probe tool is `26-fk-probes/Probe.java`. Its coordinates are in scratch only (`linden/fkprobe/*.txt`).
+3. **Then:** read CI on the final head; E5's expected values in a session of their own.
+4. **Running: nothing.**
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
