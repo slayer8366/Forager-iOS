@@ -3507,3 +3507,68 @@ in any trailer; checked by the planner).
 **Next:** the port's own router (steps 6 to 8) on `brouter-port-5b`'s line, the graph half being there (-61), unmerged until
 step 10 answers -61. The draft milestone report is in the Phase 2 report, under "Step 1b finished".
 **Notes:** Written by the planner session of -56 by hand. Next free ID -90.
+
+**Kind:** intent
+**ID:** 2026-10-28-90
+**Timestamp:** 2026-11-06T13:06:39Z
+**Continues:** 2026-10-28-24, 2026-10-28-50, 2026-10-28-61, 2026-10-28-62, 2026-10-28-68, 2026-10-28-89
+**Title:** The plan for steps 6 to 8, the port's router (planner; not yet dispatched)
+**Decision first:** the owner, verbatim: "Plan 6 to 8".
+
+**What the steps are** (Phase 1's item I, report at `20e1f92`, lines 1701-1703; Java line counts [C] there):
+- **6, the path model,** 2,068 lines in 15 classes: `RoutingContext`, `OsmPath`, `StdPath`, `OsmPathElement`, `ProfileCache`,
+  `RoutingParamCollector` and the rest.
+  - **Test:** `RoutingParamCollector` on Forager's strings; `RoutingContext` read from each profile; each path extension's
+    cost on decoded links compared to the oracle's.
+  - **Revert:** one `(int)` cast moved inside a sum in `StdPath`.
+- **7, the track and hints,** 1,367 lines in 9 classes: `OsmTrack`, `VoiceHint*` and `Format*` as far as reached.
+  - **Test:** exercised through step 8's routes; the hints are recorded, not asserted (E1).
+  - **Revert:** one distance rounding replaced by `roundToLong`.
+- **8, `RoutingEngine` and the entry point,** 2,009 lines, **less 429 for via points, left out by the owner at -24,** so 1,580.
+  It has four sub-steps:
+  - **8a,** matching and the search without memory pressure: F0 first, then R and DL;
+  - **8b,** the memory path: MP64, ML5, PM5. Revert: `isInMemoryBounds`' comparison flipped;
+  - **8c,** terminate, the time limit and the progress count: FK 9 to 11. Revert: `terminated` written but not read;
+  - **8d,** `route()` and `checkDataFile` over the engine.
+- **About 5,000 Java lines in all** (2,068 + 1,367 + 1,580) [C]. That is the largest half of the port. The port has ported
+  about 7,100 Kotlin lines so far (`brouter-port-5b`'s `commonMain`, `wc -l`).
+
+**The branch (the planner's call, technical):**
+- Step 6 needs both lines of work: the graph half, decoders and matcher, on `brouter-port-5b`; and 1b's expected values,
+  heights tuple and harness on `brouter-port`.
+- `brouter-port-5b` may not merge into `brouter-port` until step 10 answers -61. The other direction is free.
+- **So `brouter-port` is merged into `brouter-port-5b`** (by merge, never rebase), and steps 6 to 8 are built there.
+  - `brouter-port` has no `commonMain` change since their base `9f41799` (`git diff --stat`, empty). The merge is
+    therefore expected to touch only tests, tools, build files and docs [I: conflicts in `build.gradle.kts` and
+    `libs.versions.toml` are possible].
+- **That merge is the first act** of step 6's first session, with CI read after it.
+
+**Who does what:**
+- **Plumb Ledger, on `brouter-port-5b`:** 6, then 8a to 8d, step by step, one coder per branch at a time.
+- **Step 7** may go to Linden in parallel only if its files touch none of Plumb's. Otherwise it follows 6. The planner
+  decides from step 6's file list.
+
+**Debts these steps must pay, already recorded:**
+- **-62:** `interpolateEle`'s `short` cast is shown covered on F0h's cut ends, with a revert that bites, at step 6.
+- **-42:** the 19 untested way getters, exercised at step 6.
+- **-49:** `StorageConfigHelper` catches only `IOException`; the choice is reviewed at step 8.
+- **-73:** `canEscape`'s false branch comes from MP64's nodes. 5b's `collectOutreachersWithADestinationVanishesFarNodes` gets
+  a region cut around one of those nodes, so its coverage assertion can be met (-61's planner's call).
+- **-61:** `CollectOutreachersTest` stays red, reported at every CI read, never silenced.
+- **-24:** via points are a named "unsupported", with a test that shows it.
+
+**How sessions are run** (from -78's lesson that output, not reading, fills the context):
+- one sub-step per session where it fits, with stubs and tests seen failing first;
+- the full `:brouter:jvmTest` before any code push, confirmed fresh;
+- E1's coordinate scan before any evidence push;
+- the exact attribution line, never a model name.
+
+**Cost [I, an estimate, not measured]:**
+- Steps 2a to 4 cost about 2.5 million tokens for about 3,570 Java lines (-42), about 0.7 million per 1,000 lines.
+- At that rate steps 6 to 8 would take about **3.5 million**.
+- Later sessions have each run to about 180k in 15 to 40 minutes, so the true figure may be higher. The planner counts it
+  per session and reports it at each milestone.
+**For the owner before step 6 starts:** `ProfileCache`'s lock (Phase 1, item B row 8), which no entry has ruled. Phase 1
+recommends (a), keeping it with atomicfu 0.33.0's `SynchronizedObject`. That is a new dependency in shipped code.
+**Finish line for this plan:** the owner's answer on the lock, then step 6's dispatch.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -91.
