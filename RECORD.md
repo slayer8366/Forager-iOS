@@ -3359,3 +3359,70 @@ voids counted; a correction to -84
   4 of 113 is under E3's 5%. No change to FK9.
 - **FK7-x1** is compared by outcome, and both readings are recorded.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -86.
+
+**Kind:** outcome
+**ID:** 2026-10-28-86
+**Timestamp:** 2026-11-06T10:37:39Z
+**Continues:** 2026-10-28-79, 2026-10-28-80, 2026-10-28-82, 2026-10-28-85
+**Title:** FK complete: all 11 kinds 10 of 10 in one family, 3 of 114 unstable (kind 9's timing voids); 1b's strata are all run
+**Observed:** Linden Caliper, session 25, `brouter-port` `eb6460d` to `15b821c` (four commits; no model name in any trailer,
+checked by the planner). Its final message was lost in a restart of the planner's container, so this entry is read from the
+Phase 2 report's section "FK finished (twenty-fifth session)" and from CI, both by the planner.
+- **Kind 5** (-82), with start and end drawn separately: 10 of 10 after 194 of 400 draws, 0 unstable.
+- **Kind 3** (-85), selected by the oracle: 10 of 10 by draw 61. The 51 rejections were 35 "from-position not mapped" and
+  16 "route". 0 unstable.
+- **The full run on `ce3db16`** (`30-fk-e3Strata.log`) passed, with 114 cases and 0 ` e: ` lines. In family, each 10 of 10:
+  - 1, "from-position not mapped";
+  - 2, "to-position not mapped";
+  - 3, "no track found at pass=0";
+  - 4, "target island detected";
+  - 5, "to-position not mapped";
+  - 6, "datafile W80_N40.rd5 not found";
+  - 7, "file of size * too short";
+  - 8, "top index checksum error";
+  - 9, the timeout family;
+  - 10 and 11, the watchdog family.
+- **Unstable: 3 of 114,** all kind 9's timing voids (FK9-0001, -0037, -0040), kept out of exact assertions (-85).
+- **The extra cases:**
+  - **FK7-x1** gives "to-position not mapped", nothing thrown, in both runs. On the same cut tile, Linden's probe ends give
+    the index exception, so **the outcome follows the ends** [C, as reported];
+  - **FK7-x2 and FK8-x1 route identically to the intact control FK7-c0.**
+- **E1:** FK's committed evidence holds no coordinates. The planner scanned its files for both decimal and integer forms.
+- **CI, read by the planner** (run 42183317078 on `ce3db16`, the last code change, `success`): `jvm` 95 tests, 0 failures; 0
+  ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the
+  gate reading "OK: all 2 classes ran".
+**1b now stands at every stratum run:** F0, F0h, R, DL-lat, DL-lon, MP64, ML5, PM5 (short, 55), NT, CR, LB and FK. Only the
+expected values remain, with PM5 at 55 and kind 9's voids kept out.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -87.
+
+**Kind:** decision
+**ID:** 2026-10-28-87
+**Timestamp:** 2026-11-06T10:37:39Z
+**Continues:** 2026-10-28-83, 2026-10-28-84
+**Title:** OSM-derived positions stored as integers are stripped from the committed evidence (owner); two wrong claims of
+the planner's corrected
+**Observed:**
+- **Linden found the planner's scan for -83 too narrow:** it looked only for decimal coordinates. The `R1-extent` column of
+  the selection tables (`E3Select.kt:146`) is each route's bounding box in BRouter's integer microdegrees.
+- **The planner then scanned both code branches** for integer pairs and `node=` positions, and read every heavy hit.
+  - **Real:** the `R1-extent` column in seven tables (`17` to `25-*-select.tsv`), and `19-mp64-canescape-counts.txt`, which
+    holds 900 node positions (`node=105980942,130643010`, …).
+  - **False alarms, read and cleared:** R's and ML5's stability tables (costs and digests), 5b's `decode.txt` (cell
+    indices), and the scale tables.
+- **So -83's "the only file that has any" was wrong,** and so was -84's "after selection and before E3's regimes" (-85).
+**Decision:** asked whether to give these the same treatment as -84, the owner chose, verbatim: "Strip them, same as -84
+(Recommended)". The option read: "One commit removes the R1-extent column from the 7 tables (the rest of each table is
+evidence and stays) and the node positions from the canEscape file (counts stay). History keeps the old copies; no notice.
+Future tables never write the column."
+- **Rejected:** "Delete the 8 files whole"; "Leave them".
+- **Done by the planner** in `f308f88` on `brouter-port`, by a plain push:
+  - the column is removed from the seven tables, and the 900 positions are replaced by "-";
+  - **`E3Select.kt` no longer writes `R1-extent`.** The extent is still computed and used in memory, where DL's and LB's
+    reach need it;
+  - the committed readers `selcheck.py` and `cesum.py` read only the first columns or the ` cmd=` split, so they are
+    unaffected [R];
+  - **the full `:brouter:jvmTest` ran fresh before the push** (`compileTestKotlinJvm` and `jvmTest` both executed, and the
+    XML was written at run time): 95 tests, 0 failures, 0 ` e: ` lines;
+  - a scan of the staged diff found no coordinate in either form.
+- **The scan from now on,** before every evidence commit: decimal coordinates, integer microdegree pairs, and `node=` positions.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -88.
