@@ -5,9 +5,9 @@ Plumb Ledger, seventh session, on `brouter-port-5b`, from `d1de74b`. Tags: [R] r
 
 ## Status
 - Item 1 (the defect): fixed. Item 2 (reach): done, 440 unported Java lines, under the stop (session 7).
-- Item 3 (session 8): ported and the decode test passing forward; its revert is predicted and pushed, **not yet run**.
-  `OsmNode.kt`'s throwing branch is wired to a **stub** `parseNodeBody2`. Items 4 to 6: not started. Handed off at the
-  planner's message (04:35Z).
+- Item 3 (session 8): ported and the decode test passing forward; its revert run in session 9, as predicted.
+- Item 4 (session 9): route-ways test failing over the stubs, the three methods ported, passing forward, revert run as
+  predicted. Items 5 and 6: not started.
 
 ## 1. The `differingFields` defect (-69)
 - **Cause** [R]: `WaypointMatchEngines.differingFields` split each end's line on spaces, and `n1=(lon, lat)` prints
@@ -68,7 +68,42 @@ Plumb Ledger, seventh session, on `brouter-port-5b`, from `d1de74b`. Tags: [R] r
 - **Revert** [C]: prediction pushed in `ae97c7b` (`2026-11-06-brouter-port-step5d/3-decode-revert-prediction.md`).
   **Not run.**
 
+## 4. Item 0, the decode revert, and item 4 (session 9, from `4345f71`; RECORD -74)
+- **Item 0** [C]: `OsmNode.parseNodeBody2`'s empty stub made to throw `NotImplementedError("unsupported: parseNodeBody2
+  not yet ported (step 5d)")`, seen first in `ParseNodeBody2StubTest` (F0's fixture, the port's first cache,
+  through `parseNodeBody`): over the empty body it failed "Expected an exception of class kotlin.NotImplementedError to
+  be thrown, but was completed successfully"; with the throw it passed, 1 of 1, 0 ` e: ` (`3888c07`). The test was
+  removed with the port (`7072d5b`), as its own comment said.
+- **Decode revert** [C]: run on `3888c07` as predicted at `ae97c7b`: 0 ` e: `, 5 of 5 failed at cache 0, field
+  `[link dlat]`, matching the prediction; restored identical, forward line present once
+  (`2026-11-06-brouter-port-step5d/3-decode-revert.txt`).
+- **Fetches** [C]: `tools/fetch-dropoff.sh` pins Forager `a0535ece`'s `dropoff/segments/W75_N40.rd5` (4,475 bytes,
+  `a332b322...d8f7`) and `points.json` (1,103 bytes, `2872493a...6b5a`), both computed from `git show a0535ece:<path>`,
+  through `tools/fetch-pinned.sh`. `tools/fetch-f0h.sh` copied from `origin/brouter-port` unchanged (178,867 bytes,
+  `14f595e8...965c`). Both wired in `brouter/build.gradle.kts` as `fetchF0h`/`fetchDropoff` tasks the oracle's test JVM
+  depends on, with `brouter.tiles.f0h.dir` / `brouter.tiles.dropoff.dir` read by `TestTiles.f0h` / `TestTiles.dropoff`.
+  Both fetched and matched locally.
+- **`RouteWaysTest`** [C]: `BRouterRouteWays.kt:59-123`'s calls on both engines, 150 m, for the 15 points of
+  `points.json` on the drop-off square and F0h's 16 ends on F0h's square; per described link, `isReverse`, the tag map,
+  the geometry in order and whether the end-pair dedupe keeps it. `lookups.dat` is the oracle's `profiles2/lookups.dat`,
+  SHA-256 `bf8fc3b2...f419` (printed by the test).
+  - over the stubs: 2 of 2 failed, 0 ` e: `: `dropoff walker` and `F0h inside-across-the-degree-line/from`, each "the port
+    threw NotImplementedError: unsupported: parseNodeBody2 not yet ported (step 5d)" (`0a8b167`).
+  - ported (`7072d5b`): `OsmNode(long)` (`OsmNode.java:57-60`), `parseNodeBody2` (`:117-152`),
+    `ByteArrayUnifier.unify(ab, offset, len)` (`ByteArrayUnifier.java:26-53`). No other port was needed.
+  - forward: 2 of 2 passed, 0 ` e: `. Drop-off: 18 cells, 135 nodes, 120 described links, 270 geometry points, 165
+    tags, digest `b7fccbb3...fbfc`. F0h: 21 cells, 3,983 nodes, 4,858 described links, 43,006 geometry points, 15,596
+    tags, digest `5a5c054d...9e18`. `MicroCache2DecodeTest` 5/5 and `GraphDecodeTest` 5/5 still pass in the same run.
+  - **Weak spots** [C]: on both squares no described link is reverse (0 of 120, 0 of 4,858) and the dedupe drops none,
+    on the oracle as on the port; so `isReverse` and the dedupe are compared but only ever on one value. A reverse
+    described link would need a square where the decoder stores a description on a reverse link [?].
+  - revert (drop the `highway` tag, `BExpressionContext.kt:131`), predicted and pushed at `23a3eca`, run on it: 0
+    ` e: `, 2 of 2 failed at the first point of each set, line 4, field `[tags]`, matching the prediction; restored
+    identical, forward line present once (`2026-11-06-brouter-port-step5d/4-routeways-revert.txt`).
+
 ## Calls beyond scope
+- F0h's ends are run on F0h's own square (now wired), not on F0's fixture as session 8's handoff said; RECORD -74 rules
+  that way.
 - The stub step wired `OsmFile.kt`'s `hollowNodes == null` branch to the stub `MicroCache2` before the test passed, so
   the test over the stubs reached the stubs rather than the old "unsupported" throw (which would have been a failure
   no stub could change). The throw was gone from `0604a41` on; nothing outside tests calls that branch (Forager's
@@ -81,7 +116,7 @@ Plumb Ledger, seventh session, on `brouter-port-5b`, from `d1de74b`. Tags: [R] r
 - None found in -70 itself. -67's ~300-line estimate was low: 440 [C].
 
 ## Unverified
-- Items 3 to 6 are not started. CI on `e26e13d` and on this head is not read [?].
+- Items 5 and 6 (-70) are not started [R]. CI on `e26e13d` is not read [?]; CI on session 9's head: see below.
 - The forward `WaypointMatchTest` with the fix was not run on its own; the two scratch reverts ran it with the
   revert in place [C]. CI's `jvm` run will run it forward.
 
