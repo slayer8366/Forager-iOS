@@ -3318,3 +3318,44 @@ only". The option read: "A new commit deletes the file. No notice is added; the 
 
 No family or stability has been read yet. The next session applies -82's kind 5 patch and reruns FK.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -85.
+
+**Kind:** decision
+**ID:** 2026-10-28-85
+**Timestamp:** 2026-11-06T07:46:50Z
+**Continues:** 2026-10-28-50, 2026-10-28-79, 2026-10-28-80, 2026-10-28-82, 2026-10-28-84
+**Title:** FK's first full run read: 10 of 11 kinds in one family; kind 3 reselected by reach as kind 4 is; kind 9's timing
+voids counted; a correction to -84
+**A wrong reading of the planner's, in -84:** "after selection and before E3's regimes". The run went through all six regimes.
+`E3FKTest.kt:182` is its final assertion, after every case had run [R, Linden].
+**Observed (Linden, session 25, from `27-fk-e3Strata.log`, as reported):**
+- **In family:**
+  - FK1 10 of 10, "from-position not mapped";
+  - FK2 10 of 10, "to-position not mapped";
+  - FK4 10 of 10, "target island detected";
+  - FK5 9 of 9, "to-position not mapped";
+  - FK6 10 of 10, "datafile W80_N40.rd5 not found";
+  - FK7 10 of 10, "file of size * too short";
+  - FK8 10 of 10, "top index checksum error";
+  - FK9 10 of 10, the timeout family;
+  - FK10 and FK11 10 of 10 each, the watchdog family.
+- **FK3: 6 of 10** reach "from-position not mapped", and FK3-05, -07, -08 and -09 route, all stable.
+- **Unstable: 4 of 113,** all in FK9 (FK9-0001, -0037, -0040, -0049). In each, R3 was voided by "measured run took under 1
+  s". These are timing voids, not differing outcomes.
+- **The extra cases:**
+  - FK7-x1 gives R1 "to-position not mapped", with nothing thrown. Linden's scratch probe had given a raw "Index … out of
+    bounds", and why the two differ is [?];
+  - **FK7-x2 and FK8-x1 both route, identically to the intact control FK7-c0** (`route|234|6078|4768`). A cut-short or
+    sub-index-flipped tile gives the same route as the intact one.
+**Decision (the planner's, technical):**
+- **FK3 is selected as FK4 is,** by reach on the oracle, which is E4's design for FK ("the oracle's message is in the kind's
+  family"):
+  - a seeded draw of islands, capped at 200;
+  - a case is kept only if its R1 reaches "no track found at pass=0", which is -79's case, a start on a usable component
+    that cannot reach the target;
+  - rejections are counted by outcome. "From-position not mapped" means the island's ways are unusable, which is kind 1's
+    family. "Route" means it is not an island for this profile;
+  - the change and its prediction are pushed first, then kind 3 is rerun alone.
+- **FK9's 4 timing voids** are counted as unstable and kept out of exact assertions, as -50 ruled for `R-shortest-025`. FK's
+  4 of 113 is under E3's 5%. No change to FK9.
+- **FK7-x1** is compared by outcome, and both readings are recorded.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -86.
