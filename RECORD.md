@@ -3614,3 +3614,31 @@ silent race on iOS is ruled out even if the app ever runs two routes at once."
 **Abort conditions:** -3's; a merge conflict in `commonMain` (none is expected, -90); a new red besides
 `CollectOutreachersTest`; any coordinate in a staged diff.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -93.
+
+**Kind:** decision
+**ID:** 2026-10-28-93
+**Timestamp:** 2026-11-06T15:52:58Z
+**Continues:** 2026-10-28-84, 2026-10-28-87, 2026-10-28-92
+**Title:** The merge into `brouter-port-5b` is pushed; its scan hits are Forager's own route ends, under E1's standing
+exception; scans now gate pushes
+**Observed:** Plumb Ledger, session 10, stopped under -92's abort condition "any coordinate in a staged diff".
+- The merge `eac836d` (`origin/brouter-port` into `brouter-port-5b`) was pushed with the scan reading 12. Plumb's command
+  chained the push after the scan without testing its count. Plumb reported this as its own error.
+- **The merge itself:** two conflicts, neither in `commonMain` (`build.gradle.kts`, `TestTiles.kt`). Both were resolved by
+  keeping 5b's side, which already carries `brouter-port`'s F0h wiring. `jvmTest` read 121, with only
+  `CollectOutreachersTest`'s 2 red [R, as reported].
+- **The 12 hits, checked by the planner:**
+  - 10 are endpoint lines in `E3CoverageTest.kt` and `E3F0hTest.kt`, brought in from `brouter-port` byte for byte. Their
+    values equal Forager's `server/pmtiles-worker/test/fixtures/rd5/routes.json` at `a0535ece` [C: matched by value].
+    They are the same points `E3F0Test.kt` has carried since step 1b began;
+  - 2 are false positives: a float-literal list in a test log, and a diff header's timestamp.
+**Decision (the planner's, technical):**
+- **Nothing is removed or rewritten.** These are Forager's own published test ends. Phase 1's practice, written in
+  `E3F0Test.kt`'s header, is "no coordinates beyond Forager's own ends are committed (E1)". -84 and -87 removed positions
+  derived from the pinned tiles, which is a different thing.
+- **The scan from now on excludes Forager's own ends by exact value,** from `routes.json` and `points.json` at `a0535ece`.
+  **It gates the push**: the push runs only if the count is 0.
+**For the owner, information:** these route ends are OpenStreetMap node positions in Forager's own public test data. If
+the owner wants them out of Forager-iOS too, that is a ruling against Phase 1's practice, and it would also touch
+`E3F0Test.kt`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -94.
