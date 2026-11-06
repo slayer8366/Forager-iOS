@@ -2160,6 +2160,145 @@ Read from the job logs by me (`gh run view --log`) [R]:
 3. **For the planner and the owner:** the `R1-extent` columns already committed (E1, above). Fixing `E3Select` so that
    it stops writing the column is a code change I have not made.
 
+## Step 1b finished: the expected values (twenty-sixth session, Linden Caliper)
+Dispatch: RECORD -88. Baseline `f308f88`. Commits `7e02bdd` (code and the file), `13506f1` (the failing-first prediction),
+and this report's commit. Only `brouter/src/jvmTest/` and `docs/` are touched; no `commonMain` change.
+
+### The stored file: `brouter/src/jvmTest/resources/e3/expected-1b.tsv` [R]
+- **216,164 bytes, 2,126 rows**, tab-separated. Per row: stratum, id, `compare`, kind, nodes, cost, distance, node digest,
+  heights digest (-58), and the tuple digest. **No coordinates.**
+- **The tuple digest** is a 64-bit FNV-1a over the UTF-8 bytes of `kind|nodes|cost|distance|nodeDigest|heightsDigest`,
+  the tuple as `E3Outcome.toField` writes it. That byte form is my choice; E1 says only "the tuple's bits" [I]. It uses
+  integer arithmetic only. A Python check outside the JVM recomputed all 2,126 digests and got the same values [C].
+- **The head** names the JDK: `java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64` (E2). It
+  also names the tuple, the `compare` modes, and each exclusion on its own `# excluded` line.
+- **Rows by stratum:** F0 2, F0h 8, R 1,534, DL-lat 59, DL-lon 59, MP64 59, ML5 59, PM5 55, NT 59, CR 59, LB 59, FK 114
+  (110 plus the four extra cases).
+- **`compare`:** 2,120 rows are `exact`, 3 are `family` and 3 are `outcome`.
+  - **`family`:** FK9-0001, FK9-0037 and FK9-0040. These are kind 9's timing voids, logged UNSTABLE in FK's run (-85, -86),
+    and they are excluded by name.
+  - **`outcome`:** FK7-x1 is compared on its kind. FK7-x2 and FK8-x1 are compared on FK7-c0's tuple, and the test checks
+    that they hold it (-80, -85).
+- **`R-shortest-025` is not excluded.** At write time it went once more through all six regimes, alone, and was stable:
+  all six gave `route|217|5102|5102|…` (`31-expected-e3Strata.log`) [C]. So under -88 it is `exact`. -50's instability
+  was R6's, once, and it has not recurred in the two runs since. Its cause is still [?].
+- **FK9-0049** (unstable in FK's first run only) was stable in the run on record (`30-fk`). So it is `exact` [C].
+
+### The code [R]
+- **`E3Expected.kt`:** the file's form, its reader and writer, the per-stratum counts, and the committed stability tables
+  each stratum's R1 was logged in.
+- **`strata/E3ExpectedWriteTest.kt`** runs under `e3Strata` only, on the pinned Temurin. It reruns R1 for every case:
+  E3's own `R1R2` launch, with a fresh JVM, the case alone, a new thread and no `debug.txt`. It compares each R1 with the
+  stratum's committed log, and writes the file only if every case is equal.
+  - The cases come from each stratum's work folder (`build/e3/<stratum>/cases.tsv`). These folders are never committed,
+    because they hold the ends.
+  - Every list except FK's was written before `E3Case.Plan` existed, so it has 9 fields. The writer appends `NONE` to a
+    copy of each such list [R].
+  - CR gets its crossing profile, as CR's own test sets it.
+- **`E3ExpectedFileTest.kt`** runs in `jvmTest`, with no oracle. It reads the file and checks six things:
+  - the head's JDK;
+  - the counts per stratum;
+  - that every tuple digest is its tuple's;
+  - that every row equals the R1 its stratum logged (whole tuple for `exact`, kind otherwise);
+  - that the exclusions are named, and that every logged-unstable case is excluded;
+  - FK's extra cases.
+- **E1's live oracle beside the stored values** is not run per push here. `E3ExpectedWriteTest` is that run, and it
+  belongs to `e3Strata`, as E1 sets it. At step 6 it becomes the port's comparison [I].
+
+### Written across all strata, and the R1 cross-check [C]
+- **The run:** `e3Strata --tests '*E3ExpectedWriteTest*'` on Temurin 21.0.13+9, logged in `31-expected-e3Strata.log`.
+  BUILD SUCCESSFUL in 19 min 15 s.
+- **The first attempt failed in 3 s, before any case ran.** `E3Case.fromLine` refused a 9-field list. That is the old-list
+  fix above. It was one attempt at that symptom.
+- **R1 at write time equalled the stratum's logged R1 for 2,126 of 2,126 cases**, every stratum included
+  (`31-expected-r1-vs-log-summary.txt`). This is no stop.
+- **Checked outside the runner:** a Python read of the written file against the twelve committed stability tables gave
+  0 rows unlike their log, 0 wrong digests and 0 logged cases missing.
+- **The committed file equals the writer's output byte for byte** (`cmp`).
+- **One thing I noticed:** `build/e3/F0h/stability.tsv` is left over from session 20's heights revert (`15-revert-*`): its
+  heights digests are all the empty digest. The committed `12-f0h` table is the real run, and both the check and the
+  writer read that one. F0h's R1 now equals `12-f0h` [C].
+
+### Seen failing first [C]
+- **The prediction** was written and pushed before the run, in `13506f1`
+  (`31-expected-revert-prediction.txt`). The scratch revert set F0-inside-long's cost from 7405 to 7406, and was never
+  committed.
+- **The run:** `jvmTest --tests '*E3ExpectedFileTest*'` (`31-expected-revert-gradle.log`).
+  - It had 0 ` e: ` lines.
+  - The XML's timestamp, 12:36:49Z, falls after the edit at 12:36:48Z.
+  - It gave 6 tests and 2 failures, exactly as predicted:
+    - `everyTupleDigestIsItsTuple` named `[F0-inside-long]`;
+    - `everyRowIsTheR1ItsStratumLogged` named only "F0 F0-inside-long (exact): stored route|306|7406|…, logged
+      route|306|7405|…";
+    - the other four passed.
+- **The restore** was from the copy saved before the edit, not from git. Afterwards the file was `cmp`-equal to that copy
+  and to the writer's output, and `git status` was clean.
+- **The full `:brouter:jvmTest` before the code push** ran fresh: `jvmTest` and `jvmTestProcessResources` executed, and
+  44 XML files were written after the start (12:35:51Z). It gave 101 tests, 0 failures and 0 ` e: ` lines. That is 95 + 6.
+
+### E1
+Before each push, the scan of the staged diff (decimals, `node=`, integer microdegree pairs) read 0 [C].
+
+### CI
+Read from the job logs by me (`gh run view --log`) [R]:
+- **Run 42218972054 on `7e02bdd`** (the code change) concluded `success`.
+- **`jvm`:** 101 tests, 0 failures, in 44 files. All six `E3ExpectedFileTest` methods PASSED. 0 ` e: ` lines in the run's
+  log.
+- **iOS klibs:** `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL.
+- **Simulator:** 23 tests, 0 failures, in 9 files (**simulator-checked**).
+- **arm64 JVM step:** 7 tests, 0 failures, in 2 files. Its gate printed "OK: all 2 classes ran".
+- **Run 42218998244 on `13506f1`** changes only the prediction file. This report's own run follows it. I read both for
+  status only (see the final message).
+
+### Step 1b: the handoff (twenty-sixth session)
+1. **Nothing is running.**
+2. **1b's finish line is reached on my side.** What remains is the planner's: the planner reads CI, and brings the
+   milestone report below to the owner.
+3. **To rewrite the values** (another JDK, or a new case list), run `e3Strata --tests '*E3ExpectedWriteTest*'` and copy
+   `build/e3/expected/expected-1b.tsv` into `src/jvmTest/resources/e3/`. Then `E3ExpectedFileTest` holds it to the logs.
+   - The writer needs every stratum's `build/e3/<stratum>/cases.tsv` and FK's `build/e3/FK-tiles/`.
+   - These exist only in this container. A fresh container must rerun the strata to get them back [R].
+4. **For step 10 (iOS):** the file is under `jvmTest`. How iOS will read it, a resource or a generated Kotlin file as
+   with `MsunReference.kt`, is for that step [?].
+
+### Draft: 1b's milestone report, for the planner to bring to the owner
+**What 1b proved [C]:**
+- **The 1.7.10 Java engine** agrees with itself under E3's six runs, on every case of every stratum, on the pinned Temurin
+  21.0.13+9 x64 with libm's intrinsics off.
+- **Its outcome for every case is now stored** as an expected value, from R1, with no coordinates. A fresh R1 at write
+  time gave the same tuple as each stratum's logged run, for all 2,126 cases.
+- **A test reads the stored file in every `jvmTest`,** and was seen to fail on a one-entry change.
+- **1b ran no port code.** It says nothing yet about the Kotlin port. The port is first compared with these values at
+  step 6.
+
+**Each stratum's n and E5's bound.** Each bound applies once the port runs clean against these values, and only to that
+stratum's population (generator, tiles, profile, params). Each is one-sided at 95%, 1 − 0.05^(1/n):
+
+| Stratum | n | Bound on a clean run |
+|---|---|---|
+| R (26 profiles × 59) | 1,534 | under 0.195% pooled; per profile, a defect on ≥ 5% is seen with p ≥ 0.9515 |
+| DL-lat, DL-lon, MP64, ML5, NT, CR, LB | 59 each | under 4.95% each |
+| PM5 (short, -71) | 55 | under 5.30% (weaker than the 59 E5 set) |
+| FK | 110 + 4 extra | constructed, not sampled: each kind reaches its family or not; no rate |
+| F0 | 2 | Forager's own check; no rate |
+| F0h | 8 | heights cases; no rate |
+
+The total is 2,126 cases: E5's 2,118, plus F0h's 8 and FK's 4 extra cases, minus PM5's 4 short.
+
+**What is excluded:**
+- **FK9-0001, FK9-0037 and FK9-0040** are kind 9's timing voids. They are compared by family only, and they are named in
+  the file.
+- **FK's extra cases** are compared on outcome, not exactly.
+- **Nothing else.** `R-shortest-025` was stable at write time and is exact.
+
+**What is unverified [?]:**
+- whether the values hold on any other JDK, CPU, or Android's runtime (E2: they are claimed for this HotSpot only);
+- why R6 differed once for `R-shortest-025` (-50);
+- why FK7-x1's ends read as unmapped from a tile cut at D;
+- that FK10's precondition, "the measured run routes", is my own addition, beyond E4 [I];
+- every iOS claim, which waits for step 10 and will be simulator-checked only;
+- how long the full list takes on the simulator (K).
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the

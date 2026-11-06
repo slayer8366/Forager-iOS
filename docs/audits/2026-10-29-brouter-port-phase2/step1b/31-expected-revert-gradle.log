@@ -1,0 +1,49 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41473 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:jvmTest FAILED
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=41473 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3ExpectedFileTest[jvm] > everyRowIsTheR1ItsStratumLogged[jvm] FAILED
+    java.lang.AssertionError at E3ExpectedFileTest.kt:49
+
+E3ExpectedFileTest[jvm] > headNamesThePinnedJdk[jvm] PASSED
+
+E3ExpectedFileTest[jvm] > everyTupleDigestIsItsTuple[jvm] FAILED
+    java.lang.AssertionError at E3ExpectedFileTest.kt:31
+
+E3ExpectedFileTest[jvm] > exclusionsAreNamedAndOnlyThem[jvm] PASSED
+
+E3ExpectedFileTest[jvm] > everyStratumHasItsCount[jvm] PASSED
+
+E3ExpectedFileTest[jvm] > fkExtraCasesAreComparedOnOutcome[jvm] PASSED
+
+6 tests completed, 2 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':brouter:jvmTest'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/jvmTest/index.html
+
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+
+BUILD FAILED in 1s
+10 actionable tasks: 3 executed, 7 up-to-date

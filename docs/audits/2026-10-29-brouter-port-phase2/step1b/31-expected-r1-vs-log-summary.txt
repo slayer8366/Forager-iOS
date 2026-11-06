@@ -1,0 +1,14 @@
+R1 at write time against the R1 each stratum logged (E3ExpectedWriteTest's r1-vs-log.tsv, summarised; the full table is the stored file's tuples twice over, so it is not committed).
+stratum	cases	equal
+CR	59	59
+DL-lat	59	59
+DL-lon	59	59
+F0	2	2
+F0h	8	8
+FK	114	114
+LB	59	59
+ML5	59	59
+MP64	59	59
+NT	59	59
+PM5	55	55
+R	1534	1534
