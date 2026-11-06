@@ -137,3 +137,68 @@ Not yet read when this report was written. Run id and result: see the handoff's 
 - That atomicfu's classes link into both iOS klibs: pending CI on `de4d994` [?].
 - That Forager never sets `profileBaseDir`, and never uses a Kinematic profile on its path [I].
 - That `refTrack` is always null on Forager's path (-94) [I, to be checked at step 8].
+
+## 8. Session 11 (Plumb Ledger): piece 2, and the handoff for session 12
+
+**Done** (`55ea56e` and this commit):
+- `OsmNodeNamed` (fields and both constructors, as T2 keeps), `OsmNogoPolygon` and `AreaInfo` (types and fields; T2
+  keeps none of their methods). The methods the nogo half would call for a nogo polygon or a weighted nogo circle are
+  a named "unsupported" (`OsmNogoPolygon.intersects`, `isOnPolyline`, `isWithin`, `distanceWithinPolygon`;
+  `OsmNodeNamed.distanceWithinRadius`, `decodeNogo`). Not ported: `addVertex`, `calcBoundingCircle`, `isOnLine`,
+  `OsmNodeNamed.toString`, `AreaInfo.checkAreaInfo` and its getters (it needs `createNewLookupData`, not ported).
+- `RoutingContext`'s nogo and distance half, as extensions in `RoutingContextNogo.kt` (T2's nine kept methods;
+  `prepareNogoPoints` and `allInOneNogo` are not ported). `nogopoints_all`, `keepnogopoints` and `pendingEndpoint` are
+  `internal`. `libm` is now a constructor `val`.
+- `RoutingContextNogoTest`, 4 tests: `calcDistance` through `setWaypoint`/`checkPendingEndpoint`/`unsetWaypoint` (3,000
+  cases), `cleanNogoList`/`restoreNogoList` (2,000), `checkMatchedWaypointAgainstNogos` with its two refusals (3,000), and
+  the unsupported nogos (2,000). The port runs on `OracleLibm`. Seen failing over `TODO` stubs (4 of 4,
+  `NotImplementedError`). On `MsunLibm` the first run differed at the last bits of one radius: that is the scale table, not
+  the logic, so the test uses the oracle's table, as `WaypointMatchEngines` does.
+- **Revert C** (`04-revert-C-wayfraction-result.txt`): `wayfraction = 1.0 - wayfraction` became a no-op. Predicted: only
+  the `calcDistance` test fails, on `wf=`. Observed: exactly that (1 of 4, `wf=` bits differ). Compile errors 0, the XML
+  was fresh, and the file was restored (cmp equal) by the new copy-restore runner.
+- **Full run:** 127 tests, only `CollectOutreachersTest`'s 2 red.
+- **Rulings received (planner, RECORD -97):** `StdPath` uses `kotlin.math.exp`. Forager never reads time or energy. If it
+  ever does (an ETA, say), exp must move behind `LibmSeam` as an msun port, as -24 did for cos and atan2. Native exp is
+  [?]. `OsmPath`'s start-direction branch (`OsmPath.java:282-283`, `Math.sin/cos`) is a named "unsupported", with a test
+  showing it. For step 8: `:282-283` should read not covered on R's R6 runs, as for `:350`'s `containsNode` (-94).
+
+**Next, for session 12** (in this order):
+1. `MessageData` (kept: `copy`, `getPrio`, the four `is*` masks and `toString`; `toString` formats a float, native [?]) and
+   `OsmPathElement` (all but the stream methods; `calcDistance` takes `libm`). Both were read; neither is written yet.
+2. `OsmPath` and `StdPath` (read in full this session). Java's casts to keep exactly:
+   - `cost += rc.nogoCost` is `cost = (cost + nogoCost).toInt()`;
+   - `ehbd += -delta_h_micros - dist * downhillcutoff` is a float sum, then `toInt()`;
+   - `message.linkelevationcost += elevationCost` is an int plus a float, then `toInt()`;
+   - `interpolateEle` is `(…).toInt().toShort()`;
+   - `(lon0 + lat1) >> 1` is a bug in Java, kept as it is;
+   - `static int seg` becomes a companion `var`;
+   - Float against `0.` compares become `!= 0.0f`.
+3. **The cost comparison: a finding.** The port's `NodesCache` has no graph half (`getGraphNode`, `obtainNonHollowNode`,
+   `expandHollowLinkTargets`, `NodesCache.kt:14-16`), so `RoutingEngine.getStartPath` cannot be copied on the port yet.
+   Proposed: decode F0h's cells on both engines with `GraphEngines.OracleDecoder`/`PortDecoder` (seeded). For each node,
+   take each link to a non-hollow target and:
+   - build the start path with `createPath(OsmLink(null, n1))`;
+   - cut it with a waypoint at the link's midpoint (`setWaypoint(wp, false)`, then `createPath(start, link, null, detail)`,
+     with detail true and false);
+   - extend it one link further, plain and with an end waypoint (`setWaypoint(wp, true)`).
+   Compare by reflection, by Java's field names: `cost`, `selev`, `bitfield`, `ehbd`/`ehbu`, the float bits, the message
+   fields and the `originElement` chain. Do this on all 20 Std profiles, the port on `OracleLibm`. These cut points are
+   link midpoints on F0h, not Forager's 16 ends; say so, or match the ends once the graph half exists. The planner should
+   rule on which.
+4. **Reverts.**
+   - `interpolateEle`'s cast: drop `.toShort()` truncation by rounding instead. Predict the cut-path `selev`/`originElement`
+     mismatches in detail mode only.
+   - `StdPath`'s `(int)` cast moved inside a sum: **`hiking-mountain` has `turncost 0`**, so a turncost revert
+     (`((1-cos)*base).toInt() + 0.2.toInt()`) bites only on profiles with turncost > 0. Predict which profiles from their
+     `turncost`, and push the prediction first.
+5. -42's way getters: `OsmPath` and `StdPath` call 19 of the 20 (not `getTrafficSourceDensity`) and the node's
+   `getInitialcost`. Step 3's comparison exercises them [I until it runs].
+6. Then `RoutingParamCollector` (kept: `getWayPointList`, both `readPosition`, `setParams`) and `SearchBoundary` (T2 keeps
+   no method: type only).
+
+**Tools:** `$S/rev/revert.sh` was missing after the restart, so it was rewritten. It copy-restores, refuses on any `^e: `
+line or stale XML, and checks with cmp. Scratch is `$S/s11/`.
+
+**Unverified:** native `kotlin.math.exp` and float `toString` [?]; that `startDirectionValid` is false on Forager's path
+[I, step 8]; that the nogo half's msun-table results differ from the oracle only through the scale table [I].

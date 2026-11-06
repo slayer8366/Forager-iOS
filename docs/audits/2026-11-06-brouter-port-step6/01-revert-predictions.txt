@@ -8,3 +8,6 @@ as float):
   field. ProfileCacheLockTest passes.
 Revert B, first form: did not compile (Float and Double if/else branches; 1 "e: " line). Nothing read from it.
 Revert B, second form (`/ 3.6 else` -> `(v("maxSpeed", 6f) / 3.6f).toDouble() else`): same prediction as above.
+[s11 C-wayfraction] RoutingContextNogo.kt calcDistance: `wayfraction = 1.0 - wayfraction` -> `wayfraction = wayfraction`.
+  Predict: only RoutingContextNogoTest.calcDistanceAndTheWaypointCycleMatchTheOracle fails, a state mismatch in its wf= field
+  (endpoint case, s2<0 or end fractions 0/1 swapped); the other 3 nogo tests pass.
