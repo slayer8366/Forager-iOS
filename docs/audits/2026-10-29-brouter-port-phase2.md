@@ -1875,6 +1875,47 @@ That is 291 cases, all stable. -64's prediction ("each stratum fills ... 0 unsta
    `step1b/`.
 
 
+### Step 1b: the coverage reader, and the handoff (twenty-second session)
+
+RECORD -77, item 1 done; item 2 (NT) built in part, not run. Logs `step1b/21-*`.
+
+1. **The coverage reader,** `E3Coverage.kt` (jvmTest, `oracle/e3`). It reads R6's `.exec` with JaCoCo's core 0.8.16 (the
+   agent's version; a new jvmTest dependency, `gradle/libs.versions.toml` and `brouter/build.gradle.kts`, writes outside
+   -77's "jvmTest, tools and docs", decided beyond scope because nothing else on the classpath can analyse execution data:
+   the agent jar holds no `Analyzer`). It analyses the oracle jar's own class files, refuses data whose class checksum is
+   not the classpath's, refuses a named line with no instructions, and applies -50's rule first: where R6's tuple differs
+   from R1's the reading is refused and the file is never opened (`E3CoverageRuleTest`, in jvmTest, 2 tests; jvmTest 95).
+2. **Seen failing first** (`E3CoverageTest`, e3Strata; prediction `21-coverage-prediction.txt` pushed first, `dec8499`):
+   F0's `inside-long` on `hiking-mountain`, R1 and R6 equal (`route|306|7405|6713|7d242f8dd2c428b4|4f6849ea59b5f775`).
+   CR's lines read **not covered**, `StdPath.java:101-103` 0/3 lines and `:105-113` 0/9 (every line 0 of 2 to 11
+   instructions), as predicted: they sit in `if (rc.bikeMode)` and `hiking-mountain` is foot only. `RoutingEngine.java:177`
+   reads covered. Log `21-coverage-e3Strata.log`. **Bite:** `ls.all { it.covered > 0 }` changed to `it.total > 0` (copy saved
+   first, restored from it, `cmp` equal; no compile error in `21-coverage-bite-gradle.log`): the test failed with its own
+   message, "CR's lines on a foot profile: covered (StdPath.java:101-103 0/3 lines; StdPath.java:105-113 0/9 lines)
+   expected:<false> but was:<true>" (`21-coverage-bite-junit.xml`).
+3. **A finding for the planner: NT's reach line is reached by almost every case.** On F0, `WaypointMatcherImpl.java:71` reads
+   covered. `end()` adds each link twice, forward and reverse, with the same radius (`:204`, `:223`), and `updateWayList`
+   sorts after each add (`:257`), so the comparator falls to `:71` on every matched waypoint. Coverage of `:71` cannot tell a
+   near-tie from any case; NT's targeting rests on its construction (the 4-ulp gap), not on this reach. Not a listed stop;
+   NT's selector is built to require both. **[R]** for the code reading, **[C]** for F0.
+4. **NT, built, not run, no prediction pushed:** `NTGenerator.kt` and the selector's R6 option (`E3Select`'s `r6Agent`,
+   `E3Targeted.select(coverage = true)`; `select.tsv` gains an `R6-tuple` column before `reach`). The construction and
+   why it must be a straight line through a junction are in `NTGenerator`'s KDoc: with the start exactly on the junction
+   every link there has radius 0, and a 4-ulp gap (about 10^-14 degrees) needs two exactly opposite links (a zero integer
+   cross product), since integer ends approach a bisector only to about 10^-11 degrees. The generator draws J0 as R does,
+   finds such a junction in J0's cell from the links `hiking-mountain` may use (decoded with the oracle's decoder and the
+   profile's validator, `TileNodes.decodeLinks`), puts the end along that line, and checks the gap with the oracle's own
+   matching in the test JVM (`RoutingEngine.matchWaypointsToNodes` by reflection). **Not yet written:** `strata/E3NTTest.kt`
+   (seed next free, 20261205; mark: `E3Coverage.reach(r1, r6!!, exec!!, E3Coverage.NT)`, and a refused reading printed as
+   a stop for the planner), its prediction, and any run. **Unknown:** how many such junctions W75_N40 holds; NT may be short.
+   `RGenerator`'s draw order is unchanged (`drawNode` makes the same two calls `candidate` made).
+5. **Not started:** CR, LB, FK. CR's profile (E's: `trekking.brf` plus the crossing assigns, Phase 1 report lines 868-871) must
+   be written into each JVM's `profiles2/` copy (`E3Stability.launch` copies the oracle's only).
+6. **Commits:** the first (`dec8499`) ends with `Co-Authored-By: Claude <noreply@anthropic.com>` as -77 asked; the later one
+   carries the session's attribution lines, which this session's harness requires.
+7. **Running: nothing.** Scratch as before; `22-jvmTest.log` there is the last full jvmTest (95, 0 failures).
+
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the

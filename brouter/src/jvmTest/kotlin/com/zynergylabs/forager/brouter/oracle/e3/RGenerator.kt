@@ -91,11 +91,16 @@ class RGenerator(
     }
 
     /** One candidate: the four rounded coordinates (startLat, startLon, endLat, endLon), or why it was rejected. */
-    private fun candidate(rnd: Random): Any {
+    /** One node drawn uniformly over the tiles' nodes, as R draws its start; two draws from [rnd]. */
+    internal fun drawNode(rnd: Random): Long {
         val t = rnd.nextInt(tiles.size)
         val total = cumulative[t].last()
         val k = (rnd.nextDouble() * total).toLong().coerceAtMost(total - 1)
-        val start = pick(t, k)
+        return pick(t, k)
+    }
+
+    private fun candidate(rnd: Random): Any {
+        val start = drawNode(rnd)
         val d = minMetres * ratio.pow(rnd.nextDouble())
         val (tLat, tLon) = offset(lat(start), lon(start), d, 2 * PI * rnd.nextDouble())
         val end = nearest(tLat, tLon) ?: return "no node in the target's 3 x 3 cells, or the target is outside every tile"
@@ -106,7 +111,7 @@ class RGenerator(
         return out
     }
 
-    private fun pick(t: Int, k: Long): Long {
+    internal fun pick(t: Int, k: Long): Long {
         val c = cumulative[t]
         var lo = 0
         var hi = c.size - 1
@@ -120,7 +125,7 @@ class RGenerator(
         return ids[(k - (if (lo == 0) 0L else c[lo - 1])).toInt()]
     }
 
-    private fun nearest(lat: Double, lon: Double): Long? {
+    internal fun nearest(lat: Double, lon: Double): Long? {
         val home = tileOf(lat, lon) ?: return null
         val lonIdx = ((lon + 180) * home.divisor).toInt()
         val latIdx = ((lat + 90) * home.divisor).toInt()
@@ -138,18 +143,18 @@ class RGenerator(
         return best
     }
 
-    private fun tileOf(lat: Double, lon: Double): TileNodes? = tiles.firstOrNull {
+    internal fun tileOf(lat: Double, lon: Double): TileNodes? = tiles.firstOrNull {
         it.holds(((lon + 180) * it.divisor).toInt(), ((lat + 90) * it.divisor).toInt())
     }
 
-    private fun offset(lat: Double, lon: Double, metres: Double, bearing: Double): Pair<Double, Double> {
+    internal fun offset(lat: Double, lon: Double, metres: Double, bearing: Double): Pair<Double, Double> {
         val m = 6_371_000.0 * PI / 180.0 // metres per degree of latitude
         return (lat + metres * cos(bearing) / m) to (lon + metres * sin(bearing) / (m * cos(Math.toRadians(lat))))
     }
 
-    private fun lat(id: Long) = TileNodes.ilat(id) / 1e6 - 90.0
+    internal fun lat(id: Long) = TileNodes.ilat(id) / 1e6 - 90.0
 
-    private fun lon(id: Long) = TileNodes.ilon(id) / 1e6 - 180.0
+    internal fun lon(id: Long) = TileNodes.ilon(id) / 1e6 - 180.0
 
     fun close() = tiles.forEach { it.close() }
 }

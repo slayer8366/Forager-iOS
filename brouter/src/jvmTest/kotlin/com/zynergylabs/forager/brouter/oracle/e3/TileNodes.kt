@@ -3,6 +3,8 @@ package com.zynergylabs.forager.brouter.oracle.e3
 import btools.codec.DataBuffers
 import btools.mapaccess.OsmFile
 import btools.mapaccess.PhysicalFile
+import btools.codec.TagValueValidator
+import btools.codec.WaypointMatcher
 import java.io.Closeable
 import java.io.File
 import java.io.RandomAccessFile
@@ -47,6 +49,18 @@ class TileNodes(val file: File) : Closeable {
         } ?: return LongArray(0)
         val mc = osmf.createMicroCache(lonIdx, latIdx, buffers, null, null, true, null) ?: return LongArray(0)
         return LongArray(mc.getSize()) { mc.getIdForIndex(it) }
+    }
+
+    /**
+     * Decodes one cell as the engine's matching does (`NodesCache.preloadPosition` through `OsmFile.createMicroCache`), with
+     * [validator] (a profile's way context) and [matcher]: the decoder calls [matcher] once per forward link the profile
+     * may use (`MicroCache2.java:159-189`, access type at least 2), with its source and target nodes. Nothing where the
+     * degree or the cell has no data.
+     */
+    fun decodeLinks(lonIdx: Int, latIdx: Int, validator: TagValueValidator, matcher: WaypointMatcher) {
+        require(holds(lonIdx, latIdx)) { "cell ($lonIdx, $latIdx) is outside ${file.name}" }
+        val osmf = OsmFile(pf, lonIdx / divisor, latIdx / divisor, DataBuffers()).takeIf { it.hasData() } ?: return
+        osmf.createMicroCache(lonIdx, latIdx, DataBuffers(), validator, matcher, true, null)
     }
 
     override fun close() {

@@ -16,8 +16,17 @@ object E3Targeted {
     const val CAP = 20 * N
     const val PER_CASE_SECONDS = 600L
 
-    fun select(label: String, draws: Iterator<E3Select.Draw>, strata: List<String>, mark: (E3Select.Run) -> E3Select.Mark) =
-        E3Select.select(label, draws, strata, N, CAP, File(E3Strata.work, "$label-select"), E3Strata.workers, PER_CASE_SECONDS, mark)
+    /** [coverage]: reach is coverage (NT, CR), so each routed candidate also runs as R6 under JaCoCo's agent ([E3Select]). */
+    fun select(
+        label: String,
+        draws: Iterator<E3Select.Draw>,
+        strata: List<String>,
+        coverage: Boolean = false,
+        mark: (E3Select.Run) -> E3Select.Mark,
+    ) = E3Select.select(
+        label, draws, strata, N, CAP, File(E3Strata.work, "$label-select"), E3Strata.workers, PER_CASE_SECONDS,
+        if (coverage) E3Strata.agent else null, mark,
+    )
             .also { s ->
                 println("E3 $label selection: ${s.draws} draws counted (cap $CAP), ${s.routed} routed; table ${s.table}")
                 for ((why, k) in s.rejected) println("E3 $label rejected: $k $why")

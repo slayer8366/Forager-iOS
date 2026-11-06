@@ -19,6 +19,10 @@ import java.util.concurrent.TimeUnit
  * generator counts it ([RGenerator.generate]). Candidates are routed [workers] at a time and taken strictly in draw order;
  * draws still running when every stratum is full are not counted and not written. Every counted draw is one row of
  * `select.tsv` in [work].
+ *
+ * Where reach is coverage (NT, CR; RECORD -51), [r6Agent] is JaCoCo's agent: each routed candidate is then also run as R6,
+ * in its own fresh JVM after its R1R2 JVM, writing `<work>/jacoco/<id>.exec`, and [Run.r6] and [Run.exec] carry it to
+ * [mark], which reads it through [E3Coverage.reach] (RECORD -50's rule).
  */
 object E3Select {
     /** `RoutingEngine.java:2025` at v1.7.10: the line every collection logs. */
@@ -43,6 +47,9 @@ object E3Select {
         val r2Log: List<String>,
         val r1Extent: IntArray?,
         val r1Millis: Long,
+        /** R6's tuple and its execution data, when the selection ran R6 (coverage reach); else null. */
+        val r6: E3Outcome? = null,
+        val exec: File? = null,
     ) {
         val r2EqualsR1: Boolean get() = r1 == r2
         val collections: Int get() = r2Log.count { it.startsWith(COLLECTED) }
@@ -70,10 +77,12 @@ object E3Select {
         work: File,
         workers: Int,
         perCaseSeconds: Long,
+        r6Agent: File? = null,
         mark: (Run) -> Mark,
     ): Selection {
         work.deleteRecursively()
         val caseDir = File(work, "cases").also { it.mkdirs() }
+        val jacoco = File(work, "jacoco").also { it.mkdirs() }
         val taken = strata.associateWith { ArrayList<Run>() }
         val rejected = LinkedHashMap<String, Int>()
         val rows = ArrayList<String>()
@@ -91,7 +100,16 @@ object E3Select {
                     check(d.number == drawn) { "$label: draw ${d.number} came as the ${drawn}th" }
                     val future = d.case?.let { c ->
                         val caseFile = File(caseDir, "${c.id}.tsv").also { E3Case.writeList(listOf(c), it) }
-                        pool.submit(Callable { E3Stability.launch("R1R2", c.id, caseFile, work, emptyList(), perCaseSeconds) })
+                        pool.submit(
+                            Callable {
+                                val r1r2 = E3Stability.launch("R1R2", c.id, caseFile, work, emptyList(), perCaseSeconds)
+                                if (r6Agent == null) return@Callable r1r2
+                                val exec = File(jacoco, "${c.id}.exec")
+                                check(!exec.exists()) { "$label: ${exec.name} exists before its R6: the agent would append to it" }
+                                val agent = "-javaagent:${r6Agent.absolutePath}=destfile=${exec.absolutePath},includes=btools.*"
+                                r1r2 + E3Stability.launch("R6", c.id, caseFile, work, listOf(agent), perCaseSeconds)
+                            },
+                        )
                     }
                     inflight.addLast(d to future)
                 }
@@ -100,10 +118,10 @@ object E3Select {
                 counted++
                 if (future == null) {
                     rejected.merge("before routing: ${d.rejected}", 1, Int::plus)
-                    rows += listOf(d.number, "-", "-", "-", "-", "-", "-", "-", "-", "-", d.rejected, "rejected").joinToString("\t")
+                    rows += listOf(d.number, "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", d.rejected, "rejected").joinToString("\t")
                     continue
                 }
-                val run = parse(d, future.get())
+                val run = parse(d, future.get(), if (r6Agent == null) null else File(jacoco, "${d.case!!.id}.exec"))
                 routed++
                 val m = if (run.r2EqualsR1) mark(run) else Mark(null, "R2's tuple differs from R1's")
                 val result = when {
@@ -115,7 +133,7 @@ object E3Select {
                 rows += listOf(
                     d.number, run.case.id, run.r1.toField(), run.r2.toField(), run.r2EqualsR1,
                     run.r1Extent?.joinToString(",") ?: "-", run.collections, run.panic, run.r1Millis,
-                    run.case.memoryclass, m.reading, result,
+                    run.case.memoryclass, run.r6?.toField() ?: "-", m.reading, result,
                 ).joinToString("\t")
             }
         } finally {
@@ -125,14 +143,14 @@ object E3Select {
         }
         val table = File(work, "select.tsv")
         table.writeText(
-            "draw\tid\tR1-tuple\tR2-tuple\tR2-equals-R1\tR1-extent\tR2-collected-lines\tR2-panic\tR1-ms\tmemoryclass\treach\tresult\n" +
+            "draw\tid\tR1-tuple\tR2-tuple\tR2-equals-R1\tR1-extent\tR2-collected-lines\tR2-panic\tR1-ms\tmemoryclass\tR6-tuple\treach\tresult\n" +
                 rows.joinToString("\n") + "\n",
         )
         check(rows.size == counted) { "$label: ${rows.size} rows for $counted counted draws" }
         return Selection(label, taken, counted, routed, rejected, table)
     }
 
-    private fun parse(d: Draw, out: List<String>): Run {
+    private fun parse(d: Draw, out: List<String>, exec: File?): Run {
         val c = d.case!!
         fun mine(kind: String, regime: String): List<String> {
             val head = "$kind $regime ${c.id} "
@@ -145,6 +163,8 @@ object E3Select {
             mine("log", "R2"),
             mine("extent", "R1").singleOrNull()?.split(' ')?.map { it.toInt() }?.toIntArray(),
             mine("millis", "R1").single().toLong(),
+            exec?.let { E3Outcome.fromField(mine("outcome", "R6").single()) },
+            exec,
         )
     }
 }
