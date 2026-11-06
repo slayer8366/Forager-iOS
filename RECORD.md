@@ -3572,3 +3572,20 @@ step 10 answers -61. The draft milestone report is in the Phase 2 report, under 
 recommends (a), keeping it with atomicfu 0.33.0's `SynchronizedObject`. That is a new dependency in shipped code.
 **Finish line for this plan:** the owner's answer on the lock, then step 6's dispatch.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -91.
+
+**Kind:** decision
+**ID:** 2026-10-28-91
+**Timestamp:** 2026-11-06T13:54:19Z
+**Continues:** 2026-10-28-90
+**Title:** `ProfileCache`'s lock is kept, with atomicfu (owner)
+**Decision:** asked how the port should handle `ProfileCache`'s Java `synchronized` lock (-90; Phase 1, item B row 8), the
+owner, verbatim: "Keep it, with atomicfu (Recommended)". The option read: "Phase 1's recommendation: keep the lock using
+atomicfu 0.33.0's SynchronizedObject, a small, pinned dependency already proven to compile and run in Phase 1's probe. A
+silent race on iOS is ruled out even if the app ever runs two routes at once."
+- **Rejected:** "Drop it, one route at a time".
+- **What follows (the planner's calls, technical):**
+  - atomicfu **0.33.0**, pinned exactly in `gradle/libs.versions.toml` (Forager's CLAUDE.md, Building), `commonMain` only;
+  - step 6 adds it, and checks that both iOS klibs compile with it before `ProfileCache` uses it;
+  - a test shows the lock is held, with two threads on the JVM, and is seen failing with the lock removed by a revert.
+- **-90's plan has no open owner question left.** Step 6's dispatch follows.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -92.
