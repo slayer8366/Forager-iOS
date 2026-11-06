@@ -3097,3 +3097,413 @@ unstable in every stratum.
 one session. **Then the expected values** (E5's per-stratum sizes, with PM5 at 55), in a session of their own.
 **Abort conditions:** -3's; a stratum short; instability over 5%; a coverage reading where R6's tuple differs from R1's.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -78.
+
+**Kind:** outcome
+**ID:** 2026-10-28-78
+**Timestamp:** 2026-11-06T05:49:56Z
+**Continues:** 2026-10-28-50, 2026-10-28-77
+**Title:** The coverage reader built and seen failing first; NT built, not run; a wrong premise in -77 on NT's reach; a model
+name in one commit
+**Observed:** Linden Caliper, session 22, `brouter-port` `729e447` to `00b9886` (two commits). It handed off at the planner's
+message after the watcher read 182,861 at 05:43:41Z, about 12 minutes in.
+- **The coverage reader** (`E3Coverage.kt`; `E3CoverageRuleTest`, 2 tests, in `jvmTest`; `strata/E3CoverageTest.kt`):
+  - **The "not covered" reading:** on F0's `inside-long`, with R6's tuple equal to R1's, CR's lines (`StdPath.java:101-103`,
+    `:105-113`) read not covered, as predicted, since they sit in `if (rc.bikeMode)` on a foot profile. The control line
+    `RoutingEngine.java:177` read covered [R, as reported].
+  - **The bite:** a reader edited to call every line covered failed with the test's own message. 0 ` e: ` lines; restored
+    by `cmp` [R, as reported].
+- **NT:** the generator is built and compiles; nothing has run. -78's planner's call below sets its reach.
+- **CR, LB, FK:** not started.
+- **CI, read by the planner** (run 42170273999 on `00b9886`, `success`): `jvm` 95 tests, 0 failures; 0 ` e: ` lines in either
+  log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all
+  2 classes ran".
+
+**A wrong premise in -77, from Phase 1's E4: "coverage of the comparator's second line (`:71`)" as NT's reach.**
+- `end()` adds each link forward and reverse with the same radius (`WaypointMatcherImpl.java:204`, `:223`), and the list
+  is sorted after each add (`:257`). So `:71` runs in almost every case, and it read covered on F0 [R, as reported].
+- That coverage cannot tell a near-tie from anything else.
+- **The planner's call:** NT's reach is the oracle's own check of the 4-ulp gap between the two `directionDiff`s, in the
+  test JVM. Coverage of `:71` is recorded, but it is not evidence of a near-tie. The selector requires both, as built.
+
+**Accepted beyond scope:** JaCoCo core 0.8.16, the agent's own version, added as a `jvmTest` dependency only
+(`gradle/libs.versions.toml`, `brouter/build.gradle.kts`), because the agent jar has no analyser. `select.tsv` gains an
+`R6-tuple` column.
+
+**A model name in a commit, against the standing rule** (the planner's handoff: "commits end with `Co-Authored-By: Claude
+<noreply@anthropic.com>` and no model name, whatever the harness suggests"):
+- `00b9886`'s trailer names the model [R: `git log -1`]. It is pushed, and the record never force pushes, so it stays.
+- The planner searched every commit since 2026-11-04 on `brouter-port`, `brouter-port-5b` and `main`. This is the only one.
+- Dispatches from now on say it in so many words: replace the harness's attribution lines with exactly the one line above.
+
+**Context:** sessions now reach 180k within 12 to 17 minutes even with the trimmed reading list, so the cost is in the work's
+output, not the reading. The planner's call: dispatches tell coders to read logs with `tail` and `grep`, to send Gradle's
+output to a file and read only its summary lines, and never to print a stratum log whole.
+**Next:** Linden's session 23: NT's test, its prediction and its run; then CR, LB and FK.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -79.
+
+**Kind:** decision
+**ID:** 2026-10-28-79
+**Timestamp:** 2026-11-06T05:59:39Z
+**Continues:** 2026-10-28-32, 2026-10-28-77, 2026-10-28-78
+**Title:** FK kind 3, "start island", is unreachable on Forager's path; it becomes the start-on-island case as Forager meets it
+**Observed:** Linden Caliper, session 23, stopped on -77's stop "an E4 definition you can't build as written".
+- **Checked by the planner at source** (Forager's `third_party` copy):
+  - "start island detected" is thrown only when `routingContext.inverseRouting` is true (`RoutingEngine.java:954-958`);
+  - the flag is read from the profile's global assign `inverseRouting` (`RoutingContext.java:174`);
+  - nothing under Forager's `app/src/main/assets/routing/profiles2/`, and nothing in `BRouterTrailRouter.kt`, sets it (`grep`,
+    empty).
+
+  So on Forager's calls only the target-island check runs (`:960-963`).
+- **Also reported, not yet checked:** **NT filled, 59 of 59 by draw 89, 0 unstable** (`4d43ea2`). CR and LB were running.
+**Decision (the planner's, technical):** option (c).
+- **Kind 3 becomes "start on a ferry-only island, through Forager's calls":** 10 cases, built as E4 built them.
+- **Its family is the oracle's message on the first case,** and all 10 must reach that family. If they do not, it is a stop.
+- **"start island detected" is recorded as unreachable on Forager's path,** as -32 recorded `readUnified`, with the two
+  source lines above as the evidence. FK stays at 110.
+- **Rejected:**
+  - (a) FK's own profile with `assign inverseRouting = true`: a call beyond Forager's, testing a path the app never takes;
+  - (b) dropping kind 3: a start on an island is a real situation for a walker, and this is the one case that shows what
+    Forager meets there.
+- **A wrong premise in Phase 1's E4,** carried into -77: it listed kind 3 by the engine's message, without checking that
+  Forager's configuration reaches it. "Check reachability before measuring behaviour" (Forager's CLAUDE.md) applies.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -80.
+
+**Kind:** decision
+**ID:** 2026-10-28-80
+**Timestamp:** 2026-11-06T06:06:11Z
+**Continues:** 2026-10-28-77, 2026-10-28-79
+**Title:** FK's families for kinds 4, 5, 7 and 8; a cut-short or flipped tile can route without error, so three extra cases
+are named; NT and CR full
+**Observed (Linden, session 23, as reported; nothing committed for FK yet, probes in scratch):**
+- **CR** 59 of 59 at draw 83, 0 unstable, 0 coverage stops. **NT** 59 of 59 by draw 89, 0 unstable (-79). LB was running.
+- **The FK probes, on the oracle jar under Temurin with Forager's params:**
+  - **Kinds 1 and 2:** 15 of 15 give "not mapped".
+  - **Kind 6:** 12 of 12 give "datafile W80_N40.rd5 not found".
+  - **Kind 3 (-79's start on an island):** "no track found at pass=0", on 11 islands.
+  - **Kind 4:** "target island detected" from 7 of 32 guessed islands.
+  - **Kind 5:** the matcher snaps only to ways the profile can use, so E4's construction gives "not mapped" or "no track
+    found".
+  - **Kind 7, cuts of E170_S50:**
+    - at 200, 201, dataEnd/2, dataEnd−1 and dataEnd+1: "file of size N too short, should be 1061704";
+    - **at dataEnd: a raw "Index -399101066 out of bounds for length 65636"**;
+    - **at 1, 100, 199 and size−1: the route succeeds, with no error.**
+  - **Kind 8, flips:**
+    - bytes 37, 100, 150 and 199: "top index checksum error";
+    - byte 1: "lookup version mismatch";
+    - **bytes 203 to 219, in the sub-index: the route succeeds.**
+**Decision (the planner's, technical):**
+- **Kind 4:** islands drawn by a seeded generator, counted, capped at 200 draws (20 × 10). Family: "target island
+  detected".
+- **Kind 5 keeps E4's intent,** and Linden's proposal is rejected because it would duplicate kinds 3 and 4: an end on a way
+  the profile cannot use, with no usable way within 250 m. Family: "not mapped", the same as kind 2. **The report states
+  that on Forager's path kinds 2 and 5 share a family, as kinds 3 and 5 would have.**
+- **Kind 7:** family "file of size * too short, should be *", with the 10 cuts chosen to reach it.
+- **Kind 8:** family "top index checksum error", with flips in bytes 8 to 199.
+- **Three named extra cases outside FK's 110,** compared on outcome, because the port must match what Java does with a
+  damaged tile and none of these is padding:
+  - **FK7-x1,** the cut at dataEnd, compared by exception class. Its message text is the JVM's, so **step 10 must read it
+    on iOS**, where Kotlin/Native's wording may differ [I].
+  - **FK7-x2,** one cut-short tile that routes with no error.
+  - **FK8-x1,** a sub-index flip that routes with no error.
+- **Kinds 9 to 11** (time limit, cancel modes) need harness changes and go to the next session.
+**For the owner, information, not a decision:** Java's BRouter can route on a tile that is cut short or has a flipped byte
+in its sub-index, without reporting an error. That is the engine Android runs. Whether Forager's own check before routing
+(`RoutingDataFolder.headerProblem`, `RoutingDataFolder.kt:48-53` at Forager `e2969abe`, cited on `brouter-port` at
+`Route.kt:51`) catches these copies is [?], not read here.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -81.
+
+**Kind:** outcome
+**ID:** 2026-10-28-81
+**Timestamp:** 2026-11-06T06:11:04Z
+**Continues:** 2026-10-28-77, 2026-10-28-78, 2026-10-28-79, 2026-10-28-80
+**Title:** NT, CR and LB full, 59 of 59 each, all stable; FK probed, not built; CI green
+**Observed:** Linden Caliper, session 23, `brouter-port` `00b9886` to `ffa06ab` (three commits; clean tree; no model name in
+any trailer, by `git log` and `grep`, checked by the planner). It handed off at the planner's message after the watcher read
+183,184 at 06:05:47Z. Logs: `step1b/23-*` (NT), `24-*` (CR), `25-*` (LB), `26-fk-probes/`.
+- **Checked by the planner:** `23-nt-stability.tsv`, `24-cr-stability.tsv` and `25-lb-stability.tsv` each read 59 "stable".
+  `26-fk-probes/counts.txt` holds no coordinate-like number.
+- **Each stratum, as reported:**
+  - **NT** (seed 20261205): full at draw 89, 30 rejected before routing. R1 kinds: 56 routes, 2 target island, 1
+    to-position not mapped. Every taken case reads a gap of 0 ulps, an exact tie. `:71` is covered in 59 of 59, recorded
+    only (-78).
+  - **CR** (20261206): full at draw 83, 24 rejected. All 59 route.
+    - **The tiles carry `estimated_crossing_class`,** which settles Phase 1's open question.
+    - By tile: E170_S50 19, W70_N40 13, W75_N35 11, W75_N40 16.
+  - **LB** (20261207): full at draw 99, 40 rejected. All 59 route.
+    - **Only 5 of step 2b's 13 (c) rows lie inside the tiles,** not Phase 1's "12".
+  - In all three, R2 equals R1 on every routed case, and the selection's R1/R2 equal E3's in 59 of 59.
+- **CI, read by the planner** (run 42172432910 on `ffa06ab`, `success`): `jvm` 95 tests, 0 failures; 0 ` e: ` lines in either
+  log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all
+  2 classes ran".
+- **The planner's call on Linden's open point:** NT counts any outcome kind. The tie is broken in matching, before
+  routing, and the route's outcome is compared whatever it is.
+- **Unverified:** why one NT case's R1 reads "to-position not mapped" when the generator's own matching of the same ends
+  did not throw [?].
+- **Wrong premises:** Phase 1's "12 in-tile rows" for LB (5 under step 2b's definition), with -78 to -80 already recorded.
+**1b now stands at:** F0, F0h, R, DL-lat, DL-lon, MP64, ML5, PM5 (short, 55), NT, CR and LB, all run and stable. FK is next,
+under -79 and -80, including kinds 9 to 11's harness changes. Then the expected values.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -82.
+
+**Kind:** decision
+**ID:** 2026-10-28-82
+**Timestamp:** 2026-11-06T06:25:46Z
+**Continues:** 2026-10-28-80, 2026-10-28-81
+**Title:** FK kind 5 short at 9 of 10 in construction; its start and end are drawn separately and it is rerun alone
+**Observed (Linden, session 24, as reported):**
+- FK's generator and prediction were pushed at `49e2711` before the run.
+- Kinds 1, 2, 3 and 6 reached 10 of 10. **Kind 4** filled 10 of 10 at draw 74; of 64 rejections, 41 were "to-position not
+  mapped" and 23 routed.
+- **Kind 5 came out short, at 9 of 10 after 200 draws.** That cap was Linden's own: -80 set 200 for kind 4 only.
+- Kind 5's rejections, **all before routing:** 111 failed the 300 m check, 68 had a start car-fast cannot use, and 12 fell
+  at a tile edge. No oracle outcome was used in any of them.
+**Decision (the planner's, technical):** Linden's option (a).
+- **Why:** FK is "constructed, not sampled… no rate is claimed" (Phase 1's E5). E4's fill-or-short rule guards against
+  choosing cases by their outcome, and every one of these rejections came before any outcome existed.
+- **The rule for kind 5:**
+  - the start and the end are drawn separately;
+  - the cap is 400 draws, with every rejection counted by reason;
+  - nothing is selected on the oracle's outcome;
+  - the change and its prediction are pushed first, then kind 5 is rerun alone through E3's six regimes;
+  - all 10 must reach kind 5's family ("not mapped", -80), or it is a stop.
+- **The report keeps the first run's 9 of 10 and its counts,** and names the 200 cap as Linden's choice.
+- **Rejected:** (b), keeping 9. A constructed set short by construction is a harness limit, not a finding about the oracle.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -83.
+
+**Kind:** outcome
+**ID:** 2026-10-28-83
+**Timestamp:** 2026-11-06T06:27:53Z
+**Continues:** 2026-10-28-54, 2026-10-28-82
+**Title:** FK built and running; a committed file of OSM-derived coordinates found, against E1, put to the owner
+**Observed:**
+- **Linden Caliper, session 24:** `brouter-port` `ffa06ab` to `db0751a` (two commits; clean tree). It handed off at the
+  planner's message after the watcher read 183,592 at 06:25:28Z.
+  - FK's generator, its test and the harness changes for kinds 9 to 11 were pushed at `49e2711`, with the prediction,
+    before the run and after a full `:brouter:jvmTest` (95, 0 failures).
+  - The run was still going at handoff (Gradle PID 16430).
+  - -82's kind 5 rerun is written as a scratch patch, not yet compiled or pushed, so as not to disturb the running JVMs.
+  - CI on `49e2711` and `db0751a` not read.
+- **A committed file against Phase 1's E1** ("No coordinates are committed", Phase 1 report at `20e1f92`, E1):
+  - `step1b/11-r-sequence-before-edit.tsv`, committed in Linden's session 19 (`82d310a`, 2026-10-30), holds 1,534 rows,
+    each with a start and an end in degrees to six places [R, read by the planner].
+  - The ends are OpenStreetMap node positions from the pinned tiles, each moved a random 0 to 100 m and rounded
+    (`RGenerator.kt:12`, `TileNodes`) [R].
+  - The planner scanned every committed `.tsv` under `step1b/` for coordinate-like values. This is the only file that
+    has any.
+  - **The test pins the sequence by SHA-256** (`E3RSequenceTest`, -54), so the file is not needed to check it.
+  - **It is pushed, and the record never force pushes.** A later commit can remove the file from the tree, but not from
+    history.
+- **FK's own `.tsv` files carry coordinates** (Linden). Linden was told to strip them before committing anything.
+**For the owner:** whether the file is removed, and whether an OpenStreetMap (ODbL) notice is added for the copy that stays
+in history. Under -3's abort conditions, a licence question beyond MIT and ODbL notices belongs to the owner.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -84.
+
+**Kind:** decision
+**ID:** 2026-10-28-84
+**Timestamp:** 2026-11-06T07:40:39Z
+**Continues:** 2026-10-28-83
+**Title:** The committed file of OSM-derived coordinates is removed from the tree, with no notice added (owner)
+**Decision:** asked what should happen to `step1b/11-r-sequence-before-edit.tsv` (-83), the owner chose, verbatim: "Remove it
+only". The option read: "A new commit deletes the file. No notice is added; the copy in history stays without one."
+- **Rejected:** "Remove it, add ODbL notice (Recommended)"; "Keep it, add ODbL notice".
+- **Done by the planner** on `brouter-port`, in one docs-only commit, by a plain push. E3RSequenceTest's SHA-256 pin still
+  holds the sequence. The copy at `82d310a` stays in history, because the record never force pushes.
+- **E1 stands as written:** no coordinates are committed. Every dispatch from now on says so.
+
+**Also observed, after a restart of the planner's container:** Linden's session 24 pushed one more docs-only commit
+(`f0db0df`) after the planner's E1 note: no coordinates and no model name, checked by the planner. The FK run had ended
+`BUILD FAILED` at kind 5's assertion (`E3FKTest.kt:182`), after selection and before E3's regimes. Selection, from the log:
+- kinds 1, 2, 3 and 6 were 10 of 10 each, with kind 4 10 of 10 at draw 74;
+- **kinds 9, 10 and 11 were 10 of 10 each** (49 draws counted; 10 voided by the measured run);
+- kind 5 was 9 of 10 (-82).
+
+No family or stability has been read yet. The next session applies -82's kind 5 patch and reruns FK.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -85.
+
+**Kind:** decision
+**ID:** 2026-10-28-85
+**Timestamp:** 2026-11-06T07:46:50Z
+**Continues:** 2026-10-28-50, 2026-10-28-79, 2026-10-28-80, 2026-10-28-82, 2026-10-28-84
+**Title:** FK's first full run read: 10 of 11 kinds in one family; kind 3 reselected by reach as kind 4 is; kind 9's timing
+voids counted; a correction to -84
+**A wrong reading of the planner's, in -84:** "after selection and before E3's regimes". The run went through all six regimes.
+`E3FKTest.kt:182` is its final assertion, after every case had run [R, Linden].
+**Observed (Linden, session 25, from `27-fk-e3Strata.log`, as reported):**
+- **In family:**
+  - FK1 10 of 10, "from-position not mapped";
+  - FK2 10 of 10, "to-position not mapped";
+  - FK4 10 of 10, "target island detected";
+  - FK5 9 of 9, "to-position not mapped";
+  - FK6 10 of 10, "datafile W80_N40.rd5 not found";
+  - FK7 10 of 10, "file of size * too short";
+  - FK8 10 of 10, "top index checksum error";
+  - FK9 10 of 10, the timeout family;
+  - FK10 and FK11 10 of 10 each, the watchdog family.
+- **FK3: 6 of 10** reach "from-position not mapped", and FK3-05, -07, -08 and -09 route, all stable.
+- **Unstable: 4 of 113,** all in FK9 (FK9-0001, -0037, -0040, -0049). In each, R3 was voided by "measured run took under 1
+  s". These are timing voids, not differing outcomes.
+- **The extra cases:**
+  - FK7-x1 gives R1 "to-position not mapped", with nothing thrown. Linden's scratch probe had given a raw "Index … out of
+    bounds", and why the two differ is [?];
+  - **FK7-x2 and FK8-x1 both route, identically to the intact control FK7-c0** (`route|234|6078|4768`). A cut-short or
+    sub-index-flipped tile gives the same route as the intact one.
+**Decision (the planner's, technical):**
+- **FK3 is selected as FK4 is,** by reach on the oracle, which is E4's design for FK ("the oracle's message is in the kind's
+  family"):
+  - a seeded draw of islands, capped at 200;
+  - a case is kept only if its R1 reaches "no track found at pass=0", which is -79's case, a start on a usable component
+    that cannot reach the target;
+  - rejections are counted by outcome. "From-position not mapped" means the island's ways are unusable, which is kind 1's
+    family. "Route" means it is not an island for this profile;
+  - the change and its prediction are pushed first, then kind 3 is rerun alone.
+- **FK9's 4 timing voids** are counted as unstable and kept out of exact assertions, as -50 ruled for `R-shortest-025`. FK's
+  4 of 113 is under E3's 5%. No change to FK9.
+- **FK7-x1** is compared by outcome, and both readings are recorded.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -86.
+
+**Kind:** outcome
+**ID:** 2026-10-28-86
+**Timestamp:** 2026-11-06T10:37:39Z
+**Continues:** 2026-10-28-79, 2026-10-28-80, 2026-10-28-82, 2026-10-28-85
+**Title:** FK complete: all 11 kinds 10 of 10 in one family, 3 of 114 unstable (kind 9's timing voids); 1b's strata are all run
+**Observed:** Linden Caliper, session 25, `brouter-port` `eb6460d` to `15b821c` (four commits; no model name in any trailer,
+checked by the planner). Its final message was lost in a restart of the planner's container, so this entry is read from the
+Phase 2 report's section "FK finished (twenty-fifth session)" and from CI, both by the planner.
+- **Kind 5** (-82), with start and end drawn separately: 10 of 10 after 194 of 400 draws, 0 unstable.
+- **Kind 3** (-85), selected by the oracle: 10 of 10 by draw 61. The 51 rejections were 35 "from-position not mapped" and
+  16 "route". 0 unstable.
+- **The full run on `ce3db16`** (`30-fk-e3Strata.log`) passed, with 114 cases and 0 ` e: ` lines. In family, each 10 of 10:
+  - 1, "from-position not mapped";
+  - 2, "to-position not mapped";
+  - 3, "no track found at pass=0";
+  - 4, "target island detected";
+  - 5, "to-position not mapped";
+  - 6, "datafile W80_N40.rd5 not found";
+  - 7, "file of size * too short";
+  - 8, "top index checksum error";
+  - 9, the timeout family;
+  - 10 and 11, the watchdog family.
+- **Unstable: 3 of 114,** all kind 9's timing voids (FK9-0001, -0037, -0040), kept out of exact assertions (-85).
+- **The extra cases:**
+  - **FK7-x1** gives "to-position not mapped", nothing thrown, in both runs. On the same cut tile, Linden's probe ends give
+    the index exception, so **the outcome follows the ends** [C, as reported];
+  - **FK7-x2 and FK8-x1 route identically to the intact control FK7-c0.**
+- **E1:** FK's committed evidence holds no coordinates. The planner scanned its files for both decimal and integer forms.
+- **CI, read by the planner** (run 42183317078 on `ce3db16`, the last code change, `success`): `jvm` 95 tests, 0 failures; 0
+  ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the
+  gate reading "OK: all 2 classes ran".
+**1b now stands at every stratum run:** F0, F0h, R, DL-lat, DL-lon, MP64, ML5, PM5 (short, 55), NT, CR, LB and FK. Only the
+expected values remain, with PM5 at 55 and kind 9's voids kept out.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -87.
+
+**Kind:** decision
+**ID:** 2026-10-28-87
+**Timestamp:** 2026-11-06T10:37:39Z
+**Continues:** 2026-10-28-83, 2026-10-28-84
+**Title:** OSM-derived positions stored as integers are stripped from the committed evidence (owner); two wrong claims of
+the planner's corrected
+**Observed:**
+- **Linden found the planner's scan for -83 too narrow:** it looked only for decimal coordinates. The `R1-extent` column of
+  the selection tables (`E3Select.kt:146`) is each route's bounding box in BRouter's integer microdegrees.
+- **The planner then scanned both code branches** for integer pairs and `node=` positions, and read every heavy hit.
+  - **Real:** the `R1-extent` column in seven tables (`17` to `25-*-select.tsv`), and `19-mp64-canescape-counts.txt`, which
+    holds 900 node positions (`node=105980942,130643010`, …).
+  - **False alarms, read and cleared:** R's and ML5's stability tables (costs and digests), 5b's `decode.txt` (cell
+    indices), and the scale tables.
+- **So -83's "the only file that has any" was wrong,** and so was -84's "after selection and before E3's regimes" (-85).
+**Decision:** asked whether to give these the same treatment as -84, the owner chose, verbatim: "Strip them, same as -84
+(Recommended)". The option read: "One commit removes the R1-extent column from the 7 tables (the rest of each table is
+evidence and stays) and the node positions from the canEscape file (counts stay). History keeps the old copies; no notice.
+Future tables never write the column."
+- **Rejected:** "Delete the 8 files whole"; "Leave them".
+- **Done by the planner** in `f308f88` on `brouter-port`, by a plain push:
+  - the column is removed from the seven tables, and the 900 positions are replaced by "-";
+  - **`E3Select.kt` no longer writes `R1-extent`.** The extent is still computed and used in memory, where DL's and LB's
+    reach need it;
+  - the committed readers `selcheck.py` and `cesum.py` read only the first columns or the ` cmd=` split, so they are
+    unaffected [R];
+  - **the full `:brouter:jvmTest` ran fresh before the push** (`compileTestKotlinJvm` and `jvmTest` both executed, and the
+    XML was written at run time): 95 tests, 0 failures, 0 ` e: ` lines;
+  - a scan of the staged diff found no coordinate in either form.
+- **The scan from now on,** before every evidence commit: decimal coordinates, integer microdegree pairs, and `node=` positions.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -88.
+
+**Kind:** intent
+**ID:** 2026-10-28-88
+**Timestamp:** 2026-11-06T12:09:24Z
+**Continues:** 2026-10-28-50, 2026-10-28-58, 2026-10-28-71, 2026-10-28-85, 2026-10-28-86, 2026-10-28-87
+**Title:** 1b's expected values written from R1, under the pinned JDK (Linden, session 26); PR #4
+**Decision first:** asked "should Linden start the expected values" and "should I open PR #4", the owner, verbatim: "1 and 2
+yes".
+**Change** (on `brouter-port`, `jvmTest` and `docs` only), as Phase 1's E1 to E3 set it (report at `20e1f92`, lines ~776-814):
+- **The stored form, per case:**
+  - the kind, the node count, the cost, the distance and the node digest;
+  - plus -58's heights digest;
+  - plus a 64-bit FNV-1a digest of the tuple's bits.
+
+  **No coordinates.** The planner's scan is run (-87), for decimals, integer microdegree pairs and `node=`.
+- **R1's outcome is the expected value** (E3, line 814), for every case of every stratum:
+  - F0 (2), F0h (8), R (1,534), DL-lat, DL-lon, MP64, ML5, NT, CR and LB (59 each);
+  - **PM5 (55, -71);**
+  - FK (110, plus the four extra cases, compared on outcome as -80 and -85 set them).
+- **Kept out of exact values,** each named in the file:
+  - `R-shortest-025` (-50), if it is unstable when the values are written;
+  - kind 9's timing voids (-85), which FK9 compares by family only.
+- **The file's head** names the JDK it was written on (vendor, exact version, `os.arch`), which is Temurin 21.0.13+9 x64
+  (E2).
+- **On the JVM,** the oracle runs live beside the stored values, so a moved oracle shows as an oracle failure (E1). **iOS
+  compares against the stored values** at step 10.
+- **A test reads the file** and checks, for every case, that its R1 at write time equals the stored entry. It is seen
+  failing first, on one entry changed by a scratch revert.
+**Scope boundary:** writes only `brouter-port`. No `commonMain` change: the port's own routes start at step 6, where these
+values are first compared.
+**Baseline:** `brouter-port` `f308f88` (CI green, -87).
+**Finish line:** the expected values committed, the test seen failing and then passing, CI read by the planner, and 1b's
+milestone report to the owner (Amendment 3).
+**Abort conditions:** -3's; a case whose R1 differs from the R1 its stratum recorded; any coordinate in a staged diff.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -89.
+
+**Kind:** outcome
+**ID:** 2026-10-28-89
+**Timestamp:** 2026-11-06T12:47:59Z
+**Continues:** 2026-10-28-3, 2026-10-28-88
+**Title:** Milestone: step 1b complete; 2,126 expected values written from R1, each equal to its stratum's log; CI green
+**Observed:** Linden Caliper, session 26, `brouter-port` `f308f88` to `fcd35ff` (three commits; plain pushes; no model name
+in any trailer; checked by the planner).
+- **The file** `brouter/src/jvmTest/resources/e3/expected-1b.tsv` (216,164 bytes). **Checked by the planner:**
+  - **2,126 rows:** F0 2, F0h 8, R 1,534, DL-lat 59, DL-lon 59, MP64 59, ML5 59, **PM5 55**, NT 59, CR 59, LB 59, FK 114;
+  - modes: 2,120 exact, 3 family (FK9-0001, -0037, -0040, named in the head), 3 outcome (FK's extra cases);
+  - **every tuple digest recomputed by the planner's own script, 0 mismatches;**
+  - no coordinate in any form (-87's scan);
+  - the head names the JDK (Eclipse Adoptium, 21.0.13+9-LTS, amd64).
+- **The tuple digest** is FNV-1a over the UTF-8 bytes of `kind|nodes|cost|distance|nodeDigest|heightsDigest`. That byte form
+  is Linden's choice where E1 says only "the tuple's bits". Accepted: it is stated in the file's head, and checked outside
+  the JVM.
+- **`R-shortest-025` is exact:** it was stable through all six regimes at write time, so -50's exclusion did not apply.
+- **The R1 cross-check:** the writer ran all strata again on the pinned Temurin (19 min). Each case's R1 equals the R1 its
+  stratum logged, 2,126 of 2,126 [R, as reported]. In CI, `E3ExpectedFileTest.everyRowIsTheR1ItsStratumLogged` passes
+  against the committed stability tables.
+- **Failing first:** one cost changed in scratch (7405 to 7406) gave 2 of 6 failures naming only that row, as predicted. The
+  results were live (0 ` e: `, the XML written after the edit), and the file was restored from a saved copy.
+- **CI, read by the planner** (run 42219674828 on `fcd35ff`, `success`): `jvm` 101 tests, 0 failures, with all six
+  `E3ExpectedFileTest` methods passing; 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 23 of 23
+  (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2 classes ran".
+- **A fragility:** the per-case lists the writer reads (`build/e3/*/cases.tsv`) hold coordinates, so they are never
+  committed (E1), and they exist only in this container. Rewriting the values in a fresh container means regenerating them.
+  The generators are seeded and their sequences pinned by digest (R's by `E3RSequenceTest`), so they can be regenerated
+  [I: R's pin is checked, the others' are not].
+- **Unverified:** whether the values hold on another JDK, CPU or Android's runtime (E2 claims none); FK10's precondition,
+  Linden's own addition; how iOS reads the file (step 10).
+**The milestone, for the owner (Amendment 3):** what 1b proves, and what it does not.
+- **It proves the oracle agrees with itself.** Across 2,126 cases in 12 strata, Java's BRouter gives one answer under six
+  regimes (separate JVMs, parallel runs, logging, coverage), apart from 3 timing voids in FK9.
+- **It fixes those answers as the targets.** Each stratum's clean run will bound the port's disagreement rate (E5):
+  - R, pooled, below **0.195%**;
+  - each 59-case stratum below **4.95%**;
+  - PM5 below **5.30%**;
+  - FK, F0 and F0h claim no rate.
+- **1b ran no port code.** Nothing yet speaks for the port's routes: they are first compared with these values at step 6.
+- **It speaks only for HotSpot 21.0.13+9 on x86_64** (E2), not for Android's runtime, not for arm64 HotSpot, and not yet
+  for iOS.
+**Next:** the port's own router (steps 6 to 8) on `brouter-port-5b`'s line, the graph half being there (-61), unmerged until
+step 10 answers -61. The draft milestone report is in the Phase 2 report, under "Step 1b finished".
+**Notes:** Written by the planner session of -56 by hand. Next free ID -90.
