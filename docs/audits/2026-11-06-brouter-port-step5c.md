@@ -5,10 +5,11 @@ Plumb Ledger, sixth session, on `brouter-port-5b`, from `98c01e6`. The session h
 [I] inferred, [?] unknown.
 
 ## Status
-- **5c: ported, and the forward run passes. The revert ran but has not been read** (see the handoff).
+- **5c: ported and passing. The revert bites as predicted:** 2,105 ends differ, inside the predicted 1,364 to 2,718.
+  The full suite was read inside the revert run.
 - **Route-ways test: stopped before writing.** `BRouterRouteWays` calls code the port does not have. The planner was
   messaged about it, and its answer is pending.
-- **CI on this head: not read.**
+- **CI:** the stub head's run (42158645249) was read. The head's run (42159504256) was in progress at handoff.
 
 ## 5c, waypoint matching
 - **What was ported.** `MatchedWaypoint.kt` (its fields), `WaypointMatcherImpl.kt` (all of Java's class, in Java's
@@ -43,7 +44,14 @@ Plumb Ledger, sixth session, on `brouter-port-5b`, from `98c01e6`. The session h
 - **NT's ends are not compared:** NT is not built yet. They are owed when it is.
 - **The revert:** the comparator's second line becomes `0`. Its prediction was pushed first, in `51c43b3`
   (`3-revert-prediction.md`): `WaypointMatchTest` fails with 1,364 <= N <= 2,718 ends differing, and the only other
-  failures are `CollectOutreachersTest`'s 2. **Observed: not read yet** (handoff, step 1).
+  failures are `CollectOutreachersTest`'s 2. **Observed** (`4-revert.txt`) [C]:
+  - 0 compile errors;
+  - 102 tests and 3 failures: `CollectOutreachersTest`'s 2, and `WaypointMatchTest` with "ends differing from the
+    oracle: 2105", naming n1, n2, diff and name;
+  - the file was restored from the saved copy, with the forward line present and `git status` clean.
+
+  **The prediction held.** Its point estimate ("near the top") missed. Every other test in the suite passed with the
+  revert in place, so nothing else is red [C].
 - **Not covered:**
   - the island-pair branch of `start()`, because the set is always empty here;
   - the dynamic-range branch, which Forager's path cannot reach because of `use_dynamic_range=0` [R];
@@ -77,15 +85,28 @@ fixture and F0h's ends) are not fetched or pinned yet.
 - Exceptions compared as outcomes on both engines.
 - NodesCache's two methods ported in 5c (its header assigned them there).
 
+## CI
+- **Run 42158645249, on the stubs `f43ed49`:** `jvm` failure, 102 tests and 3 failed (`CollectOutreachersTest` 2,
+  `WaypointMatchTest` 1, as intended), 0 ` e: ` lines. `ios-smoke` success (simulator-checked). I did not read the two
+  `compileKotlinIos*` lines, the simulator count or the arm64 gate in that log [?].
+- **Run 42159504256, on the head `3f691a7`:** in progress at handoff, not read [?].
+
+## A defect found by the revert
+`WaypointMatchEngines.differingFields` splits on spaces. So a field such as `n1=(lon, lat)` leaves a bare coordinate
+token in the failure message. That is harmless while the test passes. But a red CI run would print coordinate
+fragments of R's ends, which are brouter.de tile nodes, not Forager's own (E1). Fix it by keeping only the `key=`
+names.
+
 ## Unverified
-- The revert's result [?]. CI on the head [?]. Whether any test other than `CollectOutreachersTest` is red: I have not
-  run the full forward suite this session [?].
+- CI on the head [?].
+- The full forward suite was not run separately. The revert run covers every test except `WaypointMatchTest`'s
+  forward, which passed on its own run [C].
 
 ## Handoff: what remains, in order (sixth session's)
 Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`. First check that `origin/brouter-port-5b` is the commit that
 added this report. Scratch: `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/plumb/5c/`.
 
-0. **The revert may still be running, or may have been killed with the container.** It was started at about 03:40Z, as
+0. **Done (the revert finished and was read; see above).** For the record: the revert was It was started at about 03:40Z, as
    `bash docs/audits/2026-10-30-brouter-port-step5b/revert-runner.sh /home/user/forager-ios-5a <scratch>/5c/revert
    brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/WaypointMatcherImpl.kt '        javaDoubleCompare(mw1.directionDiff, mw2.directionDiff)' '        0'`.
    At handoff the working tree held the reverted line, uncommitted. **Before anything else:**
@@ -93,9 +114,8 @@ added this report. Scratch: `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-
    - if `WaypointMatcherImpl.kt` differs, restore it from `<scratch>/5c/revert/WaypointMatcherImpl.kt.saved`, or if
      the scratch is gone, from `51c43b3`, which holds the forward;
    - confirm the forward line is present.
-1. If `<scratch>/5c/revert/revert-result.txt` exists, read it against `3-revert-prediction.md`, then commit a copy as
-   `2026-11-06-brouter-port-step5c/4-revert.txt`. If it does not exist, re-run the command in step 0.
-2. Run the full forward `./gradlew --max-workers=2 --offline :brouter:jvmTest --continue`. Expect red only on
+1. Fix `differingFields` (the defect above) and push it.
+2. Optionally, run the full forward `./gradlew --max-workers=2 --offline :brouter:jvmTest --continue`. Expect red only on
    `CollectOutreachersTest` (2, RECORD -61).
 3. Read CI on the head (`gh run list -R slayer8366/Forager-iOS -b brouter-port-5b`, then the job logs). Read the `jvm`
    count, the ` e: ` lines, both `compileKotlinIos*`, the simulator (simulator-checked), and arm64 with its gate.
