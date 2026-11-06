@@ -3589,3 +3589,28 @@ silent race on iOS is ruled out even if the app ever runs two routes at once."
   - a test shows the lock is held, with two threads on the JVM, and is seen failing with the lock removed by a revert.
 - **-90's plan has no open owner question left.** Step 6's dispatch follows.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -92.
+
+**Kind:** intent
+**ID:** 2026-10-28-92
+**Timestamp:** 2026-11-06T15:43:07Z
+**Continues:** 2026-10-28-61, 2026-10-28-62, 2026-10-28-90, 2026-10-28-91
+**Title:** Step 6, the path model, on `brouter-port-5b`: first the merge from `brouter-port` and atomicfu (Plumb, session 10)
+**Decision first:** the owner, verbatim: "Start step 6".
+**Change** (on `brouter-port-5b` only), in this order:
+1. **The merge:** `git merge --no-ff origin/brouter-port` (`fcd35ff`) into `brouter-port-5b` (`b65548f`), per -90. Conflicts
+   are resolved keeping both sides, and the resolution is named in the message. The full `:brouter:jvmTest` runs fresh
+   before the push. Expected: `brouter-port`'s 101 tests and 5b's 111 combined, less shared ones, with only
+   `CollectOutreachersTest`'s 2 red (-61). Then CI is read.
+2. **atomicfu 0.33.0** (-91): pinned in `gradle/libs.versions.toml`, `commonMain`, with both iOS klibs compiled before use.
+3. **Step 6 itself** (Phase 1's item I, line 1701), in the coder's own order:
+   - stubs first, then tests over them seen failing, then the port, then the revert (one `(int)` cast moved inside a sum
+     in `StdPath`), with its prediction pushed first;
+   - **tests:** `RoutingParamCollector` on Forager's strings; `RoutingContext` read from each profile; each path extension's
+     cost on decoded links compared with the oracle's;
+   - **also owed here:** -62's `interpolateEle` cast, covered on F0h's cut ends; -42's way getters; `ProfileCache`'s lock,
+     with a two-thread test that fails with the lock removed (-91).
+**Scope boundary:** writes only `brouter-port-5b`. `brouter-port` is read, not written. No via points (-24).
+**Finish line:** step 6 closed with its own report (`docs/audits/2026-11-06-brouter-port-step6.md`), or a handoff.
+**Abort conditions:** -3's; a merge conflict in `commonMain` (none is expected, -90); a new red besides
+`CollectOutreachersTest`; any coordinate in a staged diff.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -93.
