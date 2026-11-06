@@ -27,7 +27,14 @@ internal class RoutingContext(libm: LibmSeam = MsunLibm) {
     var rawTrackPath: String? = null
     var rawAreaPath: String? = null
 
-    fun getProfileName(): String = TODO("step 6: RoutingContext")
+    fun getProfileName(): String {
+        var name = localFunction ?: "unknown"
+        // Java's own: the cut uses localFunction's length (it is only reached when localFunction ends with ".brf").
+        if (name.endsWith(".brf")) name = name.substring(0, localFunction!!.length - 4)
+        val idx = name.lastIndexOf('/') // File.separatorChar, '/' on the JVM, Android and iOS
+        if (idx >= 0) name = name.substring(idx + 1)
+        return name
+    }
 
     var expctxWay: BExpressionContextWay? = null
     var expctxNode: BExpressionContextNode? = null
@@ -61,13 +68,94 @@ internal class RoutingContext(libm: LibmSeam = MsunLibm) {
 
     var pm: OsmPathModel? = null
 
-    fun initModel(): Unit = TODO("step 6: RoutingContext")
+    /**
+     * Java loads `className` by reflection. The port has [StdModel] only (step 6's row): a profile's `---model:` line
+     * (the six car profiles' `KinematicModel` and `KinematicNoCostModel`) is a named "unsupported".
+     */
+    private fun setModel(className: String?) {
+        if (className != null) throw UnsupportedOperationException("unsupported: path model $className")
+        pm = StdModel()
+        initModel()
+    }
 
-    fun getKeyValueChecksum(): Long = TODO("step 6: RoutingContext")
+    fun initModel() {
+        pm!!.init(expctxWay, expctxNode, keyValues)
+    }
 
-    fun readGlobalConfig(): Unit = TODO("step 6: RoutingContext")
+    fun getKeyValueChecksum(): Long {
+        var s = 0L
+        // Java adds the two hashCodes as ints, then widens the sum.
+        keyValues?.forEach { (k, v) -> s += (javaHashCode(k) + javaHashCode(v)).toLong() }
+        return s
+    }
 
-    fun freeNoWays(): Unit = TODO("step 6: RoutingContext")
+    fun readGlobalConfig() {
+        val g = expctxWay!! // Java: "just one of them..."
+        setModel(g.modelClass)
+        fun v(name: String, default: Float): Float = g.getVariableValue(name, default)
+        carMode = 0f != v("validForCars", 0f)
+        bikeMode = 0f != v("validForBikes", 0f)
+        footMode = 0f != v("validForFoot", 0f)
+        consider_crossing = 0f != v("consider_crossing", 0f)
+        crossing_Prio_H = v("crossing_Prio_H", 0f).toInt()
+        crossing_Prio_L = v("crossing_Prio_L", 0f).toInt()
+        cost_ToLeft_from_H_class1 = v("cost_ToLeft_from_H_class1", 0f).toInt()
+        cost_ToLeft_from_H_class2 = v("cost_ToLeft_from_H_class2", 0f).toInt()
+        cost_ToLeft_from_H_class3 = v("cost_ToLeft_from_H_class3", 0f).toInt()
+        cost_ToLeft_from_H_class4 = v("cost_ToLeft_from_H_class4", 0f).toInt()
+        cost_ToLeft_from_H_class5 = v("cost_ToLeft_from_H_class5", 0f).toInt()
+        cost_ToLeft_from_H_class6 = v("cost_ToLeft_from_H_class6", 0f).toInt()
+        cost_ToRight_from_H_class1 = v("cost_ToRight_from_H_class1", 0f).toInt()
+        cost_ToRight_from_H_class2 = v("cost_ToRight_from_H_class2", 0f).toInt()
+        cost_ToRight_from_H_class3 = v("cost_ToRight_from_H_class3", 0f).toInt()
+        cost_ToRight_from_H_class4 = v("cost_ToRight_from_H_class4", 0f).toInt()
+        cost_ToRight_from_H_class5 = v("cost_ToRight_from_H_class5", 0f).toInt()
+        cost_ToRight_from_H_class6 = v("cost_ToRight_from_H_class6", 0f).toInt()
+        waypointCatchingRange = v("waypointCatchingRange", 250f).toDouble()
+        considerTurnRestrictions = 0f != v("considerTurnRestrictions", if (footMode) 0f else 1f)
+        correctMisplacedViaPoints = 0f != v("correctMisplacedViaPoints", 0f)
+        correctMisplacedViaPointsDistance = v("correctMisplacedViaPointsDistance", 400f).toDouble() // 0 == don't use distance
+        continueStraight = 0f != v("continueStraight", 0f)
+        processUnusedTags = 0f != v("processUnusedTags", 0f)
+        forceSecondaryData = 0f != v("forceSecondaryData", 0f)
+        pass1coefficient = v("pass1coefficient", 1.5f).toDouble()
+        pass2coefficient = v("pass2coefficient", 0f).toDouble()
+        // Java's float products, then (int): Kotlin's Float.toInt() saturates and maps NaN to 0, as Java's cast does.
+        elevationpenaltybuffer = (v("elevationpenaltybuffer", 5f) * 1000000).toInt()
+        elevationmaxbuffer = (v("elevationmaxbuffer", 10f) * 1000000).toInt()
+        elevationbufferreduce = (v("elevationbufferreduce", 0f) * 10000).toInt()
+        cost1speed = v("cost1speed", 22f).toDouble()
+        additionalcostfactor = v("additionalcostfactor", 1.5f).toDouble()
+        changetime = v("changetime", 180f).toDouble()
+        buffertime = v("buffertime", 120f).toDouble()
+        waittimeadjustment = v("waittimeadjustment", 0.9f).toDouble()
+        inittimeadjustment = v("inittimeadjustment", 0.2f).toDouble()
+        starttimeoffset = v("starttimeoffset", 0f).toDouble()
+        transitonly = v("transitonly", 0f) != 0f
+        showspeed = 0f != v("showspeed", 0f)
+        showSpeedProfile = 0f != v("showSpeedProfile", 0f)
+        inverseRouting = 0f != v("inverseRouting", 0f)
+        showTime = 0f != v("showtime", 0f)
+        val tiMode = v("turnInstructionMode", 0f).toInt()
+        if (tiMode != 1) { // automatic selection from coordinate source
+            turnInstructionMode = tiMode
+        }
+        turnInstructionCatchingRange = v("turnInstructionCatchingRange", 40f).toDouble()
+        turnInstructionRoundabouts = v("turnInstructionRoundabouts", if (footMode) 0f else 1f) != 0f
+        totalMass = v("totalMass", 90f).toDouble()
+        maxSpeed = if (footMode) v("maxSpeed", 6f) / 3.6 else v("maxSpeed", 45f) / 3.6
+        S_C_x = v("S_C_x", 0.5f * 0.45f).toDouble()
+        defaultC_r = v("C_r", 0.01f).toDouble()
+        bikerPower = v("bikerPower", 100f).toDouble()
+        useDynamicDistance = v("use_dynamic_range", 1f) == 1f
+        buildBeelineOnRange = v("add_beeline", 0f) == 1f
+        val test = v("check_start_way", 1f) == 1f
+        if (!test) freeNoWays()
+    }
+
+    fun freeNoWays() {
+        expctxWay?.freeNoWays()
+    }
 
     var startDirection: Int? = null
     var startDirectionValid: Boolean = false
@@ -139,4 +227,11 @@ internal class RoutingContext(libm: LibmSeam = MsunLibm) {
         p.init(origin, link, refTrack, detailMode, this)
         return p
     }
+}
+
+/** Java's `String.hashCode()`, written out: Kotlin/Native does not promise Java's value. */
+internal fun javaHashCode(s: String): Int {
+    var h = 0
+    for (c in s) h = 31 * h + c.code
+    return h
 }
