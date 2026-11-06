@@ -1711,6 +1711,58 @@ equal to draws minus taken; routed rows with R2's tuple different from R1's.
   `W70_N40` (the log), so my picture of sparse land on both sides was wrong [C for the counts; the geography, I].
 - The whole task 2 m 47 s.
 
+### MP64 (`19-*`; prediction `19-mp64-prediction.txt`, pushed in `7dbe415`) [C]
+
+Run A is the stratum, on the plain oracle. Run B is the same command with the `canEscape` counting copy first on the
+classpath (below). Every stratum figure here is run A's.
+- **Filled:** 59 of 59, the last taken at draw **86** of 1,180 (`19-mp64-e3Strata.log`).
+- **Draws:** 86 counted, 72 routed. **Rejected, 27:** 14 before routing ("no node in the target's 3 x 3 cells, or the
+  target is outside every tile"); 13 "no collected line"; "R2's tuple differs" 0 (`19-mp64-select-check.txt`).
+- **Taken with the limit: 0; with panic mode: 0** (the log's line, E4's count at `memoryclass` 64).
+- **Stability:** 0 of 59 unstable (`19-mp64-stability.tsv`).
+- **Selection against E3:** equal in **59 of 59**. R1's kinds: route 59.
+- **Against the prediction:** filled within 150 draws, 0 limit, 0 panic, 0 unstable, 59 of 59: all held.
+- The whole task 10 m 56 s; run B 11 m 7 s.
+
+### `canEscape` on MP64's runs (RECORD -61) [C unless marked]
+
+- **Who calls it** [R]: `nodesMap.canEscape` has one caller, `RoutingEngine.java:2016`, inside the collection at `:2005-2020`
+  (Forager `third_party`, the jar's source; RECORD -61 read the same). So it runs only where a "collected" line is
+  logged.
+- **The counting copy** (`19-mp64-canescape-counter.diff`; scratch, never on any branch as code): Forager `third_party`'s
+  `OsmNodesMap.java`, compiled `--release 11 -cp <oracle jar>` on Temurin 21.0.13+9.
+  - Plain, it is bytecode-identical to the jar's class: `javap -c -p`, constant-pool numbers and spacing normalised, 0 of
+    884 lines differ.
+  - Patched, `canEscape` is renamed `canEscape0`, whose bytecode equals the jar's `canEscape` but for its name and access.
+    A new `canEscape` wraps it, counting calls and false answers. A static block appends a load line, and a shutdown hook
+    a per-JVM total, to a scratch file; the first three false nodes per JVM are also written. Method by method, the
+    other 29 methods are identical to the jar's.
+  - Put first on `e3Strata`'s classpath by a scratch init script (`-I`); every child JVM inherits `java.class.path`
+    (`E3Launcher.kt`). The log's own line shows the copy at the classpath's head, and all 314 child JVMs wrote a load
+    line and a total (`19-mp64-canescape-summary.txt`), so each counted run ran the copy.
+  - **A first form was stopped:** it wrote a line per false answer, 124 MB in 90 s, enough I/O to press on the 600 s
+    limit. It was killed with no JVM left running, and none of its output is cited. The second form is the one above.
+- **The probe changed nothing measured:** run B's `select.tsv` and `stability.tsv` equal run A's in every column but
+  `R1-ms` (`19-mp64-canescape-vs-plain.txt`, 0 diff lines each).
+- **The count:** `canEscape` answers false in **every one of the 59 taken cases**, in every regime.
+  - One run of the 59: **576,094 false of 2,366,007 calls** (24.35%), the same total in R3, R4, R5 and R6, and exactly
+    twice it in each R1R2 JVM (R1 and R2 share a JVM).
+  - Per case, the selection's R1R2, E3's R1R2 (both twice one run), R4, R5 and R6 give the same calls and false answers
+    in 59 of 59 cases (`19-mp64-canescape-per-case.tsv`). The count is deterministic across E3's six regimes.
+  - Fewest: `MP64-0025`, 34 false of 171 calls (1 collected line). Most: `MP64-0064`, 112,493 of 525,372 (198 lines).
+    Median 2,076 false per case.
+  - The 13 routed draws rejected for "no collected line" made 0 calls, as the single caller says they must.
+  - Five draws beyond 86 were in flight when MP64 filled. They are not counted, and their JVMs are left out of the
+    figures above (four of the five also answered false).
+  - The first three false nodes of each JVM, as `ilon,ilat`, are in `19-mp64-canescape-counts.txt`. That is where a
+    region for 5b's `CollectOutreachersTest` could be cut [I: not tried].
+- **Against the predictions:** the planner's "at least one MP64 case" held. **Mine was wrong:** I guessed a minority of
+  cases. It is all 59, and about a quarter of all calls.
+- **What it means for 5b** [I]: the false branch is not rare on the router's own path. It is the common answer whenever
+  a collection runs on these routes. -60's regions never reached it (0 of 3,587), most likely because `collectOutreachers`
+  was driven there outside a routing run, with different visit ids and hollow links. Whether a region cut around one of
+  these nodes reproduces false in 5b's test is [?].
+
 <!-- s21-next -->
 
 ## Confirmed vs inferred
