@@ -77,10 +77,21 @@ internal class WaypointMatchEngines(private val profile: File, private val segme
 
         /** The fields of one end's line that differ, by name only, so that a failure message carries no coordinate. */
         fun differingFields(a: String, b: String): String {
-            val fa = a.split(' ')
-            val fb = b.split(' ')
+            val fa = fields(a)
+            val fb = fields(b)
             if (fa.size != fb.size) return "field count ${fa.size} vs ${fb.size}"
-            return fa.indices.filter { fa[it] != fb[it] }.map { fa[it].substringBefore('=').ifEmpty { "#$it" } }.distinct().joinToString(",")
+            // Only a name from KEYS is ever printed: a value, or any part of one, never is.
+            return fa.indices.filter { fa[it] != fb[it] }.map { fa[it].first }.distinct().joinToString(",")
+        }
+
+        /** The keys `line` and `run` write, in that order. A field's value runs to the next key, spaces and all. */
+        private val KEYS = listOf("ok", "cross", "n1", "n2", "r", "diff", "next", "name", "type")
+        private val KEY = Regex("""(?:^|(?<=[ |;]))(${KEYS.joinToString("|")})=""")
+
+        /** One end's line as (key, value) pairs, split at each key, so that a value holding a space stays whole. */
+        internal fun fields(s: String): List<Pair<String, String>> {
+            val at = KEY.findAll(s).toList()
+            return at.mapIndexed { i, m -> m.groupValues[1] to s.substring(m.range.last + 1, at.getOrNull(i + 1)?.range?.first ?: s.length) }
         }
     }
 }
