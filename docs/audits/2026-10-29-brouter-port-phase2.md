@@ -1812,7 +1812,13 @@ That is 291 cases, all stable. -64's prediction ("each stratum fills ... 0 unsta
 
 ### CI
 
-<!-- s21-ci -->
+**Not read on the final head: handed off at the planner's call (04:25Z) with CI in progress.** [R: `gh run list`]
+- Run 42162460699 on `0042a3d` was in progress at handoff; this report commit's own run follows it. The next session
+  or the planner reads them: `jvm` count (93 expected), 0 ` e: ` lines, both `compileKotlinIos*`, the simulator count
+  (simulator-checked), and arm64 with its gate.
+- **Status only, not job logs:** runs 42155257944 (`7dbe415`), 42156448759 (`8c0ceda`), 42156753243 (`454236c`),
+  42157935970 (`1d4cd54`), 42157994570 (`4f815de`) and 42158026273 (`01388f4`) all completed `success`. This session
+  changed no code: only files under `docs/audits/` (`git diff --stat 3688c9f..HEAD`, outside `docs/audits/` empty).
 
 ### Could not determine, and unverified
 
@@ -1854,7 +1860,8 @@ That is 291 cases, all stable. -64's prediction ("each stratum fills ... 0 unsta
    next is `21-*`.
 2. **Done:** DL-lat, DL-lon, MP64, ML5 and PM5 (PM5 short at 55, standing by the planner's ruling, RECORD -71). The
    `canEscape` count is in. Nothing here needs re-running.
-3. **Next, per -64:** the remaining strata, NT, LB, CR and FK. They are not built. NT and CR select by coverage, so their
+3. **First, read CI on the head** ("CI" above); it was left unread at handoff.
+4. **Next, per -64:** the remaining strata, NT, LB, CR and FK. They are not built. NT and CR select by coverage, so their
    selector is the first code to read JaCoCo's `.exec` files (-51), and it must be seen failing first (-50). Then the
    expected values in part 7 step 4's digest form, carrying heights, with PM5 at n = 55 and its bound 5.30%, and
    `R-shortest-025` under -50's ruling.
