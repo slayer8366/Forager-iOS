@@ -1,0 +1,15 @@
+Written 2026-11-06 by Linden Caliper, session 21 (RECORD -64), before the ML5/PM5 run, after DL-lat, DL-lon and MP64 (17-* to 19-*).
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin home> --tests '*E3MemoryTest.ml5*' --console=plain (plain oracle; no counting copy)
+Seed 20261204 (pushed in 85008b1), W75_N40 only, 20 to 100 km, hiking-mountain, memoryclass 5; one sequence, ids M5-nnnn,
+cap 1,180 draws shared by ML5 and PM5.
+
+Predictions [I]:
+1. ML5 fills 59 early: MP64 collected on every routed case it took at memoryclass 64 (19-*), so at 5 most routed
+   candidates go out of bounds; any bounded pass then throws "memory limit reached" (RoutingEngine.java:2027-2028).
+2. Most ML5 cases also show panic mode (pass 0's maxTotalCost is 1e9, so its first failed collection enables panic
+   rather than throwing); guess more than half of ML5's 59.
+3. PM5 (panic, kind not the limit) is the stratum at risk: it needs a run that panics and then ends as a route or another
+   kind without the limit. Guess: PM5 fills, but late, and it is the one that could come up short. A short PM5 is a stop.
+4. Many draws are rejected as "ML5 already full".
+5. R2's tuple differs from R1's: 0. E3: 0 unstable in each. Selection equals E3 in 59 of 59 for each.
+6. No case in both strata (by construction one mark per draw; checked from select.tsv).
