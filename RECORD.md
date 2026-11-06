@@ -3889,3 +3889,25 @@ checked by the planner). The watcher closed at 159,941.
 each session's final context is recorded in its outcome. This planner run has dispatched 17 coder sessions, each ending
 between 108k and 194k of context. That is the context at the end, not the tokens billed, which the planner cannot see.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -102.
+
+**Kind:** decision
+**ID:** 2026-10-28-102
+**Timestamp:** 2026-11-06T18:17:53Z
+**Continues:** 2026-10-28-54, 2026-10-28-101
+**Title:** The owner's stop: the planner's handoff written, and the scratch tools saved into the repository
+**Decision:** the owner, verbatim: "Write a hand off and save your space to continue work this Sunday".
+- **Nothing is running:** no coder, no stratum run, no watcher.
+- **The heads at handoff** (`git ls-remote`, 18:17Z): `main` `e006c7c`, `brouter-port` `611ba54`, `brouter-port-5b` `a83ff3f`,
+  `brouter-port-5a` `2a8ba5e`. PR #5 is open with -90 to this entry.
+- **`docs/process/planner-handoff.md`** is rewritten, replacing Cedar Datum's of -54, which stays in history. It holds the
+  state, the first steps in order, the rulings since -89, the open items, and how this planner worked.
+- **Saved into `docs/process/tools/`,** because scratch does not survive a new container:
+  - `watch_tokens.py`, the context watcher;
+  - `revert.sh`, Plumb's revert runner;
+  - `scan.sh`, the gated E1 scan;
+  - `make-forager-ends.sh`, which rebuilds the list of Forager's own ends from Forager's files at `a0535ece`, so that no
+    coordinate list is committed. **Checked by the planner:** it reproduces Plumb's 63 values exactly. None of the four files
+    holds a coordinate.
+- **Still in scratch only, and lost with the container:** reverts D, E and F's result files (-101). Plumb's session 13
+  commits them first, or re-runs the three reverts and says so.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -103.
