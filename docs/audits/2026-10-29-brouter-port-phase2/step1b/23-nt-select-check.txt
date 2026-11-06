@@ -1,0 +1,7 @@
+rows 89 draws 1..n contiguous: True
+results {'taken NT': 59, 'rejected': 30}
+taken NT 59 ids rising: True draws rising: True last draw 89
+rejected 30 == draws - taken: True
+routed 59 R2-equals-R1 false: 0
+panic true (routed): 0 with collections: 15
+reach readings: {"no junction with two exactly opposite links in the drawn node's cell": 27, "no node in the target's 3 x 3 cells, or the target is outside the tile": 2, "the oracle's matching refused it: to-position not mapped in existing datafile": 1}

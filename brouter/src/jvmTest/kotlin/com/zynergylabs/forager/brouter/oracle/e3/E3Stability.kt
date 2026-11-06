@@ -65,10 +65,22 @@ object E3Stability {
         }
     }
 
+    /**
+     * E's own profiles ([E3Profiles]: CR's crossing profile, FK's), name to text, written into every launch's `profiles2/`
+     * beside the oracle's. Set by the stratum test that needs them, around its runs, and empty otherwise.
+     */
+    @Volatile
+    var ownProfiles: Map<String, String> = emptyMap()
+
     /** One regime's fresh JVM over case [id] of [caseFile], with its own copy of `profiles2/`; also [E3Select]'s R1R2 run. */
     internal fun launch(regime: String, id: String, caseFile: File, work: File, agent: List<String>, seconds: Long): List<String> {
         val base = File(work, "base-$regime-$id")
         File(OracleCalls.oracleDir, "profiles2").copyRecursively(File(base, "profiles2"), overwrite = true)
+        for ((name, text) in ownProfiles) {
+            val f = File(base, "profiles2/$name.brf")
+            check(!f.exists()) { "E's own profile $name would replace the oracle's" }
+            f.writeText(text)
+        }
         try {
             return E3Launcher.run(regime, listOf(base.absolutePath, caseFile.absolutePath, id), agent, seconds).output
         } finally {

@@ -1,0 +1,18 @@
+Written 2026-11-06 by Linden Caliper, session 23 (RECORD -77 item 4), before any LB run, on brouter-port after the NT run.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3LBTest*' --console=plain
+Seed 20261207, hiking-mountain. (c) rows: the 13 rows where the production scale table (MsunLibm) differs from the
+oracle's (OracleLibm), as step 2b set them (CheapProductionRecordTest: 474, 488, 502, 663, 675, 1046, 1053, 1079, 1295,
+1297, 1310, 1311, 1318). Row r is ilat r*100,000 to (r+1)*100,000, 0.1 degrees. LBGenerator: start node uniform over every
+node in those bands lying inside a tile; R's distance; target east or west at a latitude uniform in the band; end the
+nearest node, rejected outside the start's band. Reach: R1's route's node extent inside the band.
+
+Predictions [I]:
+1. In-tile rows: 5 by arithmetic [computed]: 1295 and 1297 (39.5 and 39.7 N, W75_N35), 1310, 1311 and 1318 (41.0, 41.1 and
+   41.8 N, W75_N40 and W70_N40); none in E170_S50 (45 to 50 S; rows 400-449). Phase 1's "12 in-tile rows" counts
+   another table comparison; this is a discrepancy for the planner, not a stop.
+2. Filled: 59 of 59 within the cap of 1,180, but with many rejections: the band is about 11 km tall, so most routes
+   longer than a few km leave it ("route leaves the band"), and many ends fall outside the start's band. Guess: the
+   last taken by draw 600.
+3. R2's tuple differs from R1's: 0. E3: 0 unstable of 59; selection's R1/R2 equal E3's in 59 of 59.
+4. No " e: " line; Temurin 21.0.13+9; select.tsv checks as before.
+If short: reported as E4 says and stopped for the planner; the generator is not changed.
