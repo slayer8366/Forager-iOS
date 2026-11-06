@@ -2916,3 +2916,44 @@ the planner's message after the watcher read 181,696 at 04:19:13Z. Report: `docs
   of 7, with the gate reading "OK: all 2 classes ran". So `WaypointMatchTest` passes with the fix.
 **Next:** items 3 to 6 of -70 (the port, the `MicroCache2` decode test, the route-ways test, CI), in Plumb's session 8.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -73.
+
+**Kind:** outcome
+**ID:** 2026-10-28-73
+**Timestamp:** 2026-11-06T04:31:03Z
+**Continues:** 2026-10-28-61, 2026-10-28-64, 2026-10-28-71
+**Title:** The four targeted sequences run: DL-lat, DL-lon, MP64 and ML5 full, PM5 short at 55; 291 cases, all stable;
+`canEscape` false on all 59 MP64 cases; CI green
+**Observed:** Linden Caliper, session 21, `brouter-port` `3688c9f` to `729e447` (fifteen commits, docs only: `git diff
+--name-only` shows no path outside `docs/audits/`). Every prediction was pushed before its run. Logs: `step1b/17-*` to
+`20-*`. It handed off at the planner's message after the watcher read 181,272 at 04:25:58Z.
+- **Each stratum** (`hiking-mountain`, -58's tuple, Temurin 21.0.13+9):
+  - **DL-lat:** 59 of 59 at draw 501.
+  - **DL-lon:** 59 of 59 at draw 326.
+  - **MP64:** 59 of 59 at draw 86.
+  - **ML5:** 59 of 59 at draw 246.
+  - **PM5:** 55, short at the cap, as ruled at -71.
+- **Checked by the planner** in the five `stability.tsv` files: 291 cases, all "stable", and no id appears twice. The
+  selection's R1/R2 equals E3's in every case, and "R2's tuple differs from R1's" never occurred [R, as reported].
+- **ML5 is mostly panic-then-limit** (54 of 59). Over the 978 routed M5 draws, panic without the limit came up only 55
+  times, and all 55 went to PM5. That is why PM5 is short [R, as reported].
+- **`canEscape` (-61), checked by the planner** in `19-mp64-canescape-summary.txt`:
+  - R3, R4 and R5 each read 576,094 false of 2,366,007 calls, and R1R2's JVMs read exactly twice that (1,152,188 of
+    4,732,014);
+  - all 59 cases answered false at least once;
+  - the counting copy is the jar's class plus a counter [R, as reported], and run B's tables equal plain run A's apart
+    from R1's milliseconds;
+  - the first false nodes are listed for cutting a 5b region (not tried).
+- **CI, read by the planner** (run 42162574478 on `729e447`, `success`): `jvm` 93 tests, 0 failures; 0 ` e: ` lines in
+  either log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the gate
+  reading "OK: all 2 classes ran". `E3MemoryTest`'s task fails by design on PM5's short assertion (`E3MemoryTest.kt:49`);
+  it is outside `jvmTest`.
+- **Wrong premises:**
+  - -64's prediction that every stratum fills (PM5 did not);
+  - the planner's search hint in -64's dispatch, `2026-10-28-6`, also matches -60 to -69;
+  - Linden's Forager checkout is at `d6e2a041`, not `a0535ece`. Only `third_party/brouter` was read, and -64 found that
+    unchanged.
+- **Unverified:** why 84% of DL-lat's draws and 79% of DL-lon's were rejected on bearing before routing; R1's and R2's
+  `canEscape` counts separately within one JVM (inferred equal from the doubled total).
+**Next for 1b:** NT, LB, CR and FK, which are not built. NT and CR need the first coverage reader, seen failing first
+(-50). Then the expected values, with PM5 at n = 55.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -74.
