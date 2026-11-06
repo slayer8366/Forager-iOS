@@ -1698,6 +1698,19 @@ equal to draws minus taken; routed rows with R2's tuple different from R1's.
   bearing rejects were 84% of draws, not about half [C for the count; why, I].
 - Selection took about 2 minutes; the whole task 5 m 4 s.
 
+### DL-lon (`18-*`; prediction `18-dl-lon-prediction.txt`, pushed in `a0a1a2a`) [C]
+
+- **Filled:** 59 of 59, the last taken at draw **326** of 1,180 (`18-dl-lon-e3Strata.log`).
+- **Draws:** 326 counted, 60 routed. **Rejected, 267:** before routing 266 (258 "the target is not across the line
+  inside the other tile", 6 "no node in the target's 3 x 3 cells", 2 "an end moved off its side"); after routing 1 ("no
+  route: target island detected for section 0"); "route on one side" 0; "R2's tuple differs" 0.
+- **Stability:** 0 of 59 unstable (`18-dl-lon-stability.tsv`).
+- **Selection against E3:** equal in **59 of 59**. R1's kinds: route 59.
+- **Against the prediction:** filled and 0 unstable held. **Wrong:** I predicted later than DL-lat (700 to 1,000 draws)
+  and more no-route rejects; it filled at 326 with one. The nodes near the line are 1,571,877 in `W75_N40` and 152,909 in
+  `W70_N40` (the log), so my picture of sparse land on both sides was wrong [C for the counts; the geography, I].
+- The whole task 2 m 47 s.
+
 <!-- s21-next -->
 
 ## Confirmed vs inferred
