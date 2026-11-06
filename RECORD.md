@@ -3268,3 +3268,31 @@ under -79 and -80, including kinds 9 to 11's harness changes. Then the expected 
 - **The report keeps the first run's 9 of 10 and its counts,** and names the 200 cap as Linden's choice.
 - **Rejected:** (b), keeping 9. A constructed set short by construction is a harness limit, not a finding about the oracle.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -83.
+
+**Kind:** outcome
+**ID:** 2026-10-28-83
+**Timestamp:** 2026-11-06T06:27:53Z
+**Continues:** 2026-10-28-54, 2026-10-28-82
+**Title:** FK built and running; a committed file of OSM-derived coordinates found, against E1, put to the owner
+**Observed:**
+- **Linden Caliper, session 24:** `brouter-port` `ffa06ab` to `db0751a` (two commits; clean tree). It handed off at the
+  planner's message after the watcher read 183,592 at 06:25:28Z.
+  - FK's generator, its test and the harness changes for kinds 9 to 11 were pushed at `49e2711`, with the prediction,
+    before the run and after a full `:brouter:jvmTest` (95, 0 failures).
+  - The run was still going at handoff (Gradle PID 16430).
+  - -82's kind 5 rerun is written as a scratch patch, not yet compiled or pushed, so as not to disturb the running JVMs.
+  - CI on `49e2711` and `db0751a` not read.
+- **A committed file against Phase 1's E1** ("No coordinates are committed", Phase 1 report at `20e1f92`, E1):
+  - `step1b/11-r-sequence-before-edit.tsv`, committed in Linden's session 19 (`82d310a`, 2026-10-30), holds 1,534 rows,
+    each with a start and an end in degrees to six places [R, read by the planner].
+  - The ends are OpenStreetMap node positions from the pinned tiles, each moved a random 0 to 100 m and rounded
+    (`RGenerator.kt:12`, `TileNodes`) [R].
+  - The planner scanned every committed `.tsv` under `step1b/` for coordinate-like values. This is the only file that
+    has any.
+  - **The test pins the sequence by SHA-256** (`E3RSequenceTest`, -54), so the file is not needed to check it.
+  - **It is pushed, and the record never force pushes.** A later commit can remove the file from the tree, but not from
+    history.
+- **FK's own `.tsv` files carry coordinates** (Linden). Linden was told to strip them before committing anything.
+**For the owner:** whether the file is removed, and whether an OpenStreetMap (ODbL) notice is added for the copy that stays
+in history. Under -3's abort conditions, a licence question beyond MIT and ODbL notices belongs to the owner.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -84.
