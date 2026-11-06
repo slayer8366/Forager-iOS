@@ -3642,3 +3642,29 @@ exception; scans now gate pushes
 the owner wants them out of Forager-iOS too, that is a ruling against Phase 1's practice, and it would also touch
 `E3F0Test.kt`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -94.
+
+**Kind:** decision
+**ID:** 2026-10-28-94
+**Timestamp:** 2026-11-06T16:00:54Z
+**Continues:** 2026-10-28-90, 2026-10-28-92
+**Title:** Step 6's file list; `OsmTrack` is a stub in step 6, and step 7 follows 6 on the same branch
+**Observed (Plumb, session 10, as reported):**
+- atomicfu 0.33.0 is pinned (`a9fb1d0`).
+- Step 6's new files are 15 under `brouter/src/commonMain/.../router/`, a package that does not exist yet:
+  `RoutingContext` (perhaps split in two), `OsmPath`, `StdPath`, `OsmPathElement`, `MessageData`, `StdModel`, `OsmPathModel`,
+  `OsmPrePath`, `OsmNodeNamed`, `ProfileCache`, `RoutingParamCollector`, `RoutingIslandException`, `SearchBoundary`,
+  `AreaInfo` and `OsmNogoPolygon`. Tests go under `jvmTest/.../router/`. No existing `commonMain` file is expected to change [I].
+- **One overlap, and a stop:** `OsmPath` takes an `OsmTrack refTrack` (`init`, `addAddionalPenalty`) and calls
+  `refTrack.containsNode` twice (`OsmPath.java:350`). `OsmTrack` is a step 7 class. `RoutingContext.createPath` also takes one.
+**Decision (the planner's, technical):** Plumb's option (a).
+- **Step 6 creates `router/OsmTrack.kt` holding only the type.** `containsNode` throws a named "unsupported"
+  (`NotImplementedError`), never an empty body (-74). Step 7 fills the same file.
+- **So step 7 follows step 6 on `brouter-port-5b`,** and does not run beside it. Step 7's classes all use step 6's types,
+  so they could not compile alone. -90's parallel option is closed.
+- **Reachability** [R for the lines, I for the conclusion]: `refTracks[i]` is created only when `lastTracks[i]` is non-null
+  (`RoutingEngine.java:988-991`), which comes from earlier alternatives. Forager passes `alternativeidx=0`, so on its path
+  `refTrack` is most likely null, and `containsNode` is unreachable at `:350`. **Checked at step 8** with the coverage
+  reader: `:350`'s true branch should read not covered on R's R6 runs.
+- **Rejected:** (b), waiting on step 7 to port `OsmTrack` first. It blocks step 6 on a class it does not need on Forager's
+  path.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -95.
