@@ -22,7 +22,8 @@ import kotlin.test.assertTrue
  * - **Kind 3** (`trekking-noferries`; RECORD -85): island-start draws ([FKGenerator]), selected by the oracle's R1
  *   ([E3Select]) for "no track found at pass=0", counted by outcome, capped at [CAP]; also run alone by its own test.
  *   The first run took the first 10 draws unselected and reached that family in none of them (6 not mapped, 4 routed).
- * - **Kind 5** (`car-fast`; RECORD -82): start and end drawn separately, capped at [CAP5]; run alone by its own test.
+ * - **Kind 5** (`hiking-mountain`; RECORD -82, -95): start and end drawn separately, capped at [CAP5]; run alone by its
+ *   own test. It was first built on `car-fast`, a Kinematic profile the port refuses (-95), so it could not be compared.
  * - **Kind 4:** island draws ([FKGenerator]), selected by the oracle's R1 ([E3Select]) for "target island detected" (-80),
  *   counted, capped at [CAP].
  * - **Kinds 7 and 8:** one pair of ends in E170_S50 ([FKGenerator.local]), each case in a folder holding only its edited copy
@@ -240,9 +241,9 @@ class E3FKTest {
     }
 
     /**
-     * Kind 5 (RECORD -82): each case's start and end drawn separately, a `car-fast`-usable start node first, then an end
-     * node with no `car-fast`-usable link within 300 m; each is one draw, every draw counted toward [CAP5], every rejection
-     * by its reason. Nothing is chosen by the oracle.
+     * Kind 5 (RECORD -82, -95): each case's start and end drawn separately, a `hiking-mountain`-usable start node first,
+     * then an end node with no `hiking-mountain`-usable link within 300 m (E4's "more than 250 m"); each is one draw,
+     * every draw counted toward [CAP5], every rejection by its reason. Nothing is chosen by the oracle.
      */
     private fun kind5(gen: FKGenerator, segments: File): MutableList<E3Case> {
         val profile = profileOf(5)
@@ -278,8 +279,7 @@ class E3FKTest {
 
     private fun profileOf(kind: Int) = when (kind) {
         3, 4 -> "trekking-noferries"
-        5 -> "car-fast"
-        else -> PROFILE
+        else -> PROFILE // kind 5 too since RECORD -95: `car-fast` is a Kinematic profile, which the port refuses
     }
 
     /** Kind 7's family is the message with its numbers read as `*` (-80); every other kind's is its kind exactly. */

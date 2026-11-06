@@ -1,0 +1,17 @@
+Written 2026-11-06 by Linden Caliper, session 27 (RECORD -82, -95, -96), before kind 5's rebuild runs, on brouter-port after
+fcd35ff.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3FKTest.fkKind5*' --console=plain
+     --max-workers=2
+Change: kind 5's profile, car-fast -> hiking-mountain (-95: the port refuses Kinematic profiles). Nothing else in the
+construction changes. Seed 20261208 + 5, as before. Start and end drawn separately: a hiking-mountain-usable start node,
+then an end node with no hiking-mountain-usable link (geometry included) within 300 m, the generator's FAR_METRES, which
+meets E4's "more than 250 m". One draw each, capped at 400, every rejection counted by reason; nothing is chosen by the
+oracle's outcome. A kind's family is its first case's R1 kind.
+
+Prediction [I]:
+- The end draw is rejected far more often than on car-fast, since hiking-mountain can use most ways. Whether 10 ends are
+  found within 400 draws I cannot say before the run. If kind 5 is short: E3 FK STOP, reported to the planner, nothing
+  changed after the run.
+- If it fills: family "to-position not mapped in existing datafile", 10 of 10; 0 unstable of 10.
+- That family's tuple is 0|0|0 with the empty digests, as on car-fast (30-fk). So the 10 rewritten rows of
+  expected-1b.tsv would equal the old ones byte for byte; the ends and the profile are not stored in the file.
