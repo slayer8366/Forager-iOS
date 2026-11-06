@@ -80,16 +80,15 @@ class FKGenerator(private val segments: File) : Closeable {
         class Rejected(val why: String) : Drawn()
     }
 
-    /** Kind [kind]'s draw, 1 to 6, with [profile] for the usable ends. */
+    /** Kind [kind]'s draw, 1 to 4 or 6, with [profile] for the usable ends; kind 5 is [usableNode] and [unusableNode]. */
     fun draw(kind: Int, rnd: Random, profile: String): Drawn = when (kind) {
         1 -> water(rnd)?.let { w -> usable(rnd, profile)?.let { u -> ends(w, point(u)) } } ?: Drawn.Rejected(lastWhy)
         2 -> usable(rnd, profile)?.let { u -> water(rnd)?.let { w -> ends(point(u), w) } } ?: Drawn.Rejected(lastWhy)
         3, 4 -> island(rnd, start = kind == 3)
-        5 -> usable(rnd, profile)?.let { u -> unusable(rnd, profile)?.let { n -> ends(point(u), point(n)) } } ?: Drawn.Rejected(lastWhy)
         6 -> usable(rnd, profile)?.let { u ->
             ends(point(u), doubleArrayOf(E3Case.six(40.0 + 5 * rnd.nextDouble()), E3Case.six(-80.0 + 5 * rnd.nextDouble())))
         } ?: Drawn.Rejected(lastWhy)
-        else -> error("FKGenerator draws kinds 1 to 6, not $kind")
+        else -> error("FKGenerator.draw draws kinds 1 to 4 and 6, not $kind")
     }
 
     /**
@@ -113,6 +112,16 @@ class FKGenerator(private val segments: File) : Closeable {
         if (others.isEmpty()) return Drawn.Rejected("no other usable link in the node's 3 x 3 cells")
         return ends(point(id), point(others[rnd.nextInt(others.size)]))
     }
+
+    /**
+     * Kind 5's draws taken separately (RECORD -82): one draw of a [profile]-usable start node, or one draw of an end node
+     * with no [profile]-usable link within [FAR_METRES]. Three draws from [rnd] each.
+     */
+    fun usableNode(rnd: Random, profile: String): Drawn =
+        usable(rnd, profile)?.let { Drawn.Ends(point(it)) } ?: Drawn.Rejected(lastWhy)
+
+    fun unusableNode(rnd: Random, profile: String): Drawn =
+        unusable(rnd, profile)?.let { Drawn.Ends(point(it)) } ?: Drawn.Rejected(lastWhy)
 
     private var lastWhy = ""
 

@@ -17,8 +17,9 @@ import kotlin.test.assertTrue
  * with its numbers read as `*`), and all 10 must reach it; a kind that does not is printed as `E3 FK STOP` and fails the
  * test after everything is reported.
  *
- * - **Kinds 1, 2, 3, 5 and 6** ([FKGenerator]): the first 10 draws the generator keeps, out of at most [CAP] draws; nothing
- *   is chosen by the oracle. Profiles: `hiking-mountain`, kind 3 `trekking-noferries` (E4), kind 5 `car-fast`.
+ * - **Kinds 1, 2, 3 and 6** ([FKGenerator]): the first 10 draws the generator keeps, out of at most [CAP] draws; nothing
+ *   is chosen by the oracle. Profiles: `hiking-mountain`, kind 3 `trekking-noferries` (E4).
+ * - **Kind 5** (`car-fast`; RECORD -82): start and end drawn separately, capped at [CAP5]; run alone by its own test.
  * - **Kind 4:** island draws ([FKGenerator]), selected by the oracle's R1 ([E3Select]) for "target island detected" (-80),
  *   counted, capped at [CAP].
  * - **Kinds 7 and 8:** one pair of ends in E170_S50 ([FKGenerator.local]), each case in a folder holding only its edited copy
@@ -44,7 +45,8 @@ class E3FKTest {
         val stops = ArrayList<String>()
         val gen = FKGenerator(segments)
         try {
-            for (kind in listOf(1, 2, 3, 5, 6)) {
+            byKind["FK5"] = kind5(gen, segments)
+            for (kind in listOf(1, 2, 3, 6)) {
                 val profile = profileOf(kind)
                 val rnd = Random(SEED + kind)
                 val cases = ArrayList<E3Case>()
@@ -182,6 +184,52 @@ class E3FKTest {
         assertTrue(stops.isEmpty(), "FK: $stops")
     }
 
+    /** Kind 5 alone through E3's six runs (RECORD -82: the rerun after the first run's 9 of 10). */
+    @Test
+    fun fkKind5ReachesOneFamilyInAllTen() {
+        E3Strata.jdk("FK5")
+        val gen = FKGenerator(TestTiles.segments)
+        val cases = try { kind5(gen, TestTiles.segments) } finally { gen.close() }
+        val result = E3Stability.run("FK5", cases, File(E3Strata.work, "FK5"), E3Strata.agent, E3Strata.workers, PER_CASE_SECONDS)
+        val kinds = result.verdicts.map { it.outcomes.getValue("R1").kind }
+        val family = kinds.firstOrNull()
+        val inFamily = kinds.count { it == family }
+        println("E3 FK FK5: family '$family' (${cases.firstOrNull()?.id}); in family $inFamily of ${cases.size}; unstable ${result.unstable.size}")
+        val stop = cases.size < N || inFamily < cases.size
+        if (stop) println("E3 FK STOP FK5: $inFamily of ${cases.size} in the family, of $N")
+        E3Strata.report(result)
+        assertTrue(!stop, "FK5: $inFamily of ${cases.size} in the family, of $N")
+    }
+
+    /**
+     * Kind 5 (RECORD -82): each case's start and end drawn separately, a `car-fast`-usable start node first, then an end
+     * node with no `car-fast`-usable link within 300 m; each is one draw, every draw counted toward [CAP5], every rejection
+     * by its reason. Nothing is chosen by the oracle.
+     */
+    private fun kind5(gen: FKGenerator, segments: File): MutableList<E3Case> {
+        val profile = profileOf(5)
+        val rnd = Random(SEED + 5)
+        val cases = ArrayList<E3Case>()
+        val rejected = LinkedHashMap<String, Int>()
+        var draws = 0
+        var start: DoubleArray? = null
+        while (cases.size < N && draws < CAP5) { // ends: draws rises by one each pass
+            draws++
+            val d = if (start == null) gen.usableNode(rnd, profile) else gen.unusableNode(rnd, profile)
+            when (d) {
+                is FKGenerator.Drawn.Rejected -> rejected.merge("${if (start == null) "start" else "end"}: ${d.why}", 1, Int::plus)
+                is FKGenerator.Drawn.Ends -> if (start == null) {
+                    start = d.e
+                } else {
+                    cases += E3Case("FK5-%02d".format(cases.size + 1), segments, start[0], start[1], d.e[0], d.e[1], profile)
+                    start = null
+                }
+            }
+        }
+        println("E3 FK kind 5: ${cases.size} of $N after $draws draws (cap $CAP5); profile $profile; rejected $rejected")
+        return cases
+    }
+
     private fun selectionReport(s: E3Select.Selection) {
         println("E3 ${s.label} selection: ${s.draws} draws counted, ${s.routed} routed; table ${s.table}")
         for ((why, k) in s.rejected) println("E3 ${s.label} rejected: $k $why")
@@ -203,6 +251,9 @@ class E3FKTest {
         const val SEED = 20261208L
         const val N = 10
         const val CAP = 20 * N
+
+        /** Kind 5's cap (RECORD -82): a start and an end are two draws. The first run's 200 was this test's own choice. */
+        const val CAP5 = 400
         const val PROFILE = "hiking-mountain"
         const val PER_CASE_SECONDS = 600L
     }
