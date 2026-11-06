@@ -13,8 +13,8 @@ import okio.Path.Companion.toPath
 /**
  * Port of BRouter 1.7.10's `btools.mapaccess.NodesCache`, its file half (step 5a): the tile cache and the segment
  * reads. The graph half (`obtainNonHollowNode`, `expandHollowLinkTargets`, `hasHollowLinkTargets`, `getStartNode`,
- * `getGraphNode`, `matchWaypointsToNodes`, `preloadPosition`) needs `OsmNode`, `MatchedWaypoint` and the weaver, and
- * arrives with steps 5b and 5c. Java's `File segmentDir` is an okio [Path] read through [fileSystem] (item B, row 2).
+ * `getGraphNode`) needs `OsmNode` and the weaver, and arrives with step 5b; `matchWaypointsToNodes` and
+ * `preloadPosition` are step 5c's. Java's `File segmentDir` is an okio [Path] read through [fileSystem] (item B, row 2).
  */
 internal class NodesCache(
     private val fileSystem: FileSystem,
@@ -58,6 +58,10 @@ internal class NodesCache(
 
     /** Java: `!Boolean.getBoolean("disableDirectWeaving")`. Forager never sets the property. */
     private val directWeaving = true
+
+    /** `NodesCache.java:21` and `:23`. */
+    private val RETRY_RANGE = 250
+    private val MAX_DYNAMIC_CATCHES = 20 // used with RoutingEngiine MAX_DYNAMIC_RANGE = 60000m
 
     init {
         nodesMap = OsmNodesMap()
@@ -190,13 +194,70 @@ internal class NodesCache(
         }
     }
 
-    /** Java's `matchWaypointsToNodes` (`NodesCache.java:292-325`), with the seam first (step 2b's rule). STUB (step 5c). */
+    /** Java's `matchWaypointsToNodes` (`NodesCache.java:292-325`, step 5c), with the seam first (step 2b's rule). */
     fun matchWaypointsToNodes(
         libm: LibmSeam,
         unmatchedWaypoints: MutableList<MatchedWaypoint>,
         maxDistance: Double,
         islandNodePairs: OsmNodePairSet,
-    ): Boolean = TODO("step 5c stub")
+    ): Boolean {
+        waypointMatcher = WaypointMatcherImpl(libm, unmatchedWaypoints, maxDistance, islandNodePairs)
+        for (mwp in unmatchedWaypoints) {
+            var cellsize = 12500
+            preloadPosition(mwp.waypoint!!, cellsize, 1, false)
+            // get a second chance
+            if (mwp.crosspoint == null || mwp.radius > RETRY_RANGE) {
+                cellsize = 1000000 / 32
+                preloadPosition(mwp.waypoint!!, cellsize, if (maxDistance < 0) MAX_DYNAMIC_CATCHES else 2, maxDistance < 0)
+            }
+        }
+
+        if (first_file_access_failed) {
+            throw IllegalArgumentException("datafile $first_file_access_name not found")
+        }
+        val len = unmatchedWaypoints.size
+        for (i in 0 until len) {
+            val mwp = unmatchedWaypoints[i]
+            val lastAfterDirect = unmatchedWaypoints.size > 1 && i == unmatchedWaypoints.size - 1 &&
+                unmatchedWaypoints[i - 1].wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT
+            if (mwp.crosspoint == null) {
+                if (lastAfterDirect) {
+                    mwp.crosspoint = OsmNode(mwp.waypoint!!.ilon, mwp.waypoint!!.ilat)
+                    mwp.wpttype = MatchedWaypoint.WAYPOINT_TYPE_DIRECT
+                } else {
+                    // do not break here throw new IllegalArgumentException(mwp.name + "-position not mapped in existing datafile");
+                    return false
+                }
+            }
+            if (lastAfterDirect) {
+                mwp.crosspoint = OsmNode(mwp.waypoint!!.ilon, mwp.waypoint!!.ilat)
+                mwp.wpttype = MatchedWaypoint.WAYPOINT_TYPE_DIRECT
+            }
+        }
+        return true
+    }
+
+    /** Java's `preloadPosition` (`NodesCache.java:327-345`). */
+    private fun preloadPosition(n: OsmNode, d: Int, maxscale: Int, bUseDynamicRange: Boolean) {
+        first_file_access_failed = false
+        first_file_access_name = null
+        loadSegmentFor(n.ilon, n.ilat)
+        if (first_file_access_failed) {
+            throw IllegalArgumentException("datafile $first_file_access_name not found")
+        }
+        var scale = 1
+        while (scale < maxscale) {
+            for (idxLat in -scale..scale) {
+                for (idxLon in -scale..scale) {
+                    if (idxLon != 0 || idxLat != 0) {
+                        loadSegmentFor(n.ilon + d * idxLon, n.ilat + d * idxLat)
+                    }
+                }
+            }
+            if (bUseDynamicRange && waypointMatcher!!.hasMatch(n.ilon, n.ilat)) break
+            scale++
+        }
+    }
 
     private fun fileForSegment(lonDegree: Int, latDegree: Int): OsmFile {
         val lonMod5 = lonDegree % 5

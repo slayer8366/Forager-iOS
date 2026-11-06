@@ -30,7 +30,7 @@ internal class WaypointMatchEngines(private val profile: File, private val segme
         }
         val oc = btools.mapaccess.NodesCache(segments, oracleWay, false, MAXMEM, null, false)
         val ook = try {
-            oc.matchWaypointsToNodes(om, RANGE, btools.mapaccess.OsmNodePairSet(ISLAND))
+            outcome { oc.matchWaypointsToNodes(om, RANGE, btools.mapaccess.OsmNodePairSet(ISLAND)) }
         } finally {
             oc.close()
         }
@@ -42,19 +42,26 @@ internal class WaypointMatchEngines(private val profile: File, private val segme
         }.toMutableList()
         val pc = NodesCache(FileSystem.SYSTEM, segments.toOkioPath(), portWay, false, MAXMEM, null, false)
         val pok = try {
-            pc.matchWaypointsToNodes(OracleLibm, pm, RANGE, OsmNodePairSet(ISLAND))
+            outcome { pc.matchWaypointsToNodes(OracleLibm, pm, RANGE, OsmNodePairSet(ISLAND)) }
         } finally {
             pc.close()
         }
 
-        val o = om.map { "ok=$ook " + line(it.crosspoint?.xy(), it.node1?.xy(), it.node2?.xy(), it.radius, it.directionDiff, it.directionToNext, it.name, it.wpttype) + " | " +
+        val o = om.map { "ok=[$ook] " + line(it.crosspoint?.xy(), it.node1?.xy(), it.node2?.xy(), it.radius, it.directionDiff, it.directionToNext, it.name, it.wpttype) + " | " +
             it.wayNearest.joinToString(" ; ") { w -> line(w.crosspoint?.xy(), w.node1?.xy(), w.node2?.xy(), w.radius, w.directionDiff, w.directionToNext, w.name, w.wpttype) } }
-        val p = pm.map { "ok=$pok " + line(it.crosspoint?.xy(), it.node1?.xy(), it.node2?.xy(), it.radius, it.directionDiff, it.directionToNext, it.name, it.wpttype) + " | " +
+        val p = pm.map { "ok=[$pok] " + line(it.crosspoint?.xy(), it.node1?.xy(), it.node2?.xy(), it.radius, it.directionDiff, it.directionToNext, it.name, it.wpttype) + " | " +
             it.wayNearest.joinToString(" ; ") { w -> line(w.crosspoint?.xy(), w.node1?.xy(), w.node2?.xy(), w.radius, w.directionDiff, w.directionToNext, w.name, w.wpttype) } }
         val reverse = om.count { it.wayNearest.isNotEmpty() && it.wayNearest[0].name.contains("_w2_") }
         // A tie on radius at the head of the list: only the comparator's second line (WaypointMatcherImpl.java:71) orders it.
         val ties = om.count { it.wayNearest.size >= 2 && it.wayNearest[0].radius == it.wayNearest[1].radius }
         return Outcome(o, p, reverse, ties)
+    }
+
+    /** The call's result, or the exception's class and message (a missing neighbour tile throws, as on the oracle). */
+    private inline fun outcome(block: () -> Boolean): String = try {
+        block().toString()
+    } catch (e: RuntimeException) {
+        "${e.javaClass.name}: ${e.message}"
     }
 
     private fun btools.mapaccess.OsmNode.xy() = ilon to ilat

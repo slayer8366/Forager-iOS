@@ -1,0 +1,4 @@
+5c forward, local (OpenJDK in the container, -XX:-UseLibmIntrinsic by build.gradle.kts), on the commit that adds this file.
+./gradlew --max-workers=2 --offline :brouter:jvmTest --tests '*WaypointMatchTest*'   -> exit 0; compile errors (^e: ) 0
+WaypointMatchTest: 1 test, 0 failures. Its line:
+5c R: 1534 cases, 3068 ends, unmatched 350, cases where the oracle threw 3, oracle chose the reverse entry at 1364, radius ties at the head 2718, ends differing 0; oracle transcript SHA-256 f26818e84d58e88612229367991cf5810f2c93e38fc62b6a2745901a99506907

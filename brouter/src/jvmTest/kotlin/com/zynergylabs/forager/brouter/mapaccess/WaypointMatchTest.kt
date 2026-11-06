@@ -19,7 +19,7 @@ import kotlin.test.assertTrue
  * wait until NT is built. Only counts and a digest are printed; a failure names case ids and field names, no coordinate.
  */
 class WaypointMatchTest {
-    private class Tally(var ends: Int = 0, var cases: Int = 0, var unmatched: Int = 0, var reverse: Int = 0, var ties: Int = 0, var differing: Int = 0)
+    private class Tally(var ends: Int = 0, var cases: Int = 0, var unmatched: Int = 0, var reverse: Int = 0, var ties: Int = 0, var differing: Int = 0, var threw: Int = 0)
 
     @Test
     fun everyEndOfStratumRMatchesTheOraclesWaypoint() {
@@ -42,6 +42,7 @@ class WaypointMatchTest {
                 t.cases++
                 t.reverse += o.oracleChoseReverse
                 t.ties += o.oracleTies
+                if (o.oracle.first().contains("Exception")) t.threw++
                 for (i in o.oracle.indices) {
                     t.ends++
                     if (o.oracle[i].contains("cross=null")) t.unmatched++
@@ -56,7 +57,7 @@ class WaypointMatchTest {
             }
         }
         val digest = md.digest().joinToString("") { "%02x".format(it) }
-        println("5c R: ${t.cases} cases, ${t.ends} ends, unmatched ${t.unmatched}, oracle chose the reverse entry at ${t.reverse}, " +
+        println("5c R: ${t.cases} cases, ${t.ends} ends, unmatched ${t.unmatched}, cases where the oracle threw ${t.threw}, oracle chose the reverse entry at ${t.reverse}, " +
             "radius ties at the head ${t.ties}, ends differing ${t.differing}; oracle transcript SHA-256 $digest")
         assertEquals(2 * 26 * E3R.N, t.ends, "not every end of R was compared")
         assertEquals(0, t.differing, "ends differing from the oracle: ${t.differing}; first: $firstDiffs")
