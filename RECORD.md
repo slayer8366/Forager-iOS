@@ -3000,3 +3000,27 @@ the planner's message after the watcher read 180,163 at 04:35:47Z.
 **A small wrong premise in -70:** `tools/fetch-pinned.sh` already exists here. Item 4 adds a `tools/fetch-dropoff.sh` that
 calls it.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -75.
+
+**Kind:** decision
+**ID:** 2026-10-28-75
+**Timestamp:** 2026-11-06T05:03:50Z
+**Continues:** 2026-10-28-68, 2026-10-28-74
+**Title:** Step 2a's `ByteArrayUnifierTest` refusal is replaced by a differential check, because -68 moved its premise
+**Observed:** Plumb Ledger, session 9, stopped on a red besides `CollectOutreachersTest`. Run 42165333186 on `a6eb12b`:
+`jvm` 109 tests, 3 failures, the third being `ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported`
+(`ByteArrayUnifierTest.kt:16`) [R, as reported].
+- The cause is 5d's port of `ByteArrayUnifier.unify` (`7072d5b`), as -70 and -74 directed.
+- Plumb's local runs were filtered to three classes, so they missed it.
+**Decision (the planner's, technical):**
+- **The test's premise is in its own header** (`3cd61ad`, step 2a): `unify` "fails as a named 'unsupported'" because it
+  was "unkept", off T2's port list. -68's owner ruling put it on the port list.
+- **So this is a planned change of behaviour, not a silenced test.** Forager's CLAUDE.md forbids weakening a test to
+  reach green. This replaces an assertion whose premise no longer holds with a stronger one.
+- **The replacement:**
+  - the constructor check is kept;
+  - a differential check against `btools.util.ByteArrayUnifier` compares the returned bytes and the instance-reuse
+    pattern over a fixed input sequence, with `validateImmutability` true and false;
+  - a one-line revert must make it fail, with the prediction pushed first;
+  - the commit and the 5d report cite `3cd61ad` and this entry.
+- **Practice from now on:** a coder runs the full `:brouter:jvmTest` before every push that touches `commonMain`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -76.
