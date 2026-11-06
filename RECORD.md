@@ -3712,3 +3712,24 @@ cases check the refusal. FK kind 5 is rebuilt on a foot profile. Nothing unteste
     is drawn as -82 drew it, and its expected rows are rewritten. That is Linden's, on `brouter-port`.
   - **The refusal** is a named "unsupported" with a test on all six profiles, already in Plumb's work [R, as reported].
 **Notes:** Written by the planner session of -56 by hand. Next free ID -96.
+
+**Kind:** outcome
+**ID:** 2026-10-28-96
+**Timestamp:** 2026-11-06T17:16:54Z
+**Continues:** 2026-10-28-91, 2026-10-28-95
+**Title:** atomicfu links into iOS: CI on `de4d994` read; next, step 6 continues (Plumb) and FK kind 5 is rebuilt (Linden)
+**Observed, read by the planner** (run 42250446552 on `de4d994`, where `ProfileCache` first uses `SynchronizedObject`):
+- `jvm` 123 tests, 2 failures, both `CollectOutreachersTest` (-61);
+- 0 ` e: ` lines in either log; both `compileKotlinIos*` ran;
+- **the simulator built, linked and ran 24 of 24** (**simulator-checked**). So atomicfu 0.33.0 links on
+  `iosSimulatorArm64`. `iosArm64` is compiled, not linked, in CI [I];
+- arm64 7 of 7, with the gate reading "OK: all 2 classes ran".
+**Next (within the owner's "Start step 6" and -95's ruling):**
+- **Plumb Ledger, session 11, on `brouter-port-5b`:** step 6's remaining files, by its handoff. Owed: `StdPath`'s cast revert,
+  -62's `interpolateEle` cast and -42's way getters.
+- **Linden Caliper, session 27, on `brouter-port`:** FK kind 5 rebuilt on `hiking-mountain` (-95). That means its generator,
+  its prediction, its run through E3's six regimes, and its 10 rows rewritten in `expected-1b.tsv`, with
+  `E3ExpectedFileTest` green.
+  - The file's other 2,116 rows must be byte-unchanged (`cmp` on the rest).
+  - `brouter-port` is then merged into `brouter-port-5b` again by Plumb, at a step boundary.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -97.
