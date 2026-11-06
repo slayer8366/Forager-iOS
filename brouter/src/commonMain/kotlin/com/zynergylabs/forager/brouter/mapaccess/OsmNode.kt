@@ -12,9 +12,8 @@ import kotlin.math.max
  * Port of BRouter 1.7.10's `btools.mapaccess.OsmNode`. A node is also a link (Java's "technical inheritance"): the first
  * link woven to a node may be the node object itself.
  *
- * Not ported: the `OsmNode(long)` constructor, `toString` and `parseNodeBody2`, which T2 does not reach from Forager's
- * calls under direct weaving (step 5b report, RECORD -32). [parseNodeBody] keeps Java's type test and fails as a named
- * "unsupported" where Java would decode a `MicroCache2`.
+ * Not ported: `toString`. `OsmNode(long)` and `parseNodeBody2` are ported in step 5d (RECORD -70, -74): Forager's
+ * route-ways read reaches them (`BRouterRouteWays.kt:88-89` at a0535ece).
  */
 internal open class OsmNode : OsmLink, OsmPos {
     /** The latitude. */
@@ -49,8 +48,11 @@ internal open class OsmNode : OsmLink, OsmPos {
         this.ilat = ilat
     }
 
-    /** STUB (step 5d): Java's `OsmNode(long)`. */
-    constructor(id: Long)
+    /** Java: `ilon = (int) (id >> 32); ilat = (int) (id & 0xffffffff);` (`OsmNode.java:57-60`). The int mask widens to -1L, so `ilat` is the low 32 bits. */
+    constructor(id: Long) {
+        ilon = (id shr 32).toInt()
+        ilat = id.toInt()
+    }
 
     fun addTurnRestriction(tr: TurnRestriction) {
         tr.next = firstRestriction
@@ -93,10 +95,8 @@ internal open class OsmNode : OsmLink, OsmPos {
         max(1.0, javaRound(CheapRuler.distance(libm, ilon, ilat, p.getILon(), p.getILat())).toDouble()).toInt()
 
     /**
-     * Java decodes a `MicroCache2` here and rejects any other cache. Under direct weaving no `MicroCache2` exists: the
-     * only one is built when `hollowNodes` is null (`OsmFile.java:139-140`), under `-DdisableDirectWeaving`, which Forager
-     * never sets and the port fixes off (`NodesCache.kt`). So the `MicroCache2` branch, and `readUnified` and `unify`
-     * behind it (`OsmNode.java:134`), are a named "unsupported" rather than code no test reaches.
+     * Java decodes a `MicroCache2` here and rejects any other cache. A `MicroCache2` is built when `hollowNodes` is null
+     * (`OsmFile.java:139-140`), as Forager's route-ways read calls it (`BRouterRouteWays.kt:84` at a0535ece).
      */
     fun parseNodeBody(mc: MicroCache, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier) {
         if (mc is MicroCache2) {
@@ -106,9 +106,44 @@ internal open class OsmNode : OsmLink, OsmPos {
         }
     }
 
-    /** STUB (step 5d): Java's `parseNodeBody2`. Throws a named "unsupported" until ported (RECORD -74). */
-    fun parseNodeBody2(mc: MicroCache2, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier): Unit =
-        throw NotImplementedError("unsupported: parseNodeBody2 not yet ported (step 5d)")
+    /** Port of `OsmNode.java:117-152`. */
+    fun parseNodeBody2(mc: MicroCache2, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier) {
+        val abUnifier = hollowNodes.getByteArrayUnifier()
+
+        // read turn restrictions
+        while (mc.readBoolean()) {
+            val tr = TurnRestriction()
+            tr.exceptions = mc.readShort()
+            tr.isPositive = mc.readBoolean()
+            tr.fromLon = mc.readInt()
+            tr.fromLat = mc.readInt()
+            tr.toLon = mc.readInt()
+            tr.toLat = mc.readInt()
+            addTurnRestriction(tr)
+        }
+
+        selev = mc.readShort()
+        val nodeDescSize = mc.readVarLengthUnsigned()
+        nodeDescription = if (nodeDescSize == 0) null else mc.readUnified(nodeDescSize, abUnifier)
+
+        while (mc.hasMoreData()) {
+            // read link data
+            val endPointer = mc.getEndPointer()
+            val linklon = ilon + mc.readVarLengthSigned()
+            val linklat = ilat + mc.readVarLengthSigned()
+            val sizecode = mc.readVarLengthUnsigned()
+            val isReverse = (sizecode and 1) != 0
+            var description: ByteArray? = null
+            val descSize = sizecode shr 1
+            if (descSize > 0) {
+                description = mc.readUnified(descSize, expCtxWay)
+            }
+            val geometry = mc.readDataUntil(endPointer)
+
+            addLink(linklon, linklat, description, geometry, hollowNodes, isReverse)
+        }
+        hollowNodes.remove(this)
+    }
 
     open fun addLink(
         linklon: Int,
