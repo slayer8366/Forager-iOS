@@ -3759,3 +3759,29 @@ cases check the refusal. FK kind 5 is rebuilt on a foot profile. Nothing unteste
 - **The start-direction branch is a named "unsupported",** with a test that shows the refusal. **Step 8's coverage check**
   reads `OsmPath.java:282-283` as not covered on R's R6 runs, as -94 set for `containsNode`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -98.
+
+**Kind:** decision
+**ID:** 2026-10-28-98
+**Timestamp:** 2026-11-06T17:28:08Z
+**Continues:** 2026-10-28-82, 2026-10-28-95, 2026-10-28-96
+**Title:** FK kind 5 on `hiking-mountain` is short at 6 of 10 in construction; its cap is raised to 1,000
+**Observed (Linden, session 27, `brouter-port` `fcd35ff` to `cc01338`, two commits, as reported):**
+- The generator change and the prediction were pushed before the run (`d841cfd`).
+- Kind 5 on `hiking-mountain` (start and end drawn separately, cap 400): 7 starts, all accepted; 393 end draws, 6
+  accepted.
+- **Rejections, all before routing:** 353 had a usable link within 300 m, and 34 had cells leaving the tile.
+- The 6 cases are all "to-position not mapped", all stable.
+- `expected-1b.tsv` was not touched. Linden reports that CI run 42261021182 on `cc01338` passed (`jvm` 101, simulator 23,
+  arm64 7 with its gate).
+**Decision (the planner's, technical):** Linden's option (a).
+- **The cap is raised to 1,000 draws.** At this run's rate, about 1 end in 66 draws, 10 ends need about 660.
+- **The reasoning is -82's:** every rejection is in construction, and none is selected on the oracle's outcome. FK is
+  "constructed, not sampled", so a larger cap does not bias it.
+- **Rejected:**
+  - (b), a 250 m distance of kind 5's own: it would split a constant that kinds 1 and 2 share, for no gain;
+  - (c), keeping 6, as -82 already rejected.
+- **The rest as -96 set it:** kind 5's 10 rows are rewritten and every other row stays byte-identical (`cmp`). The writer's
+  case list (`build/e3/FK/cases.tsv`, which still holds `car-fast`'s kind 5) is regenerated for kind 5 first.
+- **Observed for the record:** kind 5 on a foot profile is now built like kind 2 (an end beyond any usable way), and shares
+  its family, as -80 foresaw.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -99.
