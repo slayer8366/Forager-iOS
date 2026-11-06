@@ -20,7 +20,7 @@ class E3RProfilesTest {
         }
     }
 
-    private companion object {
+    internal companion object {
         /** Fixed before any run (RECORD -47): 20261101 upward, in the profiles' alphabetical order. */
         val SEEDS = linkedMapOf(
             "car-eco" to 20261101L,

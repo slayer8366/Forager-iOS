@@ -4,6 +4,7 @@ import com.zynergylabs.forager.brouter.codec.DataBuffers
 import com.zynergylabs.forager.brouter.codec.MicroCache
 import com.zynergylabs.forager.brouter.codec.WaypointMatcher
 import com.zynergylabs.forager.brouter.expressions.BExpressionContextWay
+import com.zynergylabs.forager.brouter.util.LibmSeam
 import okio.FileSystem
 import okio.IOException
 import okio.Path
@@ -188,6 +189,14 @@ internal class NodesCache(
             throw RuntimeException("error reading datafile $currentFileName: $e", e)
         }
     }
+
+    /** Java's `matchWaypointsToNodes` (`NodesCache.java:292-325`), with the seam first (step 2b's rule). STUB (step 5c). */
+    fun matchWaypointsToNodes(
+        libm: LibmSeam,
+        unmatchedWaypoints: MutableList<MatchedWaypoint>,
+        maxDistance: Double,
+        islandNodePairs: OsmNodePairSet,
+    ): Boolean = TODO("step 5c stub")
 
     private fun fileForSegment(lonDegree: Int, latDegree: Int): OsmFile {
         val lonMod5 = lonDegree % 5
