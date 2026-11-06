@@ -2879,3 +2879,40 @@ answers false on MP64
 - **ML5 is mostly panic-then-limit** (54 of 59). The report names that as a characteristic of the stratum, so that no
   figure from ML5 is later read as one about the limit without panic.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -72.
+
+**Kind:** outcome
+**ID:** 2026-10-28-72
+**Timestamp:** 2026-11-06T04:26:22Z
+**Continues:** 2026-10-28-67, 2026-10-28-69, 2026-10-28-70
+**Title:** 5d, items 1 and 2: the message defect fixed; the route-ways reach measured, with 440 Java lines unported (under
+the 600 stop); handed off at 180k
+**Observed:** Plumb Ledger, session 7, `brouter-port-5b` `d1de74b` to `d293fd4` (two commits; clean tree). It handed off at
+the planner's message after the watcher read 181,696 at 04:19:13Z. Report: `docs/audits/2026-11-06-brouter-port-step5d.md`.
+- **Item 1:** `differingFields` now splits at its known keys and prints names only. On a scratch revert, never committed,
+  the message held 33 coordinate fragments before the fix and 0 after, with the same 2,105 ends differing [R, as
+  reported]. The committed evidence (`1-defect.txt`) holds counts only: the planner found no coordinate-like number in it.
+- **Item 2, the reach** (`03-reach/out/RW/`, beside T2):
+  - from `BRouterRouteWays.kt:59-123`, with a tier of its own (W) for that call's null arguments: 141 methods, all 15
+    cuts used;
+  - under JaCoCo, 129 ran and 0 ran unreached [R, as reported];
+  - 27 classes and 87 JDK members, all already in T2's `jdk-use.txt`.
+- **Not ported** (`not-ported.tsv`; **checked by the planner:** 29 rows, being 27 methods plus 2 rows for branches that
+  throw, at 0 lines; the `java_lines` column sums to **440**):
+  - `MicroCache2`, 251 lines;
+  - `ByteDataWriter`, 53 lines;
+  - `parseNodeBody2`, 37 lines;
+  - `LinkedListContainer`, 34 lines, with no file in the port;
+  - `ByteArrayUnifier.unify`, 28 lines, which throws today;
+  - `ByteDataReader`, 26 lines;
+  - `expandId` and `getIdForIndex`, 7 lines;
+  - `OsmNode(long)`, 4 lines;
+  - and the two branches that throw, `OsmFile.kt:140-143` and `OsmNode.kt:96-100`.
+- **-67's estimate of about 300 lines was low:** the measured gap is 440, under -70's stop at 600.
+- **A finding:** `parseNodeBody2` is on T2's reach list but was never ported (`OsmNode.kt:15`). So the not-ported list was
+  read from the port's own source, not from T2. Whether an overload under the same name hides a gap is checked only for
+  `addLink` [?].
+- **CI, read by the planner** (run 42161896448 on `d293fd4`): `jvm` 102 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7
+  of 7, with the gate reading "OK: all 2 classes ran". So `WaypointMatchTest` passes with the fix.
+**Next:** items 3 to 6 of -70 (the port, the `MicroCache2` decode test, the route-ways test, CI), in Plumb's session 8.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -73.
