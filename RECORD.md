@@ -2657,3 +2657,40 @@ under the new tuple. MP64 is also read for `canEscape` answering false (-61).
   `brouter-port-5b`.
 - arm64: 7 of 7, and the gate read "OK: all 2 classes ran".
 **Notes:** Written by the planner session of -56 by hand. Next free ID -64.
+
+**Kind:** intent
+**ID:** 2026-10-28-64
+**Timestamp:** 2026-11-06T03:00:27Z
+**Continues:** 2026-10-28-51, 2026-10-28-52, 2026-10-28-56, 2026-10-28-62
+**Title:** Forager re-checked before relaunch: a second engine entry point, `BRouterRouteWays`; the targeted strata go
+ahead (Linden, session 21)
+**Decision first:** the owner, verbatim: "Begin next step".
+
+**Forager `pre-main`, `d6e2a0415` to `a0535ece` (read 2026-11-06):**
+- **Unchanged:** `third_party/brouter`, every profile, `BRouterTrailRouter.kt`, F0's and F0h's fixtures (`git diff
+  --stat`, empty for each).
+- **New, in production:** `app/src/main/java/com/zynergylabs/forager/app/routing/BRouterRouteWays.kt` (`3cd6b3d8`, the
+  way-to series), wired at `AppContainer.kt:509` and called from `WayToEnds.kt:195` [R]. It skips `RoutingEngine`: it opens
+  a square with `PhysicalFile`/`OsmFile`, decodes nodes, links and geometry (`OsmNode.parseNodeBody`,
+  `GeometryDecoder.decodeGeometry`), and reads each way's tags through `BExpressionContextWay.getKeyValueDescription` [R].
+- **No new code to port:** all 11 of its BRouter calls are on Phase 1's method-level reach list
+  (`03-reach/out/T0/reached-methods.tsv`, matched by class and method name, not by overload [C]). `getKeyValueDescription`
+  is already ported (`BExpressionContext.kt:124` on `brouter-port`).
+- **A new use, and a premise that moves with it:** Phase 1 item B12 says `getKeyValueDescription`'s text "goes into messages
+  Forager does not read". Forager now reads it, as tags (`tagsOf`, `BRouterRouteWays.kt:134`). No differential test
+  compares tags or decoded geometry from this entry point. **Put to the owner** (-65), as heights were at -56.
+
+**Change** (Linden, session 21, `brouter-port` only, `jvmTest` and `tools`): the targeted strata as the nineteenth
+session's handoff and -51/-52 set them, under -58's tuple:
+- DL-lat, then DL-lon, then MP64, then the shared ML5/PM5 sequence, one at a time;
+- each generator was pushed before its run (`85008b1`);
+- MP64's runs are also read for `canEscape` answering false, at `RoutingEngine.java:2016` (-61).
+**Scope boundary:** writes only `brouter-port`. It does not touch `brouter-port-5b`, `main`, slayer8366/Forager or the
+tile release.
+**Baseline:** `brouter-port` `3688c9f` (CI green, -63).
+**Prediction (planner):** each stratum fills its 59 within the cap of 1,180 draws; 0 unstable; at least one MP64 case
+has `canEscape` answer false [I].
+**Finish line:** each stratum's results in the Phase 2 report, CI on the head read by the planner, and a handoff, which
+comes either at the end or at 180k.
+**Abort conditions:** -3's; a run showing a case in two strata (-52); a stratum reported short.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -65.
