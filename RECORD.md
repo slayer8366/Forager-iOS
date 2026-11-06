@@ -3733,3 +3733,29 @@ cases check the refusal. FK kind 5 is rebuilt on a foot profile. Nothing unteste
   - The file's other 2,116 rows must be byte-unchanged (`cmp` on the rest).
   - `brouter-port` is then merged into `brouter-port-5b` again by Plumb, at a step boundary.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -97.
+
+**Kind:** decision
+**ID:** 2026-10-28-97
+**Timestamp:** 2026-11-06T17:26:21Z
+**Continues:** 2026-10-28-24, 2026-10-28-94, 2026-10-28-96
+**Title:** `StdPath`'s `Math.exp` uses `kotlin.math.exp`; `OsmPath`'s start-direction branch is a named "unsupported"
+**Observed (Plumb, session 11, as reported):**
+- `StdPath.computeKinematic` and `calcIncline` call `Math.exp` only in detail mode, and only to set the track's time and
+  energy, not its cost or its path. It is reached on Forager's foot profile (Tobler's speed in `footMode`). `LibmSeam` has no
+  `exp`.
+- `OsmPath`'s start-direction branch (`Math.sin`/`cos`, `OsmPath.java:282-283`) needs `rc.startDirectionValid`. That is set
+  only at `RoutingEngine.java:1931-1932`, and only when `startDirection != null`.
+**Checked by the planner:**
+- Forager reads only the track's nodes, distance and heights (`BRouterTrailRouter.kt:95-114` at `a0535ece`), never its time
+  or energy [R].
+- Its call passes only `profile`, `alternativeidx` and `profile:use_dynamic_range` (`:150-155`), with no heading [R].
+**Decision (the planner's, technical):**
+- **`kotlin.math.exp`.** On the JVM it is `Math.exp`, so the oracle comparison stays exact. On iOS it is Apple's libm,
+  which is [?].
+  - Time and energy are recorded, not asserted (E1; Phase 1 report at `20e1f92`, line ~755).
+  - **If Forager ever reads time or energy** (an ETA, say), `exp` moves behind `LibmSeam` as an msun port, as -24 did
+    for `cos` and `atan2`. The KDoc and the step 6 report say so.
+  - **Rejected now:** an msun `e_exp.c` port. It would add maths code for values Forager does not read.
+- **The start-direction branch is a named "unsupported",** with a test that shows the refusal. **Step 8's coverage check**
+  reads `OsmPath.java:282-283` as not covered on R's R6 runs, as -94 set for `containsNode`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -98.
