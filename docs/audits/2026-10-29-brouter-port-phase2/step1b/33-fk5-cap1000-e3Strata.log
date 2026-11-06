@@ -1,0 +1,45 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=38833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+Starting a Gradle Daemon, 1 busy and 1 incompatible and 2 stopped Daemons could not be reused, use --status for details
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources UP-TO-DATE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:msunReference UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=38833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3FKTest > fkKind5ReachesOneFamilyInAllTen STANDARD_OUT
+    E3 FK5 JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=<scratch>/temurin/jdk-21.0.13+9
+    E3 FK kind 5: 10 of 10 after 937 draws (cap 1000); profile hiking-mountain; rejected {end: a link hiking-mountain can use within 300.0 m=837, end: the node's 3 x 3 cells leave the tile=80}
+    E3 FK FK5: family 'to-position not mapped in existing datafile' (FK5-01); in family 10 of 10; unstable 0
+    E3 FK5: 10 cases; unstable 0 of 10; over 5%: false
+    E3 FK5 FK5-01: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 195 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-02: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 242 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-03: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 315 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-04: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 272 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK5 FK5-05: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 319 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK5 FK5-06: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 273 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK5 FK5-07: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 174 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-08: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 188 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-09: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 256 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-10: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 216 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+
+E3FKTest > fkKind5ReachesOneFamilyInAllTen PASSED
+
+BUILD SUCCESSFUL in 25s
+11 actionable tasks: 3 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

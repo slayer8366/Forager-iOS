@@ -2468,3 +2468,41 @@ the run) and this report's commit. Only `brouter/src/jvmTest/` and `docs/` are t
 3. **To finish after a ruling:** change kind 5's cap or distance with a new prediction, rerun kind 5 alone, then give the
    writer kind 5's new list and table: FK's list with its FK5 lines replaced, and `E3Expected` reading FK5's rows from
    kind 5's own table. Then `cmp` the file without FK5's rows, before and after.
+
+## FK kind 5 on `hiking-mountain`: 10 of 10 at a cap of 1,000 (twenty-eighth session, Linden Caliper)
+Dispatch: RECORD -96, -98. Baseline `cc01338`. Only `brouter/src/jvmTest/` and `docs/` are touched; no `commonMain` change.
+
+### The change [R]
+- `E3FKTest.CAP5` is 1,000 (it was 400; -98's option (a)). Nothing else in kind 5's construction changed.
+- Prediction: `step1b/33-fk5-cap1000-prediction.txt`, pushed with the change in `b5715ec` before the run.
+- `E3Expected.OWN_TABLES` and `loggedFor(stratum)`: FK's rows with ids `FK5-` are now read from
+  `33-fk5-cap1000-stability.tsv`, the rest from `30-fk-stability.tsv` (which still holds `car-fast`'s run). The writer and
+  both `E3ExpectedFileTest` cross-checks use it.
+
+### The run [C]
+`e3Strata --tests '*E3FKTest.fkKind5*' --max-workers=2` on Temurin 21.0.13+9 (`step1b/33-fk5-cap1000-e3Strata.log`,
+`step1b/33-fk5-cap1000-stability.tsv`). BUILD SUCCESSFUL in 25 s.
+- **10 of 10 after 937 draws.** 10 starts, all accepted; 927 end draws, of which 10 were accepted, **837** had a
+  `hiking-mountain`-usable link within 300 m, and **80** had 3 x 3 cells leaving the tile. 10 + 10 + 837 + 80 = 937.
+  Every rejection is before routing.
+- **Family:** "to-position not mapped in existing datafile" (FK5-01's), 10 of 10; **0 unstable of 10.** The tuple is
+  `0|0|0` with the empty digests. FK5-01 to -06 have the same verdict and tuple as session 27's; that they are the same ends
+  (one seeded sequence) is [I], since session 27's case list was not kept.
+- The prediction held on every point it made.
+
+### The rewrite [C]
+- **The writer's case list:** `build/e3/FK/cases.tsv` had its 10 `car-fast` FK5 lines (lines 11 to 20) replaced by kind 5's
+  new list; the other 104 lines are unchanged (`diff`). The old list is kept in scratch (`linden/33/FK-cases-before.tsv`).
+- **The writer** (`e3Strata --tests '*E3ExpectedWriteTest*'`, `step1b/33-fk5-cap1000-expected-e3Strata.log`), BUILD
+  SUCCESSFUL in 20 min 37 s: 2,126 rows, R1 equal to its log for 2,126 of 2,126, FK5's 10 against the new table; the same
+  3 FK9 exclusions.
+- **`cmp`:** the file without its 10 FK5 rows, before and after: 2,124 lines each, identical. **The 10 FK5 rows are also
+  byte-identical** to the old ones, so the whole file is unchanged and `git` shows no change to `expected-1b.tsv`. What
+  changed is the table they are checked against.
+
+### Checks
+- **Full `:brouter:jvmTest`, fresh** (`--rerun-tasks`, started 17:54:01Z): 101 tests, 0 failures, 44 XML files, all
+  written after the start; all six `E3ExpectedFileTest` methods pass; 0 ` e: ` lines [C].
+- **E1:** the scan of each staged diff (Forager's own ends excepted by value, -93) read 0 before each push [C].
+
+<!-- s28-ci -->

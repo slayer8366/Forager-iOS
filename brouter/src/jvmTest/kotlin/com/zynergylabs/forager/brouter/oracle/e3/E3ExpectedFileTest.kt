@@ -34,8 +34,8 @@ class E3ExpectedFileTest {
     @Test
     fun everyRowIsTheR1ItsStratumLogged() {
         val wrong = ArrayList<String>()
-        for ((stratum, spec) in E3Expected.STRATA) {
-            val log = E3Expected.logged(spec.second)
+        for (stratum in E3Expected.STRATA.keys) {
+            val log = E3Expected.loggedFor(stratum)
             val rows = stored.rows.filter { it.stratum == stratum }
             val ids = rows.map { it.id }.toSet()
             val ofStratum = if (stratum == "R") log.filterKeys { it.startsWith("R-") } else log
@@ -53,9 +53,9 @@ class E3ExpectedFileTest {
     fun exclusionsAreNamedAndOnlyThem() {
         val notExact = stored.rows.filter { it.compare != "exact" && it.compare != "outcome" }.map { it.stratum to it.id }.toSet()
         assertEquals(notExact, stored.excluded.keys, "rows kept out of exact values, against the head's named exclusions")
-        for ((stratum, spec) in E3Expected.STRATA) {
+        for (stratum in E3Expected.STRATA.keys) {
             // A case its stratum logged as unstable is never stored as exact.
-            val unstable = E3Expected.logged(spec.second).filter { it.value.first != "stable" }.keys
+            val unstable = E3Expected.loggedFor(stratum).filter { it.value.first != "stable" }.keys
             for (id in unstable.filter { u -> stored.rows.any { it.stratum == stratum && it.id == u } }) {
                 assertTrue((stratum to id) in stored.excluded, "$stratum $id was logged unstable but is not excluded")
             }
