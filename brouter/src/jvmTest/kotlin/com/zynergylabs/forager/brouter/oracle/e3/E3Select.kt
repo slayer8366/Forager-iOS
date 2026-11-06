@@ -132,7 +132,7 @@ object E3Select {
                 }
                 rows += listOf(
                     d.number, run.case.id, run.r1.toField(), run.r2.toField(), run.r2EqualsR1,
-                    run.r1Extent?.joinToString(",") ?: "-", run.collections, run.panic, run.r1Millis,
+                    run.collections, run.panic, run.r1Millis,
                     run.case.memoryclass, run.r6?.toField() ?: "-", m.reading, result,
                 ).joinToString("\t")
             }
@@ -143,7 +143,7 @@ object E3Select {
         }
         val table = File(work, "select.tsv")
         table.writeText(
-            "draw\tid\tR1-tuple\tR2-tuple\tR2-equals-R1\tR1-extent\tR2-collected-lines\tR2-panic\tR1-ms\tmemoryclass\tR6-tuple\treach\tresult\n" +
+            "draw\tid\tR1-tuple\tR2-tuple\tR2-equals-R1\tR2-collected-lines\tR2-panic\tR1-ms\tmemoryclass\tR6-tuple\treach\tresult\n" +
                 rows.joinToString("\n") + "\n",
         )
         check(rows.size == counted) { "$label: ${rows.size} rows for $counted counted draws" }
