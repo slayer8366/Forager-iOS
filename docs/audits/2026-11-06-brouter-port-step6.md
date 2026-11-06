@@ -202,3 +202,27 @@ line or stale XML, and checks with cmp. Scratch is `$S/s11/`.
 
 **Unverified:** native `kotlin.math.exp` and float `toString` [?]; that `startDirectionValid` is false on Forager's path
 [I, step 8]; that the nogo half's msun-table results differ from the oracle only through the scale table [I].
+
+## 9. Session 12 (Plumb Ledger): `NodesCache`'s graph half (5b's debt, RECORD -99)
+
+**Ported:** `getGraphNode`, `obtainNonHollowNode`, `expandHollowLinkTargets`, `hasHollowLinkTargets` and `getStartNode`
+(`NodesCache.java:213-300`), in `NodesCache.kt`, whose header now says so. `obtainNonHollowNode` passes `expCtxWay!!` to
+`parseNodeBody`; the constructor has already refused a null context, as Java's does, so it cannot fire.
+
+**`GraphHalfTest`** (one test): F0's two ends, F0h's eight, and the first 20 of R's on `hiking-mountain` (its own seed,
+`E3RTest.SEED`). For each, both engines match the two ends, make a second cache over the first (as `resetCache`), and run
+`_findTrack`'s graph steps (`RoutingEngine.java:1911-1928`): the four graph nodes, both obtains and expands, then a
+search-like walk of up to 300 nodes that obtains each hollow target (`:2152`) and asks `hasHollowLinkTargets` (`:2006`).
+Every result is written, then every node reachable from the four in `GraphTranscript`'s form (fields, links, geometry), and
+the two texts are compared line by line. Cleanup modes 1 and 2, and mode 1 again with a 64 KiB `maxmem`, which turns on the
+collection branch (`NodesCache.java:229-231`). `getStartNode` runs on a fresh cache, on the start's id and on the id
+beside it (its null return).
+- Over `TODO` stubs: fails, `NotImplementedError: ... graph half` (fresh XML, 0 compile errors).
+- On the port: passes. 30 cases, 90 runs, 1,378,140 lines equal; `getStartNode` null 90 times, `obtain` false 21 times;
+  digest `9b79c9aa0668b0e2…`.
+- `E3F0hTest`'s companion is now `internal`, so the test reads Forager's ends from it and carries none of its own.
+
+**Revert D, predicted before it ran** (`obtainNonHollowNode`'s direct-weaving return, `return true // direct weaving...`
+made `return false`): `GraphHalfTest` fails, and only it among the filter's classes. The first differing line is an
+`obtain` line, oracle `true`, port `false`, in the first case, `F0-inside-across-the-degree-line`, mode 1. Nothing before
+it differs: the node is woven all the same, so the graph and every `hasHollow` stay equal; only the returned value changes.

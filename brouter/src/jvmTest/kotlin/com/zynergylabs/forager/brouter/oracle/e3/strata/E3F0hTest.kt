@@ -37,7 +37,7 @@ class E3F0hTest {
         )
     }
 
-    private companion object {
+    internal companion object {
         const val PROFILE = "hiking-mountain" // Forager's RoutingProfile.PROFILE_FILE
 
         /** name to (from lat, from lon, to lat, to lon), `routes.json` at Forager d6e2a0415, in its order. */

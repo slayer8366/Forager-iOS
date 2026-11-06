@@ -11,10 +11,10 @@ import okio.Path
 import okio.Path.Companion.toPath
 
 /**
- * Port of BRouter 1.7.10's `btools.mapaccess.NodesCache`, its file half (step 5a): the tile cache and the segment
- * reads. The graph half (`obtainNonHollowNode`, `expandHollowLinkTargets`, `hasHollowLinkTargets`, `getStartNode`,
- * `getGraphNode`) needs `OsmNode` and the weaver, and arrives with step 5b; `matchWaypointsToNodes` and
- * `preloadPosition` are step 5c's. Java's `File segmentDir` is an okio [Path] read through [fileSystem] (item B, row 2).
+ * Port of BRouter 1.7.10's `btools.mapaccess.NodesCache`: its file half (step 5a: the tile cache and the segment
+ * reads), `matchWaypointsToNodes` and `preloadPosition` (step 5c), and its graph half (`obtainNonHollowNode`,
+ * `expandHollowLinkTargets`, `hasHollowLinkTargets`, `getStartNode`, `getGraphNode`), which 5b left out and step 6
+ * ported as 5b's debt (RECORD -99; checked against the oracle by `GraphHalfTest`). Java's `File segmentDir` is an okio [Path] read through [fileSystem] (item B, row 2).
  */
 internal class NodesCache(
     private val fileSystem: FileSystem,
@@ -192,6 +192,72 @@ internal class NodesCache(
         } catch (e: Exception) {
             throw RuntimeException("error reading datafile $currentFileName: $e", e)
         }
+    }
+
+    /**
+     * `NodesCache.java:213-237`: make sure [node] is non-hollow, which means it holds not just the id but the node's
+     * data. Returns true if it is, false if the node is still hollow. Java passes a null `expCtxWay` on to
+     * `parseNodeBody`; here the constructor has already refused a null one, so the `!!` cannot fire.
+     */
+    fun obtainNonHollowNode(node: OsmNode): Boolean {
+        if (!node.isHollow()) return true
+
+        val segment = getSegmentFor(node.ilon, node.ilat) ?: return false
+        if (!node.isHollow()) {
+            return true // direct weaving...
+        }
+
+        val id = node.getIdFromPos()
+        if (segment.getAndClear(id)) {
+            node.parseNodeBody(segment, nodesMap, expCtxWay!!)
+        }
+
+        if (garbageCollectionEnabled) { // garbage collection
+            cacheSum -= segment.collect(segment.getSize() shr 1) // threshold = 1/2 of size is deleted
+        }
+
+        return !node.isHollow()
+    }
+
+    /** `NodesCache.java:243-247`: make sure all link targets of [n] are non-hollow. */
+    fun expandHollowLinkTargets(n: OsmNode) {
+        var link = n.firstlink
+        while (link != null) {
+            obtainNonHollowNode(link.getTarget(n)!!)
+            link = link.getNext(n)
+        }
+    }
+
+    /** `NodesCache.java:252-259`: whether any link target of [n] is hollow. */
+    fun hasHollowLinkTargets(n: OsmNode): Boolean {
+        var link = n.firstlink
+        while (link != null) {
+            if (link.getTarget(n)!!.isHollow()) return true
+            link = link.getNext(n)
+        }
+        return false
+    }
+
+    /**
+     * `NodesCache.java:271-281`: the node for [id] with all its link targets non-hollow, or null if it was not found.
+     * No instance of the node may exist yet, not even a hollow one, so call it once, right after resetting the cache.
+     */
+    fun getStartNode(id: Long): OsmNode? {
+        val n = OsmNode(id)
+        n.setHollow()
+        nodesMap.put(n)
+        if (!obtainNonHollowNode(n)) return null
+        expandHollowLinkTargets(n)
+        return n
+    }
+
+    /** `NodesCache.java:283-292`: the map's node at [template]'s position, put there hollow if there was none. */
+    fun getGraphNode(template: OsmNode): OsmNode {
+        val graphNode = OsmNode(template.ilon, template.ilat)
+        graphNode.setHollow()
+        val existing = nodesMap.put(graphNode) ?: return graphNode
+        nodesMap.put(existing)
+        return existing
     }
 
     /** Java's `matchWaypointsToNodes` (`NodesCache.java:292-325`, step 5c), with the seam first (step 2b's rule). */
