@@ -3668,3 +3668,47 @@ the owner wants them out of Forager-iOS too, that is a ruling against Phase 1's 
 - **Rejected:** (b), waiting on step 7 to port `OsmTrack` first. It blocks step 6 on a class it does not need on Forager's
   path.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -95.
+
+**Kind:** outcome
+**ID:** 2026-10-28-95
+**Timestamp:** 2026-11-06T17:16:27Z
+**Continues:** 2026-10-28-24, 2026-10-28-73, 2026-10-28-89, 2026-10-28-91, 2026-10-28-92, 2026-10-28-94
+**Title:** Step 6, first session: the merge, atomicfu, `ProfileCache` with its lock, and half of `RoutingContext`; the car
+profiles are outside the port, and are refused (owner)
+**Observed:** Plumb Ledger, session 10, `brouter-port-5b` `b65548f` to `46fc891` (six commits; clean tree). It handed off at
+the planner's message after the watcher read 183,589 at 16:15:35Z. Report: `docs/audits/2026-11-06-brouter-port-step6.md`.
+- **Trailers:** the planner found one model name in the range, in `00b9886`. That is -78's commit, brought in by the merge,
+  not a new one.
+- **The merge** `eac836d`: CI read by Plumb (run 42246987233) showed `jvm` 121, only `CollectOutreachersTest`'s 2 red;
+  simulator 24 (**simulator-checked**); arm64 7, with its gate [R, as reported]. -93 covers its scan.
+- **atomicfu 0.33.0** is pinned (`a9fb1d0`). Whether it links into the iOS klibs is first shown by CI on `de4d994`, where
+  `ProfileCache` uses `SynchronizedObject`. That is read after this entry is written.
+- **Ported:** `ProfileCache` with its lock, `OsmPathModel`, `OsmPrePath`, `StdModel`, `RoutingIslandException`, and
+  `RoutingContext`'s configuration half.
+  - `RoutingContextReadTest`: 76 fields equal the oracle's on 20 profiles.
+  - `ProfileCacheLockTest`: two threads; only one is ever inside `parseProfile`.
+  - Both were seen failing over the stubs. The lock's revert fails "expected 1 but was 2". The `maxSpeed` revert fails on
+    the two foot profiles only, as predicted. Its first form did not compile and was not read.
+  - The full run before the push: 123 tests, only `CollectOutreachersTest`'s 2 red [R, as reported].
+- **Still stubs or not started:** `OsmPath`, `StdPath` (stubs); `OsmTrack` (type only, -94); `OsmPathElement`,
+  `MessageData`, `OsmNodeNamed`, `RoutingParamCollector`, `SearchBoundary`, `AreaInfo`, `OsmNogoPolygon`.
+- **The planner's own gap, found through Plumb's refusal of six profiles:**
+  - Phase 1 counted the path model, which is chosen by reflection (`RoutingContext.java:86-97`), as "dead for the pinned
+    profile" (premise 4).
+  - T2's port list keeps 0 lines of `KinematicModel`, `KinematicNoCostModel`, `KinematicPath`, `KinematicNoCostPath` and
+    `KinematicPrePath` (`03-reach/out/T2/port-list.tsv`) [C].
+  - Yet R draws on all 26 profiles, and the six car profiles name `KinematicModel`. So 354 of R's 1,534 cases (6 × 59)
+    and FK kind 5 (`car-fast`, -82) could never be compared. Neither -73, -86 nor -89 saw it.
+**Decision:** asked how the port should treat these profiles, the owner chose, verbatim: "Refuse them, test the rest
+(Recommended)". The option read: "The port refuses Kinematic profiles with a named 'unsupported', and a test shows it. R is
+compared on its 20 foot/bike profiles (1,180 cases; the clean-run bound becomes 0.254% instead of 0.195%), and the 354 car
+cases check the refusal. FK kind 5 is rebuilt on a foot profile. Nothing untested ships."
+- **Rejected:** "Port the car models too".
+- **What follows (the planner's calls, technical):**
+  - **R's figure** is corrected in -89's milestone: compared on 1,180 cases, a clean run bounds the rate below **0.254%**
+    (1 − 0.05^(1/1180) = 0.00254) [C]. The expected values keep all 1,534 rows. The 354 car rows check the refusal at
+    step 9.
+  - **FK kind 5** is rebuilt on a Std-model profile (`hiking-mountain`): an end more than 250 m from any way it can use. It
+    is drawn as -82 drew it, and its expected rows are rewritten. That is Linden's, on `brouter-port`.
+  - **The refusal** is a named "unsupported" with a test on all six profiles, already in Plumb's work [R, as reported].
+**Notes:** Written by the planner session of -56 by hand. Next free ID -96.
