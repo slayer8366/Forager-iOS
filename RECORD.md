@@ -3211,3 +3211,35 @@ in its sub-index, without reporting an error. That is the engine Android runs. W
 (`RoutingDataFolder.headerProblem`, `RoutingDataFolder.kt:48-53` at Forager `e2969abe`, cited on `brouter-port` at
 `Route.kt:51`) catches these copies is [?], not read here.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -81.
+
+**Kind:** outcome
+**ID:** 2026-10-28-81
+**Timestamp:** 2026-11-06T06:11:04Z
+**Continues:** 2026-10-28-77, 2026-10-28-78, 2026-10-28-79, 2026-10-28-80
+**Title:** NT, CR and LB full, 59 of 59 each, all stable; FK probed, not built; CI green
+**Observed:** Linden Caliper, session 23, `brouter-port` `00b9886` to `ffa06ab` (three commits; clean tree; no model name in
+any trailer, by `git log` and `grep`, checked by the planner). It handed off at the planner's message after the watcher read
+183,184 at 06:05:47Z. Logs: `step1b/23-*` (NT), `24-*` (CR), `25-*` (LB), `26-fk-probes/`.
+- **Checked by the planner:** `23-nt-stability.tsv`, `24-cr-stability.tsv` and `25-lb-stability.tsv` each read 59 "stable".
+  `26-fk-probes/counts.txt` holds no coordinate-like number.
+- **Each stratum, as reported:**
+  - **NT** (seed 20261205): full at draw 89, 30 rejected before routing. R1 kinds: 56 routes, 2 target island, 1
+    to-position not mapped. Every taken case reads a gap of 0 ulps, an exact tie. `:71` is covered in 59 of 59, recorded
+    only (-78).
+  - **CR** (20261206): full at draw 83, 24 rejected. All 59 route.
+    - **The tiles carry `estimated_crossing_class`,** which settles Phase 1's open question.
+    - By tile: E170_S50 19, W70_N40 13, W75_N35 11, W75_N40 16.
+  - **LB** (20261207): full at draw 99, 40 rejected. All 59 route.
+    - **Only 5 of step 2b's 13 (c) rows lie inside the tiles,** not Phase 1's "12".
+  - In all three, R2 equals R1 on every routed case, and the selection's R1/R2 equal E3's in 59 of 59.
+- **CI, read by the planner** (run 42172432910 on `ffa06ab`, `success`): `jvm` 95 tests, 0 failures; 0 ` e: ` lines in either
+  log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all
+  2 classes ran".
+- **The planner's call on Linden's open point:** NT counts any outcome kind. The tie is broken in matching, before
+  routing, and the route's outcome is compared whatever it is.
+- **Unverified:** why one NT case's R1 reads "to-position not mapped" when the generator's own matching of the same ends
+  did not throw [?].
+- **Wrong premises:** Phase 1's "12 in-tile rows" for LB (5 under step 2b's definition), with -78 to -80 already recorded.
+**1b now stands at:** F0, F0h, R, DL-lat, DL-lon, MP64, ML5, PM5 (short, 55), NT, CR and LB, all run and stable. FK is next,
+under -79 and -80, including kinds 9 to 11's harness changes. Then the expected values.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -82.
