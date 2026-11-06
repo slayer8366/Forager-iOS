@@ -124,13 +124,33 @@ Plumb Ledger, seventh session, on `brouter-port-5b`, from `d1de74b`. Tags: [R] r
 - The dispatch says "through `tools/fetch-pinned.sh`": that script already exists here as the generic fetcher. Item 4
   should add `tools/fetch-dropoff.sh` calling it, as `fetch-f0h.sh` does on `brouter-port`.
 
-## Wrong premises in -70
+## Wrong premises in -70 and -74
+- -74/session 8's handoff: "no test reaches" `ByteArrayUnifier.unify` was true, but a step 2a test (`3cd61ad`) pinned its
+  refusal, so porting it was a change of tested behaviour; neither the dispatch nor the handoff named that test.
+- Session 8's handoff put F0h's ends on F0's fixture; -74 overruled it (F0h's tile wired here).
 - None found in -70 itself. -67's ~300-line estimate was low: 440 [C].
 
 ## Unverified
-- Items 5 and 6 (-70) are not started [R]. CI on `e26e13d` is not read [?]; CI on session 9's head: see below.
+- Items 5 and 6 (-70) are not started [R]. CI on `e26e13d` is not read [?].
+- **CI on `1797412`** (run 42167090127), read by me [R]: `jvm` 111 tests, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: ` lines in either job's log; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran (`jvm` job,
+  BUILD SUCCESSFUL); simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, gate "OK: all 2 classes ran". `RouteWaysTest`
+  printed the same counts and digests on CI as locally.
+- No described link is reverse on either square, and the end-pair dedupe drops none [C]: `isReverse` and the dedupe
+  are compared but only ever see one value. Whether any Forager square has a reverse described link [?].
+- `ByteArrayUnifier.unify`'s crc-crosscheck branch is exercised only by `ByteArrayUnifierTest`; whether the
+  route-ways read reaches it with `validateImmutability` true is no: `OsmNodesMap` passes false (`OsmNodesMap.kt:22`) [R].
+- The route-ways test compares the calls of `BRouterRouteWays.read`, not Forager's code itself: the cell, square-name
+  and `tagsOf` arithmetic is copied into the test from a0535ece (`RouteWaysTest.kt`), so a later change on Forager's
+  side would not be seen [I].
 - The forward `WaypointMatchTest` with the fix was not run on its own; the two scratch reverts ran it with the
   revert in place [C]. CI's `jvm` run will run it forward.
+
+## Handoff (ninth session's, item 4 closed)
+Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`; `origin/brouter-port-5b` is the commit that added this
+section. Tree clean, nothing running. Items 0 to 4 of -74 are done (section 4). Next: items 5 and 6 as -70 sets them.
+Before any push touching `commonMain`, run the full `:brouter:jvmTest` (planner's condition). Scratch: `run/` (logs),
+`rev3/`, `rev4/`, `rev4u/` (revert runs), `ci/` (CI logs), `fx/` (local fetches).
 
 ## Handoff (eighth session's, at the planner's message, 04:35Z)
 Clone `/home/user/forager-ios-5a`, branch `brouter-port-5b`; check `origin/brouter-port-5b` is the commit that added
