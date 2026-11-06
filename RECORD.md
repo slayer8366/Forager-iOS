@@ -3167,3 +3167,47 @@ output to a file and read only its summary lines, and never to print a stratum l
 - **A wrong premise in Phase 1's E4,** carried into -77: it listed kind 3 by the engine's message, without checking that
   Forager's configuration reaches it. "Check reachability before measuring behaviour" (Forager's CLAUDE.md) applies.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -80.
+
+**Kind:** decision
+**ID:** 2026-10-28-80
+**Timestamp:** 2026-11-06T06:06:11Z
+**Continues:** 2026-10-28-77, 2026-10-28-79
+**Title:** FK's families for kinds 4, 5, 7 and 8; a cut-short or flipped tile can route without error, so three extra cases
+are named; NT and CR full
+**Observed (Linden, session 23, as reported; nothing committed for FK yet, probes in scratch):**
+- **CR** 59 of 59 at draw 83, 0 unstable, 0 coverage stops. **NT** 59 of 59 by draw 89, 0 unstable (-79). LB was running.
+- **The FK probes, on the oracle jar under Temurin with Forager's params:**
+  - **Kinds 1 and 2:** 15 of 15 give "not mapped".
+  - **Kind 6:** 12 of 12 give "datafile W80_N40.rd5 not found".
+  - **Kind 3 (-79's start on an island):** "no track found at pass=0", on 11 islands.
+  - **Kind 4:** "target island detected" from 7 of 32 guessed islands.
+  - **Kind 5:** the matcher snaps only to ways the profile can use, so E4's construction gives "not mapped" or "no track
+    found".
+  - **Kind 7, cuts of E170_S50:**
+    - at 200, 201, dataEnd/2, dataEnd−1 and dataEnd+1: "file of size N too short, should be 1061704";
+    - **at dataEnd: a raw "Index -399101066 out of bounds for length 65636"**;
+    - **at 1, 100, 199 and size−1: the route succeeds, with no error.**
+  - **Kind 8, flips:**
+    - bytes 37, 100, 150 and 199: "top index checksum error";
+    - byte 1: "lookup version mismatch";
+    - **bytes 203 to 219, in the sub-index: the route succeeds.**
+**Decision (the planner's, technical):**
+- **Kind 4:** islands drawn by a seeded generator, counted, capped at 200 draws (20 × 10). Family: "target island
+  detected".
+- **Kind 5 keeps E4's intent,** and Linden's proposal is rejected because it would duplicate kinds 3 and 4: an end on a way
+  the profile cannot use, with no usable way within 250 m. Family: "not mapped", the same as kind 2. **The report states
+  that on Forager's path kinds 2 and 5 share a family, as kinds 3 and 5 would have.**
+- **Kind 7:** family "file of size * too short, should be *", with the 10 cuts chosen to reach it.
+- **Kind 8:** family "top index checksum error", with flips in bytes 8 to 199.
+- **Three named extra cases outside FK's 110,** compared on outcome, because the port must match what Java does with a
+  damaged tile and none of these is padding:
+  - **FK7-x1,** the cut at dataEnd, compared by exception class. Its message text is the JVM's, so **step 10 must read it
+    on iOS**, where Kotlin/Native's wording may differ [I].
+  - **FK7-x2,** one cut-short tile that routes with no error.
+  - **FK8-x1,** a sub-index flip that routes with no error.
+- **Kinds 9 to 11** (time limit, cancel modes) need harness changes and go to the next session.
+**For the owner, information, not a decision:** Java's BRouter can route on a tile that is cut short or has a flipped byte
+in its sub-index, without reporting an error. That is the engine Android runs. Whether Forager's own check before routing
+(`RoutingDataFolder.headerProblem`, `RoutingDataFolder.kt:48-53` at Forager `e2969abe`, cited on `brouter-port` at
+`Route.kt:51`) catches these copies is [?], not read here.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -81.
