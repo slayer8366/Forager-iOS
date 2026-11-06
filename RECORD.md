@@ -3461,3 +3461,49 @@ values are first compared.
 milestone report to the owner (Amendment 3).
 **Abort conditions:** -3's; a case whose R1 differs from the R1 its stratum recorded; any coordinate in a staged diff.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -89.
+
+**Kind:** outcome
+**ID:** 2026-10-28-89
+**Timestamp:** 2026-11-06T12:47:59Z
+**Continues:** 2026-10-28-3, 2026-10-28-88
+**Title:** Milestone: step 1b complete; 2,126 expected values written from R1, each equal to its stratum's log; CI green
+**Observed:** Linden Caliper, session 26, `brouter-port` `f308f88` to `fcd35ff` (three commits; plain pushes; no model name
+in any trailer; checked by the planner).
+- **The file** `brouter/src/jvmTest/resources/e3/expected-1b.tsv` (216,164 bytes). **Checked by the planner:**
+  - **2,126 rows:** F0 2, F0h 8, R 1,534, DL-lat 59, DL-lon 59, MP64 59, ML5 59, **PM5 55**, NT 59, CR 59, LB 59, FK 114;
+  - modes: 2,120 exact, 3 family (FK9-0001, -0037, -0040, named in the head), 3 outcome (FK's extra cases);
+  - **every tuple digest recomputed by the planner's own script, 0 mismatches;**
+  - no coordinate in any form (-87's scan);
+  - the head names the JDK (Eclipse Adoptium, 21.0.13+9-LTS, amd64).
+- **The tuple digest** is FNV-1a over the UTF-8 bytes of `kind|nodes|cost|distance|nodeDigest|heightsDigest`. That byte form
+  is Linden's choice where E1 says only "the tuple's bits". Accepted: it is stated in the file's head, and checked outside
+  the JVM.
+- **`R-shortest-025` is exact:** it was stable through all six regimes at write time, so -50's exclusion did not apply.
+- **The R1 cross-check:** the writer ran all strata again on the pinned Temurin (19 min). Each case's R1 equals the R1 its
+  stratum logged, 2,126 of 2,126 [R, as reported]. In CI, `E3ExpectedFileTest.everyRowIsTheR1ItsStratumLogged` passes
+  against the committed stability tables.
+- **Failing first:** one cost changed in scratch (7405 to 7406) gave 2 of 6 failures naming only that row, as predicted. The
+  results were live (0 ` e: `, the XML written after the edit), and the file was restored from a saved copy.
+- **CI, read by the planner** (run 42219674828 on `fcd35ff`, `success`): `jvm` 101 tests, 0 failures, with all six
+  `E3ExpectedFileTest` methods passing; 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 23 of 23
+  (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2 classes ran".
+- **A fragility:** the per-case lists the writer reads (`build/e3/*/cases.tsv`) hold coordinates, so they are never
+  committed (E1), and they exist only in this container. Rewriting the values in a fresh container means regenerating them.
+  The generators are seeded and their sequences pinned by digest (R's by `E3RSequenceTest`), so they can be regenerated
+  [I: R's pin is checked, the others' are not].
+- **Unverified:** whether the values hold on another JDK, CPU or Android's runtime (E2 claims none); FK10's precondition,
+  Linden's own addition; how iOS reads the file (step 10).
+**The milestone, for the owner (Amendment 3):** what 1b proves, and what it does not.
+- **It proves the oracle agrees with itself.** Across 2,126 cases in 12 strata, Java's BRouter gives one answer under six
+  regimes (separate JVMs, parallel runs, logging, coverage), apart from 3 timing voids in FK9.
+- **It fixes those answers as the targets.** Each stratum's clean run will bound the port's disagreement rate (E5):
+  - R, pooled, below **0.195%**;
+  - each 59-case stratum below **4.95%**;
+  - PM5 below **5.30%**;
+  - FK, F0 and F0h claim no rate.
+- **1b ran no port code.** Nothing yet speaks for the port's routes: they are first compared with these values at step 6.
+- **It speaks only for HotSpot 21.0.13+9 on x86_64** (E2), not for Android's runtime, not for arm64 HotSpot, and not yet
+  for iOS.
+**Next:** the port's own router (steps 6 to 8) on `brouter-port-5b`'s line, the graph half being there (-61), unmerged until
+step 10 answers -61. The draft milestone report is in the Phase 2 report, under "Step 1b finished".
+**Notes:** Written by the planner session of -56 by hand. Next free ID -90.
