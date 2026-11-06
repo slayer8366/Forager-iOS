@@ -2957,3 +2957,46 @@ the planner's message after the watcher read 181,696 at 04:19:13Z. Report: `docs
 **Next for 1b:** NT, LB, CR and FK, which are not built. NT and CR need the first coverage reader, seen failing first
 (-50). Then the expected values, with PM5 at n = 55.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -74.
+
+**Kind:** outcome
+**ID:** 2026-10-28-74
+**Timestamp:** 2026-11-06T04:44:19Z
+**Continues:** 2026-10-28-65, 2026-10-28-70, 2026-10-28-72
+**Title:** 5d item 3: `MicroCache2`'s decoder ported, 25,072 caches equal to the oracle; a silent stub left on a live
+path, to be undone first; F0h's tile wired on this branch
+**Observed:** Plumb Ledger, session 8, `brouter-port-5b` `d293fd4` to `4345f71` (four commits; clean tree). It handed off at
+the planner's message after the watcher read 180,163 at 04:35:47Z.
+- **The port:** 467 lines added and 9 removed in 7 `commonMain` files (`git diff --stat`, checked by the planner):
+  - `MicroCache2`'s constructor, `readUnified`, `expandId` and `shrinkId`;
+  - `LinkedListContainer`;
+  - 5 `ByteDataReader` and 8 `ByteDataWriter` methods;
+  - `MicroCache.getIdForIndex` and `expandId`.
+
+  Overloads were checked by signature against `reached-methods.tsv` [R, as reported].
+- **`MicroCache2DecodeTest`:**
+  - over the stubs: 5 of 5 failed, each at cache 0, `[size]`, with 0 compile errors;
+  - forward: 5 of 5 passed, with **25,072 caches** compared field by field over the five pinned tiles [R, as reported].
+  - Its revert (one link's `dlat` sign flipped) is predicted and pushed (`ae97c7b`) but **not run**.
+- **CI, read by the planner** (run 42163527776 on `4345f71`): `jvm` 107 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7
+  of 7, with the gate reading "OK: all 2 classes ran".
+- **Unverified:** whether the sample reaches the `featureId == 13` escape or `injectSize`'s shift branch.
+
+**A silent stub on a live path, against Forager's CLAUDE.md** ("An unsupported feature or capability returns an explicit
+'unsupported,' never a fabricated plausible value"):
+- `OsmNode.kt:110` is `fun parseNodeBody2(...) {}`, an empty body, and `parseNodeBody` calls it at `:103` [R, read by
+  the planner]. So at `4345f71` a `MicroCache2` node decodes as nothing, where before it threw.
+- Plumb disclosed it, and only tests reach it today.
+- **The planner's call:** the next session's first act is to make the stub throw a named "unsupported", seen first in a
+  test, before item 4 ports the method. No stub on a live path ever returns an empty value again: stubs throw
+  `NotImplementedError`, as 5c's did.
+
+**Plumb's open question, answered (the planner's call, technical):**
+- F0h's tile is not wired on `brouter-port-5b`. It is fetched here with the same pin as on `brouter-port`, by
+  `tools/fetch-pinned.sh` (as `fetch-f0h.sh` does there).
+- **Rejected:** testing F0h's ends on F0's fixture. -65 names F0h's ends, and F0's square is a different extract, a week
+  older and without heights (-56), so the comparison would be about other data.
+
+**A small wrong premise in -70:** `tools/fetch-pinned.sh` already exists here. Item 4 adds a `tools/fetch-dropoff.sh` that
+calls it.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -75.
