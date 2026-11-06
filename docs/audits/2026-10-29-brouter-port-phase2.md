@@ -2419,3 +2419,52 @@ The total is 2,126 cases: E5's 2,118, plus F0h's 8 and FK's 4 extra cases, minus
   - `runner/bite-check.sh` is new; `revert-check.sh` is unchanged;
   - case 2's name, and its comment saying it stops short of the branch;
   - case 2 was built as the ruling words it, although its stated purpose does not hold (see that section).
+
+## FK kind 5 on `hiking-mountain`: short at 6 of 10, a stop (twenty-seventh session, Linden Caliper)
+Dispatch: RECORD -95, -96. Baseline `fcd35ff`. Commits `d841cfd` (the generator change and the prediction, pushed before
+the run) and this report's commit. Only `brouter/src/jvmTest/` and `docs/` are touched; no `commonMain` change.
+
+### The change [R]
+- `E3FKTest.profileOf(5)` is now `hiking-mountain` (it was `car-fast`, a Kinematic profile the port refuses, -95). Docs in
+  `E3FKTest` and `FKGenerator` follow it. Nothing else in the construction changed: seed 20261208 + 5, start and end drawn
+  separately, cap 400, every rejection counted by reason, nothing chosen by the oracle's outcome (-82).
+- **The distance is the generator's `FAR_METRES`, 300 m,** as on `car-fast`. It meets "more than 250 m" (-95, E4). I did
+  not lower it to 250: the constant is shared with kinds 1 and 2, whose rows must not change.
+- Prediction: `step1b/32-fk5-hiking-prediction.txt`, pushed in `d841cfd` before the run. It said the fill could not be
+  called in advance, and that a short kind is a stop.
+
+### The run [C]
+`e3Strata --tests '*E3FKTest.fkKind5*' --max-workers=2` on Temurin 21.0.13+9 (`step1b/32-fk5-hiking-e3Strata.log`,
+`step1b/32-fk5-hiking-stability.tsv`). BUILD FAILED in 25 s, by the test's own stop.
+- **6 of 10 after 400 draws.** The draws: 7 starts, all accepted (the 7th was left without an end at the cap); 393 end
+  draws, of which 6 were accepted, **353** had a `hiking-mountain`-usable link within 300 m, and **34** had 3 x 3 cells
+  leaving the tile. 7 + 6 + 353 + 34 = 400. No start was rejected.
+- **The 6 drawn reached one family,** "to-position not mapped in existing datafile" (FK5-01's), 6 of 6, all stable in
+  the six regimes. The tuple is `0|0|0` with the empty digests, as on `car-fast`.
+- **This is a stop** (-82, -96: "kind 5 short"). Nothing was changed after the run.
+
+### Not done, because of the stop
+- `expected-1b.tsv` is unchanged, so no `cmp` was needed; `E3Expected`'s FK table is still `30-fk-stability.tsv`.
+- **One thing the file would show [I]:** the stored FK5 rows hold no profile and no ends. If kind 5 fills in this family,
+  its 10 rows are `to-position not mapped…|0|0|0|…` as now, byte for byte. The rewrite would change only which table they
+  are checked against.
+
+### Checks
+- **Full `:brouter:jvmTest`, fresh** (`--rerun-tasks`, started 17:21:03Z): 101 tests, 0 failures, 44 XML files, all
+  written after the start; 0 ` e: ` lines [C].
+- **E1:** the scan of each staged diff read 0, the committed log and table included [C].
+
+### Options for the planner (not chosen)
+- **(a) A larger cap.** At this run's rate, about 1 end in 66 draws, 10 cases need about 670 draws [I]. The draws are
+  unselected by outcome, so a cap is a harness limit, as -82 put it.
+- **(b) Kind 5's own distance at 250 m,** E4's own figure, with kinds 1 and 2 kept at 300. How much it raises the rate
+  is not known.
+- **(c) Keep 6.** -82 rejected this for `car-fast` ("a harness limit, not a finding").
+
+### Handoff (twenty-seventh session)
+1. **Nothing is running.** Head is this report's commit on `brouter-port`.
+2. **`build/e3/FK5/` now holds the 6-case `hiking-mountain` run.** The `car-fast` folder it replaced is kept in scratch
+   (`linden/32-old-FK5-carfast`). `build/e3/FK/cases.tsv` still holds the `car-fast` FK5 lines; the writer reads that.
+3. **To finish after a ruling:** change kind 5's cap or distance with a new prediction, rerun kind 5 alone, then give the
+   writer kind 5's new list and table: FK's list with its FK5 lines replaced, and `E3Expected` reading FK5's rows from
+   kind 5's own table. Then `cmp` the file without FK5's rows, before and after.
