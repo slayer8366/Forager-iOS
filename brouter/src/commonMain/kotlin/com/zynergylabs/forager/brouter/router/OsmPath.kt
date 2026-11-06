@@ -6,6 +6,11 @@ import com.zynergylabs.forager.brouter.mapaccess.OsmNode
 
 /** Port of BRouter 1.7.10's `btools.router.OsmPath`. A stub until step 6 ports it. */
 internal abstract class OsmPath : OsmLinkHolder {
+    /** `OsmPath.java:19`, `:31` and `:69`, which `OsmPathElement.create` reads; the rest arrive with the port. */
+    var cost: Int = 0
+    var originElement: OsmPathElement? = null
+    var message: MessageData? = null
+
     fun getTargetNode(): OsmNode? = TODO("step 6: OsmPath")
 
     open fun init(link: OsmLink): Unit = TODO("step 6: OsmPath")

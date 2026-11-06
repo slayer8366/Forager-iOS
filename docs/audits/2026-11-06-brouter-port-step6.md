@@ -226,3 +226,24 @@ beside it (its null return).
 made `return false`): `GraphHalfTest` fails, and only it among the filter's classes. The first differing line is an
 `obtain` line, oracle `true`, port `false`, in the first case, `F0-inside-across-the-degree-line`, mode 1. Nothing before
 it differs: the node is woven all the same, so the graph and every `hasHollow` stay equal; only the returned value changes.
+
+**Revert D, observed** (`rev/D-directweave-*`): 0 compile errors, 1 fresh XML, file restored (cmp equal; `git diff` against
+`bcba78d` empty after). `GraphHalfTest` failed at `F0-inside-across-the-degree-line mode 1 ...: line 3`, an `obtain` line,
+oracle `true`, port `false`: as predicted. The texts' lengths differ too (6,915 lines against 5,391): `getStartNode`
+returns null when its obtain does, so its reachable nodes are not written. That follows from the same edit; the prediction
+spoke only of the first differing line.
+
+**`MessageData` and `OsmPathElement`** (`router/`). `MessageData`: every field, `copy` (Java's shallow `clone`), `getPrio`,
+`isBadOneway`, `isRoundabout`, `isLinktType`, `isGoodForCars` and `toString` (T2's list); `toMessage`, `add` and
+`isGoodOneway` are not ported (unreached). `OsmPathElement`: T2's 16 methods; `setAngle` and the stream methods are not
+ported. `calcDistance` takes `libm`. `OsmPath`'s stub gains `cost`, `originElement` and `message`, which
+`OsmPathElement.create(path)` reads; `create(path)` itself waits for `OsmPath` to be tested.
+- **`PathElementTest`**, 2 tests: `MessageData` against the oracle's by reflection over Java's 22 field names (defaults,
+  then 1,999 seeded fillings, each before and after `copy`), with `toString`, `getPrio` and the masks; `OsmPathElement` on
+  3,000 seeded points (getters, `getElev`, `getIdFromPos`, `toString`, `calcDistance` near and far on `OracleLibm`,
+  `positionEquals`, time and energy with and without a message). Passes. It was written over the code, not over stubs, so
+  reverts E and F stand for the failing run.
+- **Revert E, predicted:** `copy` drops `extraTime` (`d.extraTime = extraTime` removed). Only
+  `messageDataMatchesTheOracle` fails, at `case 1: copy's extraTime` (case 0 is the defaults, where both are 0).
+- **Revert F, predicted:** `calcDistance`'s `max(1.0, ...)` made `max(0.0, ...)`. Only `osmPathElementMatchesTheOracle`
+  fails, on `calcDistance`, at an even case (a near point, `dx` from -3 to 3, where a distance rounds to 0).
