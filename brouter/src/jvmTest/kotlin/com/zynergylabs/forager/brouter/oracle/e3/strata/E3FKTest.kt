@@ -22,7 +22,7 @@ import kotlin.test.assertTrue
  * - **Kind 3** (`trekking-noferries`; RECORD -85): island-start draws ([FKGenerator]), selected by the oracle's R1
  *   ([E3Select]) for "no track found at pass=0", counted by outcome, capped at [CAP]; also run alone by its own test.
  *   The first run took the first 10 draws unselected and reached that family in none of them (6 not mapped, 4 routed).
- * - **Kind 5** (`hiking-mountain`; RECORD -82, -95): start and end drawn separately, capped at [CAP5]; run alone by its
+ * - **Kind 5** (`hiking-mountain`; RECORD -82, -95, -98): start and end drawn separately, capped at [CAP5]; run alone by its
  *   own test. It was first built on `car-fast`, a Kinematic profile the port refuses (-95), so it could not be compared.
  * - **Kind 4:** island draws ([FKGenerator]), selected by the oracle's R1 ([E3Select]) for "target island detected" (-80),
  *   counted, capped at [CAP].
@@ -290,8 +290,11 @@ class E3FKTest {
         const val N = 10
         const val CAP = 20 * N
 
-        /** Kind 5's cap (RECORD -82): a start and an end are two draws. The first run's 200 was this test's own choice. */
-        const val CAP5 = 400
+        /**
+         * Kind 5's cap (RECORD -82, -98): a start and an end are two draws. The first run's 200 was this test's own choice;
+         * 400 left `hiking-mountain` at 6 of 10 (about 1 end in 66 draws), so -98 raised it to 1,000.
+         */
+        const val CAP5 = 1000
 
         /** Kind 3's family (RECORD -79, -85): a start on a usable component that cannot reach the target. */
         const val KIND3 = "no track found at pass=0"

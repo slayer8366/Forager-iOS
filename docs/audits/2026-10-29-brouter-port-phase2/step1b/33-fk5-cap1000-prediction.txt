@@ -1,0 +1,16 @@
+Written 2026-11-06 by Linden Caliper, session 28 (RECORD -96, -98), before kind 5's rerun, on brouter-port after cc01338.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3FKTest.fkKind5*' --console=plain
+     --max-workers=2
+Change: kind 5's cap, 400 -> 1,000 draws (-98). Nothing else changes: hiking-mountain, seed 20261208 + 5, start and end
+drawn separately, the end beyond any usable link within 300 m (FAR_METRES), every rejection counted by reason, nothing
+chosen by the oracle's outcome.
+
+Prediction [I]:
+- The draws are one seeded sequence, so the first 400 are those of session 27: FK5-01 to FK5-06 are the same cases, and
+  the 7th start is the same.
+- At session 27's rate (about 1 end in 66 draws) the 10th case falls near draw 660, within 1,000. If kind 5 is short
+  again: E3 FK STOP, reported to the planner, nothing changed after the run.
+- If it fills: family "to-position not mapped in existing datafile", 10 of 10; 0 unstable of 10. The rejections stay
+  before routing: a usable link within 300 m, or cells leaving the tile.
+- The tuple is 0|0|0 with the empty digests, so kind 5's 10 rewritten rows of expected-1b.tsv equal the old ones byte
+  for byte; the ends and the profile are not stored in the file.
