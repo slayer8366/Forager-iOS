@@ -3785,3 +3785,43 @@ cases check the refusal. FK kind 5 is rebuilt on a foot profile. Nothing unteste
 - **Observed for the record:** kind 5 on a foot profile is now built like kind 2 (an end beyond any usable way), and shares
   its family, as -80 foresaw.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -99.
+
+**Kind:** outcome
+**ID:** 2026-10-28-99
+**Timestamp:** 2026-11-06T17:41:08Z
+**Continues:** 2026-10-28-24, 2026-10-28-49, 2026-10-28-76, 2026-10-28-95, 2026-10-28-97
+**Title:** Step 6, second session: `RoutingContext`'s nogo half and three small classes ported; `NodesCache`'s graph half
+was never ported, a debt from 5b; the planner's rulings on the path-cost comparison
+**Observed:** Plumb Ledger, session 11, `brouter-port-5b` `46fc891` to `079537f` (two commits; clean tree; no model name;
+checked by the planner).
+- **Ported:**
+  - `RoutingContext`'s second half (the nine methods T2 keeps, in `RoutingContextNogo.kt`);
+  - `OsmNodeNamed`, with `distanceWithinRadius` and `decodeNogo` throwing a named "unsupported";
+  - `OsmNogoPolygon` and `AreaInfo`, as types, with their unreached methods refusing.
+- **`RoutingContextNogoTest`:** 4 tests, seen failing over the stubs, passing on the port. Revert C was predicted at 1 of 4
+  failing on `wf=`, and observed exactly so [R, as reported].
+  - It runs on `OracleLibm`, because `MsunLibm`'s scale table moved one radius's last bits. That is -24's rule: logic runs
+    inject the oracle's table. Accepted.
+- **Still to do:** `OsmPath` and `StdPath` (still stubs), `MessageData`, `OsmPathElement`, `RoutingParamCollector`,
+  `SearchBoundary`. The `(int)` cast revert, -62's `interpolateEle` and the path-cost comparison all wait on them.
+- **CI, read by the planner** (run 42262870661 on `079537f`): `jvm` 127 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7 of
+  7, with the gate reading "OK: all 2 classes ran".
+
+**A debt from 5b, found by Plumb and confirmed by the planner:**
+- `NodesCache`'s graph half was never ported: `getGraphNode`, `obtainNonHollowNode`, `expandHollowLinkTargets`,
+  `hasHollowLinkTargets` and `getStartNode` (Java `NodesCache.java:213-300`, about 90 lines) [R].
+- The port's own header says it "arrives with step 5b" (`NodesCache.kt:14-16`). -49 recorded it as "waiting for 5b and 5c".
+  Neither step ported it, and the planner's checks at -60, -69 and -76 did not see that.
+
+**Decision (the planner's, technical):**
+- **Step 6's next session ports the graph half first,** as 5b's debt, with its own differential test against the oracle:
+  the same nodes on both engines from real tiles, compared field by field. It is seen failing over the stubs, and a revert
+  bites.
+- **The path-cost comparison is then made from Forager's real ends,** by copying `RoutingEngine.getStartPath`'s steps in test
+  code over the ported graph half: F0's and F0h's ends, and a fixed sample of R's ends on the 20 Std profiles.
+  - Plumb's link-midpoint comparison on F0h is **accepted as an addition** for breadth, not instead of the real ends.
+  - A cut at a link midpoint is not a place Forager starts.
+- **The `(int)` cast revert runs on profiles whose `turncost` is above 0,** since `hiking-mountain`'s is 0 and the revert
+  would not bite there. Its prediction names the profiles.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -100.
