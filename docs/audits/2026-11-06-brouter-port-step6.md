@@ -247,3 +247,29 @@ ported. `calcDistance` takes `libm`. `OsmPath`'s stub gains `cost`, `originEleme
   `messageDataMatchesTheOracle` fails, at `case 1: copy's extraTime` (case 0 is the defaults, where both are 0).
 - **Revert F, predicted:** `calcDistance`'s `max(1.0, ...)` made `max(0.0, ...)`. Only `osmPathElementMatchesTheOracle`
   fails, on `calcDistance`, at an even case (a near point, `dx` from -3 to 3, where a distance rounds to 0).
+- **Revert E, observed** (`rev/E-copy-extratime-*`): 0 compile errors, 1 fresh XML, restored (cmp equal). 1 of 2 failed,
+  `messageDataMatchesTheOracle` at `case 1: copy's extraTime`, port 0: as predicted.
+- **Revert F, observed** (`rev/F-caldist-max-*`): 0 compile errors, 1 fresh XML, restored (cmp equal). 1 of 2 failed,
+  `osmPathElementMatchesTheOracle` at `case 0: calcDistance`, oracle 1, port 0: as predicted. `git status` was clean after
+  both.
+
+**Full runs:** on `bcba78d`, 128 tests; on `f848da4`, 130; both fresh (`--rerun-tasks`), 0 ` e: ` lines, only
+`CollectOutreachersTest`'s 2 red. The gated E1 scan read 0 before each push.
+
+**Next, for session 13** (in this order; -99's order, with piece 1 done):
+1. **`OsmPath` and `StdPath`**, with -97's rulings (`kotlin.math.exp`; the start-direction branch, `OsmPath.java:282-283`,
+   a named "unsupported" with a test) and §8's list of casts. `OsmPath`'s stub already holds `cost`, `originElement` and
+   `message`; the rest of its fields go beside them. `OsmPathElement.create(path)` is first reached there and is
+   compared with it.
+2. **The path-cost comparison from Forager's real ends:** `RoutingEngine.getStartPath`'s steps (`RoutingEngine.java:
+   1818-1870`) copied into test code over the graph half. `GraphHalfTest`'s `OracleSide`/`PortSide` already make the
+   two caches and the four graph nodes as `_findTrack` does (`:1911-1928`), so the comparison can start from them. F0's
+   and F0h's ends (from `E3F0hTest.ENDS`, now `internal`), and a fixed sample of R's ends on the 20 Std profiles (seeds
+   in `E3RProfilesTest.SEEDS`). The link-midpoint comparison may be added beside it.
+3. **Reverts:** `StdPath`'s `(int)` cast, on the profiles whose `turncost` is above 0 (read from the 20 profiles and named
+   in the prediction before it runs); -62's `interpolateEle` `short` cast on F0h's cut ends.
+4. Then `RoutingParamCollector` and `SearchBoundary`.
+
+**Unverified:** that the 64 KiB run reaches the collection branch of `obtainNonHollowNode` (`cacheSum` is private on both
+engines and not read) [I]; that `obtainNonHollowNode`'s `getAndClear`/`parseNodeBody` branch is reached at all under
+direct weaving [I, not counted]; native `Float.toString` in `MessageData.toString` [?]; the rest of §8's list.
