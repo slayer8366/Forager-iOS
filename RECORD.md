@@ -3850,3 +3850,42 @@ checked by the planner). The cap change and the prediction were pushed before th
 **So -95's ruling is carried out on `brouter-port`.** Plumb merges `brouter-port` into `brouter-port-5b` again at a step 6
 boundary (-96).
 **Notes:** Written by the planner session of -56 by hand. Next free ID -101.
+
+**Kind:** outcome
+**ID:** 2026-10-28-101
+**Timestamp:** 2026-11-06T18:13:54Z
+**Continues:** 2026-10-28-90, 2026-10-28-97, 2026-10-28-99
+**Title:** Step 6, third session: `NodesCache`'s graph half ported (5b's debt paid), with `MessageData` and `OsmPathElement`;
+two process gaps; a CI run lost to a 503 and re-run once
+**Observed:** Plumb Ledger, session 12, `brouter-port-5b` `079537f` to `a83ff3f` (three commits; clean tree; no model name;
+checked by the planner). The watcher closed at 159,941.
+- **The graph half** (`getGraphNode`, `obtainNonHollowNode`, `expandHollowLinkTargets`, `hasHollowLinkTargets`,
+  `getStartNode`; `NodesCache.java:213-300`) is ported, and `NodesCache.kt`'s header is corrected.
+  - **`GraphHalfTest`** starts from F0's 2 ends, F0h's 8 and 20 of R's on `hiking-mountain`. It covers cleanup modes 1 and
+    2 plus a 64 KiB run.
+  - Over the stubs it failed with `NotImplementedError`. On the port: 90 runs, 1,378,140 transcript lines equal [R, as
+    reported].
+  - Revert D (`obtainNonHollowNode`'s direct-weaving return flipped) was predicted at the first `obtain` line, and observed
+    there.
+- **`MessageData` and `OsmPathElement`** are ported with T2's methods. `PathElementTest` compares them by reflection over
+  Java's field names. Reverts E (`copy` drops `extraTime`) and F (`calcDistance`'s floor) each failed exactly as predicted.
+- **Still to do:** `OsmPath` and `StdPath` (stubs), `RoutingParamCollector`, `SearchBoundary`; the path-cost comparison; the
+  `(int)` and `interpolateEle` reverts. That is 1,019 Java lines left in step 6 (T2's port list, summed by the planner).
+- **CI, read by the planner:**
+  - Run 42266847677 on `f848da4`, first attempt: the `jvm` job failed before any test, on a `curl` 503 in
+    `:brouter:msunReference`. That is infrastructure, not this branch's code. **Re-run once by the planner.**
+  - Attempt 2: `jvm` 130 tests, 2 failures, both `CollectOutreachersTest` (-61); 0 ` e: ` lines; both `compileKotlinIos*`
+    ran. `ios-smoke` passed on attempt 1: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, with its gate.
+
+**Two process gaps:**
+- **`PathElementTest` was written over finished code,** not seen failing over stubs first. Reverts E and F show the test can
+  fail, but Forager's CLAUDE.md asks to "see the failure before writing the fix". From now on, every test is seen failing
+  over stubs before the port it checks. A revert does not stand in for that.
+- **Reverts D, E and F's result files are in scratch only** (`rev/D-*`, `rev/E-*`, `rev/F-*`), cited in the report but not
+  committed. Scratch does not survive a new container. The next session commits them under `step6/`, scanned for E1, as
+  reverts A to C were.
+
+**Cost (the planner's own gap):** -90 said the cost would be counted per session, and it has not been summed. From here,
+each session's final context is recorded in its outcome. This planner run has dispatched 17 coder sessions, each ending
+between 108k and 194k of context. That is the context at the end, not the tokens billed, which the planner cannot see.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -102.
