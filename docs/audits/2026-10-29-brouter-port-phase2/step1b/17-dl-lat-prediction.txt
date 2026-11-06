@@ -1,0 +1,13 @@
+Written 2026-11-06 by Linden Caliper, session 21 (RECORD -64), before the DL-lat run, on brouter-port 3688c9f.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3DLTest.dlLat*' --console=plain
+Seed 20261201 (pushed in 85008b1), hiking-mountain, tuple kind|nodes|cost|distance|nodeDigest|heightDigest.
+
+Predictions [I], restating the nineteenth session's and adding figures:
+1. Filled: 59 of 59 taken within the cap of 1,180 draws.
+2. Rejections: roughly half of all draws are rejected before routing (bearing away from the line); among routed
+   candidates, some are "no route" and some "route on one side". Guess: 59 taken within about 300 draws.
+3. R2's tuple differs from R1's: 0 draws.
+4. E3: 0 unstable of 59 (E3's stop is more than 2 of 59).
+5. The selection's R1 tuple and R2 lines equal E3's in 59 of 59.
+6. No compile error (no " e: " line) and the JDK line names Temurin 21.0.13+9; select.tsv draw numbers run 1..n
+   with no gap, taken ids rise, and rejected counts sum to draws minus taken.
