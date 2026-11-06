@@ -1,0 +1,17 @@
+Step 1b, the expected values' file test seen failing first (RECORD -88). Written and pushed before the run (Linden Caliper, session 26).
+
+The scratch revert, never committed: in brouter/src/jvmTest/resources/e3/expected-1b.tsv, row "F0 F0-inside-long", the cost
+field is changed from 7405 to 7406. Its tupleDigest is left as written. The file is first saved to a scratch copy, and is
+restored from that copy (not from git), then compared byte for byte with the copy.
+
+The run: :brouter:jvmTest --tests '*E3ExpectedFileTest*', on the JVM running Gradle, as every jvmTest runs.
+The build log is checked for compile errors (" e: " lines) before the JUnit XML is read, and the XML's timestamp must be
+after the edit.
+
+Predicted: 6 tests in E3ExpectedFileTest, 2 failures, 4 passes.
+- everyTupleDigestIsItsTuple FAILS, naming exactly [F0-inside-long].
+- everyRowIsTheR1ItsStratumLogged FAILS, naming exactly one row: "F0 F0-inside-long (exact): stored route|306|7406|...,
+  logged route|306|7405|...".
+- headNamesThePinnedJdk, everyStratumHasItsCount, exclusionsAreNamedAndOnlyThem, fkExtraCasesAreComparedOnOutcome PASS
+  (the edit changes neither the head, the counts, the compare column nor any FK row).
+Any other failure, or a failure naming another row, means the test or the run is wrong, and is not cited as this check.
