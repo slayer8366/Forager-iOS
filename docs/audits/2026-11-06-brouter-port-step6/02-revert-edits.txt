@@ -1,0 +1,13 @@
+Each revert: one edit to the file as committed at de4d994, made by tools in scratch (revert.sh), run with
+`:brouter:jvmTest --tests 'com.zynergylabs.forager.brouter.router.*'`, the file restored from a copy saved before
+the edit and compared with cmp, the JUnit XML deleted before each run.
+
+A-lock, router/ProfileCache.kt:
+  - fun parseProfile(rc: RoutingContext, fileSystem: FileSystem): Boolean = synchronized(lock) {
+  + fun parseProfile(rc: RoutingContext, fileSystem: FileSystem): Boolean = run synchronized@{
+B1-maxspeed, router/RoutingContext.kt (did not compile; not read):
+  - v("maxSpeed", 6f) / 3.6 else
+  + v("maxSpeed", 6f) / 3.6f else
+B2-maxspeed, router/RoutingContext.kt:
+  - v("maxSpeed", 6f) / 3.6 else
+  + (v("maxSpeed", 6f) / 3.6f).toDouble() else

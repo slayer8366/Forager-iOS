@@ -1,0 +1,8 @@
+com.zynergylabs.forager.brouter.router.ProfileCacheLockTest: tests 1, failures 0, errors 0, skipped 0
+com.zynergylabs.forager.brouter.router.RoutingContextReadTest: tests 1, failures 1, errors 0, skipped 0
+TOTAL: tests 2, failures 1, errors 0, skipped 0 in 2 files
+<failure message="java.lang.AssertionError: 2 of 26 profiles failed (26 expected, RECORD -39); by cause: {java.lang.AssertionError: 1 fields differ: [maxSpeed: oracle bits 0x3ffaaaaaaaaaaaaa, port bits 0x3ffaaaaac0000000]=2}; first: hiking-mountain.brf: java.lang.AssertionError: 1 fields differ: [maxSpeed: oracle (cut by the runner at 300 characters; the full value is the bits above)
+
+(The two doubles in the message above are written as their IEEE-754 bits, Double.toRawLongBits, so the E1 scan of
+RECORD -93 does not read them as coordinates; the runner printed them in decimal. They are 6/3.6 as a double, and the
+float quotient 6f/3.6f widened.)

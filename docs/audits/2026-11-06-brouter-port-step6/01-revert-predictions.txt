@@ -1,0 +1,10 @@
+Revert A, lock-removed (ProfileCache.parseProfile: `= synchronized(lock) {` -> `= run synchronized@{`, which keeps the
+return label):
+  ProfileCacheLockTest fails with "threads inside parseProfile at once expected:<1> but was:<2>".
+  RoutingContextReadTest passes (one thread).
+Revert B, maxSpeed-float (RoutingContext.readGlobalConfig: `/ 3.6 else` -> `/ 3.6f else`, so the foot branch divides
+as float):
+  RoutingContextReadTest fails with maxSpeed differing on the foot profiles only (footMode true), and on no other
+  field. ProfileCacheLockTest passes.
+Revert B, first form: did not compile (Float and Double if/else branches; 1 "e: " line). Nothing read from it.
+Revert B, second form (`/ 3.6 else` -> `(v("maxSpeed", 6f) / 3.6f).toDouble() else`): same prediction as above.
