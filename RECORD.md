@@ -3024,3 +3024,41 @@ calls it.
   - the commit and the 5d report cite `3cd61ad` and this entry.
 - **Practice from now on:** a coder runs the full `:brouter:jvmTest` before every push that touches `commonMain`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -76.
+
+**Kind:** outcome
+**ID:** 2026-10-28-76
+**Timestamp:** 2026-11-06T05:24:42Z
+**Continues:** 2026-10-28-65, 2026-10-28-68, 2026-10-28-70, 2026-10-28-74, 2026-10-28-75
+**Title:** Step 5d done: the route-ways path ported and equal to the oracle on both squares; every revert bites; the
+silent stub undone; CI shows only -61's known red
+**Observed:** Plumb Ledger, session 9, `brouter-port-5b` `4345f71` to `b65548f` (eleven commits; clean tree; `b65548f`
+is docs only, by `git diff --stat`). Report: `docs/audits/2026-11-06-brouter-port-step5d.md`.
+- **The silent stub (-74) is undone** (`3888c07`): `ParseNodeBody2StubTest` failed over the empty body ("completed
+  successfully"), then passed with the stub throwing a named "unsupported".
+- **The decode revert:** predicted at `ae97c7b` as 5 of 5 failing at cache 0, field `[link dlat]`, and observed exactly
+  so. 0 ` e: ` lines; restored identical [R, as reported].
+- **The route-ways test** (`RouteWaysTest`):
+  - over the stubs: 2 of 2 failed on the stub's "unsupported";
+  - forward: 2 of 2 passed, after porting `OsmNode(long)`, `parseNodeBody2` and `ByteArrayUnifier.unify`;
+  - **compared:** the drop-off square (15 points, 120 links, 165 tags) and F0h's square (16 ends, 4,858 links, 15,596
+    tags);
+  - **the revert** (drop `highway` at `BExpressionContext.kt:131`): 2 of 2 failed at `[tags]`, as predicted. **Checked
+    by the planner** in `4-routeways-revert.txt`: 0 ` e: `, restored identical, forward line present once.
+- **The pins:** Forager's drop-off rd5 (4,475 bytes, `a332b322…d8f7`) and `points.json` (1,103 bytes, `2872493a…6b5a`)
+  at `a0535ece`, through `tools/fetch-dropoff.sh`. F0h's tile is wired here by `tools/fetch-f0h.sh`, copied unchanged
+  from `brouter-port`.
+- **`ByteArrayUnifierTest`** was replaced under -75's five conditions (`9de9d48`). Its revert failed 2 of 3 as predicted,
+  and the full `:brouter:jvmTest` ran before the push [R, as reported].
+- **CI, read by the planner** (run 42167090127 on `1797412`, the last code head): `jvm` 111 tests, 2 failures, both
+  `CollectOutreachersTest` (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24
+  (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2 classes ran".
+- **Bookkeeping:** the report's "Items 5 and 6: not started" refers to the planner's session-7 dispatch numbering, where 5
+  was the CI read and 6 the report. Both are done. -70 itself has four items, and all four are done. **5d is closed.**
+- **Unverified (a check that never saw its other value):**
+  - on both squares, no described link is reverse and Forager's dedupe drops none, on the oracle and the port alike. So
+    the route-ways test has never seen `isReverse` true on this path [C, as reported];
+  - `MicroCache2DecodeTest` does compare `isReverse` per link over 25,072 caches (-74), which covers the decoder;
+  - whether any Forager square has a reverse described link is [?].
+- **Also unverified:** the test copies Forager's cell, square and `tagsOf` arithmetic from `a0535ece`, so a later Forager
+  change would not show here. The crc-crosscheck branch of `unify` is reached only by `ByteArrayUnifierTest`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -77.
