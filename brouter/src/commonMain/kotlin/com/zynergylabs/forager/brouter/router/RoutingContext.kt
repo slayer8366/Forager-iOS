@@ -10,13 +10,13 @@ import com.zynergylabs.forager.brouter.util.MsunLibm
 
 /**
  * Port of BRouter 1.7.10's `btools.router.RoutingContext`, its configuration half (`RoutingContext.java:1-284` and
- * the path factories `:555-579`). The nogo and distance half (`:285-554`) is ported in step 6's later pieces.
+ * the path factories `:555-579`). The nogo and distance half (`:285-554`) is in `RoutingContextNogo.kt`.
  *
  * Field names are Java's, underscores included, so the oracle comparison (`RoutingContextReadTest`) matches them by
- * name. Not yet ported: `poipoints`, `nogopoints`, `ai` and the other fields typed by step 6's unported classes.
+ * name.
  */
 @Suppress("PropertyName", "ktlint:standard:property-naming")
-internal class RoutingContext(libm: LibmSeam = MsunLibm) {
+internal class RoutingContext(internal val libm: LibmSeam = MsunLibm) {
     fun getAlternativeIdx(min: Int, max: Int): Int = if (alternativeIdx < min) min else if (alternativeIdx > max) max else alternativeIdx
 
     /** Java's public field; its `setAlternativeIdx` is this property's setter (a JVM signature clash otherwise). */
@@ -165,6 +165,15 @@ internal class RoutingContext(libm: LibmSeam = MsunLibm) {
     var roundTripPoints: Int? = null
     var allowSamewayback: Boolean = false
     var anglemeter: CheapAngleMeter = CheapAngleMeter(libm)
+    var ai: AreaInfo? = null
+    var poipoints: MutableList<OsmNodeNamed>? = null
+    var nogopoints: MutableList<OsmNodeNamed>? = null
+
+    // Java's private fields, `internal` here for the nogo half in `RoutingContextNogo.kt`.
+    internal var nogopoints_all: MutableList<OsmNodeNamed>? = null // full list not filtered for wayoints-in-nogos
+    internal var keepnogopoints: MutableList<OsmNodeNamed>? = null
+    internal var pendingEndpoint: OsmNodeNamed? = null
+
     var nogoCost: Double = 0.0
     var isEndpoint: Boolean = false
     var shortestmatch: Boolean = false
