@@ -4,9 +4,13 @@
 kotlin = "2.3.10"
 # okio carries the file reads in common code (Phase 1 report, item B rows 1 to 3); item I's version.
 okio = "3.18.2"
+# JaCoCo's core reads R6's .exec files for named lines (step 1b, RECORD -77); the version is R6's agent's (tools/fetch-jacoco.sh),
+# so the reader and the writer share one execution-data format.
+jacoco = "0.8.16"
 
 [libraries]
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "jacoco" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
