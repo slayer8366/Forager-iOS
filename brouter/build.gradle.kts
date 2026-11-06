@@ -96,6 +96,8 @@ kotlin {
         commonMain.dependencies {
             // api: okio's Path is in the entry point's signatures (item C, "what the port exposes").
             api(libs.okio)
+            // ProfileCache's lock (RECORD -91): SynchronizedObject; implementation, so it stays out of the port's signatures.
+            implementation(libs.atomicfu)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
