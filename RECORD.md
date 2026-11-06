@@ -2450,3 +2450,404 @@ and open the PR".
 - **Not yet dispatched.** The work goes on `brouter-port`, and this planner session can push only its own branch. It is
   dispatched once the record is on `main` and a session can write `brouter-port`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -58.
+
+**Kind:** intent
+**ID:** 2026-10-28-58
+**Timestamp:** 2026-11-04T19:35:15Z
+**Continues:** 2026-10-28-56, 2026-10-28-57
+**Title:** Heights in E3's comparison, a heighted F0 stratum, and F0 and R re-run (Linden, session 20)
+**Decision first:** the owner, verbatim: "You may push to brouter-port and brouter-port-5b".
+
+**Two corrections to -57, both the planner's own wrong premises:**
+- **"Expected values for F0 and R are re-derived."** None were ever written (the planner's handoff: "expected values:
+  none written"). So there is nothing to re-derive. They will carry heights from the start. What does need repeating
+  is F0's and R's stability under the new tuple.
+- **"Pinned in the tile release like F0."** The release is fixed once published, and a new one needs the owner's run of
+  `publish-tiles` (-43 to -45). Forager's raw file at commit `d6e2a0415` is just as fixed, being addressed by commit,
+  and `publish-tiles` fetched F0 itself that way (`F0_URL`, `.github/workflows/publish-tiles.yml:20` on
+  `brouter-port`). So the heighted fixture is fetched from there through `tools/fetch-pinned.sh`, by size and SHA-256.
+  No new release is made.
+
+**Change** (on `brouter-port`, `jvmTest` and `tools` only):
+- `E3Outcome` gains a heights digest: 64-bit FNV-1a over each node's `getSElev()`, in order, `Short.MIN_VALUE`
+  included. It is compared exactly, like the node digest. The stored form changes, so every stratum log from before
+  is marked as written under the old tuple.
+- **Stratum F0h:** Forager's `app/src/test/resources/routing/segments-heighted/W75_N40.rd5` at `d6e2a0415` (178,867
+  bytes, SHA-256 `14f595e8469455bcdcc600239102cb7d60641185759fcae29cfed444af8a965c`), into its own folder. The routes
+  are the eight that Forager's `brouter-cli/heighted/*.geojson` cover, with ends as Forager's tests give them. Its
+  reach evidence: R1's point count, and a digest of its heights, equal those of the command-line router's GeoJSON.
+  Only counts and digests are committed, never coordinates beyond Forager's own ends (E1, as F0).
+- **F0 and R are re-run** under the new tuple: F0 at 2 cases, R at 1,534 over 26 profiles, with instability counted.
+- **Data owed:** on R's R1 routes, how many nodes have a height (not `Short.MIN_VALUE`), per tile. That says whether the
+  brouter.de tiles exercise the new field at all.
+- **The check bites:** a one-line revert in `E3CaseRun` that drops the heights from the digest must fail F0h's reach
+  assertion and nothing else. The prediction is pushed before the run.
+
+**Scope boundary:** writes only `brouter-port`. No `commonMain` change: the port's own heights come with step 6's path
+model. It does not touch `brouter-port-5b`, `main`, slayer8366/Forager, the tile release or accounts.
+**Baseline:** `brouter-port` `82d310a`; Forager `pre-main` `d6e2a0415` for the heighted fixture and its GeoJSON, and
+`e2969abe4` for every other pin.
+**Prediction (planner):**
+- F0h's eight R1 routes match the command-line router on count and heights, all eight;
+- F0, F0h and R are stable under the new tuple, apart from `R-shortest-025` (-50);
+- the brouter.de tiles carry heights on most route nodes [I: not read].
+**Finish line:** pushed, CI on the head read by the planner, the revert seen failing as predicted, F0h, F0 and R reported
+in the Phase 2 report, and a handoff. Then the targeted strata (DL, MP64, ML5, PM5) resume as Linden's session 19
+handed off.
+**Abort conditions:** -3's, plus a height disagreement between R1 and the command-line router (a finding, not a fix).
+**Notes:** Written by the planner session of -56 by hand. Next free ID -59.
+
+**Kind:** intent
+**ID:** 2026-10-28-59
+**Timestamp:** 2026-11-04T19:35:15Z
+**Continues:** 2026-10-28-50, 2026-10-28-53, 2026-10-28-54, 2026-10-28-58
+**Title:** The planner's answers to Plumb's questions A and B; 5b resumes, without closing (Plumb, session 5)
+**Answers (technical; the owner may overrule):**
+- **A, `CollectOutreachersTest`'s overflow: data before any fix.** No fix is chosen in this session.
+  - Count the oracle's own `StackOverflowError` catch (`OsmNodesMap.java:62-64`) on a patched copy, as
+    `tieBreakOrder` was counted (-53), on this test's region loads at the default stack.
+  - Re-run only this class with `-Xss1g` from a scratch init script, never committed, as Plumb's handoff step 3 says.
+    The prediction is pushed first.
+  - Report whether the oracle overflowed at the default stack, and whether either engine's counts change at 1g.
+  - If the oracle's own result depends on the stack, that goes to the owner. It bears on what "Android's behaviour"
+    means, since Android runs the engine at the default stack (-56).
+- **B, `NodeHashMapOrderTest`'s refusals.** "Refuse" (-50) meant that such a draw is discarded and drawn again, not
+  that the test fails.
+  - The generator redraws a seed's keys until no equal-hash tree bucket forms, up to 20 draws per seed, with every
+    redraw counted.
+  - The test asserts order equality on every accepted seed, and fails if any of the 12 seeds is not accepted within
+    its cap.
+  - Equal-hash buckets stay covered by `NodeHashMapTieBreakTest`.
+  - A revert of the filter must make the test fail, with the prediction pushed first.
+- **Plumb's four calls beyond the handoff (fourth session) are accepted:** `tieBreakCalls`, the one `System.err` line,
+  the runner's optional arguments, and `expect`/`actual` for the catch. Their compile on iOS was confirmed at -56.
+
+**Change:** on `brouter-port-5b` only: B as above; A's data; both reverts (`DirectWeaver` at 7 and the tie-break at 1,
+with their predictions restated for a red forward and pushed before they run); the tie-break decode total re-run.
+**Scope boundary:** writes only `brouter-port-5b`. No fix for A.
+**Finish line:** pushed, CI read by the planner, A's data reported. 5b stays open until A is answered.
+**Abort conditions:** -3's.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -60.
+
+**Kind:** outcome
+**ID:** 2026-10-28-60
+**Timestamp:** 2026-11-04T20:05:52Z
+**Continues:** 2026-10-28-50, 2026-10-28-59
+**Title:** 5b, Plumb's fifth session: B fixed and its revert bites; A's data shows the port overflowing where the oracle
+does not; a test that cannot see its own false branch; handed off at 180k
+**Observed:** Plumb Ledger, `brouter-port-5b` `279194d` to `98c01e6` (seven commits; clean tree). It handed off at the
+planner's message after the watcher read 181,610 at 20:03:38Z. Report: `docs/audits/2026-10-30-brouter-port-step5b.md`,
+"Fifth session". Still open, as -59 said.
+- **B:** `NodeHashMapOrderTest` redraws refused draws (`9991929`, the only source change in the session: `git diff
+  --stat 279194d 98c01e6 -- brouter/src`, one file). It passes, with 15 redraws, and every seed accepted by draw 5. The
+  filter's revert was predicted at 3 of 101 and observed at 3, with "iteration order" [R, as reported].
+- **Both older reverts, as restated before they ran** (`d8ccf2a`, then `84aafc7`): `DirectWeaver` 7 of 7. The
+  tie-break revert was predicted at 2 or 3 and observed at 3, its own failure being `NodeHashMapTieBreakTest`. For two
+  of the seven `DirectWeaver` failures the runner cut the message before the port's half [R, as reported].
+- **The tie-break decode total, complete:** `[19, 0, 0, 0]`, all of it `treeify` at W75_N40 (106,130) sub 740. The
+  25,072 cache lines hash equal to the plain jar's [R, as reported].
+- **A, the data:**
+  - **In the test's own JVM, the oracle did not overflow** at the default stack or at `-Xss1g`. Checked by the
+    planner in `12-question-a/jvmtest-default.txt` and `jvmtest-1g.txt`: the counting class's load line prints in
+    both, and its per-firing line (`oracle-catch-counter.diff`, line +67) appears in neither.
+  - **The port did overflow at the default stack,** 2 to 4 times a run, and its mode 2 `C` line differed between
+    runs (`22106 39455 39455` and `22157 37375 37375`). That run-to-run variation is JIT timing [I, untested].
+  - **At 1g the port did not overflow,** and `collectOutreachersWithoutADestination` passes over all 12 regions
+    (`jvmtest-1g.txt`).
+  - **So -50's premise fails** at the default stack on this region: keeping the catch does not keep logic runs equal,
+    because the port overflows where the oracle does not. The oracle's own result showed no dependence on stack size,
+    so -59's stop did not trigger.
+- **A weaker piece of evidence, discounted by the planner:** the standalone probe (`probe-regions-*.txt`) reports 0
+  catches at both stacks. But its `C` values at sub 735 (`37435 41098 32946`) are not the test's (`38715 41099
+  41099`), and its last line reads "max recursion depth 0". It did not run the computation in question, so its zeros
+  are not evidence for A. The test-JVM runs above carry A.
+- **A new finding:** `collectOutreachersWithADestinationVanishesFarNodes` fails its coverage assertion (`:116`) once
+  its regions all agree: "canEscape did not answer both ways: false/true 0/3587" (`jvmtest-1g.txt`). The oracle's
+  `canEscape` never answers false on these regions, so the assertion's false branch cannot be satisfied there.
+- **CI, read by the planner** (run 41900695206 on `84c6fc2`, the same source as the head): `jvm` 101 tests, 2
+  failures, both `CollectOutreachersTest`; 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24
+  of 24 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2 classes ran". The head's own run
+  (41903010654) was still queued.
+- **Calls beyond scope, accepted:** the counting class in both test-JVM runs, through scratch init scripts; the probe
+  at 1g; revert predictions counting only failures that carry the revert's own message.
+
+**For the owner: how the port should handle the deep recursion in `cleanupPeninsulas`** (not decided here).
+**Planner's call (technical):** before any fix, check who calls `canEscape` and whether its false branch is reachable on
+Forager's path. Then either choose regions that reach it, or record it as unreachable rather than demand coverage.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -61.
+
+**Kind:** decision
+**ID:** 2026-10-28-61
+**Timestamp:** 2026-11-04T20:12:15Z
+**Continues:** 2026-10-28-50, 2026-10-28-60
+**Title:** The deep recursion in `cleanupPeninsulas` is decided after step 10 (owner); 5b stays red and unmerged
+**Decision:** asked how the port should handle the recursion in `cleanupPeninsulas` that overflows where the oracle does not
+(-60), the owner chose, verbatim: "Decide after step 10". The option read: "Leave CollectOutreachersTest red, close the
+rest of 5b, and choose once the simulator run measures real stack use on iOS. 5b can't merge into brouter-port while
+the test is red."
+- **Rejected:** "Walk it without recursion (Recommended)", an explicit-stack rewrite of the port's subtree walk; and
+  "Keep recursion, big stack", an explicit large stack on the engine thread in the tests and the app.
+- **What follows:**
+  - `CollectOutreachersTest` stays red. It is reported at every CI read, never silenced, skipped or weakened (Forager's
+    CLAUDE.md, Testing).
+  - 5b closes everything else: the report is marked done except A.
+  - **5b is not merged into `brouter-port`.** The planner's call (technical): 5c and the steps after it are cut from
+    `brouter-port-5b`, so they build on the graph half. Each later merge into `brouter-port` waits on this decision.
+  - Step 10's simulator run measures the recursion depth on the router's thread on iOS (-50), and this question comes
+    back to the owner with that number.
+- **`canEscape`'s false branch (-60) is reachable** [R]: its only caller is `RoutingEngine.java:2016`, inside the
+  memory collection (`:2005-2020`: direct weaving, not in panic mode, out of memory bounds). That is the path MP64
+  targets (-51). The planner's call: the assertion stays. The coder looks for a region where the oracle answers false
+  (an island with no hollow link), and if none is found among the pinned tiles, MP64's runs are read for one. The
+  finding goes to the planner either way.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -62.
+
+**Kind:** outcome
+**ID:** 2026-10-28-62
+**Timestamp:** 2026-11-04T20:50:14Z
+**Continues:** 2026-10-28-50, 2026-10-28-57, 2026-10-28-58
+**Title:** Heights in E3's comparison: F0h 8 of 8 equal to the command-line router; R 0 of 1,534 unstable under the new
+tuple; the revert bites; handed off at 180k
+**Observed:** Linden Caliper, session 20, `brouter-port` `82d310a` to `3688c9f` (ten commits; clean tree; no change
+under `commonMain` or `iosMain`, by `git diff --stat`). It handed off at the planner's message after the watcher read
+181,440 at 20:48:09Z. Report: the Phase 2 report, its twentieth-session section and handoff.
+- **The tuple:** `E3Outcome` carries a heights digest (`E3Case.kt`, filled at `E3CaseRun.kt:66`). `fromField` reads
+  the last five fields, so a kind containing `|` survives. `step1b/00-tuple-note.txt` marks the earlier logs as written
+  under the old tuple.
+- **F0h** (Forager's heighted fixture at `d6e2a0415`, fetched by `tools/fetch-f0h.sh`, size and SHA-256 checked; ends
+  from `server/pmtiles-worker/test/fixtures/rd5/routes.json`):
+  - all 8 cases routed and are stable;
+  - **checked by the planner:** each of the eight digests in `step1b/12-f0h-expected.tsv`, computed from Forager's
+    `brouter-cli/heighted/*.geojson` by `tools/geojson-heights.py`, appears in exactly one R1 tuple of
+    `12-f0h-stability.tsv`, with the same point count;
+  - the counts add to 3,630, every point with a height, 5.75 to 413.75 m, as Forager's README says;
+  - **the height rule:** `FormatJson.java:109` writes `selev / 4.`, and omits the value for `Short.MIN_VALUE` [R, as
+    reported].
+- **F0:** 2 of 2 stable, tuples unchanged, and no node has a height (0 of 226, 0 of 306).
+- **R:** 26 profiles, 1,534 cases, **0 unstable** (`16-r-summary.txt`, read by the planner). Every case's first five
+  fields equal the old run's. `R-shortest-025`, unstable once at -50, was stable this time. The cause is [?], and -50's
+  ruling on it stands.
+- **Do the brouter.de tiles exercise heights?** Yes. Over R's 1,268 R1 routes, 427,924 of 428,277 nodes carry a height.
+  The 353 without one fall on 30 routes. Where they are is [?].
+- **The revert** (`fnv1aShorts(heights)` to `fnv1aShorts(emptyList())` at `E3CaseRun.kt:66`) was predicted and pushed
+  first (`d971358`). **Checked by the planner** in `15-heights-revert.txt`: 0 ` e: ` lines; `jvmTest` 93 of 93; the
+  one failure is at `E3F0hTest.kt:33`, with every digest reading the FNV offset basis; nothing else failed. It was
+  restored from a saved copy, with `git diff` empty afterwards.
+- **CI:** run 41900384198 on `9302765`, as the coder read it: `jvm` 93 tests, 0 ` e: `, `fetchF0h` ran. The run on the
+  head (41910184631) was in progress when this was written.
+- **A gap, the planner's own:** -57 named a revert of `interpolateEle`'s `short` cast, and -58 named a different one.
+  -57's would mean editing the oracle jar, and the port has no `OsmPath` until step 6. So **nothing yet shows that the
+  cut-end interpolation is covered.** It is owed at step 6, when the port's `OsmPath` is compared on F0h, whose
+  heighted routes end partway along ways [I: not checked per route].
+- **Calls beyond scope, accepted:** `E3OutcomeTest`; the per-tile height count; F0h's fetch running with every oracle
+  test; F0's no-height digests predicted but not asserted; the sequence check inside R's run; `__pycache__` ignored.
+**Next:** Linden's twenty-first session reads CI on the head first, then runs the targeted strata (DL, MP64, ML5/PM5)
+under the new tuple. MP64 is also read for `canEscape` answering false (-61).
+**Notes:** Written by the planner session of -56 by hand. Next free ID -63.
+
+**Kind:** outcome
+**ID:** 2026-10-28-63
+**Timestamp:** 2026-11-04T20:55:16Z
+**Continues:** 2026-10-28-62
+**Title:** CI on `brouter-port`'s head `3688c9f`: green
+**Observed:** run 41910184631, `success`, both job logs read by the planner:
+- `jvm`: 93 tests, 0 failures; `fetchF0h` ran; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` ran, with 0
+  ` e: ` lines in either log.
+- Simulator: 23 tests, 0 failures (**simulator-checked**). That is `brouter-port`'s count; 5b's 24th test lives on
+  `brouter-port-5b`.
+- arm64: 7 of 7, and the gate read "OK: all 2 classes ran".
+**Notes:** Written by the planner session of -56 by hand. Next free ID -64.
+
+**Kind:** intent
+**ID:** 2026-10-28-64
+**Timestamp:** 2026-11-06T03:00:27Z
+**Continues:** 2026-10-28-51, 2026-10-28-52, 2026-10-28-56, 2026-10-28-62
+**Title:** Forager re-checked before relaunch: a second engine entry point, `BRouterRouteWays`; the targeted strata go
+ahead (Linden, session 21)
+**Decision first:** the owner, verbatim: "Begin next step".
+
+**Forager `pre-main`, `d6e2a0415` to `a0535ece` (read 2026-11-06):**
+- **Unchanged:** `third_party/brouter`, every profile, `BRouterTrailRouter.kt`, F0's and F0h's fixtures (`git diff
+  --stat`, empty for each).
+- **New, in production:** `app/src/main/java/com/zynergylabs/forager/app/routing/BRouterRouteWays.kt` (`3cd6b3d8`, the
+  way-to series), wired at `AppContainer.kt:509` and called from `WayToEnds.kt:195` [R]. It skips `RoutingEngine`: it opens
+  a square with `PhysicalFile`/`OsmFile`, decodes nodes, links and geometry (`OsmNode.parseNodeBody`,
+  `GeometryDecoder.decodeGeometry`), and reads each way's tags through `BExpressionContextWay.getKeyValueDescription` [R].
+- **No new code to port:** all 11 of its BRouter calls are on Phase 1's method-level reach list
+  (`03-reach/out/T0/reached-methods.tsv`, matched by class and method name, not by overload [C]). `getKeyValueDescription`
+  is already ported (`BExpressionContext.kt:124` on `brouter-port`).
+- **A new use, and a premise that moves with it:** Phase 1 item B12 says `getKeyValueDescription`'s text "goes into messages
+  Forager does not read". Forager now reads it, as tags (`tagsOf`, `BRouterRouteWays.kt:134`). No differential test
+  compares tags or decoded geometry from this entry point. **Put to the owner** (-65), as heights were at -56.
+
+**Change** (Linden, session 21, `brouter-port` only, `jvmTest` and `tools`): the targeted strata as the nineteenth
+session's handoff and -51/-52 set them, under -58's tuple:
+- DL-lat, then DL-lon, then MP64, then the shared ML5/PM5 sequence, one at a time;
+- each generator was pushed before its run (`85008b1`);
+- MP64's runs are also read for `canEscape` answering false, at `RoutingEngine.java:2016` (-61).
+**Scope boundary:** writes only `brouter-port`. It does not touch `brouter-port-5b`, `main`, slayer8366/Forager or the
+tile release.
+**Baseline:** `brouter-port` `3688c9f` (CI green, -63).
+**Prediction (planner):** each stratum fills its 59 within the cap of 1,180 draws; 0 unstable; at least one MP64 case
+has `canEscape` answer false [I].
+**Finish line:** each stratum's results in the Phase 2 report, CI on the head read by the planner, and a handoff, which
+comes either at the end or at 180k.
+**Abort conditions:** -3's; a run showing a case in two strata (-52); a stratum reported short.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -65.
+
+**Kind:** decision
+**ID:** 2026-10-28-65
+**Timestamp:** 2026-11-06T03:37:03Z
+**Continues:** 2026-10-28-61, 2026-10-28-64
+**Title:** The route-ways path gets a differential test, in 5c (owner)
+**Decision:** asked whether the port should prove that what `BRouterRouteWays` reads (way tags and geometry, straight from
+the tile decoder) matches Java (-64), the owner, verbatim: "Add a differential test (Recommended)". The option read:
+"Compare the port's decoded ways, tags and geometry against Java's around Forager's own test points (the drop-off fixture
+and F0h's ends). It goes into 5c, which already compares tile decodes. A modest test, since the decoding is already ported."
+- **Rejected:** "Defer until iOS needs it"; "Out of scope for iOS".
+- **What it adds to 5c (the planner's calls, technical):**
+  - the test drives the port through the same calls `BRouterRouteWays.read` makes (`BRouterRouteWays.kt:59-123` at Forager
+    `a0535ece`), against the oracle making the same calls;
+  - for each way near each point, it compares the tag map (from `getKeyValueDescription`), the decoded geometry in order,
+    and each link's direction (`isReverse`);
+  - the points are Forager's drop-off fixture (`app/src/test/resources/routing/dropoff/`) and F0h's ends, each pinned by
+    SHA-256 at `a0535ece`, and only counts and digests are committed (E1);
+  - it is seen failing first, by a revert that drops one tag;
+  - **Phase 1 item B12's premise is corrected:** `getKeyValueDescription`'s text is now read by Forager. -42 already showed
+    Kotlin/Native printing Java's `Float.toString` strings for every value tried, but this test is what checks it on
+    this path.
+- 5c is cut from `brouter-port-5b` (-61). Not yet dispatched: it waits until Linden's session 21 ends, so that only one
+  heavy job runs at a time.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -66.
+
+**Kind:** intent
+**ID:** 2026-10-28-66
+**Timestamp:** 2026-11-06T03:39:43Z
+**Continues:** 2026-10-28-48, 2026-10-28-61, 2026-10-28-65
+**Title:** Step 5c (waypoint matching) and the route-ways test start now, beside 1b, on `brouter-port-5b` (Plumb, session 6)
+**Decision first:** the owner, verbatim: "Start 5c now". This overrules -65's call to wait for Linden's session 21.
+
+**A wrong premise of the planner's, in -65 and in the option the owner chose:** "It goes into 5c, which already compares
+tile decodes". Step 5c is **waypoint matching** (`WaypointMatcherImpl`, `MatchedWaypoint`; Phase 1 report on
+`brouter-port`, line 1700). The tile decodes are compared in 5b (`GraphDecodeTest`, line 1699). The owner's ruling
+(add the test) stands. Only its home changes: the route-ways test is written in this session, next to 5b's decode tests.
+
+**The branch (the planner's call, technical):** the owner allowed pushes to `brouter-port` and `brouter-port-5b` only. So
+5c is built on `brouter-port-5b`, from `98c01e6`, in a report of its own, `docs/audits/2026-11-06-brouter-port-step5c.md`.
+That also satisfies -61, under which 5c builds on 5b. A separate `brouter-port-5c` would need the owner's word.
+
+**Change:**
+- **5c, as Phase 1's item I sets it** (line 1700):
+  - port `WaypointMatcherImpl` and `MatchedWaypoint` into `commonMain`;
+  - compare the matched waypoint (way, node pair, radius, direction) against the oracle for every generated endpoint
+    of R. NT is not built yet, so its endpoints wait for it, and the report says so;
+  - the revert drops the comparator's second line (`WaypointMatcherImpl.java:71`), with the prediction pushed first;
+  - the `atan2` tie-break follows (a) to (c) as step 2b settled them.
+- **The route-ways test, -65's planner's calls as written,** placed beside `GraphDecodeTest`:
+  - points from Forager's `app/src/test/resources/routing/dropoff/` at `a0535ece` (pinned by SHA-256) and F0h's ends;
+  - the revert drops one tag;
+  - only counts and digests are committed.
+- `CollectOutreachersTest` stays red as -61 ruled, and is reported at every CI read.
+**Scope boundary:** writes only `brouter-port-5b`. It does not touch `brouter-port` (Linden is running there), `main`,
+slayer8366/Forager or the tile release.
+**Finish line:** both tests seen failing over stubs and then passing, both reverts biting as predicted, CI read by the
+planner, and the report with a handoff.
+**Abort conditions:** -3's, and any new red other than `CollectOutreachersTest`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -67.
+
+**Kind:** outcome
+**ID:** 2026-10-28-67
+**Timestamp:** 2026-11-06T03:55:55Z
+**Continues:** 2026-10-28-64, 2026-10-28-65, 2026-10-28-66
+**Title:** A wrong premise of the planner's in -64: the route-ways path needs code the port does not have; -65's ruling
+goes back to the owner
+**Observed:** Plumb Ledger stopped under -66's own stop, "a call in `BRouterRouteWays` the port lacks", at
+`brouter-port-5b` `51c43b3`. **Checked by the planner at source:**
+- `BRouterRouteWays.kt:84` (Forager `a0535ece`) calls `createMicroCache(..., null, null, true, null)`, with
+  `hollowNodes` null. Java then takes the non-weaving decoder, `new MicroCache2(bc, ...)` (`OsmFile.java:139-140`,
+  Forager's `third_party` copy) [R].
+- The port throws there: `OsmFile.kt:140-143` on `brouter-port-5b` reads "unsupported: MicroCache2's decoder is not on T2's
+  port list" [R]. Its comment states the premise that has now moved: "hollowNodes is null only under -DdisableDirectWeaving,
+  which Forager never sets".
+- `MicroCache2.<init>(StatCoderContext, ...)` appears on Phase 1's reach lists T0 and T1, but not T2 or T3, which the port
+  was cut to (`03-reach/out/T*/reached-methods.tsv`: 1, 1, 0, 0) [C].
+- Plumb also names, as not ported: `OsmNode(long)`, `parseNodeBody2`, and `MicroCache.getIdForIndex` [R, as reported].
+  It sizes the gap at about 300 Java lines [I].
+- **The planner's wrong premise:** -64's "No new code to port" matched by class and method name, not by overload or by
+  argument, and -64 said so. The option the owner chose at -65 ("A modest test, since the decoding is already ported")
+  rests on it. So -65's ruling goes back to the owner with the true cost.
+- **5c's main part, as reported, not yet checked:** over the stubs, 1 test with 1 failure (`NotImplementedError`);
+  forward, 3,068 of 3,068 R ends equal to the oracle; the revert's prediction is pushed (`51c43b3`) and its run was in
+  progress. The planner checks it on the handoff.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -68.
+
+**Kind:** decision
+**ID:** 2026-10-28-68
+**Timestamp:** 2026-11-06T04:00:26Z
+**Continues:** 2026-10-28-65, 2026-10-28-67
+**Title:** The route-ways path is ported, with its test (owner); replaces -65's ruling
+**Decision:** asked again with the true cost (-67), the owner, verbatim: "Port it, with the test". The option read: "Add
+MicroCache2's decoder, OsmNode(long), parseNodeBody2 and getIdForIndex in a step of their own (about 300 Java lines,
+estimated), each seen failing over stubs first, then the route-ways differential test. The iOS app could then offer
+way-to."
+- **Rejected:** "Defer until iOS needs it"; "Out of scope for iOS".
+- **The planner's calls (technical):**
+  - **A step of its own, 5d,** on `brouter-port-5b` after 5c's handoff (one coder per branch at a time). Its own report.
+  - **Its reach is measured first:** Phase 1's T-list method, from `BRouterRouteWays.read`'s calls, so the port list comes
+    from data and not from -67's estimate. That also catches any overload -64 missed.
+  - **Its tests:**
+    - every micro-cache of each pinned tile decoded through `MicroCache2` by both engines, with a digest per cache, as
+      5b does for `DirectWeaver`;
+    - then -65's route-ways comparison, as written;
+    - each is seen failing over stubs, and a revert bites, with its prediction pushed first.
+  - Phase 1's T2 cut stands for `RoutingEngine`'s path. The new reach is added beside it, never in its place.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -69.
+
+**Kind:** outcome
+**ID:** 2026-10-28-69
+**Timestamp:** 2026-11-06T04:02:14Z
+**Continues:** 2026-10-28-61, 2026-10-28-66, 2026-10-28-67
+**Title:** Step 5c (waypoint matching) ported: 3,068 of 3,068 R ends equal to the oracle; its revert bites; handed off
+**Observed:** Plumb Ledger, session 6, `brouter-port-5b` `98c01e6` to `d1de74b` (four commits; clean tree). Report:
+`docs/audits/2026-11-06-brouter-port-step5c.md`. It handed off at the planner's message after the watcher read 183,931
+at 03:55:11Z.
+- **Tests first:** `WaypointMatchTest` over the stubs read 1 failure (`NotImplementedError`) and 0 compile errors.
+- **Forward:** 1,534 cases and 3,068 ends compared, 0 differing [R, as reported]. Each end compares the crosspoint, node
+  pair, radius, `directionDiff`, `directionToNext`, name, type and the whole `wayNearest` list. The 350 unmatched ends
+  and 3 oracle throws are compared too. `WaypointMatcherImpl.kt` is 252 lines [C].
+- **The revert** (the comparator's second line becomes `0`, `WaypointMatcherImpl.java:71`): predicted at 1,364 to 2,718
+  ends differing, observed at 2,105. **Checked by the planner** in `4-revert.txt`: 102 tests, 3 failures (that test and
+  `CollectOutreachersTest`'s 2); restored identical to the saved copy, with the forward line present.
+- **CI, read by the planner** (run 42159504256 on `3f691a7`, the same source as the head `d1de74b` by `git diff --stat`):
+  `jvm` 102 tests, 2 failures, both `CollectOutreachersTest` (-61's known red); 0 ` e: ` lines in either log; both
+  `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2
+  classes ran".
+- **Not covered:** `start()`'s island-pair branch (the set is always empty on this path); the dynamic-range branch
+  (unreachable, since Forager passes `use_dynamic_range=0`); `WAYPOINT_TYPE_DIRECT`. NT's ends wait for NT.
+- **A defect, owed first in 5d:** `WaypointMatchEngines.differingFields` splits on spaces, so a failure message carries
+  fragments of coordinates. Not a problem while the test passes, but a red run would print them (E1).
+- **Calls beyond scope, accepted:** R's seed companions made `internal`; exceptions compared as outcomes;
+  `matchWaypointsToNodes` and `preloadPosition` ported here, as `NodesCache`'s header assigned them.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -70.
+
+**Kind:** intent
+**ID:** 2026-10-28-70
+**Timestamp:** 2026-11-06T04:02:14Z
+**Continues:** 2026-10-28-68, 2026-10-28-69
+**Title:** Step 5d: the route-ways path (`MicroCache2` and its callers), reach measured first, then the test (Plumb, session 7)
+**Change** (on `brouter-port-5b`, from `d1de74b`; report `docs/audits/2026-11-06-brouter-port-step5d.md`):
+1. Fix -69's `differingFields` defect, so that only field names are printed. It is seen with a failing message first.
+2. **Reach:** measure the methods `BRouterRouteWays.read` reaches (`BRouterRouteWays.kt:59-123` at Forager `a0535ece`),
+   by Phase 1's T-list method, on a harness that makes those calls. List what is not yet ported, as a new reach file
+   beside T2. **Stop and report the count before writing any port code** if it is over 600 Java lines, twice -67's
+   estimate.
+3. **Port** it into `commonMain`, with stubs first and a `MicroCache2` decode test: every micro-cache of each pinned
+   tile, decoded through `createMicroCache(..., hollowNodes = null)` by both engines, compared by a digest per cache.
+   Seen failing over the stubs, then passing. A revert (one field decoded wrong) bites, with its prediction pushed first.
+4. **The route-ways test,** as -65 sets it. Forager's `app/src/test/resources/routing/dropoff/` at `a0535ece` is pinned by
+   SHA-256 and fetched as `tools/fetch-f0h.sh` fetches F0h. F0h's ends are included. Only counts and digests are
+   committed. Seen failing first, and a revert that drops one tag bites.
+**Scope boundary:** writes only `brouter-port-5b`. It leaves T2's list and `RoutingEngine`'s path untouched.
+**Finish line:** pushed, CI read by the planner, the report with its handoff.
+**Abort conditions:** -3's; any new red besides `CollectOutreachersTest`; the 600-line stop.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -71.
