@@ -17,8 +17,11 @@ import kotlin.test.assertTrue
  * with its numbers read as `*`), and all 10 must reach it; a kind that does not is printed as `E3 FK STOP` and fails the
  * test after everything is reported.
  *
- * - **Kinds 1, 2, 3 and 6** ([FKGenerator]): the first 10 draws the generator keeps, out of at most [CAP] draws; nothing
- *   is chosen by the oracle. Profiles: `hiking-mountain`, kind 3 `trekking-noferries` (E4).
+ * - **Kinds 1, 2 and 6** ([FKGenerator]): the first 10 draws the generator keeps, out of at most [CAP] draws; nothing
+ *   is chosen by the oracle. Profile `hiking-mountain`.
+ * - **Kind 3** (`trekking-noferries`; RECORD -85): island-start draws ([FKGenerator]), selected by the oracle's R1
+ *   ([E3Select]) for "no track found at pass=0", counted by outcome, capped at [CAP]; also run alone by its own test.
+ *   The first run took the first 10 draws unselected and reached that family in none of them (6 not mapped, 4 routed).
  * - **Kind 5** (`car-fast`; RECORD -82): start and end drawn separately, capped at [CAP5]; run alone by its own test.
  * - **Kind 4:** island draws ([FKGenerator]), selected by the oracle's R1 ([E3Select]) for "target island detected" (-80),
  *   counted, capped at [CAP].
@@ -45,8 +48,9 @@ class E3FKTest {
         val stops = ArrayList<String>()
         val gen = FKGenerator(segments)
         try {
+            byKind["FK3"] = kind3(gen, segments)
             byKind["FK5"] = kind5(gen, segments)
-            for (kind in listOf(1, 2, 3, 6)) {
+            for (kind in listOf(1, 2, 6)) {
                 val profile = profileOf(kind)
                 val rnd = Random(SEED + kind)
                 val cases = ArrayList<E3Case>()
@@ -62,7 +66,6 @@ class E3FKTest {
                     }
                 }
                 println("E3 FK kind $kind: ${cases.size} of $N after $draws draws (cap $CAP); profile $profile; rejected $rejected")
-                if (kind == 3) println("E3 FK islands: ${gen.islandCounts}")
                 byKind["FK$kind"] = cases
             }
 
@@ -186,19 +189,54 @@ class E3FKTest {
 
     /** Kind 5 alone through E3's six runs (RECORD -82: the rerun after the first run's 9 of 10). */
     @Test
-    fun fkKind5ReachesOneFamilyInAllTen() {
-        E3Strata.jdk("FK5")
+    fun fkKind5ReachesOneFamilyInAllTen() = alone("FK5") { gen -> kind5(gen, TestTiles.segments) }
+
+    /** Kind 3 alone through E3's six runs (RECORD -85: the rerun after the first run's 6 of 10). */
+    @Test
+    fun fkKind3ReachesOneFamilyInAllTen() = alone("FK3") { gen -> kind3(gen, TestTiles.segments) }
+
+    private fun alone(label: String, build: (FKGenerator) -> MutableList<E3Case>) {
+        E3Strata.jdk(label)
         val gen = FKGenerator(TestTiles.segments)
-        val cases = try { kind5(gen, TestTiles.segments) } finally { gen.close() }
-        val result = E3Stability.run("FK5", cases, File(E3Strata.work, "FK5"), E3Strata.agent, E3Strata.workers, PER_CASE_SECONDS)
+        val cases = try { build(gen) } finally { gen.close() }
+        val result = E3Stability.run(label, cases, File(E3Strata.work, label), E3Strata.agent, E3Strata.workers, PER_CASE_SECONDS)
         val kinds = result.verdicts.map { it.outcomes.getValue("R1").kind }
         val family = kinds.firstOrNull()
         val inFamily = kinds.count { it == family }
-        println("E3 FK FK5: family '$family' (${cases.firstOrNull()?.id}); in family $inFamily of ${cases.size}; unstable ${result.unstable.size}")
+        println("E3 FK $label: family '$family' (${cases.firstOrNull()?.id}); in family $inFamily of ${cases.size}; unstable ${result.unstable.size}")
         val stop = cases.size < N || inFamily < cases.size
-        if (stop) println("E3 FK STOP FK5: $inFamily of ${cases.size} in the family, of $N")
+        if (stop) println("E3 FK STOP $label: $inFamily of ${cases.size} in the family, of $N")
         E3Strata.report(result)
-        assertTrue(!stop, "FK5: $inFamily of ${cases.size} in the family, of $N")
+        assertTrue(!stop, "$label: $inFamily of ${cases.size} in the family, of $N")
+    }
+
+    /**
+     * Kind 3 (RECORD -85): an island start and a mainland end ([FKGenerator]), seeded `SEED + 3`, selected by the oracle's
+     * R1 for "no track found at pass=0", the way kind 4 is selected; every draw counted toward [CAP], every rejection by
+     * its outcome ("from-position not mapped" is kind 1's family; "route" is not an island for this profile).
+     */
+    private fun kind3(gen: FKGenerator, segments: File): MutableList<E3Case> {
+        val profile = profileOf(3)
+        val rnd = Random(SEED + 3)
+        val draws = iterator {
+            var k = 0
+            while (true) { // ends: the selector stops drawing at its cap
+                k++
+                when (val d = gen.draw(3, rnd, profile)) {
+                    is FKGenerator.Drawn.Rejected -> yield(E3Select.Draw(k, null, d.why))
+                    is FKGenerator.Drawn.Ends -> yield(
+                        E3Select.Draw(k, E3Case("FK3-%04d".format(k), segments, d.e[0], d.e[1], d.e[2], d.e[3], profile), null),
+                    )
+                }
+            }
+        }
+        val s = E3Select.select("FK3", draws, listOf("FK3"), N, CAP, File(E3Strata.work, "FK3-select"), E3Strata.workers, PER_CASE_SECONDS) { r ->
+            val k = r.r1.kind
+            if (k == KIND3) E3Select.Mark("FK3", k) else E3Select.Mark(null, "outside kind 3's family: $k")
+        }
+        println("E3 FK islands: ${gen.islandCounts}")
+        selectionReport(s)
+        return s.taken.getValue("FK3").map { it.case }.toMutableList()
     }
 
     /**
@@ -254,6 +292,9 @@ class E3FKTest {
 
         /** Kind 5's cap (RECORD -82): a start and an end are two draws. The first run's 200 was this test's own choice. */
         const val CAP5 = 400
+
+        /** Kind 3's family (RECORD -79, -85): a start on a usable component that cannot reach the target. */
+        const val KIND3 = "no track found at pass=0"
         const val PROFILE = "hiking-mountain"
         const val PER_CASE_SECONDS = 600L
     }

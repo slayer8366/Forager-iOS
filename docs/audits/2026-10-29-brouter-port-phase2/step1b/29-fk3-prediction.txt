@@ -1,0 +1,13 @@
+Written 2026-11-06 by Linden Caliper, session 25 (RECORD -85), before kind 3's rerun, on brouter-port after 9a04e27.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3FKTest.fkKind3*' --console=plain
+Seed 20261208 + 3, trekking-noferries. Construction (RECORD -85): an island start node and a mainland end node from the
+tiles' link graphs (FKGenerator), selected the way kind 4 is, by the oracle's R1 for "no track found at pass=0", every
+draw counted toward a cap of 200, every rejection counted by its outcome.
+
+The first run (27-fk) took kind 3's first 10 draws unselected: 6 "from-position not mapped in existing datafile" and
+4 "route"; none reached "no track found at pass=0", which I had predicted for all 10 (27-fk-prediction.txt, item 3).
+
+Prediction [I]: kind 3 fills 10 of 10 within 200 draws; rejections are mostly "from-position not mapped" and "route",
+in roughly the first run's 6 to 4 ratio, so about 1 draw in 5 or fewer is taken, if the session-23 probe's "isl-rev"
+(11 of its draws in this family) carries over; family "no track found at pass=0", 10 of 10; 0 unstable of 10.
+If kind 3 is short, or its 10 do not share one family: E3 FK STOP, reported to the planner.
