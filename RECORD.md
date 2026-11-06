@@ -3426,3 +3426,38 @@ Future tables never write the column."
   - a scan of the staged diff found no coordinate in either form.
 - **The scan from now on,** before every evidence commit: decimal coordinates, integer microdegree pairs, and `node=` positions.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -88.
+
+**Kind:** intent
+**ID:** 2026-10-28-88
+**Timestamp:** 2026-11-06T12:09:24Z
+**Continues:** 2026-10-28-50, 2026-10-28-58, 2026-10-28-71, 2026-10-28-85, 2026-10-28-86, 2026-10-28-87
+**Title:** 1b's expected values written from R1, under the pinned JDK (Linden, session 26); PR #4
+**Decision first:** asked "should Linden start the expected values" and "should I open PR #4", the owner, verbatim: "1 and 2
+yes".
+**Change** (on `brouter-port`, `jvmTest` and `docs` only), as Phase 1's E1 to E3 set it (report at `20e1f92`, lines ~776-814):
+- **The stored form, per case:**
+  - the kind, the node count, the cost, the distance and the node digest;
+  - plus -58's heights digest;
+  - plus a 64-bit FNV-1a digest of the tuple's bits.
+
+  **No coordinates.** The planner's scan is run (-87), for decimals, integer microdegree pairs and `node=`.
+- **R1's outcome is the expected value** (E3, line 814), for every case of every stratum:
+  - F0 (2), F0h (8), R (1,534), DL-lat, DL-lon, MP64, ML5, NT, CR and LB (59 each);
+  - **PM5 (55, -71);**
+  - FK (110, plus the four extra cases, compared on outcome as -80 and -85 set them).
+- **Kept out of exact values,** each named in the file:
+  - `R-shortest-025` (-50), if it is unstable when the values are written;
+  - kind 9's timing voids (-85), which FK9 compares by family only.
+- **The file's head** names the JDK it was written on (vendor, exact version, `os.arch`), which is Temurin 21.0.13+9 x64
+  (E2).
+- **On the JVM,** the oracle runs live beside the stored values, so a moved oracle shows as an oracle failure (E1). **iOS
+  compares against the stored values** at step 10.
+- **A test reads the file** and checks, for every case, that its R1 at write time equals the stored entry. It is seen
+  failing first, on one entry changed by a scratch revert.
+**Scope boundary:** writes only `brouter-port`. No `commonMain` change: the port's own routes start at step 6, where these
+values are first compared.
+**Baseline:** `brouter-port` `f308f88` (CI green, -87).
+**Finish line:** the expected values committed, the test seen failing and then passing, CI read by the planner, and 1b's
+milestone report to the owner (Amendment 3).
+**Abort conditions:** -3's; a case whose R1 differs from the R1 its stratum recorded; any coordinate in a staged diff.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -89.
