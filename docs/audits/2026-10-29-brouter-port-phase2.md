@@ -2079,6 +2079,82 @@ build directory. The working tree was restored to `49e2711`.
    - kinds 9 to 11 voids and any instability are unread until the run ends;
    - kind 10's measured-run precondition ("routes") is my own addition, beyond E4 [I].
 
+## Step 1b continued: FK finished (twenty-fifth session, Linden Caliper)
+
+Dispatched under RECORD -82, -84 and the planner's rulings by message (RECORD -85). Base `brouter-port` at `eb6460d`,
+fetched, equal to origin [C]. Evidence in `step1b/27-*` (the first run), `28-*`/`29-*` (kinds 5 and 3 alone) and `30-*`
+(the full run on `ce3db16`). **No coordinates are committed (E1):** the `R1-extent` column (BRouter integer coordinates)
+is dropped from every selection table, and each file was refused if any decimal or integer coordinate was left [C].
+
+### The first run (`27-fk-e3Strata.log`) went through E3's regimes [C]
+-84 read it as stopping in selection. It did not: `E3FKTest.kt:182` was the final assertion, after every case ran. Its
+stops were **FK3, 6 of 10** in its family (FK3-05, -07, -08 and -09 routed) and FK5, 9 of 9 (short). Instability was 4 of 113.
+The planner corrected -84 (-85). Kind 3's prediction ("no track found at pass=0", `27-fk-prediction.txt` item 3) missed:
+the first run's family was "from-position not mapped" [C].
+
+### Kinds 5 and 3, changed and rerun alone (`9a04e27`, `ce3db16`) [C]
+- **Kind 5 (-82):** start and end drawn separately, cap 400. Prediction `28-fk5-prediction.txt` pushed first, jvmTest 95 / 0
+  failures / 0 ` e: ` lines. **10 of 10 after 194 draws.** Rejections: end, car-fast link within 300 m, 146; end, cells
+  leave the tile, 21; start, no car-fast link, 7. No rejection used an oracle outcome. Family "to-position not mapped in
+  existing datafile", 10 of 10, 0 unstable. Prediction met.
+- **Kind 3 (-85):** selected like kind 4, by R1 for "no track found at pass=0", cap 200. Prediction
+  `29-fk3-prediction.txt` pushed first, jvmTest 95 / 0 / 0. **10 of 10 by draw 61**, with 51 rejections by outcome: 35
+  "from-position not mapped" (kind 1's family) and 16 "route". 10 of 10 in family, 0 unstable. The fill (10 in 61) beat my
+  guess of 1 in 5 or fewer [C]. Both alone tests PASSED (`29-fk35-e3Strata.log`).
+
+### The full run on `ce3db16` (`30-fk-e3Strata.log`): PASSED, 114 cases, 0 ` e: ` lines [C]
+Each kind's family comes from its first case; all 10 matched it in every kind:
+
+| Kind | Family (first case) | In family | Unstable |
+|---|---|---|---|
+| 1 | from-position not mapped in existing datafile | 10/10 | 0 |
+| 2 | to-position not mapped in existing datafile | 10/10 | 0 |
+| 3 | no track found at pass=0 (FK3-0012) | 10/10 | 0 |
+| 4 | target island detected for section 0 (74 draws) | 10/10 | 0 |
+| 5 | to-position not mapped in existing datafile | 10/10 | 0 |
+| 6 | datafile W80_N40.rd5 not found | 10/10 | 0 |
+| 7 | file of size * too short, should be * | 10/10 | 0 |
+| 8 | top index checksum error | 10/10 | 0 |
+| 9 | family:timeout | 10/10 | 3 |
+| 10 | family:watchdog | 10/10 | 0 |
+| 11 | family:watchdog | 10/10 | 0 |
+
+- **Instability: 3 of 114, under E3's 5%** (the first run had 4 of 113). It is all in kind 9: FK9-0001, -0037 and -0040
+  in both runs, and -0049 in the first run only. In each one, **R3 is voided ("the measured run took under 1 s")** while
+  the other five regimes time out. These are timing voids, not differing outcomes. Per -85 (as -50 ruled for
+  R-shortest-025) they are counted as unstable and kept out of exact assertions [C].
+- **The selection depends on timing near 1 s** [C]. Draw 13 (FK9-0013) was rejected in both runs, but for different
+  reasons: a void in the first run (963 ms) and "R2's tuple differs from R1's" in the second (R2 was voided, 1095 ms).
+  The cases taken, and the draws at which they were taken (49, 44, 30), are the same in both runs.
+- **Extra cases, compared on outcome:**
+  - **FK7-x1** (cut at D) gives R1 "to-position not mapped in existing datafile", stable, nothing thrown, in both runs.
+    Session 23's probe gave "Index -399101066 out of bounds for length 65636". I reran the probe on the byte-identical
+    cut tile: with the probe's ends it gives the index exception, with FK7-x1's ends it gives "not mapped"
+    (`30-fk7x1-probe.txt`). **So the outcome follows the ends** [C]. Why those ends read as unmapped from a tile cut at D
+    is [?].
+  - **FK7-x2** (size − 1) and **FK8-x1** (byte 203 flipped) both route, **identically to the intact control FK7-c0**
+    (`route|234|6078|4768|efb52c121f8934c3|c591233bb504b767`, heights E170_S50 234/234), stable [C]. The oracle accepts
+    both edits without noticing them.
+- Kind 10's precondition ("the measured run routes") is still my own addition, beyond E4 [I].
+
+### E1: earlier committed selection tables hold coordinates as integers [R]
+The `R1-extent` column (`E3Select.kt:146`) is each route's bounding box in BRouter integer microdegrees, e.g.
+`(lon + 180) × 1e6`. The decimal grep of E1 does not catch it. Row counts with such extents: `17-dl-lat-select.tsv` 59,
+`18-dl-lon-select.tsv` 59, `19-mp64-select.tsv` 65, `20-m5-select.tsv` 606, `23-nt-select.tsv` 56,
+`24-cr-select.tsv` 66, `25-lb-select.tsv` 86. Reported to the planner; I did not touch them. FK's tables were stripped.
+
+### CI
+<!-- s25-ci -->
+
+### Step 1b: the handoff (twenty-fifth session)
+1. **Nothing is running.** FK is complete: 11 kinds × 10 plus four extra cases, PASSED on `ce3db16`.
+2. **Next: E5's expected values for FK.** Each kind's expected value is its family above, with kind 7's numbers read as
+   `*`. Exact assertions skip kind 9's unstable cases (FK9-0001, -0037, -0040; and -0049, which was unstable in the first
+   run). FK7-x2 and FK8-x1 expect FK7-c0's tuple. FK7-x1 expects "to-position not mapped" for its own ends, with its
+   exception class [?].
+3. **For the planner and the owner:** the `R1-extent` columns already committed (E1, above). Fixing `E3Select` so that
+   it stops writing the column is a code change I have not made.
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the

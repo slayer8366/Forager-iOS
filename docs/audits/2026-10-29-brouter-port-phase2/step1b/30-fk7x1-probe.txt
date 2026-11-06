@@ -1,0 +1,8 @@
+FK7-x1 (E170_S50 cut at its data end D = 1061592), read twice with session 23's probe (26-fk-probes/Probe.java), oracle jar
+brouter-1.7.10-ro.jar, Temurin 21.0.13+9, profile hiking-mountain, doRun(0), on 2026-11-06 by Linden Caliper, session 25.
+Tile: session 23's cut copy and the harness's FK-tiles/FK7-x1 copy are byte-identical (SHA-256 ddec658bda47ebfe...).
+Ends (coordinates kept out, E1): "probe" = session 23's one Dunedin case (fkprobe/dn.txt in scratch); "harness" = FK7-x1's
+ends in FK/cases.tsv (kinds 7 and 8's ends, seed 20261215, draw 1).
+  probe    Index -399101066 out of bounds for length 65636
+  harness  to-position not mapped in existing datafile
+Same tile, same jar, same probe: the outcome follows the ends.

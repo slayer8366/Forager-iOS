@@ -1,0 +1,66 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=37833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=37833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3FKTest > fkKind3ReachesOneFamilyInAllTen STANDARD_OUT
+    E3 FK3 JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 FK islands: E170_S50.rd5: 23 island nodes, 1 islands, 45266 mainland nodes; W70_N40.rd5: 1308 island nodes, 12 islands, 166394 mainland nodes; W75_N35.rd5: 2 island nodes, 1 islands, 232670 mainland nodes
+    E3 FK3 selection: 61 draws counted, 61 routed; table /home/user/forager-ios/brouter/build/e3/FK3-select/select.tsv
+    E3 FK3 rejected: 35 reach: outside kind 3's family: from-position not mapped in existing datafile
+    E3 FK3 rejected: 16 reach: outside kind 3's family: route
+    E3 FK3 taken: 10 of 10; last taken at draw 61
+    E3 FK FK3: family 'no track found at pass=0' (FK3-0012); in family 10 of 10; unstable 0
+    E3 FK3: 10 cases; unstable 0 of 10; over 5%: false
+    E3 FK3 FK3-0012: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 374 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0023: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 412 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0028: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 455 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0040: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 374 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK3 FK3-0042: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 514 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0045: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 353 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0053: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 352 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0055: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 362 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0058: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 351 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK3 FK3-0061: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 462 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+
+E3FKTest > fkKind3ReachesOneFamilyInAllTen PASSED
+
+E3FKTest > fkKind5ReachesOneFamilyInAllTen STANDARD_OUT
+    E3 FK5 JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 FK kind 5: 10 of 10 after 194 draws (cap 400); profile car-fast; rejected {end: a link car-fast can use within 300.0 m=146, end: the node's 3 x 3 cells leave the tile=21, start: the drawn node has no link car-fast can use=7}
+    E3 FK FK5: family 'to-position not mapped in existing datafile' (FK5-01); in family 10 of 10; unstable 0
+    E3 FK5: 10 cases; unstable 0 of 10; over 5%: false
+    E3 FK5 FK5-01: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 244 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-02: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 212 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-03: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 258 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-04: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 214 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-05: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 234 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-06: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 206 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-07: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 239 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-08: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 180 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-09: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 171 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-10: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 202 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+
+E3FKTest > fkKind5ReachesOneFamilyInAllTen PASSED
+
+BUILD SUCCESSFUL in 1m 13s
+10 actionable tasks: 2 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

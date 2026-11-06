@@ -1,0 +1,240 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=37833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=37833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3FKTest > fkReachesOneFamilyPerKindInAllTen STANDARD_OUT
+    E3 FK JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 FK islands: E170_S50.rd5: 23 island nodes, 1 islands, 45266 mainland nodes; W70_N40.rd5: 1308 island nodes, 12 islands, 166394 mainland nodes; W75_N35.rd5: 2 island nodes, 1 islands, 232670 mainland nodes
+    E3 FK3 selection: 61 draws counted, 61 routed; table /home/user/forager-ios/brouter/build/e3/FK3-select/select.tsv
+    E3 FK3 rejected: 35 reach: outside kind 3's family: from-position not mapped in existing datafile
+    E3 FK3 rejected: 16 reach: outside kind 3's family: route
+    E3 FK3 taken: 10 of 10; last taken at draw 61
+    E3 FK kind 5: 10 of 10 after 194 draws (cap 400); profile car-fast; rejected {end: a link car-fast can use within 300.0 m=146, end: the node's 3 x 3 cells leave the tile=21, start: the drawn node has no link car-fast can use=7}
+    E3 FK kind 1: 10 of 10 after 10 draws (cap 200); profile hiking-mountain; rejected {}
+    E3 FK kind 2: 10 of 10 after 12 draws (cap 200); profile hiking-mountain; rejected {the drawn node has no link hiking-mountain can use=2}
+    E3 FK kind 6: 10 of 10 after 10 draws (cap 200); profile hiking-mountain; rejected {}
+    E3 FK kinds 7 and 8 ends: drawn at draw 1; rejected {}
+    E3 FK E170_S50: size 1061705, data end D 1061592
+    E3 FK kind 7 cuts: [200, 201, 1000, 265398, 530796, D-265398, D-1, D+1, D+56, D+111]
+    E3 FK kind 8 bytes: [8, 28, 48, 68, 88, 108, 128, 148, 168, 188]
+    E3 FK4 selection: 74 draws counted, 74 routed; table /home/user/forager-ios/brouter/build/e3/FK4-select/select.tsv
+    E3 FK4 rejected: 41 reach: not an island: to-position not mapped in existing datafile
+    E3 FK4 rejected: 23 reach: not an island: route
+    E3 FK4 taken: 10 of 10; last taken at draw 74
+    E3 FK9-11 selection: 49 draws counted, 43 routed; table /home/user/forager-ios/brouter/build/e3/FK9-11-select/select.tsv
+    E3 FK9-11 rejected: 3 reach: void: the measured run did not route
+    E3 FK9-11 rejected: 2 reach: void: the measured run took under 1 s
+    E3 FK9-11 rejected: 6 before routing: no node in the target's 3 x 3 cells, or the target is outside every tile
+    E3 FK9-11 rejected: 1 reach: R2's tuple differs from R1's
+    E3 FK9-11 rejected: 4 reach: void: the measured run processed under 100,000 links
+    E3 FK9-11 rejected: 2 FK11 already full
+    E3 FK9-11 rejected: 1 FK10 already full
+    E3 FK9 taken: 10 of 10; last taken at draw 49
+    E3 FK10 taken: 10 of 10; last taken at draw 44
+    E3 FK11 taken: 10 of 10; last taken at draw 30
+    E3 FK FK3: family 'no track found at pass=0' (FK3-0012); in family 10 of 10; unstable 0
+    E3 FK FK5: family 'to-position not mapped in existing datafile' (FK5-01); in family 10 of 10; unstable 0
+    E3 FK FK1: family 'from-position not mapped in existing datafile' (FK1-01); in family 10 of 10; unstable 0
+    E3 FK FK2: family 'to-position not mapped in existing datafile' (FK2-01); in family 10 of 10; unstable 0
+    E3 FK FK6: family 'datafile W80_N40.rd5 not found' (FK6-01); in family 10 of 10; unstable 0
+    E3 FK FK7: family 'file of size * too short, should be *' (FK7-01); in family 10 of 10; unstable 0
+    E3 FK FK8: family 'top index checksum error' (FK8-01); in family 10 of 10; unstable 0
+    E3 FK FK4: family 'target island detected for section 0' (FK4-0001); in family 10 of 10; unstable 0
+    E3 FK FK9: family 'family:timeout' (FK9-0001); in family 10 of 10; unstable 3
+    E3 FK FK9 FK9-0001 measured R1: 1720 ms; 219094 links; route
+    E3 FK FK9 FK9-0007 measured R1: 3691 ms; 483102 links; route
+    E3 FK FK9 FK9-0016 measured R1: 6912 ms; 1602063 links; route
+    E3 FK FK9 FK9-0025 measured R1: 2973 ms; 465425 links; route
+    E3 FK FK9 FK9-0028 measured R1: 3815 ms; 479339 links; route
+    E3 FK FK9 FK9-0034 measured R1: 3640 ms; 492280 links; route
+    E3 FK FK9 FK9-0037 measured R1: 2804 ms; 406017 links; route
+    E3 FK FK9 FK9-0040 measured R1: 2596 ms; 320171 links; route
+    E3 FK FK9 FK9-0046 measured R1: 7491 ms; 1719379 links; route
+    E3 FK FK9 FK9-0049 measured R1: 2738 ms; 363044 links; route
+    E3 FK FK10: family 'family:watchdog' (FK10-0005); in family 10 of 10; unstable 0
+    E3 FK FK10 FK10-0005 measured R1: 627 ms; 15925 links; route
+    E3 FK FK10 FK10-0008 measured R1: 5573 ms; 818870 links; route
+    E3 FK FK10 FK10-0011 measured R1: 913 ms; 82088 links; route
+    E3 FK FK10 FK10-0014 measured R1: 2990 ms; 369611 links; route
+    E3 FK FK10 FK10-0017 measured R1: 6035 ms; 930903 links; route
+    E3 FK FK10 FK10-0023 measured R1: 1860 ms; 209163 links; route
+    E3 FK FK10 FK10-0026 measured R1: 4025 ms; 478003 links; route
+    E3 FK FK10 FK10-0035 measured R1: 2953 ms; 354542 links; route
+    E3 FK FK10 FK10-0041 measured R1: 4451 ms; 738950 links; route
+    E3 FK FK10 FK10-0044 measured R1: 6008 ms; 1458930 links; route
+    E3 FK FK11: family 'family:watchdog' (FK11-0003); in family 10 of 10; unstable 0
+    E3 FK FK11 FK11-0003 measured R1: 2012 ms; 350804 links; route
+    E3 FK FK11 FK11-0006 measured R1: 4502 ms; 563763 links; route
+    E3 FK FK11 FK11-0009 measured R1: 7606 ms; 1750712 links; route
+    E3 FK FK11 FK11-0012 measured R1: 4031 ms; 975172 links; route
+    E3 FK FK11 FK11-0015 measured R1: 10307 ms; 3586177 links; route
+    E3 FK FK11 FK11-0018 measured R1: 1279 ms; 122547 links; route
+    E3 FK FK11 FK11-0021 measured R1: 1722 ms; 251239 links; route
+    E3 FK FK11 FK11-0024 measured R1: 2666 ms; 328091 links; route
+    E3 FK FK11 FK11-0027 measured R1: 3409 ms; 475993 links; route
+    E3 FK FK11 FK11-0030 measured R1: 1973 ms; 249832 links; route
+    E3 FK FK7-x1: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; thrown {}
+    E3 FK FK7-x2: stable; R1 route|234|6078|4768|efb52c121f8934c3|c591233bb504b767; thrown {}
+    E3 FK FK8-x1: stable; R1 route|234|6078|4768|efb52c121f8934c3|c591233bb504b767; thrown {}
+    E3 FK FK7-c0: stable; R1 route|234|6078|4768|efb52c121f8934c3|c591233bb504b767; thrown {}
+    E3 FK: 114 cases; unstable 3 of 114; over 5%: false
+    E3 FK FK3-0012: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 438 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0023: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 488 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0028: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 545 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0040: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 344 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0042: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 496 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0045: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 353 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0053: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 399 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0055: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 346 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0058: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 360 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK3-0061: stable; R1 no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 294 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-01: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 208 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-02: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 207 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-03: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 355 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-04: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 156 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-05: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 235 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-06: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 203 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-07: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 189 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-08: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 198 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-09: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 213 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK5-10: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 194 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-01: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 222 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-02: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 219 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-03: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 222 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-04: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 188 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-05: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 208 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-06: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 169 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-07: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 250 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-08: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 197 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-09: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 200 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK1-10: stable; R1 from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 167 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-01: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 224 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-02: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 172 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-03: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 211 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-04: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 296 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-05: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 220 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-06: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 188 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-07: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 202 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-08: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 261 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-09: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 178 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK2-10: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 175 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-01: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 227 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-02: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 194 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-03: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 191 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-04: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 180 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-05: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 199 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-06: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 276 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK FK6-07: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 251 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-08: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 219 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-09: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 204 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK6-10: stable; R1 datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 180 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-01: stable; R1 file of size 200 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 183 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-02: stable; R1 file of size 201 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 171 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-03: stable; R1 file of size 1000 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 170 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-04: stable; R1 file of size 265398 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 164 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-05: stable; R1 file of size 530796 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 175 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-06: stable; R1 file of size 796194 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 137 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-07: stable; R1 file of size 1061591 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 145 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-08: stable; R1 file of size 1061593 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 168 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-09: stable; R1 file of size 1061648 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 147 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-10: stable; R1 file of size 1061703 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 133 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-01: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 121 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-02: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 139 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-03: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 172 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-04: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 183 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-05: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 148 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-06: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 178 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-07: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 143 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK FK8-08: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 163 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-09: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 146 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-10: stable; R1 top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 149 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-x1: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 255 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-x2: stable; R1 route|234|6078|4768|efb52c121f8934c3|c591233bb504b767; collection lines 0; R1 638 ms; R1 heights E170_S50:234/234; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK8-x1: stable; R1 route|234|6078|4768|efb52c121f8934c3|c591233bb504b767; collection lines 0; R1 693 ms; R1 heights E170_S50:234/234; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK7-c0: stable; R1 route|234|6078|4768|efb52c121f8934c3|c591233bb504b767; collection lines 0; R1 710 ms; R1 heights E170_S50:234/234; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0001: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 322 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0008: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 325 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0022: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 416 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK FK4-0026: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 314 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0038: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 243 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0041: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 285 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0044: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 295 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0061: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 322 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 4,2,0,1,3,10,11,5,6,9,7,8,
+    E3 FK FK4-0072: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 302 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK4-0074: stable; R1 target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 298 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0001: UNSTABLE; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 4; R1 1805 ms; R1 heights -; control R1 1,0,2,3,4,11,10,5,6,7,8,9, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+      R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log null
+      R2 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40917/609 after=10147/464 maxTotalCost=1000000000, collected, nodes/paths before=43933/651 after=12477/499 maxTotalCost=168264, collected, nodes/paths before=40633/785 after=6594/606 maxTotalCost=168264, collected, nodes/paths before=41233/418 after=1893/300 maxTotalCost=168264]
+      R3 void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40917/609 after=10147/464 maxTotalCost=1000000000, collected, nodes/paths before=43933/651 after=12477/499 maxTotalCost=168264, collected, nodes/paths before=40633/785 after=6594/606 maxTotalCost=168264, collected, nodes/paths before=41233/418 after=1893/300 maxTotalCost=168264]
+      R4 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40917/609 after=10147/464 maxTotalCost=1000000000, collected, nodes/paths before=43933/651 after=12477/499 maxTotalCost=168264, collected, nodes/paths before=40633/785 after=6594/606 maxTotalCost=168264, collected, nodes/paths before=41233/418 after=1893/300 maxTotalCost=168264]
+      R5 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40917/609 after=10147/464 maxTotalCost=1000000000, collected, nodes/paths before=43933/651 after=12477/499 maxTotalCost=168264, collected, nodes/paths before=40633/785 after=6594/606 maxTotalCost=168264, collected, nodes/paths before=41233/418 after=1893/300 maxTotalCost=168264]
+      R6 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log null
+      kinds agree in all six: false
+    E3 FK FK9-0007: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 10; R1 3786 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0016: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 30; R1 7005 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0025: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 10; R1 3061 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0028: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 9; R1 3904 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0034: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 13; R1 3718 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0037: UNSTABLE; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 10; R1 2906 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+      R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log null
+      R2 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=41380/482 after=13898/370 maxTotalCost=1000000000, collected, nodes/paths before=40138/1592 after=21322/1220 maxTotalCost=1000000000, collected, nodes/paths before=42936/1274 after=29373/993 maxTotalCost=1000000000, collected, nodes/paths before=42930/547 after=16900/442 maxTotalCost=64776, collected, nodes/paths before=40643/902 after=18923/720 maxTotalCost=64776, collected, nodes/paths before=40846/1280 after=16786/1047 maxTotalCost=64776, collected, nodes/paths before=41225/1072 after=13462/854 maxTotalCost=64776, collected, nodes/paths before=39841/1187 after=12740/877 maxTotalCost=64776, collected, nodes/paths before=41496/842 after=9946/700 maxTotalCost=64776, collected, nodes/paths before=42705/631 after=3528/498 maxTotalCost=64776]
+      R3 void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=41380/482 after=13898/370 maxTotalCost=1000000000, collected, nodes/paths before=40138/1592 after=21322/1220 maxTotalCost=1000000000, collected, nodes/paths before=42936/1274 after=29373/993 maxTotalCost=1000000000, collected, nodes/paths before=42930/547 after=16900/442 maxTotalCost=64776, collected, nodes/paths before=40643/902 after=18923/720 maxTotalCost=64776, collected, nodes/paths before=40846/1280 after=16786/1047 maxTotalCost=64776, collected, nodes/paths before=41225/1072 after=13462/854 maxTotalCost=64776, collected, nodes/paths before=39841/1187 after=12740/877 maxTotalCost=64776, collected, nodes/paths before=41496/842 after=9946/700 maxTotalCost=64776, collected, nodes/paths before=42705/631 after=3528/498 maxTotalCost=64776]
+      R4 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=41380/482 after=13898/370 maxTotalCost=1000000000, collected, nodes/paths before=40138/1592 after=21322/1220 maxTotalCost=1000000000, collected, nodes/paths before=42936/1274 after=29373/993 maxTotalCost=1000000000, collected, nodes/paths before=42930/547 after=16900/442 maxTotalCost=64776, collected, nodes/paths before=40643/902 after=18923/720 maxTotalCost=64776, collected, nodes/paths before=40846/1280 after=16786/1047 maxTotalCost=64776, collected, nodes/paths before=41225/1072 after=13462/854 maxTotalCost=64776, collected, nodes/paths before=39841/1187 after=12740/877 maxTotalCost=64776, collected, nodes/paths before=41496/842 after=9946/700 maxTotalCost=64776, collected, nodes/paths before=42705/631 after=3528/498 maxTotalCost=64776]
+      R5 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=41380/482 after=13898/370 maxTotalCost=1000000000, collected, nodes/paths before=40138/1592 after=21322/1220 maxTotalCost=1000000000, collected, nodes/paths before=42936/1274 after=29373/993 maxTotalCost=1000000000, collected, nodes/paths before=42930/547 after=16900/442 maxTotalCost=64776, collected, nodes/paths before=40643/902 after=18923/720 maxTotalCost=64776, collected, nodes/paths before=40846/1280 after=16786/1047 maxTotalCost=64776, collected, nodes/paths before=41225/1072 after=13462/854 maxTotalCost=64776, collected, nodes/paths before=39841/1187 after=12740/877 maxTotalCost=64776, collected, nodes/paths before=41496/842 after=9946/700 maxTotalCost=64776, collected, nodes/paths before=42705/631 after=3528/498 maxTotalCost=64776]
+      R6 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log null
+      kinds agree in all six: false
+    E3 FK FK9-0040: UNSTABLE; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 5; R1 2684 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+      R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log null
+      R2 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40315/911 after=10551/657 maxTotalCost=1000000000, collected, nodes/paths before=41597/351 after=3872/271 maxTotalCost=179758, collected, nodes/paths before=41580/299 after=3659/225 maxTotalCost=179758, collected, nodes/paths before=40967/623 after=2989/471 maxTotalCost=179753, collected, nodes/paths before=41273/522 after=1810/369 maxTotalCost=179753]
+      R3 void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40315/911 after=10551/657 maxTotalCost=1000000000, collected, nodes/paths before=41597/351 after=3872/271 maxTotalCost=179758, collected, nodes/paths before=41580/299 after=3659/225 maxTotalCost=179758, collected, nodes/paths before=40967/623 after=2989/471 maxTotalCost=179753, collected, nodes/paths before=41273/522 after=1810/369 maxTotalCost=179753]
+      R4 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40315/911 after=10551/657 maxTotalCost=1000000000, collected, nodes/paths before=41597/351 after=3872/271 maxTotalCost=179758, collected, nodes/paths before=41580/299 after=3659/225 maxTotalCost=179758, collected, nodes/paths before=40967/623 after=2989/471 maxTotalCost=179753, collected, nodes/paths before=41273/522 after=1810/369 maxTotalCost=179753]
+      R5 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log [collected, nodes/paths before=40315/911 after=10551/657 maxTotalCost=1000000000, collected, nodes/paths before=41597/351 after=3872/271 maxTotalCost=179758, collected, nodes/paths before=41580/299 after=3659/225 maxTotalCost=179758, collected, nodes/paths before=40967/623 after=2989/471 maxTotalCost=179753, collected, nodes/paths before=41273/522 after=1810/369 maxTotalCost=179753]
+      R6 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325 log null
+      kinds agree in all six: false
+    E3 FK FK9-0046: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 42; R1 7586 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK9-0049: stable; R1 family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 8; R1 2828 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0005: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 662 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0008: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 23; R1 5625 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0011: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 1; R1 951 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0014: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 7; R1 3052 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0017: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 22; R1 6086 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0023: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 4; R1 1902 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0026: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 9; R1 4096 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0035: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 6; R1 2991 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0041: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 22; R1 4512 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK10-0044: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 31; R1 6037 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0003: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 7; R1 2130 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0006: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 13; R1 4679 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0009: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 37; R1 7703 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0012: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 20; R1 4198 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0015: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 61; R1 10501 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0018: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 2; R1 1395 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0021: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 4; R1 1844 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0024: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 7; R1 2953 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0027: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 10; R1 3495 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK FK11-0030: stable; R1 family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 4; R1 2145 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+
+E3FKTest > fkReachesOneFamilyPerKindInAllTen PASSED
+
+BUILD SUCCESSFUL in 8m 27s
+10 actionable tasks: 2 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

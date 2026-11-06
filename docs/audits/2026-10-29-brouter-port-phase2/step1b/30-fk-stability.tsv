@@ -1,0 +1,115 @@
+id	verdict	tuple-stable	log-stable	control-R1-ne-R4	R1-tuple	R2-collection-lines	R1-ms	R1-heights-by-tile
+FK3-0012	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	438	-
+FK3-0023	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	488	-
+FK3-0028	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	545	-
+FK3-0040	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	344	-
+FK3-0042	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	496	-
+FK3-0045	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	353	-
+FK3-0053	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	399	-
+FK3-0055	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	346	-
+FK3-0058	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	360	-
+FK3-0061	stable	true	true	true	no track found at pass=0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	294	-
+FK5-01	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	208	-
+FK5-02	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	207	-
+FK5-03	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	355	-
+FK5-04	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	156	-
+FK5-05	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	235	-
+FK5-06	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	203	-
+FK5-07	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	189	-
+FK5-08	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	198	-
+FK5-09	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	213	-
+FK5-10	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	194	-
+FK1-01	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	222	-
+FK1-02	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	219	-
+FK1-03	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	222	-
+FK1-04	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	188	-
+FK1-05	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	208	-
+FK1-06	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	169	-
+FK1-07	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	250	-
+FK1-08	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	197	-
+FK1-09	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	200	-
+FK1-10	stable	true	true	true	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	167	-
+FK2-01	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	224	-
+FK2-02	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	172	-
+FK2-03	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	211	-
+FK2-04	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	296	-
+FK2-05	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	220	-
+FK2-06	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	188	-
+FK2-07	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	202	-
+FK2-08	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	261	-
+FK2-09	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	178	-
+FK2-10	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	175	-
+FK6-01	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	227	-
+FK6-02	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	194	-
+FK6-03	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	191	-
+FK6-04	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	180	-
+FK6-05	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	199	-
+FK6-06	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	276	-
+FK6-07	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	251	-
+FK6-08	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	219	-
+FK6-09	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	204	-
+FK6-10	stable	true	true	true	datafile W80_N40.rd5 not found|0|0|0|cbf29ce484222325|cbf29ce484222325	0	180	-
+FK7-01	stable	true	true	true	file of size 200 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	183	-
+FK7-02	stable	true	true	true	file of size 201 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	171	-
+FK7-03	stable	true	true	true	file of size 1000 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	170	-
+FK7-04	stable	true	true	true	file of size 265398 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	164	-
+FK7-05	stable	true	true	true	file of size 530796 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	175	-
+FK7-06	stable	true	true	true	file of size 796194 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	137	-
+FK7-07	stable	true	true	true	file of size 1061591 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	145	-
+FK7-08	stable	true	true	true	file of size 1061593 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	168	-
+FK7-09	stable	true	true	true	file of size 1061648 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	147	-
+FK7-10	stable	true	true	true	file of size 1061703 too short, should be 1061704|0|0|0|cbf29ce484222325|cbf29ce484222325	0	133	-
+FK8-01	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	121	-
+FK8-02	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	139	-
+FK8-03	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	172	-
+FK8-04	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	183	-
+FK8-05	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	148	-
+FK8-06	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	178	-
+FK8-07	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	143	-
+FK8-08	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	163	-
+FK8-09	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	146	-
+FK8-10	stable	true	true	true	top index checksum error|0|0|0|cbf29ce484222325|cbf29ce484222325	0	149	-
+FK7-x1	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	255	-
+FK7-x2	stable	true	true	true	route|234|6078|4768|efb52c121f8934c3|c591233bb504b767	0	638	E170_S50:234/234
+FK8-x1	stable	true	true	true	route|234|6078|4768|efb52c121f8934c3|c591233bb504b767	0	693	E170_S50:234/234
+FK7-c0	stable	true	true	true	route|234|6078|4768|efb52c121f8934c3|c591233bb504b767	0	710	E170_S50:234/234
+FK4-0001	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	322	-
+FK4-0008	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	325	-
+FK4-0022	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	416	-
+FK4-0026	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	314	-
+FK4-0038	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	243	-
+FK4-0041	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	285	-
+FK4-0044	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	295	-
+FK4-0061	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	322	-
+FK4-0072	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	302	-
+FK4-0074	stable	true	true	true	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	0	298	-
+FK9-0001	UNSTABLE	false	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	4	1805	-
+FK9-0007	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	10	3786	-
+FK9-0016	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	30	7005	-
+FK9-0025	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	10	3061	-
+FK9-0028	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	9	3904	-
+FK9-0034	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	13	3718	-
+FK9-0037	UNSTABLE	false	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	10	2906	-
+FK9-0040	UNSTABLE	false	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	5	2684	-
+FK9-0046	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	42	7586	-
+FK9-0049	stable	true	true	true	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	8	2828	-
+FK10-0005	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	0	662	-
+FK10-0008	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	23	5625	-
+FK10-0011	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	1	951	-
+FK10-0014	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	7	3052	-
+FK10-0017	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	22	6086	-
+FK10-0023	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	4	1902	-
+FK10-0026	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	9	4096	-
+FK10-0035	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	6	2991	-
+FK10-0041	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	22	4512	-
+FK10-0044	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	31	6037	-
+FK11-0003	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	7	2130	-
+FK11-0006	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	13	4679	-
+FK11-0009	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	37	7703	-
+FK11-0012	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	20	4198	-
+FK11-0015	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	61	10501	-
+FK11-0018	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	2	1395	-
+FK11-0021	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	4	1844	-
+FK11-0024	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	7	2953	-
+FK11-0027	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	10	3495	-
+FK11-0030	stable	true	true	true	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	4	2145	-

@@ -1,0 +1,50 @@
+draw	id	R1-tuple	R2-tuple	R2-equals-R1	R2-collected-lines	R2-panic	R1-ms	memoryclass	R6-tuple	reach	result
+1	FK9-0001	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	4	false	2164	64	-	family:timeout	taken FK9
+2	FK10-0002	void: the measured run did not route|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run did not route|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	278	64	-	void: the measured run did not route	rejected
+3	FK11-0003	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	7	false	2551	64	-	family:watchdog	taken FK11
+4	FK9-0004	void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	329	64	-	void: the measured run took under 1 s	rejected
+5	FK10-0005	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	778	64	-	family:watchdog	taken FK10
+6	FK11-0006	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	13	false	4354	64	-	family:watchdog	taken FK11
+7	FK9-0007	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	10	false	3955	64	-	family:timeout	taken FK9
+8	FK10-0008	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	23	false	6199	64	-	family:watchdog	taken FK10
+9	FK11-0009	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	37	false	7698	64	-	family:watchdog	taken FK11
+10	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+11	FK10-0011	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	1	false	1149	64	-	family:watchdog	taken FK10
+12	FK11-0012	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	20	false	4409	64	-	family:watchdog	taken FK11
+13	FK9-0013	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325	false	1	false	1095	64	-	R2's tuple differs from R1's	rejected
+14	FK10-0014	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	7	false	2716	64	-	family:watchdog	taken FK10
+15	FK11-0015	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	61	false	11322	64	-	family:watchdog	taken FK11
+16	FK9-0016	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	30	false	7253	64	-	family:timeout	taken FK9
+17	FK10-0017	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	22	false	5487	64	-	family:watchdog	taken FK10
+18	FK11-0018	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	2	false	1238	64	-	family:watchdog	taken FK11
+19	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+20	FK10-0020	void: the measured run did not route|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run did not route|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	325	64	-	void: the measured run did not route	rejected
+21	FK11-0021	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	4	false	2894	64	-	family:watchdog	taken FK11
+22	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+23	FK10-0023	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	4	false	1826	64	-	family:watchdog	taken FK10
+24	FK11-0024	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	7	false	2998	64	-	family:watchdog	taken FK11
+25	FK9-0025	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	10	false	3150	64	-	family:timeout	taken FK9
+26	FK10-0026	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	9	false	3832	64	-	family:watchdog	taken FK10
+27	FK11-0027	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	10	false	3832	64	-	family:watchdog	taken FK11
+28	FK9-0028	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	9	false	3920	64	-	family:timeout	taken FK9
+29	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+30	FK11-0030	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	4	false	2372	64	-	family:watchdog	taken FK11
+31	FK9-0031	void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run took under 1 s|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	387	64	-	void: the measured run took under 1 s	rejected
+32	FK10-0032	void: the measured run did not route|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run did not route|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	322	64	-	void: the measured run did not route	rejected
+33	FK11-0033	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	1	false	1266	64	-	void: the measured run processed under 100,000 links	rejected
+34	FK9-0034	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	13	false	4358	64	-	family:timeout	taken FK9
+35	FK10-0035	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	6	false	3255	64	-	family:watchdog	taken FK10
+36	FK11-0036	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	1077	64	-	void: the measured run processed under 100,000 links	rejected
+37	FK9-0037	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	10	false	3355	64	-	family:timeout	taken FK9
+38	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+39	FK11-0039	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	801	64	-	void: the measured run processed under 100,000 links	rejected
+40	FK9-0040	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	5	false	3493	64	-	family:timeout	taken FK9
+41	FK10-0041	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	22	false	5465	64	-	family:watchdog	taken FK10
+42	FK11-0042	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	47	false	8977	64	-	family:watchdog	rejected: FK11 already full
+43	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+44	FK10-0044	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	31	false	6281	64	-	family:watchdog	taken FK10
+45	FK11-0045	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	void: the measured run processed under 100,000 links|0|-1|-1|cbf29ce484222325|cbf29ce484222325	true	0	false	806	64	-	void: the measured run processed under 100,000 links	rejected
+46	FK9-0046	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	42	false	6133	64	-	family:timeout	taken FK9
+47	FK10-0047	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	8	false	3112	64	-	family:watchdog	rejected: FK10 already full
+48	FK11-0048	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	family:watchdog|0|0|0|cbf29ce484222325|cbf29ce484222325	true	3	false	1926	64	-	family:watchdog	rejected: FK11 already full
+49	FK9-0049	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	family:timeout|0|0|0|cbf29ce484222325|cbf29ce484222325	true	8	false	3082	64	-	family:timeout	taken FK9
