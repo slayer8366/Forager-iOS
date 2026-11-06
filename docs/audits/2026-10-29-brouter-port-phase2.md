@@ -1670,6 +1670,36 @@ The next step is the targeted strata, **as the nineteenth session's handoff give
    `scripts/rsum.py`, the CI log `ci/9302765-jvm.log`. Every log that matters is copied into `step1b/`. Nothing there is
    needed: the JDK comes again from `bash tools/fetch-temurin.sh <dir>`.
 
+## Step 1b continued: the targeted strata DL-lat, DL-lon, MP64 and ML5/PM5, and `canEscape` on MP64 (twenty-first session, Linden Caliper): IN PROGRESS
+
+Dispatch RECORD -64 (with -51, -52, -61, -62). Base `brouter-port` `3688c9f`, fetched and equal to `origin/brouter-port`
+before any write [C]. CI on `3688c9f` is the planner's read at RECORD -63 (run 41910184631, green), cited, not re-read.
+Forager read-only at `/home/user/slayer8366/forager` (`d6e2a041`), used only for `third_party/brouter`'s source. Oracle
+JDK: Temurin 21.0.13+9 amd64, every log's first `E3` line [C]. Tuple: -58's, `kind|nodes|cost|distance|nodeDigest|heightDigest`.
+Evidence in `step1b/17-*` onward. Each prediction file was pushed before its run.
+
+The `select.tsv` checks (the nineteenth handoff's) are made by `step1b/selcheck.py`, whose output for each stratum is
+committed beside it as `*-select-check.txt`: draw numbers 1 to n with no gap; taken ids and draws rising; rejected rows
+equal to draws minus taken; routed rows with R2's tuple different from R1's.
+
+### DL-lat (`17-*`; prediction `17-dl-lat-prediction.txt`, pushed in `1359307`) [C]
+
+- **Filled:** 59 of 59, the last taken at draw **501** of the cap of 1,180 (`17-dl-lat-e3Strata.log`, "taken" line).
+- **Draws:** 501 counted, 70 routed. **Rejected, 442,** by reason (the log's "rejected" lines; the same counts in
+  `17-dl-lat-select-check.txt`):
+  - before routing, 431: 419 "the target is not across the line inside the other tile", 10 "no node in the target's
+    3 x 3 cells in the other tile", 2 "an end moved off its side";
+  - after routing, 11, all "no route": 7 "to-position not mapped", 2 "from-position not mapped", 1 "no track found at
+    pass=0", 1 "target island detected for section 0";
+  - "route on one side": 0; "R2's tuple differs from R1's": 0.
+- **Stability:** 0 of 59 unstable (`17-dl-lat-stability.tsv`, no `UNSTABLE` row; the log's "unstable 0 of 59").
+- **Selection against E3:** the selection's R1 tuple and R2 lines equal `E3Targeted`'s in **59 of 59**. R1's kinds: route 59.
+- **Against the prediction:** filled, 0 unstable and 59 of 59 held. "Taken within about 300 draws" was wrong: 501. The
+  bearing rejects were 84% of draws, not about half [C for the count; why, I].
+- Selection took about 2 minutes; the whole task 5 m 4 s.
+
+<!-- s21-next -->
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
