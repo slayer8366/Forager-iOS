@@ -2062,8 +2062,9 @@ build directory. The working tree was restored to `49e2711`.
      extra case has its own line;
    - check `grep -c " e: " <log>` and `grep "E3 FK: " <log>`, the line with the 5% count;
    - commit the log, `FK/stability.tsv`, `FK4-select/select.tsv` and `FK9-11-select/select.tsv` as
-     `step1b/27-fk-*`, after grepping each for coordinate-like numbers. The `.tsv` files hold case lines with
-     coordinates, so commit counts only if they do.
+     `step1b/27-fk-*`. **No file holding coordinates is committed (E1).** The `.tsv` files and the log's case lines hold
+     them, so strip every coordinate column first, or commit counts and digests only. `step1b/11-r-sequence-before-edit.tsv`
+     is left untouched: it goes to the owner (RECORD -83).
 3. **Next, after the run:**
    - apply `27-kind5-rerun.patch`;
    - write `step1b/28-fk5-prediction.txt`: family "to-position not mapped in existing datafile", 10 of 10;
