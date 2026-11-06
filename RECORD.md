@@ -2694,3 +2694,28 @@ has `canEscape` answer false [I].
 comes either at the end or at 180k.
 **Abort conditions:** -3's; a run showing a case in two strata (-52); a stratum reported short.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -65.
+
+**Kind:** decision
+**ID:** 2026-10-28-65
+**Timestamp:** 2026-11-06T03:37:03Z
+**Continues:** 2026-10-28-61, 2026-10-28-64
+**Title:** The route-ways path gets a differential test, in 5c (owner)
+**Decision:** asked whether the port should prove that what `BRouterRouteWays` reads (way tags and geometry, straight from
+the tile decoder) matches Java (-64), the owner, verbatim: "Add a differential test (Recommended)". The option read:
+"Compare the port's decoded ways, tags and geometry against Java's around Forager's own test points (the drop-off fixture
+and F0h's ends). It goes into 5c, which already compares tile decodes. A modest test, since the decoding is already ported."
+- **Rejected:** "Defer until iOS needs it"; "Out of scope for iOS".
+- **What it adds to 5c (the planner's calls, technical):**
+  - the test drives the port through the same calls `BRouterRouteWays.read` makes (`BRouterRouteWays.kt:59-123` at Forager
+    `a0535ece`), against the oracle making the same calls;
+  - for each way near each point, it compares the tag map (from `getKeyValueDescription`), the decoded geometry in order,
+    and each link's direction (`isReverse`);
+  - the points are Forager's drop-off fixture (`app/src/test/resources/routing/dropoff/`) and F0h's ends, each pinned by
+    SHA-256 at `a0535ece`, and only counts and digests are committed (E1);
+  - it is seen failing first, by a revert that drops one tag;
+  - **Phase 1 item B12's premise is corrected:** `getKeyValueDescription`'s text is now read by Forager. -42 already showed
+    Kotlin/Native printing Java's `Float.toString` strings for every value tried, but this test is what checks it on
+    this path.
+- 5c is cut from `brouter-port-5b` (-61). Not yet dispatched: it waits until Linden's session 21 ends, so that only one
+  heavy job runs at a time.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -66.
