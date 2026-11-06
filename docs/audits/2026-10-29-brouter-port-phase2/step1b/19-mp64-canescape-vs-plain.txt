@@ -1,0 +1,3 @@
+Run B (counting copy) against run A (plain), MP64, written by Linden Caliper, session 21:
+select.tsv, every column but R1-ms (col 9): diff lines 0
+stability.tsv, every column but R1-ms (col 8): diff lines 0

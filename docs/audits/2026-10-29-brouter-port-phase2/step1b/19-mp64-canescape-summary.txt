@@ -1,0 +1,7 @@
+JVMs loaded: 314 with a summary: 314 loaded without summary: []
+phase E3 regime R1R2: JVMs 59, with false 59, calls 4732014, false 1152188
+phase E3 regime R3: JVMs 1, with false 1, calls 2366007, false 576094
+phase E3 regime R4: JVMs 59, with false 59, calls 2366007, false 576094
+phase E3 regime R5: JVMs 59, with false 59, calls 2366007, false 576094
+phase E3 regime R6: JVMs 59, with false 59, calls 2366007, false 576094
+phase select regime R1R2: JVMs 77, with false 63, calls 5264352, false 1286174
