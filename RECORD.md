@@ -2851,3 +2851,31 @@ at 03:55:11Z.
 **Finish line:** pushed, CI read by the planner, the report with its handoff.
 **Abort conditions:** -3's; any new red besides `CollectOutreachersTest`; the 600-line stop.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -71.
+
+**Kind:** decision
+**ID:** 2026-10-28-71
+**Timestamp:** 2026-11-06T04:11:45Z
+**Continues:** 2026-10-28-51, 2026-10-28-52, 2026-10-28-61, 2026-10-28-64
+**Title:** PM5 is short at 55 of 59 and stands, as E4 says; the first three targeted strata full and stable; `canEscape`
+answers false on MP64
+**Observed (Linden, session 21, as reported; checked on its handoff):**
+- **DL-lat** 59 of 59 at draw 501, and **DL-lon** 59 of 59 at draw 326: 0 unstable each, and the selection's R1/R2
+  equal E3's in 59 of 59.
+- **MP64** 59 of 59 at draw 86: 0 limit, 0 panic, 0 unstable, 59 of 59.
+- **`canEscape` (-61)** answers false in all 59 MP64 cases: 576,094 of 2,366,007 calls per run, the same in every
+  regime, counted on a scratch copy. The counting run's tables equal the plain run's, apart from R1's milliseconds. So
+  -60's coverage assertion can be met on MP64's data.
+- **The shared M5 sequence** (seed 20261204, `memoryclass` 5, `hiking-mountain`): 1,180 draws, 978 of them routed.
+  - **ML5** filled 59 of 59 at draw 246, and 54 of the 59 also showed panic mode (-52's count).
+  - **PM5 took 55** by draw 1,180, the cap.
+  - Rejected: 202 before routing; 232 as "ML5 already full"; the rest "neither", mostly routes with no panic.
+  - E3's six regimes on both strata were still running.
+**Decision (the planner's, technical; the stop was the planner's own at -64, and Phase 1's text settles it):**
+- **PM5 stands at n = 55, reported short.** Phase 1's E4 (report at `20e1f92`, line ~908): "A stratum that cannot be filled
+  from 20 times its size in candidates is reported short, with its n and its own bound (E5). It is never filled from
+  another generator."
+- **Its own bound:** a clean run bounds its rate below 1 − 0.05^(1/55) = **5.30%** [C], against 4.95% at 59 (E5).
+- No change to the cap, the seed or the generator. The expected values use 55 for PM5.
+- **ML5 is mostly panic-then-limit** (54 of 59). The report names that as a characteristic of the stratum, so that no
+  figure from ML5 is later read as one about the limit without panic.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -72.
