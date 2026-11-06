@@ -3825,3 +3825,28 @@ checked by the planner).
 - **The `(int)` cast revert runs on profiles whose `turncost` is above 0,** since `hiking-mountain`'s is 0 and the revert
   would not bite there. Its prediction names the profiles.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -100.
+
+**Kind:** outcome
+**ID:** 2026-10-28-100
+**Timestamp:** 2026-11-06T18:01:05Z
+**Continues:** 2026-10-28-95, 2026-10-28-96, 2026-10-28-98
+**Title:** FK kind 5 on `hiking-mountain`: 10 of 10, stable; `expected-1b.tsv` byte-unchanged; CI green
+**Observed:** Linden Caliper, session 28, `brouter-port` `cc01338` to `611ba54` (three commits; clean tree; no model name;
+checked by the planner). The cap change and the prediction were pushed before the run (`b5715ec`).
+- **Kind 5:** 10 of 10 after 937 of 1,000 draws; all 927 rejections came before routing. All 10 are "to-position not
+  mapped" and stable through the six regimes [R, as reported].
+  - **Checked by the planner:** `33-fk5-cap1000-stability.tsv` reads 10 "stable".
+- **`expected-1b.tsv` is unchanged:** `git diff --stat fcd35ff 611ba54` on it is empty (planner).
+  - Kind 5's rows store no profile and no ends, and its outcome (`0|0|0`, empty digests) is the same on `hiking-mountain`
+    as on `car-fast`.
+  - What changed is the table its rows are checked against: `E3Expected` now reads `FK5-` rows against kind 5's own table.
+- **E1:** no line added by this session carries a coordinate, by the planner's scan of the added lines. The Phase 2 report
+  holds three older hits: two false positives, and F0's route end rounded to five places (line 238), which is Forager's own
+  (-93).
+- **CI, read by the planner** (run 42265967539 on `11e1e8c`, the last code change, `success`): `jvm` 101 tests, 0 failures;
+  0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with
+  the gate reading "OK: all 2 classes ran".
+- **Unverified:** that session 27's six cases are among these ten (its case list was not kept).
+**So -95's ruling is carried out on `brouter-port`.** Plumb merges `brouter-port` into `brouter-port-5b` again at a step 6
+boundary (-96).
+**Notes:** Written by the planner session of -56 by hand. Next free ID -101.
