@@ -3062,3 +3062,38 @@ is docs only, by `git diff --stat`). Report: `docs/audits/2026-11-06-brouter-por
 - **Also unverified:** the test copies Forager's cell, square and `tagsOf` arithmetic from `a0535ece`, so a later Forager
   change would not show here. The crc-crosscheck branch of `unify` is reached only by `ByteArrayUnifierTest`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -77.
+
+**Kind:** intent
+**ID:** 2026-10-28-77
+**Timestamp:** 2026-11-06T05:30:46Z
+**Continues:** 2026-10-28-50, 2026-10-28-51, 2026-10-28-58, 2026-10-28-73
+**Title:** 1b's last strata, NT, CR, LB and FK, starting with the first coverage reader (Linden, session 22); PR #3
+**Decision first:** asked "should Linden start NT, LB, CR and FK" and "should I open PR #3", the owner, verbatim: "1 and 2
+yes".
+
+**Change** (on `brouter-port`, in `jvmTest`, `tools` and `docs` only), as Phase 1's E4 sets the strata (report at `20e1f92`,
+the E4 table):
+1. **The coverage reader first.** It is the first code to read R6's JaCoCo `.exec` files (-51). -50's rule applies: coverage
+   counts as reach evidence only where R6's tuple equals R1's. It is seen failing first, on a case known not to reach a
+   line.
+2. **NT, near-ties** (59): a start nearest a junction node, and an end placed so that the two ways' `directionDiff`s
+   differ by at most 4 ulps on the oracle's JVM. Reach: coverage of the comparator's second line
+   (`WaypointMatcherImpl.java:71`).
+   - NT's ends then go into 5c's `WaypointMatchTest` (-69 left them owed). That is done on `brouter-port-5b` later, not
+     in this session.
+3. **CR, crossing** (59): R's generator with E's crossing profile. Reach: coverage of `StdPath.java:101-103` and
+   `:105-113`.
+4. **LB, latitude bands** (59): start and end in the (c) rows, as step 2b set them. Reach: the route lies in the band.
+5. **FK, failure kinds** (110): constructed, 10 per kind, as E4 lists them. Reach: the oracle's message is in the kind's
+   family.
+
+Each stratum runs under -58's tuple, on `hiking-mountain` unless E4 names another profile (CR's crossing profile, and
+FK's own), with each generator and prediction pushed before its run.
+**Scope boundary:** writes only `brouter-port`. It does not touch `brouter-port-5b`, `main`, Forager or the tile release.
+**Baseline:** `brouter-port` `729e447` (CI green, -73).
+**Prediction (planner):** NT, CR and LB fill within the cap; FK's 110 are constructed and reach their families; 0
+unstable in every stratum.
+**Finish line:** each stratum in the Phase 2 report, CI read by the planner, and a handoff. It will likely take more than
+one session. **Then the expected values** (E5's per-stratum sizes, with PM5 at 55), in a session of their own.
+**Abort conditions:** -3's; a stratum short; instability over 5%; a coverage reading where R6's tuple differs from R1's.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -78.
