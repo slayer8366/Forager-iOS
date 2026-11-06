@@ -106,8 +106,9 @@ internal open class OsmNode : OsmLink, OsmPos {
         }
     }
 
-    /** STUB (step 5d): Java's `parseNodeBody2`. */
-    fun parseNodeBody2(mc: MicroCache2, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier) {}
+    /** STUB (step 5d): Java's `parseNodeBody2`. Throws a named "unsupported" until ported (RECORD -74). */
+    fun parseNodeBody2(mc: MicroCache2, hollowNodes: OsmNodesMap, expCtxWay: IByteArrayUnifier): Unit =
+        throw NotImplementedError("unsupported: parseNodeBody2 not yet ported (step 5d)")
 
     open fun addLink(
         linklon: Int,
