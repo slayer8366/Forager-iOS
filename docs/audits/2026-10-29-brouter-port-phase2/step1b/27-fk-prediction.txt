@@ -1,0 +1,22 @@
+Written 2026-11-06 by Linden Caliper, session 24 (RECORD -79, -80), before any FK run, on brouter-port after ffa06ab.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3FKTest*' --console=plain
+Seeds 20261208 + kind (FKGenerator; kinds 7 and 8's ends 20261215), and 20261217 for kinds 9 to 11 (R's generator as MP64's).
+Construction: E3FKTest's and FKGenerator's KDoc. A kind's family is its first case's R1 kind (kind 7 with numbers as *).
+
+Predictions [I], from session 23's probes (26-fk-probes/counts.txt), where a probe exists:
+1. Kind 1: "from-position not mapped in existing datafile", 10 of 10.
+2. Kind 2: "to-position not mapped in existing datafile", 10 of 10.
+3. Kind 3 (start on a ferry-only island, -79): "no track found at pass=0", 10 of 10. The islands are found from the
+   tiles' link graphs, not guessed, so I expect no "not mapped" here, unlike the probes.
+4. Kind 4: "target island detected for section 0"; full within the cap of 200, last taken by draw 60.
+5. Kind 5 (car-fast): "to-position not mapped in existing datafile", 10 of 10, the same family as kind 2 (-80).
+6. Kind 6: "datafile W80_N40.rd5 not found", 10 of 10.
+7. Kind 7: "file of size * too short, should be *", 10 of 10.
+8. Kind 8: "top index checksum error", 10 of 10.
+9. Kind 9: family:timeout ("... timeout after 0 seconds"); voids under 1 s are rejected; full within 600 shared draws.
+10. Kind 10: family:watchdog; 11. Kind 11: family:watchdog.
+Extra: FK7-x1 "Index ... out of bounds ..." with java.lang.ArrayIndexOutOfBoundsException in R2 to R5's logs;
+FK7-x2 and FK8-x1 route. FK7-c0 (intact copy) routes; whether x2 and x8-1's tuples equal c0's is not predicted.
+Stability: 0 unstable of 114, except a risk in kind 9: a case whose measured run is near 1 s may be void in one regime
+(R3 runs warm) and not in another. That would be an instability, reported, not hidden.
+If a kind's 10 do not reach one family: E3 FK STOP, reported to the planner; the generator is not changed after the run.

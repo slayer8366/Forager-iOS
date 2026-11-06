@@ -17,7 +17,8 @@ import java.util.Random
  *
  * Prints `outcome <regime> <id> <tuple>`, `log <regime> <id> <line>` for each collection line, `millis <regime> <id> <ms>`,
  * and for a route `extent <regime> <id> <minIlon> <maxIlon> <minIlat> <maxIlat>` and
- * `heights <regime> <id> <tile>:<with a height>/<nodes> ...` ([E3CaseRun.Result.heightsByTile]).
+ * `heights <regime> <id> <tile>:<with a height>/<nodes> ...` ([E3CaseRun.Result.heightsByTile]); `thrown <regime> <id> <class>`
+ * where a logged run logged a stack trace, and `measured <regime> <id> <reading>` for a case with a plan.
  */
 object E3Jvm {
     const val PERTURBATION = 997
@@ -79,6 +80,8 @@ object E3Jvm {
         for (line in r.collections) println("log $regime ${case.id} $line")
         r.extent?.let { println("extent $regime ${case.id} ${it.joinToString(" ")}") }
         r.heightsByTile?.let { t -> println("heights $regime ${case.id} ${t.entries.joinToString(" ") { "${it.key}:${it.value[0]}/${it.value[1]}" }}") }
+        r.thrown?.let { println("thrown $regime ${case.id} $it") }
+        r.measured?.let { println("measured $regime ${case.id} $it") }
         println("millis $regime ${case.id} $ms")
     }
 

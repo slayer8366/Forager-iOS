@@ -24,6 +24,10 @@ object E3Stability {
         val controls: Map<String, String>,
         /** R1's `heights` line after the id: per tile, nodes with a height over nodes; "-" when R1 found no route. */
         val r1Heights: String = "-",
+        /** Per regime, the class of an exception the engine logged ([E3CaseRun.Result.thrown]); logged regimes only. */
+        val thrown: Map<String, String> = emptyMap(),
+        /** Per regime, a plan's measured run ([E3CaseRun.Result.measured]). */
+        val measured: Map<String, String> = emptyMap(),
     ) {
         val tupleStable get() = REGIMES.map { outcomes[it] }.distinct().size == 1
         val logStable get() = LOGGED.map { logs[it] ?: emptyList() }.distinct().size == 1
@@ -105,7 +109,9 @@ object E3Stability {
             }
         }
         val r1Heights = mine("heights").singleOrNull { it[1] == "R1" }?.get(3) ?: "-"
-        return Verdict(case, outcomes, logs, r1Millis, controls, r1Heights)
+        val thrown = mine("thrown").associate { it[1] to it[3] }
+        val measured = mine("measured").associate { it[1] to it[3] }
+        return Verdict(case, outcomes, logs, r1Millis, controls, r1Heights, thrown, measured)
     }
 
     private fun writeReport(r: Result, file: File) {
