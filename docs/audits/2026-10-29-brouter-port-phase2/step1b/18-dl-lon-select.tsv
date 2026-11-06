@@ -1,0 +1,327 @@
+draw	id	R1-tuple	R2-tuple	R2-equals-R1	R1-extent	R2-collected-lines	R2-panic	R1-ms	memoryclass	reach	result
+1	DL-lon-0001	route|96|6614|3033|c6f5219fbda970b0|7da7336ea710ab86	route|96|6614|3033|c6f5219fbda970b0|7da7336ea710ab86	true	109991020,110001262,133767297,133780909	0	false	221	64	nodes on both sides	taken DL-lon
+2	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+3	DL-lon-0003	route|204|14549|9419|c8ba0f188d073de5|faca045aced7e10d	route|204|14549|9419|c8ba0f188d073de5|faca045aced7e10d	true	109989260,110018782,131790635,131852914	0	false	339	64	nodes on both sides	taken DL-lon
+4	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+5	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+6	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+7	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+8	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+9	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+10	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+11	DL-lon-0011	route|362|17640|11770|1c7175de6e3d59ca|86fc059e6b669678	route|362|17640|11770|1c7175de6e3d59ca|86fc059e6b669678	true	109968576,110031500,131683176,131719954	0	false	366	64	nodes on both sides	taken DL-lon
+12	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+13	DL-lon-0013	route|20|915|574|d5d6518296c6ddd8|1b82d7998944a28e	route|20|915|574|d5d6518296c6ddd8|1b82d7998944a28e	true	109997924,110000149,131782996,131784429	0	false	262	64	nodes on both sides	taken DL-lon
+14	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+15	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+16	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+17	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+18	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+19	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+20	DL-lon-0020	route|311|25243|8127|1d913312243c2bda|56cc5f638f724f53	route|311|25243|8127|1d913312243c2bda|56cc5f638f724f53	true	109976629,110047549,133912819,133939071	0	false	400	64	nodes on both sides	taken DL-lon
+21	DL-lon-0021	route|535|41347|18879|d6f4f631a31d70f0|ab0f16f382935149	route|535|41347|18879|d6f4f631a31d70f0|ab0f16f382935149	true	109948217,110038018,133908502,134008859	0	false	524	64	nodes on both sides	taken DL-lon
+22	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+23	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+24	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+25	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+26	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+27	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+28	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+29	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+30	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+31	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+32	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+33	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+34	DL-lon-0034	route|152|8490|5335|b9262fcdc7ef10fb|5c74a26d83be3399	route|152|8490|5335|b9262fcdc7ef10fb|5c74a26d83be3399	true	109962292,110008910,133898370,133910084	0	false	307	64	nodes on both sides	taken DL-lon
+35	DL-lon-0035	route|18|648|479|da42a3d98a1e93bc|4cd0a3522681396c	route|18|648|479|da42a3d98a1e93bc|4cd0a3522681396c	true	109999189,110002608,131296037,131298147	0	false	223	64	nodes on both sides	taken DL-lon
+36	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+37	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+38	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+39	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+40	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+41	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+42	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+43	DL-lon-0043	route|3621|116462|88159|985bdb84aa363434|729b4d597554b3fe	route|3621|116462|88159|985bdb84aa363434|729b4d597554b3fe	true	109331448,110024139,131518149,131775342	3	false	1043	64	nodes on both sides	taken DL-lon
+44	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+45	DL-lon-0045	route|50|1674|1266|7edbaac2dd968efc|9b94480c37089647	route|50|1674|1266|7edbaac2dd968efc|9b94480c37089647	true	109996983,110001328,131826277,131830364	0	false	238	64	nodes on both sides	taken DL-lon
+46	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+47	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+48	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+49	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+50	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+51	DL-lon-0051	route|3486|240290|133465|a3b46ee1d2c3aa0b|d0d125a078a3a013	route|3486|240290|133465|a3b46ee1d2c3aa0b|d0d125a078a3a013	true	109705611,110444293,133674333,134055763	8	false	1727	64	nodes on both sides	taken DL-lon
+52	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+53	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+54	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+55	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+56	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+57	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+58	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+59	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+60	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+61	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+62	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+63	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+64	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+65	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+66	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+67	DL-lon-0067	route|13|2335|357|4c0ff1e3b717065e|7951eee47ae7f7e8	route|13|2335|357|4c0ff1e3b717065e|7951eee47ae7f7e8	true	109999472,110001638,131780288,131781876	0	false	246	64	nodes on both sides	taken DL-lon
+68	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+69	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+70	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+71	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+72	DL-lon-0072	route|26|1144|856|1588a3e910a99826|f8e344317e96815d	route|26|1144|856|1588a3e910a99826|f8e344317e96815d	true	109995575,110002017,131319647,131324615	0	false	201	64	nodes on both sides	taken DL-lon
+73	DL-lon-0073	route|69|2369|1773|96f7e9d32fbc07f1|cb1a06df8e25c767	route|69|2369|1773|96f7e9d32fbc07f1|cb1a06df8e25c767	true	109994864,110001171,131834638,131844583	0	false	267	64	nodes on both sides	taken DL-lon
+74	DL-lon-0074	route|1223|143090|96365|8478111bdc23beee|a08b7c62848678ad	route|1223|143090|96365|8478111bdc23beee|a08b7c62848678ad	true	109831633,110225632,134318607,134831195	1	false	749	64	nodes on both sides	taken DL-lon
+75	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+76	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells in the other tile	rejected
+77	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells in the other tile	rejected
+78	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+79	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+80	-	-	-	-	-	-	-	-	-	an end moved off its side	rejected
+81	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+82	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+83	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+84	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+85	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+86	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+87	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+88	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+89	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+90	DL-lon-0090	route|596|76793|40778|ed1612778826260d|b167eac5ed657f22	route|596|76793|40778|ed1612778826260d|b167eac5ed657f22	true	109974969,110242156,134325677,134421229	0	false	590	64	nodes on both sides	taken DL-lon
+91	DL-lon-0091	route|1692|162921|92771|d1a5181b79daae3f|27f7afabc87c2845	route|1692|162921|92771|d1a5181b79daae3f|27f7afabc87c2845	true	109418264,110101408,133880594,134276112	2	false	1150	64	nodes on both sides	taken DL-lon
+92	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+93	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+94	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+95	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+96	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+97	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+98	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+99	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+100	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+101	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+102	DL-lon-0102	route|1479|143109|90441|94cf335ba71cb124|998b25ca60f2ad5e	route|1479|143109|90441|94cf335ba71cb124|998b25ca60f2ad5e	true	109769172,110168032,133930757,134435151	1	false	1369	64	nodes on both sides	taken DL-lon
+103	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+104	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+105	DL-lon-0105	route|228|12908|8434|f45cbf32942031ec|f2e2c2a47d5f019e	route|228|12908|8434|f45cbf32942031ec|f2e2c2a47d5f019e	true	109996007,110018782,131790635,131829897	0	false	550	64	nodes on both sides	taken DL-lon
+106	DL-lon-0106	route|905|90406|69616|6a604dcb51ae3ef|b1a7afe9e1218136	route|905|90406|69616|6a604dcb51ae3ef|b1a7afe9e1218136	true	109656149,110062602,134694629,134915121	0	false	659	64	nodes on both sides	taken DL-lon
+107	DL-lon-0107	route|2971|222307|114412|bdedbf65dcd872d4|4abb24655f95b987	route|2971|222307|114412|bdedbf65dcd872d4|4abb24655f95b987	true	109723709,110531965,133657167,134091937	6	false	2137	64	nodes on both sides	taken DL-lon
+108	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+109	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+110	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+111	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+112	DL-lon-0112	route|1335|149844|106196|bdf70f715f6823|bd29679d1ae64d62	route|1335|149844|106196|bdf70f715f6823|bd29679d1ae64d62	true	109672963,110295736,134275497,134567413	1	false	1118	64	nodes on both sides	taken DL-lon
+113	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+114	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+115	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+116	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+117	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+118	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells in the other tile	rejected
+119	DL-lon-0119	route|80|11788|5723|19b5e24b0f7654dd|339596c267a1a9b0	route|80|11788|5723|19b5e24b0f7654dd|339596c267a1a9b0	true	109987164,110029759,134485996,134509045	0	false	167	64	nodes on both sides	taken DL-lon
+120	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+121	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+122	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+123	DL-lon-0123	route|1654|180697|135559|d4430b8ec2aac008|bb979bab89ae0a83	route|1654|180697|135559|d4430b8ec2aac008|bb979bab89ae0a83	true	109516817,110274503,134291499,134779571	1	false	681	64	nodes on both sides	taken DL-lon
+124	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+125	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells in the other tile	rejected
+126	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+127	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+128	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+129	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+130	DL-lon-0130	route|987|38664|29181|490994fadd1b151a|c982352a25a059c2	route|987|38664|29181|490994fadd1b151a|c982352a25a059c2	true	109918386,110048194,131858067,132028990	0	false	687	64	nodes on both sides	taken DL-lon
+131	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+132	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+133	DL-lon-0133	route|264|27685|15422|6637a6234b61131c|e1622158f51887f2	route|264|27685|15422|6637a6234b61131c|e1622158f51887f2	true	109944406,110022256,133927204,134024850	0	false	704	64	nodes on both sides	taken DL-lon
+134	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+135	DL-lon-0135	route|23|1735|409|baedd4b80fa955f8|f6c5fb7dfcc67bd5	route|23|1735|409|baedd4b80fa955f8|f6c5fb7dfcc67bd5	true	109998785,110001058,131778333,131780098	0	false	425	64	nodes on both sides	taken DL-lon
+136	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+137	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+138	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+139	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+140	DL-lon-0140	route|213|23305|14029|ab57bdb3f1036d89|8e3cfecb09f105eb	route|213|23305|14029|ab57bdb3f1036d89|8e3cfecb09f105eb	true	109949819,110069856,133996900,134022751	0	false	161	64	nodes on both sides	taken DL-lon
+141	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+142	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+143	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+144	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+145	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+146	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+147	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+148	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+149	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+150	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+151	DL-lon-0151	route|439|14672|9932|876b554680511dea|e5b05a4264682e2d	route|439|14672|9932|876b554680511dea|e5b05a4264682e2d	true	109946207,110020710,131740582,131762826	0	false	219	64	nodes on both sides	taken DL-lon
+152	-	-	-	-	-	-	-	-	-	an end moved off its side	rejected
+153	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+154	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+155	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+156	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+157	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+158	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+159	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+160	DL-lon-0160	route|149|14265|5782|b322d62ddb9c9069|be68fa55024e0d3f	route|149|14265|5782|b322d62ddb9c9069|be68fa55024e0d3f	true	109998492,110026808,133927204,133956583	0	false	234	64	nodes on both sides	taken DL-lon
+161	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+162	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+163	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+164	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+165	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+166	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+167	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+168	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+169	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+170	DL-lon-0170	route|960|66966|38414|9bdf47e895219051|fef74f3549d8b48	route|960|66966|38414|9bdf47e895219051|fef74f3549d8b48	true	109785221,110075576,133861296,133938692	0	false	597	64	nodes on both sides	taken DL-lon
+171	DL-lon-0171	route|130|10553|3766|c5d352adb271840d|db090f7d108f5358	route|130|10553|3766|c5d352adb271840d|db090f7d108f5358	true	109975661,110001371,131690954,131701543	0	false	323	64	nodes on both sides	taken DL-lon
+172	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+173	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+174	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+175	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+176	DL-lon-0176	route|50|4374|2058|b0c1b501ef8b35fd|179ccf30931128d6	route|50|4374|2058|b0c1b501ef8b35fd|179ccf30931128d6	true	109988925,110008389,131790635,131796544	0	false	469	64	nodes on both sides	taken DL-lon
+177	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+178	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+179	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+180	DL-lon-0180	route|279|19788|14939|7c09d0d60a4f67cf|83ac3a2745fb4e5a	route|279|19788|14939|7c09d0d60a4f67cf|83ac3a2745fb4e5a	true	109889067,110037406,131243838,131271005	0	false	482	64	nodes on both sides	taken DL-lon
+181	DL-lon-0181	route|9|1579|329|3d39652847f0b80f|bc617801cc35270f	route|9|1579|329|3d39652847f0b80f|bc617801cc35270f	true	109999761,110000995,134404669,134407243	0	false	285	64	nodes on both sides	taken DL-lon
+182	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+183	DL-lon-0183	route|388|19753|13216|4a819dc9e5a22136|e0519ea739560aa	route|388|19753|13216|4a819dc9e5a22136|e0519ea739560aa	true	109905057,110010009,131661422,131689066	0	false	506	64	nodes on both sides	taken DL-lon
+184	DL-lon-0184	route|117|4756|3577|233ead4d5e477241|f4cfb15a8c7a46eb	route|117|4756|3577|233ead4d5e477241|f4cfb15a8c7a46eb	true	109976238,110005620,131679784,131686586	0	false	277	64	nodes on both sides	taken DL-lon
+185	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+186	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+187	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+188	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+189	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+190	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+191	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+192	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+193	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+194	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+195	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+196	DL-lon-0196	route|1385|191966|106150|9c067dfb56629dcc|21080f0a448c4b2b	route|1385|191966|106150|9c067dfb56629dcc|21080f0a448c4b2b	true	109878043,110607149,134014847,134327762	1	false	826	64	nodes on both sides	taken DL-lon
+197	DL-lon-0197	route|183|10826|6746|3c7024b2c71e7fd|4db88b66ba482708	route|183|10826|6746|3c7024b2c71e7fd|4db88b66ba482708	true	109978308,110034317,133901862,133917162	0	false	433	64	nodes on both sides	taken DL-lon
+198	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+199	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+200	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+201	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+202	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+203	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+204	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+205	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells in the other tile	rejected
+206	DL-lon-0206	route|571|27630|18725|584c651cfb816572|bb42df8fa862d1f9	route|571|27630|18725|584c651cfb816572|bb42df8fa862d1f9	true	109896161,110037480,131665172,131689066	0	false	502	64	nodes on both sides	taken DL-lon
+207	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+208	DL-lon-0208	route|99|7390|3885|63ae1e4b1e14958|8ec49ec03720b6ca	route|99|7390|3885|63ae1e4b1e14958|8ec49ec03720b6ca	true	109973665,110005767,133891951,133906105	0	false	345	64	nodes on both sides	taken DL-lon
+209	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+210	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+211	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+212	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+213	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+214	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+215	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+216	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+217	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+218	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+219	DL-lon-0219	route|1529|195436|122690|2314c5209d6125fb|f5eebfd8bdfc9fe2	route|1529|195436|122690|2314c5209d6125fb|f5eebfd8bdfc9fe2	true	109374463,110272303,134382749,134620964	2	false	758	64	nodes on both sides	taken DL-lon
+220	DL-lon-0220	route|114|7317|4465|5f48943518f73755|2e6bafd02e49d12d	route|114|7317|4465|5f48943518f73755|2e6bafd02e49d12d	true	109972631,110001197,131674516,131686586	0	false	354	64	nodes on both sides	taken DL-lon
+221	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+222	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+223	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+224	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+225	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+226	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+227	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+228	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+229	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+230	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells in the other tile	rejected
+231	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+232	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+233	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+234	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+235	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+236	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+237	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+238	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+239	DL-lon-0239	route|95|18777|11171|2c2649aef2e00674|ece9fdc49851dc8	route|95|18777|11171|2c2649aef2e00674|ece9fdc49851dc8	true	109974940,110025070,134582542,134636027	0	false	137	64	nodes on both sides	taken DL-lon
+240	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+241	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+242	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+243	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+244	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+245	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+246	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+247	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+248	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+249	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+250	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+251	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+252	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+253	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+254	DL-lon-0254	route|6|720|308|cb2a65fc97a9c675|1235006c905229c5	route|6|720|308|cb2a65fc97a9c675|1235006c905229c5	true	109998059,110000480,134134541,134135557	0	false	224	64	nodes on both sides	taken DL-lon
+255	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+256	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+257	DL-lon-0257	route|58|2453|1834|c0bff986a62b5d1e|c711e70b0e1bb4e2	route|58|2453|1834|c0bff986a62b5d1e|c711e70b0e1bb4e2	true	109994617,110002649,131843513,131854606	0	false	229	64	nodes on both sides	taken DL-lon
+258	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+259	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+260	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+261	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+262	DL-lon-0262	route|15|796|633|5fd9577f665debd5|c459a697699782ee	route|15|796|633|5fd9577f665debd5|c459a697699782ee	true	109997778,110002909,131269616,131271641	0	false	128	64	nodes on both sides	taken DL-lon
+263	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+264	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+265	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+266	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+267	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+268	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+269	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+270	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+271	DL-lon-0271	route|27|876|639|b85263b6486edd34|d810c135432a296c	route|27|876|639|b85263b6486edd34|d810c135432a296c	true	109997856,110002431,131669591,131672606	0	false	159	64	nodes on both sides	taken DL-lon
+272	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+273	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+274	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+275	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+276	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+277	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+278	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+279	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+280	DL-lon-0280	route|1358|146465|80839|8ef4d432eeb994cb|3ff0e89b8e527b6f	route|1358|146465|80839|8ef4d432eeb994cb|3ff0e89b8e527b6f	true	109783921,110087959,133828282,134354935	1	false	959	64	nodes on both sides	taken DL-lon
+281	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+282	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+283	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+284	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+285	DL-lon-0285	route|760|134554|91641|288f94bf008032ed|13759e148b448a3f	route|760|134554|91641|288f94bf008032ed|13759e148b448a3f	true	109725805,110033256,133914055,134551751	1	false	869	64	nodes on both sides	taken DL-lon
+286	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+287	DL-lon-0287	route|705|77794|54752|1a5d8a267fddde1b|e0f264ede8dc2cb1	route|705|77794|54752|1a5d8a267fddde1b|e0f264ede8dc2cb1	true	109835711,110248709,134902107,134960882	0	false	223	64	nodes on both sides	taken DL-lon
+288	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+289	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+290	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+291	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+292	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+293	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+294	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+295	DL-lon-0295	route|953|93080|73400|ffbbcd982134cb28|7dad52d3b2a43895	route|953|93080|73400|ffbbcd982134cb28|7dad52d3b2a43895	true	109902729,110284705,134423919,134708415	0	false	827	64	nodes on both sides	taken DL-lon
+296	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+297	DL-lon-0297	route|4384|234081|140418|dc67818c52a21ebf|5a454a66b85e2756	route|4384|234081|140418|dc67818c52a21ebf|5a454a66b85e2756	true	109077787,110030100,131449167,131794654	7	false	2643	64	nodes on both sides	taken DL-lon
+298	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+299	DL-lon-0299	route|3474|196158|121166|fc8045d36649c23b|725864e09b5a238d	route|3474|196158|121166|fc8045d36649c23b|725864e09b5a238d	true	109474316,110155895,133342049,133912558	3	false	2263	64	nodes on both sides	taken DL-lon
+300	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+301	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+302	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+303	DL-lon-0303	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	true	-	0	false	153	64	no route: target island detected for section 0	rejected
+304	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+305	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+306	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+307	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+308	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+309	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+310	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+311	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+312	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+313	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+314	DL-lon-0314	route|52|2320|1557|39488402348c0fc1|44fd285377988e13	route|52|2320|1557|39488402348c0fc1|44fd285377988e13	true	109998882,110001482,131770550,131780961	0	false	401	64	nodes on both sides	taken DL-lon
+315	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+316	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+317	DL-lon-0317	route|135|9754|6228|ac1bc37fde39fea3|d8d0356552aa8617	route|135|9754|6228|ac1bc37fde39fea3|d8d0356552aa8617	true	109948708,110009067,131770145,131789572	0	false	545	64	nodes on both sides	taken DL-lon
+318	DL-lon-0318	route|229|18206|13925|32b60cacebf3e048|25bd472af9a209bb	route|229|18206|13925|32b60cacebf3e048|25bd472af9a209bb	true	109977598,110017867,131846311,131953007	0	false	479	64	nodes on both sides	taken DL-lon
+319	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+320	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+321	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+322	DL-lon-0322	route|508|63686|38929|7403462dded7bf52|b0a95dc3c6fcd05f	route|508|63686|38929|7403462dded7bf52|b0a95dc3c6fcd05f	true	109846121,110041663,134100245,134284101	0	false	432	64	nodes on both sides	taken DL-lon
+323	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+324	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+325	-	-	-	-	-	-	-	-	-	the target is not across the line inside the other tile	rejected
+326	DL-lon-0326	route|2601|218372|147116|8bcdd4dda718adc4|cedcf27fc5b98693	route|2601|218372|147116|8bcdd4dda718adc4|cedcf27fc5b98693	true	109033036,110028285,134081063,134502814	4	false	1197	64	nodes on both sides	taken DL-lon

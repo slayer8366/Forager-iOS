@@ -1,0 +1,7 @@
+rows 326 draws 1..n contiguous: True
+results {'taken DL-lon': 59, 'rejected': 267}
+taken DL-lon 59 ids rising: True draws rising: True last draw 326
+rejected 267 == draws - taken: True
+routed 60 R2-equals-R1 false: 0
+panic true (routed): 0 with collections: 15
+reach readings: {'the target is not across the line inside the other tile': 258, "no node in the target's 3 x 3 cells in the other tile": 6, 'an end moved off its side': 2, 'no route: target island detected for section 0': 1}
