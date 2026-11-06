@@ -2754,3 +2754,29 @@ slayer8366/Forager or the tile release.
 planner, and the report with a handoff.
 **Abort conditions:** -3's, and any new red other than `CollectOutreachersTest`.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -67.
+
+**Kind:** outcome
+**ID:** 2026-10-28-67
+**Timestamp:** 2026-11-06T03:55:55Z
+**Continues:** 2026-10-28-64, 2026-10-28-65, 2026-10-28-66
+**Title:** A wrong premise of the planner's in -64: the route-ways path needs code the port does not have; -65's ruling
+goes back to the owner
+**Observed:** Plumb Ledger stopped under -66's own stop, "a call in `BRouterRouteWays` the port lacks", at
+`brouter-port-5b` `51c43b3`. **Checked by the planner at source:**
+- `BRouterRouteWays.kt:84` (Forager `a0535ece`) calls `createMicroCache(..., null, null, true, null)`, with
+  `hollowNodes` null. Java then takes the non-weaving decoder, `new MicroCache2(bc, ...)` (`OsmFile.java:139-140`,
+  Forager's `third_party` copy) [R].
+- The port throws there: `OsmFile.kt:140-143` on `brouter-port-5b` reads "unsupported: MicroCache2's decoder is not on T2's
+  port list" [R]. Its comment states the premise that has now moved: "hollowNodes is null only under -DdisableDirectWeaving,
+  which Forager never sets".
+- `MicroCache2.<init>(StatCoderContext, ...)` appears on Phase 1's reach lists T0 and T1, but not T2 or T3, which the port
+  was cut to (`03-reach/out/T*/reached-methods.tsv`: 1, 1, 0, 0) [C].
+- Plumb also names, as not ported: `OsmNode(long)`, `parseNodeBody2`, and `MicroCache.getIdForIndex` [R, as reported].
+  It sizes the gap at about 300 Java lines [I].
+- **The planner's wrong premise:** -64's "No new code to port" matched by class and method name, not by overload or by
+  argument, and -64 said so. The option the owner chose at -65 ("A modest test, since the decoding is already ported")
+  rests on it. So -65's ruling goes back to the owner with the true cost.
+- **5c's main part, as reported, not yet checked:** over the stubs, 1 test with 1 failure (`NotImplementedError`);
+  forward, 3,068 of 3,068 R ends equal to the oracle; the revert's prediction is pushed (`51c43b3`) and its run was in
+  progress. The planner checks it on the handoff.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -68.
