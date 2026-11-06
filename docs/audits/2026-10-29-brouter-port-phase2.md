@@ -2011,6 +2011,73 @@ Not read on this session's head: the handoff came first. CI on `00b9886` was rea
 3. **Then:** read CI on the final head; E5's expected values in a session of their own.
 4. **Running: nothing.**
 
+## Step 1b continued: FK built and running (twenty-fourth session, Linden Caliper)
+
+Dispatched under RECORD -79, -80 and -82 (by message). Base `brouter-port` at `ffa06ab`, fetched, equal to origin [C].
+- **Before the run:** jvmTest 95 tests, 0 failures, 0 ` e: ` lines; the JUnit XML was fresh at 06:22:53Z (`24-jvmTest.log` in scratch) [C].
+- **The generator and the prediction were pushed before the run,** at `49e2711` (`step1b/27-fk-prediction.txt`) [C].
+- **The harness:**
+  - `E3Case.Plan` covers kinds 9 to 11;
+  - `E3CaseRun` makes a measured run first, then the variant: the 50 ms limit, a cancel before `doRun`, or a cancel past
+    10,000 links;
+  - it logs a `thrown` class for FK7-x1 and a `measured` line;
+  - `FKGenerator` and `E3FKTest` build the cases. Their construction is in the KDoc.
+
+### What the running log showed by 06:26Z (`27-fk-e3Strata.log`, counts only) [C]
+- **Kinds 1, 2, 3 and 6:** 10 of 10 built each (after 10, 12, 10 and 10 draws). Their families are not read yet.
+- **Islands, from the link graphs:** 1 in E170_S50, 12 in W70_N40 and 1 in W75_N35.
+- **Kind 4:** full, 10 of 10 by draw 74.
+  - Of the 64 rejected draws, 41 were "to-position not mapped" and 23 routed.
+  - So 41 graph-found island nodes were not matched by the oracle. Why is [?]. Kind 3 starts on the same kind of node, so
+    its family has to be read.
+- **Kind 5: short, 9 of 10 at 200 draws.** The rejections by reason:
+  - 111 had a car-fast link within 300 m;
+  - 68 had a start node with no car-fast link;
+  - 12 had 3 × 3 cells that leave the tile.
+
+  **The 200-draw cap for kind 5 was my own choice; -80 set that cap for kind 4.** The planner ruled (-82) that kind 5's
+  start and end are drawn separately, capped at 400, and kind 5 is rerun alone.
+- **Kinds 7 and 8:** E170_S50 is 1,061,705 bytes, with its data end D at 1,061,592.
+  - Cuts: 200, 201, 1000, D/4, D/2, 3D/4, D−1, D+1, D+56 and D+111.
+  - Flipped bytes: 8 to 188, in steps of 20.
+
+### The kind 5 change: written, not compiled, not pushed
+The patch is `linden/27-kind5-rerun.patch` in scratch (129 lines). It adds:
+- `FKGenerator.usableNode` and `unusableNode`;
+- in `E3FKTest`, `kind5()`, `CAP5 = 400` and a separate test, `fkKind5ReachesOneFamilyInAllTen`.
+
+I did not compile it while FK was running: a compile would replace the classes that the run's child JVMs load from the
+build directory. The working tree was restored to `49e2711`.
+
+### Step 1b: the handoff (twenty-fourth session)
+1. **Running:**
+   - FK's e3Strata run, Gradle PID 16430, started about 06:23Z;
+   - log: `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/27-fk-e3Strata.log`;
+   - work: `brouter/build/e3/FK/`, `FK4-select/` and `FK9-11-select/`.
+
+   It is finished when `BUILD` appears in the log. **It will end FAILED whatever else happens,** because kind 5 is
+   short (9) and that is a STOP in the test.
+2. **Reading the results:**
+   - run `grep -E "E3 FK" <log> | cut -c1-250`. Each kind has a `family … in family x of 10; unstable u` line, and each
+     extra case has its own line;
+   - check `grep -c " e: " <log>` and `grep "E3 FK: " <log>`, the line with the 5% count;
+   - commit the log, `FK/stability.tsv`, `FK4-select/select.tsv` and `FK9-11-select/select.tsv` as
+     `step1b/27-fk-*`, after grepping each for coordinate-like numbers. The `.tsv` files hold case lines with
+     coordinates, so commit counts only if they do.
+3. **Next, after the run:**
+   - apply `27-kind5-rerun.patch`;
+   - write `step1b/28-fk5-prediction.txt`: family "to-position not mapped in existing datafile", 10 of 10;
+   - run the full `:brouter:jvmTest`, then push;
+   - run `--tests '*E3FKTest.fkKind5*'` (the full FK test also builds kind 5 the new way after the patch).
+4. **Then:**
+   - write FK's section, per kind: cases in family, stability, and kind 4's draws;
+   - record the three extra cases' outcomes and FK7-x1's class from R2 to R5's `thrown`;
+   - read CI on the final head;
+   - then E5's expected values.
+5. **For the planner:**
+   - kinds 9 to 11 voids and any instability are unread until the run ends;
+   - kind 10's measured-run precondition ("routes") is my own addition, beyond E4 [I].
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the
