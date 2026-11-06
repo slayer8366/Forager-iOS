@@ -3140,3 +3140,30 @@ output, not the reading. The planner's call: dispatches tell coders to read logs
 output to a file and read only its summary lines, and never to print a stratum log whole.
 **Next:** Linden's session 23: NT's test, its prediction and its run; then CR, LB and FK.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -79.
+
+**Kind:** decision
+**ID:** 2026-10-28-79
+**Timestamp:** 2026-11-06T05:59:39Z
+**Continues:** 2026-10-28-32, 2026-10-28-77, 2026-10-28-78
+**Title:** FK kind 3, "start island", is unreachable on Forager's path; it becomes the start-on-island case as Forager meets it
+**Observed:** Linden Caliper, session 23, stopped on -77's stop "an E4 definition you can't build as written".
+- **Checked by the planner at source** (Forager's `third_party` copy):
+  - "start island detected" is thrown only when `routingContext.inverseRouting` is true (`RoutingEngine.java:954-958`);
+  - the flag is read from the profile's global assign `inverseRouting` (`RoutingContext.java:174`);
+  - nothing under Forager's `app/src/main/assets/routing/profiles2/`, and nothing in `BRouterTrailRouter.kt`, sets it (`grep`,
+    empty).
+
+  So on Forager's calls only the target-island check runs (`:960-963`).
+- **Also reported, not yet checked:** **NT filled, 59 of 59 by draw 89, 0 unstable** (`4d43ea2`). CR and LB were running.
+**Decision (the planner's, technical):** option (c).
+- **Kind 3 becomes "start on a ferry-only island, through Forager's calls":** 10 cases, built as E4 built them.
+- **Its family is the oracle's message on the first case,** and all 10 must reach that family. If they do not, it is a stop.
+- **"start island detected" is recorded as unreachable on Forager's path,** as -32 recorded `readUnified`, with the two
+  source lines above as the evidence. FK stays at 110.
+- **Rejected:**
+  - (a) FK's own profile with `assign inverseRouting = true`: a call beyond Forager's, testing a path the app never takes;
+  - (b) dropping kind 3: a start on an island is a real situation for a walker, and this is the one case that shows what
+    Forager meets there.
+- **A wrong premise in Phase 1's E4,** carried into -77: it listed kind 3 by the engine's message, without checking that
+  Forager's configuration reaches it. "Check reachability before measuring behaviour" (Forager's CLAUDE.md) applies.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -80.
