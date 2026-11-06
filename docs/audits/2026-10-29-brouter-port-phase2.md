@@ -2144,7 +2144,12 @@ The `R1-extent` column (`E3Select.kt:146`) is each route's bounding box in BRout
 `24-cr-select.tsv` 66, `25-lb-select.tsv` 86. Reported to the planner; I did not touch them. FK's tables were stripped.
 
 ### CI
-<!-- s25-ci -->
+Read from the job logs by me (`gh run view --log`) [R]:
+- **Run 42183317078 on `ce3db16`** (the last code change) and **run 42184654325 on `67012ee`** (the report) both
+  concluded `success`. In each: `jvm` 95 PASSED, 0 FAILED, 0 ` e: ` lines; `compileKotlinIosArm64` and
+  `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL; simulator 23 tests, 0 failures, in 9 files
+  (**simulator-checked**); the arm64 JVM step 7 tests, 0 failures, in 2 files, and its gate printed "OK: all 2 classes ran".
+- The run for this commit, which changes only the report, was not read past its status.
 
 ### Step 1b: the handoff (twenty-fifth session)
 1. **Nothing is running.** FK is complete: 11 kinds × 10 plus four extra cases, PASSED on `ce3db16`.
