@@ -101,6 +101,18 @@ Plumb Ledger, seventh session, on `brouter-port-5b`, from `d1de74b`. Tags: [R] r
     ` e: `, 2 of 2 failed at the first point of each set, line 4, field `[tags]`, matching the prediction; restored
     identical, forward line present once (`2026-11-06-brouter-port-step5d/4-routeways-revert.txt`).
 
+- **A red I caused, and its fix** [C]: CI run 42165333186 on `a6eb12b` read jvm 109 tests, 3 failed: `CollectOutreachersTest`'s
+  2 (-61) and `ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported` (`ByteArrayUnifierTest.kt:16`), which
+  pinned step 2a's refusal of `unify` (`3cd61ad`). My local runs were filtered to three classes and missed it. Reported
+  to the planner, who approved the change: **the 2a test changed because RECORD -68 moved its premise** (`unify` is now
+  on the port list). `9de9d48` keeps the constructor check and replaces the refusal with a differential check against
+  `btools.util.ByteArrayUnifier` (cache size 4, 72 calls, returned bytes and reuse pattern, 9 reuses; with validation, a
+  mutated returned array then hit again, `IllegalArgumentException` on both). Full `:brouter:jvmTest` locally: 111
+  tests, 2 failed (`CollectOutreachersTest`), 0 ` e: `. Revert (`if (i == len)` to `if (i == len + 1)`), predicted
+  and pushed at `47ac4a9`, run: 0 ` e: `, 2 of 3 failed at call 1 each, `constructs` passed, matching
+  (`2026-11-06-brouter-port-step5d/4-unifier-revert.txt`). From now on the full `:brouter:jvmTest` runs before any push
+  touching `commonMain` (the planner's condition 5).
+
 ## Calls beyond scope
 - F0h's ends are run on F0h's own square (now wired), not on F0's fixture as session 8's handoff said; RECORD -74 rules
   that way.
