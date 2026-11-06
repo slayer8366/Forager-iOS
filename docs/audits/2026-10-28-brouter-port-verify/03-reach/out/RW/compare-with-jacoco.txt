@@ -1,0 +1,26 @@
+methods JaCoCo instruments: 884; ran: 129
+methods in the static reach: 141 (of which JaCoCo instruments 140)
+ran but not statically reached (unsound if any): 0
+statically reached, instrumented, but did not run on this sample: 11
+     2 btools/codec/MicroCache
+     2 btools/expressions/CacheNode
+     2 btools/expressions/VarWrapper
+     1 btools/codec/LinkedListContainer
+     1 btools/mapaccess/OsmNode
+     1 btools/mapaccess/TurnRestriction
+     1 btools/util/ByteDataReader
+     1 btools/util/ByteDataWriter
+lines (JaCoCo executable lines) in statically reached methods: 1278; covered on this sample: 1025 (80.2%)
+
+statically reached, did not run (full list):
+  btools/codec/LinkedListContainer.resize()V  lines 0/4
+  btools/codec/MicroCache.expandId(I)J  lines 0/1
+  btools/codec/MicroCache.shrinkId(J)I  lines 0/1
+  btools/expressions/CacheNode.equals(Ljava/lang/Object;)Z  lines 0/6
+  btools/expressions/CacheNode.hashCode()I  lines 0/1
+  btools/expressions/VarWrapper.equals(Ljava/lang/Object;)Z  lines 0/4
+  btools/expressions/VarWrapper.hashCode()I  lines 0/1
+  btools/mapaccess/OsmNode.addTurnRestriction(Lbtools/mapaccess/TurnRestriction;)V  lines 0/3
+  btools/mapaccess/TurnRestriction.<init>()V  lines 0/1
+  btools/util/ByteDataReader.<init>([BI)V  lines 0/5
+  btools/util/ByteDataWriter.writeInt(I)V  lines 0/5

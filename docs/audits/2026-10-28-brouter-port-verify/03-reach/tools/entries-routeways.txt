@@ -1,0 +1,40 @@
+# BRouterRouteWays.read's calls into BRouter, at Forager a0535ece (step 5d, RECORD -70 item 2).
+# Same format as entries.txt. R = app/src/main/java/com/zynergylabs/forager/app/routing/BRouterRouteWays.kt
+new btools/expressions/BExpressionMetaData                   # R:60
+call btools/expressions/BExpressionMetaData.<init>:()V       # :60
+new btools/expressions/BExpressionContextWay                 # R:61
+call btools/expressions/BExpressionContextWay.<init>:(Lbtools/expressions/BExpressionMetaData;)V   # :61
+call btools/expressions/BExpressionMetaData.readMetaData:(Ljava/io/File;)V   # :62
+new btools/mapaccess/GeometryDecoder                         # R:72
+call btools/mapaccess/GeometryDecoder.<init>:()V             # :72
+new btools/codec/DataBuffers                                 # R:77
+call btools/codec/DataBuffers.<init>:()V                     # :77
+new btools/mapaccess/PhysicalFile                            # R:78
+call btools/mapaccess/PhysicalFile.<init>:(Ljava/io/File;Lbtools/codec/DataBuffers;II)V   # :78
+field btools/mapaccess/PhysicalFile.divisor                  # :80
+new btools/mapaccess/OsmFile                                 # R:82
+call btools/mapaccess/OsmFile.<init>:(Lbtools/mapaccess/PhysicalFile;IILbtools/codec/DataBuffers;)V   # :82
+call btools/mapaccess/OsmFile.hasData:()Z                    # :83
+call btools/mapaccess/OsmFile.createMicroCache:(IILbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;ZLbtools/mapaccess/OsmNodesMap;)Lbtools/codec/MicroCache;   # :84
+new btools/mapaccess/OsmNodesMap                             # R:85
+call btools/mapaccess/OsmNodesMap.<init>:()V                 # :85
+call btools/codec/MicroCache.getSize:()I                     # :86 (cache.size)
+call btools/codec/MicroCache.getIdForIndex:(I)J              # :87
+call btools/codec/MicroCache.getAndClear:(J)Z                # :88
+new btools/mapaccess/OsmNode                                 # R:89
+call btools/mapaccess/OsmNode.<init>:(J)V                    # :89
+call btools/mapaccess/OsmNode.parseNodeBody:(Lbtools/codec/MicroCache;Lbtools/mapaccess/OsmNodesMap;Lbtools/util/IByteArrayUnifier;)V   # :90
+field btools/mapaccess/OsmNode.firstlink                     # :91
+field btools/mapaccess/OsmLink.descriptionBitmap             # :93
+call btools/mapaccess/OsmLink.getTarget:(Lbtools/mapaccess/OsmNode;)Lbtools/mapaccess/OsmNode;   # :95
+call btools/mapaccess/OsmLink.isReverse:(Lbtools/mapaccess/OsmNode;)Z   # :96
+field btools/mapaccess/OsmNode.ilat                          # :98, :103, :107
+field btools/mapaccess/OsmNode.ilon                          # :98, :103, :107
+field btools/mapaccess/OsmLink.geometry                      # :99
+call btools/mapaccess/GeometryDecoder.decodeGeometry:([BLbtools/mapaccess/OsmNode;Lbtools/mapaccess/OsmNode;Z)Lbtools/mapaccess/OsmTransferNode;   # :99
+field btools/mapaccess/OsmTransferNode.ilat                  # :101
+field btools/mapaccess/OsmTransferNode.ilon                  # :101
+field btools/mapaccess/OsmTransferNode.next                  # :102
+call btools/expressions/BExpressionContextWay.getKeyValueDescription:(Z[B)Ljava/lang/String;   # :108
+call btools/mapaccess/OsmLink.getNext:(Lbtools/mapaccess/OsmNode;)Lbtools/mapaccess/OsmLink;   # :110
+call btools/mapaccess/PhysicalFile.close:()V                 # :115

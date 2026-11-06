@@ -1,0 +1,102 @@
+file	file_lines	kept_lines	methods_kept	methods_in_file	kept_methods
+btools/codec/DataBuffers.java	31	31	2	2	<init>() <init>(byte[])
+btools/codec/IntegerFifo3Pass.java	53	0	0	5	
+btools/codec/LinkedListContainer.java	78	78	5	5	<init>(int,int[]) addDataElement(int,int) getDataElement() initList(int) resize()
+btools/codec/MicroCache.java	342	151	9	21	<init>(byte[]) emptyCache() expandId(int) getAndClear(long) getIdForIndex(int) getSize() init(int) shrinkId(long) startPos(int)
+btools/codec/MicroCache2.java	476	275	4	7	<init>(StatCoderContext,DataBuffers,int,int,int,TagValueValidator,WaypointMatcher) expandId(int) readUnified(int,IByteArrayUnifier) shrinkId(long)
+btools/codec/NoisyDiffCoder.java	79	36	2	6	<init>(StatCoderContext) decodeSignedValue()
+btools/codec/StatCoderContext.java	254	120	5	11	<init>(byte[]) decodeNoisyDiff(int) decodeNoisyNumber(int) decodePredictedValue(int) decodeSortedArray(int[],int,int,int,int)
+btools/codec/TagValueCoder.java	247	109	3	11	<init>(BitCoderContext,DataBuffers,TagValueValidator) decodeTagValueSet() decodeTree(BitCoderContext,DataBuffers,TagValueValidator)
+btools/codec/TagValueValidator.java	18	9	0	5	
+btools/codec/TagValueWrapper.java	11	11	0	0	
+btools/codec/WaypointMatcher.java	16	12	0	4	
+btools/expressions/BExpression.java	406	0	0	14	
+btools/expressions/BExpressionContext.java	1062	474	8	55	<init>(String,BExpressionMetaData) <init>(String,int,BExpressionMetaData) addLookupValue(String,String,int[]) decode(int[],boolean,byte[]) finishMetaParsing() getKeyValueDescription(boolean,byte[]) parseMetaLine(String) unify(byte[],int,int)
+btools/expressions/BExpressionContextNode.java	35	0	0	4	
+btools/expressions/BExpressionContextWay.java	134	46	1	25	<init>(BExpressionMetaData)
+btools/expressions/BExpressionLookupValue.java	57	57	5	5	<init>(String) addAlias(String) equals(Object) matches(String) toString()
+btools/expressions/BExpressionMetaData.java	75	75	2	2	readMetaData(File) registerListener(String,BExpressionContext)
+btools/expressions/CacheNode.java	27	27	2	2	equals(Object) hashCode()
+btools/expressions/IntegrityCheckProfile.java	49	0	0	2	
+btools/expressions/ProfileComparator.java	52	0	0	2	
+btools/expressions/VarWrapper.java	23	23	2	2	equals(Object) hashCode()
+btools/mapaccess/DirectWeaver.java	200	33	0	3	
+btools/mapaccess/GeometryDecoder.java	69	69	2	2	<init>() decodeGeometry(byte[],OsmNode,OsmNode,boolean)
+btools/mapaccess/MatchedWaypoint.java	74	0	0	2	
+btools/mapaccess/NodesCache.java	418	0	0	16	
+btools/mapaccess/NodesList.java	12	0	0	0	
+btools/mapaccess/OsmFile.java	216	147	5	11	<init>(PhysicalFile,int,int,DataBuffers) createMicroCache(int,int,DataBuffers,TagValueValidator,WaypointMatcher,boolean,OsmNodesMap) getDataInputForSubIdx(int,byte[]) getPosIdx(int) hasData()
+btools/mapaccess/OsmLink.java	155	96	4	11	<init>() getNext(OsmNode) getTarget(OsmNode) isReverse(OsmNode)
+btools/mapaccess/OsmLinkHolder.java	12	10	0	2	
+btools/mapaccess/OsmNode.java	262	192	11	21	<init>() <init>(int,int) <init>(long) addLink(OsmLink,boolean,OsmNode) addLink(int,int,byte[],byte[],OsmNodesMap,boolean) addTurnRestriction(TurnRestriction) equals(Object) hashCode() parseNodeBody(MicroCache,OsmNodesMap,IByteArrayUnifier) parseNodeBody2(MicroCache2,OsmNodesMap,IByteArrayUnifier) setHollow()
+btools/mapaccess/OsmNodePairSet.java	104	0	0	11	
+btools/mapaccess/OsmNodesMap.java	291	85	4	15	get(int,int) getByteArrayUnifier() put(OsmNode) remove(OsmNode)
+btools/mapaccess/OsmPos.java	22	16	0	6	
+btools/mapaccess/OsmTransferNode.java	16	16	0	0	
+btools/mapaccess/PhysicalFile.java	156	96	2	5	<init>(File,DataBuffers,int,int) close()
+btools/mapaccess/Rd5DiffManager.java	115	0	0	4	
+btools/mapaccess/Rd5DiffTool.java	637	0	0	21	
+btools/mapaccess/Rd5DiffValidator.java	62	0	0	2	
+btools/mapaccess/StorageConfigHelper.java	49	0	0	3	
+btools/mapaccess/TurnRestriction.java	60	24	0	4	
+btools/mapaccess/WaypointMatcherImpl.java	263	0	0	7	
+btools/router/AreaInfo.java	71	0	0	6	
+btools/router/AreaReader.java	270	0	0	6	
+btools/router/FormatCsv.java	43	0	0	4	
+btools/router/FormatGpx.java	573	0	0	10	
+btools/router/FormatJson.java	261	0	0	7	
+btools/router/FormatKml.java	116	0	0	5	
+btools/router/Formatter.java	569	0	0	22	
+btools/router/KinematicModel.java	147	0	0	10	
+btools/router/KinematicNoCostModel.java	147	0	0	10	
+btools/router/KinematicNoCostPath.java	264	0	0	10	
+btools/router/KinematicPath.java	273	0	0	10	
+btools/router/KinematicPrePath.java	56	0	0	1	
+btools/router/MessageData.java	104	0	0	10	
+btools/router/OsmNodeNamed.java	100	0	0	5	
+btools/router/OsmNogoPolygon.java	488	0	0	11	
+btools/router/OsmPath.java	434	0	0	21	
+btools/router/OsmPathElement.java	127	0	0	19	
+btools/router/OsmPathModel.java	20	0	0	3	
+btools/router/OsmPrePath.java	26	0	0	2	
+btools/router/OsmTrack.java	587	0	0	27	
+btools/router/ProfileCache.java	142	0	0	3	
+btools/router/RoutingContext.java	579	0	0	22	
+btools/router/RoutingEngine.java	2443	0	0	50	
+btools/router/RoutingHelper.java	41	0	0	4	
+btools/router/RoutingIslandException.java	4	0	0	0	
+btools/router/RoutingParamCollector.java	374	0	0	13	
+btools/router/SearchBoundary.java	87	0	0	4	
+btools/router/StdModel.java	36	0	0	3	
+btools/router/StdPath.java	356	0	0	11	
+btools/router/SuspectInfo.java	59	0	0	4	
+btools/router/VoiceHint.java	223	0	0	9	
+btools/router/VoiceHintList.java	61	0	0	5	
+btools/router/VoiceHintProcessor.java	529	0	0	6	
+btools/util/BitCoderContext.java	320	290	18	20	<init>(byte[]) closeAndGetEncodedLength() decodeBit() decodeBits(int) decodeBitsReverse(int) decodeBounded(int) decodeVarBits() decodeVarBits2() encodeBit(boolean) encodeBounded(int,int) encodeVarBits(int) encodeVarBits2(int) fillBuffer() flushBuffer() getReadingBitPosition() getWritingBitPosition() reset() reset(byte[])
+btools/util/ByteArrayUnifier.java	54	43	2	3	<init>(int,boolean) unify(byte[],int,int)
+btools/util/ByteDataReader.java	135	118	14	16	<init>(byte[]) <init>(byte[],int) getEndPointer() hasMoreData() readBoolean() readByte() readDataUntil(int) readFully(byte[]) readInt() readLong() readShort() readVarLengthSigned() readVarLengthUnsigned() reset(byte[])
+btools/util/ByteDataWriter.java	150	125	11	16	<init>(byte[]) injectSize(int) write(byte[],int,int) writeBoolean(boolean) writeInt(int) writeModeAndDesc(boolean,byte[]) writeShort(int) writeSizePlaceHolder() writeVarBytes(byte[]) writeVarLengthSigned(int) writeVarLengthUnsigned(int)
+btools/util/CheapAngleMeter.java	75	0	0	6	
+btools/util/CheapRuler.java	97	0	0	4	
+btools/util/CompactLongMap.java	286	0	0	10	
+btools/util/CompactLongSet.java	183	0	0	8	
+btools/util/Crc32.java	53	53	1	1	crc(byte[],int,int)
+btools/util/DenseLongMap.java	203	0	0	6	
+btools/util/DiffCoderDataInputStream.java	43	0	0	4	
+btools/util/DiffCoderDataOutputStream.java	39	0	0	4	
+btools/util/FrozenLongMap.java	120	0	0	8	
+btools/util/FrozenLongSet.java	67	0	0	5	
+btools/util/IByteArrayUnifier.java	5	5	1	1	unify(byte[],int,int)
+btools/util/LazyArrayOfLists.java	45	0	0	4	
+btools/util/LongList.java	36	0	0	4	
+btools/util/LruMap.java	100	39	2	5	<init>(int,int) get(LruMapNode)
+btools/util/LruMapNode.java	9	9	0	0	
+btools/util/MixCoderDataInputStream.java	125	0	0	7	
+btools/util/MixCoderDataOutputStream.java	106	0	0	7	
+btools/util/ProgressListener.java	8	0	0	2	
+btools/util/ReducedMedianFilter.java	82	0	0	5	
+btools/util/SortedHeap.java	310	0	0	15	
+btools/util/StackSampler.java	120	0	0	7	
+btools/util/StringUtils.java	48	0	0	3	
+btools/util/TinyDenseLongMap.java	180	0	0	7	

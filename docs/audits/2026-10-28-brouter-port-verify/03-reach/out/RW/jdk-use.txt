@@ -1,0 +1,122 @@
+reached methods: 141
+JDK classes used: 27
+java/io/BufferedReader  (used in 1 BRouter classes: BExpressionMetaData)
+    (new)
+    <init>(Ljava/io/Reader;)V
+    close()V
+    readLine()Ljava/lang/String;
+java/io/File  (used in 1 BRouter classes: PhysicalFile)
+    getName()Ljava/lang/String;
+java/io/FileReader  (used in 1 BRouter classes: BExpressionMetaData)
+    (new)
+    <init>(Ljava/io/File;)V
+java/io/IOException  (used in 2 BRouter classes: OsmFile PhysicalFile)
+    (new)
+    <init>(Ljava/lang/String;)V
+java/io/PrintStream  (used in 2 BRouter classes: BExpressionContext MicroCache2)
+    println(Ljava/lang/String;)V
+java/io/RandomAccessFile  (used in 2 BRouter classes: OsmFile PhysicalFile)
+    (new)
+    <init>(Ljava/io/File;Ljava/lang/String;)V
+    close()V
+    length()J
+    readFully([BII)V
+    seek(J)V
+java/lang/Boolean  (used in 1 BRouter classes: BExpressionContext)
+    getBoolean(Ljava/lang/String;)Z
+java/lang/Exception  (used in 1 BRouter classes: BExpressionContext)
+    getMessage()Ljava/lang/String;
+java/lang/Float  (used in 1 BRouter classes: BExpressionContext)
+    parseFloat(Ljava/lang/String;)F
+    toString(F)Ljava/lang/String;
+    valueOf(F)Ljava/lang/Float;
+java/lang/IllegalArgumentException  (used in 5 BRouter classes: BExpressionContext ByteArrayUnifier LinkedListContainer MicroCache OsmNode)
+    (new)
+    <init>(Ljava/lang/String;)V
+java/lang/Integer  (used in 1 BRouter classes: BExpressionContext)
+    (checkcast)
+    intValue()I
+    parseInt(Ljava/lang/String;)I
+    valueOf(I)Ljava/lang/Integer;
+java/lang/Math  (used in 1 BRouter classes: BExpressionContext)
+    abs(F)F
+java/lang/Object  (used in 22 BRouter classes: BExpressionContext BExpressionLookupValue BExpressionMetaData BitCoderContext ByteArrayUnifier ByteDataReader DataBuffers GeometryDecoder LinkedListContainer LruMap LruMapNode NoisyDiffCoder OsmFile OsmLink OsmNode OsmNodesMap OsmTransferNode PhysicalFile TagValueCoder TagValueCoder$TreeNode TagValueWrapper TurnRestriction)
+    (anewarray)
+    <init>()V
+    equals(Ljava/lang/Object;)Z
+    getClass()Ljava/lang/Class;
+java/lang/RuntimeException  (used in 1 BRouter classes: BExpressionMetaData)
+    (new)
+    <init>(Ljava/lang/Throwable;)V
+java/lang/Short  (used in 1 BRouter classes: BExpressionMetaData)
+    parseShort(Ljava/lang/String;)S
+java/lang/String  (used in 5 BRouter classes: BExpressionContext BExpressionContextWay BExpressionLookupValue BExpressionMetaData OsmNode)
+    (anewarray)
+    (checkcast)
+    (instanceof)
+    contains(Ljava/lang/CharSequence;)Z
+    equals(Ljava/lang/Object;)Z
+    format(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    indexOf(I)I
+    indexOf(Ljava/lang/String;)I
+    length()I
+    matches(Ljava/lang/String;)Z
+    replace(CC)Ljava/lang/String;
+    replaceAll(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    split(Ljava/lang/String;)[Ljava/lang/String;
+    startsWith(Ljava/lang/String;)Z
+    substring(I)Ljava/lang/String;
+    substring(II)Ljava/lang/String;
+    toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
+    trim()Ljava/lang/String;
+    valueOf(Ljava/lang/Object;)Ljava/lang/String;
+java/lang/StringBuilder  (used in 1 BRouter classes: BExpressionContext)
+    (new)
+    <init>(I)V
+    append(C)Ljava/lang/StringBuilder;
+    append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    length()I
+    toString()Ljava/lang/String;
+java/lang/System  (used in 7 BRouter classes: BExpressionContext ByteArrayUnifier ByteDataReader ByteDataWriter LinkedListContainer MicroCache2 TagValueCoder)
+    arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
+    field err
+    field out
+java/util/ArrayList  (used in 2 BRouter classes: BExpressionContext BExpressionLookupValue)
+    (new)
+    <init>()V
+java/util/Arrays  (used in 2 BRouter classes: CacheNode VarWrapper)
+    equals([B[B)Z
+    equals([F[F)Z
+java/util/Collection  (used in 1 BRouter classes: BExpressionMetaData)
+    iterator()Ljava/util/Iterator;
+java/util/HashMap  (used in 3 BRouter classes: BExpressionContext BExpressionMetaData OsmNodesMap)
+    (new)
+    <init>()V
+    <init>(I)V
+java/util/Iterator  (used in 2 BRouter classes: BExpressionLookupValue BExpressionMetaData)
+    hasNext()Z
+    next()Ljava/lang/Object;
+java/util/List  (used in 2 BRouter classes: BExpressionContext BExpressionLookupValue)
+    add(Ljava/lang/Object;)Z
+    get(I)Ljava/lang/Object;
+    iterator()Ljava/util/Iterator;
+    set(ILjava/lang/Object;)Ljava/lang/Object;
+    size()I
+java/util/Locale  (used in 1 BRouter classes: BExpressionContext)
+    field US
+java/util/Map  (used in 3 BRouter classes: BExpressionContext BExpressionMetaData OsmNodesMap)
+    get(Ljava/lang/Object;)Ljava/lang/Object;
+    put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    remove(Ljava/lang/Object;)Ljava/lang/Object;
+    values()Ljava/util/Collection;
+java/util/StringTokenizer  (used in 1 BRouter classes: BExpressionContext)
+    (new)
+    <init>(Ljava/lang/String;Ljava/lang/String;)V
+    hasMoreTokens()Z
+    nextToken()Ljava/lang/String;
+
+synchronized blocks (monitorenter) in reached methods: 0
+string concatenations (invokedynamic) in reached methods: 13
+volatile fields in all classes:
+  btools/router/RoutingEngine: private volatile boolean terminated;
+  btools/util/StackSampler: private volatile boolean stopped;

@@ -1,0 +1,29 @@
+# Edges and methods cut from BRouter v1.7.10's static reach for BRouterRouteWays.read's calls only (step 5d, RECORD -70).
+# Same format as exclusions.txt. One tier, W: the arguments of that call. It is applied alone, never with T2's tiers:
+# T2's S row cuts createMicroCache -> MicroCache2, which is exactly the edge this path takes (hollowNodes null).
+# Paths: J = third_party/brouter/src/main/java/btools/ and R = app/src/main/java/com/zynergylabs/forager/app/routing/BRouterRouteWays.kt,
+# both at Forager a0535ece (J equal to e2969abe4's: empty git diff).
+
+# ---- W: hollowNodes is null (R:84 passes null), so createMicroCache returns MicroCache2 and never weaves (J/mapaccess/OsmFile.java:139-142)
+W | btools/mapaccess/OsmFile.createMicroCache(IILbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;ZLbtools/mapaccess/OsmNodesMap;)Lbtools/codec/MicroCache; -> btools/mapaccess/DirectWeaver.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;Lbtools/mapaccess/OsmNodesMap;)V | hollowNodes null (R:84; OsmFile.java:139-142)
+
+# ---- W: waypointMatcher is null (R:84), so matcher is null on every link (J/codec/MicroCache2.java:160) and :163-189 never call it or checkStartWay
+W | btools/codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V -> btools/codec/WaypointMatcher.start(IIIIZ)Z | waypointMatcher null (R:84; MicroCache2.java:160, :163-166)
+W | btools/codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V -> btools/codec/WaypointMatcher.transferNode(II)V | as above (MicroCache2.java:186-187)
+W | btools/codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V -> btools/codec/WaypointMatcher.end()V | as above (MicroCache2.java:189)
+W | btools/codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V -> btools/codec/TagValueValidator.checkStartWay([B)Z | only inside matcher != null (MicroCache2.java:163-164)
+W | btools/codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V -> btools/expressions/BExpressionContext.checkStartWay([B)Z | as above
+
+# ---- W: wayValidator is null (R:84), passed on to TagValueCoder (MicroCache2.java:41), whose decodeTree then never calls it (J/codec/TagValueCoder.java:118, :128-135)
+W | btools/codec/TagValueCoder.decodeTree(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object; -> btools/codec/TagValueValidator.isLookupIdxUsed(I)Z | validator null (TagValueCoder.java:118)
+W | btools/codec/TagValueCoder.decodeTree(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object; -> btools/expressions/BExpressionContext.isLookupIdxUsed(I)Z | as above
+W | btools/codec/TagValueCoder.decodeTree(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object; -> btools/codec/TagValueValidator.unify([BII)[B | validator null (TagValueCoder.java:128-132)
+W | btools/codec/TagValueCoder.decodeTree(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object; -> btools/expressions/BExpressionContext.unify([BII)[B | as above (BExpressionContext.unify stays reached through readUnified, OsmNode.java:146)
+W | btools/codec/TagValueCoder.decodeTree(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object; -> btools/codec/TagValueValidator.accessType([B)I | validator null (TagValueCoder.java:135)
+W | btools/codec/TagValueCoder.decodeTree(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object; -> btools/expressions/BExpressionContextWay.accessType([B)I | as above
+
+# ---- W: never converted to a string. R stringifies no BRouter object (R:80 prints an int, R:108 builds its key from longs and an int),
+#      and the one reached Object-to-string site (J/mapaccess/OsmNode.java:114) takes a Class, and only for a cache that is not a MicroCache2
+W | btools/mapaccess/OsmNode.toString()Ljava/lang/String; | no reached Object-to-string site takes an OsmNode
+W | btools/mapaccess/TurnRestriction.toString()Ljava/lang/String; | no reached Object-to-string site takes a TurnRestriction
+W | btools/util/ByteDataReader.toString()Ljava/lang/String; | no reached Object-to-string site takes a ByteDataReader
