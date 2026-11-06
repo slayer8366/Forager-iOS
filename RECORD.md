@@ -2719,3 +2719,38 @@ and F0h's ends). It goes into 5c, which already compares tile decodes. A modest 
 - 5c is cut from `brouter-port-5b` (-61). Not yet dispatched: it waits until Linden's session 21 ends, so that only one
   heavy job runs at a time.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -66.
+
+**Kind:** intent
+**ID:** 2026-10-28-66
+**Timestamp:** 2026-11-06T03:39:43Z
+**Continues:** 2026-10-28-48, 2026-10-28-61, 2026-10-28-65
+**Title:** Step 5c (waypoint matching) and the route-ways test start now, beside 1b, on `brouter-port-5b` (Plumb, session 6)
+**Decision first:** the owner, verbatim: "Start 5c now". This overrules -65's call to wait for Linden's session 21.
+
+**A wrong premise of the planner's, in -65 and in the option the owner chose:** "It goes into 5c, which already compares
+tile decodes". Step 5c is **waypoint matching** (`WaypointMatcherImpl`, `MatchedWaypoint`; Phase 1 report on
+`brouter-port`, line 1700). The tile decodes are compared in 5b (`GraphDecodeTest`, line 1699). The owner's ruling
+(add the test) stands. Only its home changes: the route-ways test is written in this session, next to 5b's decode tests.
+
+**The branch (the planner's call, technical):** the owner allowed pushes to `brouter-port` and `brouter-port-5b` only. So
+5c is built on `brouter-port-5b`, from `98c01e6`, in a report of its own, `docs/audits/2026-11-06-brouter-port-step5c.md`.
+That also satisfies -61, under which 5c builds on 5b. A separate `brouter-port-5c` would need the owner's word.
+
+**Change:**
+- **5c, as Phase 1's item I sets it** (line 1700):
+  - port `WaypointMatcherImpl` and `MatchedWaypoint` into `commonMain`;
+  - compare the matched waypoint (way, node pair, radius, direction) against the oracle for every generated endpoint
+    of R. NT is not built yet, so its endpoints wait for it, and the report says so;
+  - the revert drops the comparator's second line (`WaypointMatcherImpl.java:71`), with the prediction pushed first;
+  - the `atan2` tie-break follows (a) to (c) as step 2b settled them.
+- **The route-ways test, -65's planner's calls as written,** placed beside `GraphDecodeTest`:
+  - points from Forager's `app/src/test/resources/routing/dropoff/` at `a0535ece` (pinned by SHA-256) and F0h's ends;
+  - the revert drops one tag;
+  - only counts and digests are committed.
+- `CollectOutreachersTest` stays red as -61 ruled, and is reported at every CI read.
+**Scope boundary:** writes only `brouter-port-5b`. It does not touch `brouter-port` (Linden is running there), `main`,
+slayer8366/Forager or the tile release.
+**Finish line:** both tests seen failing over stubs and then passing, both reverts biting as predicted, CI read by the
+planner, and the report with a handoff.
+**Abort conditions:** -3's, and any new red other than `CollectOutreachersTest`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -67.
