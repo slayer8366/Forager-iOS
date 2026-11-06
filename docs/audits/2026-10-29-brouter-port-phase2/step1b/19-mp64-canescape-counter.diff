@@ -1,10 +1,10 @@
 --- src-plain/btools/mapaccess/OsmNodesMap.java	2026-11-06 03:04:06.440395114 +0000
-+++ src-patched/btools/mapaccess/OsmNodesMap.java	2026-11-06 03:04:32.474936880 +0000
-@@ -124,9 +124,34 @@
++++ src-patched/btools/mapaccess/OsmNodesMap.java	2026-11-06 03:27:41.751537945 +0000
+@@ -124,9 +124,33 @@
  
    private List<OsmNode> nodes2check;
  
-+  /** Scratch probe (step 1b, session 21, RECORD -61/-64): canEscape's answers. Not in the oracle. */
++  /** Scratch probe (step 1b, session 21, RECORD -61/-64): canEscape's answers: per-JVM totals at exit, and the first 3 false nodes per JVM. Not in the oracle. */
 +  private static final String PROBE_FILE = "/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/canescape/counts.txt";
 +  private static final java.util.concurrent.atomic.AtomicLong probeCalls = new java.util.concurrent.atomic.AtomicLong();
 +  private static final java.util.concurrent.atomic.AtomicLong probeFalse = new java.util.concurrent.atomic.AtomicLong();
@@ -25,8 +25,7 @@
 +    probeCalls.incrementAndGet();
 +    boolean r = canEscape0(n0);
 +    if (!r) {
-+      probeFalse.incrementAndGet();
-+      probeWrite("false pid=" + ProcessHandle.current().pid() + " node=" + n0.ilon + "," + n0.ilat + " cmd=" + System.getProperty("sun.java.command"));
++      if (probeFalse.incrementAndGet() <= 3) probeWrite("false pid=" + ProcessHandle.current().pid() + " node=" + n0.ilon + "," + n0.ilat + " cmd=" + System.getProperty("sun.java.command"));
 +    }
 +    return r;
 +  }
