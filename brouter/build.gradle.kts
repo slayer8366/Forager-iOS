@@ -57,6 +57,32 @@ val fetchTiles by tasks.registering(Exec::class) {
     )
 }
 
+// Stratum F0h (RECORD -58): Forager's heighted Harriman square, fetched by tools/fetch-f0h.sh from Forager's raw file at
+// commit d6e2a0415 into build/tiles-f0h/f0h, refused unless its size and SHA-256 match the pins in that script. Not in
+// the tile release or tools/tile-pins.tsv. Wired here as on brouter-port (RECORD -74): a fetch the oracle's test JVM
+// depends on, and a folder property (TestTiles.f0h).
+val f0hDir = layout.buildDirectory.dir("tiles-f0h")
+val fetchF0h by tasks.registering(Exec::class) {
+    description = "Fetches F0h's heighted W75_N40.rd5 from Forager at d6e2a0415, refusing it unless it matches its pins."
+    val scripts = rootProject.layout.projectDirectory.dir("tools")
+    inputs.file(scripts.file("fetch-f0h.sh"))
+    inputs.file(scripts.file("fetch-pinned.sh"))
+    outputs.dir(f0hDir)
+    commandLine("bash", scripts.file("fetch-f0h.sh").asFile.absolutePath, f0hDir.get().asFile.absolutePath)
+}
+
+// Step 5d's route-ways test (RECORD -65, -74): Forager's drop-off square and points.json at a0535ece, fetched by
+// tools/fetch-dropoff.sh into build/tiles-dropoff/dropoff, each refused unless it matches its pins in that script.
+val dropoffDir = layout.buildDirectory.dir("tiles-dropoff")
+val fetchDropoff by tasks.registering(Exec::class) {
+    description = "Fetches Forager's drop-off W75_N40.rd5 and points.json at a0535ece, refusing either unless it matches its pins."
+    val scripts = rootProject.layout.projectDirectory.dir("tools")
+    inputs.file(scripts.file("fetch-dropoff.sh"))
+    inputs.file(scripts.file("fetch-pinned.sh"))
+    outputs.dir(dropoffDir)
+    commandLine("bash", scripts.file("fetch-dropoff.sh").asFile.absolutePath, dropoffDir.get().asFile.absolutePath)
+}
+
 kotlin {
     jvm {
         compilerOptions {
@@ -94,9 +120,11 @@ val fetchJacoco by tasks.registering(Exec::class) {
 
 // The oracle's test JVM, shared by jvmTest and e3Strata.
 fun Test.oracleJvm() {
-    dependsOn(fetchOracle, msunReference, fetchTiles)
+    dependsOn(fetchOracle, msunReference, fetchTiles, fetchF0h, fetchDropoff)
     systemProperty("brouter.oracle.dir", oracleDir.get().asFile.absolutePath)
     systemProperty("brouter.tiles.dir", tilesDir.get().asFile.absolutePath)
+    systemProperty("brouter.tiles.f0h.dir", f0hDir.get().asFile.absolutePath)
+    systemProperty("brouter.tiles.dropoff.dir", dropoffDir.get().asFile.absolutePath)
     systemProperty("brouter.tiles.pins", tilePins.asFile.absolutePath)
     systemProperty("brouter.msunref.dir", msunRefDir.get().asFile.absolutePath)
     // The planner's call (RECORD -24): the oracle runs with libm's intrinsics off, so HotSpot's Math.cos is fdlibm's.
