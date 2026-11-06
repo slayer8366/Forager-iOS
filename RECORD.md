@@ -3243,3 +3243,28 @@ any trailer, by `git log` and `grep`, checked by the planner). It handed off at 
 **1b now stands at:** F0, F0h, R, DL-lat, DL-lon, MP64, ML5, PM5 (short, 55), NT, CR and LB, all run and stable. FK is next,
 under -79 and -80, including kinds 9 to 11's harness changes. Then the expected values.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -82.
+
+**Kind:** decision
+**ID:** 2026-10-28-82
+**Timestamp:** 2026-11-06T06:25:46Z
+**Continues:** 2026-10-28-80, 2026-10-28-81
+**Title:** FK kind 5 short at 9 of 10 in construction; its start and end are drawn separately and it is rerun alone
+**Observed (Linden, session 24, as reported):**
+- FK's generator and prediction were pushed at `49e2711` before the run.
+- Kinds 1, 2, 3 and 6 reached 10 of 10. **Kind 4** filled 10 of 10 at draw 74; of 64 rejections, 41 were "to-position not
+  mapped" and 23 routed.
+- **Kind 5 came out short, at 9 of 10 after 200 draws.** That cap was Linden's own: -80 set 200 for kind 4 only.
+- Kind 5's rejections, **all before routing:** 111 failed the 300 m check, 68 had a start car-fast cannot use, and 12 fell
+  at a tile edge. No oracle outcome was used in any of them.
+**Decision (the planner's, technical):** Linden's option (a).
+- **Why:** FK is "constructed, not sampled… no rate is claimed" (Phase 1's E5). E4's fill-or-short rule guards against
+  choosing cases by their outcome, and every one of these rejections came before any outcome existed.
+- **The rule for kind 5:**
+  - the start and the end are drawn separately;
+  - the cap is 400 draws, with every rejection counted by reason;
+  - nothing is selected on the oracle's outcome;
+  - the change and its prediction are pushed first, then kind 5 is rerun alone through E3's six regimes;
+  - all 10 must reach kind 5's family ("not mapped", -80), or it is a stop.
+- **The report keeps the first run's 9 of 10 and its counts,** and names the 200 cap as Linden's choice.
+- **Rejected:** (b), keeping 9. A constructed set short by construction is a harness limit, not a finding about the oracle.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -83.
