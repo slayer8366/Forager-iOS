@@ -1670,7 +1670,7 @@ The next step is the targeted strata, **as the nineteenth session's handoff give
    `scripts/rsum.py`, the CI log `ci/9302765-jvm.log`. Every log that matters is copied into `step1b/`. Nothing there is
    needed: the JDK comes again from `bash tools/fetch-temurin.sh <dir>`.
 
-## Step 1b continued: the targeted strata DL-lat, DL-lon, MP64 and ML5/PM5, and `canEscape` on MP64 (twenty-first session, Linden Caliper): IN PROGRESS
+## Step 1b continued: the targeted strata DL-lat, DL-lon, MP64 and ML5/PM5, and `canEscape` on MP64 (twenty-first session, Linden Caliper)
 
 Dispatch RECORD -64 (with -51, -52, -61, -62). Base `brouter-port` `3688c9f`, fetched and equal to `origin/brouter-port`
 before any write [C]. CI on `3688c9f` is the planner's read at RECORD -63 (run 41910184631, green), cited, not re-read.
@@ -1763,7 +1763,110 @@ classpath (below). Every stratum figure here is run A's.
   was driven there outside a routing run, with different visit ids and hollow links. Whether a region cut around one of
   these nodes reproduces false in 5b's test is [?].
 
-<!-- s21-next -->
+### ML5 and PM5, one sequence (`20-*`; prediction `20-m5-prediction.txt`, pushed in `01388f4`) [C]
+
+- **ML5 filled:** 59 of 59, the last taken at draw **246**.
+- **PM5 is SHORT:** **55 of 59** at the cap, its last case taken at draw **1,180** (`20-m5-e3Strata.log`). The task fails
+  on the short assertion by design. The JUnit message is "M5: short after 1180 draws: {PM5=55} of 59"
+  (`20-m5-junit.xml`, `E3MemoryTest.kt:49`); it is the only failure.
+- **The stop was sent, and the planner ruled** (technical; RECORD -71, to be written by the planner): PM5 stands at 55
+  and is reported short, as E4 says. It is never filled from another generator, and the cap, the seed and the generator
+  do not change. The expected values use n = 55. Its own bound, re-derived here: a clean run bounds PM5's instability
+  rate below 1 − 0.05^(1/55) = **5.30%**, against 4.95% at 59 [C: arithmetic].
+- **Draws:** 1,180 counted, 978 routed (`20-m5-select-check.txt`). **Rejected, 1,066:**
+  - 202 before routing ("no node in the target's 3 x 3 cells, or the target is outside every tile");
+  - 232 "ML5 already full", every one of them the limit (204 after panic mode);
+  - 632 "neither": 551 routes without panic, of which 482 collected at least once and 69 never did; 65 "to-position not
+    mapped", 10 "no track found at pass=0", 3 "from-position not mapped", 3 "target island detected for section 0";
+  - "R2's tuple differs from R1's": 0.
+
+  The log prints "neither" by its collection count, so it has 40 separate lines; the grouping above is
+  `selcheck.py`'s and a reading of `20-m5-select.tsv`'s R1 kinds.
+- **Panic and the limit over all 978 routed draws:** 313 showed panic mode. 258 of them ended in the limit; the other 55
+  are PM5, all of them, every one a route. 33 hit the limit without panic. So **panic without the limit is 55 of 978
+  routed draws (5.6%)**, which is why PM5 is short.
+- **ML5 with panic: 54 of 59** (the log's line). The other 5 reached the limit with no panic line. **ML5 is mostly
+  panic, then the limit** (the planner's wording): its cases test the panic path and the throw after it, not only the
+  throw.
+- **Stability:** 0 of 59 unstable in ML5 (`20-ml5-stability.tsv`), 0 of 55 in PM5 (`20-pm5-stability.tsv`).
+- **Selection against E3:** equal in **59 of 59** (ML5) and **55 of 55** (PM5). R1's kinds: ML5 "memory limit reached"
+  59; PM5 route 55.
+- **No case in two strata:** each draw has one result in `select.tsv`, and across all four sequences the 291 taken ids
+  are distinct.
+- **Against the prediction:** ML5 filling early, most ML5 cases with panic, PM5 the one at risk, 0 R2 differences and 0
+  unstable all held. "PM5 fills, but late" was wrong: it is short by 4.
+- The whole task 43 m 32 s (selection 26 minutes).
+
+### Summary of the four sequences [C]
+
+| Stratum | Taken | Last draw | Draws (cap 1,180) | Routed | Rejected | Unstable | Selection = E3 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| DL-lat | 59 | 501 | 501 | 70 | 442 | 0 of 59 | 59 of 59 |
+| DL-lon | 59 | 326 | 326 | 60 | 267 | 0 of 59 | 59 of 59 |
+| MP64 | 59 | 86 | 86 | 72 | 27 | 0 of 59 | 59 of 59 |
+| ML5 | 59 | 246 | 1,180 (shared) | 978 (shared) | 1,066 (shared) | 0 of 59 | 59 of 59 |
+| PM5 | **55 (short)** | 1,180 | (shared) | (shared) | (shared) | 0 of 55 | 55 of 55 |
+
+That is 291 cases, all stable. -64's prediction ("each stratum fills ... 0 unstable; at least one MP64 case has
+`canEscape` answer false") held except for PM5's fill.
+
+### CI
+
+<!-- s21-ci -->
+
+### Could not determine, and unverified
+
+- **Why the bearing rejects are 84% of DL-lat's draws** and 79% of DL-lon's, against the "about half" predicted. They are
+  counted [C]; the cause is not read from `DLGenerator` [?].
+- **Where `canEscape`'s false nodes lie,** beyond the first three per JVM, and whether a region cut around one makes 5b's
+  `CollectOutreachersTest` see false [?]. Not tried; 5b's branch is outside this dispatch.
+- **R1 against R2 inside one R1R2 JVM:** the counter totals per JVM, so R1's and R2's counts are not told apart. That
+  they are equal is inferred from the JVM total being exactly twice R4's in 59 of 59 [I].
+- **R3's count** is one total over all 59 cases (one JVM). It equals the sum of R4's [C], but it is not per case.
+- **The ML5/PM5 stratum logs were run on the plain oracle only;** `canEscape` was counted on MP64 alone, as -64 asked.
+- **The geography behind DL-lon's node counts** (1.57 million nodes near 70°W in `W75_N40`) is not checked against a map
+  [?].
+
+### Premises that were wrong
+
+- **-64's "each stratum fills its 59 within the cap"** (the planner's prediction, marked [I]): PM5 did not, 55 of 59.
+- **Mine, from the nineteenth session:** "PM5 is the one that may come up short" held. But "DL-lon, with more rejects
+  before routing than DL-lat" did not: it had fewer, and filled sooner.
+- **Mine, at `19-mp64-prediction.txt` item 5:** `canEscape` false "in a minority of cases" was wrong. It is all 59, and
+  24% of all calls.
+- **The dispatch's search hint `**ID:** 2026-10-28-6`** also matches -60 to -69 as a prefix. -64 is `2026-10-28-64`
+  (`RECORD.md:2662` on the record's branch). Read correctly; noted only so the next hint can be exact.
+- **The Forager clone is at `d6e2a041`,** not -64's `a0535ece`. Only `third_party/brouter` was read, which -64 records as
+  unchanged between the two [R: -64; not re-diffed here].
+
+### Calls beyond scope (mine; for the planner)
+
+- **MP64 ran twice:** run A on the plain oracle is the stratum; run B carries the counter. This gives a check that the
+  probe changed nothing (0 diff lines). It cost 11 minutes.
+- **The counter's first form was stopped and replaced** (above). The diff committed is the second form's.
+- **`selcheck.py` and `cesum.py` are committed in `step1b/`** as the readers of the committed tables, not as tools.
+  `19-mp64-canescape-counts.txt` (345 kB) is committed whole.
+- **The 5 MP64 draws in flight at fill** are left out of every count, as `E3Select` leaves them out of `select.tsv`.
+
+### Step 1b: the handoff (twenty-first session)
+
+1. **Base:** `brouter-port` at the commit carrying this section or later; fetch first. Logs are numbered to `20-*`; the
+   next is `21-*`.
+2. **Done:** DL-lat, DL-lon, MP64, ML5 and PM5 (PM5 short at 55, standing by the planner's ruling, RECORD -71). The
+   `canEscape` count is in. Nothing here needs re-running.
+3. **Next, per -64:** the remaining strata, NT, LB, CR and FK. They are not built. NT and CR select by coverage, so their
+   selector is the first code to read JaCoCo's `.exec` files (-51), and it must be seen failing first (-50). Then the
+   expected values in part 7 step 4's digest form, carrying heights, with PM5 at n = 55 and its bound 5.30%, and
+   `R-shortest-025` under -50's ruling.
+4. **For the planner:** `canEscape`'s false nodes, for 5b (-61), are in `19-mp64-canescape-counts.txt`. To count again,
+   rebuild the copy: apply `19-mp64-canescape-counter.diff` to Forager `third_party`'s `OsmNodesMap.java`, run `javac
+   --release 11 -cp brouter/build/oracle/brouter-1.7.10-ro.jar -d <dir>` with the path in `PROBE_FILE` edited, and pass a
+   scratch init script with `-I` that sets `t.classpath = files('<dir>') + t.classpath` on `e3Strata`. Never commit it.
+5. **Running: nothing.** The ML5/PM5 task ended at about 04:24Z; no Gradle test JVM or E3 child of mine is left.
+6. **Scratch,** `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/`: the
+   Temurin home, `canescape/` (sources, classes, init script, counts), and `scripts/`. Every file that matters is in
+   `step1b/`.
+
 
 ## Confirmed vs inferred
 
