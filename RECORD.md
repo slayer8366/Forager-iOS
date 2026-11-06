@@ -2851,3 +2851,249 @@ at 03:55:11Z.
 **Finish line:** pushed, CI read by the planner, the report with its handoff.
 **Abort conditions:** -3's; any new red besides `CollectOutreachersTest`; the 600-line stop.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -71.
+
+**Kind:** decision
+**ID:** 2026-10-28-71
+**Timestamp:** 2026-11-06T04:11:45Z
+**Continues:** 2026-10-28-51, 2026-10-28-52, 2026-10-28-61, 2026-10-28-64
+**Title:** PM5 is short at 55 of 59 and stands, as E4 says; the first three targeted strata full and stable; `canEscape`
+answers false on MP64
+**Observed (Linden, session 21, as reported; checked on its handoff):**
+- **DL-lat** 59 of 59 at draw 501, and **DL-lon** 59 of 59 at draw 326: 0 unstable each, and the selection's R1/R2
+  equal E3's in 59 of 59.
+- **MP64** 59 of 59 at draw 86: 0 limit, 0 panic, 0 unstable, 59 of 59.
+- **`canEscape` (-61)** answers false in all 59 MP64 cases: 576,094 of 2,366,007 calls per run, the same in every
+  regime, counted on a scratch copy. The counting run's tables equal the plain run's, apart from R1's milliseconds. So
+  -60's coverage assertion can be met on MP64's data.
+- **The shared M5 sequence** (seed 20261204, `memoryclass` 5, `hiking-mountain`): 1,180 draws, 978 of them routed.
+  - **ML5** filled 59 of 59 at draw 246, and 54 of the 59 also showed panic mode (-52's count).
+  - **PM5 took 55** by draw 1,180, the cap.
+  - Rejected: 202 before routing; 232 as "ML5 already full"; the rest "neither", mostly routes with no panic.
+  - E3's six regimes on both strata were still running.
+**Decision (the planner's, technical; the stop was the planner's own at -64, and Phase 1's text settles it):**
+- **PM5 stands at n = 55, reported short.** Phase 1's E4 (report at `20e1f92`, line ~908): "A stratum that cannot be filled
+  from 20 times its size in candidates is reported short, with its n and its own bound (E5). It is never filled from
+  another generator."
+- **Its own bound:** a clean run bounds its rate below 1 − 0.05^(1/55) = **5.30%** [C], against 4.95% at 59 (E5).
+- No change to the cap, the seed or the generator. The expected values use 55 for PM5.
+- **ML5 is mostly panic-then-limit** (54 of 59). The report names that as a characteristic of the stratum, so that no
+  figure from ML5 is later read as one about the limit without panic.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -72.
+
+**Kind:** outcome
+**ID:** 2026-10-28-72
+**Timestamp:** 2026-11-06T04:26:22Z
+**Continues:** 2026-10-28-67, 2026-10-28-69, 2026-10-28-70
+**Title:** 5d, items 1 and 2: the message defect fixed; the route-ways reach measured, with 440 Java lines unported (under
+the 600 stop); handed off at 180k
+**Observed:** Plumb Ledger, session 7, `brouter-port-5b` `d1de74b` to `d293fd4` (two commits; clean tree). It handed off at
+the planner's message after the watcher read 181,696 at 04:19:13Z. Report: `docs/audits/2026-11-06-brouter-port-step5d.md`.
+- **Item 1:** `differingFields` now splits at its known keys and prints names only. On a scratch revert, never committed,
+  the message held 33 coordinate fragments before the fix and 0 after, with the same 2,105 ends differing [R, as
+  reported]. The committed evidence (`1-defect.txt`) holds counts only: the planner found no coordinate-like number in it.
+- **Item 2, the reach** (`03-reach/out/RW/`, beside T2):
+  - from `BRouterRouteWays.kt:59-123`, with a tier of its own (W) for that call's null arguments: 141 methods, all 15
+    cuts used;
+  - under JaCoCo, 129 ran and 0 ran unreached [R, as reported];
+  - 27 classes and 87 JDK members, all already in T2's `jdk-use.txt`.
+- **Not ported** (`not-ported.tsv`; **checked by the planner:** 29 rows, being 27 methods plus 2 rows for branches that
+  throw, at 0 lines; the `java_lines` column sums to **440**):
+  - `MicroCache2`, 251 lines;
+  - `ByteDataWriter`, 53 lines;
+  - `parseNodeBody2`, 37 lines;
+  - `LinkedListContainer`, 34 lines, with no file in the port;
+  - `ByteArrayUnifier.unify`, 28 lines, which throws today;
+  - `ByteDataReader`, 26 lines;
+  - `expandId` and `getIdForIndex`, 7 lines;
+  - `OsmNode(long)`, 4 lines;
+  - and the two branches that throw, `OsmFile.kt:140-143` and `OsmNode.kt:96-100`.
+- **-67's estimate of about 300 lines was low:** the measured gap is 440, under -70's stop at 600.
+- **A finding:** `parseNodeBody2` is on T2's reach list but was never ported (`OsmNode.kt:15`). So the not-ported list was
+  read from the port's own source, not from T2. Whether an overload under the same name hides a gap is checked only for
+  `addLink` [?].
+- **CI, read by the planner** (run 42161896448 on `d293fd4`): `jvm` 102 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7
+  of 7, with the gate reading "OK: all 2 classes ran". So `WaypointMatchTest` passes with the fix.
+**Next:** items 3 to 6 of -70 (the port, the `MicroCache2` decode test, the route-ways test, CI), in Plumb's session 8.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -73.
+
+**Kind:** outcome
+**ID:** 2026-10-28-73
+**Timestamp:** 2026-11-06T04:31:03Z
+**Continues:** 2026-10-28-61, 2026-10-28-64, 2026-10-28-71
+**Title:** The four targeted sequences run: DL-lat, DL-lon, MP64 and ML5 full, PM5 short at 55; 291 cases, all stable;
+`canEscape` false on all 59 MP64 cases; CI green
+**Observed:** Linden Caliper, session 21, `brouter-port` `3688c9f` to `729e447` (fifteen commits, docs only: `git diff
+--name-only` shows no path outside `docs/audits/`). Every prediction was pushed before its run. Logs: `step1b/17-*` to
+`20-*`. It handed off at the planner's message after the watcher read 181,272 at 04:25:58Z.
+- **Each stratum** (`hiking-mountain`, -58's tuple, Temurin 21.0.13+9):
+  - **DL-lat:** 59 of 59 at draw 501.
+  - **DL-lon:** 59 of 59 at draw 326.
+  - **MP64:** 59 of 59 at draw 86.
+  - **ML5:** 59 of 59 at draw 246.
+  - **PM5:** 55, short at the cap, as ruled at -71.
+- **Checked by the planner** in the five `stability.tsv` files: 291 cases, all "stable", and no id appears twice. The
+  selection's R1/R2 equals E3's in every case, and "R2's tuple differs from R1's" never occurred [R, as reported].
+- **ML5 is mostly panic-then-limit** (54 of 59). Over the 978 routed M5 draws, panic without the limit came up only 55
+  times, and all 55 went to PM5. That is why PM5 is short [R, as reported].
+- **`canEscape` (-61), checked by the planner** in `19-mp64-canescape-summary.txt`:
+  - R3, R4 and R5 each read 576,094 false of 2,366,007 calls, and R1R2's JVMs read exactly twice that (1,152,188 of
+    4,732,014);
+  - all 59 cases answered false at least once;
+  - the counting copy is the jar's class plus a counter [R, as reported], and run B's tables equal plain run A's apart
+    from R1's milliseconds;
+  - the first false nodes are listed for cutting a 5b region (not tried).
+- **CI, read by the planner** (run 42162574478 on `729e447`, `success`): `jvm` 93 tests, 0 failures; 0 ` e: ` lines in
+  either log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the gate
+  reading "OK: all 2 classes ran". `E3MemoryTest`'s task fails by design on PM5's short assertion (`E3MemoryTest.kt:49`);
+  it is outside `jvmTest`.
+- **Wrong premises:**
+  - -64's prediction that every stratum fills (PM5 did not);
+  - the planner's search hint in -64's dispatch, `2026-10-28-6`, also matches -60 to -69;
+  - Linden's Forager checkout is at `d6e2a041`, not `a0535ece`. Only `third_party/brouter` was read, and -64 found that
+    unchanged.
+- **Unverified:** why 84% of DL-lat's draws and 79% of DL-lon's were rejected on bearing before routing; R1's and R2's
+  `canEscape` counts separately within one JVM (inferred equal from the doubled total).
+**Next for 1b:** NT, LB, CR and FK, which are not built. NT and CR need the first coverage reader, seen failing first
+(-50). Then the expected values, with PM5 at n = 55.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -74.
+
+**Kind:** outcome
+**ID:** 2026-10-28-74
+**Timestamp:** 2026-11-06T04:44:19Z
+**Continues:** 2026-10-28-65, 2026-10-28-70, 2026-10-28-72
+**Title:** 5d item 3: `MicroCache2`'s decoder ported, 25,072 caches equal to the oracle; a silent stub left on a live
+path, to be undone first; F0h's tile wired on this branch
+**Observed:** Plumb Ledger, session 8, `brouter-port-5b` `d293fd4` to `4345f71` (four commits; clean tree). It handed off at
+the planner's message after the watcher read 180,163 at 04:35:47Z.
+- **The port:** 467 lines added and 9 removed in 7 `commonMain` files (`git diff --stat`, checked by the planner):
+  - `MicroCache2`'s constructor, `readUnified`, `expandId` and `shrinkId`;
+  - `LinkedListContainer`;
+  - 5 `ByteDataReader` and 8 `ByteDataWriter` methods;
+  - `MicroCache.getIdForIndex` and `expandId`.
+
+  Overloads were checked by signature against `reached-methods.tsv` [R, as reported].
+- **`MicroCache2DecodeTest`:**
+  - over the stubs: 5 of 5 failed, each at cache 0, `[size]`, with 0 compile errors;
+  - forward: 5 of 5 passed, with **25,072 caches** compared field by field over the five pinned tiles [R, as reported].
+  - Its revert (one link's `dlat` sign flipped) is predicted and pushed (`ae97c7b`) but **not run**.
+- **CI, read by the planner** (run 42163527776 on `4345f71`): `jvm` 107 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7
+  of 7, with the gate reading "OK: all 2 classes ran".
+- **Unverified:** whether the sample reaches the `featureId == 13` escape or `injectSize`'s shift branch.
+
+**A silent stub on a live path, against Forager's CLAUDE.md** ("An unsupported feature or capability returns an explicit
+'unsupported,' never a fabricated plausible value"):
+- `OsmNode.kt:110` is `fun parseNodeBody2(...) {}`, an empty body, and `parseNodeBody` calls it at `:103` [R, read by
+  the planner]. So at `4345f71` a `MicroCache2` node decodes as nothing, where before it threw.
+- Plumb disclosed it, and only tests reach it today.
+- **The planner's call:** the next session's first act is to make the stub throw a named "unsupported", seen first in a
+  test, before item 4 ports the method. No stub on a live path ever returns an empty value again: stubs throw
+  `NotImplementedError`, as 5c's did.
+
+**Plumb's open question, answered (the planner's call, technical):**
+- F0h's tile is not wired on `brouter-port-5b`. It is fetched here with the same pin as on `brouter-port`, by
+  `tools/fetch-pinned.sh` (as `fetch-f0h.sh` does there).
+- **Rejected:** testing F0h's ends on F0's fixture. -65 names F0h's ends, and F0's square is a different extract, a week
+  older and without heights (-56), so the comparison would be about other data.
+
+**A small wrong premise in -70:** `tools/fetch-pinned.sh` already exists here. Item 4 adds a `tools/fetch-dropoff.sh` that
+calls it.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -75.
+
+**Kind:** decision
+**ID:** 2026-10-28-75
+**Timestamp:** 2026-11-06T05:03:50Z
+**Continues:** 2026-10-28-68, 2026-10-28-74
+**Title:** Step 2a's `ByteArrayUnifierTest` refusal is replaced by a differential check, because -68 moved its premise
+**Observed:** Plumb Ledger, session 9, stopped on a red besides `CollectOutreachersTest`. Run 42165333186 on `a6eb12b`:
+`jvm` 109 tests, 3 failures, the third being `ByteArrayUnifierTest.constructsAndRefusesUnifyAsUnsupported`
+(`ByteArrayUnifierTest.kt:16`) [R, as reported].
+- The cause is 5d's port of `ByteArrayUnifier.unify` (`7072d5b`), as -70 and -74 directed.
+- Plumb's local runs were filtered to three classes, so they missed it.
+**Decision (the planner's, technical):**
+- **The test's premise is in its own header** (`3cd61ad`, step 2a): `unify` "fails as a named 'unsupported'" because it
+  was "unkept", off T2's port list. -68's owner ruling put it on the port list.
+- **So this is a planned change of behaviour, not a silenced test.** Forager's CLAUDE.md forbids weakening a test to
+  reach green. This replaces an assertion whose premise no longer holds with a stronger one.
+- **The replacement:**
+  - the constructor check is kept;
+  - a differential check against `btools.util.ByteArrayUnifier` compares the returned bytes and the instance-reuse
+    pattern over a fixed input sequence, with `validateImmutability` true and false;
+  - a one-line revert must make it fail, with the prediction pushed first;
+  - the commit and the 5d report cite `3cd61ad` and this entry.
+- **Practice from now on:** a coder runs the full `:brouter:jvmTest` before every push that touches `commonMain`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -76.
+
+**Kind:** outcome
+**ID:** 2026-10-28-76
+**Timestamp:** 2026-11-06T05:24:42Z
+**Continues:** 2026-10-28-65, 2026-10-28-68, 2026-10-28-70, 2026-10-28-74, 2026-10-28-75
+**Title:** Step 5d done: the route-ways path ported and equal to the oracle on both squares; every revert bites; the
+silent stub undone; CI shows only -61's known red
+**Observed:** Plumb Ledger, session 9, `brouter-port-5b` `4345f71` to `b65548f` (eleven commits; clean tree; `b65548f`
+is docs only, by `git diff --stat`). Report: `docs/audits/2026-11-06-brouter-port-step5d.md`.
+- **The silent stub (-74) is undone** (`3888c07`): `ParseNodeBody2StubTest` failed over the empty body ("completed
+  successfully"), then passed with the stub throwing a named "unsupported".
+- **The decode revert:** predicted at `ae97c7b` as 5 of 5 failing at cache 0, field `[link dlat]`, and observed exactly
+  so. 0 ` e: ` lines; restored identical [R, as reported].
+- **The route-ways test** (`RouteWaysTest`):
+  - over the stubs: 2 of 2 failed on the stub's "unsupported";
+  - forward: 2 of 2 passed, after porting `OsmNode(long)`, `parseNodeBody2` and `ByteArrayUnifier.unify`;
+  - **compared:** the drop-off square (15 points, 120 links, 165 tags) and F0h's square (16 ends, 4,858 links, 15,596
+    tags);
+  - **the revert** (drop `highway` at `BExpressionContext.kt:131`): 2 of 2 failed at `[tags]`, as predicted. **Checked
+    by the planner** in `4-routeways-revert.txt`: 0 ` e: `, restored identical, forward line present once.
+- **The pins:** Forager's drop-off rd5 (4,475 bytes, `a332b322…d8f7`) and `points.json` (1,103 bytes, `2872493a…6b5a`)
+  at `a0535ece`, through `tools/fetch-dropoff.sh`. F0h's tile is wired here by `tools/fetch-f0h.sh`, copied unchanged
+  from `brouter-port`.
+- **`ByteArrayUnifierTest`** was replaced under -75's five conditions (`9de9d48`). Its revert failed 2 of 3 as predicted,
+  and the full `:brouter:jvmTest` ran before the push [R, as reported].
+- **CI, read by the planner** (run 42167090127 on `1797412`, the last code head): `jvm` 111 tests, 2 failures, both
+  `CollectOutreachersTest` (-61); 0 ` e: ` lines in either log; both `compileKotlinIos*` ran; simulator 24 of 24
+  (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2 classes ran".
+- **Bookkeeping:** the report's "Items 5 and 6: not started" refers to the planner's session-7 dispatch numbering, where 5
+  was the CI read and 6 the report. Both are done. -70 itself has four items, and all four are done. **5d is closed.**
+- **Unverified (a check that never saw its other value):**
+  - on both squares, no described link is reverse and Forager's dedupe drops none, on the oracle and the port alike. So
+    the route-ways test has never seen `isReverse` true on this path [C, as reported];
+  - `MicroCache2DecodeTest` does compare `isReverse` per link over 25,072 caches (-74), which covers the decoder;
+  - whether any Forager square has a reverse described link is [?].
+- **Also unverified:** the test copies Forager's cell, square and `tagsOf` arithmetic from `a0535ece`, so a later Forager
+  change would not show here. The crc-crosscheck branch of `unify` is reached only by `ByteArrayUnifierTest`.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -77.
+
+**Kind:** intent
+**ID:** 2026-10-28-77
+**Timestamp:** 2026-11-06T05:30:46Z
+**Continues:** 2026-10-28-50, 2026-10-28-51, 2026-10-28-58, 2026-10-28-73
+**Title:** 1b's last strata, NT, CR, LB and FK, starting with the first coverage reader (Linden, session 22); PR #3
+**Decision first:** asked "should Linden start NT, LB, CR and FK" and "should I open PR #3", the owner, verbatim: "1 and 2
+yes".
+
+**Change** (on `brouter-port`, in `jvmTest`, `tools` and `docs` only), as Phase 1's E4 sets the strata (report at `20e1f92`,
+the E4 table):
+1. **The coverage reader first.** It is the first code to read R6's JaCoCo `.exec` files (-51). -50's rule applies: coverage
+   counts as reach evidence only where R6's tuple equals R1's. It is seen failing first, on a case known not to reach a
+   line.
+2. **NT, near-ties** (59): a start nearest a junction node, and an end placed so that the two ways' `directionDiff`s
+   differ by at most 4 ulps on the oracle's JVM. Reach: coverage of the comparator's second line
+   (`WaypointMatcherImpl.java:71`).
+   - NT's ends then go into 5c's `WaypointMatchTest` (-69 left them owed). That is done on `brouter-port-5b` later, not
+     in this session.
+3. **CR, crossing** (59): R's generator with E's crossing profile. Reach: coverage of `StdPath.java:101-103` and
+   `:105-113`.
+4. **LB, latitude bands** (59): start and end in the (c) rows, as step 2b set them. Reach: the route lies in the band.
+5. **FK, failure kinds** (110): constructed, 10 per kind, as E4 lists them. Reach: the oracle's message is in the kind's
+   family.
+
+Each stratum runs under -58's tuple, on `hiking-mountain` unless E4 names another profile (CR's crossing profile, and
+FK's own), with each generator and prediction pushed before its run.
+**Scope boundary:** writes only `brouter-port`. It does not touch `brouter-port-5b`, `main`, Forager or the tile release.
+**Baseline:** `brouter-port` `729e447` (CI green, -73).
+**Prediction (planner):** NT, CR and LB fill within the cap; FK's 110 are constructed and reach their families; 0
+unstable in every stratum.
+**Finish line:** each stratum in the Phase 2 report, CI read by the planner, and a handoff. It will likely take more than
+one session. **Then the expected values** (E5's per-stratum sizes, with PM5 at 55), in a session of their own.
+**Abort conditions:** -3's; a stratum short; instability over 5%; a coverage reading where R6's tuple differs from R1's.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -78.
