@@ -1,0 +1,7 @@
+rows 83 draws 1..n contiguous: True
+results {'rejected': 24, 'taken CR': 59}
+taken CR 59 ids rising: True draws rising: True last draw 83
+rejected 24 == draws - taken: True
+routed 73 R2-equals-R1 false: 0
+panic true (routed): 0 with collections: 6
+reach readings: {"no node in the target's 3 x 3 cells, or the target is outside every tile": 10, 'not covered (StdPath.java:101-103 0/3 lines; StdPath.java:105-113 0/9 lines)': 10, 'not covered (StdPath.java:101-103 3/3 lines; StdPath.java:105-113 0/9 lines)': 4}

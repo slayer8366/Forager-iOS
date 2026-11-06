@@ -1,0 +1,19 @@
+Written 2026-11-06 by Linden Caliper, session 23 (RECORD -77, -78), before any NT run, on brouter-port 00b9886 plus E3NTTest.kt.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3NTTest*' --console=plain
+Seed 20261205, hiking-mountain, W75_N40 only, tuple kind|nodes|cost|distance|nodeDigest|heightDigest.
+Reach (RECORD -78): the oracle's own 4-ulp gap check in the test JVM (NTGenerator.probe), made by the generator before
+routing and again by the mark; WaypointMatcherImpl.java:71's coverage from R6 recorded in select.tsv, not required.
+Any outcome kind counts (my call: the tie is broken in the matching, before routing; for the planner).
+
+Predictions [I]:
+1. Filled or short: unknown beforehand (the handoff's "NT may be short"). Guess: filled, 59 of 59, within the cap of
+   1,180, most rejections before routing.
+2. Rejections: the largest reason "no junction with two exactly opposite links in the drawn node's cell"; then
+   "gap over 4 ulps" and "the start's crosspoint is not the junction". Reach rejections after routing ("no near-tie"):
+   0, since the mark repeats the generator's deterministic check on the same ends.
+3. :71 reads covered in every taken case (RECORD -78: it runs on almost every case).
+4. R6's tuple differs from R1's: 0 cases (no coverage stop). R2's tuple differs from R1's: 0 draws.
+5. E3: 0 unstable of 59 (E3's stop is more than 2 of 59); selection's R1 tuple and R2 lines equal E3's in 59 of 59.
+6. No " e: " line; the JDK line names Temurin 21.0.13+9; select.tsv draw numbers 1..n with no gap, taken ids rising,
+   rejected rows equal to draws minus taken (selcheck.py).
+If short: reported as E4 says and stopped for the planner; the generator is not changed.

@@ -1,0 +1,7 @@
+rows 99 draws 1..n contiguous: True
+results {'taken LB': 59, 'rejected': 40}
+taken LB 59 ids rising: True draws rising: True last draw 99
+rejected 40 == draws - taken: True
+routed 91 R2-equals-R1 false: 0
+panic true (routed): 0 with collections: 23
+reach readings: {'route leaves the band': 27, "no node in the target's 3 x 3 cells, or the target is outside every tile": 8, 'no route: to-position not mapped in existing datafile': 4, 'no route: from-position not mapped in existing datafile': 1}

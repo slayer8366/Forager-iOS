@@ -102,6 +102,8 @@ kotlin {
         }
         jvmTest.dependencies {
             implementation(files(oracleJar).builtBy(fetchOracle))
+            // The coverage reader (E3Coverage): R6's .exec read against the oracle jar's own class files.
+            implementation(libs.jacoco.core)
         }
     }
 }

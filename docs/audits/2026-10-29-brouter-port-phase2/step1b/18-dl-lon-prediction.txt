@@ -1,0 +1,12 @@
+Written 2026-11-06 by Linden Caliper, session 21 (RECORD -64), before the DL-lon run, after DL-lat's (17-*).
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3DLTest.dlLon*' --console=plain
+Seed 20261202 (pushed in 85008b1), hiking-mountain, tile pair W75_N40 / W70_N40 across 70°W.
+
+Predictions [I]:
+1. Filled: 59 of 59 within the cap of 1,180, but later than DL-lat's draw 501: guess about 700 to 1,000 draws. Land
+   across 70°W in these tiles is only Cape Cod/islands west of the line and Maine/coast east [I: geography], so more
+   "no node in the target's 3 x 3 cells" and "to/from-position not mapped" rejects than DL-lat. A short stratum is the
+   one real risk here.
+2. More "no route" and "route on one side" rejects than DL-lat (water between the two sides).
+3. R2's tuple differs from R1's: 0.
+4. E3: 0 unstable of 59. 5. Selection equals E3 in 59 of 59.

@@ -1,0 +1,15 @@
+Step 1b, session 22: the coverage reader (RECORD -77 item 1), prediction written before E3CoverageTest first runs.
+
+Case: F0's inside-long ends (E3F0Test), hiking-mountain, run as R1 (R1R2's JVM) and as R6 under JaCoCo 0.8.16's agent.
+
+P1. R6's tuple equals R1's (F0 was stable in every earlier E3 run, 4-f0-stability.tsv, 14-*), so the reading is not refused.
+P2. CR's spans read "not covered": StdPath.java:101-103 0/3 lines, :105-113 0/9 lines. Why: they sit inside
+    `if (rc.bikeMode)` (StdPath.java:94); hiking-mountain sets validForFoot only (hiking-mountain.brf:84), so bikeMode is
+    false (RoutingContext.java:119). This is the reading seen first: a case known not to reach a line reads "not covered".
+P3. RoutingEngine.java:177 (`doRouting(maxRunningTime)`) reads "covered" (1/1 lines).
+P4. NT's line, WaypointMatcherImpl.java:71, on F0: not predicted; printed only.
+P5. Bite (run after, from a saved copy, per Forager CLAUDE.md's revert rules): the reader with `it.covered > 0` changed to
+    `it.total > 0` in E3Coverage.reach reads every line holding code as covered; then the test fails at the CR assertion
+    with "CR's lines on a foot profile: covered (StdPath.java:101-103 3/3 lines; StdPath.java:105-113 9/9 lines)".
+    The counts in that message stay the real ones (describe() counts covered > 0), so a message reading "covered" with
+    0/3 and 0/9 is the expected bite output.

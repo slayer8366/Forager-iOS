@@ -1,0 +1,19 @@
+Written 2026-11-06 by Linden Caliper, session 21 (RECORD -64), before either MP64 run, after DL-lat (17-*) and DL-lon (18-*).
+Run A (the stratum, plain oracle): ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin home> --tests '*E3MemoryTest.mp64*'
+Run B (canEscape count, RECORD -61): the same command with a scratch Gradle init script putting a counting copy of
+btools/mapaccess/OsmNodesMap.class first on e3Strata's classpath (every child JVM inherits java.class.path, E3Launcher.kt).
+The copy is Forager third_party's OsmNodesMap.java (bytecode-identical to the jar's class when compiled plain, javap
+normalised, 0 of 884 lines differ) with canEscape renamed canEscape0 (its bytecode otherwise unchanged) behind a wrapper
+that counts calls and false answers and appends them to a scratch file. Nothing patched is committed; its diff is
+committed as 19-mp64-canescape-counter.diff for reading only.
+Seed 20261203 (pushed in 85008b1), W75_N40 only, 20 to 100 km log-uniform, hiking-mountain, memoryclass 64.
+
+Predictions [I]:
+1. Filled: 59 of 59 well within the cap; most routed candidates collect at least once (session 19's prediction). Guess:
+   full within 150 draws. Rejections mostly "no collected line" and "no route".
+2. Taken with the limit: 0; with panic mode: 0 (memoryclass 64).
+3. R2's tuple differs from R1's: 0. E3: 0 unstable of 59. Selection equals E3 in 59 of 59.
+4. Run B's select.tsv and stability.tsv equal run A's in every column but the millisecond ones.
+5. canEscape answers false at least once across MP64's runs (the planner's prediction at -64); my guess, in a minority
+   of cases, because a false answer needs a path's target in a component with no hollow node and no low visit id,
+   which near a tile's edge or on a small island is plausible but rare.

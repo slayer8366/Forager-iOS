@@ -1,0 +1,10 @@
+Written 2026-11-06 by Linden Caliper, session 25 (RECORD -82), before kind 5's rerun, on brouter-port after eb6460d.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3FKTest.fkKind5*' --console=plain
+Seed 20261208 + 5. Construction (RECORD -82): start and end drawn separately, a car-fast-usable start node, then an end
+node with no car-fast-usable link within 300 m; one draw each, capped at 400, every rejection counted by reason; nothing
+is chosen by the oracle's outcome. A kind's family is its first case's R1 kind.
+
+Prediction [I]: kind 5 fills 10 of 10 within 400 draws; family "to-position not mapped in existing datafile", 10 of 10;
+0 unstable of 10. The first run (27-fk) was 9 of 9 in this family after 200 draws, under a cap of 200 that was my own.
+If kind 5 is short again, or its 10 do not share one family: E3 FK STOP, reported to the planner; nothing is changed after
+the run.

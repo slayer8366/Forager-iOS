@@ -1,0 +1,7 @@
+rows 86 draws 1..n contiguous: True
+results {'rejected': 27, 'taken MP64': 59}
+taken MP64 59 ids rising: True draws rising: True last draw 86
+rejected 27 == draws - taken: True
+routed 72 R2-equals-R1 false: 0
+panic true (routed): 0 with collections: 59
+reach readings: {"no node in the target's 3 x 3 cells, or the target is outside every tile": 14, 'no collected line': 13}

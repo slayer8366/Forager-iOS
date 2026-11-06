@@ -1,0 +1,19 @@
+The heights revert (RECORD -58), run 2026-11-04 against the prediction in 13-heights-predictions.txt, item 3.
+
+Edit: E3CaseRun.kt:66, `E3Outcome.fnv1aShorts(heights),` -> `E3Outcome.fnv1aShorts(emptyList()),`; nothing else
+(git diff --stat: 1 file, 1 insertion, 1 deletion). The file was copied to scratch before the edit.
+Old JUnit XML (jvmTest, e3Strata) deleted before the runs.
+
+jvmTest (15-revert-jvmTest.log): compileTestKotlinJvm ran on the edited source; 0 lines with " e: ".
+  junit-counts: tests 93, failures 0, errors 0, skipped 0 in 42 files.            Predicted: 93, 0.  Matches.
+e3Strata --tests '*E3F0hTest*' (15-revert-f0h-e3Strata.log): compileTestKotlinJvm UP-TO-DATE from the jvmTest
+  build of the same edited source; 0 lines with " e: ".
+  "E3 F0h: 8 cases; unstable 0 of 8"; all eight R1 tuples "route", heights digest cbf29ce484222325 in every one.
+  Predicted: 8 of 8 stable, 8 routes.  Matches.
+  junit-counts: tests 1, failures 1. Failure at E3F0hTest.kt:33, the reach assertion, message
+  "F0h: R1's point count and heights digest are not the command-line router's expected:<{...=(226, 602d4109bb916eca)
+  ...}> but was:<{...=(226, cbf29ce484222325) ...}>", every count equal, every digest the offset basis.
+  Predicted: that assertion, that message, those digests, counts equal, nothing else failing.  Matches.
+
+Restore: copied back from the scratch copy (not git). Afterwards the file is byte-equal to the saved copy and to
+HEAD's (cmp), `git diff --stat` is empty, and E3CaseRun.kt:66 reads `E3Outcome.fnv1aShorts(heights),` again.

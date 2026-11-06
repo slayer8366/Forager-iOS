@@ -1,0 +1,104 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3DLTest > dlLatIsSelectedByReachAndCountedAgainstE3sStop STANDARD_OUT
+    E3 DL-lat JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 DL-lat seed: 20261201; profile hiking-mountain
+    E3 DL-lat nodes near the line: {W75_N35.rd5=244229, W75_N40.rd5=2490362}
+    E3 DL-lat selection: 501 draws counted (cap 1180), 70 routed; table /home/user/forager-ios/brouter/build/e3/DL-lat-select/select.tsv
+    E3 DL-lat rejected: 419 before routing: the target is not across the line inside the other tile
+    E3 DL-lat rejected: 10 before routing: no node in the target's 3 x 3 cells in the other tile
+    E3 DL-lat rejected: 2 before routing: an end moved off its side
+    E3 DL-lat rejected: 1 reach: no route: no track found at pass=0
+    E3 DL-lat rejected: 7 reach: no route: to-position not mapped in existing datafile
+    E3 DL-lat rejected: 2 reach: no route: from-position not mapped in existing datafile
+    E3 DL-lat rejected: 1 reach: no route: target island detected for section 0
+    E3 DL-lat taken: 59 of 59; last taken at draw 501
+    E3 DL-lat: selection's R1 tuple and R2 lines equal E3's in 59 of 59
+    E3 DL-lat kinds (R1): {route=59}
+    E3 DL-lat: 59 cases; unstable 0 of 59; over 5%: false
+    E3 DL-lat DL-lat-0006: stable; R1 route|266|11043|6789|3e35e2d8f72b81a8|7833dd97973b66b6; collection lines 0; R1 400 ms; R1 heights W75_N35:240/240 W75_N40:26/26; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0031: stable; R1 route|1034|79885|33785|179b7c02d88b6b3e|b952b805169a0eb; collection lines 3; R1 1811 ms; R1 heights W75_N35:190/190 W75_N40:844/844; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0036: stable; R1 route|477|25238|13048|596ea13e72f73444|cc1bb3c2c8668e9f; collection lines 0; R1 800 ms; R1 heights W75_N35:424/424 W75_N40:53/53; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0052: stable; R1 route|1138|84421|53122|7f466a09c3a721d6|6cc0e745507a5ee1; collection lines 2; R1 1121 ms; R1 heights W75_N35:793/793 W75_N40:345/345; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0064: stable; R1 route|875|61924|29113|c11f68f8a31af1fb|648c41c2f3c6021b; collection lines 2; R1 1288 ms; R1 heights W75_N35:715/715 W75_N40:160/160; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0084: stable; R1 route|1047|57560|28148|87993b1533b6bcb1|5ffbfa5efb550b69; collection lines 1; R1 992 ms; R1 heights W75_N35:601/601 W75_N40:446/446; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0086: stable; R1 route|154|7744|5220|38dcfdd834ec9e5|1a02216e8bb23def; collection lines 0; R1 373 ms; R1 heights W75_N35:99/99 W75_N40:55/55; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0093: stable; R1 route|2078|138070|83643|78a01f3bdf425f49|870069a02e7a57b9; collection lines 6; R1 1917 ms; R1 heights W75_N35:1190/1190 W75_N40:888/888; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0125: stable; R1 route|1719|119623|69127|8b4a4283fea5182f|4d3dd57a31cb3efd; collection lines 6; R1 2391 ms; R1 heights W75_N35:1470/1470 W75_N40:249/249; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0127: stable; R1 route|1753|101742|58001|963a24ffc0a8a075|72cc5d995f99c7d; collection lines 5; R1 2564 ms; R1 heights W75_N35:345/345 W75_N40:1408/1408; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0131: stable; R1 route|148|16632|5392|4c67c10a65fb56ff|a87e4899034e4760; collection lines 0; R1 609 ms; R1 heights W75_N35:127/127 W75_N40:21/21; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0139: stable; R1 route|242|13181|8934|663dad6bf36de167|8b249389aa26ff42; collection lines 0; R1 568 ms; R1 heights W75_N35:232/232 W75_N40:10/10; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0154: stable; R1 route|2001|123741|76782|ee6a960aadacf9d6|6464d2181955d759; collection lines 8; R1 2566 ms; R1 heights W75_N35:101/101 W75_N40:1900/1900; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0156: stable; R1 route|184|19385|14675|84faef38217bbc|dd9f2015e13ec7ed; collection lines 0; R1 459 ms; R1 heights W75_N35:95/95 W75_N40:89/89; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0160: stable; R1 route|2224|123340|72853|19a0f7121b8687b0|3a924dc993647826; collection lines 9; R1 3569 ms; R1 heights W75_N35:100/100 W75_N40:2124/2124; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0161: stable; R1 route|1806|118852|69299|a1e58daa1cdc5575|cae160c4ec3c9bb4; collection lines 10; R1 3633 ms; R1 heights W75_N35:546/546 W75_N40:1260/1260; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0192: stable; R1 route|318|21078|11823|aeac588c7ee4c8e8|34529d214f4f5897; collection lines 0; R1 671 ms; R1 heights W75_N35:125/125 W75_N40:193/193; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0199: stable; R1 route|981|77032|44260|b7ba91bc3e7da748|cc15ebebe7068fc2; collection lines 3; R1 1692 ms; R1 heights W75_N35:541/541 W75_N40:440/440; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0201: stable; R1 route|1599|94074|48061|d78dacd2d3d77663|6677354aef1c62c2; collection lines 3; R1 2095 ms; R1 heights W75_N35:536/536 W75_N40:1063/1063; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0221: stable; R1 route|114|5583|3219|3e9a0a1ee14fdd18|4002ab8bc3476eea; collection lines 0; R1 578 ms; R1 heights W75_N35:75/75 W75_N40:39/39; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0223: stable; R1 route|640|55344|24492|5af2277e7c36095a|bbe16a4e9ae197b8; collection lines 1; R1 920 ms; R1 heights W75_N35:304/304 W75_N40:336/336; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0244: stable; R1 route|1443|95688|65686|3e5bb5a60882aa1c|c6c7e09bfd10b0f6; collection lines 4; R1 1941 ms; R1 heights W75_N35:182/182 W75_N40:1261/1261; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0246: stable; R1 route|653|54143|24690|5e5bdd78d60309fa|3c988a8a08afc70d; collection lines 1; R1 1265 ms; R1 heights W75_N35:116/116 W75_N40:537/537; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0255: stable; R1 route|73|6008|2454|3c74ad368521ba57|1555fa0b6920a9eb; collection lines 0; R1 402 ms; R1 heights W75_N35:16/16 W75_N40:57/57; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0276: stable; R1 route|2434|149321|83513|6d95c3ecc3558e11|900e8f2584485521; collection lines 13; R1 3967 ms; R1 heights W75_N35:755/755 W75_N40:1679/1679; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0277: stable; R1 route|1767|130340|92053|b73a1af713e62104|6b9349c6a8890937; collection lines 2; R1 1362 ms; R1 heights W75_N35:1130/1130 W75_N40:637/637; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0299: stable; R1 route|391|47057|18661|b628e53fc06a3db0|5c0e4e585a0f4166; collection lines 0; R1 767 ms; R1 heights W75_N35:40/40 W75_N40:351/351; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0303: stable; R1 route|555|44213|19780|fe453b37c7216d|45747e062dec24be; collection lines 1; R1 1027 ms; R1 heights W75_N35:289/289 W75_N40:266/266; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0305: stable; R1 route|164|12928|5469|cf2de84c0e80aa0f|3dfc38c283c1a05c; collection lines 0; R1 442 ms; R1 heights W75_N35:30/30 W75_N40:134/134; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0306: stable; R1 route|2530|141211|79638|750f1c7a0c5ce213|15fd3264693f21ef; collection lines 10; R1 3966 ms; R1 heights W75_N35:526/526 W75_N40:2004/2004; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0309: stable; R1 route|2837|189309|135515|f76b2f9f59f11fbc|aec613685b1a8215; collection lines 20; R1 5473 ms; R1 heights W75_N35:1379/1379 W75_N40:1458/1458; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0316: stable; R1 route|2079|141688|77619|bc7a19369f8f24fd|85a5b4d6cffbed8; collection lines 10; R1 3851 ms; R1 heights W75_N35:669/669 W75_N40:1410/1410; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0324: stable; R1 route|231|15492|8529|34fdcc606f031571|8828a13377a8b725; collection lines 0; R1 594 ms; R1 heights W75_N35:60/60 W75_N40:171/171; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0327: stable; R1 route|281|21855|12570|1d584a76565dc5a4|9932c4249afa8653; collection lines 0; R1 717 ms; R1 heights W75_N35:114/114 W75_N40:167/167; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0333: stable; R1 route|322|20521|10763|d7c8466b6c38f4ed|229eafc268384698; collection lines 0; R1 504 ms; R1 heights W75_N35:44/44 W75_N40:278/278; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0334: stable; R1 route|1512|97035|48785|50db035014a58f85|d0a667fec8796257; collection lines 4; R1 1692 ms; R1 heights W75_N35:142/142 W75_N40:1370/1370; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0347: stable; R1 route|262|18045|9260|8b4d2ffdc88b32a|5adeae3ff9e5c745; collection lines 0; R1 595 ms; R1 heights W75_N35:15/15 W75_N40:247/247; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0352: stable; R1 route|1741|115825|67181|6913394fd06440c6|b5dfceee1b4bc86c; collection lines 9; R1 3169 ms; R1 heights W75_N35:433/433 W75_N40:1308/1308; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0353: stable; R1 route|1825|106154|68983|bde9ed12efbddc2e|d6f5f479bcb3f6ba; collection lines 7; R1 2918 ms; R1 heights W75_N35:188/188 W75_N40:1637/1637; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0364: stable; R1 route|1162|70432|37077|3a4cbe92059852b7|81c2c289805e9561; collection lines 1; R1 1404 ms; R1 heights W75_N35:504/504 W75_N40:658/658; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0376: stable; R1 route|3077|210734|136814|c94ecbb5a102cbcb|c2a04f29911e5eb5; collection lines 28; R1 6454 ms; R1 heights W75_N35:253/253 W75_N40:2824/2824; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0387: stable; R1 route|358|33617|15794|6b97ebf2a188ae80|47d7f6a186264d8b; collection lines 0; R1 587 ms; R1 heights W75_N35:271/271 W75_N40:87/87; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0392: stable; R1 route|879|68770|38727|7abccca5a0d938ca|dd1862110edc3b5e; collection lines 3; R1 1051 ms; R1 heights W75_N35:494/494 W75_N40:385/385; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0395: stable; R1 route|1441|101348|53049|8a40867a84d19d33|9bd6cadb352c2d88; collection lines 4; R1 2343 ms; R1 heights W75_N35:93/93 W75_N40:1348/1348; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0397: stable; R1 route|132|7609|5734|c61d2590fabeba6d|ba8ee1221bfde5b5; collection lines 0; R1 508 ms; R1 heights W75_N35:21/21 W75_N40:111/111; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0406: stable; R1 route|1810|128862|75130|a9b346e0c699bdd4|f5c7a28d543a009d; collection lines 8; R1 3410 ms; R1 heights W75_N35:589/589 W75_N40:1221/1221; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0418: stable; R1 route|349|23552|11904|c0200898a3ebb96e|e42dc948cd606127; collection lines 0; R1 646 ms; R1 heights W75_N35:137/137 W75_N40:212/212; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0426: stable; R1 route|351|16840|11846|67b2499af72dee71|83ded12bf0188b8e; collection lines 0; R1 637 ms; R1 heights W75_N35:348/348 W75_N40:3/3; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0430: stable; R1 route|1349|124336|58135|918e56286f7d1136|c4eff1e8c4e00ecc; collection lines 9; R1 2864 ms; R1 heights W75_N35:513/513 W75_N40:836/836; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0433: stable; R1 route|106|6585|3703|ab66c67fc5475c03|31e2aba76d35e4ac; collection lines 0; R1 493 ms; R1 heights W75_N35:92/92 W75_N40:14/14; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0436: stable; R1 route|944|64332|33931|9f5f48e22215ad1b|45bb9f861cc6c2a0; collection lines 2; R1 982 ms; R1 heights W75_N35:798/798 W75_N40:146/146; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0438: stable; R1 route|129|10504|4815|af868e962d137147|cab8ffc3c9a2d336; collection lines 0; R1 411 ms; R1 heights W75_N35:76/76 W75_N40:53/53; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0443: stable; R1 route|111|15277|4910|d404a86187187af0|5b8ecbe4383a3eea; collection lines 0; R1 432 ms; R1 heights W75_N35:57/57 W75_N40:54/54; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0444: stable; R1 route|580|49588|26682|fdd782afcb2e03cb|c41ee04320309a7b; collection lines 1; R1 981 ms; R1 heights W75_N35:364/364 W75_N40:216/216; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0463: stable; R1 route|527|34165|21354|99b3aecdb884d96|3e906ab2033036e8; collection lines 0; R1 665 ms; R1 heights W75_N35:462/462 W75_N40:65/65; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0468: stable; R1 route|750|68689|30064|e66bd5aa83648330|50d1636cfe120cb8; collection lines 1; R1 1189 ms; R1 heights W75_N35:463/463 W75_N40:287/287; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0470: stable; R1 route|3321|201770|134864|d6772a1c2d3e94a1|b6ac89d872443ffe; collection lines 31; R1 6613 ms; R1 heights W75_N35:270/270 W75_N40:3051/3051; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0472: stable; R1 route|1803|131494|74303|3c88b3c8430f2540|11c710c73a27bc25; collection lines 8; R1 2365 ms; R1 heights W75_N35:782/782 W75_N40:1021/1021; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 DL-lat DL-lat-0501: stable; R1 route|2060|146575|103362|65b279ed4100550d|15b78af176261ab8; collection lines 10; R1 3348 ms; R1 heights W75_N35:1068/1068 W75_N40:992/992; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+
+E3DLTest > dlLatIsSelectedByReachAndCountedAgainstE3sStop PASSED
+
+BUILD SUCCESSFUL in 5m 4s
+10 actionable tasks: 2 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

@@ -1,0 +1,100 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+> Task :brouter:kmpPartiallyResolvedDependenciesChecker
+> Task :brouter:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:fetchOracle UP-TO-DATE
+> Task :brouter:jvmProcessResources NO-SOURCE
+> Task :brouter:processJvmMainResources SKIPPED
+> Task :brouter:jvmMainClasses UP-TO-DATE
+> Task :brouter:jvmJar UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:fetchF0h UP-TO-DATE
+> Task :brouter:fetchJacoco UP-TO-DATE
+> Task :brouter:fetchTiles UP-TO-DATE
+> Task :brouter:jvmTestProcessResources NO-SOURCE
+> Task :brouter:processJvmTestResources SKIPPED
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:msunReference UP-TO-DATE
+
+> Task :brouter:e3Strata
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32935 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+
+E3MemoryTest > mp64IsSelectedByItsCollectionsAndCountedAgainstE3sStop STANDARD_OUT
+    E3 MP64 JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/temurin/jdk-21.0.13+9
+    E3 MP64 seed: 20261203; profile hiking-mountain; memoryclass 64
+    E3 the tile's node count: {W75_N40.rd5=8137833}
+    E3 MP64 selection: 86 draws counted (cap 1180), 72 routed; table /home/user/forager-ios/brouter/build/e3/MP64-select/select.tsv
+    E3 MP64 rejected: 14 before routing: no node in the target's 3 x 3 cells, or the target is outside every tile
+    E3 MP64 rejected: 13 reach: no collected line
+    E3 MP64 taken: 59 of 59; last taken at draw 86
+    E3 MP64 taken with the limit: 0; with panic mode: 0
+    E3 MP64: selection's R1 tuple and R2 lines equal E3's in 59 of 59
+    E3 MP64 kinds (R1): {route=59}
+    E3 MP64: 59 cases; unstable 0 of 59; over 5%: false
+    E3 MP64 MP64-0002: stable; R1 route|2393|92453|66706|77f2be0b34c2ba69|fb762894e40834d4; collection lines 11; R1 4125 ms; R1 heights W75_N40:2393/2393; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0004: stable; R1 route|1691|81988|53454|f5475453b1cda41f|d845687a97e09fe5; collection lines 11; R1 2431 ms; R1 heights W75_N40:1691/1691; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0005: stable; R1 route|1892|63668|45579|1171ed56719ede6a|5431878540af44c9; collection lines 30; R1 4549 ms; R1 heights W75_N40:1892/1892; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0007: stable; R1 route|2806|121840|80573|7389e0384e0b205b|3e1ea36c75658a82; collection lines 22; R1 3967 ms; R1 heights W75_N40:2806/2806; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0009: stable; R1 route|1896|89138|62656|c59194e08fa64c07|a618877ea48f6efc; collection lines 7; R1 2590 ms; R1 heights W75_N40:1896/1896; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0010: stable; R1 route|881|102019|45619|9024965fdc8b5ba0|5495bc5202a165d1; collection lines 26; R1 5736 ms; R1 heights W75_N40:863/881; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0011: stable; R1 route|1182|62333|50803|623353a19648339b|acb5760de706fc0f; collection lines 1; R1 954 ms; R1 heights W75_N40:1182/1182; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0013: stable; R1 route|2293|101998|62464|fcb4b6248286c7ba|7098e8935ddd9ed8; collection lines 3; R1 1263 ms; R1 heights W75_N40:2293/2293; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0016: stable; R1 route|5358|212911|142307|48f314725b959c22|ae8d7ba6bdc8693c; collection lines 31; R1 4678 ms; R1 heights W75_N40:5358/5358; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0017: stable; R1 route|1243|75959|39801|43a70c3373cd714c|f5e088e4f26e0c02; collection lines 3; R1 1262 ms; R1 heights W75_N40:1243/1243; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0018: stable; R1 route|2667|117978|79531|d7c38ca68fe1579d|6d867df375808c68; collection lines 38; R1 5648 ms; R1 heights W75_N40:2667/2667; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0019: stable; R1 route|3118|252889|119210|3197673f876d308a|2bf99894241dfa95; collection lines 5; R1 1920 ms; R1 heights W75_N40:3118/3118; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0020: stable; R1 route|2663|115492|81060|b8e8a4fafd5ad1fb|9334f8e4fc99213c; collection lines 2; R1 1495 ms; R1 heights W75_N40:2663/2663; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0021: stable; R1 route|2606|114077|79572|e24e3000aaa22f7c|15519ba256839094; collection lines 62; R1 7951 ms; R1 heights W75_N40:2600/2606; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0023: stable; R1 route|3356|122834|84652|c0c691eb84510954|bd68d3c8156059ec; collection lines 25; R1 4060 ms; R1 heights W75_N40:3356/3356; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0024: stable; R1 route|1100|56593|38391|1b80996373cfbd10|f8d5880708603ec3; collection lines 13; R1 3213 ms; R1 heights W75_N40:1100/1100; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0025: stable; R1 route|1838|120940|68755|436e64f9d61a032|9ee6e1cb2a714a36; collection lines 1; R1 1127 ms; R1 heights W75_N40:1838/1838; control R1 1,0,2,3,9,4,5,6,10,7,11,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0026: stable; R1 route|2447|163057|108289|c5e01c2b1515569e|d0ab4647de0823df; collection lines 18; R1 5065 ms; R1 heights W75_N40:2447/2447; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0027: stable; R1 route|4745|208200|143913|488709c1c9c1c4cc|a7dfcb4327676ae2; collection lines 6; R1 2561 ms; R1 heights W75_N40:4745/4745; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0028: stable; R1 route|1673|110767|60599|e2b77ce50f581614|2def756fd42c5643; collection lines 1; R1 1303 ms; R1 heights W75_N40:1673/1673; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0029: stable; R1 route|2814|125589|83549|14c478712c693ac9|5c8b32f0739c9729; collection lines 11; R1 3781 ms; R1 heights W75_N40:2814/2814; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0030: stable; R1 route|3492|184509|128646|2540da0d5bb084fb|c48a862308d3a4e2; collection lines 11; R1 3828 ms; R1 heights W75_N40:3492/3492; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0031: stable; R1 route|2652|93691|75065|d1bfd5144eca97cb|a7088036d26769cc; collection lines 3; R1 1695 ms; R1 heights W75_N40:2652/2652; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0032: stable; R1 route|2975|100900|74103|eb40a4980c0b3ae7|44602a9bb4c4a6cd; collection lines 45; R1 7362 ms; R1 heights W75_N40:2975/2975; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0034: stable; R1 route|1721|52180|38767|3f9856b2c6c7e3cb|b52357a6503a4f96; collection lines 34; R1 5287 ms; R1 heights W75_N40:1721/1721; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0038: stable; R1 route|1668|67916|48565|eff758c76671c9ed|4126bf55c1be3a2a; collection lines 10; R1 2010 ms; R1 heights W75_N40:1668/1668; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0040: stable; R1 route|1526|44555|32691|e02b87142aff0854|8403213aea375ebc; collection lines 14; R1 4577 ms; R1 heights W75_N40:1526/1526; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0044: stable; R1 route|2110|94519|67154|bbee4ef15a076799|24e9ad6ab75585dc; collection lines 12; R1 3757 ms; R1 heights W75_N40:2110/2110; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0046: stable; R1 route|1708|109343|68264|2a18796abcc8f9be|b294bc053a05c86b; collection lines 5; R1 2694 ms; R1 heights W75_N40:1708/1708; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0047: stable; R1 route|662|48721|36605|d34611cb58c79171|dfed530d36f1217a; collection lines 1; R1 1133 ms; R1 heights W75_N40:662/662; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0048: stable; R1 route|2158|77692|52688|c806df6e0ebc1074|b940f832754dc5c6; collection lines 46; R1 7841 ms; R1 heights W75_N40:2158/2158; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0052: stable; R1 route|3207|98555|71950|862e1e8cc97eb035|b03d9b04eb11b483; collection lines 14; R1 3551 ms; R1 heights W75_N40:3207/3207; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0053: stable; R1 route|2835|189170|127752|2537ac707cd933bb|8c9f8990761112dd; collection lines 8; R1 2875 ms; R1 heights W75_N40:2835/2835; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0054: stable; R1 route|2246|132016|82189|d00f10755c291ba|d8f37bd928db3df4; collection lines 4; R1 2187 ms; R1 heights W75_N40:2246/2246; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0055: stable; R1 route|2080|109669|69509|32f8c90c7cb18632|1a713d022dd43f70; collection lines 8; R1 2869 ms; R1 heights W75_N40:2080/2080; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0056: stable; R1 route|957|58933|33797|1952df8fe4b74805|8630c29915698ea4; collection lines 1; R1 1074 ms; R1 heights W75_N40:957/957; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0057: stable; R1 route|3128|122986|84393|e2f2098930194776|bd2238b17ac11b4b; collection lines 9; R1 3632 ms; R1 heights W75_N40:3128/3128; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0058: stable; R1 route|3605|143627|110028|bda095ad686cae3e|5f33063ec04426b9; collection lines 7; R1 2710 ms; R1 heights W75_N40:3605/3605; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 2,0,1,3,4,5,11,6,7,8,9,10,
+    E3 MP64 MP64-0062: stable; R1 route|3493|111078|82086|971a54d06ba49c70|af5d6d251c140609; collection lines 57; R1 8762 ms; R1 heights W75_N40:3493/3493; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0063: stable; R1 route|3437|177753|123005|fac4381b96124a37|7780c4ddbd6e958b; collection lines 39; R1 5745 ms; R1 heights W75_N40:3437/3437; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0064: stable; R1 route|3415|692797|306097|34d6c89665cb1089|4c76fe9861e74a5a; collection lines 198; R1 26055 ms; R1 heights W75_N40:3408/3415; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0065: stable; R1 route|1465|97747|65029|a9c606240a1f8fe4|50a685611e83939f; collection lines 5; R1 1396 ms; R1 heights W75_N40:1465/1465; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0066: stable; R1 route|3213|100112|74403|e170b1857509704c|1203e359bdb11ab2; collection lines 12; R1 2548 ms; R1 heights W75_N40:3213/3213; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0067: stable; R1 route|6767|188247|153409|89f6c1b7ab8727bb|c8b088b162b07c3; collection lines 64; R1 9894 ms; R1 heights W75_N40:6767/6767; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0068: stable; R1 route|6311|123687|112218|808f2a62b89807c2|8689c06a7d4c157b; collection lines 6; R1 1502 ms; R1 heights W75_N40:6311/6311; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0070: stable; R1 route|1133|44298|33335|8e17721fd1aa48bc|8638996937e3b311; collection lines 9; R1 2853 ms; R1 heights W75_N40:1133/1133; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0071: stable; R1 route|1503|104839|63888|eeeb8bfd6f77e281|81ce0b4e47d16733; collection lines 9; R1 3019 ms; R1 heights W75_N40:1503/1503; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0072: stable; R1 route|1250|125381|61968|bd4d55f6ed067330|875d92aa85e93324; collection lines 51; R1 9417 ms; R1 heights W75_N40:1250/1250; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0073: stable; R1 route|2790|125998|89793|2ab2d6fc11a0ef2b|1549dd0055fc67ae; collection lines 13; R1 2598 ms; R1 heights W75_N40:2790/2790; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0074: stable; R1 route|3652|165459|118986|6ef7cb3f73c75349|28786e52fd447c53; collection lines 15; R1 4613 ms; R1 heights W75_N40:3652/3652; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0075: stable; R1 route|3216|190373|112934|f3eb3167e983c399|bf8113b8d4a453d; collection lines 34; R1 7292 ms; R1 heights W75_N40:3216/3216; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0076: stable; R1 route|993|38873|28119|4bb58aebfda09dad|b217956e5a464929; collection lines 2; R1 1160 ms; R1 heights W75_N40:993/993; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0077: stable; R1 route|2572|106134|77702|249373c55ef5349e|b8c35d002c4331; collection lines 20; R1 5016 ms; R1 heights W75_N40:2572/2572; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0078: stable; R1 route|3532|162681|99240|423fdb9e81cb8876|55ccbbd04e17f2b3; collection lines 3; R1 1927 ms; R1 heights W75_N40:3532/3532; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0079: stable; R1 route|2612|98454|72847|211ad9bb1dbeb4a2|8169dbb216959718; collection lines 26; R1 6187 ms; R1 heights W75_N40:2612/2612; control R1 1,0,2,3,9,4,5,6,10,7,11,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0080: stable; R1 route|1457|89216|53223|d87b395fba6b60d2|40784de3c94a7347; collection lines 1; R1 969 ms; R1 heights W75_N40:1457/1457; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0081: stable; R1 route|1840|199496|86468|a5f68e062f473b84|f50403396220f4af; collection lines 1; R1 1251 ms; R1 heights W75_N40:1840/1840; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0085: stable; R1 route|4146|101931|78194|1c7e7128b796341a|b201233e80a5d4bf; collection lines 4; R1 1933 ms; R1 heights W75_N40:4146/4146; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+    E3 MP64 MP64-0086: stable; R1 route|2173|65475|50676|6cec9923b87ef4aa|9fd9e5464916e801; collection lines 29; R1 6495 ms; R1 heights W75_N40:2173/2173; control R1 4,2,0,1,10,3,9,11,5,6,7,8, R4 1,0,11,2,3,4,5,6,7,10,8,9,
+
+E3MemoryTest > mp64IsSelectedByItsCollectionsAndCountedAgainstE3sStop PASSED
+
+BUILD SUCCESSFUL in 10m 56s
+10 actionable tasks: 2 executed, 8 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.0.0/userguide/configuration_cache_enabling.html

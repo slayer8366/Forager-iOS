@@ -22,6 +22,12 @@ object E3Stability {
         val logs: Map<String, List<String>>,
         val r1Millis: Long,
         val controls: Map<String, String>,
+        /** R1's `heights` line after the id: per tile, nodes with a height over nodes; "-" when R1 found no route. */
+        val r1Heights: String = "-",
+        /** Per regime, the class of an exception the engine logged ([E3CaseRun.Result.thrown]); logged regimes only. */
+        val thrown: Map<String, String> = emptyMap(),
+        /** Per regime, a plan's measured run ([E3CaseRun.Result.measured]). */
+        val measured: Map<String, String> = emptyMap(),
     ) {
         val tupleStable get() = REGIMES.map { outcomes[it] }.distinct().size == 1
         val logStable get() = LOGGED.map { logs[it] ?: emptyList() }.distinct().size == 1
@@ -63,9 +69,22 @@ object E3Stability {
         }
     }
 
-    private fun launch(regime: String, id: String, caseFile: File, work: File, agent: List<String>, seconds: Long): List<String> {
+    /**
+     * E's own profiles ([E3Profiles]: CR's crossing profile, FK's), name to text, written into every launch's `profiles2/`
+     * beside the oracle's. Set by the stratum test that needs them, around its runs, and empty otherwise.
+     */
+    @Volatile
+    var ownProfiles: Map<String, String> = emptyMap()
+
+    /** One regime's fresh JVM over case [id] of [caseFile], with its own copy of `profiles2/`; also [E3Select]'s R1R2 run. */
+    internal fun launch(regime: String, id: String, caseFile: File, work: File, agent: List<String>, seconds: Long): List<String> {
         val base = File(work, "base-$regime-$id")
         File(OracleCalls.oracleDir, "profiles2").copyRecursively(File(base, "profiles2"), overwrite = true)
+        for ((name, text) in ownProfiles) {
+            val f = File(base, "profiles2/$name.brf")
+            check(!f.exists()) { "E's own profile $name would replace the oracle's" }
+            f.writeText(text)
+        }
         try {
             return E3Launcher.run(regime, listOf(base.absolutePath, caseFile.absolutePath, id), agent, seconds).output
         } finally {
@@ -89,18 +108,21 @@ object E3Stability {
                 if (next.split(' ')[2] == case.id) controls[f[1]] = f[2]
             }
         }
-        return Verdict(case, outcomes, logs, r1Millis, controls)
+        val r1Heights = mine("heights").singleOrNull { it[1] == "R1" }?.get(3) ?: "-"
+        val thrown = mine("thrown").associate { it[1] to it[3] }
+        val measured = mine("measured").associate { it[1] to it[3] }
+        return Verdict(case, outcomes, logs, r1Millis, controls, r1Heights, thrown, measured)
     }
 
     private fun writeReport(r: Result, file: File) {
         val rows = r.verdicts.map { v ->
             listOf(
                 v.case.id, if (v.stable) "stable" else "UNSTABLE", v.tupleStable, v.logStable, v.controlMoves,
-                v.outcomes["R1"]!!.toField(), v.logs["R2"]?.size ?: 0, v.r1Millis,
+                v.outcomes["R1"]!!.toField(), v.logs["R2"]?.size ?: 0, v.r1Millis, v.r1Heights,
             ).joinToString("\t")
         }
         file.writeText(
-            "id\tverdict\ttuple-stable\tlog-stable\tcontrol-R1-ne-R4\tR1-tuple\tR2-collection-lines\tR1-ms\n" +
+            "id\tverdict\ttuple-stable\tlog-stable\tcontrol-R1-ne-R4\tR1-tuple\tR2-collection-lines\tR1-ms\tR1-heights-by-tile\n" +
                 rows.joinToString("\n") + "\n",
         )
     }

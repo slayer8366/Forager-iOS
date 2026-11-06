@@ -1145,6 +1145,1160 @@ Each mutation in `E3Jvm.report`, restored from a copy saved before editing and t
 4. **Then DL-lat and DL-lon,** which need a generator forcing ends to opposite sides; then MP64, ML5, PM5.
 5. **Expected values** once a stratum is stable: read part 7 step 4's digest first.
 
+## Step 1b continued: the oracle's JDK, and R on all 26 profiles (seventeenth session, Linden Caliper)
+
+Dispatched by Cedar Datum under Amendment 3 Part B after RECORD -47. **Bases [R]:** `brouter-port` at `0265239` on pull, as the
+dispatch said; `main` at `699125d` after fetch. Evidence is in `2026-10-29-brouter-port-phase2/step1b/`, files 8 to 10. The
+predictions (`8-temurin-prediction.txt`) were pushed in `8cf8be4`, before any run on Temurin.
+
+### The oracle's JDK (`970df90`)
+
+- **Source [R]:** Adoptium's GitHub release `adoptium/temurin21-binaries`, tag `jdk-21.0.13+9`, asset
+  `OpenJDK21U-jdk_x64_linux_hotspot_21.0.13_9.tar.gz`. `api.adoptium.net/v3/assets/release_name/eclipse/jdk-21.0.13%2B9`
+  (linux, x64, jdk, hotspot, normal heap) names that link, release timestamp 2026-10-22T08:58:06Z.
+- **Pin:** 207,858,352 bytes, SHA-256 `d7f5d5cf865a2902b70ff549b97586a7d3f234e016f041ab447ea740c7d66d1c`. That is Adoptium's
+  published checksum, read from two of its own sources that agree: the release's `.sha256.txt` and the API's
+  `package.checksum` and `package.size` **[R]**. The SHA-256 computed from the download equals both **[C]**. Adoptium's
+  GPG signature was **not** checked.
+- **`tools/fetch-temurin.sh <dir>`** fetches it through `fetch-pinned.sh` (size, then SHA-256), extracts it fresh, and refuses
+  it unless its `release` file reads `IMPLEMENTOR="Eclipse Adoptium"` and `JAVA_RUNTIME_VERSION="21.0.13+9-LTS"` **[C]**. The
+  JDK was fetched into the session's scratch directory; nothing is committed.
+- **`e3Strata` runs on it only:** `-Pbrouter.e3.jdk=<home>` sets the test JVM's `executable`. Without it the task refuses
+  before any case runs ("e3Strata runs on the oracle's JDK only (RECORD -47)…") **[C: run]**. Every regime's JVM starts from
+  the test JVM's `java.home` (`E3Launcher.kt:32`) **[R]**. During the `hiking-mountain` run, `ps` showed R1R2, R3 and R4 JVMs
+  started as Temurin's `bin/java -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic` **[C]**. R5 and R6 were not in that
+  snapshot; they use the same launcher **[R]**.
+- **The head of every stratum's log** (`E3Strata.jdk`) prints `java.vendor`, `java.runtime.version`, `os.arch`,
+  `java.vm.name` and `java.home`. It refuses any JDK other than Eclipse Adoptium 21.0.13+9-LTS amd64. All 27 stratum logs here
+  read `java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64` **[C]**.
+- **R's body moved to `E3R`, unchanged**, so the 25 profiles share it. `E3RTest` keeps `hiking-mountain`'s seed 20261030.
+  `E3RProfilesTest` holds the other 25 profiles' seeds, 20261101 to 20261125 in alphabetical order. They were committed and
+  pushed in `970df90`, before any run of them. The test checks that the 26 profiles are the oracle's `profiles2/*.brf`.
+
+### F0 and R on `hiking-mountain`, re-run on Temurin (`2ada78c`) [C]
+
+| Stratum | JDK | Unstable | Over 5%? | Earlier (OpenJDK 21.0.12.1, `525448b`) |
+|---|---|---|---|---|
+| **F0** | Temurin 21.0.13+9 amd64 | **0 of 2** | no | 0 of 2 |
+| **R, `hiking-mountain`** | Temurin 21.0.13+9 amd64 | **0 of 59** | no | 0 of 59 |
+
+- **Same cases, same answers.** R generated the same 59 case ids from 67 candidates (8 rejected). **Every R1 tuple equals
+  the OpenJDK run's: 59 of 59, and F0's 2 of 2** (`9-*-stability.tsv` against `6-` and `4-`). The control moved in every JVM.
+  Predictions 1 to 5 held.
+- **The second gap closes for this stratum:** the generator was pushed (`525448b`, `970df90`) before this run.
+
+### R on the other 25 profiles (`10-r-25-profiles-temurin-*`) [C]
+
+All on Temurin 21.0.13+9 amd64. The profiles ran **one after another in one `e3Strata` run** (04:48:18Z to 06:00:53Z, 1 h 12 min),
+3 regime JVMs at a time. **Not in parallel:** see the calls below. Each stratum has n = 59 (E5), with 61 to 71 candidates, and
+none is short. The control moved in all 1,475 cases.
+
+| Profile | Unstable (of 59) | Routes (R1) | Logged cases |
+|---|---|---|---|
+| car-eco / car-eco-nocost | 0 / 0 | 51 / 50 | 4 / 3 |
+| car-fast / car-fast-nocost | 0 / 0 | 54 / 52 | 3 / 6 |
+| car-vario / car-vario-nocost | 0 / 0 | 50 / 43 | 7 / 5 |
+| fastbike / -asia-pacific / -lowtraffic / -verylowtraffic | 0 / 0 / 0 / 0 | 53 / 55 / 57 / 57 | 10 / 8 / 4 / 18 |
+| gravel / moped / mtb | 0 / 0 / 0 | 56 / 48 / 54 | 14 / 6 / 8 |
+| rail / river | 0 / 0 | 2 / 2 | 0 / 0 |
+| safety / **shortest** / skating | 0 / **1** / 0 | 54 / 55 / 43 | 7 / 6 / 3 |
+| trekking / -ignore-cr / -noferries / -nosteps / -steep | 0 / 0 / 0 / 0 / 0 | 52 / 55 / 53 / 54 / 57 | 5 / 12 / 7 / 13 / 9 |
+| vm-forum-liegerad-schnell / vm-forum-velomobil-schnell | 0 / 0 | 51 / 51 | 8 / 5 |
+
+- **No profile passes E3's 5%: no stop.** The highest is `shortest`, at 1 of 59 (1.7%). Over all 26 profiles, R is **1 of
+  1,534** unstable.
+- **The one unstable case, `R-shortest-025`:** R1 to R5 agree on `route|217|5102|5102|5413e0b4fd811f2e`, and the logged runs
+  agree on one collection ("collected, nodes/paths before=48326/395 after=19174/303 maxTotalCost=5194"). **R6, under JaCoCo's
+  agent, routed `route|188|5103|5103|a72dd9fe13d1c2c1`:** a different route 1 m longer. The kinds agree in all six. Under E3 it
+  is kept out of every exact assertion and compared on kind only. **Why R6 differed was not determined [?].**
+  - **[I]** `shortest`'s cost equals its distance, so two routes 1 m apart are a near-tie. A collection ran at maxTotalCost
+    5,194 in the logged runs. R6 has no `debug.txt`, so whether it collected, or when, is not visible.
+  - **This also bears on E3's own rule:** the coverage run must give R1's tuple. For this case it did not, so its `.exec` does
+    not describe the expected-value run.
+- **Kinds:** non-routes are the oracle's own errors: "to/from-position not mapped", "target island", "no track found",
+  "datafile … not found" for tiles not captured, and once "error re-tracking track" (car-fast-nocost). `rail` and `river` give
+  52 and 53 "from-position not mapped" respectively, as predicted.
+- **Crossings:** 25 cases have ends on opposite sides of 40°N, and 17 of 70°W, in 21 of the 25 profiles. These are ends only,
+  not routes **[C: `10-…-summary.tsv`]**.
+- **Prediction 6 partly failed:** "most likely 0 unstable in each" was wrong for `shortest`. "No profile over 5%", "none short"
+  and "rail and river mostly non-route" held.
+
+### CI [R: job logs]
+
+- **Run 41004546970 on `970df90`: `success`.** `jvm`: "TOTAL: tests 81, failures 0, errors 0, skipped 0 in 37 files", the same
+  81 as before, so no stratum ran there. E3ControlTest: "R1 repeats across fresh JVMs: true; R4: true". `ios-smoke`
+  `success` (simulator-checked).
+- **Runs on `8cf8be4`, `2ada78c` and the planner's `9f41799`:** `success` by their run conclusions, logs not read. The run on
+  this merge, `83cba83`, was in progress at handoff and was not read.
+
+### Calls beyond the amendment (mine; for the planner)
+
+- **The JDK is given to `e3Strata` by a property, not fetched by a Gradle task,** because the dispatch said "into scratch".
+  The task refuses without the property, and the run refuses any other JDK.
+- **The in-run check includes the arch, amd64,** as RECORD -47 names it. The libm flag is still chosen from Gradle's own JVM's
+  `os.arch` (`build.gradle.kts`), which is amd64 here, as Temurin's is.
+- **The seeds, 20261101 to 20261125 in alphabetical order, are mine.** E4 fixes only that each seed is in the source.
+- **One test runs the 25 in sequence, and stops at the first profile over 5%.**
+- **The planner allowed up to 3 profiles at a time during the run. I did not take it.** The one run already held the machine
+  at load about 7 on 4 cores, 2% idle **[C: `/proc/loadavg`, `top`, at profile 15]**. More profiles at once would not have
+  finished sooner, and would have taken the core left for the second coder. The run was not restarted.
+- **`R-shortest-025` is recorded, not investigated:** under the stop, and outside this dispatch.
+- **Commit trailers follow the dispatch** (`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name), as this branch's
+  history does.
+
+### Could not determine, and unverified
+
+- **Why R6 gave `R-shortest-025` another route [?].** Whether R1 repeats it on CI's Temurin, or on aarch64: no case has run
+  there.
+- **Whether `shortest`'s instability is Temurin's:** `shortest` never ran on OpenJDK 21.0.12.1 **[?]**.
+- **Adoptium's GPG signature on the tarball:** not checked. The pin rests on Adoptium's two published checksums.
+- **The `.exec` files are not analysed;** no expected value is written (dispatch).
+
+### Step 1b: the handoff (seventeenth session)
+
+1. **Read** this section and RECORD -47. Run `tools/fetch-temurin.sh <scratch>`, then
+   `./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<scratch>/jdk-21.0.13+9 --tests <class>`. Filter by class: the 25-profile run
+   alone takes about 73 min.
+2. **R is done on all 26 profiles:** 1 of 1,534 unstable, `R-shortest-025`. The planner may want R6's disagreement looked at
+   before any coverage is read as reach evidence.
+3. **Next, in the planner's order:** DL-lat and DL-lon (a generator forcing ends to opposite sides; seeds pushed before any
+   run), then MP64, ML5, PM5. Each through `E3Strata.jdk` and `E3Strata.report`.
+4. **Expected values** once a stratum is stable: read part 7 step 4's digest first.
+
+## Step 1b continued: RECORD -50's rulings, the planner's rulings on E4's targeted strata, and DL's generator (eighteenth session, Linden Caliper): PARTIAL
+
+Dispatched by Cedar Datum under Amendment 3 Part B after RECORD -50. **Bases [R]:** `brouter-port` at `db3b133` after fetch, as
+the dispatch said. **Handed off at the planner's request (07:41Z) before any run.** No stratum ran this session.
+
+### RECORD -50's two rulings, as they apply here
+
+- **`R-shortest-025` is unstable under E3's rule** (Phase 1 report at `20e1f92`, line 831). It is counted and named (1 of 59 in
+  `shortest`, 1 of 1,534 in R), kept out of every exact assertion, and compared on kind only: all six runs agree on kind `route`.
+  When expected values are written, it is marked unstable.
+- **Coverage counts as reach evidence only for a case whose R6 tuple equals its R1 tuple.** **No code reads coverage today
+  [R: `git grep` for jacoco, `.exec` and coverage]:** R6 writes one `.exec` per case (`E3Stability.kt:45,52`), and nothing parses
+  one. So no code was changed for this rule. Its first reader will be NT's or CR's selector, which applies it, seen failing first
+  (the planner, ruling below).
+
+### The planner's rulings on E4's targeted strata (2026-10-30, to be recorded as RECORD -51)
+
+I asked two questions: whether E4's reach column selects cases or counts them over the first 59, and which profile these strata
+use. While DL was being built, I reported two more things: R1 has no log, and one run can show both panic mode and the limit
+(`RoutingEngine.java:1739-1749`, `:1796-1799`, `:1893`, `:1997-1998`, `:2026-2031` at v1.7.10 **[R]**; whether data does is
+not known).
+
+**First answer (Q1, Q2), the planner, verbatim in its operative parts:**
+- Q1: "(b), selected. ... each stratum is the first 59 candidates, in generation order, whose reach evidence holds. ... The rest
+  are rejected candidates, counted;
+- ML5 and PM5 share one candidate sequence, MP64's generator with memoryclass 5. ...
+- the cap is 20 × 59 = 1,180 candidates per stratum. For the shared ML5/PM5 sequence, the cap is 1,180 for each stratum. A
+  stratum still not full is reported short, with its n, and never filled from another generator;
+- E3's six runs and the instability count are then taken over the selected 59, as for R. ...
+- Where reach is coverage (NT's comparator line, CR's StdPath lines), the selector is the first code that reads coverage.
+  RECORD -50's rule applies there: a case counts only if its R6 tuple equals its R1 tuple. Seen failing first when you build it."
+  (The planner corrected its own citation: "Cases are kept in generation order" is line 885, not 889.)
+- Q2: "hiking-mountain, your default, for DL-lat, DL-lon, MP64, ML5 and PM5. ... Rejected: the uniform draw. Say in the report
+  that hiking-mountain switches off turn restrictions, so these strata do not exercise them; R does." **So stated:**
+  `hiking-mountain` switches off turn restrictions (Phase 1, E4: 24 of 26 profiles switch them on, all but `hiking-mountain` and
+  `shortest`), so DL-lat, DL-lon, MP64, ML5 and PM5 do not exercise them. R does.
+
+**Ruling 1, the reach source, verbatim:** "You are right that R1 has no log; my "R1's log" was a wrong premise, and I will record
+it. Option (i): R2, the same case at once in R1's own JVM with debug.txt. The selection pass is E3's R1R2 JVM run over the
+candidates, in generation order. A candidate's reach counts only if R2's tuple equals R1's, the same rule as RECORD -50's for
+coverage. R3 to R6 then run on the selected 59 only. ML5's mark is R1's kind; MP64's and PM5's marks are R2's log lines (:2025,
+:2031). Rejected: (ii) R5, which reads reach after selection should already be done, and (iii) a separate run, which costs a JVM
+per candidate for nothing (i) lacks."
+
+**Ruling 2, a run that shows both panic mode and "memory limit reached", verbatim:** "(a), ML5 by its outcome. The strata stay
+disjoint, and the outcome decides. ML5 = the run's kind is "memory limit reached", whatever came before. PM5 = R2's log shows
+panic mode enabled, and the kind is not the limit. Count and report how many ML5 cases also showed panic. Rejected: (c) both,
+which puts one case in two strata and breaks E5's per-stratum sizes; (d) neither, which drops a real path; (b) PM5, which would
+put a fixed-message outcome into the stratum J predicts by collections."
+
+### What was written (work in progress, uncompiled, never run)
+
+- **`DLGenerator.kt` (new):** the geometric candidate sequence for DL-lat (40°N: `W75_N35` below, `W75_N40` above) and DL-lon
+  (70°W: `W75_N40` west, `W70_N40` east). Per candidate, from one `java.util.Random(seed)`:
+  - the start's side, uniform;
+  - R's distance law, `100 m × 1000^u`;
+  - a start node, uniform over the start tile's nodes in the rows (columns) of cells within that distance of the line;
+  - a uniform bearing, and a target, rejected unless it lies inside the other tile;
+  - the end, the nearest node to the target in its 3 × 3 cells in the other tile;
+  - both ends moved 0 to 100 m and rounded to six decimals, then rejected unless each is still on its own side.
+
+  Its details are my calls; E4 fixes the line, the tiles, node-drawn ends, the move and the six decimals. **It was written before
+  ruling 1 and still numbers kept cases `DL-lat-001`…**: under selection, ids should carry the candidate's draw number, so the
+  count to the 59th selected case can be read from them.
+- **`E3CaseRun`:** `Result.extent`, a route's `minIlon, maxIlon, minIlat, maxIlat` (null when there is no route). This is DL's reach:
+  nodes on both sides is `min < line <= max`, with the line at ilat 130,000,000 or ilon 110,000,000, and a node on the line counted
+  in the tile above it, as the tiles hold it.
+- **`E3Jvm`:** prints `extent <regime> <id> …` for a route, and has an `R1`-alone single-case regime. **Under ruling 1 the `R1`
+  regime is not needed:** selection is the `R1R2` JVM. The next session should remove it rather than build on it.
+- **Not written:** the seeds, the DL test class, the selector, and MP64's, ML5's and PM5's generators. **Nothing was pushed
+  before a run, because nothing ran.**
+
+### Could not determine, and unverified
+
+- Whether `DLGenerator` compiles, and what it generates: not compiled, not run.
+- Whether any real run shows both panic mode and the limit: code reading only.
+- **My slip:** `tools/fetch-temurin.sh` is committed `100644`, not executable. The seventeenth handoff said to run it directly;
+  `bash tools/fetch-temurin.sh <dir>` works. This session re-checked the JDK through it: present, 207,858,352 bytes, SHA-256
+  `d7f5d5cf…66d1c`, re-extracted fresh.
+
+### Step 1b: the handoff (eighteenth session)
+
+1. **Read** this section, RECORD -50 and -51 (when written), and E4 (Phase 1 at `20e1f92`, lines 839-932). Then
+   `bash tools/fetch-temurin.sh <scratch>` and `./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<scratch>/jdk-21.0.13+9 --tests <class>`.
+2. **Finish the selector (`E3Select`, new file) under ruling 1:**
+   - run the `R1R2` JVM over each stratum's candidates in generation order (parallel is fine; keep order when taking);
+   - a candidate's reach counts only if R2's tuple equals R1's;
+   - keep the first 59 that reach; the rest are rejected and counted; cap 1,180 per stratum; short is reported, never filled;
+   - write each candidate's row (id, draw number, R1 and R2 tuples, extent, reach) to a TSV;
+   - then run R3 to R6 on the 59. `E3Stability` currently runs all six itself. Either feed it the selection's R1R2 output, or
+     re-run R1R2 and also record that the selection's R1 equals E3's.
+3. **Before any run:**
+   - drop the `R1` regime;
+   - give DL ids their draw numbers;
+   - write `E3DLTest` (two tests) with the seeds. My proposal is 20261201 (DL-lat) and 20261202 (DL-lon). Not yet fixed;
+   - assert in the test, before routing, that every case's ends are in the two tiles, one each;
+   - **commit and push. Only then run.**
+4. **MP64, ML5 and PM5,** as ruled:
+   - MP64 is R's generator in `W75_N40`, 20 to 100 km, `memoryclass` 64; reach is at least one "collected" line in R2's log (`:2025`).
+     `RGenerator` must not change R's sequence; check that it does not, against a list saved before any edit.
+   - ML5 and PM5 are one sequence at `memoryclass` 5:
+     - ML5 is R1's kind "memory limit reached";
+     - PM5 is panic mode in R2's log (`:2031`), with a kind other than the limit;
+     - count the ML5 cases that also showed panic.
+   - Seeds pushed before runs.
+5. **Then** E3's 5% stop per stratum, the expected values (part 7 step 4's digest form, with unstable cases marked, including
+   `R-shortest-025`), and 1b's milestone report: total against 2,118. NT, LB, CR and FK are not built.
+
+## Step 1b continued: the selector, DL's, MP64's, ML5's and PM5's tests, seeds pushed; no stratum run (nineteenth session, Linden Caliper): PARTIAL
+
+Dispatched by Cedar Datum after RECORD -52. **Base [R]:** `brouter-port` at `fa54097` after fetch, as the dispatch said.
+**Stopped at the planner's request (07:58Z, the owner's call to stop the team) with no run underway.** No stratum ran.
+
+### `fa54097` first [C]
+
+- **It compiles:** `./gradlew :brouter:compileTestKotlinJvm` green locally before any edit.
+- **CI on `fa54097`, run 41021809372:** completed, conclusion success (both jobs) [R: the run's job list]. Counts not read from
+  its log; the counts below are `85008b1`'s.
+
+### What was built (`437e047`, `85008b1`)
+
+- **R's sequence pinned before `RGenerator` was edited (`437e047`).** `E3RSequenceTest` (strata package, so `e3Strata`
+  only) generates R's 26 lists exactly as `E3R` does and holds the SHA-256 of their lines (id, the four ends, profile,
+  `memoryclass`, time limit; not the tile folder) to `ed378c85…e43d6c`.
+  - **Before the edit [C]:** 1,534 cases, that digest; the test failed on its placeholder, as predicted, and printed it
+    (`step1b/11-r-sequence-before-edit-e3Strata.log`). The list is saved whole: `step1b/11-r-sequence-before-edit.tsv`, whose
+    `sha256sum` is the same value.
+  - **After the edit [C]:** the test passed with the same digest, and `cmp` of the new list against the saved one found them
+    byte-identical (`step1b/11-r-sequence-after-edit-e3Strata.log`). Both on Temurin 21.0.13+9.
+  - **Not seen to bite on a changed sequence [stated]:** no revert was run. What stands outside the check is the `cmp` of the
+    whole list against the copy saved before the edit.
+- **`E3Select` (new):** the selector under RECORD -51 and -52.
+  - Each candidate runs in E3's own `R1R2` JVM (`E3Stability.launch`, now `internal`), as many at once as `E3Strata.workers` (cores - 1), and is taken
+    strictly in draw order.
+  - Reach counts only when R2's tuple equals R1's; otherwise the candidate is rejected as "R2's tuple differs from R1's".
+  - The first 59 per stratum are taken; a candidate for a full stratum of a shared sequence is "already full", counted.
+  - **The cap is 1,180 draws per sequence,** a draw rejected before routing counting toward it, as R's generator counts its
+    candidates (`RGenerator.generate`). **A call (mine):** the alternative, 1,180 routed candidates, is looser.
+  - Draws still running when every stratum is full are neither counted nor written; the pool is shut down without interrupting,
+    so no child JVM is left unwatched.
+  - Every counted draw is a row of `<work>/<label>-select/select.tsv`: draw, id, R1 and R2 tuples, R2 = R1, R1's extent,
+    R2's collected lines, R2's panic line, R1's ms, `memoryclass`, the reach reading, the result. A check holds rows to draws.
+  - `E3Select.PANIC` is "enabled memory panic mode": the panic line at `:2031` **also contains "memory limit reached"**
+    [R: `RoutingEngine.java:2031` at v1.7.10], so the two are told apart by that part. "memory limit reached" is thrown at one
+    site only, `:2028` [R: grep].
+- **`E3Targeted` (new, strata):** `hiking-mountain`, n 59, cap 1,180, 600 s per JVM. After selection it runs E3's six regimes
+  on the taken cases with `E3Stability.run` unchanged, which **re-runs R1R2** (the handoff's second option), and compares each
+  case's selection R1 tuple and R2 lines with E3's, printing every difference and the count of agreements. All strata of one
+  sequence are reported before the first E3 failure is thrown; a short stratum fails after E3 has run on what it has.
+- **`DLGenerator`:** `generate` replaced by `draws`, an endless numbered sequence; draw 7 is `DL-lat-0007`.
+- **`E3DLTest` (new, two tests):** seeds **20261201** (DL-lat) and **20261202** (DL-lon). Before a case is routed, it asserts
+  that the case's ends lie in the two tiles, one in each, by tile names computed from the degrees, independent of the
+  generator's cell test. Reach: R1's extent has `min < line <= max`, with the line at ilat 130,000,000 or ilon 110,000,000.
+- **`RGenerator`:** optional `only` (one tile), `minMetres` and `ratio` (distance `minMetres × ratio^u`); the defaults are R's
+  expression unchanged. `draws(prefix, profile, memoryclass, …)` beside `generate`.
+- **`E3MemoryTest` (new, two tests):**
+  - **MP64,** seed **20261203:** `W75_N40` only, both ends in it, 20 to 100 km log-uniform (`20 km × 5^u`), `memoryclass` 64.
+    Reach: at least one "collected" line in R2. Taken cases with the limit or panic mode are counted and printed (E4).
+  - **ML5 and PM5,** one sequence, seed **20261204,** `memoryclass` 5, ids `M5-nnnn`. ML5: R1's kind is "memory limit
+    reached". PM5: R2 shows the panic line and the kind is not the limit. Neither: rejected. ML5 cases that also showed panic
+    are counted.
+  - **Calls (mine):** "in `W75_N40`" read as both ends in that tile (the route may leave it), and "20 to 100 km" read as R's
+    log-uniform law over that range.
+- **`E3Jvm`:** the `R1` regime is dropped, as the eighteenth handoff said.
+
+### CI [R: job logs]
+
+- **`437e047`, run 41022631752:** success.
+- **`85008b1`, run 41023085025:** success. `jvm` TOTAL tests 91, failures 0, in 41 files; `ios-smoke` 23, failures 0
+  (simulator-checked); the arm64 JVM step 7, failures 0.
+- **These counts equal 5a's (91, 23, 7) and say nothing about the new code beyond compiling:** every new test is in the strata
+  package, which `jvmTest` excludes.
+
+### Mechanism predictions, written before any run [I unless marked]
+
+- **DL-lat:** fills 59 within the cap. About half of all draws are rejected before routing (a uniform bearing points away
+  from the line about half the time). Land on both sides of 40°N in these tiles is New Jersey, roughly 75°W to 74°W [I:
+  geography]. Some routed candidates fail with no route.
+- **DL-lon:** fills, with more rejects before routing than DL-lat (Maine and Cape Cod only).
+- **MP64:** most routed candidates collect at least once (20 km and more on `hiking-mountain` in the New York area); it fills
+  early. 0 limit and 0 panic at `memoryclass` 64.
+- **ML5 and PM5** [?]: most routed candidates reach a collection. In pass 0, `maxTotalCost` is 1e9, so the first out-of-bounds
+  collection enables panic; a later pass with a bound throws the limit (`:2027-2028`). So ML5 should hold many cases that
+  also showed panic, and **PM5 is the one that may come up short.**
+- **E3:** 0 unstable in each stratum (Phase 1's prediction; R missed it by 1 of 1,534).
+
+### Could not determine, and unverified
+
+- **Not run:** the selector, DL's, MP64's and the ML5/PM5 tests. Nothing about what they select, or how long they take, is
+  known. A 20 to 100 km `hiking-mountain` run may take tens of seconds; R's 59 on that profile took 3 minutes in all.
+- **`E3Select` has no unit test of its own** (draw order, the cap, a full stratum in a shared sequence). Its one internal
+  check is rows against counted draws. The first run's `select.tsv` is the evidence to read: draw numbers 1 to n with no gap,
+  taken ids in rising order, and rejected counts summing to draws minus taken.
+- `E3RSequenceTest` has not been seen to fail on a changed sequence (above).
+
+### Step 1b: the handoff (nineteenth session)
+
+1. **Read** this section, RECORD -51 and -52, and E4 (Phase 1 at `20e1f92`, lines 839-932). Base: `brouter-port` at the
+   commit carrying this section or later; fetch first.
+2. **The JDK:** `bash tools/fetch-temurin.sh <scratch>` (now executable too). It prints the home to pass below.
+3. **Run DL, one test at a time, nothing edited first** (the seeds are pushed in `85008b1`):
+   `./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<home> --tests '*E3DLTest.dlLat*' --console=plain > <scratch>/12-dl-lat.log 2>&1`,
+   then `--tests '*E3DLTest.dlLon*'` into `12-dl-lon.log`.
+   - **Before citing anything:** the log has no `e: ` line; its JDK line is Temurin 21.0.13+9; `select.tsv` passes the checks
+     under "Could not determine" above.
+   - Copy into `step1b/`: the log, `brouter/build/e3/<stratum>-select/select.tsv`, and `brouter/build/e3/<stratum>/stability.tsv`.
+   - Record per stratum: draws, routed, rejected by reason, taken (59 or short), the last draw taken, unstable of 59, and
+     selection-vs-E3 agreements. Compare with the predictions above. **More than 5% unstable (over 2 of 59) is a stop.**
+   - Commit and push after each stratum.
+4. **Then** `--tests '*E3MemoryTest.mp64*'`, then `--tests '*E3MemoryTest.ml5*'`, the same way. For ML5/PM5 also record
+   ML5-with-panic. MP64: the printed counts of taken cases with the limit or panic at 64.
+5. **Then** E3's 5% stop per stratum, the expected values (part 7 step 4's digest form, unstable cases marked, including
+   `R-shortest-025`), and 1b's milestone report: total against 2,118. NT, LB, CR and FK are not built.
+
+**Left in scratch:** nothing a fresh session needs. The R list saved before the edit and both logs are in `step1b/11-*`.
+`brouter/build/e3/` is build output and is regenerated.
+
+## Step 1b continued: heights in E3's tuple, stratum F0h, and F0 and R re-run (twentieth session, Linden Caliper)
+
+Dispatch RECORD -58 (with -56, -57). Base `brouter-port` `82d310a`, fetched and equal to `origin/brouter-port` before any
+write [C]. Forager read-only at `pre-main` `d6e2a0415` for the heighted fixture, its GeoJSON and its routes; nothing else
+re-pinned. Oracle JDK: Temurin 21.0.13+9 amd64, every stratum log's first `E3` line [C]. Evidence in `step1b/12-*` to `16-*`.
+
+### What changed (`d52e08c`, `66d345f`)
+
+- **`E3Outcome` gains `heightDigest`** (`E3Case.kt:56-64`): 64-bit FNV-1a over every node's `OsmPathElement.getSElev()`
+  in order, `Short.MIN_VALUE` included, each short's two bytes low byte first (`fnv1aShorts`, `E3Case.kt:107-117`). The
+  tuple's line form is now `kind|nodes|cost|distance|nodeDigest|heightDigest`. `fromField` takes the last five fields
+  and joins the rest as the kind, so a kind holding `|` reads back whole (`E3Case.kt:70-79`); `E3OutcomeTest` holds that
+  and pins the digest to the Python tool's output on a fixed vector [C: jvmTest].
+- **`E3CaseRun` fills it** from `track.nodes` (`E3CaseRun.kt:57`, `:66`), and for a found route also counts, per 5°
+  tile, the nodes with a height and all nodes (`E3CaseRun.kt:58-63`, `tileOf` at `:82-86`). The child prints that as a
+  `heights` line (`E3Jvm.kt:81`); `stability.tsv` gains a last column `R1-heights-by-tile` (`E3Stability.kt:95`, `:103`), and the
+  stratum report prints it per case (`E3Strata.kt:40`).
+- **Old logs:** `step1b/00-tuple-note.txt` says which files carry the old five-field tuple (4-* to 10-*), unedited.
+- **F0h's fixture:** `tools/fetch-f0h.sh` fetches Forager's `segments-heighted/W75_N40.rd5` from raw.githubusercontent.com
+  at commit `d6e2a0415e5fc50a43210f78120ceedb9e2e6de4` through `tools/fetch-pinned.sh` (178,867 bytes, SHA-256
+  `14f595e8…a965c`) into `build/tiles-f0h/f0h/` alone. The build wires it as F0: an `Exec` task (`fetchF0h`) the oracle's
+  test JVM depends on, and a folder property, `brouter.tiles.f0h.dir` (`TestTiles.f0h`). The tile release and
+  `tools/tile-pins.tsv` are untouched [C: `git diff --stat 82d310a`]. The blob at that commit hashes to the pin [C:
+  `git show | sha256sum`], and the fetch accepted it [C].
+- **F0h's routes** (`E3F0hTest.kt`): the eight of `server/pmtiles-worker/test/fixtures/rd5/routes.json` at `d6e2a0415`,
+  `from` and `to` as written there. `BRouterHeightedRouteTest.kt:90-99` there carries the same sixteen ends [R].
+- **F0h's expected values:** `tools/geojson-heights.py` reads each `brouter-cli/heighted/<name>.geojson` at `d6e2a0415`
+  and prints the point count and heights digest; its output is `step1b/12-f0h-expected.tsv`. Only counts and digests are
+  committed. Over the eight: 3,630 points, all with a height, 5.75 to 413.75 m [C], which equals Forager's README and
+  `BRouterHeightedRouteTest.kt` (3,630; 5.75; 413.75) [R].
+- **The height rule used** [R: source]: BRouter's GeoJSON writes a third value only when `getSElev() != Short.MIN_VALUE`,
+  and writes `getElev()`, which is `selev / 4.` (`FormatJson.java:109`, `OsmPathElement.java:43-44`, Forager's
+  `third_party` copy at `d6e2a0415`), by Java's `Double.toString`. A quarter is exact in binary and `Double.toString`
+  reads back to the same double, so selev = value × 4. The tool checks, in decimal, that every value × 4 is a whole
+  number in a short's range, and refuses the file otherwise; a missing third value is `Short.MIN_VALUE`. All 3,630
+  passed. (`FormatJson.java:110` writes speed there instead when the profile sets `showspeed`; Forager's README says
+  these are heights, and the quarter-metre check would very likely refuse speeds [I].)
+
+### F0h forward (`12-f0h-*`) [C]
+
+8 cases, **0 of 8 unstable**, 8 of 8 `route`. R1's point count and heights digest equal the command-line router's on
+**all eight**, so the test passed (JUnit XML: 1 test, 0 failures; 0 ` e: ` lines). Every R1 node has a height
+(`W75_N40:n/n` on each). R1's distances also equal each GeoJSON's `track-length` (5047, 2573, 6713, 10253, 11107, 7619,
+13997, 13908) [C: read, not asserted]. `inside-across-the-degree-line` and `inside-long` have the same node digest, cost
+and distance on both squares, as Forager's README says of their points [C]. **No height disagreement** with the
+command-line router, so the stop on one did not arise. The planner's first prediction held.
+
+### F0 forward (`14-f0-*`) [C]
+
+2 of 2 stable. R1 as before (226, 5302, 5047, `9ca48d05…`; 306, 7405, 6713, `7d242f8d…`), and the heights digests
+are the two predicted for all-`Short.MIN_VALUE` lists, `afc27854ee968af5` and `4f6849ea59b5f775`, with
+`W75_N40:0/226` and `W75_N40:0/306`.
+
+### The revert (`13-heights-predictions.txt` item 3, `15-*`) [C]
+
+Prediction pushed in `d971358` before the run. `E3CaseRun.kt:66` `fnv1aShorts(heights)` → `fnv1aShorts(emptyList())`,
+the file copied to scratch first; old XML deleted. **Predicted:** compiles; jvmTest 93, 0 failures; F0h 8 of 8 stable
+and routes; F0h fails at its reach assertion with every digest `cbf29ce484222325` and counts equal; nothing else.
+**Observed:** exactly that. 0 ` e: ` lines in both logs; jvmTest 93, 0; F0h 1 test, 1 failure at `E3F0hTest.kt:33`,
+the reach assertion's own message. Restored from the copy; then byte-equal to the copy and to HEAD, `git diff` empty, and
+`:66` reads `fnv1aShorts(heights)` again.
+
+### R on all 26 profiles under the new tuple (`16-*`) [C]
+
+One `e3Strata` run on `14ba69d`'s tree, 19:46:39Z to 20:47:20Z (`BUILD SUCCESSFUL in 1h 40s`), 0 ` e: ` lines, JUnit XML
+3 tests (`E3RSequenceTest`, `E3RTest`, `E3RProfilesTest`), 0 failures. Load about 8 on 4 cores (another session shares
+the container); no case has a time limit, so load moves no outcome.
+
+- **Sequence unchanged:** 1,534 cases, SHA-256 `ed378c85…3d6c`, the pinned value (`E3RSequenceTest`).
+- **Unstable: 0 of 1,534,** 0 of 59 in every profile, `shortest` and `hiking-mountain` included.
+- **`R-shortest-025` was stable this time.** Its R1 tuple's first five fields, `route|217|5102|5102|5413e0b4…`, equal
+  the old run's, and all six regimes agreed. In `10-*` its R6 alone routed 1 m longer. So that instability did not
+  recur in one more run [C]; why it happened once is still [?]. **This misses the planner's prediction ("stable apart
+  from `R-shortest-025`") and my own (item 4, "1 at most").** The miss is towards stability, and it does not lift -50's
+  ruling: that ruling keeps the case out of exact assertions because it was seen unstable once, and that is still true.
+- **Old against new:** each case's new R1 tuple, without its heights digest, equals the old R1 tuple (`10-*`, `9-r-*`) in
+  **1,534 of 1,534** [C: `16-r-summary.txt`]. Adding the digest moved no other field.
+- **R1 kinds:** 1,268 routes, 144 `from-position not mapped`, 106 `to-position not mapped`, 16 others.
+- **The data -58 owes, nodes with a height on R's 1,268 R1 routes, per tile** [C]:
+
+| Tile | Nodes with a height | Nodes | Share |
+|---|---|---|---|
+| E170_S50 | 97,521 | 97,558 | 99.96% |
+| W70_N40 | 62,271 | 62,364 | 99.85% |
+| W75_N35 | 58,824 | 58,874 | 99.92% |
+| W75_N40 | 209,308 | 209,481 | 99.92% |
+
+  So the brouter.de tiles do exercise the new field, on every tile. The planner's third prediction held. 353 nodes on
+  30 routes have no height, at most 79 in one route. Where they are (voids in the source DEM, or water) is [?], not read.
+  Counted from the `heights` line R1's JVM prints, not from the digest.
+
+Progress as recorded during the run:
+- **19:58Z, progress:** 5 of 26 profiles done (car-eco, car-eco-nocost, car-fast, car-fast-nocost, car-vario), 0 of 295
+  unstable; R1's first five fields equal the old run's (`10-*`) in 295 of 295. Heights on their 257 R1 routes: E170_S50
+  13,324 of 13,327 nodes, W70_N40 8,033 of 8,045, W75_N35 5,304 of 5,304, W75_N40 28,694 of 28,729 [C, partial]. Load
+  about 8 on 4 cores (another session shares the container); no case has a time limit.
+- **20:19Z, progress:** 14 of 26 profiles done (through `mtb`), 0 of 826 unstable; first five fields equal the old run's
+  in 826 of 826. Heights on 682 R1 routes: E170_S50 40,753 of 40,758; W70_N40 28,427 of 28,439; W75_N35 30,851 of
+  30,860; W75_N40 98,277 of 98,327 [C, partial].
+
+### Mechanism predictions against results (`13-heights-predictions.txt`, pushed in `d971358` before any run)
+
+| Item | Predicted | Observed |
+|---|---|---|
+| F0h | 8 stable, 8 routes, count and heights equal on all eight, every node heighted | as predicted |
+| F0 | 2 stable, tuples as before, heights `afc27854…` and `4f6849ea…`, 0 heighted | as predicted |
+| Revert | compiles; jvmTest 93/0; F0h stable but fails at the reach assertion, digests `cbf29ce4…` | as predicted |
+| R | sequence unchanged; at most 1 unstable (`R-shortest-025`); first five fields unchanged | 0 unstable; otherwise as predicted |
+| R heights | most nodes heighted [I] | 99.85% to 99.96% per tile |
+
+### What this does and does not show
+
+- **Shown:** E3's tuple now carries each node's height, and a check exists that a wrong one fails (F0h, by the revert).
+  On the heighted square, the oracle as E3 calls it gives the command-line router's heights on all eight routes. The
+  brouter.de tiles carry heights, so R's expected values, once written, will test them too.
+- **Not shown:** anything about the port's heights. The port has no path model yet (step 6), so no port output is
+  compared. The revert -57 named, breaking the `short` cast in `interpolateEle` (`OsmPath.java:392`), would be a change
+  inside the oracle jar. -58 replaced it with the digest revert, which shows that the comparison sees heights, not that
+  the cut-end interpolation is covered. Whether F0h's or R's routes have interpolated end heights at all is [?]; I did
+  not separate the end nodes.
+
+### Could not determine, and unverified
+
+- Why `R-shortest-025`'s R6 differed once (`10-*`) and not now.
+- Where R's 353 height-less nodes lie, and why they have no height.
+- Whether any F0h or R route end is a cut point with an interpolated height (above).
+- That `showspeed` is off for the command-line router's run of these GeoJSON files: inferred from Forager's README and
+  from every value being a whole number of quarter metres, not from the run's own parameters.
+- The iOS targets for this change: read in CI only (below).
+
+### Premises that were wrong
+
+- **None of -58's premises about the tree** were wrong where I checked them: `origin/brouter-port` was `82d310a`;
+  `E3Case.kt:54` and `E3CaseRun.kt:~52` were the tuple and its fill; the blob at `d6e2a0415` has the pinned size and
+  SHA-256; R is 26 profiles and 1,534 cases; F0 is 2 cases.
+- **One prediction missed:** `R-shortest-025` was stable (above).
+- **-57 and -58 name different reverts.** -58 is the dispatch, so its revert ran; -57's is recorded above as not run.
+- **The dispatch's commit trailer** (`Co-Authored-By: Claude <noreply@anthropic.com>`, no model named) differs from the
+  session's own attribution line. I followed the dispatch.
+
+### Calls beyond scope (mine; for the planner)
+
+- **`E3OutcomeTest`** in `jvmTest` (so it runs in CI): `fromField` with a kind holding `|`, and the heights digest pinned
+  to the Python tool's output on a fixed vector, so the Kotlin and Python digests cannot drift.
+- **The per-tile height count** is a new child output line (`heights`) and a new last column in `stability.tsv`, not
+  part of the compared tuple.
+- **`fetchF0h` hangs off every oracle test JVM,** as F0's fetch does, so CI's `jvm` job fetches 178,867 bytes from
+  raw.githubusercontent.com on each run (seen working in CI).
+- **The pins sit in `tools/fetch-f0h.sh`,** as JaCoCo's do in `tools/fetch-jacoco.sh`, since `tile-pins.tsv` is the release's.
+- **F0h forward ran before the revert,** so the revert's failure is read against a pass on the same data. The order was
+  in the pushed prediction.
+- **F0h's distances** were checked against `track-length` by reading, not asserted. The reach assertion is the count and
+  heights only, as -58 says.
+- **F0's all-`Short.MIN_VALUE` heights are predicted and observed, not asserted.** Asserting them would be cheap, but it
+  would add a second failure to -58's revert and so change the prediction -58 fixed.
+- **`R-sequence` ran in R's `e3Strata` call,** to confirm the sequence under the new code.
+- **`.gitignore` gained `__pycache__/`,** after a stray `.pyc` went into `d52e08c`; `66d345f` removes it, without amending.
+
+### CI [R: job log, partial]
+
+- **Read on `9302765`, run 41900384198:** success. `jvm` TOTAL tests 93, failures 0, in 42 files; 0 ` e: ` lines;
+  `fetchF0h` ran and fetched F0h's fixture; `E3OutcomeTest` 2 of 2.
+- **Not read, because the planner asked for the handoff first:** both `compileKotlinIos*`, the simulator count and
+  arm64 with its gate, on this or any later head. **The final head's CI is unread.** The change is `jvmTest` and `tools`
+  only, so iOS compiles nothing new [I].
+
+### Step 1b: the handoff (twentieth session)
+
+The next step is the targeted strata, **as the nineteenth session's handoff gives them** (above), with these changes:
+
+1. Base: `brouter-port` at the commit carrying this section or later; fetch first. Every tuple is now
+   `kind|nodes|cost|distance|nodeDigest|heightDigest`. `stability.tsv` has a last column, `R1-heights-by-tile`.
+   `E3Targeted`'s "selection's R1 equals E3's" now compares heights too.
+2. Number the logs from `17-*` in `step1b/`; `12-*` to `16-*` are this session's.
+3. Run DL (`dlLat`, then `dlLon`), then MP64, then ML5, exactly as the nineteenth handoff's items 2 to 4 say, with its
+   checks before citing anything and its 5% stop. Commit and push after each stratum.
+4. Then the expected values (part 7 step 4's digest form), now carrying heights. `R-shortest-025` stays under -50's
+   ruling, although it was stable in this session's run.
+5. **First, before step 3:** read CI on the head carrying this section (`gh run list --repo slayer8366/Forager-iOS
+   --branch brouter-port`, then `gh api repos/slayer8366/Forager-iOS/actions/jobs/<id>/logs` for `jvm` and `ios-smoke`):
+   `jvm` 93 tests expected, 0 ` e: ` lines, both `compileKotlinIos*`, the simulator count (simulator-checked), arm64 and
+   its gate. That is -58's item 5, left open.
+6. **Running: nothing.** R finished at 20:47:20Z (`16-*`); no Gradle or JVM of mine is left running.
+7. **Scratch,** `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/`: the
+   Temurin home `temurin/jdk-21.0.13+9`, the revert's saved copy `revert/E3CaseRun.kt.forward`, the R summary script
+   `scripts/rsum.py`, the CI log `ci/9302765-jvm.log`. Every log that matters is copied into `step1b/`. Nothing there is
+   needed: the JDK comes again from `bash tools/fetch-temurin.sh <dir>`.
+
+## Step 1b continued: the targeted strata DL-lat, DL-lon, MP64 and ML5/PM5, and `canEscape` on MP64 (twenty-first session, Linden Caliper)
+
+Dispatch RECORD -64 (with -51, -52, -61, -62). Base `brouter-port` `3688c9f`, fetched and equal to `origin/brouter-port`
+before any write [C]. CI on `3688c9f` is the planner's read at RECORD -63 (run 41910184631, green), cited, not re-read.
+Forager read-only at `/home/user/slayer8366/forager` (`d6e2a041`), used only for `third_party/brouter`'s source. Oracle
+JDK: Temurin 21.0.13+9 amd64, every log's first `E3` line [C]. Tuple: -58's, `kind|nodes|cost|distance|nodeDigest|heightDigest`.
+Evidence in `step1b/17-*` onward. Each prediction file was pushed before its run.
+
+The `select.tsv` checks (the nineteenth handoff's) are made by `step1b/selcheck.py`, whose output for each stratum is
+committed beside it as `*-select-check.txt`: draw numbers 1 to n with no gap; taken ids and draws rising; rejected rows
+equal to draws minus taken; routed rows with R2's tuple different from R1's.
+
+### DL-lat (`17-*`; prediction `17-dl-lat-prediction.txt`, pushed in `1359307`) [C]
+
+- **Filled:** 59 of 59, the last taken at draw **501** of the cap of 1,180 (`17-dl-lat-e3Strata.log`, "taken" line).
+- **Draws:** 501 counted, 70 routed. **Rejected, 442,** by reason (the log's "rejected" lines; the same counts in
+  `17-dl-lat-select-check.txt`):
+  - before routing, 431: 419 "the target is not across the line inside the other tile", 10 "no node in the target's
+    3 x 3 cells in the other tile", 2 "an end moved off its side";
+  - after routing, 11, all "no route": 7 "to-position not mapped", 2 "from-position not mapped", 1 "no track found at
+    pass=0", 1 "target island detected for section 0";
+  - "route on one side": 0; "R2's tuple differs from R1's": 0.
+- **Stability:** 0 of 59 unstable (`17-dl-lat-stability.tsv`, no `UNSTABLE` row; the log's "unstable 0 of 59").
+- **Selection against E3:** the selection's R1 tuple and R2 lines equal `E3Targeted`'s in **59 of 59**. R1's kinds: route 59.
+- **Against the prediction:** filled, 0 unstable and 59 of 59 held. "Taken within about 300 draws" was wrong: 501. The
+  bearing rejects were 84% of draws, not about half [C for the count; why, I].
+- Selection took about 2 minutes; the whole task 5 m 4 s.
+
+### DL-lon (`18-*`; prediction `18-dl-lon-prediction.txt`, pushed in `a0a1a2a`) [C]
+
+- **Filled:** 59 of 59, the last taken at draw **326** of 1,180 (`18-dl-lon-e3Strata.log`).
+- **Draws:** 326 counted, 60 routed. **Rejected, 267:** before routing 266 (258 "the target is not across the line
+  inside the other tile", 6 "no node in the target's 3 x 3 cells", 2 "an end moved off its side"); after routing 1 ("no
+  route: target island detected for section 0"); "route on one side" 0; "R2's tuple differs" 0.
+- **Stability:** 0 of 59 unstable (`18-dl-lon-stability.tsv`).
+- **Selection against E3:** equal in **59 of 59**. R1's kinds: route 59.
+- **Against the prediction:** filled and 0 unstable held. **Wrong:** I predicted later than DL-lat (700 to 1,000 draws)
+  and more no-route rejects; it filled at 326 with one. The nodes near the line are 1,571,877 in `W75_N40` and 152,909 in
+  `W70_N40` (the log), so my picture of sparse land on both sides was wrong [C for the counts; the geography, I].
+- The whole task 2 m 47 s.
+
+### MP64 (`19-*`; prediction `19-mp64-prediction.txt`, pushed in `7dbe415`) [C]
+
+Run A is the stratum, on the plain oracle. Run B is the same command with the `canEscape` counting copy first on the
+classpath (below). Every stratum figure here is run A's.
+- **Filled:** 59 of 59, the last taken at draw **86** of 1,180 (`19-mp64-e3Strata.log`).
+- **Draws:** 86 counted, 72 routed. **Rejected, 27:** 14 before routing ("no node in the target's 3 x 3 cells, or the
+  target is outside every tile"); 13 "no collected line"; "R2's tuple differs" 0 (`19-mp64-select-check.txt`).
+- **Taken with the limit: 0; with panic mode: 0** (the log's line, E4's count at `memoryclass` 64).
+- **Stability:** 0 of 59 unstable (`19-mp64-stability.tsv`).
+- **Selection against E3:** equal in **59 of 59**. R1's kinds: route 59.
+- **Against the prediction:** filled within 150 draws, 0 limit, 0 panic, 0 unstable, 59 of 59: all held.
+- The whole task 10 m 56 s; run B 11 m 7 s.
+
+### `canEscape` on MP64's runs (RECORD -61) [C unless marked]
+
+- **Who calls it** [R]: `nodesMap.canEscape` has one caller, `RoutingEngine.java:2016`, inside the collection at `:2005-2020`
+  (Forager `third_party`, the jar's source; RECORD -61 read the same). So it runs only where a "collected" line is
+  logged.
+- **The counting copy** (`19-mp64-canescape-counter.diff`; scratch, never on any branch as code): Forager `third_party`'s
+  `OsmNodesMap.java`, compiled `--release 11 -cp <oracle jar>` on Temurin 21.0.13+9.
+  - Plain, it is bytecode-identical to the jar's class: `javap -c -p`, constant-pool numbers and spacing normalised, 0 of
+    884 lines differ.
+  - Patched, `canEscape` is renamed `canEscape0`, whose bytecode equals the jar's `canEscape` but for its name and access.
+    A new `canEscape` wraps it, counting calls and false answers. A static block appends a load line, and a shutdown hook
+    a per-JVM total, to a scratch file; the first three false nodes per JVM are also written. Method by method, the
+    other 29 methods are identical to the jar's.
+  - Put first on `e3Strata`'s classpath by a scratch init script (`-I`); every child JVM inherits `java.class.path`
+    (`E3Launcher.kt`). The log's own line shows the copy at the classpath's head, and all 314 child JVMs wrote a load
+    line and a total (`19-mp64-canescape-summary.txt`), so each counted run ran the copy.
+  - **A first form was stopped:** it wrote a line per false answer, 124 MB in 90 s, enough I/O to press on the 600 s
+    limit. It was killed with no JVM left running, and none of its output is cited. The second form is the one above.
+- **The probe changed nothing measured:** run B's `select.tsv` and `stability.tsv` equal run A's in every column but
+  `R1-ms` (`19-mp64-canescape-vs-plain.txt`, 0 diff lines each).
+- **The count:** `canEscape` answers false in **every one of the 59 taken cases**, in every regime.
+  - One run of the 59: **576,094 false of 2,366,007 calls** (24.35%), the same total in R3, R4, R5 and R6, and exactly
+    twice it in each R1R2 JVM (R1 and R2 share a JVM).
+  - Per case, the selection's R1R2, E3's R1R2 (both twice one run), R4, R5 and R6 give the same calls and false answers
+    in 59 of 59 cases (`19-mp64-canescape-per-case.tsv`). The count is deterministic across E3's six regimes.
+  - Fewest: `MP64-0025`, 34 false of 171 calls (1 collected line). Most: `MP64-0064`, 112,493 of 525,372 (198 lines).
+    Median 2,076 false per case.
+  - The 13 routed draws rejected for "no collected line" made 0 calls, as the single caller says they must.
+  - Five draws beyond 86 were in flight when MP64 filled. They are not counted, and their JVMs are left out of the
+    figures above (four of the five also answered false).
+  - The first three false nodes of each JVM, as `ilon,ilat`, are in `19-mp64-canescape-counts.txt`. That is where a
+    region for 5b's `CollectOutreachersTest` could be cut [I: not tried].
+- **Against the predictions:** the planner's "at least one MP64 case" held. **Mine was wrong:** I guessed a minority of
+  cases. It is all 59, and about a quarter of all calls.
+- **What it means for 5b** [I]: the false branch is not rare on the router's own path. It is the common answer whenever
+  a collection runs on these routes. -60's regions never reached it (0 of 3,587), most likely because `collectOutreachers`
+  was driven there outside a routing run, with different visit ids and hollow links. Whether a region cut around one of
+  these nodes reproduces false in 5b's test is [?].
+
+### ML5 and PM5, one sequence (`20-*`; prediction `20-m5-prediction.txt`, pushed in `01388f4`) [C]
+
+- **ML5 filled:** 59 of 59, the last taken at draw **246**.
+- **PM5 is SHORT:** **55 of 59** at the cap, its last case taken at draw **1,180** (`20-m5-e3Strata.log`). The task fails
+  on the short assertion by design. The JUnit message is "M5: short after 1180 draws: {PM5=55} of 59"
+  (`20-m5-junit.xml`, `E3MemoryTest.kt:49`); it is the only failure.
+- **The stop was sent, and the planner ruled** (technical; RECORD -71, to be written by the planner): PM5 stands at 55
+  and is reported short, as E4 says. It is never filled from another generator, and the cap, the seed and the generator
+  do not change. The expected values use n = 55. Its own bound, re-derived here: a clean run bounds PM5's instability
+  rate below 1 − 0.05^(1/55) = **5.30%**, against 4.95% at 59 [C: arithmetic].
+- **Draws:** 1,180 counted, 978 routed (`20-m5-select-check.txt`). **Rejected, 1,066:**
+  - 202 before routing ("no node in the target's 3 x 3 cells, or the target is outside every tile");
+  - 232 "ML5 already full", every one of them the limit (204 after panic mode);
+  - 632 "neither": 551 routes without panic, of which 482 collected at least once and 69 never did; 65 "to-position not
+    mapped", 10 "no track found at pass=0", 3 "from-position not mapped", 3 "target island detected for section 0";
+  - "R2's tuple differs from R1's": 0.
+
+  The log prints "neither" by its collection count, so it has 40 separate lines; the grouping above is
+  `selcheck.py`'s and a reading of `20-m5-select.tsv`'s R1 kinds.
+- **Panic and the limit over all 978 routed draws:** 313 showed panic mode. 258 of them ended in the limit; the other 55
+  are PM5, all of them, every one a route. 33 hit the limit without panic. So **panic without the limit is 55 of 978
+  routed draws (5.6%)**, which is why PM5 is short.
+- **ML5 with panic: 54 of 59** (the log's line). The other 5 reached the limit with no panic line. **ML5 is mostly
+  panic, then the limit** (the planner's wording): its cases test the panic path and the throw after it, not only the
+  throw.
+- **Stability:** 0 of 59 unstable in ML5 (`20-ml5-stability.tsv`), 0 of 55 in PM5 (`20-pm5-stability.tsv`).
+- **Selection against E3:** equal in **59 of 59** (ML5) and **55 of 55** (PM5). R1's kinds: ML5 "memory limit reached"
+  59; PM5 route 55.
+- **No case in two strata:** each draw has one result in `select.tsv`, and across all four sequences the 291 taken ids
+  are distinct.
+- **Against the prediction:** ML5 filling early, most ML5 cases with panic, PM5 the one at risk, 0 R2 differences and 0
+  unstable all held. "PM5 fills, but late" was wrong: it is short by 4.
+- The whole task 43 m 32 s (selection 26 minutes).
+
+### Summary of the four sequences [C]
+
+| Stratum | Taken | Last draw | Draws (cap 1,180) | Routed | Rejected | Unstable | Selection = E3 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| DL-lat | 59 | 501 | 501 | 70 | 442 | 0 of 59 | 59 of 59 |
+| DL-lon | 59 | 326 | 326 | 60 | 267 | 0 of 59 | 59 of 59 |
+| MP64 | 59 | 86 | 86 | 72 | 27 | 0 of 59 | 59 of 59 |
+| ML5 | 59 | 246 | 1,180 (shared) | 978 (shared) | 1,066 (shared) | 0 of 59 | 59 of 59 |
+| PM5 | **55 (short)** | 1,180 | (shared) | (shared) | (shared) | 0 of 55 | 55 of 55 |
+
+That is 291 cases, all stable. -64's prediction ("each stratum fills ... 0 unstable; at least one MP64 case has
+`canEscape` answer false") held except for PM5's fill.
+
+### CI
+
+**Not read on the final head: handed off at the planner's call (04:25Z) with CI in progress.** [R: `gh run list`]
+- Run 42162460699 on `0042a3d` was in progress at handoff; this report commit's own run follows it. The next session
+  or the planner reads them: `jvm` count (93 expected), 0 ` e: ` lines, both `compileKotlinIos*`, the simulator count
+  (simulator-checked), and arm64 with its gate.
+- **Status only, not job logs:** runs 42155257944 (`7dbe415`), 42156448759 (`8c0ceda`), 42156753243 (`454236c`),
+  42157935970 (`1d4cd54`), 42157994570 (`4f815de`) and 42158026273 (`01388f4`) all completed `success`. This session
+  changed no code: only files under `docs/audits/` (`git diff --stat 3688c9f..HEAD`, outside `docs/audits/` empty).
+
+### Could not determine, and unverified
+
+- **Why the bearing rejects are 84% of DL-lat's draws** and 79% of DL-lon's, against the "about half" predicted. They are
+  counted [C]; the cause is not read from `DLGenerator` [?].
+- **Where `canEscape`'s false nodes lie,** beyond the first three per JVM, and whether a region cut around one makes 5b's
+  `CollectOutreachersTest` see false [?]. Not tried; 5b's branch is outside this dispatch.
+- **R1 against R2 inside one R1R2 JVM:** the counter totals per JVM, so R1's and R2's counts are not told apart. That
+  they are equal is inferred from the JVM total being exactly twice R4's in 59 of 59 [I].
+- **R3's count** is one total over all 59 cases (one JVM). It equals the sum of R4's [C], but it is not per case.
+- **The ML5/PM5 stratum logs were run on the plain oracle only;** `canEscape` was counted on MP64 alone, as -64 asked.
+- **The geography behind DL-lon's node counts** (1.57 million nodes near 70°W in `W75_N40`) is not checked against a map
+  [?].
+
+### Premises that were wrong
+
+- **-64's "each stratum fills its 59 within the cap"** (the planner's prediction, marked [I]): PM5 did not, 55 of 59.
+- **Mine, from the nineteenth session:** "PM5 is the one that may come up short" held. But "DL-lon, with more rejects
+  before routing than DL-lat" did not: it had fewer, and filled sooner.
+- **Mine, at `19-mp64-prediction.txt` item 5:** `canEscape` false "in a minority of cases" was wrong. It is all 59, and
+  24% of all calls.
+- **The dispatch's search hint `**ID:** 2026-10-28-6`** also matches -60 to -69 as a prefix. -64 is `2026-10-28-64`
+  (`RECORD.md:2662` on the record's branch). Read correctly; noted only so the next hint can be exact.
+- **The Forager clone is at `d6e2a041`,** not -64's `a0535ece`. Only `third_party/brouter` was read, which -64 records as
+  unchanged between the two [R: -64; not re-diffed here].
+
+### Calls beyond scope (mine; for the planner)
+
+- **MP64 ran twice:** run A on the plain oracle is the stratum; run B carries the counter. This gives a check that the
+  probe changed nothing (0 diff lines). It cost 11 minutes.
+- **The counter's first form was stopped and replaced** (above). The diff committed is the second form's.
+- **`selcheck.py` and `cesum.py` are committed in `step1b/`** as the readers of the committed tables, not as tools.
+  `19-mp64-canescape-counts.txt` (345 kB) is committed whole.
+- **The 5 MP64 draws in flight at fill** are left out of every count, as `E3Select` leaves them out of `select.tsv`.
+
+### Step 1b: the handoff (twenty-first session)
+
+1. **Base:** `brouter-port` at the commit carrying this section or later; fetch first. Logs are numbered to `20-*`; the
+   next is `21-*`.
+2. **Done:** DL-lat, DL-lon, MP64, ML5 and PM5 (PM5 short at 55, standing by the planner's ruling, RECORD -71). The
+   `canEscape` count is in. Nothing here needs re-running.
+3. **First, read CI on the head** ("CI" above); it was left unread at handoff.
+4. **Next, per -64:** the remaining strata, NT, LB, CR and FK. They are not built. NT and CR select by coverage, so their
+   selector is the first code to read JaCoCo's `.exec` files (-51), and it must be seen failing first (-50). Then the
+   expected values in part 7 step 4's digest form, carrying heights, with PM5 at n = 55 and its bound 5.30%, and
+   `R-shortest-025` under -50's ruling.
+4. **For the planner:** `canEscape`'s false nodes, for 5b (-61), are in `19-mp64-canescape-counts.txt`. To count again,
+   rebuild the copy: apply `19-mp64-canescape-counter.diff` to Forager `third_party`'s `OsmNodesMap.java`, run `javac
+   --release 11 -cp brouter/build/oracle/brouter-1.7.10-ro.jar -d <dir>` with the path in `PROBE_FILE` edited, and pass a
+   scratch init script with `-I` that sets `t.classpath = files('<dir>') + t.classpath` on `e3Strata`. Never commit it.
+5. **Running: nothing.** The ML5/PM5 task ended at about 04:24Z; no Gradle test JVM or E3 child of mine is left.
+6. **Scratch,** `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/`: the
+   Temurin home, `canescape/` (sources, classes, init script, counts), and `scripts/`. Every file that matters is in
+   `step1b/`.
+
+
+### Step 1b: the coverage reader, and the handoff (twenty-second session)
+
+RECORD -77, item 1 done; item 2 (NT) built in part, not run. Logs `step1b/21-*`.
+
+1. **The coverage reader,** `E3Coverage.kt` (jvmTest, `oracle/e3`). It reads R6's `.exec` with JaCoCo's core 0.8.16 (the
+   agent's version; a new jvmTest dependency, `gradle/libs.versions.toml` and `brouter/build.gradle.kts`, writes outside
+   -77's "jvmTest, tools and docs", decided beyond scope because nothing else on the classpath can analyse execution data:
+   the agent jar holds no `Analyzer`). It analyses the oracle jar's own class files, refuses data whose class checksum is
+   not the classpath's, refuses a named line with no instructions, and applies -50's rule first: where R6's tuple differs
+   from R1's the reading is refused and the file is never opened (`E3CoverageRuleTest`, in jvmTest, 2 tests; jvmTest 95).
+2. **Seen failing first** (`E3CoverageTest`, e3Strata; prediction `21-coverage-prediction.txt` pushed first, `dec8499`):
+   F0's `inside-long` on `hiking-mountain`, R1 and R6 equal (`route|306|7405|6713|7d242f8dd2c428b4|4f6849ea59b5f775`).
+   CR's lines read **not covered**, `StdPath.java:101-103` 0/3 lines and `:105-113` 0/9 (every line 0 of 2 to 11
+   instructions), as predicted: they sit in `if (rc.bikeMode)` and `hiking-mountain` is foot only. `RoutingEngine.java:177`
+   reads covered. Log `21-coverage-e3Strata.log`. **Bite:** `ls.all { it.covered > 0 }` changed to `it.total > 0` (copy saved
+   first, restored from it, `cmp` equal; no compile error in `21-coverage-bite-gradle.log`): the test failed with its own
+   message, "CR's lines on a foot profile: covered (StdPath.java:101-103 0/3 lines; StdPath.java:105-113 0/9 lines)
+   expected:<false> but was:<true>" (`21-coverage-bite-junit.xml`).
+3. **A finding for the planner: NT's reach line is reached by almost every case.** On F0, `WaypointMatcherImpl.java:71` reads
+   covered. `end()` adds each link twice, forward and reverse, with the same radius (`:204`, `:223`), and `updateWayList`
+   sorts after each add (`:257`), so the comparator falls to `:71` on every matched waypoint. Coverage of `:71` cannot tell a
+   near-tie from any case; NT's targeting rests on its construction (the 4-ulp gap), not on this reach. Not a listed stop;
+   NT's selector is built to require both. **[R]** for the code reading, **[C]** for F0.
+4. **NT, built, not run, no prediction pushed:** `NTGenerator.kt` and the selector's R6 option (`E3Select`'s `r6Agent`,
+   `E3Targeted.select(coverage = true)`; `select.tsv` gains an `R6-tuple` column before `reach`). The construction and
+   why it must be a straight line through a junction are in `NTGenerator`'s KDoc: with the start exactly on the junction
+   every link there has radius 0, and a 4-ulp gap (about 10^-14 degrees) needs two exactly opposite links (a zero integer
+   cross product), since integer ends approach a bisector only to about 10^-11 degrees. The generator draws J0 as R does,
+   finds such a junction in J0's cell from the links `hiking-mountain` may use (decoded with the oracle's decoder and the
+   profile's validator, `TileNodes.decodeLinks`), puts the end along that line, and checks the gap with the oracle's own
+   matching in the test JVM (`RoutingEngine.matchWaypointsToNodes` by reflection). **Not yet written:** `strata/E3NTTest.kt`
+   (seed next free, 20261205; mark: `E3Coverage.reach(r1, r6!!, exec!!, E3Coverage.NT)`, and a refused reading printed as
+   a stop for the planner), its prediction, and any run. **Unknown:** how many such junctions W75_N40 holds; NT may be short.
+   `RGenerator`'s draw order is unchanged (`drawNode` makes the same two calls `candidate` made).
+5. **Not started:** CR, LB, FK. CR's profile (E's: `trekking.brf` plus the crossing assigns, Phase 1 report lines 868-871) must
+   be written into each JVM's `profiles2/` copy (`E3Stability.launch` copies the oracle's only).
+6. **Commits:** the first (`dec8499`) ends with `Co-Authored-By: Claude <noreply@anthropic.com>` as -77 asked; the later one
+   carries the session's attribution lines, which this session's harness requires.
+7. **Running: nothing.** Scratch as before; `22-jvmTest.log` there is the last full jvmTest (95, 0 failures).
+
+
+## Step 1b continued: NT, CR and LB, and FK's probes (twenty-third session, Linden Caliper)
+
+Dispatch RECORD -77, -78 (rulings -79, -80 by message). Base `brouter-port` `00b9886`, fetched, equal to origin [C]. Oracle JDK
+Temurin 21.0.13+9 amd64, each log's first `E3` line [C]. Tuple -58's. Each prediction was pushed before its run (`f410e02`
+NT, `4d43ea2` CR and LB). jvmTest 95, 0 failures, before each code push (`23-jvmTest*.log` in scratch) [C]. 0 ` e: ` lines in
+each stratum log [C]. `select.tsv` checks by `selcheck.py`, committed as `*-select-check.txt` [C].
+
+### NT (`23-*`; seed 20261205) [C]
+- **Filled:** 59 of 59, last taken at draw **89** of 1,180. 59 routed. **Rejected 30, all before routing:** 27 "no junction
+  with two exactly opposite links in the drawn node's cell", 2 "no node in the target's 3 x 3 cells", 1 "the oracle's
+  matching refused it: to-position not mapped".
+- **Reach (-78):** the oracle's 4-ulp check, repeated by the mark. Every taken case reads **gap 0 ulps**, an exact tie. `:71`
+  reads covered in 59 of 59, recorded only. 0 coverage stops, because R6 equals R1 in every case. R2 equals R1 in every routed
+  case.
+- **Stability:** 0 unstable of 59. The selection's R1 and R2 equal E3's in 59 of 59. R1 kinds: 56 route, 2 "target island
+  detected for section 0", 1 "to-position not mapped".
+- **Against the prediction:** filled as guessed. One taken case's R1 is "to-position not mapped", although the generator's
+  in-JVM matching of the same ends did not throw, while another draw's did. Why the two differ is not traced **[?]**. Any
+  outcome kind is taken, my call (the tie is broken in matching, before routing). For the planner.
+
+### CR (`24-*`; seed 20261206; profile `trekking-crossing`, SHA-256 `a9cc214d…` in the log) [C]
+- **Filled:** 59 of 59, last at draw **83**. 73 routed. **Rejected 24:**
+  - 10 before routing: "no node in the target's 3 x 3 cells";
+  - 10 "not covered" (101-103 0/3, 105-113 0/9);
+  - 4 "not covered" (101-103 3/3, 105-113 0/9).
+- **Reach:** every taken case covers both spans in full, so the captured tiles do carry `estimated_crossing_class`. That
+  answers Phase 1's [?].
+- **Coverage stops:** 0. **Tiles of the 59:** E170_S50 19, W70_N40 13, W75_N35 11, W75_N40 16.
+- **Stability:** 0 unstable of 59. The selection's R1 and R2 equal E3's in 59 of 59. R1 kinds: 59 route.
+- **Code:** `E3Profiles.crossing()` writes E4's assigns into the top of `trekking.brf`'s global context, and checks that
+  `trekking.brf` names none of them. `E3Stability.ownProfiles` writes it into every launch's `profiles2/`, refusing to
+  replace an oracle profile.
+
+### LB (`25-*`; seed 20261207, hiking-mountain) [C]
+- **(c) rows:** the 13 of step 2b (MsunLibm against OracleLibm, asserted). **Inside the tiles: 5**, as computed: 1295, 1297,
+  1310, 1311 and 1318. E170_S50 holds none.
+  - Phase 1's "12 in-tile rows" is another comparison **[I]**. For the planner.
+- **Filled:** 59 of 59, last at draw **99**. 91 routed. **Rejected 40:**
+  - 27 "route leaves the band";
+  - 8 before routing: "no node in the target's 3 x 3 cells";
+  - 4 no route, "to-position not mapped";
+  - 1 no route, "from-position not mapped".
+- **Taken by row:** 1295 1, 1297 4, 1310 13, 1311 18, 1318 23.
+- **Stability:** 0 unstable of 59. The selection's R1 and R2 equal E3's in 59 of 59. R1 kinds: 59 route. Filled far sooner
+  than guessed (draw 600).
+
+### FK: probes only, not built (`26-fk-probes/counts.txt`; scratch probes of the oracle jar, not E3 runs) [C]
+Counts by message, no coordinates (-80).
+- **Kind 1, water starts:** 15 of 15 "from-position not mapped".
+- **Kind 6, ends west of 75°W:** 12 of 12 "datafile W80_N40.rd5 not found".
+- **Islands with trekking-noferries:**
+  - target on the island: 7 of 32 "target island detected";
+  - start on the island: 11 of 20 "no track found at pass=0".
+- **Kind 5's E4 construction (car-fast):** 6 "to-position not mapped", 1 "from-position", 3 routed.
+- **Cuts of E170_S50:**
+  - 5 "file of size N too short, should be 1061704";
+  - at dataEnd, "Index -399101066 out of bounds for length 65636";
+  - 4 routed (cuts at 1, 100, 199 and size-1).
+- **Byte flips:**
+  - 4 "top index checksum error";
+  - byte 1, "lookup version mismatch";
+  - 5 sub-index flips (203 to 219) routed.
+- **"start island detected" is unreachable on Forager's path [R]:** it is thrown only when `inverseRouting` is set
+  (`RoutingEngine.java:954-958`). That comes from a profile assign (`RoutingContext.java:174`), which no oracle profile has.
+  -79 rules kind 3 as "start on a ferry-only island", with its family being the first case's message. On the probes that is
+  "no track found at pass=0".
+- **Shared families on Forager's path:** kinds 3 and 5 as I first proposed them; kinds 2 and 5 under -80.
+
+### CI
+Not read on this session's head: the handoff came first. CI on `00b9886` was read by the planner (-78). **Unverified.**
+
+### Calls beyond scope, and premises that were wrong
+- `E3Stability.ownProfiles` and `E3Profiles` are harness code in jvmTest, inside -77's scope.
+- Wrong premise: Phase 1's "12 in-tile rows" for LB. Under step 2b's (c) rows there are 5.
+- Wrong premise, as -78 already said: `:71` as NT's reach.
+
+### Step 1b: the handoff (twenty-third session)
+1. **Done:** NT, CR and LB, each filled with 0 unstable, evidence committed.
+2. **Next, first: FK per RECORD -80**, on `brouter-port`, generator and prediction pushed before the run.
+   - **Kind 1:** water starts.
+   - **Kind 2:** water ends.
+   - **Kind 3:** a start on a ferry-only island; family is the first case's message (-79).
+   - **Kind 4:** a seeded island generator, cap 200; family "target island detected".
+   - **Kind 5:** an end on a way the profile cannot use, with no usable way within 250 m; family "not mapped", shared
+     with kind 2.
+   - **Kind 6:** W80_N40.
+   - **Kind 7:** 10 cuts reaching "file of size * too short, should be *". Plus FK7-x1, the dataEnd cut, compared by
+     exception class (step 10 must check its text on iOS), and FK7-x2, one routing cut.
+   - **Kind 8:** 10 flips in bytes 8 to 199, family "top index checksum error". Plus FK8-x1, a sub-index flip that routes.
+   - **Kinds 9 to 11:** need harness changes to E3CaseRun: R1 timed, then the 50 ms rerun; the two cancel modes; a
+     links-processed count.
+   - The probe tool is `26-fk-probes/Probe.java`. Its coordinates are in scratch only (`linden/fkprobe/*.txt`).
+3. **Then:** read CI on the final head; E5's expected values in a session of their own.
+4. **Running: nothing.**
+
+## Step 1b continued: FK built and running (twenty-fourth session, Linden Caliper)
+
+Dispatched under RECORD -79, -80 and -82 (by message). Base `brouter-port` at `ffa06ab`, fetched, equal to origin [C].
+- **Before the run:** jvmTest 95 tests, 0 failures, 0 ` e: ` lines; the JUnit XML was fresh at 06:22:53Z (`24-jvmTest.log` in scratch) [C].
+- **The generator and the prediction were pushed before the run,** at `49e2711` (`step1b/27-fk-prediction.txt`) [C].
+- **The harness:**
+  - `E3Case.Plan` covers kinds 9 to 11;
+  - `E3CaseRun` makes a measured run first, then the variant: the 50 ms limit, a cancel before `doRun`, or a cancel past
+    10,000 links;
+  - it logs a `thrown` class for FK7-x1 and a `measured` line;
+  - `FKGenerator` and `E3FKTest` build the cases. Their construction is in the KDoc.
+
+### What the running log showed by 06:26Z (`27-fk-e3Strata.log`, counts only) [C]
+- **Kinds 1, 2, 3 and 6:** 10 of 10 built each (after 10, 12, 10 and 10 draws). Their families are not read yet.
+- **Islands, from the link graphs:** 1 in E170_S50, 12 in W70_N40 and 1 in W75_N35.
+- **Kind 4:** full, 10 of 10 by draw 74.
+  - Of the 64 rejected draws, 41 were "to-position not mapped" and 23 routed.
+  - So 41 graph-found island nodes were not matched by the oracle. Why is [?]. Kind 3 starts on the same kind of node, so
+    its family has to be read.
+- **Kind 5: short, 9 of 10 at 200 draws.** The rejections by reason:
+  - 111 had a car-fast link within 300 m;
+  - 68 had a start node with no car-fast link;
+  - 12 had 3 × 3 cells that leave the tile.
+
+  **The 200-draw cap for kind 5 was my own choice; -80 set that cap for kind 4.** The planner ruled (-82) that kind 5's
+  start and end are drawn separately, capped at 400, and kind 5 is rerun alone.
+- **Kinds 7 and 8:** E170_S50 is 1,061,705 bytes, with its data end D at 1,061,592.
+  - Cuts: 200, 201, 1000, D/4, D/2, 3D/4, D−1, D+1, D+56 and D+111.
+  - Flipped bytes: 8 to 188, in steps of 20.
+
+### The kind 5 change: written, not compiled, not pushed
+The patch is `linden/27-kind5-rerun.patch` in scratch (129 lines). It adds:
+- `FKGenerator.usableNode` and `unusableNode`;
+- in `E3FKTest`, `kind5()`, `CAP5 = 400` and a separate test, `fkKind5ReachesOneFamilyInAllTen`.
+
+I did not compile it while FK was running: a compile would replace the classes that the run's child JVMs load from the
+build directory. The working tree was restored to `49e2711`.
+
+### Step 1b: the handoff (twenty-fourth session)
+1. **Running:**
+   - FK's e3Strata run, Gradle PID 16430, started about 06:23Z;
+   - log: `/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/27-fk-e3Strata.log`;
+   - work: `brouter/build/e3/FK/`, `FK4-select/` and `FK9-11-select/`.
+
+   It is finished when `BUILD` appears in the log. **It will end FAILED whatever else happens,** because kind 5 is
+   short (9) and that is a STOP in the test.
+2. **Reading the results:**
+   - run `grep -E "E3 FK" <log> | cut -c1-250`. Each kind has a `family … in family x of 10; unstable u` line, and each
+     extra case has its own line;
+   - check `grep -c " e: " <log>` and `grep "E3 FK: " <log>`, the line with the 5% count;
+   - commit the log, `FK/stability.tsv`, `FK4-select/select.tsv` and `FK9-11-select/select.tsv` as
+     `step1b/27-fk-*`. **No file holding coordinates is committed (E1).** The `.tsv` files and the log's case lines hold
+     them, so strip every coordinate column first, or commit counts and digests only. `step1b/11-r-sequence-before-edit.tsv`
+     is left untouched: it goes to the owner (RECORD -83).
+3. **Next, after the run:**
+   - apply `27-kind5-rerun.patch`;
+   - write `step1b/28-fk5-prediction.txt`: family "to-position not mapped in existing datafile", 10 of 10;
+   - run the full `:brouter:jvmTest`, then push;
+   - run `--tests '*E3FKTest.fkKind5*'` (the full FK test also builds kind 5 the new way after the patch).
+4. **Then:**
+   - write FK's section, per kind: cases in family, stability, and kind 4's draws;
+   - record the three extra cases' outcomes and FK7-x1's class from R2 to R5's `thrown`;
+   - read CI on the final head;
+   - then E5's expected values.
+5. **For the planner:**
+   - kinds 9 to 11 voids and any instability are unread until the run ends;
+   - kind 10's measured-run precondition ("routes") is my own addition, beyond E4 [I].
+
+## Step 1b continued: FK finished (twenty-fifth session, Linden Caliper)
+
+Dispatched under RECORD -82, -84 and the planner's rulings by message (RECORD -85). Base `brouter-port` at `eb6460d`,
+fetched, equal to origin [C]. Evidence in `step1b/27-*` (the first run), `28-*`/`29-*` (kinds 5 and 3 alone) and `30-*`
+(the full run on `ce3db16`). **No coordinates are committed (E1):** the `R1-extent` column (BRouter integer coordinates)
+is dropped from every selection table, and each file was refused if any decimal or integer coordinate was left [C].
+
+### The first run (`27-fk-e3Strata.log`) went through E3's regimes [C]
+-84 read it as stopping in selection. It did not: `E3FKTest.kt:182` was the final assertion, after every case ran. Its
+stops were **FK3, 6 of 10** in its family (FK3-05, -07, -08 and -09 routed) and FK5, 9 of 9 (short). Instability was 4 of 113.
+The planner corrected -84 (-85). Kind 3's prediction ("no track found at pass=0", `27-fk-prediction.txt` item 3) missed:
+the first run's family was "from-position not mapped" [C].
+
+### Kinds 5 and 3, changed and rerun alone (`9a04e27`, `ce3db16`) [C]
+- **Kind 5 (-82):** start and end drawn separately, cap 400. Prediction `28-fk5-prediction.txt` pushed first, jvmTest 95 / 0
+  failures / 0 ` e: ` lines. **10 of 10 after 194 draws.** Rejections: end, car-fast link within 300 m, 146; end, cells
+  leave the tile, 21; start, no car-fast link, 7. No rejection used an oracle outcome. Family "to-position not mapped in
+  existing datafile", 10 of 10, 0 unstable. Prediction met.
+- **Kind 3 (-85):** selected like kind 4, by R1 for "no track found at pass=0", cap 200. Prediction
+  `29-fk3-prediction.txt` pushed first, jvmTest 95 / 0 / 0. **10 of 10 by draw 61**, with 51 rejections by outcome: 35
+  "from-position not mapped" (kind 1's family) and 16 "route". 10 of 10 in family, 0 unstable. The fill (10 in 61) beat my
+  guess of 1 in 5 or fewer [C]. Both alone tests PASSED (`29-fk35-e3Strata.log`).
+
+### The full run on `ce3db16` (`30-fk-e3Strata.log`): PASSED, 114 cases, 0 ` e: ` lines [C]
+Each kind's family comes from its first case; all 10 matched it in every kind:
+
+| Kind | Family (first case) | In family | Unstable |
+|---|---|---|---|
+| 1 | from-position not mapped in existing datafile | 10/10 | 0 |
+| 2 | to-position not mapped in existing datafile | 10/10 | 0 |
+| 3 | no track found at pass=0 (FK3-0012) | 10/10 | 0 |
+| 4 | target island detected for section 0 (74 draws) | 10/10 | 0 |
+| 5 | to-position not mapped in existing datafile | 10/10 | 0 |
+| 6 | datafile W80_N40.rd5 not found | 10/10 | 0 |
+| 7 | file of size * too short, should be * | 10/10 | 0 |
+| 8 | top index checksum error | 10/10 | 0 |
+| 9 | family:timeout | 10/10 | 3 |
+| 10 | family:watchdog | 10/10 | 0 |
+| 11 | family:watchdog | 10/10 | 0 |
+
+- **Instability: 3 of 114, under E3's 5%** (the first run had 4 of 113). It is all in kind 9: FK9-0001, -0037 and -0040
+  in both runs, and -0049 in the first run only. In each one, **R3 is voided ("the measured run took under 1 s")** while
+  the other five regimes time out. These are timing voids, not differing outcomes. Per -85 (as -50 ruled for
+  R-shortest-025) they are counted as unstable and kept out of exact assertions [C].
+- **The selection depends on timing near 1 s** [C]. Draw 13 (FK9-0013) was rejected in both runs, but for different
+  reasons: a void in the first run (963 ms) and "R2's tuple differs from R1's" in the second (R2 was voided, 1095 ms).
+  The cases taken, and the draws at which they were taken (49, 44, 30), are the same in both runs.
+- **Extra cases, compared on outcome:**
+  - **FK7-x1** (cut at D) gives R1 "to-position not mapped in existing datafile", stable, nothing thrown, in both runs.
+    Session 23's probe gave "Index -399101066 out of bounds for length 65636". I reran the probe on the byte-identical
+    cut tile: with the probe's ends it gives the index exception, with FK7-x1's ends it gives "not mapped"
+    (`30-fk7x1-probe.txt`). **So the outcome follows the ends** [C]. Why those ends read as unmapped from a tile cut at D
+    is [?].
+  - **FK7-x2** (size − 1) and **FK8-x1** (byte 203 flipped) both route, **identically to the intact control FK7-c0**
+    (`route|234|6078|4768|efb52c121f8934c3|c591233bb504b767`, heights E170_S50 234/234), stable [C]. The oracle accepts
+    both edits without noticing them.
+- Kind 10's precondition ("the measured run routes") is still my own addition, beyond E4 [I].
+
+### E1: earlier committed selection tables hold coordinates as integers [R]
+The `R1-extent` column (`E3Select.kt:146`) is each route's bounding box in BRouter integer microdegrees, e.g.
+`(lon + 180) × 1e6`. The decimal grep of E1 does not catch it. Row counts with such extents: `17-dl-lat-select.tsv` 59,
+`18-dl-lon-select.tsv` 59, `19-mp64-select.tsv` 65, `20-m5-select.tsv` 606, `23-nt-select.tsv` 56,
+`24-cr-select.tsv` 66, `25-lb-select.tsv` 86. Reported to the planner; I did not touch them. FK's tables were stripped.
+
+### CI
+Read from the job logs by me (`gh run view --log`) [R]:
+- **Run 42183317078 on `ce3db16`** (the last code change) and **run 42184654325 on `67012ee`** (the report) both
+  concluded `success`. In each: `jvm` 95 PASSED, 0 FAILED, 0 ` e: ` lines; `compileKotlinIosArm64` and
+  `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL; simulator 23 tests, 0 failures, in 9 files
+  (**simulator-checked**); the arm64 JVM step 7 tests, 0 failures, in 2 files, and its gate printed "OK: all 2 classes ran".
+- The run for this commit, which changes only the report, was not read past its status.
+
+### Step 1b: the handoff (twenty-fifth session)
+1. **Nothing is running.** FK is complete: 11 kinds × 10 plus four extra cases, PASSED on `ce3db16`.
+2. **Next: E5's expected values for FK.** Each kind's expected value is its family above, with kind 7's numbers read as
+   `*`. Exact assertions skip kind 9's unstable cases (FK9-0001, -0037, -0040; and -0049, which was unstable in the first
+   run). FK7-x2 and FK8-x1 expect FK7-c0's tuple. FK7-x1 expects "to-position not mapped" for its own ends, with its
+   exception class [?].
+3. **For the planner and the owner:** the `R1-extent` columns already committed (E1, above). Fixing `E3Select` so that
+   it stops writing the column is a code change I have not made.
+
+## Step 1b finished: the expected values (twenty-sixth session, Linden Caliper)
+Dispatch: RECORD -88. Baseline `f308f88`. Commits `7e02bdd` (code and the file), `13506f1` (the failing-first prediction),
+and this report's commit. Only `brouter/src/jvmTest/` and `docs/` are touched; no `commonMain` change.
+
+### The stored file: `brouter/src/jvmTest/resources/e3/expected-1b.tsv` [R]
+- **216,164 bytes, 2,126 rows**, tab-separated. Per row: stratum, id, `compare`, kind, nodes, cost, distance, node digest,
+  heights digest (-58), and the tuple digest. **No coordinates.**
+- **The tuple digest** is a 64-bit FNV-1a over the UTF-8 bytes of `kind|nodes|cost|distance|nodeDigest|heightsDigest`,
+  the tuple as `E3Outcome.toField` writes it. That byte form is my choice; E1 says only "the tuple's bits" [I]. It uses
+  integer arithmetic only. A Python check outside the JVM recomputed all 2,126 digests and got the same values [C].
+- **The head** names the JDK: `java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64` (E2). It
+  also names the tuple, the `compare` modes, and each exclusion on its own `# excluded` line.
+- **Rows by stratum:** F0 2, F0h 8, R 1,534, DL-lat 59, DL-lon 59, MP64 59, ML5 59, PM5 55, NT 59, CR 59, LB 59, FK 114
+  (110 plus the four extra cases).
+- **`compare`:** 2,120 rows are `exact`, 3 are `family` and 3 are `outcome`.
+  - **`family`:** FK9-0001, FK9-0037 and FK9-0040. These are kind 9's timing voids, logged UNSTABLE in FK's run (-85, -86),
+    and they are excluded by name.
+  - **`outcome`:** FK7-x1 is compared on its kind. FK7-x2 and FK8-x1 are compared on FK7-c0's tuple, and the test checks
+    that they hold it (-80, -85).
+- **`R-shortest-025` is not excluded.** At write time it went once more through all six regimes, alone, and was stable:
+  all six gave `route|217|5102|5102|…` (`31-expected-e3Strata.log`) [C]. So under -88 it is `exact`. -50's instability
+  was R6's, once, and it has not recurred in the two runs since. Its cause is still [?].
+- **FK9-0049** (unstable in FK's first run only) was stable in the run on record (`30-fk`). So it is `exact` [C].
+
+### The code [R]
+- **`E3Expected.kt`:** the file's form, its reader and writer, the per-stratum counts, and the committed stability tables
+  each stratum's R1 was logged in.
+- **`strata/E3ExpectedWriteTest.kt`** runs under `e3Strata` only, on the pinned Temurin. It reruns R1 for every case:
+  E3's own `R1R2` launch, with a fresh JVM, the case alone, a new thread and no `debug.txt`. It compares each R1 with the
+  stratum's committed log, and writes the file only if every case is equal.
+  - The cases come from each stratum's work folder (`build/e3/<stratum>/cases.tsv`). These folders are never committed,
+    because they hold the ends.
+  - Every list except FK's was written before `E3Case.Plan` existed, so it has 9 fields. The writer appends `NONE` to a
+    copy of each such list [R].
+  - CR gets its crossing profile, as CR's own test sets it.
+- **`E3ExpectedFileTest.kt`** runs in `jvmTest`, with no oracle. It reads the file and checks six things:
+  - the head's JDK;
+  - the counts per stratum;
+  - that every tuple digest is its tuple's;
+  - that every row equals the R1 its stratum logged (whole tuple for `exact`, kind otherwise);
+  - that the exclusions are named, and that every logged-unstable case is excluded;
+  - FK's extra cases.
+- **E1's live oracle beside the stored values** is not run per push here. `E3ExpectedWriteTest` is that run, and it
+  belongs to `e3Strata`, as E1 sets it. At step 6 it becomes the port's comparison [I].
+
+### Written across all strata, and the R1 cross-check [C]
+- **The run:** `e3Strata --tests '*E3ExpectedWriteTest*'` on Temurin 21.0.13+9, logged in `31-expected-e3Strata.log`.
+  BUILD SUCCESSFUL in 19 min 15 s.
+- **The first attempt failed in 3 s, before any case ran.** `E3Case.fromLine` refused a 9-field list. That is the old-list
+  fix above. It was one attempt at that symptom.
+- **R1 at write time equalled the stratum's logged R1 for 2,126 of 2,126 cases**, every stratum included
+  (`31-expected-r1-vs-log-summary.txt`). This is no stop.
+- **Checked outside the runner:** a Python read of the written file against the twelve committed stability tables gave
+  0 rows unlike their log, 0 wrong digests and 0 logged cases missing.
+- **The committed file equals the writer's output byte for byte** (`cmp`).
+- **One thing I noticed:** `build/e3/F0h/stability.tsv` is left over from session 20's heights revert (`15-revert-*`): its
+  heights digests are all the empty digest. The committed `12-f0h` table is the real run, and both the check and the
+  writer read that one. F0h's R1 now equals `12-f0h` [C].
+
+### Seen failing first [C]
+- **The prediction** was written and pushed before the run, in `13506f1`
+  (`31-expected-revert-prediction.txt`). The scratch revert set F0-inside-long's cost from 7405 to 7406, and was never
+  committed.
+- **The run:** `jvmTest --tests '*E3ExpectedFileTest*'` (`31-expected-revert-gradle.log`).
+  - It had 0 ` e: ` lines.
+  - The XML's timestamp, 12:36:49Z, falls after the edit at 12:36:48Z.
+  - It gave 6 tests and 2 failures, exactly as predicted:
+    - `everyTupleDigestIsItsTuple` named `[F0-inside-long]`;
+    - `everyRowIsTheR1ItsStratumLogged` named only "F0 F0-inside-long (exact): stored route|306|7406|…, logged
+      route|306|7405|…";
+    - the other four passed.
+- **The restore** was from the copy saved before the edit, not from git. Afterwards the file was `cmp`-equal to that copy
+  and to the writer's output, and `git status` was clean.
+- **The full `:brouter:jvmTest` before the code push** ran fresh: `jvmTest` and `jvmTestProcessResources` executed, and
+  44 XML files were written after the start (12:35:51Z). It gave 101 tests, 0 failures and 0 ` e: ` lines. That is 95 + 6.
+
+### E1
+Before each push, the scan of the staged diff (decimals, `node=`, integer microdegree pairs) read 0 [C].
+
+### CI
+Read from the job logs by me (`gh run view --log`) [R]:
+- **Run 42218972054 on `7e02bdd`** (the code change) concluded `success`.
+- **`jvm`:** 101 tests, 0 failures, in 44 files. All six `E3ExpectedFileTest` methods PASSED. 0 ` e: ` lines in the run's
+  log.
+- **iOS klibs:** `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL.
+- **Simulator:** 23 tests, 0 failures, in 9 files (**simulator-checked**).
+- **arm64 JVM step:** 7 tests, 0 failures, in 2 files. Its gate printed "OK: all 2 classes ran".
+- **Run 42218998244 on `13506f1`** changes only the prediction file. This report's own run follows it. I read both for
+  status only (see the final message).
+
+### Step 1b: the handoff (twenty-sixth session)
+1. **Nothing is running.**
+2. **1b's finish line is reached on my side.** What remains is the planner's: the planner reads CI, and brings the
+   milestone report below to the owner.
+3. **To rewrite the values** (another JDK, or a new case list), run `e3Strata --tests '*E3ExpectedWriteTest*'` and copy
+   `build/e3/expected/expected-1b.tsv` into `src/jvmTest/resources/e3/`. Then `E3ExpectedFileTest` holds it to the logs.
+   - The writer needs every stratum's `build/e3/<stratum>/cases.tsv` and FK's `build/e3/FK-tiles/`.
+   - These exist only in this container. A fresh container must rerun the strata to get them back [R].
+4. **For step 10 (iOS):** the file is under `jvmTest`. How iOS will read it, a resource or a generated Kotlin file as
+   with `MsunReference.kt`, is for that step [?].
+
+### Draft: 1b's milestone report, for the planner to bring to the owner
+**What 1b proved [C]:**
+- **The 1.7.10 Java engine** agrees with itself under E3's six runs, on every case of every stratum, on the pinned Temurin
+  21.0.13+9 x64 with libm's intrinsics off.
+- **Its outcome for every case is now stored** as an expected value, from R1, with no coordinates. A fresh R1 at write
+  time gave the same tuple as each stratum's logged run, for all 2,126 cases.
+- **A test reads the stored file in every `jvmTest`,** and was seen to fail on a one-entry change.
+- **1b ran no port code.** It says nothing yet about the Kotlin port. The port is first compared with these values at
+  step 6.
+
+**Each stratum's n and E5's bound.** Each bound applies once the port runs clean against these values, and only to that
+stratum's population (generator, tiles, profile, params). Each is one-sided at 95%, 1 − 0.05^(1/n):
+
+| Stratum | n | Bound on a clean run |
+|---|---|---|
+| R (26 profiles × 59) | 1,534 | under 0.195% pooled; per profile, a defect on ≥ 5% is seen with p ≥ 0.9515 |
+| DL-lat, DL-lon, MP64, ML5, NT, CR, LB | 59 each | under 4.95% each |
+| PM5 (short, -71) | 55 | under 5.30% (weaker than the 59 E5 set) |
+| FK | 110 + 4 extra | constructed, not sampled: each kind reaches its family or not; no rate |
+| F0 | 2 | Forager's own check; no rate |
+| F0h | 8 | heights cases; no rate |
+
+The total is 2,126 cases: E5's 2,118, plus F0h's 8 and FK's 4 extra cases, minus PM5's 4 short.
+
+**What is excluded:**
+- **FK9-0001, FK9-0037 and FK9-0040** are kind 9's timing voids. They are compared by family only, and they are named in
+  the file.
+- **FK's extra cases** are compared on outcome, not exactly.
+- **Nothing else.** `R-shortest-025` was stable at write time and is exact.
+
+**What is unverified [?]:**
+- whether the values hold on any other JDK, CPU, or Android's runtime (E2: they are claimed for this HotSpot only);
+- why R6 differed once for `R-shortest-025` (-50);
+- why FK7-x1's ends read as unmapped from a tile cut at D;
+- that FK10's precondition, "the measured run routes", is my own addition, beyond E4 [I];
+- every iOS claim, which waits for step 10 and will be simulator-checked only;
+- how long the full list takes on the simulator (K).
+
 ## Confirmed vs inferred
 
 - **Confirmed by running:** the build, the three JVM tests and both klibs, locally and in CI; the smoke test on the

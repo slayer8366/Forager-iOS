@@ -5,7 +5,8 @@ import java.util.Locale
 
 /**
  * One case (Phase 1 report, E1): the tile folder, the two ends as Forager sends them, the profile, `memoryclass` and the
- * time limit. The params map is Forager's own and fixed (see [E3CaseRun]); no stratum built so far has a cancel plan.
+ * time limit. The params map is Forager's own and fixed (see [E3CaseRun]). [plan] is FK's kinds 9 to 11 (Phase 1 report,
+ * E4; RECORD -80): [Plan.NONE] for every other case.
  * A generated case's ends are rounded to six decimals by its generator, so `ilon` and `ilat` are exact (E4); F0's are
  * Forager's own, kept as given. The line form writes each with Double.toString, which reads back to the same double.
  */
@@ -19,11 +20,25 @@ class E3Case(
     val profile: String,
     val memoryclass: Int = 64,
     val maxRunningTimeMillis: Long = 0L,
+    val plan: Plan = Plan.NONE,
 ) {
+    /**
+     * FK's kinds 9 to 11 ([E3CaseRun]). Each first runs the case as it stands, measured, and is void when the measured run
+     * misses its condition; otherwise a second engine runs the variant.
+     * - [LIMIT50], kind 9: void under 1 s measured; then `doRun(50)`.
+     * - [CANCEL_BEFORE], kind 10: void unless the measured run routes; then `terminate()` before `doRun`.
+     * - [CANCEL_MID], kind 11: void under 100,000 links processed; then `doRun` on its own thread, and `terminate()` once
+     *   `getLinksProcessed()` passes 10,000.
+     */
+    enum class Plan { NONE, LIMIT50, CANCEL_BEFORE, CANCEL_MID }
+
+    /** This case with [p] as its plan. */
+    fun withPlan(p: Plan) = E3Case(id, segments, startLat, startLon, endLat, endLon, profile, memoryclass, maxRunningTimeMillis, p)
+
     /** One tab-separated line, the form a child JVM reads its case list in. */
     fun toLine(): String = listOf(
         id, segments.absolutePath, startLat, startLon, endLat, endLon, profile, memoryclass,
-        maxRunningTimeMillis,
+        maxRunningTimeMillis, plan,
     ).joinToString("\t")
 
     companion object {
@@ -32,10 +47,10 @@ class E3Case(
 
         fun fromLine(line: String): E3Case {
             val f = line.split('\t')
-            require(f.size == 9) { "a case line has 9 fields, not ${f.size}: $line" }
+            require(f.size == 10) { "a case line has 10 fields, not ${f.size}: $line" }
             return E3Case(
                 f[0], File(f[1]), f[2].toDouble(), f[3].toDouble(), f[4].toDouble(), f[5].toDouble(), f[6],
-                f[7].toInt(), f[8].toLong(),
+                f[7].toInt(), f[8].toLong(), Plan.valueOf(f[9]),
             )
         }
 
@@ -47,19 +62,34 @@ class E3Case(
 
 /**
  * E1's compared tuple for one run: the kind (the message, null for a route; the two timing families by family only),
- * the node count, cost and distance, and a 64-bit FNV-1a digest over every node's (ilon, ilat) in order. Comparing the
- * digest stands in for comparing the node list pair by pair, up to a 2^-64 collision. It is E3's comparison only, not
- * the stored form's digest, which is written with the expected values.
+ * the node count, cost and distance, a 64-bit FNV-1a digest over every node's (ilon, ilat) in order, and (RECORD -57,
+ * -58) a second over every node's height as the engine holds it, `OsmPathElement.getSElev()` in quarter metres, in
+ * order, `Short.MIN_VALUE` ("no height") included. Comparing a digest stands in for comparing the list pair by pair, up
+ * to a 2^-64 collision. It is E3's comparison only, not the stored form's digest, which is written with the expected
+ * values. Logs written before the heights digest was added (`step1b/` up to `11-*`) carry the old five-field tuple.
  */
-data class E3Outcome(val kind: String, val nodes: Int, val cost: Int, val distance: Int, val nodeDigest: String) {
-    fun toField(): String = "$kind|$nodes|$cost|$distance|$nodeDigest"
+data class E3Outcome(
+    val kind: String,
+    val nodes: Int,
+    val cost: Int,
+    val distance: Int,
+    val nodeDigest: String,
+    val heightDigest: String,
+) {
+    fun toField(): String = "$kind|$nodes|$cost|$distance|$nodeDigest|$heightDigest"
 
     companion object {
+        /** The fields after the kind: nodes, cost, distance and the two digests. */
+        private const val TAIL = 5
+
         fun fromField(s: String): E3Outcome {
             val f = s.split('|')
             val n = f.size
-            // The kind is a message and may hold '|'; the last four fields are numbers.
-            return E3Outcome(f.subList(0, n - 4).joinToString("|"), f[n - 4].toInt(), f[n - 3].toInt(), f[n - 2].toInt(), f[n - 1])
+            require(n > TAIL) { "an outcome field has the kind and $TAIL more, not ${n - 1} more: $s" }
+            // The kind is a message and may hold '|'; the last five fields hold no '|'.
+            return E3Outcome(
+                f.subList(0, n - TAIL).joinToString("|"), f[n - 5].toInt(), f[n - 4].toInt(), f[n - 3].toInt(), f[n - 2], f[n - 1],
+            )
         }
 
         /** E1's failure-kind table: the timeout and watchdog messages compare by family; every other message exactly. */
@@ -81,6 +111,22 @@ data class E3Outcome(val kind: String, val nodes: Int, val cost: Int, val distan
             for ((lon, lat) in pairs) {
                 mix(lon)
                 mix(lat)
+            }
+            return java.lang.Long.toHexString(h)
+        }
+
+        /**
+         * 64-bit FNV-1a over [heights] in order, each short's two bytes low byte first (as [fnv1a] takes an int's four).
+         * `tools/geojson-heights.py` computes the same digest from a GeoJSON's heights; the two must stay one function.
+         */
+        fun fnv1aShorts(heights: List<Short>): String {
+            var h = -0x340d631b7bdddcdbL // 0xcbf29ce484222325
+            for (s in heights) {
+                val v = s.toInt()
+                for (shift in 0 until 16 step 8) {
+                    h = h xor ((v ushr shift) and 0xff).toLong()
+                    h *= 0x100000001b3L
+                }
             }
             return java.lang.Long.toHexString(h)
         }

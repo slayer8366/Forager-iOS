@@ -1,0 +1,3 @@
+id	verdict	tuple-stable	log-stable	control-R1-ne-R4	R1-tuple	R2-collection-lines	R1-ms	R1-heights-by-tile
+F0-inside-across-the-degree-line	stable	true	true	true	route|226|5302|5047|9ca48d05a90f4dcd|afc27854ee968af5	0	549	W75_N40:0/226
+F0-inside-long	stable	true	true	true	route|306|7405|6713|7d242f8dd2c428b4|4f6849ea59b5f775	0	580	W75_N40:0/306

@@ -37,7 +37,7 @@ object E3Strata {
         for (v in r.verdicts) {
             println(
                 "E3 ${r.stratum} ${v.case.id}: ${if (v.stable) "stable" else "UNSTABLE"}; R1 ${v.outcomes["R1"]!!.toField()}; " +
-                    "collection lines ${v.logs["R2"]?.size ?: 0}; R1 ${v.r1Millis} ms; control R1 ${v.controls["R1"]} R4 ${v.controls["R4"]}",
+                    "collection lines ${v.logs["R2"]?.size ?: 0}; R1 ${v.r1Millis} ms; R1 heights ${v.r1Heights}; control R1 ${v.controls["R1"]} R4 ${v.controls["R4"]}",
             )
             if (!v.stable) {
                 for (regime in E3Stability.REGIMES) println("  $regime ${v.outcomes[regime]!!.toField()} log ${v.logs[regime]}")

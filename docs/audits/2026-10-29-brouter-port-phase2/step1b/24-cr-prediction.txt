@@ -1,0 +1,18 @@
+Written 2026-11-06 by Linden Caliper, session 23 (RECORD -77 item 3), before any CR run, on brouter-port after the NT run.
+Run: ./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<Temurin 21.0.13+9 home> --tests '*E3CRTest*' --console=plain
+Seed 20261206; R's generator (four tiles, 100 m to 100 km, memoryclass 64); profile trekking-crossing (E3Profiles.crossing():
+the oracle's trekking.brf with E4's crossing assigns at the top of its global context; its SHA-256 printed in the log),
+written into every JVM's profiles2/ (E3Stability.ownProfiles). Reach: R6's coverage of StdPath.java:101-103 and :105-113,
+every line covered, read only where R6's tuple equals R1's (-50); a refused reading is printed as a stop.
+
+Predictions [I]:
+1. Filled or short: unknown beforehand. :105-113 needs a node tagged estimated_crossing_class on a left turn from a
+   classified way onto a lower one; whether the captured tiles carry the tag was never read (Phase 1: [?]). If none do,
+   CR is short with every routed case "not covered" at :105-113 while :101-103 reads covered. Guess: filled, within the
+   cap of 1,180, taken mostly from long W75_N40 routes.
+2. Rejections: before routing, R's "no node in the target's 3 x 3 cells" and "an end moved outside every tile"; after
+   routing, the largest "not covered" (short routes, no qualifying turn), then no-route kinds.
+3. R6's tuple differs from R1's: 0 (no coverage stop). R2's tuple differs from R1's: 0 draws.
+4. E3: 0 unstable of 59; selection's R1 tuple and R2 lines equal E3's in 59 of 59.
+5. No " e: " line; Temurin 21.0.13+9; select.tsv checks as before (selcheck.py).
+If short: reported as E4 says and stopped for the planner; the generator is not changed.

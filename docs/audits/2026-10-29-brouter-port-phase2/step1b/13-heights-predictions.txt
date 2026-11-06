@@ -1,0 +1,41 @@
+Predictions for session 20's runs (RECORD -58), written and pushed before any of them ran.
+Forward code: 66d345f on brouter-port (heights digest from d52e08c). Oracle JDK: Temurin 21.0.13+9.
+
+ORDER. F0h forward, then F0 forward (one e3Strata call each), then the revert, then R over 26 profiles.
+The forward F0h comes before the revert so that the revert's failure is read against a forward pass on the same data.
+
+1. F0h forward (--tests '*E3F0hTest*'):
+   - 8 cases, 8 of 8 kind "route"; unstable 0 of 8.
+   - R1's point count and heights digest equal 12-f0h-expected.tsv for all eight (the planner's prediction too).
+   - Every R1 node has a height: the R1-heights-by-tile column reads W75_N40:<n>/<n> with <n> the points.
+   - Test passes. [I: from the command-line router's GeoJSON being the same engine and data.]
+
+2. F0 forward (--tests '*E3F0Test*'):
+   - 2 cases, stable 2 of 2; R1 226 / 5047 and 306 / 6713 as before; node digests 9ca48d05a90f4dcd and
+     7d242f8dd2c428b4 and costs 5302 and 7405 as in 9-f0-temurin-stability.tsv (unchanged by this change).
+   - F0's fixture has no heights, so every node is Short.MIN_VALUE: heights digests afc27854ee968af5 (226 nodes) and
+     4f6849ea59b5f775 (306 nodes), computed by tools/geojson-heights.py's fnv1a_shorts on 226 and 306 copies of -32768.
+     Heights by tile: W75_N40:0/226 and W75_N40:0/306.
+   - Test passes.
+
+3. The revert (RECORD -58, "The check bites"). One-line edit in E3CaseRun.kt: the outcome's heights digest
+   `E3Outcome.fnv1aShorts(heights)` becomes `E3Outcome.fnv1aShorts(emptyList())`. E3CaseRun.kt is copied to scratch
+   first and restored from that copy, never from git; afterwards `git diff` must be empty and the forward line present.
+   Run: jvmTest, then e3Strata --tests '*E3F0hTest*'. Build log checked for ` e: ` lines before any result is read.
+   - Compiles (0 ` e: ` lines).
+   - jvmTest: 93 tests, 0 failures, as forward (no jvmTest class calls E3CaseRun.run; E3OutcomeTest calls
+     fnv1aShorts directly).
+   - F0h: 8 of 8 stable (the digest is one constant everywhere), 8 of 8 "route": the kinds assertion passes.
+   - F0h FAILS at its reach assertion, message "F0h: R1's point count and heights digest are not the command-line
+     router's", with every actual digest cbf29ce484222325 (FNV-1a's offset basis) and every point count still equal to
+     the expected one. Nothing else fails.
+   (RECORD -57 named a different revert, breaking the short cast in interpolateEle, OsmPath.java:392. That is a change
+   inside the oracle jar, which this repository does not build; -58 replaced it with this one, and this is the one run.)
+
+4. R, 26 profiles, 1,534 cases (--tests '*E3RTest*' then '*E3RProfilesTest*'), under the new tuple:
+   - R's sequence is unchanged (no generator edit); 59 cases per profile from the same candidates as 10-*.
+   - Unstable: 1 of 1,534 at most, R-shortest-025 if any (the planner's prediction). Adding heights can only add
+     instability where the heights differ between regimes and the node list does not, which I expect never [I].
+   - Every R1 tuple's first five fields equal 10-*/9-* stability.tsv's for the same case where that case was stable.
+   - Heights on R1 routes: most nodes have a height on the four brouter.de tiles [I: brouter.de's segments4 are built
+     with SRTM-derived heights as I recall; not read], except E170_S50's, which I cannot predict [?].

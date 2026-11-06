@@ -1,0 +1,8 @@
+rows 1180 draws 1..n contiguous: True
+results {'taken ML5': 59, 'rejected': 834, 'taken PM5': 55, 'rejected: ML5 already full': 232}
+taken ML5 59 ids rising: True draws rising: True last draw 246
+taken PM5 55 ids rising: True draws rising: True last draw 1180
+rejected 1066 == draws - taken: True
+routed 978 R2-equals-R1 false: 0
+panic true (routed): 313 with collections: 828
+reach readings: {'the limit, after panic mode': 204, "no node in the target's 3 x 3 cells, or the target is outside every tile": 202, 'neither; kind route; 1 collected lines': 99, 'neither; kind route; 2 collected lines': 73, 'neither; kind route; 0 collected lines': 69, 'neither; kind to-position not mapped in existing datafile; 0 collected lines': 65, 'neither; kind route; 4 collected lines': 45, 'neither; kind route; 3 collected lines': 44, 'neither; kind route; 6 collected lines': 40, 'neither; kind route; 5 collected lines': 35, 'the limit': 28, 'neither; kind route; 7 collected lines': 27}
