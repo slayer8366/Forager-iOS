@@ -2505,4 +2505,20 @@ Dispatch: RECORD -96, -98. Baseline `cc01338`. Only `brouter/src/jvmTest/` and `
   written after the start; all six `E3ExpectedFileTest` methods pass; 0 ` e: ` lines [C].
 - **E1:** the scan of each staged diff (Forager's own ends excepted by value, -93) read 0 before each push [C].
 
-<!-- s28-ci -->
+### CI
+Read from the job logs by me (`gh run view --log`) [R]:
+- **Run 42265967539 on `11e1e8c`** (the code change and its tables) concluded `success`.
+- **`jvm`:** 101 tests, 0 failures, in 44 files. All six `E3ExpectedFileTest` methods PASSED, reading FK5 from the new
+  table. 0 ` e: ` lines in the run's log (either job).
+- **iOS klibs:** `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL.
+- **Simulator:** 23 tests, 0 failures, in 9 files (**simulator-checked**).
+- **arm64 JVM step:** 7 tests, 0 failures, in 2 files. Its gate printed "OK: all 2 classes ran".
+- Run 42262233218 on `b5715ec` (the cap and the prediction) concluded `success`; status only, logs not read. This report
+  commit's own run (docs only) is not read.
+
+### Handoff (twenty-eighth session)
+1. **Nothing is running.** Head is this report's commit on `brouter-port`. Kind 5 is done: 10 of 10, one family, stable.
+2. **`expected-1b.tsv` is unchanged** (the rewrite gave the same bytes). `build/e3/FK/cases.tsv` now holds kind 5's
+   `hiking-mountain` list; the `car-fast` list is in scratch (`linden/33/FK-cases-before.tsv`).
+3. **Next, per -96:** Plumb merges `brouter-port` into `brouter-port-5b` at a step boundary. `30-fk-stability.tsv` still
+   holds the `car-fast` FK5 rows; they are no longer read for FK5 (`E3Expected.OWN_TABLES`).
