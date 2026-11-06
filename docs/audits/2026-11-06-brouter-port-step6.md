@@ -112,6 +112,26 @@ Not yet read when this report was written. Run id and result: see the handoff's 
    - `03-scan.sh` here: run as `n=$(scan.sh origin/brouter-port-5b HEAD); [ "$n" = 0 ] && git push`. It needs
      `forager-ends.txt` beside it, rebuilt from Forager's routes.json (both) and points.json at a0535ece.
 
+**Commands** (clone `/home/user/forager-ios-5a`; `S` is session 10's scratch,
+`/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/plumb/6/`):
+- CI: `gh run list --branch brouter-port-5b --limit 3`, then
+  `gh run view --job <id> --log > $S/ci.log; grep -E 'tests completed|Task :brouter:compileKotlinIos|BUILD|TOTAL|OK: all' $S/ci.log`
+  and `grep -c ' e: ' $S/ci.log`.
+- The piece's tests: `./gradlew --max-workers=2 :brouter:jvmTest --tests 'com.zynergylabs.forager.brouter.router.*' --console=plain > $S/r.log 2>&1`,
+  then `python3 -I tools/junit-counts.py brouter/build/test-results/jvmTest`.
+- The full run: `./gradlew --max-workers=2 :brouter:jvmTest --continue --console=plain > $S/full.log 2>&1`. Expect 123
+  tests with only `CollectOutreachersTest`'s 2 red.
+- A revert: `$S/rev/revert.sh <name> <file> '<old>' '<new>' '<test filter>'`, its prediction written to
+  `$S/rev/predictions.txt` first.
+- The gated push: `n=$($S/scan.sh origin/brouter-port-5b HEAD); [ "$n" = 0 ] && git push origin brouter-port-5b`. A copy
+  of `scan.sh` is `03-scan.sh` here; `$S/forager-ends.txt` (63 values) is rebuilt by
+  `git -C /home/user/slayer8366/forager show a0535ece:<file>` for
+  `app/src/test/resources/routing/dropoff/points.json`, `server/pmtiles-worker/test/fixtures/rd5/routes.json` and
+  `server/pmtiles-worker/test/fixtures/rd5/two-squares/routes.json`, then
+  `grep -oE '\-?[0-9]{1,3}\.[0-9]{5,}' | sort -u`.
+- **A scan lesson:** evidence files that print doubles (for example a field-compare message) trip the scan. Write such
+  values as IEEE-754 bits, with a note, as `02-revert-B2-maxspeed-result.txt` does.
+
 ## 7. Unverified
 
 - That atomicfu's classes link into both iOS klibs: pending CI on `de4d994` [?].
