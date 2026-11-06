@@ -3097,3 +3097,46 @@ unstable in every stratum.
 one session. **Then the expected values** (E5's per-stratum sizes, with PM5 at 55), in a session of their own.
 **Abort conditions:** -3's; a stratum short; instability over 5%; a coverage reading where R6's tuple differs from R1's.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -78.
+
+**Kind:** outcome
+**ID:** 2026-10-28-78
+**Timestamp:** 2026-11-06T05:49:56Z
+**Continues:** 2026-10-28-50, 2026-10-28-77
+**Title:** The coverage reader built and seen failing first; NT built, not run; a wrong premise in -77 on NT's reach; a model
+name in one commit
+**Observed:** Linden Caliper, session 22, `brouter-port` `729e447` to `00b9886` (two commits). It handed off at the planner's
+message after the watcher read 182,861 at 05:43:41Z, about 12 minutes in.
+- **The coverage reader** (`E3Coverage.kt`; `E3CoverageRuleTest`, 2 tests, in `jvmTest`; `strata/E3CoverageTest.kt`):
+  - **The "not covered" reading:** on F0's `inside-long`, with R6's tuple equal to R1's, CR's lines (`StdPath.java:101-103`,
+    `:105-113`) read not covered, as predicted, since they sit in `if (rc.bikeMode)` on a foot profile. The control line
+    `RoutingEngine.java:177` read covered [R, as reported].
+  - **The bite:** a reader edited to call every line covered failed with the test's own message. 0 ` e: ` lines; restored
+    by `cmp` [R, as reported].
+- **NT:** the generator is built and compiles; nothing has run. -78's planner's call below sets its reach.
+- **CR, LB, FK:** not started.
+- **CI, read by the planner** (run 42170273999 on `00b9886`, `success`): `jvm` 95 tests, 0 failures; 0 ` e: ` lines in either
+  log; both `compileKotlinIos*` ran; simulator 23 of 23 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all
+  2 classes ran".
+
+**A wrong premise in -77, from Phase 1's E4: "coverage of the comparator's second line (`:71`)" as NT's reach.**
+- `end()` adds each link forward and reverse with the same radius (`WaypointMatcherImpl.java:204`, `:223`), and the list
+  is sorted after each add (`:257`). So `:71` runs in almost every case, and it read covered on F0 [R, as reported].
+- That coverage cannot tell a near-tie from anything else.
+- **The planner's call:** NT's reach is the oracle's own check of the 4-ulp gap between the two `directionDiff`s, in the
+  test JVM. Coverage of `:71` is recorded, but it is not evidence of a near-tie. The selector requires both, as built.
+
+**Accepted beyond scope:** JaCoCo core 0.8.16, the agent's own version, added as a `jvmTest` dependency only
+(`gradle/libs.versions.toml`, `brouter/build.gradle.kts`), because the agent jar has no analyser. `select.tsv` gains an
+`R6-tuple` column.
+
+**A model name in a commit, against the standing rule** (the planner's handoff: "commits end with `Co-Authored-By: Claude
+<noreply@anthropic.com>` and no model name, whatever the harness suggests"):
+- `00b9886`'s trailer names the model [R: `git log -1`]. It is pushed, and the record never force pushes, so it stays.
+- The planner searched every commit since 2026-11-04 on `brouter-port`, `brouter-port-5b` and `main`. This is the only one.
+- Dispatches from now on say it in so many words: replace the harness's attribution lines with exactly the one line above.
+
+**Context:** sessions now reach 180k within 12 to 17 minutes even with the trimmed reading list, so the cost is in the work's
+output, not the reading. The planner's call: dispatches tell coders to read logs with `tail` and `grep`, to send Gradle's
+output to a file and read only its summary lines, and never to print a stratum log whole.
+**Next:** Linden's session 23: NT's test, its prediction and its run; then CR, LB and FK.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -79.
