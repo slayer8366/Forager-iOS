@@ -3296,3 +3296,25 @@ under -79 and -80, including kinds 9 to 11's harness changes. Then the expected 
 **For the owner:** whether the file is removed, and whether an OpenStreetMap (ODbL) notice is added for the copy that stays
 in history. Under -3's abort conditions, a licence question beyond MIT and ODbL notices belongs to the owner.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -84.
+
+**Kind:** decision
+**ID:** 2026-10-28-84
+**Timestamp:** 2026-11-06T07:40:39Z
+**Continues:** 2026-10-28-83
+**Title:** The committed file of OSM-derived coordinates is removed from the tree, with no notice added (owner)
+**Decision:** asked what should happen to `step1b/11-r-sequence-before-edit.tsv` (-83), the owner chose, verbatim: "Remove it
+only". The option read: "A new commit deletes the file. No notice is added; the copy in history stays without one."
+- **Rejected:** "Remove it, add ODbL notice (Recommended)"; "Keep it, add ODbL notice".
+- **Done by the planner** on `brouter-port`, in one docs-only commit, by a plain push. E3RSequenceTest's SHA-256 pin still
+  holds the sequence. The copy at `82d310a` stays in history, because the record never force pushes.
+- **E1 stands as written:** no coordinates are committed. Every dispatch from now on says so.
+
+**Also observed, after a restart of the planner's container:** Linden's session 24 pushed one more docs-only commit
+(`f0db0df`) after the planner's E1 note: no coordinates and no model name, checked by the planner. The FK run had ended
+`BUILD FAILED` at kind 5's assertion (`E3FKTest.kt:182`), after selection and before E3's regimes. Selection, from the log:
+- kinds 1, 2, 3 and 6 were 10 of 10 each, with kind 4 10 of 10 at draw 74;
+- **kinds 9, 10 and 11 were 10 of 10 each** (49 draws counted; 10 voided by the measured run);
+- kind 5 was 9 of 10 (-82).
+
+No family or stability has been read yet. The next session applies -82's kind 5 patch and reruns FK.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -85.
