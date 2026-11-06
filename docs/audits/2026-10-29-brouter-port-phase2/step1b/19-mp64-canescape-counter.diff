@@ -1,0 +1,37 @@
+--- src-plain/btools/mapaccess/OsmNodesMap.java	2026-11-06 03:04:06.440395114 +0000
++++ src-patched/btools/mapaccess/OsmNodesMap.java	2026-11-06 03:04:32.474936880 +0000
+@@ -124,9 +124,34 @@
+ 
+   private List<OsmNode> nodes2check;
+ 
++  /** Scratch probe (step 1b, session 21, RECORD -61/-64): canEscape's answers. Not in the oracle. */
++  private static final String PROBE_FILE = "/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/linden/canescape/counts.txt";
++  private static final java.util.concurrent.atomic.AtomicLong probeCalls = new java.util.concurrent.atomic.AtomicLong();
++  private static final java.util.concurrent.atomic.AtomicLong probeFalse = new java.util.concurrent.atomic.AtomicLong();
++  private static void probeWrite(String s) {
++    try (java.io.FileOutputStream o = new java.io.FileOutputStream(PROBE_FILE, true)) {
++      o.write((s + "\n").getBytes(java.nio.charset.StandardCharsets.UTF_8));
++    } catch (java.io.IOException e) { throw new RuntimeException(e); }
++  }
++  static {
++    final String cmd = String.valueOf(System.getProperty("sun.java.command"));
++    probeWrite("loaded pid=" + ProcessHandle.current().pid() + " cmd=" + cmd);
++    Runtime.getRuntime().addShutdownHook(new Thread(() -> probeWrite("summary pid=" + ProcessHandle.current().pid() + " calls=" + probeCalls.get() + " false=" + probeFalse.get() + " cmd=" + cmd)));
++  }
++
+   // is there an escape from this node
+   // to a hollow node (or destination node) ?
+   public boolean canEscape(OsmNode n0) {
++    probeCalls.incrementAndGet();
++    boolean r = canEscape0(n0);
++    if (!r) {
++      probeFalse.incrementAndGet();
++      probeWrite("false pid=" + ProcessHandle.current().pid() + " node=" + n0.ilon + "," + n0.ilat + " cmd=" + System.getProperty("sun.java.command"));
++    }
++    return r;
++  }
++
++  private boolean canEscape0(OsmNode n0) {
+     boolean sawLowIDs = false;
+     lastVisitID++;
+     nodes2check.clear();
