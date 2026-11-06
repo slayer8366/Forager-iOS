@@ -2780,3 +2780,25 @@ goes back to the owner
   forward, 3,068 of 3,068 R ends equal to the oracle; the revert's prediction is pushed (`51c43b3`) and its run was in
   progress. The planner checks it on the handoff.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -68.
+
+**Kind:** decision
+**ID:** 2026-10-28-68
+**Timestamp:** 2026-11-06T04:00:26Z
+**Continues:** 2026-10-28-65, 2026-10-28-67
+**Title:** The route-ways path is ported, with its test (owner); replaces -65's ruling
+**Decision:** asked again with the true cost (-67), the owner, verbatim: "Port it, with the test". The option read: "Add
+MicroCache2's decoder, OsmNode(long), parseNodeBody2 and getIdForIndex in a step of their own (about 300 Java lines,
+estimated), each seen failing over stubs first, then the route-ways differential test. The iOS app could then offer
+way-to."
+- **Rejected:** "Defer until iOS needs it"; "Out of scope for iOS".
+- **The planner's calls (technical):**
+  - **A step of its own, 5d,** on `brouter-port-5b` after 5c's handoff (one coder per branch at a time). Its own report.
+  - **Its reach is measured first:** Phase 1's T-list method, from `BRouterRouteWays.read`'s calls, so the port list comes
+    from data and not from -67's estimate. That also catches any overload -64 missed.
+  - **Its tests:**
+    - every micro-cache of each pinned tile decoded through `MicroCache2` by both engines, with a digest per cache, as
+      5b does for `DirectWeaver`;
+    - then -65's route-ways comparison, as written;
+    - each is seen failing over stubs, and a revert bites, with its prediction pushed first.
+  - Phase 1's T2 cut stands for `RoutingEngine`'s path. The new reach is added beside it, never in its place.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -69.
