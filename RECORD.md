@@ -2802,3 +2802,52 @@ way-to."
     - each is seen failing over stubs, and a revert bites, with its prediction pushed first.
   - Phase 1's T2 cut stands for `RoutingEngine`'s path. The new reach is added beside it, never in its place.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -69.
+
+**Kind:** outcome
+**ID:** 2026-10-28-69
+**Timestamp:** 2026-11-06T04:02:14Z
+**Continues:** 2026-10-28-61, 2026-10-28-66, 2026-10-28-67
+**Title:** Step 5c (waypoint matching) ported: 3,068 of 3,068 R ends equal to the oracle; its revert bites; handed off
+**Observed:** Plumb Ledger, session 6, `brouter-port-5b` `98c01e6` to `d1de74b` (four commits; clean tree). Report:
+`docs/audits/2026-11-06-brouter-port-step5c.md`. It handed off at the planner's message after the watcher read 183,931
+at 03:55:11Z.
+- **Tests first:** `WaypointMatchTest` over the stubs read 1 failure (`NotImplementedError`) and 0 compile errors.
+- **Forward:** 1,534 cases and 3,068 ends compared, 0 differing [R, as reported]. Each end compares the crosspoint, node
+  pair, radius, `directionDiff`, `directionToNext`, name, type and the whole `wayNearest` list. The 350 unmatched ends
+  and 3 oracle throws are compared too. `WaypointMatcherImpl.kt` is 252 lines [C].
+- **The revert** (the comparator's second line becomes `0`, `WaypointMatcherImpl.java:71`): predicted at 1,364 to 2,718
+  ends differing, observed at 2,105. **Checked by the planner** in `4-revert.txt`: 102 tests, 3 failures (that test and
+  `CollectOutreachersTest`'s 2); restored identical to the saved copy, with the forward line present.
+- **CI, read by the planner** (run 42159504256 on `3f691a7`, the same source as the head `d1de74b` by `git diff --stat`):
+  `jvm` 102 tests, 2 failures, both `CollectOutreachersTest` (-61's known red); 0 ` e: ` lines in either log; both
+  `compileKotlinIos*` ran; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, with the gate reading "OK: all 2
+  classes ran".
+- **Not covered:** `start()`'s island-pair branch (the set is always empty on this path); the dynamic-range branch
+  (unreachable, since Forager passes `use_dynamic_range=0`); `WAYPOINT_TYPE_DIRECT`. NT's ends wait for NT.
+- **A defect, owed first in 5d:** `WaypointMatchEngines.differingFields` splits on spaces, so a failure message carries
+  fragments of coordinates. Not a problem while the test passes, but a red run would print them (E1).
+- **Calls beyond scope, accepted:** R's seed companions made `internal`; exceptions compared as outcomes;
+  `matchWaypointsToNodes` and `preloadPosition` ported here, as `NodesCache`'s header assigned them.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -70.
+
+**Kind:** intent
+**ID:** 2026-10-28-70
+**Timestamp:** 2026-11-06T04:02:14Z
+**Continues:** 2026-10-28-68, 2026-10-28-69
+**Title:** Step 5d: the route-ways path (`MicroCache2` and its callers), reach measured first, then the test (Plumb, session 7)
+**Change** (on `brouter-port-5b`, from `d1de74b`; report `docs/audits/2026-11-06-brouter-port-step5d.md`):
+1. Fix -69's `differingFields` defect, so that only field names are printed. It is seen with a failing message first.
+2. **Reach:** measure the methods `BRouterRouteWays.read` reaches (`BRouterRouteWays.kt:59-123` at Forager `a0535ece`),
+   by Phase 1's T-list method, on a harness that makes those calls. List what is not yet ported, as a new reach file
+   beside T2. **Stop and report the count before writing any port code** if it is over 600 Java lines, twice -67's
+   estimate.
+3. **Port** it into `commonMain`, with stubs first and a `MicroCache2` decode test: every micro-cache of each pinned
+   tile, decoded through `createMicroCache(..., hollowNodes = null)` by both engines, compared by a digest per cache.
+   Seen failing over the stubs, then passing. A revert (one field decoded wrong) bites, with its prediction pushed first.
+4. **The route-ways test,** as -65 sets it. Forager's `app/src/test/resources/routing/dropoff/` at `a0535ece` is pinned by
+   SHA-256 and fetched as `tools/fetch-f0h.sh` fetches F0h. F0h's ends are included. Only counts and digests are
+   committed. Seen failing first, and a revert that drops one tag bites.
+**Scope boundary:** writes only `brouter-port-5b`. It leaves T2's list and `RoutingEngine`'s path untouched.
+**Finish line:** pushed, CI read by the planner, the report with its handoff.
+**Abort conditions:** -3's; any new red besides `CollectOutreachersTest`; the 600-line stop.
+**Notes:** Written by the planner session of -56 by hand. Next free ID -71.
