@@ -510,3 +510,46 @@ boundary merge is pushed and checked.
 2. Record which tests the merge changes (none added; `E3ExpectedFileTest`, `E3FKTest` and `E3ExpectedWriteTest` edited)
    and their counts, against the 138 here.
 3. Optional (§12's step 4): revert I against the pre-widening `StartPathTest`, and F0h's cut starts under revert H.
+
+## 14. Session 17 (Plumb Ledger): the boundary merge pushed and checked (RECORD -96)
+
+**Base:** `origin/brouter-port-5b` at `028783c` and `origin/brouter-port` at `611ba54`, both matching `git ls-remote`.
+Built on a fresh local branch `s17-merge`; session 16's local `brouter-port-5b` (`4f5492f`) and `s16-handoff` are untouched.
+Result file `19-` in `2026-11-06-brouter-port-step6/`. Trailer `Co-Authored-By: Claude <noreply@anthropic.com>`.
+
+**1. The merge.** `git merge --no-ff origin/brouter-port`: clean, no conflicts, commit `7491f3a`, pushed as a fast-forward
+(`028783c..7491f3a`). 13 files, +304 / -14: FK kind 5 on hiking-mountain (`E3Expected.kt`, `FKGenerator.kt`,
+`E3ExpectedFileTest`, and the strata tests `E3FKTest`, `E3ExpectedWriteTest`), the phase 2 report's section and step 1b's
+`32-`/`33-` logs. No CI file and no `expected-1b.tsv` change (`git diff 028783c HEAD` on both: empty) [C].
+
+**2. Against session 16's unpushed merge.** `git diff 4f5492f HEAD` is exactly §13's 60 lines and nothing else, and is
+byte-identical to `git diff 12ae393 028783c` (§13's own commit; `4f5492f` was made on `12ae393`). So the merged code trees
+match [C].
+
+**3. Full fresh run** (`:brouter:jvmTest --rerun-tasks`, `19-`): Gradle "138 tests completed, 2 failed", both
+`CollectOutreachersTest` (-61): `collectOutreachersWithoutADestination`, `collectOutreachersWithADestinationVanishesFarNodes`.
+0 ` e: `, 0 429s; 61 XML, 61 non-empty, summing to 138 / 2 / 0 errors. Against §13's 138 / 2: difference 0. Of the
+classes the merge changed, only `E3ExpectedFileTest` is in `jvmTest` (6 of 6 passed; 6 `@Test` before and after);
+`E3FKTest` and `E3ExpectedWriteTest` are in the `e3.strata` package, which `jvmTest` excludes (`build.gradle.kts:151-156`),
+so they were not run here; `brouter-port` ran them on its own branch.
+
+**4. E1 scan** on `git diff 028783c HEAD`: 0. Told apart from `brouter-port`'s lines by diffing: the merge's diff against
+`028783c` is byte-identical to `brouter-port`'s own diff from the merge base (`fcd35ff..611ba54`), which also scans 0. So
+every added line came from `brouter-port`, and none of them reads [C].
+
+**5. CI on `7491f3a`** (run 42984411711, read with the GitHub tools and `gh` logs): `jvm` TOTAL 138 tests, 2 failures,
+0 errors, 61 files; failed both `CollectOutreachersTest` (-61), the job red for them alone; 0 ` e: ` in either log;
+`compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran. `ios-smoke`: simulator TOTAL 24, 0 failed
+(**simulator-checked**); arm64 TOTAL 7, 0 failed; the gate "OK: all 2 classes ran". `iosArm64` is compiled, not linked [I].
+
+**Unverified:** the strata classes on this merge (not in `jvmTest`, not run here; `e3Strata` is the expensive task and was
+not dispatched); CI for `6cd2ab9` (§13's step 1) was not read, superseded by `7491f3a`'s 138 / 2; §13's carried items
+(native number grammar [?], the lost exception message [I], `profile:` key order [?]); the optional revert I / revert H work
+(§12 step 4) not done.
+
+**Step 6 against T2's port list.** §3's step 6 classes (the 15 `btools.router` files and `OsmTrack`'s type) all exist in
+`commonMain/.../router/`, each with a row in T2's `port-list.tsv` (`2026-10-28-brouter-port-verify/03-reach/out/T2/`),
+and none holds a stub but `OsmTrack.containsNode`, which is step 7's by -94 [C]. T2 lists 17 more `btools.router` classes
+(the `Kinematic*`, `Format*`, `VoiceHint*`, `RoutingEngine`, `RoutingHelper`, `AreaReader`, `SuspectInfo`) that §3 does not
+put in step 6 and that have no file yet [C]; they are taken as later steps' [I]. With the boundary merge pushed and its CI
+read as expected, **step 6 is complete** against its list, subject to the planner's reading.
