@@ -29,7 +29,7 @@ class VoiceHintTest {
 
     /** A call's result, or the class of what it threw, so that both engines' exceptions compare as values. */
     private fun res(f: () -> Any?): String = try {
-        val v = f()
+        val v = f().let { if (it == Unit) null else it } // Java's void reads as null by reflection; Kotlin's Unit is the same no-value
         if (v is Float) "f${v.toRawBits()}" else "v$v"
     } catch (e: java.lang.reflect.InvocationTargetException) {
         "throws ${e.targetException.javaClass.simpleName}"

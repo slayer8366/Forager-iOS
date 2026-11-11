@@ -1,0 +1,7 @@
+Session 21, step 1 (RECORD -113's condition): the two accepted test fixes of 05, committed, run over the stubs.
+Command: :brouter:jvmTest --rerun-tasks, the three classes; test-results/jvmTest deleted first; 3 fresh XML; 0 " e: ".
+TrackDetourTest  2 tests, 2 failed: NotImplementedError at OsmTrack.getFromDetourMap; at OsmTrack.getMinDistance
+TrackHeadTest    1 test,  1 failed: NotImplementedError at OsmTrack.registerDetourForId
+VoiceHintTest    2 tests, 2 failed: NotImplementedError at VoiceHintList.getTransportMode;
+                 ComparisonFailure "case 0: getTime expected:<[f0]> but was:<[throws NotImplementedError]>"
+Total 5 tests, 5 failed, 0 errors.

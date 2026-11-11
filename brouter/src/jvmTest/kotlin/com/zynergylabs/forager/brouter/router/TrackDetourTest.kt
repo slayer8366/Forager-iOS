@@ -92,13 +92,16 @@ class TrackDetourTest {
             found += compareMaps(c, oa, pa, "$id registered")
             val (od, pd) = TrackEngines.tracks(ws[0])
             od.copyDetours(oa); pd.copyDetours(pa)
+            // a second copy from the map just emptied: recorded, so both engines' outcome (an NPE) shows in the log
+            run { val ro = res { btools.router.OsmTrack().copyDetours(oa) }; val rp = res { OsmTrack().copyDetours(pa) }; outcomes.merge("second copy o=$ro p=$rp", 1, Int::plus) }
             found += compareMaps(c, od, pd, "$id copied")
             // addDetours: onto a frozen map, from a source with a frozen map and a built nodes map; and the edge cases.
             for (variant in 0 until 5) {
                 val vid = "$id addDetours variant $variant"
                 val (ot, pt) = TrackEngines.tracks(ws[0])
                 when (variant) {
-                    0, 1, 2 -> { ot.copyDetours(oa); pt.copyDetours(pa) }
+                    0, 1, 2 -> { // a fresh map per copy: Java's FrozenLongMap empties the map it is built from, so one source cannot be copied twice
+                        val (ox, px) = TrackEngines.tracks(ws[0]); register(rnd, c, ox, px, n); ot.copyDetours(ox); pt.copyDetours(px) }
                     3 -> register(rnd, c, ot, pt, 3) // a map that is not frozen
                     else -> {}
                 }
@@ -139,7 +142,8 @@ class TrackDetourTest {
             run {
                 val (ot, pt) = TrackEngines.tracks(ws[0])
                 if (g % 3 == 1) register(rnd, c, ot, pt, 5)
-                if (g % 3 == 2) { ot.copyDetours(oa); pt.copyDetours(pa) }
+                // a fresh source map, as above: copyDetours empties the one it freezes
+                if (g % 3 == 2) { val (ox, px) = TrackEngines.tracks(ws[0]); register(rnd, c, ox, px, n); ot.copyDetours(ox); pt.copyDetours(px) }
                 for (s in 1..2) {
                     val (os, ps) = TrackEngines.tracks(ws[s])
                     if (s == 1 || g % 2 == 0) register(rnd, c, os, ps, rnd.nextInt(1, 10))
