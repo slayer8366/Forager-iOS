@@ -1,0 +1,15 @@
+Session 24 (Plumb Ledger): ReadBinaryTest changed as RECORD -116 rules, then run over the stubs (port not applied).
+
+The change (ReadBinaryTest.kt): where either engine's debugInfo contains "Error reading rawTrack: " (Java's catch,
+OsmTrack.java:287-290, which also takes the EOF cuts), the test asserts both took that path, compares debugInfo exactly
+(by digest and length) up to and including the prefix, and asserts each wrote some text after it. The result is still
+compared exactly. Every other read keeps the whole-text debugInfo comparison. A counter of error-path reads is printed.
+Disclosed as -116 does: a comparison changed after a port result was seen, on the planner's ruling.
+
+Run: :brouter:jvmTest --rerun-tasks --tests '*ReadBinaryTest', test-results deleted first.
+Observed: BUILD FAILED; 0 lines with " e: "; 1 fresh XML; tests 1, failures 1, errors 0.
+Message (head): "track 0, t0.bin, target 0/0, shift 0, profile true, debug true: result: oracle <digest>/10787, port throws
+kotlin.NotImplementedError: An operation is not implemented: step 7, session 23 stub: OsmTrack.readBinary's file branch".
+Red on purpose: the stub is named; the port (patch 16) is applied in the next commit.
+Full fresh :brouter:jvmTest --rerun-tasks before the push: 70 XML, 151 tests, 3 failures, 0 errors, 0 " e: ", no Maven 429
+(the two "429" hits in the log are test counts). Failures: CollectOutreachersTest 2 (-61, -106), ReadBinaryTest 1 (red on purpose).

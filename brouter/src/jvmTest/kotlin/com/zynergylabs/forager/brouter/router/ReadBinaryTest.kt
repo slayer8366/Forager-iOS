@@ -15,9 +15,12 @@ import kotlin.test.assertTrue
  * directory that is deleted after. Each file is read by both engines with the target moved by 0 or 19 to 21 units,
  * checksums moved by 0, 20 or 21, the profile stamp equal or not, with and without `debugInfo`; and again cut short at
  * seeded lengths, and as a missing file. Results are compared field by field by digest and length, the debug text
- * by digest and length, so no position appears in a failure (E1).
+ * by digest and length, so no position appears in a failure (E1). On Java's catch path the debug text is compared
+ * only up to and including "Error reading rawTrack: ", and each side must write text after it (RECORD -116).
  */
 class ReadBinaryTest {
+    private val ERROR_PREFIX = "Error reading rawTrack: "
+
     private fun digest(s: String): String =
         java.security.MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }
             .take(16) + "/" + s.length
@@ -69,6 +72,7 @@ class ReadBinaryTest {
             var reads = 0
             var nonNull = 0
             var debugs = 0
+            var errorPaths = 0
             val seen = HashSet<String>()
             for ((ti, ot) in tracks.withIndex()) {
                 val wp = btools.mapaccess.MatchedWaypoint()
@@ -123,7 +127,25 @@ class ReadBinaryTest {
                                     "$id: result: oracle " + (if (o.startsWith("throws")) o else digest(o)) +
                                         ", port " + (if (p.startsWith("throws")) p else digest(p)))
                                 assertEquals(digest(o), digest(p), "$id: result")
-                                assertEquals(digest(oDebug?.toString() ?: "null"), digest(pDebug?.toString() ?: "null"), "$id: debugInfo")
+                                val oText = oDebug?.toString() ?: "null"
+                                val pText = pDebug?.toString() ?: "null"
+                                val oErr = oText.indexOf(ERROR_PREFIX)
+                                val pErr = pText.indexOf(ERROR_PREFIX)
+                                if (oErr >= 0 || pErr >= 0) {
+                                    // RECORD -116: on Java's catch path (OsmTrack.java:287-290) the text after BRouter's
+                                    // prefix is the runtime's own description of its exception. There, debugInfo is
+                                    // compared exactly up to and including the prefix; both engines must have taken the
+                                    // path, and each must have written some text after the prefix.
+                                    assertTrue(oErr >= 0 && pErr >= 0, "$id: debugInfo: error path taken, oracle ${oErr >= 0}, port ${pErr >= 0}")
+                                    val oHead = oText.substring(0, oErr + ERROR_PREFIX.length)
+                                    val pHead = pText.substring(0, pErr + ERROR_PREFIX.length)
+                                    assertEquals(digest(oHead), digest(pHead), "$id: debugInfo up to the error prefix")
+                                    assertTrue(oText.length > oHead.length, "$id: debugInfo: oracle wrote nothing after the error prefix")
+                                    assertTrue(pText.length > pHead.length, "$id: debugInfo: port wrote nothing after the error prefix")
+                                    errorPaths++
+                                } else {
+                                    assertEquals(digest(oText), digest(pText), "$id: debugInfo")
+                                }
                                 reads++
                                 if (!o.startsWith("null") && !o.startsWith("throws")) nonNull++
                                 if (oDebug != null) { debugs++; seen += oDebug.toString().substringAfter("pre;").take(60).replace(Regex("[-0-9]+"), "#") }
@@ -132,7 +154,7 @@ class ReadBinaryTest {
                     }
                 }
             }
-            println("7 readBinary: ${tracks.size} tracks, $reads reads compared, $nonNull tracks returned, $debugs debug texts; kinds $seen")
+            println("7 readBinary: ${tracks.size} tracks, $reads reads compared, $nonNull tracks returned, $debugs debug texts, $errorPaths on the error path; kinds $seen")
             assertTrue(nonNull > 50 && reads > 1000, "too little reached: $nonNull of $reads")
         } finally {
             fcx.release()
