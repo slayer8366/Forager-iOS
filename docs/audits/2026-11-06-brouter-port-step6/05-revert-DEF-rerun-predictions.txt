@@ -1,0 +1,14 @@
+Session 14, reverts D, E and F re-run at 4815a6f (RECORD -101: their result files were in scratch only).
+These are re-runs of session 12's reverts (report section 9), with section 9's exact edits, through revert.sh.
+Predictions, written and pushed before the runs (section 9's, unchanged):
+
+[s14 D-directweave] NodesCache.kt obtainNonHollowNode: `return true // direct weaving...` -> `return false // direct weaving...`.
+  Filter *GraphHalfTest. Predict: GraphHalfTest fails; the first differing line is an `obtain` line, oracle true, port false,
+  in the first case, F0-inside-across-the-degree-line, mode 1.
+
+[s14 E-copy-extratime] MessageData.kt copy: `d.extraTime = extraTime` removed.
+  Filter *PathElementTest. Predict: only messageDataMatchesTheOracle fails, at `case 1: copy's extraTime` (port 0).
+
+[s14 F-caldist-max] OsmPathElement.kt calcDistance: `max(1.0, javaRound(` -> `max(0.0, javaRound(`.
+  Filter *PathElementTest. Predict: only osmPathElementMatchesTheOracle fails, on calcDistance, at an even (near) case;
+  section 9 observed case 0, oracle 1, port 0.
