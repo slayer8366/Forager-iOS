@@ -1,0 +1,11 @@
+id	verdict	tuple-stable	log-stable	control-R1-ne-R4	R1-tuple	R2-collection-lines	R1-ms	R1-heights-by-tile
+FK5-01	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	195	-
+FK5-02	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	242	-
+FK5-03	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	315	-
+FK5-04	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	272	-
+FK5-05	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	319	-
+FK5-06	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	273	-
+FK5-07	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	174	-
+FK5-08	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	188	-
+FK5-09	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	256	-
+FK5-10	stable	true	true	true	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	0	216	-

@@ -41,6 +41,23 @@ object E3Expected {
         "FK" to (114 to "30-fk-stability.tsv"),
     )
 
+    /**
+     * Cases logged in a table of their own, by id prefix, in place of their stratum's (RECORD -96, -98): FK kind 5, rebuilt on
+     * `hiking-mountain`; `30-fk-stability.tsv` still holds its `car-fast` run.
+     */
+    val OWN_TABLES: Map<String, List<Pair<String, String>>> = mapOf("FK" to listOf("FK5-" to "33-fk5-cap1000-stability.tsv"))
+
+    /** [stratum]'s logged R1, by id: its table from [STRATA], with the ids of each [OWN_TABLES] prefix read from that table. */
+    fun loggedFor(stratum: String): Map<String, Pair<String, E3Outcome>> {
+        var log = logged(STRATA.getValue(stratum).second)
+        for ((prefix, table) in OWN_TABLES[stratum].orEmpty()) {
+            val own = logged(table)
+            check(own.isNotEmpty() && own.keys.all { it.startsWith(prefix) }) { "$table: not only $prefix ids" }
+            log = log.filterKeys { !it.startsWith(prefix) } + own
+        }
+        return log
+    }
+
     /** FK's extra cases (RECORD -80, -85), compared on outcome; the two that route are held to the intact control's tuple. */
     val OUTCOME_ONLY = setOf("FK7-x1", "FK7-x2", "FK8-x1")
     val SAME_AS_CONTROL = setOf("FK7-x2", "FK8-x1")

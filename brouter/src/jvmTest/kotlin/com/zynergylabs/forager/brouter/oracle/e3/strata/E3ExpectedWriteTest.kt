@@ -41,7 +41,7 @@ class E3ExpectedWriteTest {
         val pool = Executors.newFixedThreadPool(E3Strata.workers)
         try {
             for ((stratum, folders) in dirs) {
-                val log = E3Expected.logged(E3Expected.STRATA.getValue(stratum).second)
+                val log = E3Expected.loggedFor(stratum)
                 if (stratum == "CR") E3Stability.ownProfiles = mapOf(E3Profiles.CROSSING to E3Profiles.crossing())
                 try {
                     val jobs = folders.flatMap { folder ->

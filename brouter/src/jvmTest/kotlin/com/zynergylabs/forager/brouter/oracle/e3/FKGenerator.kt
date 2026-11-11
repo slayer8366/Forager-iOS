@@ -38,7 +38,7 @@ import kotlin.math.min
  *   component has at least [MAINLAND_MIN] nodes: it is left only by a ferry. The mainland node is drawn from the tile's
  *   largest `trekking-noferries` component. [ISLAND_MAX] is under `MAXNODES_ISLAND_CHECK` (500, `RoutingEngine.java:50`).
  * - **Kind 5, an end on a way the profile cannot use:** a node none of whose cell's and eight neighbours' usable links
- *   (`car-fast`), geometry included, passes within [FAR_METRES] of it.
+ *   (the test's profile, `hiking-mountain` since RECORD -95), geometry included, passes within [FAR_METRES] of it.
  * - **Kind 6:** a point uniform over W80_N40's square, which is not in the folder.
  */
 class FKGenerator(private val segments: File) : Closeable {

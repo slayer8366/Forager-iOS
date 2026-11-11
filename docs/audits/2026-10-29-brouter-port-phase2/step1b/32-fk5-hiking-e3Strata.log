@@ -1,0 +1,26 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=38833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+w: file:///home/user/forager-ios/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/oracle/e3/FKGenerator.kt:326:28 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Pair<Int, Int>'.
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=38833 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+E3FKTest > fkKind5ReachesOneFamilyInAllTen STANDARD_OUT
+    E3 FK5 JDK: java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS; os.arch=amd64; java.vm.name=OpenJDK 64-Bit Server VM; java.home=<scratch>/temurin/jdk-21.0.13+9
+    E3 FK kind 5: 6 of 10 after 400 draws (cap 400); profile hiking-mountain; rejected {end: a link hiking-mountain can use within 300.0 m=353, end: the node's 3 x 3 cells leave the tile=34}
+    E3 FK FK5: family 'to-position not mapped in existing datafile' (FK5-01); in family 6 of 6; unstable 0
+    E3 FK STOP FK5: 6 of 6 in the family, of 10
+    E3 FK5: 6 cases; unstable 0 of 6; over 5%: false
+    E3 FK5 FK5-01: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 400 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-02: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 104 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-03: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 150 ms; R1 heights -; control R1 1,0,2,3,4,11,10,5,6,7,8,9, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-04: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 177 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-05: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 163 ms; R1 heights -; control R1 1,0,2,3,4,11,10,5,6,7,8,9, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+    E3 FK5 FK5-06: stable; R1 to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325; collection lines 0; R1 168 ms; R1 heights -; control R1 4,0,1,2,3,9,10,5,6,11,7,8, R4 1,0,2,10,3,4,5,6,7,11,9,8,
+E3FKTest > fkKind5ReachesOneFamilyInAllTen FAILED
+    java.lang.AssertionError at E3FKTest.kt:211
+1 test completed, 1 failed
+FAILURE: Build failed with an exception.
+* What went wrong:
+Execution failed for task ':brouter:e3Strata'.
+> There were failing tests. See the report at: file:///home/user/forager-ios/brouter/build/reports/tests/e3Strata/index.html
+* Try:
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+BUILD FAILED in 25s
+11 actionable tasks: 4 executed, 7 up-to-date

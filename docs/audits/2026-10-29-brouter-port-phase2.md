@@ -2419,3 +2419,106 @@ The total is 2,126 cases: E5's 2,118, plus F0h's 8 and FK's 4 extra cases, minus
   - `runner/bite-check.sh` is new; `revert-check.sh` is unchanged;
   - case 2's name, and its comment saying it stops short of the branch;
   - case 2 was built as the ruling words it, although its stated purpose does not hold (see that section).
+
+## FK kind 5 on `hiking-mountain`: short at 6 of 10, a stop (twenty-seventh session, Linden Caliper)
+Dispatch: RECORD -95, -96. Baseline `fcd35ff`. Commits `d841cfd` (the generator change and the prediction, pushed before
+the run) and this report's commit. Only `brouter/src/jvmTest/` and `docs/` are touched; no `commonMain` change.
+
+### The change [R]
+- `E3FKTest.profileOf(5)` is now `hiking-mountain` (it was `car-fast`, a Kinematic profile the port refuses, -95). Docs in
+  `E3FKTest` and `FKGenerator` follow it. Nothing else in the construction changed: seed 20261208 + 5, start and end drawn
+  separately, cap 400, every rejection counted by reason, nothing chosen by the oracle's outcome (-82).
+- **The distance is the generator's `FAR_METRES`, 300 m,** as on `car-fast`. It meets "more than 250 m" (-95, E4). I did
+  not lower it to 250: the constant is shared with kinds 1 and 2, whose rows must not change.
+- Prediction: `step1b/32-fk5-hiking-prediction.txt`, pushed in `d841cfd` before the run. It said the fill could not be
+  called in advance, and that a short kind is a stop.
+
+### The run [C]
+`e3Strata --tests '*E3FKTest.fkKind5*' --max-workers=2` on Temurin 21.0.13+9 (`step1b/32-fk5-hiking-e3Strata.log`,
+`step1b/32-fk5-hiking-stability.tsv`). BUILD FAILED in 25 s, by the test's own stop.
+- **6 of 10 after 400 draws.** The draws: 7 starts, all accepted (the 7th was left without an end at the cap); 393 end
+  draws, of which 6 were accepted, **353** had a `hiking-mountain`-usable link within 300 m, and **34** had 3 x 3 cells
+  leaving the tile. 7 + 6 + 353 + 34 = 400. No start was rejected.
+- **The 6 drawn reached one family,** "to-position not mapped in existing datafile" (FK5-01's), 6 of 6, all stable in
+  the six regimes. The tuple is `0|0|0` with the empty digests, as on `car-fast`.
+- **This is a stop** (-82, -96: "kind 5 short"). Nothing was changed after the run.
+
+### Not done, because of the stop
+- `expected-1b.tsv` is unchanged, so no `cmp` was needed; `E3Expected`'s FK table is still `30-fk-stability.tsv`.
+- **One thing the file would show [I]:** the stored FK5 rows hold no profile and no ends. If kind 5 fills in this family,
+  its 10 rows are `to-position not mapped…|0|0|0|…` as now, byte for byte. The rewrite would change only which table they
+  are checked against.
+
+### Checks
+- **Full `:brouter:jvmTest`, fresh** (`--rerun-tasks`, started 17:21:03Z): 101 tests, 0 failures, 44 XML files, all
+  written after the start; 0 ` e: ` lines [C].
+- **E1:** the scan of each staged diff read 0, the committed log and table included [C].
+
+### Options for the planner (not chosen)
+- **(a) A larger cap.** At this run's rate, about 1 end in 66 draws, 10 cases need about 670 draws [I]. The draws are
+  unselected by outcome, so a cap is a harness limit, as -82 put it.
+- **(b) Kind 5's own distance at 250 m,** E4's own figure, with kinds 1 and 2 kept at 300. How much it raises the rate
+  is not known.
+- **(c) Keep 6.** -82 rejected this for `car-fast` ("a harness limit, not a finding").
+
+### Handoff (twenty-seventh session)
+1. **Nothing is running.** Head is this report's commit on `brouter-port`.
+2. **`build/e3/FK5/` now holds the 6-case `hiking-mountain` run.** The `car-fast` folder it replaced is kept in scratch
+   (`linden/32-old-FK5-carfast`). `build/e3/FK/cases.tsv` still holds the `car-fast` FK5 lines; the writer reads that.
+3. **To finish after a ruling:** change kind 5's cap or distance with a new prediction, rerun kind 5 alone, then give the
+   writer kind 5's new list and table: FK's list with its FK5 lines replaced, and `E3Expected` reading FK5's rows from
+   kind 5's own table. Then `cmp` the file without FK5's rows, before and after.
+
+## FK kind 5 on `hiking-mountain`: 10 of 10 at a cap of 1,000 (twenty-eighth session, Linden Caliper)
+Dispatch: RECORD -96, -98. Baseline `cc01338`. Only `brouter/src/jvmTest/` and `docs/` are touched; no `commonMain` change.
+
+### The change [R]
+- `E3FKTest.CAP5` is 1,000 (it was 400; -98's option (a)). Nothing else in kind 5's construction changed.
+- Prediction: `step1b/33-fk5-cap1000-prediction.txt`, pushed with the change in `b5715ec` before the run.
+- `E3Expected.OWN_TABLES` and `loggedFor(stratum)`: FK's rows with ids `FK5-` are now read from
+  `33-fk5-cap1000-stability.tsv`, the rest from `30-fk-stability.tsv` (which still holds `car-fast`'s run). The writer and
+  both `E3ExpectedFileTest` cross-checks use it.
+
+### The run [C]
+`e3Strata --tests '*E3FKTest.fkKind5*' --max-workers=2` on Temurin 21.0.13+9 (`step1b/33-fk5-cap1000-e3Strata.log`,
+`step1b/33-fk5-cap1000-stability.tsv`). BUILD SUCCESSFUL in 25 s.
+- **10 of 10 after 937 draws.** 10 starts, all accepted; 927 end draws, of which 10 were accepted, **837** had a
+  `hiking-mountain`-usable link within 300 m, and **80** had 3 x 3 cells leaving the tile. 10 + 10 + 837 + 80 = 937.
+  Every rejection is before routing.
+- **Family:** "to-position not mapped in existing datafile" (FK5-01's), 10 of 10; **0 unstable of 10.** The tuple is
+  `0|0|0` with the empty digests. FK5-01 to -06 have the same verdict and tuple as session 27's; that they are the same ends
+  (one seeded sequence) is [I], since session 27's case list was not kept.
+- The prediction held on every point it made.
+
+### The rewrite [C]
+- **The writer's case list:** `build/e3/FK/cases.tsv` had its 10 `car-fast` FK5 lines (lines 11 to 20) replaced by kind 5's
+  new list; the other 104 lines are unchanged (`diff`). The old list is kept in scratch (`linden/33/FK-cases-before.tsv`).
+- **The writer** (`e3Strata --tests '*E3ExpectedWriteTest*'`, `step1b/33-fk5-cap1000-expected-e3Strata.log`), BUILD
+  SUCCESSFUL in 20 min 37 s: 2,126 rows, R1 equal to its log for 2,126 of 2,126, FK5's 10 against the new table; the same
+  3 FK9 exclusions.
+- **`cmp`:** the file without its 10 FK5 rows, before and after: 2,124 lines each, identical. **The 10 FK5 rows are also
+  byte-identical** to the old ones, so the whole file is unchanged and `git` shows no change to `expected-1b.tsv`. What
+  changed is the table they are checked against.
+
+### Checks
+- **Full `:brouter:jvmTest`, fresh** (`--rerun-tasks`, started 17:54:01Z): 101 tests, 0 failures, 44 XML files, all
+  written after the start; all six `E3ExpectedFileTest` methods pass; 0 ` e: ` lines [C].
+- **E1:** the scan of each staged diff (Forager's own ends excepted by value, -93) read 0 before each push [C].
+
+### CI
+Read from the job logs by me (`gh run view --log`) [R]:
+- **Run 42265967539 on `11e1e8c`** (the code change and its tables) concluded `success`.
+- **`jvm`:** 101 tests, 0 failures, in 44 files. All six `E3ExpectedFileTest` methods PASSED, reading FK5 from the new
+  table. 0 ` e: ` lines in the run's log (either job).
+- **iOS klibs:** `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL.
+- **Simulator:** 23 tests, 0 failures, in 9 files (**simulator-checked**).
+- **arm64 JVM step:** 7 tests, 0 failures, in 2 files. Its gate printed "OK: all 2 classes ran".
+- Run 42262233218 on `b5715ec` (the cap and the prediction) concluded `success`; status only, logs not read. This report
+  commit's own run (docs only) is not read.
+
+### Handoff (twenty-eighth session)
+1. **Nothing is running.** Head is this report's commit on `brouter-port`. Kind 5 is done: 10 of 10, one family, stable.
+2. **`expected-1b.tsv` is unchanged** (the rewrite gave the same bytes). `build/e3/FK/cases.tsv` now holds kind 5's
+   `hiking-mountain` list; the `car-fast` list is in scratch (`linden/33/FK-cases-before.tsv`).
+3. **Next, per -96:** Plumb merges `brouter-port` into `brouter-port-5b` at a step boundary. `30-fk-stability.tsv` still
+   holds the `car-fast` FK5 rows; they are no longer read for FK5 (`E3Expected.OWN_TABLES`).
