@@ -28,3 +28,19 @@ PREDICTION (pushed before the run; to be read after 08's result, which it does n
 - MP64, F0, R, DL-lat, DL-lon PASS, 0 mismatches each: no refill runs without panic mode first, and on the premise of 08
   none of their cases panics. If 08 shows R or DL panicking, this line is expected to fail for those same cases.
 - After restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED (the same scratch runner as 08; RV_TIMEOUT=1200; two parts):
+- Part 1, rv9a (DL, F0, RoutingEngineMemoryTest): the edit applied once (one - line, :691); 0 "e: " lines; 3 fresh XML,
+  6 tests, 2 failures, 0 errors; BUILD FAILED in 7m 54s. No oracle-against-expected-1b assertion failed.
+  - PM5: 55 cases, 48 mismatches. The 20 printed: all "oracle route, port no track found at pass=0", on all six fields.
+  - ML5: 59 cases, 53 mismatches. The 20 printed: all [kind] only, "oracle memory limit reached, port no track found
+    at pass=0".
+  - MP64 59, 0; F0 passed; DL-lat 59, 0; DL-lon 59, 0.
+- Part 2, rv9b (R): 0 "e: "; 1 fresh XML, 1 test, 0 failures; BUILD SUCCESSFUL in 11m 11s; R 1534 cases, 0 mismatches.
+- No hang. Restored: cmp equal after each part, and cmp equal to a copy taken before either part; git status clean.
+RESULT: THE PREDICTION FAILED on its numbers. Held: the groups that fail (PM5, ML5) and those that do not (MP64, F0, R,
+DL-lat, DL-lon), and the port's kind ("no track found at pass=0", not the limit). Failed: PM5 48 of 55, not "at least 50"
+(7 PM5 cases stay equal with their parked paths dropped); ML5 53 of 59, not 54 (one case that panicked in 1b's logged run
+still throws the limit, or one ML5 case's panic is not the one before its limit). Not explained: which 7 and which 6, and
+why; the run prints only the first 20 mismatches. Per the dispatch, one more try with a new pushed prediction is allowed;
+not started (the planner's handoff call came mid-run).

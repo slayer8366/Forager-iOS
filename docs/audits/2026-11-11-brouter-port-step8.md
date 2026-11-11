@@ -283,3 +283,63 @@ stratum-alone reverts of MP64 and PM5 (question 1).
 1. The planner's answers to questions 1 and 2; if owed, the MP64 and PM5 reverts, predictions pushed first.
 2. CI for this head (docs only).
 3. 8c (terminate, the time limit, the progress count, `catch (Error)`), 8d (heights in `RouteOutcome.Found`, -122).
+
+## 6. Session 32 (partial: stopped at the planner's handoff call)
+
+Plumb Ledger, session 32, `brouter-port-5b` `8deeb46` to the head that carries this section (fast-forward only).
+Trailer on every commit `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan on every staged diff: 0, no hit to fix.
+No source file changed in this session; every commit is docs.
+
+**Done:**
+1. **§5's line 264 corrected in place** (the planner's correction, -124): the false "(the 5b graph half is iterative)"
+   replaced by what was observed. A fresh full `:brouter:jvmTest --rerun-tasks` on `8deeb46`: 80 XML, `TOTAL: tests
+   166, failures 2` (both `CollectOutreachersTest`, -61, unchanged), 0 ` e: `. `grep -c 'caught a StackOverflowError'`:
+   3 over the log, 3 over the XML; per class `CollectOutreachersTest` 3, each of the other 79 classes 0.
+2. **Revert (a), the limit's condition** (`step8/08-revert-limit-condition.txt`; prediction `1adb40c`, result `fdc5ec9`):
+   `maxTotalCost < 1000000000` to `<=` (always true: every panic becomes the limit). Cannot loop; run under 1200 s per
+   part all the same. **Held on all seven groups:** PM5 55 of 55 (port the limit, oracle route), ML5 0, MP64 0, F0
+   passed, DL-lat 0, DL-lon 0, R 0 of 1534. Restored `cmp` equal. R and DL passing also shows none of their cases panics.
+3. **Revert (b), panic mode's refill** (`step8/09-revert-panic-refill.txt`; prediction `71a466e`, result in this
+   section's commit): the refill loop's `openSet.add` removed (the parked paths dropped). Cannot loop. **The prediction
+   failed on its numbers:** PM5 48 of 55 (predicted at least 50), ML5 53 of 59 (predicted 54), every printed mismatch the
+   port's "no track found at pass=0"; the groups held exactly (MP64, F0, DL-lat, DL-lon, R 0). Restored `cmp` equal.
+4. **8c: not started in code.** Read: Java `doRun`, `doRouting` (`:199-236`, `:312-361`), `logException`, `cleanOnOOM`,
+   `_findTrack`'s loop head (`:1960-1990`), `searchRoutedTrack` (`:1708-1805`), `mergeTrack`, the getters; Forager's
+   `BRouterTrailRouter.kt:117-180` (`doRun(maxRunningTimeMillis)` on its own engine thread; `terminate()` on a cancel,
+   then a non-cancellable join; reads `getErrorMessage()` then `getFoundTrack()`; never `getLinksProcessed`,
+   `isTerminated` or `getFoundRawTrack`). Drafted, **not compiled or run**: `step8/10-8c-draft-EngineClock.kt.txt` (an
+   injected `fun interface EngineClock`, with a monotonic default for callers) and
+   `step8/10-8c-draft-RoutingEngineStopTest.kt.txt` (FK 9, 10, 11 against the oracle on the kind and the message's fixed
+   part; the progress count exactly on FK11's cases run to the end; Forager's 30 s limit on a stopped clock; the limit,
+   the watchdog's seconds, an Error and an Exception through a driven clock). It needs `E3FKTest`'s companion made
+   `internal` and a clock argument on the port's constructor.
+5. **CI:** no code push this session, so no code CI to read. `CollectOutreachersTest`'s 2 failures are unchanged in the
+   local full run (-61); not touched.
+
+**[I]/[?]:**
+- [I] No stack overflow in any route group on the JVM: shown by the count in item 1 (route classes 0). iOS: step 10.
+- [I] No hang in either revert: all four parts printed a BUILD line (7m 36s, 11m 12s, 7m 54s, 11m 11s), under 1200 s.
+- [?] Revert (b)'s misses: 7 PM5 cases equal without the refill, and 6 ML5 cases not moved. Only the first 20 mismatches
+  are printed, so which cases they are was not seen.
+- [I] Found while reading for 8c: the `maxRunningTime / 3` case (`:1980`) needs `fastPartialRecalc`, which the port holds
+  false (`check`, §1: only the nearby track sets it), so no test can reach it; it can be ported as written, not shown.
+  The dirty track (`:1749-1758`) writes `foundRawTrack` only, which nothing in Forager's path reads; also not testable.
+- [I] No E3 row reaches `catch (Error)` (no row's kind is an Error's `toString`): its draft test drives it through the
+  clock, against Java's text, not the oracle.
+
+**Questions for the planner:**
+1. Revert (b) failed on its counts but held on every group and the direction. Is a second try owed (a new prediction,
+   e.g. one of the two flags, which can loop and so runs under the limit), or does (b) as observed close 8b?
+2. Is a test of the `maxRunningTime / 3` case owed, when the only path to it is left out (§1)?
+
+**Are 8b and 8c complete?** 8b: both reverts are run; (a) held, (b) failed on numbers only; complete if the planner rules
+on question 1. 8c: not complete; only reading and an unrun draft.
+
+**Next:**
+1. The planner's ruling on question 1; if owed, revert (b)'s second try, prediction pushed first.
+2. 8c from the drafts: the tests over a stub (`terminate`, `isTerminated`, `getLinksProcessed` as `TODO`, plus the
+   existing time-limit `TODO`), seen red with the `NotImplementedError` named, pushed red; then the port (`@Volatile
+   terminated`, `startTime`/`maxRunningTime` from the clock, the loop head, the re-tracking reset `:1797`, the dirty
+   track, `catch (e: Error) { cleanOnOOM(); logException(e) }`); CI read.
+3. 8c's revert (-90): `terminated` written but not read, prediction pushed first.
+4. 8d (heights in `RouteOutcome.Found`, -122).
