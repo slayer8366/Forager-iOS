@@ -4223,3 +4223,36 @@ watcher did not fire.
 **Next:** session 20, the hint code (-111): `VoiceHint`, `VoiceHintList`'s rest, `OsmTrack`'s detour methods and hint body;
 then `VoiceHintProcessor`; then `readBinary`'s file branch and the formats.
 **Notes:** Written by the planner session by hand. Next free ID -113.
+
+**Kind:** outcome
+**ID:** 2026-10-28-113
+**Timestamp:** 2026-11-11T10:59:56Z
+**Continues:** 2026-10-28-101, 2026-10-28-107, 2026-10-28-111, 2026-10-28-112
+**Title:** Step 7, Plumb's session 20: the hint code's first half red over stubs; the port written, held at the stop on
+changing tests after the result; two harness fixes accepted on conditions
+**Observed:** Plumb Ledger, session 20, `brouter-port-5b` `737fdf2` to `46626f3` (two commits; trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 150,206 by the harness's count.
+- **Red over stubs, `d2d8e34`:** `VoiceHintTest` (`VoiceHint` whole and `VoiceHintList`'s rest, on 30,000 seeded hints with
+  zero positions), `TrackDetourTest` (the four detour methods, `getMinDistance`, `getMatchedWaypoint`, `removeVoiceHint`),
+  and `TrackHeadTest`'s `copyDetours` on a real detour map. 5 of 5 failed, 0 ` e: ` [R].
+- **The weak check of -112 is closed:** the stronger `copyDetours` check fails over a null-returning stub, "detourMap
+  expected:<FrozenLongMap> but was:<null>" (`step7/04-copydetours-null-stub-result.txt`) [R].
+- **The port is written and not pushed:** `step7/03-s20-port-unpushed.patch`, and a local stash.
+- **The stop this prompt set, hit:** on the port, 2 of 5 failed on defects of the tests, not the port [R]:
+  - `calcCommand`'s comparison read Java's void result as null, and Kotlin's as `Unit`;
+  - the set-up froze one Java detour map twice, and Java's `FrozenLongMap` empties the map it is built from, so the oracle
+    side threw an NPE.
+  - With both fixed, uncommitted (`step7/05-s20-diagnostic-test-changes-not-applied.patch`), 5 of 5 passed [R].
+- **E1:** the scan flagged 6 timestamps in the two patch files' diff headers. They were stripped, and the rescan read 0.
+- **A false premise in -112's plan:** `processVoiceHints`' hint body cannot be compared with the oracle before
+  `VoiceHintProcessor` is ported. The two, with `startSection`, are tested as one unit.
+**Decision (the planner's, technical), after reading patch 05's lines:** both fixes are accepted.
+- The first maps `Unit` to null and nothing else. A port method returning `Unit` where Java returns a value still fails,
+  since the value is not null. So it cannot hide a port defect.
+- The second makes a fresh map for each copy, which changes the set-up, not a comparison. It adds a check that a second
+  copy from an emptied map throws on both engines alike.
+- **On a condition:** the fixed tests are committed and seen failing over the stubs again before the port goes in, so
+  -101's evidence is about the tests that are kept.
+- **Why this is not -107's case:** there a comparison of results was narrowed (throws compared by class) after the data
+  was seen. Here no comparison of values is narrowed.
+**Notes:** Written by the planner session by hand. Next free ID -114.
