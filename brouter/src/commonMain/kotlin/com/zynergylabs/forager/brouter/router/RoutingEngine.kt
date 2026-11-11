@@ -28,6 +28,7 @@ internal class RoutingEngine(
     private val waypoints: MutableList<OsmNodeNamed>,
     private val routingContext: RoutingContext,
     private val engineMode: Int,
+    private val clock: EngineClock = EngineClock.MONOTONIC,
 ) {
     private var nodesCache: NodesCache? = null
     private val openSet = SortedHeap<OsmPath>()
@@ -993,6 +994,12 @@ internal class RoutingEngine(
     fun getFoundTrack(): OsmTrack = foundTrack
 
     fun getErrorMessage(): String? = errorMessage
+
+    fun getLinksProcessed(): Int = TODO("RoutingEngine: the progress count, step 8c, RECORD -90")
+
+    fun terminate(): Unit = TODO("RoutingEngine: terminate, step 8c, RECORD -90")
+
+    fun isTerminated(): Boolean = TODO("RoutingEngine: isTerminated, step 8c, RECORD -90")
 
     private fun unsupported(what: String): Nothing =
         throw UnsupportedOperationException("RoutingEngine: $what is not supported (step 8 report §1)")

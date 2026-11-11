@@ -285,7 +285,7 @@ class E3FKTest {
     /** Kind 7's family is the message with its numbers read as `*` (-80); every other kind's is its kind exactly. */
     private fun familyOf(label: String, kind: String) = if (label == "FK7") kind.replace(Regex("\\d+"), "*") else kind
 
-    private companion object {
+    internal companion object {
         const val SEED = 20261208L
         const val N = 10
         const val CAP = 20 * N
