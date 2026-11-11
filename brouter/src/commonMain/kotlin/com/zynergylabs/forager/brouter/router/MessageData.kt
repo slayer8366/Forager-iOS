@@ -3,7 +3,7 @@ package com.zynergylabs.forager.brouter.router
 /**
  * Port of BRouter 1.7.10's `btools.router.MessageData`: the fields and the methods T2 keeps (`copy`, `getPrio`,
  * `isBadOneway`, `isRoundabout`, `isLinktType`, `isGoodForCars`, `toString`). Not ported, being unreached on Forager's
- * path: `toMessage`, `add` and `isGoodOneway`. Java's `clone()` is a field-by-field copy, as [copy] is.
+ * path: `isGoodOneway`. Session 24: `toMessage` and `add`, for `FormatCsv` (RECORD -111). Java's `clone()` is a field-by-field copy, as [copy] is.
  * `toString` formats `turnangle` with Kotlin's `Float.toString`, which is Java's on the JVM; on native it is [?].
  */
 internal class MessageData {
@@ -34,6 +34,12 @@ internal class MessageData {
     var vnode0: Int = 999
     var vnode1: Int = 999
     var extraTime: Int = 0
+
+    /** `MessageData.java:38-57`. */
+    fun toMessage(): String? = TODO("step 7, session 24 stub: MessageData.toMessage")
+
+    /** `MessageData.java:59-65`. */
+    fun add(d: MessageData): Unit = TODO("step 7, session 24 stub: MessageData.add")
 
     /** `MessageData.java:67-73`: Java's shallow `clone()`. */
     fun copy(): MessageData {

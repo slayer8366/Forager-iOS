@@ -16,6 +16,7 @@ import kotlin.math.abs
  * Session 20 (RECORD -111): the detour methods (`registerDetourForId`, `addDetours`, `appendDetours`,
  * `getFromDetourMap`), `getMatchedWaypoint`, `getMinDistance` and `removeVoiceHint`. Session 22: the hint body of
  * `processVoiceHints` (with `startSection`). Session 23: the file branch of `readBinary` (`writeBinary` is not ported).
+ * Session 24: `aggregateMessages`, for `FormatCsv`.
  * On Forager's path the reference track `OsmPath` takes is most likely always null (RECORD -94 [I], step 8 checks).
  */
 internal class OsmTrack {
@@ -239,6 +240,9 @@ internal class OsmTrack {
         showspeed = showspeed or t.showspeed
         showSpeedProfile = showSpeedProfile or t.showSpeedProfile
     }
+
+    /** `OsmTrack.java:168-188`. */
+    fun aggregateMessages(): List<String> = TODO("step 7, session 24 stub: OsmTrack.aggregateMessages")
 
     fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
         val wps = matchedWaypoints ?: return null
