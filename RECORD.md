@@ -4116,3 +4116,42 @@ reached") and -94 (step 7 follows 6 on the same branch). The planner's calls, te
 - **Stops:** anything that would assert a hint or a route coordinate (E1); any change to the plan's scope, such as
   `Format*` classes Forager never reaches. Those come to the planner, and scope to the owner.
 **Notes:** Written by the planner session by hand. Next free ID -110.
+
+**Kind:** outcome
+**ID:** 2026-10-28-110
+**Timestamp:** 2026-11-11T08:32:07Z
+**Continues:** 2026-10-28-90, 2026-10-28-94, 2026-10-28-109
+**Title:** Step 7's verify-first report (Plumb's session 18): the hints and every `Format*` output are unreached on
+Forager's path; -90's revert has no target; Android's routes carry heights and the port's do not
+**Observed:** Plumb Ledger, session 18, `brouter-port-5b` `7125739` to `916cb8f` (one docs commit,
+`docs/audits/2026-11-11-brouter-port-step7.md`; trailer `Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 [R]).
+No code was built. The watcher fired at 190,601 (08:30:28Z), nine minutes in; the report was pushed before the planner's
+handoff call landed. It ended at 196,212 by the harness's count. Plumb names the cost: a `grep` loop over `OsmTrack`'s
+members, about 600 lines of Java in ranges, and item I's wide rows.
+- **Step 7's files** (Java lines / T2's kept lines) [R]: `OsmTrack` 587/444, `VoiceHint` 223/201, `VoiceHintList` 61/33,
+  `VoiceHintProcessor` 529/529, `Formatter` 569/84, `FormatGpx` 573/26, `FormatJson` 261/22, `FormatKml` 116/15,
+  `FormatCsv` 43/13. 1,367 kept lines, as -90 says.
+- **The hints are off on Forager's path. Checked by the planner** in Forager's vendored BRouter: every one of the 24 profiles
+  that sets `turnInstructionMode` sets it to 1, "auto-choose", and `RoutingContext.java:177-179` leaves the field at its
+  default 0 when the value is 1. Only `RoutingParamCollector.java:224-231` sets it otherwise, and the port refuses those
+  keys (-107). So `processVoiceHints` returns early (`OsmTrack.java:457-460`, [R]), and `VoiceHint`, `VoiceHintProcessor`,
+  the detour methods and `containsNode` are not reached. Phase 1's JaCoCo run agrees [R].
+- **Reached** [R]: `OsmTrack`'s fields, `buildMap`, `getLink`, `appendTrack` (its one-section branch), `copyDetours`,
+  `readBinary`'s null check, `prepareSpeedProfile`, the start of `processVoiceHints`, and `VoiceHintList`'s constructor and
+  `setTransportMode`. `getTotalSeconds` and `Formatter`'s three methods are reached but only write `track.message`, which
+  nothing reads. No `Format*` output is taken by Forager. `addNode` runs only on a timeout: unknown.
+- **-90's revert has no target.** No distance is rounded in step 7. Plumb proposes instead `OsmTrack.java:346`'s
+  `if (i > 0 || ourSize == 0)` made `if (i > 0)`, which drops the first node when tracks are joined.
+- **A premise for step 8, checked by the planner:** Android's router keeps a height for every route point since 2026-10-30
+  (`BRouterTrailRouter.kt:219`, `nodes.map { heightMetresOf(it.getSElev()) }`; Forager `ba6a52d7`, dispatch 2026-10-30-06
+  Amendment 1). The port's `RouteOutcome.Found` carries `iLat`, `iLon` and `distance`, and no heights [R for the line,
+  `Route.kt:40`]. That is a gap with Android, the planner's to raise.
+- **Tests proposed** [R]: `TrackMapTest`, `AppendTrackTest`, `TrackHeadTest` and `TrackTimeTest`, each seen failing over stubs
+  first, over tracks built from step 6's paths. They compare by index, bits and digest, and assert no positions and no
+  hints. Real routes wait for step 8.
+**Decision (the planner's, technical):** -90's revert is replaced by Plumb's `OsmTrack.java:346` revert, since the original
+names a rounding step 7 does not have. `TrackTimeTest` asserts its time and energy values, since its inputs are step 6's
+paths from Forager's own ends (excepted, -93) and it asserts no position or hint.
+**For the owner:** whether the unreached hint and detour code, and the `Format*` classes, are ported or left as named
+"unsupported"; and whether step 8's route result carries heights, as Android's does.
+**Notes:** Written by the planner session by hand. Next free ID -111.
