@@ -1,0 +1,19 @@
+Revert (c), postProcess' catching-range comparison flipped (session 22, on the port of 080885f), written before it runs.
+This is -110's suggestion (report §5: "VoiceHintProcessor's catching-range comparison flipped").
+  Edit: VoiceHintProcessor.kt postProcess,
+    `} else if (input.distanceToNext < catchingRange) {`  ->  `} else if (input.distanceToNext > catchingRange) {`
+    (VoiceHintProcessor.java:408).
+  Filter: *.router.VoiceHint* (VoiceHintProcessTest, VoiceHintTest).
+  Predict:
+  - VoiceHintProcessTest.processVoiceHintsMatchesTheOracle fails, at a "hint count" assertion:
+    "case N: hint count expected:<a> but was:<b>" with b > a (the port keeps more hints).
+    Why: the branch's own condition becomes dead, since `input.distanceToNext > catchingRange` is already taken by the
+    `if` before it. Every hint that has a next hint, lies within the catching range and follows a saved hint within the
+    range then falls to the final `else`, which saves it unconditionally; forward, that branch drops short straight
+    hints (C/KR/KL without a higher-prio bad way), hints under 22.5 degrees and merges pairs (hintIdx++).
+    N I cannot say beforehand [I]. Case 0 (direct routing, no detours, hints mostly U-turns, which the branch saves
+    anyway) may agree; the first differing case is expected within the first few with a range of 40 or 100.
+  - If a case first differs with equal counts (a merged pair forward against two unmerged hints where the second is
+    then dropped), the first failure is instead a field of a hint ("hint h, angle", "cmd" or "distanceToNext") [I].
+  - The "result" assertion before it passes (no throw either way). The coverage check passes (oracle side only).
+  - VoiceHintTest (2 tests: VoiceHint and VoiceHintList, which do not call postProcess) passes.
