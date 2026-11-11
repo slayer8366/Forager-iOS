@@ -4033,3 +4033,38 @@ count; the watcher did not fire.
 **Left in step 6:** `SearchBoundary` (87 Java lines) and `RoutingParamCollector` (374), neither stubbed yet; then the merge
 of `brouter-port` (`611ba54`) into 5b at the step boundary (-96).
 **Notes:** Written by the planner session by hand. Next free ID -107.
+
+**Kind:** outcome
+**ID:** 2026-10-28-107
+**Timestamp:** 2026-11-11T08:18:20Z
+**Continues:** 2026-10-28-90, 2026-10-28-96, 2026-10-28-101, 2026-10-28-106
+**Title:** Step 6, Plumb's session 16: `SearchBoundary` and `RoutingParamCollector` ported, each over a failing stub first;
+reverts J and K; the boundary merge made but not pushed; a test loosened after the port first ran
+**Observed:** Plumb Ledger, session 16, `brouter-port-5b` `d2c6993` to `028783c` (nine commits; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). The watcher fired at 180,895 (07:52:34Z); the
+planner asked for the handoff and told Plumb to leave the merge. It ended at 189,487 by the harness's count.
+- **`SearchBoundary`, ported whole:** over the stub (`ca11871`, red on purpose) 1 of 1 failed, `NotImplementedError` naming
+  `getFileName`'s stub; on the port it passes on 168,000 `isInBoundary` cases [R, as reported].
+- **`RoutingParamCollector`, ported for Forager's calls:** `getWayPointList`, both `readPosition`s, and `setParams` for
+  `profile`, `alternativeidx` and `profile:`. Over the stubs (`30293c8`, red on purpose) 3 of 3 failed. **Checked by the
+  planner:** a non-empty `nogoLats`, each of the 18 other keys Java acts on, and a second `profile:` key throw
+  `UnsupportedOperationException("unsupported: ...")` (`RoutingParamCollector.kt:92-117`). The 8 methods Forager never
+  calls are not ported; §13 of the step 6 report names them.
+- **Reverts,** each predicted in a pushed file before it ran: J (`SearchBoundary`'s inner east bound) failed on
+  `getBoundaryDistance` direction 3, off by one degree, the branch Plumb had called less likely; K (`getWayPointList`'s
+  latitude truncated) failed one lower on Forager-form ends, as predicted, but on F0h case 3, not the first [R, as
+  reported].
+- **CI, read by the planner:** on `30293c8` (run 42981080608), `jvm` 138 tests, 5 failed: the three
+  `RoutingParamCollectorTest` stubs and `CollectOutreachersTest`'s two. On `6cd2ab9`, `12ae393` and `028783c` (runs
+  42982527896, 42982592547, 42982873596), `jvm` 138, 2 failed, both `CollectOutreachersTest` (-61). Every run: 0 ` e: `;
+  both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **The merge of `brouter-port` (`611ba54`) was not pushed.** **Checked by the planner:** `611ba54` is not an ancestor of
+  the remote `brouter-port-5b`. Plumb's local merge commit `4f5492f` (clean, no conflicts) stays on a local branch; session
+  17 redoes the merge from the remote and compares the trees.
+**A flag of the planner's, for the owner:** after the port first ran, Plumb changed `SearchBoundaryTest` twice, with the
+port unchanged. Out-of-range latitudes throw in both engines, and the test now compares those throws by class, and by
+message only for Java's own `IllegalArgumentException`. Plumb's stated reason: an index error lost its message on a
+JIT-compiled path [I]. That is a check loosened after the data was seen, against "fix choices before data". It touches only
+the throwing cases, not the 168,000 compared results. A stricter route, a test-JVM flag that keeps those messages, changes
+the build and is the owner's call. The planner proposes that the independent reviewer read it, once that role is named.
+**Notes:** Written by the planner session by hand. Next free ID -108.
