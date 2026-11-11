@@ -4001,3 +4001,35 @@ the harness's count; the watcher did not fire.
 **Left in step 6:** -62's `interpolateEle` revert; the empty XML; `StartPathTest`'s end-cut sample; revert G's port value;
 `RoutingParamCollector` and `SearchBoundary`. Then the merge of `brouter-port` into 5b at the step boundary.
 **Notes:** Written by the planner session by hand. Next free ID -106.
+
+**Kind:** outcome
+**ID:** 2026-10-28-106
+**Timestamp:** 2026-11-11T06:56:40Z
+**Continues:** 2026-10-28-61, 2026-10-28-62, 2026-10-28-90, 2026-10-28-105
+**Title:** Step 6, Plumb's session 15: revert G's port value read (lower, as predicted); reverts H and I; `StartPathTest`'s
+end cuts widened from 6 to 668; the empty XML not seen again
+**Observed:** Plumb Ledger, session 15, `brouter-port-5b` `7282c67` to `d2c6993` (six commits; clean tree; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 141,920 tokens by the harness's
+count; the watcher did not fire.
+- **The empty XML of -105 did not recur:** the full fresh run at `7282c67` gave 134 tests in 59 XML files, none empty, 0
+  ` e: ` (`10-full-run-7282c67.txt`). Its cause is unknown; Plumb's hypothesis, a process overlapping the moment all 59
+  files are written, is [I].
+- **Revert G's "port lower" is confirmed,** read from the whole XML messages (`11-revert-G3-port-value-result.txt`, read by
+  the planner): oracle `cost=26923`, port `26914`; at the start, `2847` against `2842` [R for the second].
+- **Revert H, -62's `interpolateEle` revert** (prediction at `4ffae38`, result at `016327f`): 0 compile errors, 2 fresh XML,
+  `cmp`-equal restore; 2 of 4 failed, `interpolateEleMatchesTheOracle` and `startPathsMatchTheOracleFromForagersEnds`, as
+  predicted. **One part missed:** the start-path failure came on one of R's ends, not on F0h's. Why F0h's cut starts pass
+  the revert is [?].
+- **`StartPathTest` widened:** synthetic end waypoints at each extension link's midpoint reach 668 of 1,868 end cuts,
+  against 6 final links before [R, as reported]. Revert I (the end cut's height left unchanged), predicted at `61a8e4f`
+  and observed at `370f384`, failed on an F0h cut line, as predicted [R, as reported].
+- **CI, read by the planner** on `61a8e4f` (run 42974370259) and `370f384` (run 42974441912): `jvm` 134 tests, 2 failed, both
+  `CollectOutreachersTest` (-61); 0 ` e: `; both `compileKotlinIos*` ran. `ios-smoke`: simulator 24 of 24
+  (**simulator-checked**), arm64 7 of 7, the gate reading "OK".
+- **`collectOutreachersWithoutADestination` passed once** in Plumb's local run at `7282c67`, and was red again in the next run
+  and in CI, with no code change between. This matches what the record already holds for Question A: at the default stack,
+  the port overflows 2 to 4 times a run, and at 1g this test passes. It is the deep-recursion question that waits for step
+  10 (-61). Not touched.
+**Left in step 6:** `SearchBoundary` (87 Java lines) and `RoutingParamCollector` (374), neither stubbed yet; then the merge
+of `brouter-port` (`611ba54`) into 5b at the step boundary (-96).
+**Notes:** Written by the planner session by hand. Next free ID -107.
