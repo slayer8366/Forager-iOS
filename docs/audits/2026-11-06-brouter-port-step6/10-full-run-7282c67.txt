@@ -1,0 +1,19 @@
+Session 15, full fresh run at 7282c67 (baseline; section 11 "Next" item 1, the 10 empty XML files).
+Command: ./gradlew :brouter:jvmTest --rerun-tasks --console=plain (no other Gradle run, no other process touching
+brouter/build during it). Wall time 605 s (Gradle: BUILD FAILED in 10m 4s, on the known red class).
+
+Gradle log: "134 tests completed, 1 failed"; 133 PASSED lines, 1 FAILED; 0 ' e: ' lines; 0 HTTP 429.
+JUnit XML (tools/junit-counts.py): TOTAL: tests 134, failures 1, errors 0, skipped 0 in 59 files.
+XML files: 59, 0 empty (0 bytes). So the counts agree three ways, and session 14's 10 empty files did not recur.
+
+Data on when the XML is written: a sampler listed the XML directory every 15 s during the run; the 59 files'
+mtimes all fall within 5 ms (06:26:17.769 to 06:26:17.774 UTC), at the task's end, not per class as each finishes.
+So any second process (another Gradle run, a filtered run, a reader truncating files) overlapping the task's end
+could leave files empty; that is a hypothesis [I], not observed. Disk: 29G free at the end.
+
+The one failure: CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes
+  "canEscape did not answer both ways: false/true 0/3587" (known red, RECORD -61).
+Changed from session 14 and CI on bce3a3a (both 2 of 2 red in CollectOutreachersTest):
+  collectOutreachersWithoutADestination PASSED here. 7282c67 differs from bce3a3a in docs only (2 files under
+  docs/audits). RECORD (Question A, 12-question-a) already records this test's outcome varying run to run at the
+  default stack (the port's stack overflow 2 to 4 times a run, JIT timing [I]). Reported, not touched.
