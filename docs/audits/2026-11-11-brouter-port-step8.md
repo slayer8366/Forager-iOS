@@ -210,5 +210,7 @@ that does not reach the memory path. Its strata are not green: R and DL wait on 
 1. The planner's ruling on question 1.
 2. 8b: the memory path (`collectOutreachers`, panic mode) and the open border list; then R and DL run whole, and §2's
    revert re-run on the committed R test.
-3. CI for `377d109` and this head (R and DL red on purpose there).
+3. CI for this head (docs only). **CI for `377d109`** (run 43092122738), read: JVM 163 tests, 5 failures
+   (CollectOutreachersTest 2, R 1, DL 2, as local); 0 ` e: `; both iOS klibs BUILD SUCCESSFUL; simulator 24/0; arm64
+   gate 7/0. Simulator-checked.
 4. 8c (time limit, `catch (Error)`), 8d (heights in `RouteOutcome.Found`, -122).
