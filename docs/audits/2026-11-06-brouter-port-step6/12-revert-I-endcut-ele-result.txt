@@ -1,0 +1,26 @@
+Session 15, revert I at 61a8e4f (prediction 12-revert-I-endcut-ele-prediction.txt, pushed in 61a8e4f before the
+run). revert.sh unchanged, run from a copy in scratch, filter *StartPathTest. 9-digit numbers redacted as <int>.
+
+Edit (OsmPath.kt, the end cut):
+                     stopAtEndpoint = true
+-                    ele2 = interpolateEle(ele1, ele2, rc.wayfraction)
++                    ele2 = ele2
+
+== runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="startPathsMatchTheOracleFromForagersEnds[jvm]"
+message="java.lang.AssertionError: fastbike-asia-pacific F0h-inside-across-the-degree-line detail false: line 15 of 19/19: oracle [cut path cost=13010 selev=0 airdistance=0 sourceNode=n<int>:<int> targ
+
+== full message, read from the fresh XML (1,251 characters; token by token):
+fastbike-asia-pacific F0h-inside-across-the-degree-line detail false: line 15 of 19: oracle [cut path cost=13010
+selev=0 ...]; 29 tokens each side; 2 differ: ehbd 1930000 (oracle) / 2680000 (port), ehbu 3930000 / 3180000.
+Cost, positions and the rest equal.
+
+Against the prediction: a "cut" path line (a synthetic end cut), not a start line; a heighted case (F0h), not F0;
+the first profile, fastbike-asia-pacific; fields among ehbd/ehbu, cost not moved. As predicted. Restored (cmp
+equal); git status after the run showed no source change.
+Not checked: whether StartPathTest before the widening (6 final links) also caught this revert [?].
