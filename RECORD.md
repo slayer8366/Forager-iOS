@@ -3963,3 +3963,41 @@ drafted but not compiled; a coder starts at about 61k of context; a wrong premis
 **So step 6 has not moved in code.** Session 14 starts from section 10's list, with the baseline already read. It reads
 the drafts against Java one method at a time, not both Java files whole.
 **Notes:** Written by the planner session by hand. Next free ID -105.
+
+**Kind:** outcome
+**ID:** 2026-10-28-105
+**Timestamp:** 2026-11-11T06:15:09Z
+**Continues:** 2026-10-28-90, 2026-10-28-97, 2026-10-28-99, 2026-10-28-101, 2026-10-28-104
+**Title:** Step 6, Plumb's session 14: `OsmPath` and `StdPath` ported, their tests seen failing over stubs first; reverts
+D, E and F re-run and committed; revert G (the turncost cast) as predicted, with the port's side of its line unread
+**Observed:** Plumb Ledger, session 14, `brouter-port-5b` `4815a6f` to `7282c67` (six commits; clean tree; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name; checked by the planner). It ended at 167,215 tokens by
+the harness's count; the watcher did not fire.
+- **Reverts D, E and F, re-run at `4815a6f`** (predictions at `7928c2a`, results at `ecf4506`). **Checked by the planner**
+  in the three result files: each has 0 compile errors, 1 fresh XML and a `cmp`-equal restore, and each failure message is
+  specific to its own edit and matches session 12's observation (D: line 3, an `obtain` line, oracle `true`, port `false`,
+  6,915 against 5,391 lines; E: `case 1: copy's extraTime`, port 0; F: `case 0: calcDistance`, oracle 1, port 0).
+  -101's missing files are now committed, as re-runs, not the originals.
+- **Tests over stubs first (-101), at `128dffd`, red on purpose:** `StdPathTest` (3) and `StartPathTest` (1), 4 of 4
+  `NotImplementedError: ... step 6: OsmPath`, 0 compile errors, 2 fresh XML (planner read the file).
+- **The port, at `bce3a3a`:** the drafts checked against Java method by method, with two compile fixes
+  (`anglemeter.cosAngle`; `@JvmField` on `sourceNode`, `targetNode`, `link`) [R, as reported]. The four path classes 7 of 7.
+  - **-97 carried out, checked by the planner:** `OsmPath.kt:267` throws `UnsupportedOperationException("unsupported:
+    OsmPath's start direction (OsmPath.java:282-283)")`, and `startDirectionIsUnsupported` asserts that exact message, then
+    the same path without a start direction. `OsmPath.kt:132` refuses `AreaInfo.checkAreaInfo` the same way.
+- **Revert G, the `(int)` cast** (prediction pushed in `bce3a3a` before the run): it named the 16 of 20 Std profiles whose
+  `turncost` is above 0, read from the brf files, and expected `fastbike-asia-pacific` first. Observed: `StdPathTest` 1 of
+  3 and `StartPathTest` 1 of 1 failed, both on `fastbike-asia-pacific`, `F0-inside-across-the-degree-line`, at a cost line
+  (oracle `cost=26923`; start, oracle `cost=2847`). The other two tests passed, as predicted. **Not confirmed:** the
+  prediction's "port lower". The runner cuts messages at 200 characters, so the port's value is not in the result file.
+- **CI on `bce3a3a`, read by the planner** (run 42969696836): `jvm` 134 tests, 2 failed, both `CollectOutreachersTest`
+  (-61); 0 ` e: `; both `compileKotlinIos*` ran. `ios-smoke`: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, the
+  gate reading "OK: all 2 classes ran". The two docs commits after it were still running at writing.
+- **An anomaly in the container [?]:** Plumb's full local run left 10 of 59 XML files empty, while Gradle's log and CI both
+  give 134. Not explained.
+- **Plumb asked about the trailer:** the harness suggested one naming the model with a session link. Plumb used the
+  dispatch's trailer. That is right: the record's rule is no model name in commits (-102's handoff), and the harness's own
+  guidance also forbids model identifiers in commits.
+**Left in step 6:** -62's `interpolateEle` revert; the empty XML; `StartPathTest`'s end-cut sample; revert G's port value;
+`RoutingParamCollector` and `SearchBoundary`. Then the merge of `brouter-port` into 5b at the step boundary.
+**Notes:** Written by the planner session by hand. Next free ID -106.
