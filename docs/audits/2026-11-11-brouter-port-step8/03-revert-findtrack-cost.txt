@@ -1,0 +1,16 @@
+Step 8a, session 30: the revert of the step 8 report's §2, on 4dcd049.
+
+Edit (one line, port only): router/RoutingEngine.kt:841, in findTrackInner (Java _findTrack :2219),
+  "testPath.cost < bestPath.cost"  ->  "testPath.cost > bestPath.cost"
+so the costliest of a link's paths is kept.
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh; filter *RoutingEngineF0Test.
+
+PREDICTION (pushed before the run):
+- The build compiles (0 "e: " lines) and fresh XML is written.
+- RoutingEngineF0Test fails: 1 test, 1 failure, an assertion (not an exception), on F0's first case
+  checked, F0-inside-across-the-degree-line, at its cost or its node count/digest first (the test
+  asserts kind, nodes, cost, distance, node digest, heights digest in that order, so the first
+  differing of those is the one reported) [I: which field is not predicted; "nodes" is the first
+  that can differ if the route changes shape].
+- The oracle-against-expected-1b assertion passes before it (the edit is in the port only).
+- After restore: cmp equal to the saved copy, and git diff of RoutingEngine.kt against 4dcd049 empty.
