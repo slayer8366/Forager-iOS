@@ -28,3 +28,21 @@ PREDICTION (pushed before the run):
 - F0 [?]: not predicted. Whether either of its two short routes ever pops a hollow-target path is not known; the 8b
   stub was inside the bounds check, so F0 passing over it says nothing about hollow pops.
 - After restore: cmp equal to the saved copy, and git diff of src against 31aa7b1 empty.
+
+OBSERVED (scratch copy of revert.sh, run rv4; the copy's timeout raised from 1500 to 5000 s for R, nothing else
+changed):
+- The edit applied once (one - and one + line; it is at OsmNodesMap.kt:123, not :122 as written above, the same
+  string); 0 "e: " lines; 4 fresh XML files, 7 tests, 6 failures, 0 errors. Every oracle-against-expected-1b assertion
+  passed (each failure is the port comparison).
+- MP64: 59 cases, 59 mismatches, each on all six fields, the port "memory limit reached" with an empty track. HELD.
+- PM5: 55 cases, 55 mismatches, the same shape. HELD.
+- ML5: 59 cases, 0 mismatches; the test passed. HELD: -90's revert is the one ML5 does not catch.
+- R: 1534 cases (oracle route 968, refused 354, error 212), 805 mismatches; the 20 printed all on all six fields with
+  the port "memory limit reached". HELD (at least 151).
+- DL-lat: 59 of 59 mismatches; DL-lon: 59 of 59; the same shape. HELD (at least 36 and 15), and more than predicted:
+  every DL case pops a hollow-target path.
+- F0 (not predicted): fails, "F0-inside-across-the-degree-line: kind expected:<[route]> but was:<[memory limit
+  reached]>". So F0's routes also pop a hollow-target path.
+- Restored: cmp equal to the saved copy; git diff of src against e501548 empty.
+- Each failure is one this edit produces: the port's kind becomes the limit wherever the oracle routes; where the oracle
+  already reached the limit (ML5) nothing differs.
