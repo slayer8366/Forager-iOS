@@ -4392,3 +4392,37 @@ harness's count, under the watcher's 180,000.
   `2f602b3` was still running and is not read.
 **Next:** session 25 ports `FormatJson` (261 lines) and `FormatGpx` (573), each red first, and closes step 7.
 **Notes:** Written by the planner session by hand. Next free ID -118.
+
+**Kind:** outcome
+**ID:** 2026-10-28-118
+**Timestamp:** 2026-11-11T14:33:49Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-117
+**Title:** Step 7, Plumb's session 25: `FormatJson` stubbed and red on purpose; JSON and GPX ports held unrun in patch 29;
+the planner's ruling on `OsmTrack.version`
+**Observed:** Plumb Ledger, session 25, `brouter-port-5b` `2f602b3` to `a775e5c` (partial, handed off at the watcher's
+182,216; ended at 189,019 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner).
+- **`3108507`, red on purpose:** `FormatJson` stubbed (`format`, `formatAsWaypoint`, `formatDecimal3` for Java's
+  `DecimalFormat`), with `OsmTrack.aggregateSpeedProfile`, `getVoiceHint` and `getVoiceHintTime`. `FormatJsonTest` sets
+  hints through `processVoiceHints` for modes 0 to 9, with speed, speed profile, itinerary, POIs, waypoints and export
+  flags; `formatDecimal3` against `DecimalFormat` on 250,023 floats. Full fresh run: 156 tests, 4 failed
+  (`CollectOutreachersTest`'s 2, `FormatJsonTest`'s 2 as `NotImplementedError` naming a stub), 0 ` e: ` [R].
+- **E1:** a first scan of 1 on a float test constant, not a position; rewritten as the same value before the commit, 0 [R].
+- **Held, never compiled or run:** `29-s25-partial-formatjson-formatgpx-port.patch` (the `FormatJson` port, the
+  `OsmTrack` helpers, `FormatGpx` whole with `read`, and `FormatGpxTest`). `FormatGpx` was never seen red. The revert
+  has a prediction in §12 but none was pushed, and it did not run. CI on `3108507` was not read.
+**Checked by the planner:** `git ls-remote` `a775e5c`, a fast-forward of `2f602b3`; no model name; E1 over
+`2f602b3..a775e5c`: 0. CI on `3108507` and `a775e5c` was still running and is not read here.
+**Found by the planner, not raised by Plumb:** the stub sets `OsmTrack.version` to the constant `"1.7.10"`, the oracle
+jar's `Implementation-Version`. Java reads it at run time from the package manifest (`OsmTrack.java:26`) and writes it
+into GPX's and JSON's `creator` (`FormatGpx.java:497`, `FormatJson.java:219`). Forager builds BRouter as a plain
+`java-library` whose `build.gradle.kts` sets no `Implementation-Version` (read on `pre-main`), so Forager's own output
+would read `BRouter-null` [I: from the build file; not run on Android]. The constant matches the test's oracle, not
+Forager.
+**Decision (the planner's, technical):** `OsmTrack.version` becomes a settable `String?`, `null` by default, which is
+what Forager's build gives. The port writes it as Java does (`"BRouter-" + version`, so `BRouter-null` when unset). The
+tests set it from the oracle's own `OsmTrack.version` at run time and compare outputs whole. No version number is written
+into common code. This is ruled before any port result for it was seen, so it is not a comparison changed after a result.
+**Next:** session 26 applies -118, compiles and runs patch 29, ports `FormatGpx` red first, runs the GPX revert with its
+prediction pushed first, reads CI, and closes step 7 if reached.
+**Notes:** Written by the planner session by hand. Next free ID -119.
