@@ -4287,3 +4287,36 @@ predicted; `VoiceHintProcessor`'s unit red over stubs; -113 corrected in place
 **Next:** session 22 ports the `VoiceHintProcessor` unit. Its sample is widened to reach the four missing commands, if it
 can be, before the port runs, while only the oracle's side has been seen.
 **Notes:** Written by the planner session by hand. Next free ID -115.
+
+**Kind:** outcome
+**ID:** 2026-10-28-115
+**Timestamp:** 2026-11-11T11:58:35Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-114
+**Title:** Step 7, Plumb's session 22: `VoiceHintProcessor`, `startSection` and `processVoiceHints`' body ported over a
+sample widened first; revert (c) as predicted; `OFFR` unreachable, `EL`/`ER` not reached on these inputs
+**Observed:** Plumb Ledger, session 22, `brouter-port-5b` `7193465` to `dd43676` (five commits; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 167,529 by the harness's count.
+- **The sample widened before the port (`5ba7488`, red on purpose):** only the inputs changed, from 10 walks of up to 25
+  steps per end to 40 of up to 80, so from 100 cases to 400. An oracle-side coverage check was added for commands 1 to 16
+  except 12, with the comparison untouched. Over the stubs 1 of 1 failed, 0 ` e: ` [R]. On the oracle's side: 17,279
+  hints, every command 1 to 16 but 12 reached, 10 three times and 13 six times [R].
+- **`OFFR` (12) cannot be reached. Checked by the planner:** it appears only in `Formatter.java`'s switches (`:165`, `:211`,
+  `:259`, `:303`, `:516`), and no line sets it.
+- **`EL`/`ER` (17, 18) are not reached on these inputs.** They are set at `VoiceHintProcessor.java:385-387` and `:444-446`
+  (planner's `grep`), on a motorway link. Plumb reads Forager's profile as pricing motorways at 100000, so no walk takes one
+  [I, not traced through the cost code].
+- **The port (`080885f`):** the processor, `startSection` and the hint body; `VoiceHintProcessTest` and the three track
+  tests 6 of 6 on the first run. Full fresh run 149 tests, 2 failed, both `CollectOutreachersTest` [R].
+- **Revert (c)** (`postProcess`' catching-range check, `<` made `>`), predicted at `bf66b05` before the run: "case 26: hint
+  count expected:<62> but was:<66>", as predicted, 0 compile errors, `cmp`-equal restore [R].
+- **CI on `080885f`, read by the planner** (run 43014941206): `jvm` 149, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+**Decision (the planner's, technical):** session 23 first tries to reach `EL`/`ER` with a test-only set-up applied alike on
+both engines, such as an input that takes a motorway link. If that is not cheap, the four lines are recorded as not
+covered, with the reason. `OFFR` is recorded as unreachable. The low counts for 10 and 13 stand: each is reached and
+compared.
+**A slip, the planner's:** its message to the owner before this entry put revert (c)'s figures the wrong way round. The
+oracle gives 62; the reverted port gives 66.
+**Next:** session 23: `EL`/`ER` as above, then `readBinary`'s file branch and the formats (-111), 1,562 Java lines whole,
+likely two sessions.
+**Notes:** Written by the planner session by hand. Next free ID -116.
