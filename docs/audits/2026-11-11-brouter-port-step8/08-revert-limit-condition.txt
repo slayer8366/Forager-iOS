@@ -26,3 +26,19 @@ PREDICTION (pushed before the run):
   each failure must be the port's kind "memory limit reached" against an oracle that is not the limit; any other
   failure means a stale or wrong run.
 - After restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED (scratch copy of revert.sh, taking several --tests filters and RV_TIMEOUT=1200; two parts, each applying the
+edit, running, and restoring from its own saved copy, because the four classes take about 1,226 s together):
+- Part 1, rv8a (DL, F0, RoutingEngineMemoryTest): the edit applied once (one - and one + line, :718); 0 "e: " lines;
+  3 fresh XML files, 6 tests, 1 failure, 0 errors; BUILD FAILED in 7m 36s (the one failure). No oracle-against-
+  expected-1b assertion failed.
+  - PM5: 55 cases, 55 mismatches. The 20 printed are all "oracle route, port memory limit reached", on all six fields.
+    HELD (55 of 55; the other 35 are counted, not printed).
+  - ML5: 59 cases, 0 mismatches. HELD.
+  - MP64: 59 cases, 0. F0 passed. DL-lat 59, 0; DL-lon 59, 0. HELD.
+- Part 2, rv8b (R): the same edit; 0 "e: " lines; 1 fresh XML, 1 test, 0 failures; BUILD SUCCESSFUL in 11m 12s. R 1534
+  cases {route=968, refused=354, error=212}, 0 mismatches. HELD: no R case panics, so the premise holds for R and DL.
+- No hang: both parts ended well inside 1200 s.
+- Restored: cmp equal after each part, and cmp equal to a copy of the file taken before either part; git status clean.
+RESULT: the prediction held on all seven groups. PM5 catches a wrong decision on when the limit is thrown (a panic
+turned into the limit); ML5 does not catch this one, as predicted (it holds the limit itself, and the limit came anyway).
