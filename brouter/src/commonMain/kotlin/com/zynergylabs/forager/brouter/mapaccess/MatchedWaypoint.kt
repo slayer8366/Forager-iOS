@@ -25,5 +25,9 @@ internal class MatchedWaypoint {
         const val WAYPOINT_TYPE_SHAPING: Byte = 1 // route next to this point
         const val WAYPOINT_TYPE_MEETING: Byte = 2 // visit this point
         const val WAYPOINT_TYPE_DIRECT: Byte = 3 // from this point go direct to next = beeline routing
+
+        /** `MatchedWaypoint.java:50-72`; session 23, for `OsmTrack.readBinary`'s file branch (RECORD -111). */
+        fun readFromStream(dis: okio.BufferedSource): MatchedWaypoint =
+            TODO("step 7, session 23 stub: MatchedWaypoint.readFromStream")
     }
 }

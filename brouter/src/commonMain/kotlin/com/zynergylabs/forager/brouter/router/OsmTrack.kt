@@ -393,10 +393,11 @@ internal class OsmTrack {
             nogoChecksums: LongArray?,
             profileChecksum: Long,
             debugInfo: StringBuilder?,
+            fileSystem: okio.FileSystem = okio.FileSystem.SYSTEM,
         ): OsmTrack? {
             if (filename != null) {
-                // `OsmTrack.java:236-292`, the file branch: a later session (RECORD -111).
-                TODO("step 7: hint code, a later session (RECORD -111)")
+                // `OsmTrack.java:236-292`, the file branch: session 23 (RECORD -111).
+                TODO("step 7, session 23 stub: OsmTrack.readBinary's file branch")
             }
             return null
         }
