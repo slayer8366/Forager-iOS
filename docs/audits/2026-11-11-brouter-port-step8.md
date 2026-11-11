@@ -261,7 +261,13 @@ Trailer on every commit `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 sca
   MP64 showed neither panic nor the limit in 1b, and R and DL at memory class 64 reach the same collection, so no
   revert MP64 alone catches has been found. Both are caught by -90's revert, with R and DL.
 - [I] ML5's own revert moves a message, not a decision; a wrong choice of when to throw the limit is not yet shown caught.
-- [I] No stack overflow or out-of-memory in any memory-path run (the 5b graph half is iterative).
+- [I] No stack overflow or out-of-memory in any memory-path run. **Corrected (the planner's, RECORD -124):** the
+  parenthesis that stood here, "(the 5b graph half is iterative)", was false. `OsmNodesMap.kt:58-65`'s
+  `cleanupPeninsulas` is recursive and, on the JVM, catches a `StackOverflowError` and carries on, printing one line
+  to stderr, as Java does (-61's rejected option was the rewrite without recursion). Observed: CI's log on `31aa7b1`
+  prints that line 3 times, all by `CollectOutreachersTest`, none by the six route groups (the planner's reading, -124);
+  session 32's fresh full run on `8deeb46` (80 XML, 166 tests) gives `grep -c 'caught a StackOverflowError'` 3 over
+  the log and 3 over the XML, `CollectOutreachersTest` 3, every other class 0. On iOS there is no catch (-50; step 10).
 - [?] Kotlin/Native numbers and `Throwable.toString`: step 10. iOS: simulator-checked only.
 
 **Questions for the planner:**
