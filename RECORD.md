@@ -4702,3 +4702,52 @@ planner). Docs only: no code changed.
    `fastPartialRecalc`. 8c ports the plain time limit and names the third as left out, with the `check` as its guard.
 4. **Next: 8c** in code, from the drafts, tests seen failing first.
 **Notes:** Written by the planner session by hand. Next free ID -126.
+
+**Kind:** outcome
+**ID:** 2026-10-28-126
+**Timestamp:** 2026-11-12T00:02:00Z
+**Continues:** 2026-10-28-90, 2026-10-28-125
+**Title:** Step 8c, Plumb's session 33: tests red over stubs, the port held as a patch; a stop on a draft test's false
+premise; the JVM job hit its 30-minute limit; the planner's rulings
+**Observed:** Plumb Ledger, session 33, `brouter-port-5b` `3fc4341` to `486588d` (fast-forward only; ended at 150,599 by
+the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **Red, pushed** (`124e6da`): `RoutingEngineStopTest` (9 tests: FK9, FK10, FK11, FK11's link count, and five on an
+  injected clock or a thrown error), `EngineClock`, three stubs. 9 of 9 fail on a `NotImplementedError`.
+  `E3FKTest`'s companion changed from `private` to `internal`.
+- **The port, not in the tree** (`step8/11-8c-port.patch`, per the stop rule): with it, 8 of 9 pass; full run 175 tests,
+  2 failed [R, Plumb's].
+- **The stop:** `theTimeLimitReadsTheInjectedClock` expects "pass0 timeout after 30 seconds" and the port gives
+  "target-island-check timeout after 30 seconds". Plumb made no fix. No revert was run.
+- Locally `CollectOutreachersTest` failed 1 of 2 with 0 caught-overflow lines [R, Plumb's; ?].
+**Checked by the planner:**
+- `git ls-remote` `486588d`, a fast-forward of `3fc4341`; 2 commits, one trailer each, no model name; E1 over the range: 0.
+- **The premise is false by the Java** [R]: `RoutingEngine.java:961` runs `findTrack("target-island-check", ...)` for
+  every section before any pass, and the time limit is checked inside `_findTrack`'s loop (`:1979-1983`) under whatever
+  operation name it was given. On a clock already past the limit, the first operation to strike is the island check. The
+  expected text was session 32's hand-written reading, never an oracle's output. The port's answer agrees with the Java.
+- **FK9's pattern has the same gap:** `(pass0|pass1|re-tracking) timeout after 0 seconds` leaves the island check out. It
+  passes only while the island check finishes inside the 50 ms limit, on both engines.
+- **CI on `124e6da`** (run 43118062551): `jvm` 175 tests, 11 failed: the 9 red on purpose and `CollectOutreachersTest`'s
+  2; 0 ` e: `. **The job was cancelled at its 30-minute limit:** the test step alone ran 29.5 minutes, so "iOS klibs" was
+  cancelled and `compileKotlinIosArm64` did not run. `ios-smoke`: `compileKotlinIosSimulatorArm64` ran, simulator 24 of
+  24 (**simulator-checked**), arm64 7 of 7, the gate "OK". This run is over the stubs.
+- **The caught-overflow line in that CI log: 4 prints,** against 3 in the earlier runs. With Plumb's local 0 and 1 of 2,
+  the known pair is not stable in how it fails. That fits a stack-depth effect (-61) and shows nothing new about the port.
+- The patch, skimmed against the Java, not yet line by line: the loop head (`:1975-1984`), the dirty track on a timeout
+  (`:1749-1758`), `terminate`, `cleanOnOOM`, the link count. It reads a monotonic clock where Java reads the wall clock;
+  the difference is named in `EngineClock`.
+**Decisions (the planner's, technical):**
+1. **The test's expected text is corrected to the Java's, and FK9's pattern gains `target-island-check`.** This is a
+   comparison changed after a port result, so it is done under these terms and **flagged for the independent reviewer**
+   with -107, -116 and -119:
+   - evidence from the oracle alone is pushed first: the oracle run with a 1 ms limit on FK9's cases, the first words of
+     its messages counted, no port in the run;
+   - the change is a commit of its own, naming this entry, made while the port is still out of the tree, and seen red over
+     the stubs again;
+   - nothing else in either comparison moves. `start-island-check` is not added: Forager never routes inverse.
+2. **The JVM job's limit goes from 30 to 60 minutes** (`brouter.yml:18`). It weakens no check; at 30 the klib compile is
+   lost. The suite's length is now a cost on every push and is named as such.
+3. **The monotonic clock is accepted** as a named difference from Java.
+4. **Not covered:** `catch (Error)` on Kotlin/Native, where an out-of-memory normally ends the process. Step 10.
+5. **Next:** session 34 does 1 and 2, applies the patch, runs 8c's two reverts.
+**Notes:** Written by the planner session by hand. Next free ID -127.
