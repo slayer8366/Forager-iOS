@@ -4535,3 +4535,37 @@ the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; 
 - **Still failing, known:** `CollectOutreachersTest`'s 2 (-61), for step 10.
 **Next:** step 8, `RoutingEngine`, with heights per route point (-111) and via points out (-24).
 **Notes:** Written by the planner session by hand. Next free ID -122.
+
+**Kind:** outcome
+**ID:** 2026-10-28-122
+**Timestamp:** 2026-11-11T19:15:27Z
+**Continues:** 2026-10-28-24, 2026-10-28-90, 2026-10-28-111, 2026-10-28-121
+**Title:** Step 8a, Plumb's session 29: `RoutingEngine`'s survey and test plan; F0's test red over the stub; the 8a port
+held uncompiled in a patch; the planner's answers to two questions
+**Observed:** Plumb Ledger, session 29, `brouter-port-5b` `461e4d6` to `2fddfcc` (partial, handed off at the watcher's
+181,688; ended at 212,100 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner). No stops.
+- **`22266d1`, pushed alone first:** `docs/audits/2026-11-11-brouter-port-step8.md` §1 places every method and field
+  group of `RoutingEngine` in 8a, 8b, 8c, 8d or "left out", with its evidence; §2 is 8a's test plan, the revert named
+  (`testPath.cost <` flipped to `>`). Via points are 424 lines in `RoutingEngine`; -24's other 5 (`getFromDetourMap`)
+  were ported at step 7. Unported classes it calls: `AreaReader` and `StackSampler`, both left out.
+- **`15a4aa2`, red on purpose:** `RoutingEngine` stubbed with `RoutingEngineF0Test`, which first holds the in-JVM oracle
+  to `expected-1b.tsv` (passed), then compares the port field by field. 1 test, 1 failure, a `NotImplementedError` naming
+  `RoutingEngine.doRun`. Full fresh run: 160 tests, 3 failed (`CollectOutreachersTest`'s 2, F0 on purpose), 0 ` e: ` [R].
+- **Held, never compiled or run:** `02-partial-routingengine-8a.patch`. CI not read by Plumb.
+**Checked by the planner:**
+- `git ls-remote` `2fddfcc`, a fast-forward of `461e4d6`; no model name; E1 over `461e4d6..2fddfcc`: 0. CI on
+  `15a4aa2` and `2fddfcc` was still running and is not read.
+- **§1's premises about Forager, read on `pre-main` at `12eb9697`** (5 commits past the coder's checkout; no diff under
+  `app/.../routing` or `third_party/brouter`): `BRouterTrailRouter.kt` passes three parameters only (`profile`,
+  `alternativeidx` "0", `profile:use_dynamic_range` "0"), sets `quite = true`, builds the six-argument engine with both
+  file bases `null` in `ROUTING` mode, and calls `doRun(maxRunningTimeMillis)` on its own thread. These hold.
+- **Not checked by the planner:** §1's other "left out" rows, line by line. Each throws by name if reached, so a wrong
+  row shows as a refusal, not as a wrong route.
+**Decisions (the planner's, technical), on Plumb's two questions:**
+1. **Heights at 8d change `RouteOutcome.Found`:** yes, wanted. That is what the owner's -111 ruling means in code.
+2. **`debug.txt`:** the port throws a named "unsupported" if it or `stacks.txt` exists where Java looks, and is compared
+   in E3's unlogged regime only. That is the right reading: Forager puts no such file there [I: Plumb's, from the profile
+   folder], and logging to a file is not part of a route. **Recorded as not covered:** the port in E3's logged regime.
+**Next:** session 30 reads CI, applies the patch fixing compile errors only, runs F0, then the revert, then R and DL.
+**Notes:** Written by the planner session by hand. Next free ID -123.
