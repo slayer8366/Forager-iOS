@@ -21,3 +21,16 @@ PREDICTION (pushed before the run):
   element sharing a position with its origin, which compileTrack then skips as a double element; the end waypoints
   are not on nodes, so this is not expected.]
 - After restore: cmp equal to the saved copy, and git diff of src/commonMain against 0ab64b6 empty.
+
+OBSERVED (scratch copy of revert.sh, run rv3):
+- The edit applied once (the diff has one - and one + line, at RoutingEngine.kt:896); compileKotlinJvm ran (3 known
+  warnings, 0 "e: " lines); 1 fresh XML.
+- RoutingEngineF0Test: TOTAL tests 1, failures 1, errors 0. The message: "F0-inside-across-the-degree-line: nodes
+  expected:<226> but was:<227>", at RoutingEngineF0Test.kt:36 (the nodes assertion). THE PREDICTION HELD: the first
+  case, the nodes field, the port one more than the oracle.
+- The test's printed tuple for that case: kind route on both, nodes 226 against 227, cost 5302 on both, distance 5047
+  against 5086, node digest and heights digest both differ. So every field predicted to stay equal stayed equal, and
+  every field predicted to move moved; the oracle-against-expected-1b assertion passed before it.
+- Restored: cmp equal to the saved copy; git diff of src against 0ab64b6 empty.
+- So F0 through the port has now been seen red on a wrong port, not only over the stub. The failure names a field and
+  a count this edit, and no other, produces (one node more, cost unchanged).
