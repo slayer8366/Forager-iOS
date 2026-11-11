@@ -1,0 +1,18 @@
+Revert (c), postProcess' catching-range comparison flipped (session 22; prediction 12, pushed at bf66b05 before the run).
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh; results deleted first.
+Edit (the runner's diff):
+-                } else if (input.distanceToNext < catchingRange) {
++                } else if (input.distanceToNext > catchingRange) {
+Filter: *.router.VoiceHint*
+Runner output:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 2
+TOTAL: tests 3, failures 1, errors 0, skipped 0 in 2 files
+TOTAL: tests 3, failures 1, errors 0, skipped 0 in 2 files
+testcase name="processVoiceHintsMatchesTheOracle[jvm]"
+message="java.lang.AssertionError: case 26: hint count expected:<62> but was:<66>
+Full message from the XML (not cut): "java.lang.AssertionError: case 26: hint count expected:<62> but was:<66>"
+Observed against prediction: as predicted - a hint count assertion, the port keeping more hints (66 against 62),
+  in a case within the first few groups (26), not case 0; VoiceHintTest's 2 tests passed.
+After: the forward line present once in VoiceHintProcessor.kt, git status clean, restore cmp-equal.
