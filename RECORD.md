@@ -4320,3 +4320,42 @@ oracle gives 62; the reverted port gives 66.
 **Next:** session 23: `EL`/`ER` as above, then `readBinary`'s file branch and the formats (-111), 1,562 Java lines whole,
 likely two sessions.
 **Notes:** Written by the planner session by hand. Next free ID -116.
+
+**Kind:** outcome
+**ID:** 2026-10-28-116
+**Timestamp:** 2026-11-11T12:38:07Z
+**Continues:** 2026-10-28-101, 2026-10-28-107, 2026-10-28-111, 2026-10-28-115
+**Title:** Step 7, Plumb's session 23: `Formatter` ported whole over failing stubs; revert (d) as predicted; `EL`/`ER` not
+covered; `readBinary`'s file branch stopped on JDK 21's null-pointer wording; the planner's ruling on it
+**Observed:** Plumb Ledger, session 23, `brouter-port-5b` `dd43676` to `2f2eb38` (partial, handed off at the watcher's
+182,127; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 188,576 by the
+harness's count.
+- **`EL`/`ER`, recorded not covered** (`d413679`): a probe on `fastbike` with motorways allowed reached `goodWay` prio 29
+  142 times, but never beside a motorway (`maxBadPrio` 30) [R]. The committed test is unchanged.
+- **`Formatter` whole**, red over stubs at `08fdbba`, then passing at `3d64e31` on 63,728 calls against the oracle [R].
+- **Revert (d)** (`getOruxAction`'s sum flipped), predicted in `3d64e31` before it ran: "getOruxAction(13, -12) expected
+  996, was 1020", as predicted, `cmp`-equal restore [R].
+- **CI, read by the planner:** on `08fdbba` (run 43017985612), `jvm` 151, 4 failed: `FormatterTest` and `ReadBinaryTest` red
+  on purpose, and `CollectOutreachersTest`'s two. On `3d64e31` (run 43020174261), `jvm` 151, 3 failed: `ReadBinaryTest` red
+  on purpose and `CollectOutreachersTest`'s two. Both: 0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24
+  (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **The stop:** `ReadBinaryTest` passes tracks 0 to 29, then fails at track 30, the first empty one. The result is equal, but
+  the debug text is 145 characters on the oracle and 93 on the port. With no nodes, Java's `last_pe.cost`
+  (`OsmTrack.java:258`) throws a null-pointer exception, and JDK 21 adds its own message [I: inferred from the length].
+  The port is held in `16-s23-readbinary-port-not-passing.patch`; the source keeps its stubs.
+**Checked by the planner:**
+- Java catches every exception there and only appends `"Error reading rawTrack: " + e` to `debugInfo`
+  (`OsmTrack.java:286-290`). The differing text is the JVM's wording of its exception, not BRouter's.
+- The branch is unreachable on Forager's path: it needs `rawTrackPath` (`RoutingEngine.java:914`), which Forager's
+  `pre-main` never sets, and `RoutingParamCollector` has no key for it (both by `git grep`, no hit).
+**Decision (the planner's, technical):** neither of Plumb's options.
+- (a), JDK 21's wording copied into common code, would put a made-up JVM message on iOS, against "never a fabricated
+  plausible value".
+- (b), the empty track ruled out, removes the one input that reaches the error path.
+- **Instead:** the port writes its own exception's description after BRouter's prefix. On the error path, the test
+  compares the result exactly, and `debugInfo` exactly up to and including `"Error reading rawTrack: "`. It asserts that
+  both engines took that path and that each wrote some text after the prefix. On every other path, `debugInfo` is
+  compared whole, as now. The port's code names the difference in a comment.
+- **Disclosed as what it is:** a comparison changed after a result was seen, like -107's. The planner puts it beside -107's
+  case for the independent reviewer, once that role is named.
+**Notes:** Written by the planner session by hand. Next free ID -117.
