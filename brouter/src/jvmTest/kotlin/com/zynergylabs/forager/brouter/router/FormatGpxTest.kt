@@ -20,6 +20,15 @@ import kotlin.test.assertTrue
  * -116); a stub's message is kept so that it names the stub. Texts are compared by digest and length only (E1).
  */
 class FormatGpxTest {
+    /**
+     * RECORD -118: the port's `OsmTrack.version` is `null` by default; set from the oracle's own value at run time, as
+     * in `FormatJsonTest`. Added in session 27: patch 29's test predates -118 (an input, not a change to the comparison).
+     */
+    @kotlin.test.BeforeTest
+    fun setVersion() {
+        OsmTrack.version = btools.router.OsmTrack.version
+    }
+
     private fun digest(s: String): String =
         java.security.MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }
             .take(16) + "/" + s.length

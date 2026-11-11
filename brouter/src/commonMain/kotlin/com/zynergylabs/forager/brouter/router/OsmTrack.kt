@@ -297,10 +297,27 @@ internal class OsmTrack {
     }
 
     /** `OsmTrack.java:397-405`. */
-    fun getVoiceHint(i: Int): VoiceHint? = TODO("OsmTrack.getVoiceHint: step 7, session 25")
+    fun getVoiceHint(i: Int): VoiceHint? {
+        val vh = voiceHints ?: return null
+        for (hint in vh.list) {
+            if (hint.indexInTrack == i) {
+                return hint
+            }
+        }
+        return null
+    }
 
     /** `OsmTrack.java:551-559`. */
-    fun getVoiceHintTime(i: Int): Float = TODO("OsmTrack.getVoiceHintTime: step 7, session 25")
+    fun getVoiceHintTime(i: Int): Float {
+        val list = voiceHints!!.list
+        if (list.isNotEmpty() && i < list.size) {
+            return list[i].getTime()
+        }
+        if (nodes.isEmpty()) {
+            return 0f
+        }
+        return nodes[nodes.size - 1].getTime()
+    }
 
     fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
         val wps = matchedWaypoints ?: return null
