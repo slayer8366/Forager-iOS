@@ -22,8 +22,8 @@ import kotlin.test.fail
  * `RoutingEngine.getStartPath`'s steps (`RoutingEngine.java:1814-1870`, both overloads) after `_findTrack`'s graph
  * steps (`:1911-1928`, [PathEngines.OracleGraph]), and extends each start path once over its target's links as the
  * search does (`:2146-2227`), with the end waypoint set on the final link (`:2214-2225`). So the cut ends are reached:
- * the start cut (`OsmPath.java:236-255`, `interpolateEle` at `1 - wayfraction`), the pending end on the same segment,
- * and the end cut (`:233-235`).
+ * the start cut (`OsmPath.java:245-261`, `interpolateEle` at `1 - wayfraction`), the pending end on the same segment,
+ * and the end cut (`:242-244`).
  *
  * Ends: F0's two and F0h's eight (`E3F0hTest.ENDS`), on each of the 20 `StdModel` profiles; and the first [R_SAMPLE]
  * of R's ends on each of those profiles, from its own fixed seed (`E3RProfilesTest.SEEDS`; `hiking-mountain`'s is

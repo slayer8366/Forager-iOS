@@ -176,7 +176,7 @@ class StdPathTest {
         }
     }
 
-    /** `interpolateEle` (`OsmPath.java:368-373`) on seeded heights and fractions, its `(short)` cast included. */
+    /** `interpolateEle` (`OsmPath.java:388-393`) on seeded heights and fractions, its `(short)` cast included. */
     @Test
     fun interpolateEleMatchesTheOracle() {
         val oc = Class.forName("btools.router.StdPath").getDeclaredConstructor().also { it.isAccessible = true }
