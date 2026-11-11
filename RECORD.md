@@ -4503,3 +4503,35 @@ the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; 
   ported then.
 **Next:** session 28 ports `equalsTrack` and `addNodes` and closes step 7.
 **Notes:** Written by the planner session by hand. Next free ID -121.
+
+**Kind:** outcome
+**ID:** 2026-10-28-121
+**Timestamp:** 2026-11-11T18:50:13Z
+**Continues:** 2026-10-28-111, 2026-10-28-120
+**Title:** Step 7 closed: Plumb's session 28 ports `equalsTrack` and `addNodes`; revert (g) as predicted; the planner's
+check of the close
+**Observed:** Plumb Ledger, session 28, `brouter-port-5b` `f29366e` to `461e4d6` (fast-forward only; ended at 127,241 by
+the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). No stops.
+- **Red first** (`cb8e1e1`): `equalsTrack` and `addNodes` stubbed with `TrackEqualsAddNodesTest`; 2 tests, 2 failures,
+  each a `NotImplementedError` naming its stub [R].
+- **Port** (`d49a3ff`), passing on the first run, the test unchanged: `equalsTrack` 240 true and 1,180 false, every
+  variant reached; `addNodes` 120 runs, 111,426 nodes, digests equal. Full fresh run: 159 tests, 2 failed
+  (`CollectOutreachersTest`'s), 0 ` e: ` [R].
+- **Revert (g)** (the latitude comparison dropped), prediction pushed first: "walk 0: lat at 0, direction 0: equalsTrack
+  expected false, was true", as predicted, `cmp`-equal restore [R].
+- **§15** of the step 7 report holds the closing table.
+**Checked by the planner:**
+- `git ls-remote` `461e4d6`, a fast-forward of `f29366e`; no model name; E1 over `f29366e..461e4d6`: 0.
+- **CI on `d49a3ff`** (run 43079285759): `jvm` 159, 2 failed, both `CollectOutreachersTest`'s; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". `461e4d6` (docs only) was
+  still running and is not read.
+- Stubs in `commonMain` at `461e4d6`, by `git grep`: 3, all in `Route.kt` and all marked for step 8's
+  `RoutingEngine`; none in step 7's files.
+**Step 7 is closed,** with these left open and named:
+- **Not ported:** `writeBinary` (-120, no caller).
+- **Not covered by a test:** `EL`/`ER`, `OFFR`, GPX's middle-waypoint type branches (compared, not counted).
+- **Unverified:** Kotlin/Native number formatting [?], for step 10. Every iOS result is simulator-checked only.
+- **For the independent reviewer, once named:** the comparisons changed after a result in -107, -116 and -119.
+- **Still failing, known:** `CollectOutreachersTest`'s 2 (-61), for step 10.
+**Next:** step 8, `RoutingEngine`, with heights per route point (-111) and via points out (-24).
+**Notes:** Written by the planner session by hand. Next free ID -122.
