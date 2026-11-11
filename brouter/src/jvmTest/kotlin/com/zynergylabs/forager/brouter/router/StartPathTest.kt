@@ -28,6 +28,11 @@ import kotlin.test.fail
  * Ends: F0's two and F0h's eight (`E3F0hTest.ENDS`), on each of the 20 `StdModel` profiles; and the first [R_SAMPLE]
  * of R's ends on each of those profiles, from its own fixed seed (`E3RProfilesTest.SEEDS`; `hiking-mountain`'s is
  * `E3RTest.SEED`). Plain mode (the search, cleanup mode 1 or 2) and detail mode (the final pass, cleanup mode 0).
+ *
+ * Forager's ends reach the end cut rarely (6 final links in 600 runs, session 14), so each run also extends every
+ * start path over each of its target's links with a synthetic end waypoint at that link's node midpoint (session 15).
+ * It is hit wherever the link's first geometry segment passes within 1.5 m of it ("cut hit true"); on a link with
+ * intermediate geometry it may not be, and that extension is still compared as a plain one.
  */
 class StartPathTest {
     @Test
@@ -45,6 +50,8 @@ class StartPathTest {
         var finals = 0
         var sameSegment = 0
         var cutStarts = 0
+        var endCuts = 0
+        var endCutTries = 0
         for (profile in profiles) {
             val name = profile.name.removeSuffix(".brf")
             val seed = if (name == E3RTest.PROFILE) E3RTest.SEED else E3RProfilesTest.SEEDS.getValue(name)
@@ -69,6 +76,8 @@ class StartPathTest {
                         starts += o.lines().count { it.startsWith("start") && !it.endsWith("null") }
                         finals += o.lines().count { it.startsWith("final ") }
                         if (o.contains("same true")) sameSegment++
+                        endCuts += o.lines().count { it == "cut hit true" }
+                        endCutTries += o.lines().count { it.startsWith("cut hit") }
                         if (detail) cutStarts += o.lines().count { it.startsWith("start") && it.contains("originElement=[") }
                     }
                 }
@@ -79,10 +88,12 @@ class StartPathTest {
         println(
             "6 start paths: ${profiles.size} profiles, $runs runs, $starts start paths, $finals final links, " +
                 "$sameSegment same-segment runs, $cutStarts cut starts in detail mode, " +
+                "$endCuts of $endCutTries synthetic end cuts hit, " +
                 "digest ${md.digest().joinToString("") { "%02x".format(it) }}",
         )
         assertTrue(finals > 0, "no run reached a final link with the end waypoint set")
         assertTrue(cutStarts > 0, "no detail run cut a start")
+        assertTrue(endCuts > 0, "no synthetic end waypoint was hit")
     }
 
     private fun oracleRun(cx: PathEngines.Contexts, c: E3Case, wps: List<btools.router.OsmNodeNamed>, detail: Boolean): String {
@@ -121,6 +132,31 @@ class StartPathTest {
                         } finally {
                             if (isFinal) rc.unsetWaypoint()
                         }
+                    }
+                    l = l.getNext(current)
+                }
+            }
+            // Synthetic end cuts (session 15): each extension link's node midpoint as the end waypoint.
+            for (p in sp) {
+                if (p == null || PathEngines.cost(p) < 0) continue
+                val current = PathEngines.field(p, "targetNode") as btools.mapaccess.OsmNode
+                val source = PathEngines.field(p, "sourceNode")
+                var l = current.firstlink
+                while (l != null) {
+                    val next = l.getTarget(current)
+                    if (g.nc.obtainNonHollowNode(next) && next.firstlink != null && next !== source) {
+                        val mid = btools.router.OsmNodeNamed(
+                            btools.mapaccess.OsmNode((current.ilon + next.ilon) / 2, (current.ilat + next.ilat) / 2),
+                        )
+                        mid.radius = 1.5
+                        try {
+                            rc.setWaypoint(mid, true)
+                            sb.append("cut ")
+                            PathEngines.outcomeOr(sb) { PathEngines.oCreate(rc, p, l!!, detail) }
+                        } finally {
+                            rc.unsetWaypoint()
+                        }
+                        sb.append("cut hit ${mid.radius < 1.5}\n")
                     }
                     l = l.getNext(current)
                 }
@@ -207,6 +243,29 @@ class StartPathTest {
                         } finally {
                             if (isFinal) rc.unsetWaypoint()
                         }
+                    }
+                    l = l.getNext(current)
+                }
+            }
+            // Synthetic end cuts (session 15): as on the oracle's side.
+            for (p in sp) {
+                if (p == null || PathEngines.cost(p) < 0) continue
+                val current = PathEngines.field(p, "targetNode") as OsmNode
+                val source = PathEngines.field(p, "sourceNode")
+                var l = current.firstlink
+                while (l != null) {
+                    val next = l.getTarget(current)!!
+                    if (g.nc.obtainNonHollowNode(next) && next.firstlink != null && next !== source) {
+                        val mid = OsmNodeNamed(OsmNode((current.ilon + next.ilon) / 2, (current.ilat + next.ilat) / 2))
+                        mid.radius = 1.5
+                        try {
+                            rc.setWaypoint(mid, true)
+                            sb.append("cut ")
+                            PathEngines.outcomeOr(sb) { rc.createPath(p, l!!, null, detail) }
+                        } finally {
+                            rc.unsetWaypoint()
+                        }
+                        sb.append("cut hit ${mid.radius < 1.5}\n")
                     }
                     l = l.getNext(current)
                 }
