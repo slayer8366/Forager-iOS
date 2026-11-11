@@ -1,0 +1,29 @@
+Session 16, revert J: does SearchBoundaryTest bite on one bound? Prediction, pushed before the run.
+
+Edit (SearchBoundary.kt, the constructor's inner east bound, SearchBoundary.java:44 `maxlon = lon + 6000000;`):
+  `maxlon = lon + 6000000` -> `maxlon = lon + 5000000`
+The inner box's east edge moves one degree west. Every other bound is unchanged.
+
+What reads maxlon: isInBoundary when radius <= 0 and cost != 0 (the inner box), and getBoundaryDistance in
+direction 3 (OsmNode(maxlon, n.ilat)).
+
+Predict: SearchBoundaryTest fails (1 of 1, 1 fresh XML, 0 ' e: '), in one of the first few cases, on one of two
+messages, whichever case comes first in the seeded order:
+- (more likely: per case, radius <= 0 has p = 1/2 and the probe's latitude falls inside the inner box with p ~ 7/15)
+  "case N probe 9 cost C radius R: isInBoundary expected:<true> but was:<false>", with C > 0 and R <= 0: probe 9 is the
+  point one unit west of the true inner east edge, inside for the oracle and outside the moved edge for the port.
+  Probes 0 to 8 cannot fail: they sit on the outer box's edges and the inner west edge.
+- (less likely: direction 3 has p = 1/7 per case, but fails at probe 0, before probe 9 is reached)
+  "case N probe 0 direction 3: getBoundaryDistance expected:<D> but was:<D'>", the port's distance different from
+  the oracle's by about a degree of longitude at that latitude.
+Not predicted to fail: getFileName (does not read maxlon), radius-mode and outer-box isInBoundary, directions 0-2.
+
+Full fresh :brouter:jvmTest --rerun-tasks on 7e822c4 (the port), before its push:
+  head 7e822c4 rc=1 wall 688 s
+  e: lines 0; 429 lines 0
+  135 tests completed, 2 failed
+  BUILD FAILED in 11m 28s
+  XML 60, fresh 60, empty 0
+  TOTAL: tests 135, failures 2, errors 0, skipped 0 in 60 files
+  CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+  CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
