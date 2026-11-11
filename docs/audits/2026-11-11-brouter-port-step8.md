@@ -343,3 +343,68 @@ on question 1. 8c: not complete; only reading and an unrun draft.
    track, `catch (e: Error) { cleanOnOOM(); logException(e) }`); CI read.
 3. 8c's revert (-90): `terminated` written but not read, prediction pushed first.
 4. 8d (heights in `RouteOutcome.Found`, -122).
+
+## 7. Session 33 (stopped: a false premise in a draft test, found by the first port result)
+
+Plumb Ledger, session 33, `brouter-port-5b` `3fc4341` to the head that carries this section (fast-forward only). Trailer on
+every commit `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan on every staged diff: 0, no hit to fix.
+
+**Done:**
+1. **Red, pushed (`124e6da`).** `RoutingEngineStopTest` from session 32's draft, copied unchanged;
+   `EngineClock.kt` as drafted; `RoutingEngine` takes `clock: EngineClock = EngineClock.MONOTONIC`; stubs
+   `getLinksProcessed`, `terminate`, `isTerminated` as `TODO` naming 8c, the time-limit `TODO` kept; `E3FKTest`'s
+   companion `private` to `internal` (no comparison changed). Run of the class: fresh XML, 0 ` e: `, `tests 9, failures
+   9`, every one a `NotImplementedError`: "the time limit" 5, "terminate" 2, "the progress count" 2. The commit message
+   states how the port takes time and what is compared where the oracle depends on wall time, before any port result.
+2. **The port, run once, not committed to the tree:** saved as `step8/11-8c-port.patch` (applies to `124e6da`; applying
+   it reproduces the tested file, `cmp` equal; the tree was restored to `124e6da`'s file). It ports `@Volatile
+   terminated`, `startTime`/`maxRunningTime` from the clock (`:201-203`), the loop head (`:1975-1984`, the plain limit;
+   `maxRunningTime / 3` left out and named, its guard the `check` on `fastPartialRecalc`, RECORD -125), the re-tracking
+   reset (`:1797`), the timeout's dirty raw track (`:1749-1758`), `catch (e: Error) { cleanOnOOM(); logException(e) }`,
+   `cleanOnOOM`, `terminate`, `isTerminated`, `getLinksProcessed`. Not ported: `logThrowable` and the execution-time
+   line (the info log, §1).
+   - Class run on the port: `tests 9, failures 1`, 0 ` e: `, fresh XML. FK9 10 cases 0 mismatches (both sides'
+     operation `pass0`, 20 of 20), FK10 0, FK11 0, the FK11 count exact, the 30 s stopped clock, the watchdog's seconds,
+     the Error and the Exception tests pass.
+   - **Fails: `theTimeLimitReadsTheInjectedClock`**: expected `pass0 timeout after 30 seconds`, the port gives
+     `target-island-check timeout after 30 seconds`. The port is Java's here: `tryFindTrack` runs
+     `findTrack("target-island-check", ...)` (`RoutingEngine.java:961`; port `:290`) before `searchRoutedTrack`, and
+     that is the first pass through `_findTrack`'s loop head. The draft's expected operation is a false premise. **No fix
+     made** (the port matches Java; changing the test's expected text would change a comparison after a port result).
+   - Full fresh `:brouter:jvmTest --rerun-tasks` on the port: 81 of 81 XML fresh, 0 ` e: `, `TOTAL: tests 175, failures
+     2`: that test and `CollectOutreachersTest` 1 of 2 (`collectOutreachersWithADestinationVanishesFarNodes`), BUILD in
+     33m 56s.
+3. **Reverts: not run** (the stop came first; there is no passing port in the tree to revert).
+4. **CI on `124e6da`** (run 43118062551): jvm job `TOTAL: tests 175, failures 11` (StopTest 9, the red; CollectOutreachers
+   2, -61, expected, not touched), 0 ` e: `; the JVM step took 29m 29s and the job's 30-minute limit cancelled "iOS klibs"
+   (`compileKotlinIosArm64` not seen to finish). ios-smoke: success, `compileKotlinIosSimulatorArm64` ran, 24 tests 0
+   failures, the gate 7 tests 0 failures: simulator-checked, over the stubs (the port has had no iOS compile).
+
+**[I]/[?]:**
+- [I] No compile error in any local run: `grep -c '^e: '` over the red, port-class and full logs: 0, 0, 0; CI `grep -c ' e: '`: 0.
+- [?] `CollectOutreachersTest` failed 1 of 2 locally (not 2 of 2 as in sessions 31-32 and in CI), and `grep -c 'caught a
+  StackOverflowError'` over the full log reads 0 (3 in session 32). The class does not reach `RoutingEngine` (`grep -n
+  'RoutingEngine(' CollectOutreachersTest.kt`: none) and the patch touches only `router/RoutingEngine.kt`, so the change is
+  not this patch's; the cause is not known (the stack overflow's depth varies by run?). Not touched.
+- [?] FK9's fixed part `(pass0|pass1|re-tracking)` has the same gap as the failing test: a limit striking in the island
+  check would read `target-island-check timeout after 0 seconds` and fail it on either side. It did not here (20 of 20
+  `pass0`), so FK9 passing depends on the island check taking under 50 ms on both sides.
+- [?] Kotlin/Native: `catch (e: Error)` is `kotlin.Error` in commonMain and compiles for the JVM; it has not been compiled
+  for iOS (patch not pushed). Whether Native raises a catchable `Error` for out-of-memory or a stack overflow is step 10's.
+- [I] The jvm CI job's 30 minutes: 3fc4341's JVM step took 28m 10s, 124e6da's 29m 29s with the stub class failing fast; the
+  ported class runs about 1.5 min locally, so the jvm job will likely be cancelled before "iOS klibs" on every push.
+
+**Questions for the planner:**
+1. `theTimeLimitReadsTheInjectedClock` expects `pass0`; Java gives `target-island-check`. May the test's expected text be
+   corrected to Java's (`target-island-check timeout after 30 seconds`), and FK9's fixed part widened to
+   `(target-island-check|pass0|pass1|re-tracking)`? Both are changes to a comparison after a port result, so not mine.
+2. The jvm job's 30-minute limit: raise it, or move the 8c class elsewhere? A CI change, not mine.
+
+**Is 8c complete?** No: the port exists as a patch, one test fails on a false premise, and neither revert is run.
+
+**Next:**
+1. The planner's ruling on question 1; then the patch applied, the class and a full fresh run, commit, push, CI read.
+2. 8c's revert (-90): `terminated` written but not read, prediction pushed first, under `timeout` 1200 s.
+3. The second revert, in the time limit, the same way.
+4. The ruling on question 2.
+5. 8d (heights in `RouteOutcome.Found`, -122).
