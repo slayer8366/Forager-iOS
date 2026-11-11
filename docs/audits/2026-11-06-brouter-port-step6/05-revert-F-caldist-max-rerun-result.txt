@@ -1,0 +1,16 @@
+Session 14, revert F-caldist-max, a re-run at 4815a6f (section 9's edit, revert.sh). Prediction: 05-revert-DEF-rerun-predictions.txt (pushed at 7928c2a before the run).
+9-digit numbers are redacted as <int>.
+
+Edit:
+-        max(1.0, javaRound(CheapRuler.distance(libm, ilon, ilat, p.getILon(), p.getILat())).toDouble()).toInt()
++        max(0.0, javaRound(CheapRuler.distance(libm, ilon, ilat, p.getILon(), p.getILat())).toDouble()).toInt()
+
+Runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 2, failures 1, errors 0, skipped 0 in 1 files
+testcase name="osmPathElementMatchesTheOracle[jvm]"
+message="java.lang.AssertionError: case 0: calcDistance expected:&lt;1&gt; but was:&lt;0&gt;
+
+Observed: matches the prediction and section 9: 1 of 2 failed, osmPathElementMatchesTheOracle at case 0: calcDistance, oracle 1, port 0.

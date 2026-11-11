@@ -1,0 +1,16 @@
+Session 14, revert D-directweave, a re-run at 4815a6f (section 9's edit, revert.sh). Prediction: 05-revert-DEF-rerun-predictions.txt (pushed at 7928c2a before the run).
+9-digit numbers are redacted as <int>.
+
+Edit:
+-            return true // direct weaving...
++            return false // direct weaving...
+
+Runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="graphHalfMatchesTheOracleOnForagersEnds[jvm]"
+message="java.lang.AssertionError: F0-inside-across-the-degree-line mode 1 maxmem 67108864: line 3 of 6915/5391: oracle [obtain <int> <int> true] port [obtain <int> <int> false]
+
+Observed: matches the prediction and section 9: first differing line is line 3, an obtain line, oracle true, port false, in F0-inside-across-the-degree-line mode 1 (lengths 6915/5391, as section 9).
