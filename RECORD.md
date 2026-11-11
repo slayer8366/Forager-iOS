@@ -4462,3 +4462,44 @@ a test after a result was seen, it goes beside -107's and -116's cases for the i
 - **Not yet shown:** that the port matches Java on every tested value from 3e17 up to 2^63 (session 26 named its failure
   near 2.8e22 only). If any value below 2^63 differs, that is a stop, not part of this ruling.
 **Notes:** Written by the planner session by hand. Next free ID -120.
+
+**Kind:** outcome
+**ID:** 2026-10-28-120
+**Timestamp:** 2026-11-11T18:18:07Z
+**Continues:** 2026-10-28-111, 2026-10-28-118, 2026-10-28-119
+**Title:** Step 7, Plumb's session 27: `FormatJson` and `FormatGpx` ported and passing; revert (f) as predicted; step 7
+left open on `equalsTrack`, `addNodes` and `writeBinary`; the planner's rulings on them
+**Observed:** Plumb Ledger, session 27, `brouter-port-5b` `4f5791c` to `f29366e` (fast-forward only; ended at 180,473 by
+the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **-119's premise, checked first:** every tested value from 3e17 up to 2^63 matches Java (1,982, 0 differ); below 3e17,
+  222,747 match; at or above 2^63, 16 of 25,294 differ [R]. So -119's "not yet shown" is now shown on the tested values.
+- **`FormatJson`** (`f1a5f22`): `formatDecimal3` throws `UnsupportedOperationException` naming 2^63 and -119 for finite
+  values at or above 2^63. The test compares 224,731 floats exactly and asserts the throw on 25,292. Full run 156, 2 failed
+  (`CollectOutreachersTest`'s) [R]. Plumb kept the infinities in the exact comparison (they match Java and print no
+  digits); its own reading of -119.
+- **`FormatGpx`:** red over stubs at `61a1377` (157, 3 failed, the GPX one a `NotImplementedError` naming
+  `FormatGpx.format`), passing at `fc4d946` (157, 2 failed) [R]. Run 1 failed on `creator="BRouter-null"`: patch 29's test
+  lacked -118's `@BeforeTest` setting `OsmTrack.version` from the oracle; Plumb added it, the comparison unchanged.
+- **Revert (f)**, prediction pushed first: "track 0: format", the port 16 characters longer, as predicted, `cmp`-equal
+  restore [R].
+- **E1:** a first scan of 3 on the 2^63 constant written as a long decimal, not a position; rewritten before the commit.
+- **Not covered:** `EL`/`ER`, `OFFR`, GPX's middle-waypoint type branches (compared, not counted). Kotlin/Native number
+  formatting is [?] for step 10.
+**Checked by the planner:**
+- `git ls-remote` `f29366e`, a fast-forward of `4f5791c`; no model name; E1 over `4f5791c..f29366e`: 0.
+- **CI on `fc4d946`** (run 43074102819): `jvm` 157, 2 failed, both `CollectOutreachersTest`'s; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The earlier runs are
+  Plumb's reading; `f29366e` (docs only) not read.
+- `FormatGpxTest`'s `@BeforeTest` sets the version from the oracle's own value, as -118 rules.
+- Callers, by `grep` over the vendored tree and Forager's `app/src/main`: `equalsTrack` at `RoutingEngine.java:261`,
+  `addNodes` at `RoutingEngine.java:991`; `writeBinary` has no caller anywhere.
+**Decisions (the planner's, technical):**
+- **The infinities:** Plumb's reading stands. -119 forbids wrong digits; an infinity prints none and matches Java.
+- **The GPX `@BeforeTest`:** not a comparison change. It applies -118, ruled before any result, to a test written before
+  -118. Recorded because it was added after a port result.
+- **`equalsTrack` and `addNodes`:** ported in step 7, red first, since step 8's `RoutingEngine` calls both.
+- **`writeBinary`:** not ported, recorded out of scope. Nothing in BRouter or Forager calls it, and a missing method
+  cannot return a wrong value. The tests keep using the oracle's to feed `readBinary`. If a caller ever appears, it is
+  ported then.
+**Next:** session 28 ports `equalsTrack` and `addNodes` and closes step 7.
+**Notes:** Written by the planner session by hand. Next free ID -121.
