@@ -317,3 +317,67 @@ Nothing in `brouter/` changed; this commit adds only drafts and this section.
 
 **Unverified:** the whole draft [?]; the baseline count at `a83ff3f` in this container [?]; CI was not read for this
 docs-only commit.
+
+## 11. Session 14 (Plumb Ledger): reverts D to F committed; `OsmPath` and `StdPath` ported; revert G
+
+**Base:** `4815a6f`, matching `git ls-remote`. The baseline (130 tests, 2 failed, both `CollectOutreachersTest`, -61;
+0 ` e: `) was run at `a83ff3f` before this session and read by the planner; it was not re-run. All result files below
+are in `2026-11-06-brouter-port-step6/`, 9-digit numbers redacted, and the gated E1 scan read 0 before each push.
+
+**Reverts D, E and F, re-run at `4815a6f`** (RECORD -101), with §9's exact edits through `revert.sh` (run from a copy in
+scratch, so nothing was written under `main`'s checkout). Predictions pushed first (`05-revert-DEF-rerun-predictions.txt`,
+`7928c2a`); results in `05-revert-*-rerun-result.txt` (`ecf4506`). Each: 0 compile errors, 1 fresh XML, restored (cmp
+equal), and each matched both its prediction and session 12's observation:
+- D: `GraphHalfTest` failed at line 3, an `obtain` line, oracle `true`, port `false`, in
+  `F0-inside-across-the-degree-line` mode 1 (lengths 6,915/5,391, as §9).
+- E: 1 of 2, `messageDataMatchesTheOracle` at `case 1: copy's extraTime`, port 0.
+- F: 1 of 2, `osmPathElementMatchesTheOracle` at `case 0: calcDistance`, oracle 1, port 0.
+
+**Tests over the stubs** (`128dffd`, red on purpose, said in its message; `06-stubs-failing-StdPath-StartPath.txt`).
+`PathEngines`, `StdPathTest` and `StartPathTest` went into `jvmTest` unchanged from session 13's drafts; `OsmPath`'s stub
+gained `interpolateEle` as a `TODO`. That was all they needed to compile. Run on the two classes: 0 ` e: `, 2 fresh XML,
+4 of 4 failed, each `NotImplementedError: ... step 6: OsmPath`.
+
+**The port** (`bce3a3a`). The drafts were read against `OsmPath.java` and `StdPath.java` method by method (fields, both
+`init`s, `addAddionalPenalty` in full, `interpolateEle`, the getters; `StdPath`'s `init`, `resetState`,
+`processWaySection` with both crossing blocks, `processTargetNode`, `elevationCorrection`, `definitlyWorseThan`,
+`calcIncline`, `computeKinematic`, `solveCubic`). No logic difference was found; each of §8's casts is kept. Changes made:
+- `rc.anglemeter.getCosAngle()` became `rc.anglemeter.cosAngle` (the port's property): a compile error.
+- `@JvmField` on `sourceNode`, `targetNode` and `link`: their getters clashed with Java's `getSourceNode()` and the rest
+  on the JVM. The field names that `PathEngines` reads by reflection are unchanged.
+- Java line citations corrected: `AreaInfo` refusal `OsmPath.java:145-146`; crossing blocks `StdPath.java:98-116` and
+  `:121-139`; `interpolateEle` `OsmPath.java:388-393`; `StartPathTest`'s start cut `:245-261` and end cut `:242-244`.
+  The start-direction citation `:282-283` was right.
+- Filtered run (`StdPathTest`, `StartPathTest`, `GraphHalfTest`, `PathElementTest`): 0 ` e: `, 4 fresh XML, 7 of 7 pass.
+  `StdPathTest`: 20 profiles, 10 cases, 105,401 paths (104 refused), 1,358,473 origin links. `StartPathTest`: 20
+  profiles, 600 runs, 1,024 start paths, 500 cut starts in detail mode, but only **6 final links and 4 same-segment
+  runs**, so the end cut and the pending endpoint are thinly covered [I].
+- **Full fresh `:brouter:jvmTest --rerun-tasks`:** 0 ` e: `, no 429s; Gradle: 134 tests completed, 2 failed, both
+  `CollectOutreachersTest` (-61); 132 PASSED lines. **A discrepancy:** 10 of the 59 fresh XML files were empty (0 bytes),
+  among them `StdPathTest`'s and `StartPathTest`'s. The 49 others read 110 tests, 2 failures; the 10 classes have 24
+  PASSED lines in the Gradle log, and 110 + 24 = 134. Cause not found [?]; disk was not full. The 7 path tests' pass
+  is from the filtered run's XML, read before the full run (`08-port-passing-and-full-run.txt`).
+
+**Revert G** (StdPath's `(int)` cast moved inside the sum; §8 item 4). Prediction pushed in `bce3a3a` before the run
+(`07-revert-G-turncost-int-prediction.txt`): turncost read from the 20 brf files, 0 on hiking-mountain, rail, river and
+shortest, above 0 on the other 16; the failure would name one of the 16, expected fastbike-asia-pacific first, 2 of 4
+failing. **Observed** (`07-revert-G-turncost-int-result.txt`): 0 compile errors, fresh XML, restored (cmp equal).
+`StdPathTest` 1 of 3, `pathsMatchTheOracleOnEveryStdProfile` on `fastbike-asia-pacific.brf`,
+`F0-inside-across-the-degree-line`, detail false, path line 2; `StartPathTest` 1 of 1, same profile and case, line 2. As
+predicted. My filter `*Std*PathTest` missed `StartPathTest`, so it ran as a second revert with the same edit (G2). The
+runner's 200-character message limit cuts off the port's side, so "port lower" was not read [?].
+
+**Not done:** -62's `interpolateEle` revert (left for room); `RoutingParamCollector`, `SearchBoundary`.
+
+**CI:** see the line added below for `bce3a3a`.
+
+**Unverified:** the 10 empty XML files [?]; the port's side of revert G's lines [?]; the end-cut coverage of
+`StartPathTest` (6 final links) [I]; iOS compile of `@JvmField` in common code, until CI is read [?].
+
+**Next, for session 15** (in this order):
+1. Find why the full run left 10 empty XML files (re-run once and compare; check whether anything else touched
+   `test-results` during it).
+2. -62's `interpolateEle` revert (`.toInt().toShort()` with the truncation changed), its prediction pushed first: detail
+   mode only, `StartPathTest`'s cut starts, and `StdPathTest`'s `interpolateEleMatchesTheOracle`.
+3. Widen `StartPathTest`'s end-cut sample past 6 final links, or say why it cannot be.
+4. `RoutingParamCollector` and `SearchBoundary`, each test seen failing over stubs first.
