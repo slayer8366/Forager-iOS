@@ -10,7 +10,9 @@ internal class VoiceHintList {
     internal var turnInstructionMode: Int = 0
     internal var list: MutableList<VoiceHint> = ArrayList()
 
-    fun setTransportMode(isCar: Boolean, isBike: Boolean): Unit = TODO("step 7 stub: VoiceHintList.setTransportMode")
+    fun setTransportMode(isCar: Boolean, isBike: Boolean) {
+        transportMode = if (isCar) TRANS_MODE_CAR else (if (isBike) TRANS_MODE_BIKE else TRANS_MODE_FOOT)
+    }
 
     companion object {
         internal const val TRANS_MODE_NONE = 0
