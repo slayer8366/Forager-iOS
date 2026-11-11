@@ -168,7 +168,8 @@ internal class OsmTrack {
     }
 
     fun addNodes(t: OsmTrack) {
-        TODO("OsmTrack.addNodes (step 7, RECORD -120)")
+        for (n in t.nodes) addNode(n)
+        buildMap()
     }
 
     fun containsNode(node: OsmPos): Boolean = nodesMap!!.contains(node.getIdFromPos())
@@ -339,7 +340,13 @@ internal class OsmTrack {
     }
 
     fun equalsTrack(t: OsmTrack): Boolean {
-        TODO("OsmTrack.equalsTrack (step 7, RECORD -120)")
+        if (nodes.size != t.nodes.size) return false
+        for (i in nodes.indices) {
+            val e1 = nodes[i]
+            val e2 = t.nodes[i]
+            if (e1.getILon() != e2.getILon() || e1.getILat() != e2.getILat()) return false
+        }
+        return true
     }
 
     fun getFromDetourMap(id: Long): OsmPathElementHolder? {

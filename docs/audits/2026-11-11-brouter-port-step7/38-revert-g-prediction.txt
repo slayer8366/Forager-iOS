@@ -1,0 +1,16 @@
+Revert (g), session 28, written and pushed before the revert is run.
+
+Edit (one line, OsmTrack.kt, equalsTrack): the latitude comparison is dropped.
+  old: if (e1.getILon() != e2.getILon() || e1.getILat() != e2.getILat()) return false
+  new: if (e1.getILon() != e2.getILon()) return false
+
+Runner: a scratch copy of docs/process/tools/revert.sh (Forager-iOS main), filter *TrackEqualsAddNodesTest.
+
+Predicted:
+- 0 compile errors, 1 fresh XML, 2 tests, 1 failure.
+- The failure is equalsTrackMatchesTheOracle, at the first case's walk 0, variant "lat at 0, direction 0":
+  equalsTrack expected:<false> but was:<true>. The pairs are tried in the order same walk, copy, lon at 0, lat at 0,
+  so the lat variant at index 0 is the first pair on which the two engines can disagree; Java returns false on it
+  (one latitude moved by one unit) and the reverted port returns true.
+- addNodesMatchesTheOracle passes (it does not call equalsTrack).
+- Restore cmp-equal to the saved copy; the forward line present once after the run.
