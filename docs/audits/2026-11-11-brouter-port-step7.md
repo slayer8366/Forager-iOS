@@ -354,3 +354,61 @@ one unit for testing. `startSection` is private and reached only from the body, 
    boundary, or `addDetours`' `source.nodesMap!!.contains(id)` negated).
 3. `VoiceHintProcessor` together with `processVoiceHints`' hint body and `startSection`, stubs and red first.
 4. Then `readBinary`'s file branch and the formats.
+
+## 8. Session 21: the hint code's first half pushed; `VoiceHintProcessor`'s unit red
+
+Plumb Ledger, session 21, `brouter-port-5b` `46626f3` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done, in -113's order:**
+1. **The two accepted test fixes committed, red over the stubs on purpose** (`79f8d93`, -113's condition): `05`'s lines
+   applied, the "DIAGNOSTIC ONLY" comments replaced by the reasons (Java's void reads as null by reflection, Kotlin's
+   `Unit` is the same no-value; `FrozenLongMap` empties the map it is built from, so each copy gets a fresh one). Over
+   the stubs: 5 tests, 5 failed, 0 ` e: `, 3 fresh XML (`06-s21-fixed-tests-red-over-stubs.txt`): `NotImplementedError` at
+   `getFromDetourMap`, `getMinDistance`, `registerDetourForId`, `VoiceHintList.getTransportMode`, and "case 0: getTime
+   expected:<[f0]> but was:<[throws NotImplementedError]>" [R].
+2. **The port applied unchanged** (session 20's stash, identical to `03`; `7e3fb60`): the three classes 5 tests, 0 failed,
+   0 ` e: ` [R]. `VoiceHintTest` 30,000 cases, 50,552 bad ways, 4,031 give-ways, 16 commands; `TrackDetourTest` 20 groups,
+   100 walks, 429 registered, 8,444 chains, 49 thrown; the second copy from an emptied map throws NPE on both engines
+   (20 of 20); helpers 400 cases, 247 removed, 603 matched; `TrackHeadTest` 100 runs, 50 maps copied.
+3. **Full fresh `:brouter:jvmTest --rerun-tasks`** (results deleted first): 67 XML, 148 tests, 2 failures, both
+   `CollectOutreachersTest` (-61, -106), 0 errors, 0 ` e: `, no Maven 429 [R]. The stash was dropped only after the
+   pushed commit was diffed equal to it.
+4. **Revert (b)**, predicted in `07-revert-b-prediction.txt` (pushed at `c6da1d1` before it ran): `addDetours`'
+   `source.nodesMap!!.contains(id)` negated. Observed (`08-revert-b-nodesmap-negated-result.txt`): 0 compile errors,
+   5 fresh XML, 8 tests, 1 failure, "group 0 addDetours variant 0: getFromDetourMap, candidate 26 expected:<[835]> but
+   was:<null>" (an identity index), as predicted: group 0, variant 0, a map comparison, the port lacking a chain; the
+   other 7 passed. Restored by `cmp` from the saved copy; the forward line present after [R].
+5. **CI on `7e3fb60`** (run 43010170082, attempt 1, read from the job logs by me): `jvm` TOTAL 148 tests, 2 failures,
+   0 errors, 67 files, both failures `CollectOutreachersTest` (-61), 0 ` e: `; `compileKotlinIosArm64` and
+   `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL. The job reads "failure" on those 2 only. `ios-smoke`
+   passed: `iosSimulatorArm64Test` 24 of 24 (**simulator-checked**), arm64 JVM 7 of 7 with its gate "OK: all 2 classes
+   ran", 0 ` e: ` [R]. The later pushes (`c6da1d1` docs, `24603fb` red by design) were not read.
+6. **`VoiceHintProcessor` with `processVoiceHints`' hint body and `startSection`, stubs and test, red** (`24603fb`):
+   `VoiceHintProcessor.kt` (internal, as `VoiceHint` is; every method a `TODO`), `startSection` and the body as `TODO`s.
+   `VoiceHintProcessTest` (1 test) goes through `processVoiceHints` only (-113: one unit). 100 cases from `TrackEngines`'
+   walks from Forager's own ends; hints switched on in test code on both engines alike: `hasDirectRouting` (cases
+   0, 3 mod 4) or a detour map over the track's own node ids with group elements (1, 2, 3 mod 4; 2 frozen by
+   `copyDetours`); seeded `turnInstructionMode` 0-9, catching range, roundabouts, car/bike mode, and matched
+   waypoints of the three types. Every Java field of each hint compared by name, in order, by digest (E1); messages by
+   index in the group. Coverage is checked on the oracle's side before any comparison. Over the stubs: 1 of 1 failed,
+   "case 0: result expected:<[ok]> but was:<[throws NotImplementedError]>", 0 ` e: ` (first attempt did not compile: a
+   public class exposed the internal `VoiceHint`; no XML then). Oracle side: 1,934 hints, 1,032 with bad ways, 0
+   thrown, 12 commands (`09-...txt`) [R].
+
+**Found, for the planner:** -113 says `05`'s second fix "adds a check that a second copy from an emptied map throws on
+both engines alike". In the committed test it is recorded in the printed outcomes, not asserted; I kept the accepted
+lines as they are rather than add an assertion after seeing the port's result. Both engines threw NPE in all 20 [R].
+
+**Unverified:**
+- [I] `hasGiveWay`'s order of checks (session 20's note) still rests on its equal outcomes only.
+- [I] Native: nothing in step 7 runs off the JVM except through CI's compile.
+- [?] `VoiceHintProcessTest` reaches commands 2-9, 11, 14-16 on the oracle; 1, 10, 12, 13 (and roundabout exits) are
+  not reached by this sample. Whether they are reachable from Forager's ends at all is not traced.
+
+**Next, for session 22:**
+1. Port `VoiceHintProcessor` (529 Java lines), `processVoiceHints`' body (`OsmTrack.java:462-534`) and `startSection`
+   over `24603fb`'s test; run it, then the full fresh `:brouter:jvmTest --rerun-tasks`; push; read CI.
+2. One revert on that port, predicted in a committed file first.
+3. The planner's call on the probe above, and on whether the unreached commands need a seeded `process` test.
+4. Then `readBinary`'s file branch and the formats.
