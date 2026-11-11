@@ -1,0 +1,21 @@
+Revert (b), addDetours' nodes-map test negated (session 21, on the port of 7e3fb60), written before it runs:
+  Edit: OsmTrack.kt addDetours,
+    `if (!tmpDetourMap.contains(id) && source.nodesMap!!.contains(id)) {`
+    -> `if (!tmpDetourMap.contains(id) && !source.nodesMap!!.contains(id)) {`   (OsmTrack.java's addDetours)
+  Filter: *.router.*Track*Test (AppendTrackTest, TrackDetourTest, TrackHeadTest, TrackMapTest, TrackTimeTest).
+  Predict:
+  - TrackDetourTest.detourMethodsMatchTheOracle fails in group 0, addDetours variant 0 (a frozen target map, a source
+    with a built nodes map and a frozen detour map), at a map comparison:
+    "group 0 addDetours variant 0: getFromDetourMap, candidate N expected:<...> but was:<...>".
+    Why: the source's map is registered over the group's candidate ids, from all five walks plus 4 synthetic ids, and its
+    nodes map holds only walk 1's nodes, so forward and reverted keep different, both non-empty, sets of source ids
+    (the reverted port takes those outside walk 1, drops those inside). N I cannot say beforehand [I]; it is the first
+    candidate in the source map and not in the target's that is in walk 1 (port lacks it: was:<...> shorter/empty)
+    or outside it (port has an extra chain). The "result" assertion before it passes (both Unit).
+    Variants 1 (no source map), 3 (cast throws first) and 4 (no target map) cannot reach the edited line; variant 2's
+    NPE is thrown by `!!` either way. The test stops at variant 0, before them.
+  - If group 0's variant 0 happens to agree (every source id already in the target's map), the first failure moves to a
+    later group's variant 0 or to appendTrack's detour branch, with the same kind of message [I].
+  - TrackDetourTest.hintHelpersMatchTheOracle, AppendTrackTest (detour maps only null-checked, none registered),
+    TrackHeadTest (copyDetours only), TrackMapTest, TrackTimeTest pass.
+  - 0 compile errors, fresh XML; restore by cmp from the saved copy; the forward line confirmed present after.
