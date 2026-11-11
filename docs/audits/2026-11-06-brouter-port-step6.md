@@ -273,3 +273,47 @@ ported. `calcDistance` takes `libm`. `OsmPath`'s stub gains `cost`, `originEleme
 **Unverified:** that the 64 KiB run reaches the collection branch of `obtainNonHollowNode` (`cacheSum` is private on both
 engines and not read) [I]; that `obtainNonHollowNode`'s `getAndClear`/`parseNodeBody` branch is reached at all under
 direct weaving [I, not counted]; native `Float.toString` in `MessageData.toString` [?]; the rest of §8's list.
+
+## 10. Session 13 (Plumb Ledger): partial, handed off on the planner's call
+
+**Stopped early:** the planner asked for a handoff (its watcher read 183,054). None of the dispatch's five steps is finished.
+Nothing in `brouter/` changed; this commit adds only drafts and this section.
+
+**Done:**
+- Read: both CLAUDE.md files (Testing, Building, Known pitfalls in full), the coder profile, RECORD -90, -93, -96, -97,
+  -99 and -101, and §8 and §9 here. The base was `a83ff3f`, matching `git ls-remote`.
+- **A wrong premise:** the dispatch put the coder profile at `/home/user/forager-ios-5a/docs/process/coder-profile.md`. It
+  is not on this branch. It is on `main` (`/home/user/Forager-iOS/docs/process/coder-profile.md`), and was read there.
+- **The first full `jvmTest` at `a83ff3f` (the baseline) failed before any test ran.** Maven Central returned HTTP 429 (Too
+  Many Requests) for okio-jvm 3.18.2, annotations 13.0 and atomicfu-jvm 0.33.0. That is infrastructure, not this
+  branch's code. The retry got the dependencies and was still running tests at handoff, so its count is not read [?].
+- **Drafted, never compiled and never run** (`2026-11-06-brouter-port-step6/s13-drafts/*.kt.txt`, kept out of the
+  source sets so CI is not touched):
+  - `OsmPath.kt` and `StdPath.kt`, full ports. §8's casts are kept. The ruling at -97 is applied: `kotlin.math.exp`, and
+    the start-direction branch refuses as `unsupported: OsmPath's start direction (OsmPath.java:282-283)`. `AreaInfo`'s
+    check also refuses. `seg` is a companion `var`.
+  - `PathEngines.kt` (test helper): writes paths by reflection over Java's own field names; prepares the graph as
+    `_findTrack` does, on both engines.
+  - `StdPathTest.kt`, 3 tests: paths over decoded links on the 20 Std profiles, from F0's and F0h's ends;
+    `startDirectionIsUnsupported`; and `interpolateEleMatchesTheOracle`.
+  - `StartPathTest.kt`: step 3's comparison. `getStartPath` is copied in test code, then extended once with the end
+    waypoint on the final link. It runs F0's and F0h's ends plus 5 of R's per Std profile, in plain and detail mode.
+  - **None of these has been seen failing over stubs (-101).** That run is still owed. The stub needs
+    `interpolateEle` (a `TODO`) added first, so that the tests compile.
+- **Reverts D, E and F were not re-run.** Their result files are still missing.
+
+**Next, for session 14** (in this order):
+1. Run the baseline `jvmTest --rerun-tasks` at the head and read its count. If 429s recur, report them; do not
+   work around them.
+2. Reverts D, E and F, re-run with `revert.sh` and §9's edits, then committed. Redact 9-digit positions in the failure
+   files and run the E1 scan.
+3. Copy `PathEngines`, `StdPathTest` and `StartPathTest` into `brouter/src/jvmTest/.../router/`, and add the stub's
+   `interpolateEle`. See all of them fail over the stubs: fresh XML, 0 ` e: `, `NotImplementedError`.
+4. Then put the drafts of `OsmPath.kt` and `StdPath.kt` in place. Compile, check, and run both tests passing. Read the
+   draft first, line by line, against Java; it has not been compiled.
+5. The `(int)`-cast revert (the profiles with `turncost` above 0, read from the brf files and named in the prediction)
+   and -62's `interpolateEle` revert, each with its prediction pushed before it runs.
+6. `RoutingParamCollector` and `SearchBoundary`.
+
+**Unverified:** the whole draft [?]; the baseline count at `a83ff3f` in this container [?]; CI was not read for this
+docs-only commit.
