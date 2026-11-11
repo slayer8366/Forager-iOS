@@ -265,6 +265,15 @@ internal class OsmTrack {
         return res
     }
 
+    /** `OsmTrack.java:190-208`. */
+    fun aggregateSpeedProfile(): List<String> = TODO("OsmTrack.aggregateSpeedProfile: step 7, session 25")
+
+    /** `OsmTrack.java:397-405`. */
+    fun getVoiceHint(i: Int): VoiceHint? = TODO("OsmTrack.getVoiceHint: step 7, session 25")
+
+    /** `OsmTrack.java:551-559`. */
+    fun getVoiceHintTime(i: Int): Float = TODO("OsmTrack.getVoiceHintTime: step 7, session 25")
+
     fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
         val wps = matchedWaypoints ?: return null
         for (wp in wps) {
@@ -416,6 +425,12 @@ internal class OsmTrack {
     }
 
     companion object {
+        /**
+         * `OsmTrack.java:26`: Java reads it from its jar's manifest (`getImplementationVersion()`), which for BRouter
+         * 1.7.10's release jar, the oracle, is `1.7.10`.
+         */
+        const val version: String = "1.7.10"
+
         fun readBinary(
             filename: String?,
             newEp: OsmNodeNamed?,
