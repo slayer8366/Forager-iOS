@@ -1,0 +1,14 @@
+Revert (b), addDetours' nodes-map test negated, run on 7e3fb60's port (prediction: 07, pushed at c6da1d1 before the run).
+Runner: a scratch copy of docs/process/tools/revert.sh; filter *.router.*Track*Test. Its output:
+  restored: cmp equal
+  compile errors: 0
+  fresh XML files: 5
+  TOTAL: tests 8, failures 1, errors 0, skipped 0 in 5 files
+  TOTAL: tests 8, failures 1, errors 0, skipped 0 in 5 files
+  testcase name="detourMethodsMatchTheOracle[jvm]"
+  message="java.lang.AssertionError: group 0 addDetours variant 0: getFromDetourMap, candidate 26 expected:&lt;[835]&gt; but was:&lt;null&gt;
+  exit=0
+Full message, from the XML: group 0 addDetours variant 0: getFromDetourMap, candidate 26 expected:<[835]> but was:<null>
+  (835 is an identity index into the group's node list, not a position.)
+After: OsmTrack.kt cmp-equal to the copy saved before the run; the forward line present once.
+Observed as predicted: the only failure is group 0, variant 0, a map comparison, the port lacking a source chain inside walk 1. The other 7 tests passed.
