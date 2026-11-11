@@ -260,7 +260,7 @@ internal class OsmTrack {
         // sendSpeedProfile = rc.keyValues != null && rc.keyValues.containsKey( "vmax" );
     }
 
-    /** `OsmTrack.java:452-460`, the head Forager's path reaches; the hint body (`:462-534`) is a later session. */
+    /** `OsmTrack.java:452-460`, the head Forager's path reaches; the hint body (`:462-534`) is stubbed (RECORD -113). */
     fun processVoiceHints(rc: RoutingContext) {
         val v = VoiceHintList()
         voiceHints = v
@@ -271,8 +271,14 @@ internal class OsmTrack {
             // only when no direct way points
             return
         }
-        TODO("step 7: hint code, a later session (RECORD -111)")
+        // `OsmTrack.java:462-534`: stubbed, tested with `VoiceHintProcessor` as one unit (RECORD -113).
+        TODO("step 7: processVoiceHints' hint body, session 21 (RECORD -113)")
     }
+
+    /** `OsmTrack.java:573-586`, reached only from `processVoiceHints`' hint body: stubbed (RECORD -113). */
+    @Suppress("unused")
+    private fun startSection(element: OsmPathElement?, root: OsmPathElement): MessageData? =
+        TODO("step 7: startSection, session 21 (RECORD -113)")
 
     internal fun getMinDistance(): Int {
         val v = voiceHints
