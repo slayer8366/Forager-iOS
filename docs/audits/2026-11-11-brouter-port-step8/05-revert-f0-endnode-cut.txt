@@ -1,0 +1,23 @@
+Step 8a, session 31: a revert F0 must catch (RECORD -123, decision 2), on 0ab64b6.
+
+Edit (one line, port only): router/RoutingEngine.kt:896, in compileTrack (Java :2272-2275), the final track's end-node
+cut removed:
+  "if (guideTrack != null && element!!.origin != null) element = element.origin"
+  ->  "// reverted (session 31): the final track's end node is not cut"
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh; filter *RoutingEngineF0Test.
+
+WHY F0 MUST EXERCISE IT: every route ends with searchRoutedTrack's "re-tracking" pass, which runs with guideTrack set
+(RoutingEngine.kt:518-521), and that pass returns through compileTrack. Neither F0 route is a same-segment search, so
+the found path has an origin and the cut applies on both routes. The edit touches only compileTrack's output, never the
+search: pass0 and pass1 (guideTrack null) are unchanged, and so is the guide track the re-tracking pass follows.
+
+PREDICTION (pushed before the run):
+- The build compiles (0 "e: " lines) and fresh XML is written.
+- The oracle-against-expected-1b assertion passes (the edit is in the port only).
+- RoutingEngineF0Test fails: 1 test, 1 failure, an assertion, on the first case, F0-inside-across-the-degree-line.
+- The field: NODES, the port one more than the oracle (the path's own end element is kept). kind and cost do not
+  differ (track.cost is path.cost, set apart from the cut). distance, the node digest and the heights digest would
+  differ too, but the test stops at nodes, the first of the six that differs. [I: the one way this fails is the end
+  element sharing a position with its origin, which compileTrack then skips as a double element; the end waypoints
+  are not on nodes, so this is not expected.]
+- After restore: cmp equal to the saved copy, and git diff of src/commonMain against 0ab64b6 empty.
