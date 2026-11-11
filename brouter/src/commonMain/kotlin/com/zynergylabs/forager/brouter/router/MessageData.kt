@@ -36,10 +36,35 @@ internal class MessageData {
     var extraTime: Int = 0
 
     /** `MessageData.java:38-57`. */
-    fun toMessage(): String? = TODO("step 7, session 24 stub: MessageData.toMessage")
+    fun toMessage(): String? {
+        if (wayKeyValues == null) {
+            return null
+        }
+
+        val iCost = (costfactor * 1000 + 0.5f).toInt()
+        return (lon - 180000000).toString() + "\t" +
+            (lat - 90000000) + "\t" +
+            ele / 4 + "\t" +
+            linkdist + "\t" +
+            iCost + "\t" +
+            linkelevationcost +
+            "\t" + linkturncost +
+            "\t" + linknodecost +
+            "\t" + linkinitcost +
+            "\t" + wayKeyValues +
+            "\t" + (nodeKeyValues ?: "") +
+            "\t" + time.toInt() +
+            "\t" + energy.toInt()
+    }
 
     /** `MessageData.java:59-65`. */
-    fun add(d: MessageData): Unit = TODO("step 7, session 24 stub: MessageData.add")
+    fun add(d: MessageData) {
+        linkdist += d.linkdist
+        linkelevationcost += d.linkelevationcost
+        linkturncost += d.linkturncost
+        linknodecost += d.linknodecost
+        linkinitcost += d.linkinitcost
+    }
 
     /** `MessageData.java:67-73`: Java's shallow `clone()`. */
     fun copy(): MessageData {

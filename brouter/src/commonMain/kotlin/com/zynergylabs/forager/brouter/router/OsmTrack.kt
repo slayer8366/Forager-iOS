@@ -242,7 +242,28 @@ internal class OsmTrack {
     }
 
     /** `OsmTrack.java:168-188`. */
-    fun aggregateMessages(): List<String> = TODO("step 7, session 24 stub: OsmTrack.aggregateMessages")
+    fun aggregateMessages(): List<String> {
+        val res = ArrayList<String>()
+        var current: MessageData? = null
+        for (n in nodes) {
+            val m = n.message
+            if (m != null && m.wayKeyValues != null) {
+                val md = m.copy()
+                if (current != null) {
+                    if (current.nodeKeyValues != null || current.wayKeyValues != md.wayKeyValues) {
+                        res.add(current.toMessage()!!)
+                    } else {
+                        md.add(current)
+                    }
+                }
+                current = md
+            }
+        }
+        if (current != null) {
+            res.add(current.toMessage()!!)
+        }
+        return res
+    }
 
     fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
         val wps = matchedWaypoints ?: return null
