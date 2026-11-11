@@ -157,3 +157,58 @@ Plumb Ledger, session 29, `brouter-port-5b` `461e4d6` to the head that carries t
    against Java `:858-1052`, `:1609-2350` once more, then run `*RoutingEngineF0Test`.
 3. On a pass: full fresh `jvmTest --rerun-tasks`, push; then revert per §2 (prediction pushed first).
 4. Then R (20 StdModel profiles; Kinematic refusals) and DL-lat/DL-lon, per §2.
+
+## 4. Session 30
+
+Plumb Ledger, session 30, `brouter-port-5b` `2fddfcc` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan on every staged diff: 0, no hit to fix.
+
+**Done:**
+1. **CI for `15a4aa2`** (run 43085259189): JVM `TOTAL: tests 160, failures 3` in 77 files (CollectOutreachersTest 2, F0
+   red on purpose); 0 ` e: `; iOS klibs (`compileKotlinIosArm64`, `compileKotlinIosSimulatorArm64`) BUILD SUCCESSFUL;
+   commonTest on the simulator 24 tests, 0 failures; the arm64 gate 7 tests, 0 failed. Simulator-checked.
+2. **The 8a port** (`4dcd049`): session 29's patch applied clean and compiled with 0 errors and no change.
+   `RoutingEngineF0Test`, fresh XML: 1 test, 0 failures; both routes equal the oracle on all six fields. Full fresh
+   `:brouter:jvmTest --rerun-tasks`: 77 XML, 160 tests, 2 failures (CollectOutreachersTest, known), 0 ` e: ` (one
+   earlier attempt stopped at `msunReference` on an HTTP 503 fetching a pinned source; the retry ran clean).
+   **CI for `4dcd049`** (run 43088039556): JVM 160 tests, 2 failures; 0 ` e: `; both iOS klibs BUILD SUCCESSFUL;
+   simulator 24/0; arm64 gate 7/0. Simulator-checked.
+3. **§2's revert** (`step8/03-revert-findtrack-cost.txt`; prediction pushed first, `70c4c20`): `testPath.cost <`
+   flipped to `>` at `RoutingEngine.kt:841` (Java `:2219`). Compiled, 0 ` e: `, fresh XML: F0 1 test, **0 failures.
+   The prediction failed:** F0 does not catch it. Restored `cmp`-equal; the port equal to `4dcd049` after. A later
+   diagnostic (below) shows R catches it.
+4. **R and DL** (`377d109`, red on purpose; `step8/04-red-r-dl.txt`): `RoutingEngineRTest` (26 profiles x 59 from
+   `RGenerator` with 1b's seeds) and `RoutingEngineDLTest` (`DLGenerator`'s draws with 1b's seeds, the ids of
+   `expected-1b`'s rows within 1b's cap), compared as F0's test, the oracle first held to its row. Both red, fresh XML,
+   0 ` e: `: R 1 test 1 failure, DL 2 tests 2 failures, each a `NotImplementedError` naming the memory path, step 8b.
+   Full fresh run: 79 XML, 163 tests, 5 failures (CollectOutreachersTest 2; R 1, DL 2 on purpose), 0 ` e: `.
+   `E3DLTest`'s companion made `internal` (visibility only) so the new test reads its seeds instead of copying them.
+5. **Diagnostics, not committed** (each test's port call wrapped to count the 8b stub and go on; restored from saved
+   copies, `cmp` equal): R: all 1534 oracle runs equal their rows; 354 Kinematic cases refused by name; of the 1180
+   StdModel cases **151 reach the 8b stub**, the other 1029 (818 routes, 211 errors) equal the oracle on all six fields.
+   DL-lat **36 of 59** reach the stub, 23 equal; DL-lon **15 of 59**, 44 equal. 0 mismatches anywhere. With §2's
+   revert applied: F0 and DL 0 mismatches, **R 176 mismatches** (the first 20 all on nodes or cost and the digests).
+
+**[I]/[?]:**
+- [I] F0 misses §2's revert because a link rarely holds more than one undominated path on F0's two routes; not counted.
+- [I] Neither R nor DL passed on first run, so no second revert was owed; the one revert R's comparison does catch is
+  shown only through the uncommitted diagnostic, since the committed test stops at the first 8b stub.
+- [?] Kotlin/Native numbers and `Throwable.toString`: step 10. iOS: simulator-checked only.
+
+**Questions for the planner:**
+1. §2 put R and DL in 8a, but 151 of R's StdModel cases and 51 of DL's 118 reach the memory path (8b) at memory class
+   64. Read as a false premise of §2's strata, reported, not chosen: 8a cannot be green on R or DL before 8b. Should R
+   and DL stay red until 8b (as committed), or should 8a's comparison be split by whether a case reaches the memory path?
+   (The second would change a test's comparison after a port result, so it is yours to rule.)
+2. F0 has never been seen failing on a revert of the ported search, only over the stub. Is R's catch of §2's revert
+   (diagnostic) enough, or should F0 carry a revert of its own?
+
+**Is 8a complete?** The port of 8a's methods is in, compiles, and equals the oracle on F0 and on every R and DL case
+that does not reach the memory path. Its strata are not green: R and DL wait on 8b. Not complete by §2's terms.
+
+**Next:**
+1. The planner's ruling on question 1.
+2. 8b: the memory path (`collectOutreachers`, panic mode) and the open border list; then R and DL run whole, and §2's
+   revert re-run on the committed R test.
+3. CI for `377d109` and this head (R and DL red on purpose there).
+4. 8c (time limit, `catch (Error)`), 8d (heights in `RouteOutcome.Found`, -122).

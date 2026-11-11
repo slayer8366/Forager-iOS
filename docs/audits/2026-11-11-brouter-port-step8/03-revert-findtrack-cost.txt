@@ -25,3 +25,15 @@ OBSERVED (scratch copy of revert.sh, run rv1):
   dominance check leaves more than one only when none dominates the other, so on F0's two routes every
   link that was expanded held one path, or the paths it held agreed. Not checked by a count.
 - So F0's test has been seen red only over the stub (session 29), never on a revert of the ported search.
+
+DIAGNOSTIC, after 377d109 (not a committed check; its prediction was not pushed first):
+The same one-line revert (run rv2, the same scratch runner, filter *RoutingEngine*Test), with R's and DL's tests in
+their uncommitted diagnostic form (the port call wrapped to step past the 8b stub; both restored from saved copies
+afterwards, tree equal to 377d109). Predicted beforehand, unpushed: some R or DL case differs on nodes or cost [I].
+- Edit applied once; 0 "e: "; 3 fresh XML; restored, cmp equal.
+- F0: 1 test, 0 failures. DL-lat and DL-lon: 0 mismatches each. R: 176 mismatches among its 1029 compared cases
+  (151 still stopped at the stub, 354 refused). Of the 20 printed: 17 differ on [nodes, cost, distance, node digest,
+  heights digest], 2 on [cost, distance, node digest, heights digest], 1 on [nodes, distance, node digest, heights
+  digest]; by profile fastbike 11, fastbike-asia-pacific 8, hiking-mountain 1.
+- So the revert bites R's comparison, not F0's or DL's. The committed R test cannot show it until 8b: it stops at the
+  first case that reaches the memory path.
