@@ -19,8 +19,8 @@ import okio.Path.Companion.toPath
  * Java's `Thread` base is not kept: Forager calls `doRun` on a thread of its own. `synchronized (openSet)` is not kept:
  * its only other reader, `getOpenSet`, is left out (§1).
  *
- * 8a ports matching and the search without memory pressure. Still to come, each a `TODO` naming its sub-step: the memory
- * path (8b); terminate, the time limit, the progress count and `catch (Error)` (8c).
+ * 8a ports matching and the search; 8b the memory path (`collectOutreachers`, `canEscape`, panic mode). Still to come,
+ * each a `TODO` naming its sub-step: terminate, the time limit, the progress count and `catch (Error)` (8c).
  */
 internal class RoutingEngine(
     private val fileSystem: FileSystem,
@@ -679,21 +679,55 @@ internal class RoutingEngine(
         addToOpenset(startPath1)
         addToOpenset(startPath2)
         val openBorderList = ArrayList<OsmPath>(4096)
+        var memoryPanicMode = false
+        var needNonPanicProcessing = false
 
         while (true) {
             val path = openSet.popLowestKeyValue()
             if (path == null) {
                 if (openBorderList.isEmpty()) break
-                TODO("RoutingEngine: the open border list (memory panic mode), step 8b, RECORD -90")
+                // RoutingEngine.java:1993-1998, the open border list back into the open set.
+                for (p in openBorderList) {
+                    openSet.add(p.cost + (p.airdistance * airDistanceCostFactor).toInt(), p)
+                }
+                openBorderList.clear()
+                memoryPanicMode = false
+                needNonPanicProcessing = true
+                continue
             }
 
             if (path.airdistance == -1) continue
 
+            // RoutingEngine.java:2006-2040, the memory path. Its two logInfo lines are not kept (no log, quite).
             if (DIRECT_WEAVING && nc.hasHollowLinkTargets(path.getTargetNode()!!)) {
-                if (!nc.nodesMap.isInMemoryBounds(openSet.getSize(), false)) {
-                    TODO("RoutingEngine: the memory path (collectOutreachers, panic mode), step 8b, RECORD -90")
+                if (!memoryPanicMode) {
+                    if (!nc.nodesMap.isInMemoryBounds(openSet.getSize(), false)) {
+                        nc.nodesMap.collectOutreachers(libm)
+                        while (true) {
+                            val p3 = openSet.popLowestKeyValue() ?: break
+                            if (p3.airdistance != -1 && nc.nodesMap.canEscape(p3.getTargetNode()!!)) {
+                                openBorderList.add(p3)
+                            }
+                        }
+                        nc.nodesMap.clearTemp()
+                        for (p in openBorderList) {
+                            openSet.add(p.cost + (p.airdistance * airDistanceCostFactor).toInt(), p)
+                        }
+                        openBorderList.clear()
+                        if (!nc.nodesMap.isInMemoryBounds(openSet.getSize(), true)) {
+                            if (maxTotalCost < 1000000000 || needNonPanicProcessing || fastPartialRecalc) {
+                                throw IllegalArgumentException("memory limit reached")
+                            }
+                            memoryPanicMode = true
+                        }
+                    }
+                }
+                if (memoryPanicMode) {
+                    openBorderList.add(path)
+                    continue
                 }
             }
+            needNonPanicProcessing = false
 
             if (nodeLimit > 0) { // check node-limit for target island search
                 if (--nodeLimit == 0) return null
