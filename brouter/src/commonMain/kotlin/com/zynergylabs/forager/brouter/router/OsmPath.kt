@@ -21,4 +21,6 @@ internal abstract class OsmPath : OsmLinkHolder {
     override fun setNextForLink(holder: OsmLinkHolder?): Unit = TODO("step 6: OsmPath")
 
     override fun getNextForLink(): OsmLinkHolder? = TODO("step 6: OsmPath")
+
+    fun interpolateEle(e1: Short, e2: Short, fraction: Double): Short = TODO("step 6: OsmPath")
 }
