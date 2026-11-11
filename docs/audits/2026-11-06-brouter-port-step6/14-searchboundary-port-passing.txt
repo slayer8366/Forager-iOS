@@ -1,0 +1,20 @@
+Session 16: SearchBoundary ported; SearchBoundaryTest passing.
+
+Full fresh run on the red stub commit ca11871 (before its push): ' e: ' 0, HTTP 429 0; Gradle "135 tests completed,
+3 failed"; XML 60 files, 60 fresh, 0 empty; TOTAL tests 135, failures 3: SearchBoundaryTest (the stub, on purpose)
+and CollectOutreachersTest's 2 (RECORD -61). Wall 648 s.
+
+Two test fixes after the port first ran (the port unchanged between them):
+1. java.lang.ArrayIndexOutOfBoundsException, uncaught, no stack (JIT). Probes can fall below latitude 0 or above
+   180,000,000, where CheapRuler's table lookup throws, in the oracle as in the port. isInBoundary's call is now
+   wrapped and compared by exception class too.
+2. "case 180 probe 2 direction 3: message expected:<Index -6 out of bounds for length 1800> but was:<null>": the same
+   out-of-range lookup; the port's message was null (a JIT-compiled implicit exception can lose its message [I]).
+   Messages are now compared only for Java's own IllegalArgumentException ("undefined direction: N").
+The same test (as committed here) over the stub again: 0 ' e: ', 1 fresh XML, 1 of 1 failed, "kotlin.NotImplementedError:
+An operation is not implemented: SearchBoundary.getFileName stub"; restored, cmp equal.
+
+Passing run (filter *SearchBoundaryTest): 0 ' e: ', 1 fresh XML, TOTAL tests 1, failures 0. Its line:
+168000 isInBoundary cases; direction 0=11087, 1=11665, 2=12253, 3=11983, undefined direction=35644, distance
+throws=1368; inner false=33641, inner true=8863; outer false=12144, outer true=30360; radius false=70460, radius
+true=11152, radius throws=1380. 3000 cases; getFileName compared on each.
