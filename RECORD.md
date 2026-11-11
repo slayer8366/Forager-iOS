@@ -4192,3 +4192,34 @@ profiles still set `turnInstructionMode` to 1, which leaves BRouter's hints off 
 - **Forager's next-turn code** is an app-layer port, not part of BRouter. It is an open item for the iOS app's plan, after
   the BRouter port, and gets its own intent when planned.
 **Notes:** Written by the planner session by hand. Next free ID -112.
+
+**Kind:** outcome
+**ID:** 2026-10-28-112
+**Timestamp:** 2026-11-11T10:49:47Z
+**Continues:** 2026-10-28-94, 2026-10-28-101, 2026-10-28-110, 2026-10-28-111
+**Title:** Step 7, Plumb's session 19: `OsmTrack`'s reached core ported over failing stubs; revert (a) as predicted
+**Observed:** Plumb Ledger, session 19, `brouter-port-5b` `916cb8f` to `737fdf2` (five commits; clean tree; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 170,728 by the harness's count; the
+watcher did not fire.
+- **Ported** (`cbd31d6`): `OsmTrack`'s fields, `addNode`, `copyDetours`, `buildMap`, `containsNode` (replacing -94's stub),
+  `getLink`, `appendTrack`, `getTotalSeconds`, `prepareSpeedProfile`, `readBinary`'s null guard and `processVoiceHints`'
+  head; `VoiceHintList`'s constructor, fields and `setTransportMode`; `Formatter`'s three statics. The hint body,
+  `addDetours` and `readBinary`'s file branch are `TODO("step 7: hint code, a later session (RECORD -111)")` [R].
+- **Tests, over stubs first** (`bf48f79`, red on purpose): `TrackMapTest`, `AppendTrackTest`, `TrackHeadTest`,
+  `TrackTimeTest`, 6 of 6 `NotImplementedError` naming the stubs, 0 compile errors; on the port 6 of 6 [R]. Full fresh run
+  144 tests, 2 failed, both `CollectOutreachersTest` [R].
+- **Revert (a)** (`OsmTrack.java:346`, -110), prediction pushed at `c898514` before the run. **Checked by the planner** in
+  the result file: 0 compile errors, 4 fresh XML, `cmp`-equal restore; 2 of 6 failed, as predicted:
+  `appendTrackMatchesTheOracle` at mode 0, the first case, node count 564 against 563; and
+  `totalSecondsOnBuiltTracksMatchTheOracle` on seconds and time (15,747 against 15,739), energy equal.
+- **CI on `cbd31d6`, read by the planner** (run 43005311784): `jvm` 144, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **Disclosed by Plumb:**
+  - A test literal changed to pass the E1 scan: a double in `TrackTimeTest`'s list, `0.0499` followed by one more 9, was
+    cut to `0.0499`, because the scan's decimal pattern caught it. That was before the port existed, and the red run was
+    repeated after it. It is not a coordinate; the scan's pattern is wider than E1.
+  - A weak check [?]: `TrackHeadTest` asserts that `copyDetours` on a track with no detours gives null, which a stub
+    returning null would also pass. Session 20 strengthens it with a real detour map.
+**Next:** session 20, the hint code (-111): `VoiceHint`, `VoiceHintList`'s rest, `OsmTrack`'s detour methods and hint body;
+then `VoiceHintProcessor`; then `readBinary`'s file branch and the formats.
+**Notes:** Written by the planner session by hand. Next free ID -113.
