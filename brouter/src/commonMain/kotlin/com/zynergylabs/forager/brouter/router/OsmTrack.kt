@@ -59,12 +59,17 @@ internal class OsmTrack {
         nodes.add(0, node)
     }
 
+    fun registerDetourForId(id: Long, detour: OsmPathElement?): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
+
     fun copyDetours(source: OsmTrack) {
         detourMap = source.detourMap?.let { FrozenLongMap(it) }
     }
 
-    /** `OsmTrack.java:91-116`, a detour method: the hint code's session (RECORD -111). */
-    fun addDetours(source: OsmTrack): Unit = TODO("step 7: hint code, a later session (RECORD -111)")
+    fun addDetours(source: OsmTrack): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
+
+    var lastorigin: OsmPathElement? = null
+
+    fun appendDetours(source: OsmTrack): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
 
     fun buildMap() {
         val map = CompactLongMap<OsmPathElementHolder>()
@@ -159,10 +164,14 @@ internal class OsmTrack {
         showSpeedProfile = showSpeedProfile or t.showSpeedProfile
     }
 
+    fun getMatchedWaypoint(idx: Int): MatchedWaypoint? = TODO("step 7: hint code, session 20 (RECORD -111)")
+
     fun getTotalSeconds(): Int {
         val s = if (nodes.size < 2) 0f else nodes[nodes.size - 1].getTime() - nodes[0].getTime()
         return (s + 0.5).toInt()
     }
+
+    fun getFromDetourMap(id: Long): OsmPathElementHolder? = TODO("step 7: hint code, session 20 (RECORD -111)")
 
     fun prepareSpeedProfile(rc: RoutingContext) {
         // sendSpeedProfile = rc.keyValues != null && rc.keyValues.containsKey( "vmax" );
@@ -181,6 +190,10 @@ internal class OsmTrack {
         }
         TODO("step 7: hint code, a later session (RECORD -111)")
     }
+
+    internal fun getMinDistance(): Int = TODO("step 7: hint code, session 20 (RECORD -111)")
+
+    fun removeVoiceHint(i: Int): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
 
     companion object {
         fun readBinary(
