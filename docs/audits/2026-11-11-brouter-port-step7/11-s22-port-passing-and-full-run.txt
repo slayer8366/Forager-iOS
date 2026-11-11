@@ -1,0 +1,11 @@
+Session 22 (RECORD -114): VoiceHintProcessor (process, postProcess, sumNonConsumedWithinCatchingRange,
+checkForNextNoneMotorway, checkStraightHold), OsmTrack.startSection and processVoiceHints' hint body, ported over
+the stubs that 10's widened test failed on. No test changed after the port was written.
+Run 1: :brouter:jvmTest --rerun-tasks --tests VoiceHintProcessTest, VoiceHintTest, TrackDetourTest, TrackHeadTest;
+results deleted first; 4 fresh XML; 0 " e: ". 6 tests, 0 failures, 0 errors (first attempt; no fix needed).
+  VoiceHintProcessTest: 400 cases, 5978 detours registered, 652 waypoints, 17279 hints, 4997 with bad ways, 0 thrown,
+  commands {1=5, 2=104, 3=2112, 4=43, 5=114, 6=2046, 7=269, 8=138, 9=100, 10=3, 11=878, 13=6, 14=35, 15=11336, 16=90};
+  every field of every hint equal on both engines (compared by digest).
+Run 2: full fresh :brouter:jvmTest --rerun-tasks, results deleted first: 68 XML, 149 tests, 2 failures, 0 errors,
+  0 skipped, 0 " e: ", no Maven 429. Both failures CollectOutreachersTest (-61, -106):
+  collectOutreachersWithoutADestination, collectOutreachersWithADestinationVanishesFarNodes.

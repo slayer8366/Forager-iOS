@@ -260,7 +260,10 @@ internal class OsmTrack {
         // sendSpeedProfile = rc.keyValues != null && rc.keyValues.containsKey( "vmax" );
     }
 
-    /** `OsmTrack.java:452-460`, the head Forager's path reaches; the hint body (`:462-534`) is stubbed (RECORD -113). */
+    /**
+     * `OsmTrack.java:452-534`. Forager's path reaches only the head (`:452-460`) and returns there; the hint body is
+     * ported in session 22 and tested with `VoiceHintProcessor` and `startSection` as one unit (RECORD -113, -114).
+     */
     fun processVoiceHints(rc: RoutingContext) {
         val v = VoiceHintList()
         voiceHints = v
@@ -271,14 +274,90 @@ internal class OsmTrack {
             // only when no direct way points
             return
         }
-        // `OsmTrack.java:462-534`: stubbed, tested with `VoiceHintProcessor` as one unit (RECORD -113).
-        TODO("step 7: processVoiceHints' hint body, session 21 (RECORD -113)")
+        var nodeNr = nodes.size - 1
+        var node: OsmPathElement? = nodes[nodeNr]
+        while (node != null) {
+            node = node.origin
+        }
+
+        node = nodes[nodeNr]
+        val inputs = ArrayList<VoiceHint>()
+        while (node != null) {
+            val origin = node.origin
+            if (origin != null) {
+                if (nodeNr == nodes.size - 1) {
+                    val input = VoiceHint()
+                    inputs.add(0, input)
+                    input.ilat = node.getILat()
+                    input.ilon = node.getILon()
+                    input.selev = node.getSElev()
+                    input.goodWay = node.message
+                    input.oldWay = node.message
+                    input.indexInTrack = nodes.size - 1
+                    input.cmd = VoiceHint.END
+                }
+                val input = VoiceHint()
+                inputs.add(input)
+                input.ilat = origin.getILat()
+                input.ilon = origin.getILon()
+                input.selev = origin.getSElev()
+                input.indexInTrack = --nodeNr
+                input.goodWay = node.message
+                input.oldWay = if (origin.message == null) node.message else origin.message
+                if (rc.turnInstructionMode == 8 ||
+                    rc.turnInstructionMode == 4 ||
+                    rc.turnInstructionMode == 2 ||
+                    rc.turnInstructionMode == 9
+                ) {
+                    val mwpt = getMatchedWaypoint(nodeNr)
+                    if (mwpt != null && mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
+                        input.cmd = VoiceHint.BL
+                        input.angle = if (nodeNr == 0) origin.message!!.turnangle else node.message!!.turnangle
+                        input.distanceToNext = node.calcDistance(rc.libm, origin).toDouble()
+                    }
+                }
+                val map = detourMap
+                if (map != null) {
+                    val detours = map.get(origin.getIdFromPos())
+                    if (nodeNr >= 0 && detours != null) {
+                        var h: OsmPathElementHolder? = detours
+                        while (h != null) {
+                            val e = h.node
+                            input.addBadWay(startSection(e, origin))
+                            h = h.nextHolder
+                        }
+                    }
+                }
+            }
+            node = node.origin
+        }
+
+        val transportMode = v.transportMode()
+        val vproc = VoiceHintProcessor(rc.turnInstructionCatchingRange, rc.turnInstructionRoundabouts, transportMode)
+        val results = vproc.process(inputs)
+
+        val minDistance = getMinDistance().toDouble()
+        val resultsLast = vproc.postProcess(results, rc.turnInstructionCatchingRange, minDistance)
+        for (hint in resultsLast) {
+            v.list.add(hint)
+        }
     }
 
-    /** `OsmTrack.java:573-586`, reached only from `processVoiceHints`' hint body: stubbed (RECORD -113). */
-    @Suppress("unused")
-    private fun startSection(element: OsmPathElement?, root: OsmPathElement): MessageData? =
-        TODO("step 7: startSection, session 21 (RECORD -113)")
+    /** `OsmTrack.java:573-586`, reached only from `processVoiceHints`' hint body. */
+    private fun startSection(element: OsmPathElement?, root: OsmPathElement): MessageData? {
+        var e = element
+        var cnt = 0
+        while (e != null && e.origin != null) {
+            if (e.origin!!.getILat() == root.getILat() && e.origin!!.getILon() == root.getILon()) {
+                return e.message
+            }
+            e = e.origin
+            if (cnt++ == 1000000) {
+                throw IllegalArgumentException("ups: $root->$element")
+            }
+        }
+        return null
+    }
 
     internal fun getMinDistance(): Int {
         val v = voiceHints
