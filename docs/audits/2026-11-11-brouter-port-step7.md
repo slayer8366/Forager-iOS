@@ -465,3 +465,66 @@ Plumb Ledger, session 22, `brouter-port-5b` `7193465` to the head that carries t
 2. The planner's call on whether 17/18 (motorway exits, unreachable on Forager's profile) need a seeded `process` test
    on synthetic hints, and on the thin counts of 10 and 13.
 3. One revert per new unit, predicted in a committed file first.
+
+## 10. Session 23: EL/ER closed as not covered; `Formatter` ported; `readBinary`'s file branch stopped (partial)
+
+Plumb Ledger, session 23, `brouter-port-5b` `dd43676` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R]. Ended on the planner's handoff
+call at about 182k; no format class was started.
+
+**Done:**
+1. **EL/ER (17, 18), time-boxed** (`d413679`, `14-s23-el-er-not-covered.txt`). A scratch probe swapped only the contexts:
+   car profiles cannot drive the walks (their model is not `StdModel`). `fastbike` with `allow_motorways=1`, on the same
+   400 cases, reached goodWay prio 29 142 times but the 29/30 pair 0 times, so no 17 or 18 [R]. The four lines
+   (`VoiceHintProcessor.java:385-387`, `:444-446`) are recorded as **not covered**. The committed test is unchanged; a fresh
+   run on the port gave 1/1 passed, 17,279 hints [R].
+2. **Red over the stubs, pushed on purpose** (`08fdbba`, `15-...txt`): `Formatter` whole plus `readBinary`'s file branch
+   and its two `readFromStream`s, stubbed. `FormatterTest` and `ReadBinaryTest` failed 2 of 2 with `NotImplementedError`
+   naming the stubs; 2 fresh XML, 0 compile errors [R]. One slip, caught before any port code existed: the first display
+   printed an oracle track text into the local XML. The files were deleted and never staged, and the display was fixed
+   (recorded in 15).
+3. **`Formatter` ported** (`3d64e31`, `18-...txt`): `FormatterTest` 1/1 passed on the first run, with 63,728 calls
+   compared. That covers all 10 command tables, `formatILon`/`formatILat` by digest, and `getFormattedTime3` (Julian
+   before 1582-10-15 and BC years, NaN, the infinities, random float bits); `read`; and both constants [R]. `write` is ported
+   (UTF-8) but not yet compared [I]; it is to be checked with `FormatCsv`.
+4. **Full fresh `:brouter:jvmTest --rerun-tasks`** before the code push: 70 XML, 151 tests, 3 failures, 0 errors, 0 `e: `,
+   no Maven 429. The failures are CollectOutreachersTest's 2 (-61, -106) and `ReadBinaryTest` over its stubs (red on purpose) [R].
+5. **Revert (d)**, predicted in `17-...txt` (pushed at `3d64e31` before it ran). The edit: `getOruxAction`'s
+   `1008 + roundaboutExit` made `-`. Observed (`19-...txt`): 0 compile errors, 1 fresh XML, 1 failure,
+   "getOruxAction(13, -12) expected:<ok:[996]> but was:<ok:[1020]>"; restored `cmp`-equal, with the forward line present.
+   **As predicted** [R].
+6. **CI**: run 43020174261 on `3d64e31` was still in progress at handoff and has **not been read**. Runs 43017095024
+   (`d413679`) and 43017985612 (`08fdbba`) conclude "failure", which is expected with CollectOutreachersTest's 2 and, on
+   `08fdbba`, ReadBinaryTest red on purpose. Their logs were not read either: no TOTAL, no ` e: ` count, no
+   compileKotlinIos* or gate checked. iOS results: none read, so nothing here is simulator-checked.
+
+**The stop: `readBinary`'s file branch fails on the port.** The port is held in `16-s23-readbinary-port-not-passing.patch`
+(it applies to `3d64e31`); the source set keeps the stubs. `ReadBinaryTest` passes every variant of tracks 0-29: target
+deltas, checksum shifts, profile stamp, debug on and off, every cut length (EOF texts matched), and the missing file. It
+fails at track 30, the first **empty** track (0 nodes): the result is equal, but `debugInfo` is 145 characters on the
+oracle and 93 on the port. With 0 nodes, Java's `t.cost = last_pe.cost` (`OsmTrack.java:258`) throws a NullPointerException.
+The catch appends `"Error reading rawTrack: " + e`. JDK 21 adds its helpful NPE message, which by length reads `: Cannot
+read field "cost" because "last_pe" is null` [I: inferred from the length; not printed]. The port's `lastPe!!` gives a bare
+`java.lang.NullPointerException`.
+**The question for the planner:** for an empty (0-node) raw-track file, should the port (a) write JDK 21's NPE wording
+literally into common code, (b) have the empty-file input ruled out of scope as unreachable from BRouter's writer (the
+test's inputs would then change, with a ruling), or (c) do something else? Under (a) the text is still the JVM's own, and
+Native would print `okio.EOFException`-style names for the EOF cases anyway (see [?] below).
+
+**Unverified:**
+- [I] Java's NPE text above, inferred from its length.
+- [?] Native: `"Error reading rawTrack: " + e` prints the exception's class name. On the JVM, okio's `EOFException` is
+  `java.io.EOFException`, and it matched; on Kotlin/Native it is `okio.EOFException`, so the debug text would differ.
+  This is for step 10, not tested here.
+- [?] `getFormattedTime3`'s calendar arithmetic is common code and matched on the JVM only. Native was not run.
+- [I] `MatchedWaypoint.name` decodes as UTF-8, as JDK 18+ `new String(bytes)` does (the oracle runs on JDK 21). Names
+  with non-ASCII characters, written by `writeBytes` as low bytes, matched on tracks 0-29.
+- [I] 17/18 are still not reached by any input (item 1); `OFFR` (12) is unreachable.
+
+**Next, for session 24:**
+1. Read CI run 43020174261 (`3d64e31`) and the later docs pushes: TOTAL, ` e: `, both compileKotlinIos*, the gate.
+2. Apply the planner's answer on `readBinary`'s empty-file case; then apply patch 16, see `ReadBinaryTest` pass, and push.
+3. `FormatCsv` (43 lines), which also compares `Formatter.write`; then `FormatKml` (116), `FormatJson` (261) and
+   `FormatGpx` (573). For each: stubs and a red push first, outputs by digest and length, hints switched on in test code.
+4. One revert per new unit, predicted in a pushed file.
+5. Step 7's close: the report's summary of what is covered and what is not (EL/ER, OFFR), and the planner's check.
