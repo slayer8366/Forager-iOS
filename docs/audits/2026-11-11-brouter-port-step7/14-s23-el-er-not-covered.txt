@@ -1,0 +1,16 @@
+Session 23 (RECORD -115): EL/ER (commands 17, 18), VoiceHintProcessor.java:385-387 and :444-446. Time-boxed attempt
+at a test-only set-up, applied alike on both engines; stopped as not cheap. The four lines stay NOT COVERED.
+
+What was tried (a scratch probe, a copy of VoiceHintProcessTest with only its contexts swapped; not committed):
+- car-fast: PathEngines.stdProfiles() excludes it (its model is not StdModel; KinematicModel is not ported), so
+  the car profiles cannot drive the walks at all.
+- fastbike with profile:allow_motorways=1 (its motorway costfactor 1.5 in place of 10000), same 400 cases, same
+  ends, same seeds: 16,694 hints on the oracle's side. Histogram of (goodWay prio / maxBadPrio) over those hints:
+  goodWay prio 29 (motorway_link) 142 times (141 with no bad way, 1 with 29), prio 30 (motorway) 545 times; the
+  pair 29/30 that EL/ER need: 0. Commands {1..9, 11, 13..16} reached; 10 not; 17, 18 not [R].
+Why not further: reaching 29/30 needs a walk to leave a motorway onto a link at a fork where the motorway stays a
+bad way, and random walks from Forager's ends do not hit that in 400 cases even with motorways allowed. Steering
+walks or synthesising hints is a larger set-up than -115 asked for. On Forager's own profile (hiking-mountain,
+motorway|motorway_link costfactor 100000) no walk takes a motorway way at all [I: costfactor read from the profile].
+The committed test is unchanged. Its run on the existing port, fresh (--rerun-tasks, results deleted first):
+1 XML, 1 test, 0 failures, 0 errors, 0 " e: "; 400 cases, 17279 hints, commands as in 11-s22 [R].
