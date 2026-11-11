@@ -412,3 +412,56 @@ lines as they are rather than add an assertion after seeing the port's result. B
 2. One revert on that port, predicted in a committed file first.
 3. The planner's call on the probe above, and on whether the unreached commands need a seeded `process` test.
 4. Then `readBinary`'s file branch and the formats.
+
+## 9. Session 22: `VoiceHintProcessor`'s unit ported, its sample widened first
+
+Plumb Ledger, session 22, `brouter-port-5b` `7193465` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done, in -114's order:**
+1. **Sample widened, red over the stubs on purpose** (`5ba7488`, `10-s22-widened-sample-red-over-stubs.txt`), while only
+   the oracle's side had been seen. Test inputs only: `TrackEngines.walks(..., 40, 80)` (was 10, 25), so 400 cases (was
+   100); plus an oracle-side coverage assertion that commands 1-16 bar 12 are reached. The comparison is untouched. Tried
+   per end (walks, max steps): 40/25 gives 1, 10, 13 (10 once); 10/80 misses 10; 40/80 gives 1=5, 10=3, 13=6 (kept). Over
+   the stubs: 1 test, 1 failed, "case 0: result expected:<[ok]> but was:<[throws NotImplementedError]>", 1 fresh XML,
+   0 ` e: `. Oracle side: 17,279 hints, 4,997 with bad ways, 0 thrown, commands {1=5, 2=104, 3=2112, 4=43, 5=114,
+   6=2046, 7=269, 8=138, 9=100, 10=3, 11=878, 13=6, 14=35, 15=11336, 16=90} [R].
+   - **Not reachable on these inputs:** 12 (OFFR) is assigned by no Java line (declared in `VoiceHint`, read only by
+     `Formatter`) [R]. 100 (END) is made only as the first input and `postProcess` skips it as the last hint [R].
+   - **A premise short by two:** -114 lists 1, 10, 12 and 13 as missing; 17 (EL) and 18 (ER) were missing too. They need
+     a goodWay of prio 29 (motorway_link) beside a 30; Forager's `hiking-mountain` prices motorway|motorway_link at
+     costfactor 100000, so no walk takes one [I: not traced into the cost code].
+2. **The port** (`080885f`): `VoiceHintProcessor` whole (`process`, `postProcess`, `sumNonConsumedWithinCatchingRange`,
+   `checkForNextNoneMotorway`, `checkStraightHold`), `startSection` and `processVoiceHints`' body (`OsmTrack.java:462-534`).
+   `postProcess`' loop is a `while`, since Java bumps `hintIdx` in the body; float/double types kept as Java promotes
+   them. `VoiceHintProcessTest` and the step 7 track tests (`VoiceHintTest`, `TrackDetourTest`, `TrackHeadTest`): 4 fresh
+   XML, 6 tests, 0 failed, 0 ` e: `, first attempt; every field of all 17,279 hints equal (`11-...txt`) [R].
+3. **Full fresh `:brouter:jvmTest --rerun-tasks`** (results deleted first): 68 XML, 149 tests, 2 failures, 0 errors, 0
+   ` e: `, no Maven 429; both failures `CollectOutreachersTest` (-61, -106) [R].
+4. **Revert (c)**, -110's suggestion, predicted in `12-revert-c-prediction.txt` (pushed at `bf66b05` before it ran):
+   `postProcess`' `else if (input.distanceToNext < catchingRange)` flipped to `>`. Predicted: a "hint count" failure with
+   the port keeping more, in an early case not necessarily case 0; `VoiceHintTest` passing. Observed
+   (`13-revert-c-catching-range-flipped-result.txt`): 0 compile errors, 2 fresh XML, 3 tests, 1 failure, "case 26: hint
+   count expected:<62> but was:<66>" (full message from the XML), `VoiceHintTest` passed; restored `cmp`-equal from the
+   saved copy, the forward line present after, tree clean [R]. As predicted.
+5. **CI on `080885f`** (run 43014941206, attempt 1, read from the job logs by me): `jvm` TOTAL 149 tests, 2 failures,
+   0 errors, 68 files, both failures `CollectOutreachersTest` (-61), 0 ` e: `; `compileKotlinIosArm64` and
+   `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL. The job reads "failure" on those 2 only. `ios-smoke`
+   passed: `iosSimulatorArm64Test` 24 of 24 (**simulator-checked**), arm64 JVM 7 of 7 with its gate "OK: all 2 classes
+   ran", 0 ` e: ` [R]. The later pushes (`bf66b05`, `ea7d345`, docs only) were not read.
+
+**Stops hit:** none. No test was changed after the port was written; the port passed on its first run.
+
+**Unverified:**
+- [I] 17/18 unreachable because motorway ways cost 100000 on Forager's profile: read from the profile, not traced to
+  where the walk's cost turns negative.
+- [I] Commands 10 and 13 are reached 3 and 6 times; a defect on a path they alone take could still hide in so few.
+- [I] `hasGiveWay`'s order of checks (session 20) still rests on equal outcomes only.
+- [I] Native: nothing in step 7 runs off the JVM except through CI's compile.
+- [?] Roundabout exits are reached (13, 14), but how many distinct roundabouts the 400 cases cross is not counted.
+
+**Next, for session 23:**
+1. `readBinary`'s file branch and the formats (-111), each test seen failing over stubs first.
+2. The planner's call on whether 17/18 (motorway exits, unreachable on Forager's profile) need a seeded `process` test
+   on synthetic hints, and on the thin counts of 10 and 13.
+3. One revert per new unit, predicted in a committed file first.
