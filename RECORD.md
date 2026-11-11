@@ -4426,3 +4426,39 @@ into common code. This is ruled before any port result for it was seen, so it is
 **Next:** session 26 applies -118, compiles and runs patch 29, ports `FormatGpx` red first, runs the GPX revert with its
 prediction pushed first, reads CI, and closes step 7 if reached.
 **Notes:** Written by the planner session by hand. Next free ID -119.
+
+**Kind:** outcome
+**ID:** 2026-10-28-119
+**Timestamp:** 2026-11-11T16:57:23Z
+**Continues:** 2026-10-28-107, 2026-10-28-116, 2026-10-28-118
+**Title:** Step 7, Plumb's session 26: -118 applied; `FormatJson` matching the oracle, held on `formatDecimal3` above
+2^63; the owner's ruling on it; the planner's ruling on the seeded speeds
+**Observed:** Plumb Ledger, session 26, `brouter-port-5b` `a775e5c` to `4f5791c` (partial, a stop; ended at 144,549 by the
+harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **-118 applied** (`7ddd4ef`): `OsmTrack.version` a settable `String?`, `null` by default; `FormatJsonTest` sets it from
+  the oracle's value. Full fresh run: 156 tests, 4 failed (`CollectOutreachersTest`'s 2, `FormatJsonTest`'s 2 on purpose
+  naming the stubs), 0 ` e: ` [R].
+- **JSON port, run 1:** every JSON comparison equal, but the test's own reached-branch check on the speed profile failed:
+  step 6's paths never set message speeds, so the profile was empty in both engines. Plumb then seeded those speeds alike
+  in both engines (in `7ddd4ef`); the comparison and the reached-branch list are unchanged [R].
+- **`formatDecimal3`** (Java's `DecimalFormat` `"0.###"`, used only on `getTime()`, `FormatJson.java:82-85`): wrong
+  digits near 3e17 on run 1, fixed with the JDK's integer fast path. Run 2: `formatJsonMatchesTheOracle` passes;
+  `formatDecimal3` fails near 2.8e22, above 2^63, 17 digits on Java against 16 [R]. Plumb stopped there: matching it means
+  porting about 360 lines of the JDK's GPLv2 digit code. Port held in patch 30, runs in file 31. `FormatGpx` not started
+  (patch 29's GPX calls `FormatJson.speedText`); no revert.
+- **CI on `3108507`**, read by Plumb: `jvm` 156, 4 failed as expected, 0 ` e: `; simulator 24 and arm64 7, 0 failed, the
+  gate "OK" (**simulator-checked**).
+**Checked by the planner:** `git ls-remote` `4f5791c`, a fast-forward of `a775e5c`; no model name; E1 over
+`a775e5c..4f5791c`: 0. BRouter's licence is MIT (`third_party/brouter/LICENSE`). `getTime()` returns a `float` of seconds
+(`OsmPathElement.java:47`); 2^63 seconds is about 9.2e18, beyond any route (the universe is about 4e17 seconds old).
+CI on `7ddd4ef` not read.
+**Decision (the planner's, technical), on the seeded speeds:** not a stop. The failing check was a reached-branch
+assertion, not an oracle comparison; the change adds inputs alike to both engines so the branch the test already demands
+is reached, and loosens nothing. Recorded because inputs changed after a result was seen.
+**Decision (the owner's), asked with the recommendation first, on `formatDecimal3` above 2^63:** "Stop at the limit
+(Recommended)". The port matches Java exactly below 2^63 and throws a clear error above it, never printing wrong digits;
+the test checks every value below the limit and checks for the error above it. No JDK code is copied. Because this narrows
+a test after a result was seen, it goes beside -107's and -116's cases for the independent reviewer, once named.
+- **Not yet shown:** that the port matches Java on every tested value from 3e17 up to 2^63 (session 26 named its failure
+  near 2.8e22 only). If any value below 2^63 differs, that is a stop, not part of this ruling.
+**Notes:** Written by the planner session by hand. Next free ID -120.
