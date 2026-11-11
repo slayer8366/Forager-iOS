@@ -1,0 +1,14 @@
+Session 22 (RECORD -114): VoiceHintProcessTest's sample widened while only the oracle's side had been seen.
+Change (test inputs only, alike on both engines; the comparison untouched): TrackEngines.walks(fcx, c, 7401L + ci, 40, 80)
+(was 10, 25), so 400 cases (was 100); plus a coverage assertion on the oracle's side that commands 1-16 bar 12 are reached.
+Tried on the oracle side over the stubs, per end (walks, max steps) -> commands not in 2-9, 11, 14-16:
+  40, 25 -> 1=14, 10=1, 13=2;   10, 80 -> 1=2, 13=1 (no 10);   40, 80 -> 1=5, 10=3, 13=6 (kept).
+Not reachable on these inputs:
+  12 OFFR: no Java line assigns it (VoiceHint.java declares it; Formatter only reads it).
+  17 EL, 18 ER: need goodWay prio 29 (motorway_link) with maxBadPrio 30; Forager's hiking-mountain prices
+    motorway|motorway_link at costfactor 100000, so no walk takes one [I: not traced to the cost code].
+  100 END: made only as the last input; postProcess skips it as the last hint and drops a trailing END.
+Command: :brouter:jvmTest --rerun-tasks --tests '*.router.VoiceHintProcessTest'; results deleted first; 1 fresh XML; 0 " e: ".
+Result: 1 test, 1 failed: "case 0: result expected:<[ok]> but was:<[throws NotImplementedError]>" (the body's stub).
+Oracle side: 400 cases, 5978 detours registered, 652 waypoints, 17279 hints, 4997 with bad ways, 0 thrown,
+commands {1=5, 2=104, 3=2112, 4=43, 5=114, 6=2046, 7=269, 8=138, 9=100, 10=3, 11=878, 13=6, 14=35, 15=11336, 16=90}.

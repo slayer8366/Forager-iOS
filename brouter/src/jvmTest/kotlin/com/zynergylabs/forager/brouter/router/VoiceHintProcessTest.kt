@@ -64,7 +64,9 @@ class VoiceHintProcessTest {
         assertEquals(16, hintFields.size, "VoiceHint's field count is not Java's")
         val fcx = PathEngines.contexts(TrackEngines.foragerProfile())!!
         try {
-            val walks = TrackEngines.cases().withIndex().flatMap { (ci, c) -> TrackEngines.walks(fcx, c, 7401L + ci, 10, 25) }
+            // Session 22 (RECORD -114): 40 walks of up to 80 steps per case (was 10 of 25), widened while only the
+            // oracle's side had been seen, so that it reaches commands 1 (C), 10 (TLU) and 13 (RNDB) too.
+            val walks = TrackEngines.cases().withIndex().flatMap { (ci, c) -> TrackEngines.walks(fcx, c, 7401L + ci, 40, 80) }
             val groups = walks.size / 5
             assertTrue(groups >= 4, "too few walks: ${walks.size}")
             val rnd = Random(20261121L)
@@ -143,6 +145,11 @@ class VoiceHintProcessTest {
                 "$hints hints, $badWays with bad ways, $thrown thrown, commands ${cmds.toSortedMap()}")
             // Coverage, on the oracle's side alone: the sample reaches the body and makes hints of several kinds.
             assertTrue(hints > 200 && cmds.size >= 5 && badWays > 20, "too little reached: $hints hints, $badWays, ${cmds.keys}")
+            // Session 22: every command these inputs can reach, on the oracle's side alone. Not 12 (OFFR: no Java line
+            // assigns it), 17 and 18 (EL, ER: they need a goodWay of prio 29, motorway_link, which Forager's profile
+            // prices at 100000, so no walk takes one), nor 100 (END: made only last, and postProcess drops it).
+            val reachable = (1..16).filter { it != 12 }
+            assertTrue(cmds.keys.containsAll(reachable), "commands not reached: ${reachable.filter { it !in cmds }}")
             for (k in ids.indices) {
                 val o = oracle[k]
                 val p = port[k]
