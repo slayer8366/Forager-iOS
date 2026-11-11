@@ -1,0 +1,27 @@
+Session 27, FormatJson port (patch 30) with formatDecimal3 under RECORD -119. Fresh XML on every run.
+
+Premise check, before any -119 change (patch 30 as held; a scratch counting test over FormatJsonTest's own float
+sample, seed 20261151, never committed; run with FormatJsonTest, 0 compile errors):
+  |v| below 3e17 (and NaN):         222,747 tested, 0 differ from Java's DecimalFormat
+  3e17 <= |v| < 2^63:                 1,982 tested, 0 differ
+  |v| >= 2^63 (incl. 2 infinities):  25,294 tested, 16 differ (patch 30's Double.toString branch)
+  FormatJsonTest in the same run: 2 tests, 1 failed (formatDecimal3, bits 1690321024, as in file 31).
+  So every tested value from 3e17 up to 2^63 matches; -119 applies, no stop.
+
+-119 applied: the port throws UnsupportedOperationException ("|value| >= 2^63 (about 9.2e18) is unsupported
+(RECORD -119)") for finite |v| >= 2^63; patch 30's Double.toString branch removed. The test compares every tested value
+below 2^63 with Java exactly and asserts the throw (type, "2^63", "RECORD -119") on every finite tested value at or
+above it. Infinities print no digits, match Java ("∞"), and stay in the exact comparison.
+
+FormatJsonTest alone: 2 tests, 0 failures, 0 errors, 0 compile errors.
+  7 FormatJson.formatDecimal3: 224731 floats compared with Java, 25292 at or above 2^63 throwing (RECORD -119)
+  7 FormatJson: 121 tracks, 1642 hints, 242 waypoint texts; speedprofile reached 20, voicehints modes 0-9 each reached.
+
+Full fresh :brouter:jvmTest --rerun-tasks: 74 XML, 156 tests, 2 failures (CollectOutreachersTest 2), 0 errors,
+0 compile errors, no Maven 429 (the log's one "429" is detour test data).
+
+E1 on the first staging: 3 hits, none a position: the 2^63 limit written as a 19-digit decimal (port message, test
+constant, this file). Rewritten as "about 9.2e18" in the message and Math.scalb(1.0, 63) in the test, same limit.
+Rerun after that edit, FormatGpx files moved out of the tree so the run is the commit's tree exactly:
+full fresh :brouter:jvmTest --rerun-tasks: 74 XML, 156 tests, 2 failures (CollectOutreachersTest 2), 0 errors,
+0 compile errors, no Maven 429; formatDecimal3 224731 compared, 25292 throwing.

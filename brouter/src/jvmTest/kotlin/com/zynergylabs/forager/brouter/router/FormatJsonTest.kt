@@ -5,6 +5,7 @@ import com.zynergylabs.forager.brouter.mapaccess.OsmNode
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 /**
@@ -79,12 +80,24 @@ class FormatJsonTest {
         val vs = fixed + List(100000) { Float.fromBits(rnd.nextInt()) } +
             List(100000) { rnd.nextInt(-2000000, 20000000) / 1000f + rnd.nextInt(-3, 4) * 0.0005f } +
             List(50000) { (rnd.nextInt(0, 1 shl 20) / 1024f) }
+        // RECORD -119 (the owner's ruling, "stop at the limit"): every tested value below 2^63 in magnitude is compared
+        // with Java exactly; every finite tested value at or above 2^63 must throw the port's UnsupportedOperationException
+        // naming the limit and RECORD -119, never digits. Infinities print no digits and stay compared with Java.
+        val limit = Math.scalb(1.0, 63) // 2^63, exact as a double
         var n = 0
+        var over = 0
         for (v in vs) {
-            assertEquals(df.format(v.toDouble()), res { FormatJson.formatDecimal3(v) }, "bits ${v.toRawBits()}")
-            n++
+            if (v.isFinite() && kotlin.math.abs(v.toDouble()) >= limit) {
+                val e = assertFailsWith<UnsupportedOperationException>("bits ${v.toRawBits()}") { FormatJson.formatDecimal3(v) }
+                assertTrue(e.message!!.contains("2^63") && e.message!!.contains("RECORD -119"), "bits ${v.toRawBits()}: ${e.message}")
+                over++
+            } else {
+                assertEquals(df.format(v.toDouble()), res { FormatJson.formatDecimal3(v) }, "bits ${v.toRawBits()}")
+                n++
+            }
         }
-        println("7 FormatJson.formatDecimal3: $n floats")
+        assertTrue(n > 0 && over > 0, "both sides of the -119 limit reached: $n below, $over at or above")
+        println("7 FormatJson.formatDecimal3: $n floats compared with Java, $over at or above 2^63 throwing (RECORD -119)")
     }
 
     @Test

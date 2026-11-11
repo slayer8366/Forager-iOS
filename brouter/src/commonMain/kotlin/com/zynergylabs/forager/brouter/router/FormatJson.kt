@@ -1,21 +1,335 @@
 package com.zynergylabs.forager.brouter.router
 
+import com.zynergylabs.forager.brouter.mapaccess.MatchedWaypoint
+import com.zynergylabs.forager.brouter.util.MsunLibm
+import com.zynergylabs.forager.brouter.util.StringUtils
+
 /**
- * BRouter 1.7.10's `btools.router.FormatJson` (step 7, session 25; RECORD -111, "Port them"). Stubs, seen failing
- * first (RECORD -101).
+ * BRouter 1.7.10's `btools.router.FormatJson`, whole (step 7, session 25; RECORD -111, "Port them"). Java's
+ * `BufferedWriter` over a `StringWriter` is a [StringBuilder] here. Where Java dereferences a null, `!!` throws Kotlin's
+ * `NullPointerException`.
  */
 internal class FormatJson(rc: RoutingContext?) : Formatter(rc) {
     /** `FormatJson.java:19-180`. */
-    override fun format(t: OsmTrack): String = TODO("FormatJson.format: step 7, session 25")
+    override fun format(t: OsmTrack): String {
+        val turnInstructionMode = t.voiceHints?.turnInstructionMode ?: 0
 
-    /** `FormatJson.java:199-212`. */
-    fun formatAsWaypoint(n: OsmNodeNamed): String = TODO("FormatJson.formatAsWaypoint: step 7, session 25")
+        val sb = StringBuilder(8192)
+
+        sb.append("{\n")
+        sb.append("  \"type\": \"FeatureCollection\",\n")
+        sb.append("  \"features\": [\n")
+        sb.append("    {\n")
+        sb.append("      \"type\": \"Feature\",\n")
+        sb.append("      \"properties\": {\n")
+        sb.append("        \"creator\": \"BRouter-" + OsmTrack.version + "\",\n")
+        sb.append("        \"name\": \"").append(t.name).append("\",\n")
+        sb.append("        \"track-length\": \"").append(t.distance).append("\",\n")
+        sb.append("        \"filtered ascend\": \"").append(t.ascend).append("\",\n")
+        sb.append("        \"plain-ascend\": \"").append(t.plainAscend).append("\",\n")
+        sb.append("        \"total-time\": \"").append(t.getTotalSeconds()).append("\",\n")
+        sb.append("        \"total-energy\": \"").append(t.energy).append("\",\n")
+        sb.append("        \"cost\": \"").append(t.cost).append("\",\n")
+        val vh = t.voiceHints
+        if (vh != null && vh.list.isNotEmpty()) {
+            sb.append("        \"voicehints\": [\n")
+            for (hint in vh.list) {
+                sb.append("          [")
+                sb.append(hint.indexInTrack)
+                sb.append(',').append(getJsonCommandIndex(hint.cmd, turnInstructionMode))
+                sb.append(',').append(hint.getExitNumber())
+                sb.append(',').append(hint.distanceToNext)
+                sb.append(',').append(hint.angle.toInt())
+
+                // not always include geometry because longer and only needed for comment style
+                if (turnInstructionMode == 4 || turnInstructionMode == 9) { // comment style
+                    sb.append(",\"").append(hint.formatGeometry()).append("\"")
+                }
+
+                sb.append("],\n")
+            }
+            sb.deleteAt(sb.lastIndexOf(","))
+            sb.append("        ],\n")
+        }
+        if (t.showSpeedProfile) { // set in profile
+            val sp = t.aggregateSpeedProfile()
+            if (sp.isNotEmpty()) {
+                sb.append("        \"speedprofile\": [\n")
+                for (i in sp.size - 1 downTo 0) {
+                    sb.append("          [").append(sp[i]).append(if (i > 0) "],\n" else "]\n")
+                }
+                sb.append("        ],\n")
+            }
+        }
+        //  ... traditional message list
+        run {
+            sb.append("        \"messages\": [\n")
+            // Java's `replaceAll("\t", ...)`: a regex of one tab and a replacement with no `$` or `\`, so a plain replace.
+            sb.append("          [\"").append(MESSAGES_HEADER.replace("\t", "\", \"")).append("\"],\n")
+            for (m in t.aggregateMessages()) {
+                sb.append("          [\"").append(m.replace("\t", "\", \"")).append("\"],\n")
+            }
+            sb.deleteAt(sb.lastIndexOf(","))
+            sb.append("        ],\n")
+        }
+
+        if (t.getTotalSeconds() > 0) {
+            sb.append("        \"times\": [")
+            for (n in t.nodes) {
+                sb.append(formatDecimal3(n.getTime())).append(",")
+            }
+            sb.deleteAt(sb.lastIndexOf(","))
+            sb.append("]\n")
+        } else {
+            sb.deleteAt(sb.lastIndexOf(","))
+        }
+
+        sb.append("      },\n")
+
+        val iternity = t.iternity
+        if (iternity != null) {
+            sb.append("      \"iternity\": [\n")
+            for (s in iternity) {
+                sb.append("        \"").append(s).append("\",\n")
+            }
+            sb.deleteAt(sb.lastIndexOf(","))
+            sb.append("        ],\n")
+        }
+        sb.append("      \"geometry\": {\n")
+        sb.append("        \"type\": \"LineString\",\n")
+        sb.append("        \"coordinates\": [\n")
+
+        var nn: OsmPathElement? = null
+        for (n in t.nodes) {
+            var sele = if (n.getSElev() == Short.MIN_VALUE) "" else ", " + n.getElev()
+            if (t.showspeed) { // hack: show speed instead of elevation
+                sele = ", " + speedText(n, nn)
+            }
+            sb.append("          [").append(formatILon(n.getILon())).append(", ").append(formatILat(n.getILat()))
+                .append(sele).append("],\n")
+            nn = n
+        }
+        sb.deleteAt(sb.lastIndexOf(","))
+
+        sb.append("        ]\n")
+        sb.append("      }\n")
+        if (t.exportWaypoints || t.exportCorrectedWaypoints || t.pois.isNotEmpty()) {
+            sb.append("    },\n")
+            for (i in 0..t.pois.size - 1) {
+                val poi = t.pois[i]
+                addFeature(sb, "poi", poi.name, poi.ilat, poi.ilon, poi.getSElev())
+                if (i < t.pois.size - 1) {
+                    sb.append(",")
+                }
+                sb.append("    \n")
+            }
+            if (t.exportWaypoints) {
+                if (t.pois.isNotEmpty()) sb.append("    ,\n")
+                val wps = t.matchedWaypoints!!
+                for (i in 0..wps.size - 1) {
+                    val wp = wps[i]
+                    val type = when (wp.wpttype) {
+                        MatchedWaypoint.WAYPOINT_TYPE_DIRECT -> "beeline"
+                        MatchedWaypoint.WAYPOINT_TYPE_MEETING -> "via"
+                        else -> "shaping"
+                    }
+                    val w = wp.waypoint!!
+                    addFeature(sb, type, wp.name, w.ilat, w.ilon, w.getSElev())
+                    if (i < wps.size - 1) {
+                        sb.append(",")
+                    }
+                    sb.append("    \n")
+                }
+            }
+            if (t.exportCorrectedWaypoints) {
+                if (t.exportWaypoints) sb.append("    ,\n")
+                var hasCorrPoints = false
+                val wps = t.matchedWaypoints!!
+                for (i in 0..wps.size - 1) {
+                    val type = "via_corr"
+
+                    val wp = wps[i]
+                    val cp = wp.correctedpoint
+                    if (cp != null) {
+                        if (hasCorrPoints) {
+                            sb.append(",")
+                        }
+                        addFeature(sb, type, wp.name + "_corr", cp.ilat, cp.ilon, cp.getSElev())
+                        sb.append("    \n")
+                        hasCorrPoints = true
+                    }
+                }
+            }
+        } else {
+            sb.append("    }\n")
+        }
+        sb.append("  ]\n")
+        sb.append("}\n")
+
+        return sb.toString()
+    }
+
+    /** `FormatJson.java:182-197`. */
+    private fun addFeature(sb: StringBuilder, type: String, name: String?, ilat: Int, ilon: Int, selev: Short) {
+        sb.append("    {\n")
+        sb.append("      \"type\": \"Feature\",\n")
+        sb.append("      \"properties\": {\n")
+        sb.append("        \"name\": \"" + StringUtils.escapeJson(name) + "\",\n")
+        sb.append("        \"type\": \"" + type + "\"\n")
+        sb.append("      },\n")
+        sb.append("      \"geometry\": {\n")
+        sb.append("        \"type\": \"Point\",\n")
+        sb.append("        \"coordinates\": [\n")
+        sb.append("          " + formatILon(ilon) + ",\n")
+        sb.append("          " + formatILat(ilat) + (if (selev != Short.MIN_VALUE) ",\n          " + selev / 4.0 else "") + "\n")
+        sb.append("        ]\n")
+        sb.append("      }\n")
+        sb.append("    }")
+    }
+
+    /** `FormatJson.java:199-212`. Java wraps whatever is thrown in a `RuntimeException`; so does this. */
+    fun formatAsWaypoint(n: OsmNodeNamed): String {
+        try {
+            val sw = StringBuilder(8192)
+            addJsonHeader(sw)
+            val d = n.nodeDescription
+            addJsonFeature(sw, "info", "wpinfo", n.ilon, n.ilat, n.getElev(), if (d != null) rc!!.expctxWay!!.getKeyValueDescription(false, d) else null)
+            addJsonFooter(sw)
+            return sw.toString()
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+
+    /** `FormatJson.java:214-240`. */
+    private fun addJsonFeature(sb: StringBuilder, type: String, name: String, ilon: Int, ilat: Int, elev: Double, desc: String?) {
+        sb.append("    {\n")
+        sb.append("      \"type\": \"Feature\",\n")
+        sb.append("      \"properties\": {\n")
+        sb.append("        \"creator\": \"BRouter-" + OsmTrack.version + "\",\n")
+        sb.append("        \"name\": \"" + StringUtils.escapeJson(name) + "\",\n")
+        sb.append("        \"type\": \"" + type + "\"")
+        if (desc != null) {
+            sb.append(",\n        \"message\": \"" + desc + "\"\n")
+        } else {
+            sb.append("\n")
+        }
+        sb.append("      },\n")
+        sb.append("      \"geometry\": {\n")
+        sb.append("        \"type\": \"Point\",\n")
+        sb.append("        \"coordinates\": [\n")
+        sb.append("          " + formatILon(ilon) + ",\n")
+        sb.append("          " + formatILat(ilat) + ",\n")
+        sb.append("          " + elev + "\n")
+        sb.append("        ]\n")
+        sb.append("      }\n")
+        sb.append("    }\n")
+    }
 
     companion object {
+        /** `FormatJson.java:242-250`. */
+        private fun addJsonHeader(sb: StringBuilder) {
+            sb.append("{\n")
+            sb.append("  \"type\": \"FeatureCollection\",\n")
+            sb.append("  \"features\": [\n")
+        }
+
+        /** `FormatJson.java:252-259`. */
+        private fun addJsonFooter(sb: StringBuilder) {
+            sb.append("  ]\n")
+            sb.append("}\n")
+        }
+
         /**
          * Java's `DecimalFormat` from `NumberFormat.getInstance(Locale.ENGLISH)` with pattern `0.###`, as
-         * `FormatJson.java:84-86` formats a node's time (a `float`, widened to `double`).
+         * `FormatJson.java:84-86` formats a node's time (a `float`, widened to `double`): at most three decimals,
+         * rounded half-even on the exact binary value, trailing zeros dropped, no grouping, `-` kept on a negative value
+         * that rounds to zero (and on -0.0), `NaN` and the infinity sign as Locale.ENGLISH's symbols. A float is
+         * `m * 2^e` with `m` under 2^24, so below 2^53 the rounding is exact in `Long` arithmetic. From 2^54 to 2^63
+         * (never a time), [longDigits]. From 2^63 up (|v| >= 2^63), Java takes the digits of the JDK's `FloatingDecimal`
+         * general `dtoa`, which this port does not reproduce, so under the owner's ruling (RECORD -119, "stop at the
+         * limit") it throws [UnsupportedOperationException] naming the limit and never prints digits there. A time is
+         * a float of seconds, so 2^63 (about 9.2e18 s) is beyond any route. No JDK code is copied.
          */
-        internal fun formatDecimal3(v: Float): String = TODO("FormatJson.formatDecimal3: step 7, session 25")
+        internal fun formatDecimal3(v: Float): String {
+            if (v.isNaN()) return "NaN"
+            val negative = v < 0f || (v == 0f && 1f / v < 0f)
+            val sign = if (negative) "-" else ""
+            if (v.isInfinite()) return sign + "∞"
+            val a = kotlin.math.abs(v)
+            if (a == 0f) return sign + "0"
+            val bits = a.toRawBits()
+            val exp = (bits ushr 23) and 0xff
+            var m = (bits and 0x7fffff).toLong()
+            val e: Int
+            if (exp == 0) {
+                e = -149
+            } else {
+                m = m or 0x800000L
+                e = exp - 150
+            }
+            if (e >= 0) {
+                val binExp = e + 23
+                if (binExp <= 53) return sign + (m shl e).toString()
+                if (binExp <= 62) return sign + longDigits(m shl e, binExp)
+                // RECORD -119: unsupported from 2^63 up, never a fabricated value.
+                throw UnsupportedOperationException(
+                    "FormatJson.formatDecimal3: |value| >= 2^63 (about 9.2e18) is unsupported (RECORD -119)"
+                )
+            }
+            // value * 1000 = m * 1000 / 2^k with k = -e, rounded half-even to an integer q; the text is q / 1000.
+            val k = -e
+            val num = m * 1000L // under 2^34
+            val q: Long = if (k >= 62) {
+                0L // num / 2^k is under 2^34 / 2^62, far below one half
+            } else {
+                val whole = num ushr k
+                val rem = num - (whole shl k)
+                val half = 1L shl (k - 1)
+                when {
+                    rem > half -> whole + 1
+                    rem < half -> whole
+                    else -> if (whole and 1L == 1L) whole + 1 else whole
+                }
+            }
+            val ip = q / 1000L
+            val fp = (q % 1000L).toString().padStart(3, '0').trimEnd('0')
+            return sign + ip.toString() + (if (fp.isEmpty()) "" else ".$fp")
+        }
+
+        /**
+         * An integer double with binary exponent 54 to 62, as `DecimalFormat` takes its digits from the JDK's
+         * `FloatingDecimal` (not from `Double.toString`, which since JDK 19 writes the shortest digits): the exact
+         * integer with its last `insignificantDigitsForPow2(binExp - 54)` decimal digits rounded half-up away and written
+         * as zeros. The count is `floor(p2 * log10 2)` for `p2` from 2 (0 and 1 give 0); only `p2` 0 to 8 are reached
+         * here. (Behaviour of JDK 21's `FloatingDecimal.dtoa` fast path and `developLongDigits`, read in session 26.)
+         */
+        private fun longDigits(x: Long, binExp: Int): String {
+            val p2 = binExp - 54
+            val insignificant = if (p2 > 1) intArrayOf(0, 0, 0, 0, 1, 1, 1, 2, 2)[p2] else 0
+            if (insignificant == 0) return x.toString()
+            var pow10 = 1L
+            repeat(insignificant) { pow10 *= 10L }
+            var q = x / pow10
+            if (x % pow10 >= (pow10 shr 1)) q++
+            return q.toString() + "0".repeat(insignificant)
+        }
+
+        /**
+         * `FormatJson.java:110-119` (and `FormatGpx.java:294-303`, `:353-362`): the speed into node [n] from [nn],
+         * `((int) (speed * 10)) / 10.f` as Java's `Float.toString` writes it. Java's `calcDistance(OsmPos)` needs no
+         * context; the port's takes the libm seam, here [MsunLibm], the default every `RoutingContext` is built with.
+         */
+        internal fun speedText(n: OsmPathElement, nn: OsmPathElement?): String {
+            var speed = 0.0
+            if (nn != null) {
+                val dist = n.calcDistance(MsunLibm, nn)
+                val dt = n.getTime() - nn.getTime()
+                if (dt != 0f) {
+                    speed = ((3.6f * dist) / dt + 0.5)
+                }
+            }
+            return "" + ((speed * 10).toInt() / 10f)
+        }
     }
 }

@@ -266,7 +266,35 @@ internal class OsmTrack {
     }
 
     /** `OsmTrack.java:190-208`. */
-    fun aggregateSpeedProfile(): List<String> = TODO("OsmTrack.aggregateSpeedProfile: step 7, session 25")
+    fun aggregateSpeedProfile(): List<String> {
+        val res = ArrayList<String>()
+        var vmax = -1
+        var vmaxe = -1
+        var vmin = -1
+        var extraTime = 0
+        for (i in nodes.size - 1 downTo 1) {
+            val n = nodes[i]
+            val m = n.message
+            val vnode = getVNode(i)
+            if (m != null && (vmax != m.vmax || vmin != m.vmin || vmaxe != m.vmaxExplicit || vnode < m.vmax || extraTime != m.extraTime)) {
+                vmax = m.vmax
+                vmin = m.vmin
+                vmaxe = m.vmaxExplicit
+                extraTime = m.extraTime
+                res.add("" + i + "," + vmaxe + "," + vmax + "," + vmin + "," + vnode + "," + extraTime)
+            }
+        }
+        return res
+    }
+
+    /** `OsmTrack.java:417-423`. */
+    private fun getVNode(i: Int): Int {
+        val m1 = if (i + 1 < nodes.size) nodes[i + 1].message else null
+        val m0 = if (i < nodes.size) nodes[i].message else null
+        val vnode0 = m1?.vnode0 ?: 999
+        val vnode1 = m0?.vnode1 ?: 999
+        return if (vnode0 < vnode1) vnode0 else vnode1
+    }
 
     /** `OsmTrack.java:397-405`. */
     fun getVoiceHint(i: Int): VoiceHint? = TODO("OsmTrack.getVoiceHint: step 7, session 25")
