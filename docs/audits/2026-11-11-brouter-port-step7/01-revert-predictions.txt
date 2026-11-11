@@ -1,0 +1,12 @@
+Revert (a), first-node-dropped (step 7's report §4, the planner's choice, RECORD -110), written before it runs:
+  Edit: OsmTrack.kt appendTrack, `if (i > 0 || ourSize == 0) {` -> `if (i > 0) {` (OsmTrack.java:346 in the port).
+  Filter: *.router.*Track*Test (TrackMapTest, AppendTrackTest, TrackHeadTest, TrackTimeTest; 6 tests).
+  Predict:
+  - AppendTrackTest fails on its first case, mode 0 (one section into an empty track, Forager's case):
+    "mode 0 F0-inside-across-the-degree-line walk 0: node count expected:<N+1> but was:<N>", the port one short.
+    Modes 1 and 2 (ourSize > 0) are untouched by the edit; the test stops at mode 0 before reaching them.
+  - TrackTimeTest.totalSecondsOnBuiltTracksMatchTheOracle fails on "seconds, time, ...": with the first node gone the
+    span starts at the second node's time. Which walk first shows it I cannot say beforehand: a second node under half
+    a second from the start rounds to the same seconds [I]. The energy entries stay equal (the last node is kept).
+  - TrackMapTest, TrackHeadTest and TrackTimeTest's other two tests pass (no appendTrack).
+  - 0 compile errors, fresh XML; restore by cmp from the saved copy, then the forward change confirmed present.
