@@ -369,10 +369,14 @@ runner's 200-character message limit cuts off the port's side, so "port lower" w
 
 **Not done:** -62's `interpolateEle` revert (left for room); `RoutingParamCollector`, `SearchBoundary`.
 
-**CI:** see the line added below for `bce3a3a`.
+**CI on `bce3a3a`** (run 42969696836, attempt 1, read with `gh`): `jvm` 134 tests completed, 2 failed, both
+`CollectOutreachersTest` (-61); JUnit XML `TOTAL: tests 134, failures 2` in 59 files (none empty there, unlike this
+container); 0 ` e: ` lines; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran. `ios-smoke` passed:
+simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, with its gate step. So `@JvmField` in common code compiles
+for iOS.
 
 **Unverified:** the 10 empty XML files [?]; the port's side of revert G's lines [?]; the end-cut coverage of
-`StartPathTest` (6 final links) [I]; iOS compile of `@JvmField` in common code, until CI is read [?].
+`StartPathTest` (6 final links) [I]; the container's empty XML files did not occur in CI.
 
 **Next, for session 15** (in this order):
 1. Find why the full run left 10 empty XML files (re-run once and compare; check whether anything else touched
