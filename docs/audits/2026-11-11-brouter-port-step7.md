@@ -655,3 +655,68 @@ first push; marked **partial**.
    push with the JSON port after a full fresh run; push the revert's prediction with it.
 4. Apply the GPX port; full run; push; run the revert; commit its result.
 5. Step 7's close (EL/ER, `OFFR`, `writeBinary` and any GPX branch not reached).
+
+## 13. Session 26: -118 applied; the JSON port stopped on `formatDecimal3` above 2^63 (partial; GPX not started)
+
+Plumb Ledger, session 26, `brouter-port-5b` `a775e5c` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Ended at a stop (dispatch step 2: `FormatJsonTest` failing on the
+port); marked **partial**.
+
+**Done:**
+1. **-118** (`7ddd4ef`): `OsmTrack.version` is a settable `String?`, `null` by default, written as Java writes it
+   (`"BRouter-" + version`). `FormatJsonTest` sets it in a `@BeforeTest` from the oracle's own
+   `btools.router.OsmTrack.version` at run time. Common code holds no version number.
+2. **The JSON half of patch 29 applied, run, not passing.** It covers `FormatJson.kt` and `aggregateSpeedProfile`/`getVNode`.
+   `getVoiceHint`/`getVoiceHintTime` were kept stubbed for GPX's red run. Runs in `31-s26-formatjson-port-runs.txt`:
+   - Run 1, fresh XML, 0 ` e: `: 2 tests, 2 failed. `formatJsonMatchesTheOracle` compared every text equal, then
+     failed its reach check "not reached: speedprofile". `formatDecimal3` failed at bits 1552235021 (binary exponent 58).
+   - Symptom (a), fix 1, a **test input** change made after seeing a port result. The comparison and the reach list
+     are unchanged. Only `KinematicPath`/`KinematicNoCostPath` write `MessageData`'s speeds, and step 6's paths keep the
+     defaults (`vmax` -1, `vnode*` 999), so `aggregateSpeedProfile` is empty in both engines. The test now seeds `vmax`,
+     `vmin`, `vmaxExplicit`, `vnode0`, `vnode1` and `extraTime` alike on a third of the nodes' messages in half the
+     speed-profile cases. Committed in `7ddd4ef` over the stubs. **For the planner to confirm** this is not a
+     comparison change under the stop rule.
+   - Symptom (b), fix 1, port: `DecimalFormat` takes its digits from the JDK's `FloatingDecimal`, not from
+     `Double.toString` (shortest since JDK 19). Added `longDigits`: the integer fast path for binary exponents 54 to 62,
+     which rounds away `insignificantDigitsForPow2` digits half-up. Checked line by line against JDK 21's
+     `FloatingDecimal.java` (`dtoa`, `developLongDigits`, the table, `MAX_SMALL_BIN_EXP` 62). The source was read from
+     openjdk/jdk21u because this container's `src.zip` links are broken.
+   - Run 2, fresh XML, 0 ` e: `: 2 tests, 1 failed. **`formatJsonMatchesTheOracle` passed** (speedprofile reached 20).
+     `formatDecimal3` failed at bits 1690321024 (binary exponent 74, above 2^63): Java writes 17 significant digits
+     where `Double.toString` writes 16. That is only the first mismatch; how many floats differ is not counted.
+   - **Stopped there, before fix 2.** Matching Java above 2^63 means porting `FloatingDecimal`'s general `dtoa` (about 360
+     lines of GPLv2 JDK code, with the Classpath Exception) into common code. That is a licensing call, like a new
+     dependency, so it goes to the owner. The port is held, never committed in the tree, as
+     `30-s26-formatjson-port-held-formatdecimal3-over-2e63.patch` (against `7ddd4ef`, applies clean).
+3. **Full fresh `:brouter:jvmTest --rerun-tasks`** before `7ddd4ef`: 74 XML, 156 tests, 4 failures
+   (CollectOutreachersTest 2; FormatJsonTest 2 on purpose over the stubs, naming `aggregateSpeedProfile` and
+   `formatDecimal3`), 0 errors, 0 ` e: `, no Maven 429. The log's two "429"s are test data.
+4. **E1** on `7ddd4ef`'s staged diff: 0.
+5. **CI, `3108507`** (run 222): `jvm` TOTAL 156, failures 4 (CollectOutreachersTest 2, FormatJsonTest 2), 0 errors,
+   0 ` e: `. `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both succeeded. The job is red on those 4, as
+   expected. `ios-smoke`, simulator-checked: TOTAL 24 tests, 0 failures, in 10 files; arm64 JVM 7 tests, 0 failures; the
+   gate reads "OK: all 2 classes ran". CI on `7ddd4ef` was still running when this was written and is not read here.
+
+**Not done:** the GPX stubs, red run, port and revert, so no revert prediction was pushed. Step 7's close.
+
+**Unverified:**
+- [?] How many floats from 2^63 up `formatDecimal3` writes differently from Java. Floats past exponent 62 are never
+  times. Native (step 10): `Double.toString` in that branch.
+- [I] The speed seeding takes values no profile gives (`vmin` -1, `vnode*` up to 999). It exercises
+  `aggregateSpeedProfile`'s conditions, not real kinematic speeds.
+- [I] `FormatGpx`'s port (patch 29) calls `FormatJson.speedText`, which exists only in the held JSON port. GPX
+  therefore cannot pass in the tree until the JSON port lands, or until `speedText` is split out.
+- §12's [?]/[I] items stand.
+
+**Step 7 against §1 and -111: not complete.** `FormatJson` and `FormatGpx` are not ported in the tree. EL/ER, `OFFR`,
+`writeBinary` and every GPX branch remain as §10 to §12 left them.
+
+**Next:**
+1. Owner or planner: rule on `formatDecimal3` from 2^63 up. Options: (a) port `FloatingDecimal`'s general `dtoa` (GPLv2
+   with the Classpath Exception); (b) mark that range "unsupported" or confine the test's float sample. (b) narrows a
+   test, so it is the owner's call. The planner also confirms the speed seeding in `7ddd4ef`.
+2. Then apply patch 30 (plus the ruled branch), run `FormatJsonTest`, and push it passing after a full fresh run.
+3. GPX as §12's "Next" 3 and 4: stubs and `FormatGpxTest` from patch 29, seen red; the revert prediction pushed first;
+   the port; the revert run with a scratch `revert.sh`.
+4. Read CI for `7ddd4ef` (expect `jvm` 156, 4 failed, as at `3108507`).
+5. Step 7's close.
