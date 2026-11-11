@@ -4068,3 +4068,51 @@ JIT-compiled path [I]. That is a check loosened after the data was seen, against
 the throwing cases, not the 168,000 compared results. A stricter route, a test-JVM flag that keeps those messages, changes
 the build and is the owner's call. The planner proposes that the independent reviewer read it, once that role is named.
 **Notes:** Written by the planner session by hand. Next free ID -108.
+
+**Kind:** outcome
+**ID:** 2026-10-28-108
+**Timestamp:** 2026-11-11T08:20:40Z
+**Continues:** 2026-10-28-42, 2026-10-28-62, 2026-10-28-90, 2026-10-28-94, 2026-10-28-96, 2026-10-28-107
+**Closes:** step 6 of 2026-10-28-90
+**Title:** Step 6 closed: `brouter-port` merged into `brouter-port-5b` at the boundary (Plumb's session 17); every file on
+-94's list ported
+**Observed:** Plumb Ledger, session 17, `brouter-port-5b` `028783c` to `7125739` (two commits; trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 97,993 by the harness's count.
+- **The merge, `7491f3a`** (`028783c` and `611ba54`), clean. **Checked by the planner:** `611ba54` is now an ancestor of
+  `brouter-port-5b`; the merge's diff against `028783c` is byte-identical, `index` lines aside, to `brouter-port`'s own
+  `fcd35ff..611ba54`, so it adds nothing `brouter-port` did not carry, and its E1 scan is that branch's (0). The redone
+  merge's tree matches session 16's unpushed `4f5492f` apart from §13 [R, as reported].
+- **Tests:** local fresh run 138, 2 failed, both `CollectOutreachersTest` (-61), 61 of 61 XML non-empty [R]. Of the classes
+  the merge changed, only `E3ExpectedFileTest` is in `jvmTest`, 6 of 6 [R]; `E3FKTest` and `E3ExpectedWriteTest` are strata
+  tests outside it.
+- **CI on `7491f3a`, read by the planner** (run 42984411711): `jvm` 138, 2 failed, both `CollectOutreachersTest`; 0 ` e: `;
+  both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **Step 6 against -94's list, checked by the planner:** `router/` holds all 15 classes named there, `RoutingContext` split
+  in two (`RoutingContextNogo.kt`), as -94 allowed, plus `OsmTrack.kt` holding only the type. The one stub left in
+  `router/` is `OsmTrack.containsNode`, which throws a named "unsupported", as -94 ruled; step 7 fills it.
+- **-90's debts for step 6:**
+  - -62's `interpolateEle` cast: shown, by revert H (-106).
+  - The step's own revert, the `(int)` cast: shown, by revert G (-105, -106).
+  - -42's way getters: 19 named getters are called from `OsmPath.kt` and `StdPath.kt` (planner's `grep`), and the oracle
+    comparisons that run those classes pass. That each call site executes is not counted [I], so -42 is paid by
+    inference, not shown. Step 8's coverage reader can show it.
+**So step 6, the path model, is done and compared with the oracle.** About 3,000 Java lines remain in steps 7 and 8 (-90's
+counts: 1,367 and 1,580).
+**Notes:** Written by the planner session by hand. Next free ID -109.
+
+**Kind:** intent
+**ID:** 2026-10-28-109
+**Timestamp:** 2026-11-11T08:20:40Z
+**Continues:** 2026-10-28-90, 2026-10-28-94, 2026-10-28-108
+**Title:** Step 7, the track and hints, on `brouter-port-5b`: a verify-first session before any port
+**Intent:** under -90 ("7, the track and hints, 1,367 lines in 9 classes: `OsmTrack`, `VoiceHint*` and `Format*` as far as
+reached") and -94 (step 7 follows 6 on the same branch). The planner's calls, technical:
+- **Plumb Ledger takes step 7,** since the branch has one coder at a time and Plumb holds step 6's knowledge.
+- **The first session reads and reports, and builds nothing beyond stubs:** step 7's file list; which methods Forager's
+  path reaches from `RoutingEngine` and `OsmPath`, traced to their callers; what Phase 1's item I says step 7 holds; and
+  a test plan. -90 says step 7 is "exercised through step 8's routes; the hints are recorded, not asserted (E1)". Under
+  -101, each test is seen failing over stubs first, so the report says what step 7 can test against the oracle on its
+  own before step 8, and what must wait. Its revert, from -90: "one distance rounding replaced by `roundToLong`".
+- **Stops:** anything that would assert a hint or a route coordinate (E1); any change to the plan's scope, such as
+  `Format*` classes Forager never reaches. Those come to the planner, and scope to the owner.
+**Notes:** Written by the planner session by hand. Next free ID -110.
