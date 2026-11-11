@@ -1,0 +1,15 @@
+Session 24: FormatKml whole and btools.util.StringUtils whole (48 Java lines; BRouter's own class, outside step 7's
+file list in section 1, needed by FormatKml, FormatJson and FormatGpx; not a new dependency), stubbed. Tests:
+- StringUtilsTest: 20006 inputs (null, empty, the escaped characters, ASCII, any UTF-16 code unit, non-ASCII), both
+  methods, compared exactly; a thrown exception by class only, unless it is a stub's NotImplementedError.
+- FormatKmlTest: walks from Forager's own ends, with POIs, matched waypoints, corrected points and export flags set
+  alike in test code (Forager's path sets none), names needing escaping and, rarely, null; format by digest and length.
+Before any port existed, res() was changed to keep a NotImplementedError's message (the first run showed the class
+only, so the stub was not named); nothing else changed.
+Run: :brouter:jvmTest --rerun-tasks --tests '*FormatKmlTest' --tests '*StringUtilsTest', test-results deleted first.
+Observed: BUILD FAILED; 0 " e: "; 2 fresh XML; each tests 1, failures 1, errors 0.
+FormatKmlTest: "track 0: format expected:<[<digest>/11410]> but was:<[throws kotlin.NotImplementedError: An operation is
+not implemented: step 7, session 24 stub: FormatKml.format]>".
+StringUtilsTest: "escapeXml10, input 0 expected:<throws [java.lang.NullPointerException]> but was:<throws
+[kotlin.NotImplementedError: An operation is not implemented: step 7, session 24 stub: StringUtils.escapeXml10]>".
+Red on purpose.
