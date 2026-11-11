@@ -385,3 +385,68 @@ for iOS.
    mode only, `StartPathTest`'s cut starts, and `StdPathTest`'s `interpolateEleMatchesTheOracle`.
 3. Widen `StartPathTest`'s end-cut sample past 6 final links, or say why it cannot be.
 4. `RoutingParamCollector` and `SearchBoundary`, each test seen failing over stubs first.
+
+## 12. Session 15 (Plumb Ledger): the empty XML, revert G's port value, reverts H and I, the end cut widened
+
+**Base:** `7282c67`, matching `git ls-remote`. Result files are in `2026-11-06-brouter-port-step6/`, 9-digit numbers
+redacted; the E1 scan read 0 on the staged diff before each push. `revert.sh` was run unchanged from a copy in scratch;
+for each revert below the whole failure message was read from the fresh XML (ElementTree), not the runner's 200-character
+cut, after the runner's own refusal checks had passed.
+
+**1. The empty XML files** (`10-full-run-7282c67.txt`). One full fresh `:brouter:jvmTest --rerun-tasks`, nothing else
+running: 0 ` e: `, 0 HTTP 429; Gradle "134 tests completed, 1 failed"; 133 PASSED lines; 59 XML files, **0 empty**, TOTAL
+134 tests, 1 failure. Counts agree three ways; session 14's 10 empty files did not recur. Data: a 15 s sampler of the XML
+directory showed the 59 files' mtimes all within 5 ms at the task's end, so Gradle writes them together at the end; a
+second process overlapping that moment could leave files empty [I, a hypothesis, not observed]. Nothing in CI or the build
+was changed. The second full run (below) also had 0 empty.
+
+**A test outside the task changed outcome with no code change:** in that baseline,
+`CollectOutreachersTest.collectOutreachersWithoutADestination` **passed** (it was red in session 14's run and in CI on
+`bce3a3a`; `7282c67` differs from `bce3a3a` in docs only). In the second full run it was red again. RECORD's Question A
+already records this test's outcome varying run to run at the default stack (the port's stack overflow, JIT timing [I]).
+Reported, not touched. It is a newly passing result, not a newly failing one, so not a stop.
+
+**2. Revert G's port value** (`11-revert-G3-port-value-result.txt`). The same edit, filter `*St*PathTest` (both classes in
+one run): 0 compile errors, 2 fresh XML, restored cmp equal, 2 of 4 failed as before. Full messages: `StdPathTest` oracle
+`cost=26923`, port `cost=26914`; `StartPathTest` oracle `cost=2847`, port `cost=2842`; cost is the only token that differs
+in each. **Port lower: confirmed.** By 9 and 5, not 1, since a link sums several sections' turn costs [I: not counted].
+
+**3. -62's `interpolateEle` revert, H** (prediction `09-...-prediction.txt`, pushed in `4ffae38` before the run; result
+`09-...-result.txt`). Edit: `+ 0.5` before `.toInt().toShort()`. 0 compile errors, 2 fresh XML, restored. 2 of 4 failed:
+- `interpolateEleMatchesTheOracle` at `case 2: interpolateEle(-26070, -484, 0.221) expected:<-20415> but was:<-20414>`:
+  early, port one higher, as predicted.
+- `StartPathTest` on fastbike-asia-pacific, detail true, a start line, originElement height oracle 102 / port 103, with
+  ehbu, time and energy moved, cost not: as predicted, **except the case**: it was `R-fastbike-asia-pacific-002`, not an
+  F0h case as predicted. All 8 F0h cases passed under the revert; why their cut starts do not bite is unknown [?].
+- `pathsMatchTheOracleOnEveryStdProfile` and `startDirectionIsUnsupported` passed, as predicted.
+
+**4. `StartPathTest`'s end cut, widened** (`61a8e4f`). Each run now also extends every start path over each of its
+target's links with a synthetic end waypoint at that link's node midpoint, on both sides, and compares the result
+("cut" lines); a new assertion requires at least one hit. These ends are synthetic, not Forager's, and the KDoc says so.
+Filtered run: 0 ` e: `, 1 fresh XML, 1 of 1 pass; 600 runs, 1,024 start paths, 6 final links, 4 same-segment runs, 500
+cut starts in detail mode, **668 of 1,868 synthetic end cuts hit** (was 6 final links). Full fresh run before the push:
+0 ` e: `, 0 429s, 134 completed, 2 failed (both `CollectOutreachersTest`, -61), 59 XML, 0 empty.
+**Revert I** (prediction pushed in `61a8e4f`, result `12-revert-I-endcut-ele-result.txt`): the end cut's `ele2 =
+interpolateEle(...)` replaced by `ele2 = ele2`. 0 compile errors, 1 fresh XML, restored. Failed on a "cut" line,
+fastbike-asia-pacific `F0h-inside-across-the-degree-line` detail false, line 15 of 19: ehbd 1930000/2680000, ehbu
+3930000/3180000, cost equal. As predicted. Whether the test before the widening caught it was not checked [?].
+
+**5. `RoutingParamCollector` and `SearchBoundary`: not started** (room). Neither has a port file in `commonMain` yet.
+Java: `SearchBoundary.java` 87 lines (constructor, `getFileName`, `isInBoundary`, `getBoundaryDistance`; only a field
+in `RoutingEngine.java:88`), `RoutingParamCollector.java` 374 lines.
+
+**CI on `61a8e4f`** (run 42974370259, read with `gh`): `jvm` 134 tests completed, 2 failed, both `CollectOutreachersTest`
+(-61); JUnit XML `TOTAL: tests 134, failures 2` in 59 files; 0 ` e: ` lines in either job; `compileKotlinIosArm64` and
+`compileKotlinIosSimulatorArm64` both ran. `ios-smoke` passed: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7,
+the gate reading "OK: all 2 classes ran". The docs-only commits after it were not read.
+
+**Unverified:** why F0h's cut starts did not bite revert H [?]; whether pre-widening `StartPathTest` caught revert I [?];
+the empty-XML cause [I, hypothesis only]; revert G's per-section count [I].
+
+**Next, for session 16** (in this order):
+1. Read CI on this branch's head (docs only since `61a8e4f`).
+2. `SearchBoundary` (87 lines): stub, its test seen failing over the stub (fresh XML, 0 ` e: `), then the port.
+3. `RoutingParamCollector` (374 lines): the same.
+4. Optional, if cheap: run revert I against `StartPathTest` as of `016327f` (before the widening) to show whether the
+   widening was needed; look at why F0h's cut starts pass revert H.
+5. Then the merge of `brouter-port` into 5b at the step boundary (RECORD -105).
