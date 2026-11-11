@@ -809,3 +809,98 @@ by ruling (-119).
    `writeBinary`, `equalsTrack` and `addNodes` are in step 7 (port them red-first, or record them as out of scope).
 2. If they are in scope: stubs and tests red over them, port, then a revert.
 3. Step 7's close by the planner, with the not-covered list above.
+
+## 15. Session 28: `equalsTrack` and `addNodes` ported; revert (g); step 7's close
+
+Plumb Ledger, session 28, `brouter-port-5b` `f29366e` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Not partial: every dispatched step done; no stop hit.
+
+**Done:**
+1. **Red over stubs** (`cb8e1e1`, red on purpose, `37-...txt`): `equalsTrack` and `addNodes` stubbed with `TODO`
+   naming RECORD -120; `TrackEqualsAddNodesTest` new, on tracks built as in step 7's tests (`TrackEngines.tracks`).
+   - `equalsTrack` (Java compares node count, then `ILon` and `ILat` per index): each walk's track against a second
+     track from the same walk, a fresh-element copy, copies with one node's longitude or latitude moved by one unit
+     (at index 0, the last index and one random index), a copy one node shorter, one node longer, the next walk's track
+     and an empty track, each in both directions. Asserts both `true` and `false` seen, and every variant reached.
+   - `addNodes` onto an empty track (`RoutingEngine.java:991`'s first call), onto another walk's track, and twice in a
+     row. Compared per node by which input element it is (identity), `getLink` both ways to the previous node and
+     `containsNode`; the oracle's and the port's digests asserted equal.
+   - Fresh XML, 0 ` e: `: 2 tests, 2 failures, each a `NotImplementedError` naming its own stub.
+2. **The port** (`d49a3ff`, `39-...txt`): both methods line for line from `OsmTrack.java:309-313` and `:430-440`. The
+   test unchanged; passed on the first run. 240 `true`, 1,180 `false`; `addNodes` 60 onto empty, 30 onto a track, 30
+   twice, 111,426 nodes, 98,999 links found. Full fresh `:brouter:jvmTest --rerun-tasks`: 76 XML, 159 tests, 2 failures
+   (CollectOutreachersTest 2), 0 ` e: `, no Maven 429.
+3. **Revert (g)**, prediction pushed first in `d49a3ff` (`38-...txt`): the latitude comparison dropped. Scratch copy of
+   `revert.sh`, filter `*TrackEqualsAddNodesTest`: 0 compile errors, 1 fresh XML, 2 tests, 1 failure, "F0-inside-across-
+   the-degree-line walk 0: lat at 0, direction 0: equalsTrack expected:<false> but was:<true>", as predicted;
+   `addNodes` passed. "restored: cmp equal"; checked outside the runner (cmp with a copy taken before, the forward line
+   present once) (`40-...txt`).
+4. **CI** (TOTAL lines, ` e: `, both `compileKotlinIos*`, the gate; iOS results are simulator-checked):
+   - `cb8e1e1` (run 230): `jvm` 159 tests, 4 failed (CollectOutreachersTest 2, TrackEqualsAddNodesTest 2 on purpose),
+     0 ` e: `; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` BUILD SUCCESSFUL. `ios-smoke`,
+     simulator-checked: 24 tests, 0 failures; arm64 7/0; gate "OK: all 2 classes ran".
+   - `d49a3ff` (run 231): `jvm` 159 tests, 2 failed (CollectOutreachersTest), 0 ` e: `; both iOS compiles BUILD
+     SUCCESSFUL. `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+5. **E1:** 0 on every staged diff; no hit to fix.
+
+**Step 7's classes and methods (§1's list, plus -111's "`OsmTrack` whole" and -120):**
+
+| Class | Method(s) | Ported | Tested against the oracle | Commit |
+|---|---|---|---|---|
+| `OsmTrack` | `addNode`, `buildMap`, `getLink`, `containsNode` | yes | `TrackMapTest` (and `TrackEqualsAddNodesTest`) | `cbd31d6` |
+| `OsmTrack` | `appendTrack` | yes | `AppendTrackTest` | `cbd31d6` |
+| `OsmTrack` | `copyDetours`, `prepareSpeedProfile` | yes | `TrackHeadTest` | `cbd31d6` |
+| `OsmTrack` | `getTotalSeconds` | yes | `TrackTimeTest` | `cbd31d6` |
+| `OsmTrack` | `addDetours`, `registerDetourForId`, `getFromDetourMap`, `getMatchedWaypoint`, `getMinDistance`, `removeVoiceHint` | yes | `TrackDetourTest`, `TrackHeadTest` | `7e3fb60` |
+| `OsmTrack` | `processVoiceHints`, `startSection` | yes | `VoiceHintProcessTest` | `080885f` |
+| `OsmTrack` | `readBinary` (file branch under -116) | yes | `ReadBinaryTest`, `TrackHeadTest` | `cbd31d6`, `12af1e9` |
+| `OsmTrack` | `equalsTrack`, `addNodes` (-120) | yes | `TrackEqualsAddNodesTest` | `d49a3ff` |
+| `OsmTrack` | `writeBinary` | **no: out of scope** (-120; no caller anywhere; the tests use the oracle's) | - | - |
+| `OsmTrack` | `getVoiceHint`, `getVoiceHintTime` (for `FormatGpx`) | yes | `FormatGpxTest` | `fc4d946` |
+| `OsmTrack` | `aggregateMessages` (for `FormatCsv`, `FormatJson`) | yes | `FormatCsvTest` | `8334bcd` |
+| `OsmTrack` | `aggregateSpeedProfile` (for `FormatJson`) | yes | `FormatJsonTest` | `f1a5f22` |
+| `VoiceHint` | `addBadWay`, `calcCommand`, `hasGiveWay`, `is180DegAngle`, `isRoundabout` | yes | `VoiceHintTest` | `7e3fb60` |
+| `VoiceHintList` | `setTransportMode(boolean,boolean)`, `transportMode` | yes | `VoiceHintTest`, `TrackHeadTest` | `7e3fb60` |
+| `VoiceHintProcessor` | constructor, `process`, `postProcess`, `checkForNextNoneMotorway`, `checkStraightHold`, `sumNonConsumedWithinCatchingRange` | yes | `VoiceHintProcessTest` | `080885f` |
+| `Formatter` | whole (`getFormattedTime2`, `getFormattedEnergy`, `format1` among them) | yes | `FormatterTest`, `TrackTimeTest` | `3d64e31` |
+| `FormatCsv` | whole | yes | `FormatCsvTest` | `8334bcd` |
+| `FormatKml` | whole | yes | `FormatKmlTest` | `6abe8f3` |
+| `FormatJson` | whole; `formatDecimal3` unsupported at or above 2^63 (-119) | yes | `FormatJsonTest` | `f1a5f22` |
+| `FormatGpx` | whole | yes | `FormatGpxTest` | `fc4d946` |
+
+Commits are the last to change each method's body (`git log -L` on `OsmTrack.kt` for `OsmTrack`'s rows; the
+class's port commit otherwise). The test column is by `grep` of the test sources for each method's name [C].
+
+**Stub check:** `grep -c 'TODO(\|NotImplementedError'` over the nine ported files (`OsmTrack.kt`, `VoiceHint.kt`,
+`VoiceHintList.kt`, `VoiceHintProcessor.kt`, `Formatter.kt`, `FormatGpx.kt`, `FormatJson.kt`, `FormatKml.kt`,
+`FormatCsv.kt`): **0** in each, 0 in all [R].
+
+**Not covered:**
+- EL/ER (commands 17, 18), recorded not covered after a time-boxed probe (-115, §10).
+- `OFFR`: unreachable (§10, §11).
+- GPX's middle-waypoint type branches (`beeline`/`via`/`shaping` in `exportWaypoints`): compared whole, not counted
+  (§14). Thrown texts in GPX modes 5, 6, 7 and 9 not reached.
+- Line coverage not measured (no new dependency) [?].
+
+**Unverified:**
+- [?] Kotlin/Native number formatting (step 10): `formatDecimal3`'s from-2^53 branches; `Float`/`Double` `toString` in
+  JSON's and GPX's text; `String.toDouble` in `FormatGpx.read`; GPX mode 4's `String.format`. None is run on Native.
+- [I] -119's limit checked on the tested sample only (§14). [I] The infinities read as outside -119's limit (§14,
+  confirmed by the planner in -120). [I] §12's and §13's items stand (speed seeding with values no profile gives;
+  `read` decodes UTF-8; `formatAsGpx` returns nothing).
+- [I] `equalsTrack`'s test moves a coordinate by one unit only; `addNodes`' test does not call it on a track with
+  itself (`RoutingEngine` never does).
+
+**Test-comparison flags for the reviewer** (each a comparison changed or shaped by a ruling, not by this session):
+- **-107:** session 20's two test defects (`Unit` against `null` for a void call; one detour map copied twice) found
+  after a port result; fixed only under the planner's later ruling (-113), red over the stubs again first (§7, §8).
+- **-116:** `ReadBinaryTest`'s error path compares `debugInfo` up to and including `"Error reading rawTrack: "` and
+  asserts text after it, not the whole message (§11).
+- **-119:** `FormatJsonTest` asserts a throw, not digits, for finite values at or above 2^63; with it, the seeded
+  speeds, and (under -118) `FormatGpxTest`'s `OsmTrack.version` `@BeforeTest` added after a port result (§14).
+No comparison was changed in session 28.
+
+**Step 7 against §1, -111 and -120: complete.** Every method in §1's list and the rest of `OsmTrack` is ported and
+compared with the oracle, except `writeBinary`, which -120 records out of scope, and the not-covered branches above.
+
+**Next:** the planner's review and step 7's close in the record; then step 8 (`RoutingEngine`).
