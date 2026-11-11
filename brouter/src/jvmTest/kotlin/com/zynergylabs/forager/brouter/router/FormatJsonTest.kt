@@ -18,6 +18,12 @@ import kotlin.test.assertTrue
  * message is kept so that it names the stub. Texts are compared by digest and length only (E1).
  */
 class FormatJsonTest {
+    /** RECORD -118: the port's `OsmTrack.version` is `null` by default; set from the oracle's own value at run time. */
+    @kotlin.test.BeforeTest
+    fun setVersion() {
+        OsmTrack.version = btools.router.OsmTrack.version
+    }
+
     private fun digest(s: String): String =
         java.security.MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }
             .take(16) + "/" + s.length
@@ -123,6 +129,23 @@ class FormatJsonTest {
                 val ss = rnd.nextInt(3) == 0; val sp = rnd.nextInt(3) == 0
                 setField(ot, "showspeed", ss); pt.showspeed = ss
                 setField(ot, "showSpeedProfile", sp); pt.showSpeedProfile = sp
+                // Speeds on the nodes' messages, alike in both engines: only the kinematic paths write them, and step 6's
+                // paths keep MessageData's defaults, so without these the speed profile is always empty (session 26).
+                if (sp && rnd.nextBoolean()) {
+                    for (k in ot.nodes.indices) {
+                        val om = TrackEngines.field(ot.nodes[k], "message") ?: continue
+                        val pm = pt.nodes[k].message ?: continue
+                        if (rnd.nextInt(3) != 0) continue
+                        val vx = rnd.nextInt(-1, 130); val vn = rnd.nextInt(-1, 60); val ve = rnd.nextInt(-1, 130)
+                        val v0 = rnd.nextInt(0, 1000); val v1 = rnd.nextInt(0, 1000); val xt = rnd.nextInt(0, 30)
+                        setField(om, "vmax", vx); pm.vmax = vx
+                        setField(om, "vmin", vn); pm.vmin = vn
+                        setField(om, "vmaxExplicit", ve); pm.vmaxExplicit = ve
+                        setField(om, "vnode0", v0); pm.vnode0 = v0
+                        setField(om, "vnode1", v1); pm.vnode1 = v1
+                        setField(om, "extraTime", xt); pm.extraTime = xt
+                    }
+                }
                 if (rnd.nextInt(4) == 0) {
                     val it = List(rnd.nextInt(1, 4)) { k -> "step $k ${names[rnd.nextInt(names.size)]}" }
                     ot.iternity = ArrayList(it); pt.iternity = ArrayList(it)

@@ -426,10 +426,11 @@ internal class OsmTrack {
 
     companion object {
         /**
-         * `OsmTrack.java:26`: Java reads it from its jar's manifest (`getImplementationVersion()`), which for BRouter
-         * 1.7.10's release jar, the oracle, is `1.7.10`.
+         * `OsmTrack.java:26`: Java reads it from its jar's manifest (`getImplementationVersion()`). Forager builds BRouter
+         * as a plain library with no `Implementation-Version`, so it is `null` here by default and written as Java writes
+         * it (`"BRouter-" + version`, so `BRouter-null` when unset). Tests set it from the oracle's own value (RECORD -118).
          */
-        const val version: String = "1.7.10"
+        var version: String? = null
 
         fun readBinary(
             filename: String?,
