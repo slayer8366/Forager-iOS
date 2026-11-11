@@ -59,8 +59,14 @@ internal open class OsmPathElement protected constructor() : OsmPos {
 
     companion object {
         /** `OsmPathElement.java:119-126`; session 23, for `OsmTrack.readBinary`'s file branch (RECORD -111). */
-        fun readFromStream(dis: okio.BufferedSource): OsmPathElement =
-            TODO("step 7, session 23 stub: OsmPathElement.readFromStream")
+        fun readFromStream(dis: okio.BufferedSource): OsmPathElement {
+            val pe = OsmPathElement()
+            pe.ilat = dis.readInt()
+            pe.ilon = dis.readInt()
+            pe.selev = dis.readShort()
+            pe.cost = dis.readInt()
+            return pe
+        }
 
         /** `OsmPathElement.java:84-90`. */
         fun create(path: OsmPath): OsmPathElement {

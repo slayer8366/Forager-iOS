@@ -4,14 +4,18 @@ import com.zynergylabs.forager.brouter.mapaccess.MatchedWaypoint
 import com.zynergylabs.forager.brouter.mapaccess.OsmPos
 import com.zynergylabs.forager.brouter.util.CompactLongMap
 import com.zynergylabs.forager.brouter.util.FrozenLongMap
+import okio.EOFException
+import okio.Path.Companion.toPath
+import okio.buffer
+import kotlin.math.abs
 
 /**
  * BRouter 1.7.10's `btools.router.OsmTrack`. Step 7, session 19: the reached core (step 7's report, §5): the fields,
  * `OsmPathElementHolder`, `addNode`, `copyDetours`, `buildMap`, `readBinary`'s null guard, `containsNode` (replacing
  * RECORD -94's stub), `getLink`, `appendTrack`, `getTotalSeconds`, `prepareSpeedProfile` and `processVoiceHints`' head.
  * Session 20 (RECORD -111): the detour methods (`registerDetourForId`, `addDetours`, `appendDetours`,
- * `getFromDetourMap`), `getMatchedWaypoint`, `getMinDistance` and `removeVoiceHint`. The hint body of
- * `processVoiceHints` (with `startSection`) and the file branch of `readBinary` are later sessions.
+ * `getFromDetourMap`), `getMatchedWaypoint`, `getMinDistance` and `removeVoiceHint`. Session 22: the hint body of
+ * `processVoiceHints` (with `startSection`). Session 23: the file branch of `readBinary` (`writeBinary` is not ported).
  * On Forager's path the reference track `OsmPath` takes is most likely always null (RECORD -94 [I], step 8 checks).
  */
 internal class OsmTrack {
@@ -395,11 +399,79 @@ internal class OsmTrack {
             debugInfo: StringBuilder?,
             fileSystem: okio.FileSystem = okio.FileSystem.SYSTEM,
         ): OsmTrack? {
+            var t: OsmTrack? = null
             if (filename != null) {
                 // `OsmTrack.java:236-292`, the file branch: session 23 (RECORD -111).
-                TODO("step 7, session 23 stub: OsmTrack.readBinary's file branch")
+                val f = filename.toPath()
+                if (fileSystem.exists(f)) {
+                    try {
+                        val dis = fileSystem.source(f).buffer()
+                        val ep = MatchedWaypoint.readFromStream(dis)
+                        val dlon = ep.waypoint!!.ilon - newEp!!.ilon
+                        val dlat = ep.waypoint!!.ilat - newEp.ilat
+                        val targetMatch = dlon < 20 && dlon > -20 && dlat < 20 && dlat > -20
+                        debugInfo?.append("target-delta = " + dlon + "/" + dlat + " targetMatch=" + targetMatch)
+                        if (targetMatch) {
+                            val nt = OsmTrack()
+                            t = nt
+                            nt.endPoint = ep
+                            val n = dis.readInt()
+                            var lastPe: OsmPathElement? = null
+                            for (i in 0 until n) {
+                                val pe = OsmPathElement.readFromStream(dis)
+                                pe.origin = lastPe
+                                lastPe = pe
+                                nt.nodes.add(pe)
+                            }
+                            nt.cost = lastPe!!.cost
+                            nt.buildMap()
+
+                            // check cheecksums, too
+                            val al = LongArray(3)
+                            var pchecksum = 0L
+                            try {
+                                al[0] = dis.readLong()
+                                al[1] = dis.readLong()
+                                al[2] = dis.readLong()
+                            } catch (eof: EOFException) { /* kind of expected */ }
+                            try {
+                                nt.isDirty = dis.readByte().toInt() != 0
+                            } catch (eof: EOFException) { /* kind of expected */ }
+                            try {
+                                pchecksum = dis.readLong()
+                            } catch (eof: EOFException) { /* kind of expected */ }
+                            val nogoCheckOk = abs(al[0] - nogoChecksums!![0]) <= 20 &&
+                                abs(al[1] - nogoChecksums[1]) <= 20 &&
+                                abs(al[2] - nogoChecksums[2]) <= 20
+                            val profileCheckOk = pchecksum == profileChecksum
+
+                            if (debugInfo != null) {
+                                debugInfo.append(" nogoCheckOk=" + nogoCheckOk + " profileCheckOk=" + profileCheckOk)
+                                debugInfo.append(" al=" + formatLongs(al) + " nogoChecksums=" + formatLongs(nogoChecksums))
+                            }
+                            if (!(nogoCheckOk && profileCheckOk)) return null
+                        }
+                        dis.close()
+                    } catch (e: Exception) {
+                        // A known difference (RECORD -116): after BRouter's prefix this writes the port's own exception's
+                        // description, not the JVM's. With 0 nodes Java's `last_pe.cost` gives JDK 21's helpful NPE text;
+                        // `lastPe!!` gives Kotlin's own, and on Native the class names differ too (e.g. okio.EOFException).
+                        debugInfo?.append("Error reading rawTrack: " + e)
+                    }
+                }
             }
-            return null
+            return t
+        }
+
+        private fun formatLongs(al: LongArray): String {
+            val sb = StringBuilder()
+            sb.append('{')
+            for (l in al) {
+                sb.append(l)
+                sb.append(' ')
+            }
+            sb.append('}')
+            return sb.toString()
         }
     }
 }

@@ -27,7 +27,33 @@ internal class MatchedWaypoint {
         const val WAYPOINT_TYPE_DIRECT: Byte = 3 // from this point go direct to next = beeline routing
 
         /** `MatchedWaypoint.java:50-72`; session 23, for `OsmTrack.readBinary`'s file branch (RECORD -111). */
-        fun readFromStream(dis: okio.BufferedSource): MatchedWaypoint =
-            TODO("step 7, session 23 stub: MatchedWaypoint.readFromStream")
+        fun readFromStream(dis: okio.BufferedSource): MatchedWaypoint {
+            val mwp = MatchedWaypoint()
+            val node1 = OsmNode()
+            val node2 = OsmNode()
+            val crosspoint = OsmNode()
+            val waypoint = OsmNode()
+            mwp.node1 = node1
+            mwp.node2 = node2
+            mwp.crosspoint = crosspoint
+            mwp.waypoint = waypoint
+
+            node1.ilat = dis.readInt()
+            node1.ilon = dis.readInt()
+            node2.ilat = dis.readInt()
+            node2.ilon = dis.readInt()
+            crosspoint.ilat = dis.readInt()
+            crosspoint.ilon = dis.readInt()
+            waypoint.ilat = dis.readInt()
+            waypoint.ilon = dis.readInt()
+            mwp.radius = Double.fromBits(dis.readLong())
+            mwp.wpttype = dis.readByte()
+            val len = dis.readShort().toInt()
+            val bytes = ByteArray(len)
+            dis.readFully(bytes)
+            // Java's `new String(bytes)` decodes in the default charset, UTF-8 from JDK 18 (the oracle runs on 21).
+            mwp.name = bytes.decodeToString()
+            return mwp
+        }
     }
 }
