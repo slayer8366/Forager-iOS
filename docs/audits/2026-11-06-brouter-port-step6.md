@@ -450,3 +450,63 @@ the empty-XML cause [I, hypothesis only]; revert G's per-section count [I].
 4. Optional, if cheap: run revert I against `StartPathTest` as of `016327f` (before the widening) to show whether the
    widening was needed; look at why F0h's cut starts pass revert H.
 5. Then the merge of `brouter-port` into 5b at the step boundary (RECORD -105).
+
+## 13. Session 16 (Plumb Ledger): `SearchBoundary` and `RoutingParamCollector` ported; reverts J and K; the merge not pushed (handoff)
+
+**Base:** `d2c6993`, matching `git ls-remote`. Result files `13-` to `18-` in `2026-11-06-brouter-port-step6/`; E1 scan 0 on
+every staged diff; every trailer `Co-Authored-By: Claude <noreply@anthropic.com>`. Ended on the planner's handoff call.
+
+**CI on `d2c6993`** (run 42975838550, read with `gh`): `jvm` 134 tests, 2 failed, both `CollectOutreachersTest` (-61); 0
+` e: `; both `compileKotlinIos*` ran; `ios-smoke` simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, the gate "OK".
+
+**1. `SearchBoundary`, ported whole** (constructor, `getFileName`, `isInBoundary`, `getBoundaryDistance`; Forager does not
+reach it, T2 lists it). Over the stub (`ca11871`, pushed red on purpose): 1 fresh XML, 0 ` e: `, 1 of 1 failed with
+`NotImplementedError ... SearchBoundary.getFileName stub` (`13-`). Two test fixes after the port first ran, the port
+unchanged: out-of-range latitudes throw in `CheapRuler` in both, so throws are compared by class, and by message only for
+Java's own `IllegalArgumentException` (a JIT-compiled index error lost its message in the port [I]); the fixed test was
+seen failing over the stub again (`14-`). Passing: 168,000 `isInBoundary` cases, both answers in each of the 3 modes, all 4
+directions and the undefined one. Full runs: `ca11871` 135 / 3 failed (the stub and -61's 2); `7e822c4` 135 / 2 (-61's);
+60 XML, 0 empty, 0 ` e: `, 0 429s.
+**Revert J** (prediction `fa69d49`, result `ae2260f`): inner `maxlon` one degree west. 0 compile errors, 1 fresh XML, cmp
+equal, 1 of 1 failed: `case 0 probe 0 direction 3: getBoundaryDistance expected:<133759> but was:<121599>`, one degree
+(11 against 10 times 12,160 m). It was the prediction's second branch, the one called less likely.
+
+**2. `RoutingParamCollector`, for Forager's calls.** Forager reaches the constructor, `getWayPointList` and `setParams`
+(`BRouterTrailRouter.kt:143-160`). Ported: `getWayPointList` and both `readPosition`s whole; `setParams` for `profile`,
+`alternativeidx` and `profile:` keys, with the keys Java ignores ignored. **Refused with "unsupported", before the context
+is touched:** the 18 other keys Java acts on, `nogoLats` when not empty, and more than one `profile:` key (hash order into
+`_parseFile`, [?] in the verify report). **Not ported, no caller in Forager:** `readPositions`, `getUrlParams`,
+`setProfileParams`, `parseNogoPolygons`, `readPoisList`, `readNogoList`, `readNogos`, both `readNogo`s. Over the stubs
+(`30293c8`, pushed red on purpose): 3 of 3 failed, each naming its own stub (`16-`). The port passed on its first run:
+8 Forager-form cases and 4,008 seeded strings; 26 profiles times 2, with 76 context fields; 19 refused keys, each shown to
+change the oracle's context (`17-`). Full runs: `30293c8` 138 / 5 (the 3 stubs and -61's 2); `6cd2ab9` 138 / 2 (-61's); 61
+XML, 0 empty, 0 ` e: `, 0 429s.
+**Revert K** (prediction `d42ff96`, result `12ae393`): `ilat` truncated, not rounded. 0 compile errors, 1 fresh XML, cmp
+equal, 1 of 3 failed, `wayPointListMatchesTheOracle`, "Forager's form", the from node's `ilat` one lower; the setParams
+tests passed. All as predicted except the case: F0h case 3 (`edge-north-a`), not the first. Cases 0 to 2 have
+micro-degree fractions below 0.5, so truncating does not change them.
+
+**3. The merge: made locally, NOT pushed (partial).** `git merge origin/brouter-port` (`611ba54`) was clean, with no conflicts:
+5 commits, FK kind 5 on hiking-mountain plus its docs, 5 jvmTest files changed and no test class added. The E1 scan read 0
+on the merge diff. The handoff call came during its full run, which was stopped before it finished, so it is not
+evidence. The local merge commit `4f5492f` is left on the local `brouter-port-5b` only, and this section is pushed from
+`12ae393`. `expected-1b.tsv` is unchanged by `brouter-port` since the merge base: that branch's report says FK5's rows
+are read from kind 5's own table.
+
+**CI on the code commits:** `7e822c4` (run 42979541777) `jvm` 135 / 2 (-61's), 0 ` e: `, both `compileKotlinIos*`;
+simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, gate "OK". `ca11871` 135 / 3 (the stub and -61's), ios-smoke the
+same. `30293c8`, `6cd2ab9`, `d42ff96` and `12ae393` were not read (still running at handoff).
+
+**Unverified:** native `toDouble`/`toInt` grammar on unusual text [?]; the port's lost exception message [I]; the effect
+of `profile:` key order [?] (refused, so not reached).
+
+**Step 6 against T2's port list:** every file is now ported or refused by name. **Step 6 is not complete** until the
+boundary merge is pushed and checked.
+
+**Next, for session 17** (in this order):
+1. The boundary merge (-96): `git merge origin/brouter-port` into `brouter-port-5b` again (clean in this session), then a
+   full fresh `:brouter:jvmTest --rerun-tasks`, push, and read CI. Before it, read CI for `6cd2ab9` (`jvm` 138 / 2
+   expected).
+2. Record which tests the merge changes (none added; `E3ExpectedFileTest`, `E3FKTest` and `E3ExpectedWriteTest` edited)
+   and their counts, against the 138 here.
+3. Optional (§12's step 4): revert I against the pre-widening `StartPathTest`, and F0h's cut starts under revert H.
