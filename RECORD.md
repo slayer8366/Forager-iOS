@@ -4251,8 +4251,39 @@ changing tests after the result; two harness fixes accepted on conditions
   since the value is not null. So it cannot hide a port defect.
 - The second makes a fresh map for each copy, which changes the set-up, not a comparison. It adds a check that a second
   copy from an emptied map throws on both engines alike.
+  - **Corrected 2026-11-11T11:27:54Z by the planner (-114):** it adds a logged outcome, not an asserted check. In the
+    committed test (`79f8d93`) the second copy's result is written to the log (an NPE on both engines, 20 of 20), and no
+    assertion reads it. Plumb left it unasserted rather than add an assertion after seeing the port's result.
 - **On a condition:** the fixed tests are committed and seen failing over the stubs again before the port goes in, so
   -101's evidence is about the tests that are kept.
 - **Why this is not -107's case:** there a comparison of results was narrowed (throws compared by class) after the data
   was seen. Here no comparison of values is narrowed.
 **Notes:** Written by the planner session by hand. Next free ID -114.
+
+**Kind:** outcome
+**ID:** 2026-10-28-114
+**Timestamp:** 2026-11-11T11:27:54Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-113
+**Title:** Step 7, Plumb's session 21: the hint code's first half ported over the fixed tests, red first; revert (b) as
+predicted; `VoiceHintProcessor`'s unit red over stubs; -113 corrected in place
+**Observed:** Plumb Ledger, session 21, `brouter-port-5b` `46626f3` to `7193465` (six commits; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 165,287 by the harness's count.
+- **-113's condition met:** the two fixes committed with their reasons, and run over the stubs first (`79f8d93`, red on
+  purpose): 5 of 5 failed, 0 ` e: ` [R]. Then the port, unchanged from session 20's (`7e3fb60`): the three classes 5 of 5.
+  The stash was dropped only after it diffed equal to the pushed commit [R]; the planner saw no stash left.
+- **Full fresh run:** 148 tests, 2 failed, both `CollectOutreachersTest` [R].
+- **Revert (b)** (`addDetours`' `source.nodesMap!!.contains(id)` negated), predicted at `c6da1d1` before the run. **Checked
+  by the planner** in the result file: 0 compile errors, 5 fresh XML, `cmp`-equal restore; 1 of 8 failed, "group 0
+  addDetours variant 0: getFromDetourMap, candidate 26 expected:<[835]> but was:<null>", as predicted.
+- **CI on `7e3fb60`, read by the planner** (run 43010170082): `jvm` 148, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **The next unit, red over stubs (`24603fb`):** `VoiceHintProcessor`, `startSection` and `processVoiceHints`' body, with
+  `VoiceHintProcessTest` (100 cases, hints switched on in test code on both engines, compared by digest). 1 of 1 failed on
+  the body's stub, 0 ` e: `. The oracle side alone gives 1,934 hints and 12 commands; commands 1, 10, 12 and 13 are not
+  reached by this sample [R].
+- **-113 corrected in place,** under the owner's rule: "The rule is corrections go into the same record that was recorded"
+  (Forager's planner profile, "Keeping the record"). -113 said fix 2 "adds a check"; it adds a logged outcome, not an
+  asserted one. The planner's misreading of patch 05.
+**Next:** session 22 ports the `VoiceHintProcessor` unit. Its sample is widened to reach the four missing commands, if it
+can be, before the port runs, while only the oracle's side has been seen.
+**Notes:** Written by the planner session by hand. Next free ID -115.
