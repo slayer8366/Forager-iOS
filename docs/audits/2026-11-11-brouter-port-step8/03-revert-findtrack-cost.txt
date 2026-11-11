@@ -14,3 +14,14 @@ PREDICTION (pushed before the run):
   that can differ if the route changes shape].
 - The oracle-against-expected-1b assertion passes before it (the edit is in the port only).
 - After restore: cmp equal to the saved copy, and git diff of RoutingEngine.kt against 4dcd049 empty.
+
+OBSERVED (scratch copy of revert.sh, run rv1):
+- The edit applied once (the diff has one - and one + line, at RoutingEngine.kt:841); compileKotlinJvm ran;
+  0 "e: " lines; 1 fresh XML.
+- RoutingEngineF0Test: TOTAL tests 1, failures 0, errors 0, skipped 0. THE PREDICTION FAILED: F0 does not
+  catch this revert. Both F0 routes are unchanged with the costliest path kept.
+- Restored: cmp equal to the saved copy; git diff of src/commonMain against 4dcd049 empty.
+- [I] Why: the loop picks among the paths held on one link (firstLinkHolder's chain). addToOpenset's
+  dominance check leaves more than one only when none dominates the other, so on F0's two routes every
+  link that was expanded held one path, or the paths it held agreed. Not checked by a count.
+- So F0's test has been seen red only over the stub (session 29), never on a revert of the ported search.

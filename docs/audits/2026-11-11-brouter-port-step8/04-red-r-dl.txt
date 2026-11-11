@@ -1,0 +1,21 @@
+Step 8a, session 30: strata R and DL through the port, on 70c4c20 plus the two new tests.
+Counts and case ids only (E1).
+
+R (RoutingEngineRTest; 26 profiles x 59, from RGenerator with E3RTest's and E3RProfilesTest's seeds):
+- Filtered run, fresh XML, 0 "e: ": 1 test, 1 failure, kotlin.NotImplementedError "RoutingEngine: the memory
+  path (collectOutreachers, panic mode), step 8b, RECORD -90", 13 s into the run (on hiking-mountain, R's first profile).
+- Diagnostic, not committed (the port call wrapped to count the 8b stub and go on; the test restored from a saved copy,
+  cmp equal): 542 s; 1534 cases, every oracle run equal to its expected-1b row; 354 Kinematic cases refused by name
+  ("unsupported: path model ..."); of the 1180 StdModel cases 151 reach the 8b stub; the other 1029 (818 routes,
+  211 errors) equal the oracle on kind, nodes, cost, distance, node digest and heights digest: 0 mismatches.
+  Stub hits by profile include fastbike 10, fastbike-asia-pacific 8, fastbike-lowtraffic 4, fastbike-verylowtraffic 18,
+  gravel 14, hiking-mountain 8, moped 6, mtb 8, safety 7, shortest 6, skating 3 (the listing was cut at 12 rows).
+
+DL (RoutingEngineDLTest; DLGenerator's draws with E3DLTest's seeds, the ones whose ids are expected-1b's rows):
+- Filtered run, fresh XML, 0 "e: ": 2 tests, 2 failures, both the same 8b NotImplementedError.
+- Diagnostic, not committed (as R's; restored, cmp equal): DL-lat 59 cases within 501 draws, 36 reach the 8b stub,
+  23 equal the oracle on all six fields; DL-lon 59 within 326 draws, 15 reach the stub, 44 equal: 0 mismatches.
+
+Full fresh :brouter:jvmTest --rerun-tasks with both tests: 79 XML, 163 tests, 5 failures (CollectOutreachersTest 2,
+known; RoutingEngineRTest 1 and RoutingEngineDLTest 2, red on purpose over the 8b stub), 0 "e: "; the one "429" in
+the log is test output text, not a Maven response.
