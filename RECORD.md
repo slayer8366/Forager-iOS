@@ -4608,3 +4608,61 @@ checked and is false: 151 of R's StdModel cases and 51 of DL's 118 reach the mem
 3. **8a is not closed** until R and DL pass, which is at 8b. 8b then adds its own strata (MP64, ML5, PM5) and -90's revert
    (`isInMemoryBounds`' comparison flipped).
 **Notes:** Written by the planner session by hand. Next free ID -124.
+
+**Kind:** outcome
+**ID:** 2026-10-28-124
+**Timestamp:** 2026-11-11T21:52:00Z
+**Continues:** 2026-10-28-61, 2026-10-28-90, 2026-10-28-123
+**Title:** Steps 8a and 8b, Plumb's session 31: the memory path ported; R, DL, MP64, ML5 and PM5 equal to the oracle; three
+reverts caught as predicted; one false line in the report; the planner's rulings
+**Observed:** Plumb Ledger, session 31, `brouter-port-5b` `0ab64b6` to `8deeb46` (fast-forward only; ended at 162,038 by
+the harness's count, under the watcher's 170,000; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **A revert F0 catches** (prediction pushed first, `b62ea53`; result `97b4167`): `compileTrack`'s end-node cut on the
+  final track removed. F0 failed on nodes, 226 expected against 227, cost equal, as predicted [R, Plumb's]. Restored.
+- **8b, the memory path** (`543693e`): `RoutingEngine.java:1970-2040` into `findTrackInner`. R passes with 1,534 cases and
+  0 mismatches; DL-lat and DL-lon 59 each, 0 mismatches.
+- **MP64, ML5, PM5** (`31aa7b1`, new `RoutingEngineMemoryTest`): 59, 59 and 55 cases, 0 mismatches each.
+  `E3MemoryTest`'s companion changed from `private` to `internal`.
+- **-90's revert** (`isInMemoryBounds`' `<=` flipped; prediction `e501548`, result `a3a246b`): MP64 59 of 59, PM5 55 of
+  55, DL 59 and 59, R 805 mismatches; ML5 0; F0 also red (not predicted) [R, Plumb's]. Restored.
+- **A revert only ML5 catches** (the limit's message changed; prediction `7e24058`, result `45c653b`): ML5 59 of 59 on
+  kind, the other six groups 0 [R, Plumb's]. Restored.
+- `CollectOutreachersTest`'s 2 failures are unchanged (-61).
+**Checked by the planner:**
+- `git ls-remote` `8deeb46`, a fast-forward of `0ab64b6`; 9 commits, one trailer each, no model name; E1 over
+  `0ab64b6..8deeb46`: 0.
+- **The port against the Java, line by line** (`RoutingEngine.java:1970-2038`): the same statements in the same order.
+  The two `logInfo` lines and their two counters are left out; nothing else differs.
+- **The reverts were restored:** no code differs between `0ab64b6` and `97b4167`, nor between `31aa7b1` and `8deeb46`.
+- **The test diff:** one new test file and the one visibility word in `E3MemoryTest`. No comparison in an existing test
+  changed.
+- **CI on `543693e`** (run 43098746396): `jvm` 163 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **CI on `31aa7b1`** (run 43099991963): `jvm` 166 tests, the same 2 failed; 0 ` e: `; both `compileKotlinIos*`;
+  simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". Its log prints all six groups at 0
+  mismatches. The head's own run (docs only) was still in progress at this reading.
+- The three reverts' own results are Plumb's reading; their runs were local.
+**A false line in the report (§5, `:264`):** "No stack overflow or out-of-memory in any memory-path run (the 5b graph
+half is iterative)." The port's `cleanupPeninsulas` is recursive (`OsmNodesMap.kt:58-65`), and on the JVM it catches a
+`StackOverflowError` and carries on, as Java does; -61's rejected option was the rewrite without recursion. What CI's
+log on `31aa7b1` does show [R]: the catch's line is printed 3 times, all by `CollectOutreachersTest`, and by none of the
+six route groups. So the first half of the line holds on the JVM in CI, and the reason given for it is wrong. Session 32
+corrects the line in place.
+**What this does not show:**
+- **The collection itself still differs from Java's on one loaded region** (`CollectOutreachersTest`, -61), while every
+  route through it is equal. Equal routes on 1,825 cases do not show the two collections equal.
+- No overflow in the route groups on the JVM says nothing about iOS, where the stack is smaller and there is no catch
+  (-50). That stays with step 10.
+- None of the route comparisons runs on iOS. They are JVM tests.
+**Decisions (the planner's, technical):**
+1. **8a is closed.** R and DL pass whole, and F0 has caught a wrong port (-123's terms).
+2. **Plumb's question 1: no revert that MP64 alone catches is owed.** -90 asked that a wrong memory path turn its strata
+   red, and -90's revert turned MP64 red on 59 of 59. "Alone" was never the requirement. The same holds for PM5.
+3. **Plumb's question 2: yes.** A changed message is not a changed decision. Session 32 runs two more reverts,
+   predictions pushed first: one in the condition that throws the limit, one in a panic-mode line (the refill of the open
+   set, or one of the two flags). Each prediction names the groups expected to fail. A revert that could loop for ever is
+   run under a time limit, and a hang is reported as such.
+4. **8b closes when those two reverts are caught,** or their misses are reported and ruled on.
+5. **Next: 8c** (terminate, the time limit, the progress count, `catch (Error)`), then 8d.
+**Notes:** Written by the planner session by hand. Next free ID -125.
