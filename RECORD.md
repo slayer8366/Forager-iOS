@@ -4666,3 +4666,39 @@ corrects the line in place.
 4. **8b closes when those two reverts are caught,** or their misses are reported and ruled on.
 5. **Next: 8c** (terminate, the time limit, the progress count, `catch (Error)`), then 8d.
 **Notes:** Written by the planner session by hand. Next free ID -125.
+
+**Kind:** outcome
+**ID:** 2026-10-28-125
+**Timestamp:** 2026-11-11T23:08:00Z
+**Continues:** 2026-10-28-90, 2026-10-28-124
+**Title:** Step 8b closed: Plumb's session 32, two more reverts caught, one prediction failed on its counts; 8c drafted
+only; the planner's rulings
+**Observed:** Plumb Ledger, session 32, `brouter-port-5b` `8deeb46` to `3fc4341` (fast-forward only; called at 170,243,
+ended at 181,509 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner). Docs only: no code changed.
+- **§5's false line corrected in place** (`4c096b7`), marked as the planner's correction. A fresh full run on `8deeb46`:
+  166 tests, 2 failed (`CollectOutreachersTest`); the caught-overflow line 3 times, all in that class [R, Plumb's].
+- **Revert (a), the limit's condition** (`maxTotalCost < 1000000000` to `<=`; prediction `1adb40c`, result `fdc5ec9`):
+  PM5 55 of 55 mismatches, the other six groups 0. The prediction held [R, Plumb's].
+- **Revert (b), panic mode's refill** (the refill's `openSet.add` removed; prediction `71a466e`, result `3fc4341`): PM5
+  48 of 55, ML5 53 of 59, the other five groups 0. **The prediction failed on its counts** (at least 50 and 54 were
+  predicted) and held on which groups fail [R, Plumb's]. Which 7 PM5 and 6 ML5 cases stay equal, and why, is not
+  explained.
+- **8c is not in code.** Two uncompiled drafts are saved as text (`step8/10-8c-draft-*.txt`).
+**Checked by the planner:**
+- `git ls-remote` `3fc4341`, a fast-forward of `8deeb46`; 5 commits, one trailer each, no model name; E1 over the range:
+  0; nothing outside `docs/` changed, so both reverts were restored and no test changed.
+- Both predictions precede their results in the history.
+- `fastPartialRecalc` in the port: `findTrackInner` refuses it with a `check` (`RoutingEngine.kt:619`), and in Java it is
+  the only way to `maxRunningTime / 3` (`RoutingEngine.java:1980`).
+- No code CI to read. The revert results are Plumb's reading of local runs.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: no second try is owed for revert (b).** What -124 asked is shown: a wrong refill turns 101
+   cases red in the two groups that panic and none elsewhere. The prediction stays recorded as failed on its counts, and
+   the unexplained 13 cases stay named as unexplained. They are not pursued: the port was `cmp`-equal throughout, so the
+   miss is in the coder's model of the cases, not in the port.
+2. **8b is closed.** Not covered, as -124 names: the collection on `CollectOutreachersTest`'s region (-61), and iOS.
+3. **Plumb's question 2: no test of `maxRunningTime / 3` is owed.** No test can reach it while the port refuses
+   `fastPartialRecalc`. 8c ports the plain time limit and names the third as left out, with the `check` as its guard.
+4. **Next: 8c** in code, from the drafts, tests seen failing first.
+**Notes:** Written by the planner session by hand. Next free ID -126.
