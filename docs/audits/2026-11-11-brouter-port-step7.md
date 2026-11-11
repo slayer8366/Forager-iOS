@@ -605,3 +605,53 @@ Not covered: EL/ER (§10), `OFFR`.
 3. `FormatGpx` (573; read method by method): the same, including `read` (GPX parsing) and `formatAsWaypoint`.
 4. One revert on a new format, predicted in a pushed file.
 5. Step 7's close: the summary of what is covered and not (EL/ER, OFFR, `writeBinary`), for the planner's check.
+
+## 12. Session 25: `FormatJson` red over stubs; the JSON and GPX ports written but not run (partial)
+
+Plumb Ledger, session 25, `brouter-port-5b` `2f602b3` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Ended at the planner's handoff call (182,216 by the watcher) after the
+first push; marked **partial**.
+
+**Done:**
+1. **`FormatJson` stubbed, `FormatJsonTest` written, red on purpose** (`3108507`, `28-...txt`). Stubs: `format`,
+   `formatAsWaypoint`, `formatDecimal3` (the port's stand-in for Java's `DecimalFormat` `0.###`, `Locale.ENGLISH`),
+   `OsmTrack.aggregateSpeedProfile`, `getVoiceHint`, `getVoiceHintTime`. `OsmTrack.version` added as `"1.7.10"`, the
+   oracle jar's manifest `Implementation-Version` (Java reads it from the manifest). The test switches on, alike in both
+   engines: hints through `processVoiceHints` under modes 0 to 9, `showspeed`, `showSpeedProfile`, an itinerary, POIs,
+   waypoints of types 0 to 3, corrected points and both export flags, and `formatAsWaypoint` on way and node description
+   bytes from the oracle's graph and on a null context; `formatDecimal3` is compared with Java's `DecimalFormat` on
+   250,023 floats.
+2. **Full fresh `:brouter:jvmTest --rerun-tasks`** before `3108507` [R]: 74 XML, 156 tests, 4 failures
+   (CollectOutreachersTest 2; FormatJsonTest 2 on purpose, naming the `aggregateSpeedProfile` and `formatDecimal3`
+   stubs), 0 errors, 0 ` e: `, no Maven 429 (the log's one "429" is a test count).
+3. **E1:** the first staged scan read 1, a float test constant with seven decimals in mantissa form, not a position;
+   rewritten as the same value without decimals, `FormatJsonTest` re-run alone (same 2 failures, 0 ` e: `), scan 0.
+4. **Written, not compiled or run, in a committed patch** (`29-s25-partial-formatjson-formatgpx-port.patch`, against
+   `3108507`): the `FormatJson` port; `aggregateSpeedProfile`/`getVNode`, `getVoiceHint`, `getVoiceHintTime`; the whole
+   `FormatGpx` (all ten methods, `read` included); `FormatGpxTest` (modes 0 to 9, message list, params, `showTime`,
+   tags on messages, waypoints on the track's own indices with `via`/`from`/`to`/`rt` names, `read` on the oracle's
+   texts and on crafted lines). The patch mixes the JSON port with GPX's test and port; it is not split into stub and
+   port, so the GPX stub commit has to be made from it first (the stub file is the port's signatures with `TODO`).
+
+**Not done:** the JSON port's passing run; GPX red and port; the revert (planned, not yet pushed as a prediction:
+`FormatGpx`'s `if (i < ml.size - 1)` made `if (i < ml.size)`, expected first at "track 0: format", the port longer by
+16 characters, or by a whole comment line if the list's last entry is null); CI for `3108507` not read; step 7's close.
+
+**Unverified:**
+- [?] Native, step 10: `formatDecimal3`'s from-2^53 branch (`Double.toString`'s digits); `Double`/`Float` `toString` in
+  both formats; `String.toDouble` in `read`.
+- [I] `FormatGpx`'s mode-4 `String.format` and `toLowerCase` assume the oracle JVM's default locale writes ASCII; `read`
+  reads UTF-8 where Java takes the default charset (UTF-8 on JDK 21). `formatAsGpx` returns nothing (Java's return is a
+  writer's identity string that `format` drops).
+- [I] The patch's ports have not been compiled.
+
+**Step 7 against §1 and -111: not complete.** `FormatJson` and `FormatGpx` are not ported in the tree.
+
+**Next, for session 26:**
+1. Read CI for `3108507` (expect `jvm` 156, 4 failed: CollectOutreachersTest 2, FormatJsonTest 2 on purpose).
+2. Apply the JSON half of patch 29 (`FormatJson.kt`, `aggregateSpeedProfile`/`getVNode`); run `FormatJsonTest`; on any
+   failure, stop and report (the test's comparison is fixed).
+3. Add `FormatGpx` stubs and `FormatGpxTest` from patch 29, `getVoiceHint`/`getVoiceHintTime` still stubbed; see it red;
+   push with the JSON port after a full fresh run; push the revert's prediction with it.
+4. Apply the GPX port; full run; push; run the revert; commit its result.
+5. Step 7's close (EL/ER, `OFFR`, `writeBinary` and any GPX branch not reached).
