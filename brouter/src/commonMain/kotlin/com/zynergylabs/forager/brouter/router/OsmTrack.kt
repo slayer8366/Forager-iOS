@@ -9,7 +9,9 @@ import com.zynergylabs.forager.brouter.util.FrozenLongMap
  * BRouter 1.7.10's `btools.router.OsmTrack`. Step 7, session 19: the reached core (step 7's report, §5): the fields,
  * `OsmPathElementHolder`, `addNode`, `copyDetours`, `buildMap`, `readBinary`'s null guard, `containsNode` (replacing
  * RECORD -94's stub), `getLink`, `appendTrack`, `getTotalSeconds`, `prepareSpeedProfile` and `processVoiceHints`' head.
- * The hint body, the detour methods and the file branch of `readBinary` are the hint code's sessions (RECORD -111).
+ * Session 20 (RECORD -111): the detour methods (`registerDetourForId`, `addDetours`, `appendDetours`,
+ * `getFromDetourMap`), `getMatchedWaypoint`, `getMinDistance` and `removeVoiceHint`. The hint body of
+ * `processVoiceHints` (with `startSection`) and the file branch of `readBinary` are later sessions.
  * On Forager's path the reference track `OsmPath` takes is most likely always null (RECORD -94 [I], step 8 checks).
  */
 internal class OsmTrack {
@@ -59,17 +61,87 @@ internal class OsmTrack {
         nodes.add(0, node)
     }
 
-    fun registerDetourForId(id: Long, detour: OsmPathElement?): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
+    fun registerDetourForId(id: Long, detour: OsmPathElement?) {
+        val map = detourMap ?: CompactLongMap<OsmPathElementHolder>().also { detourMap = it }
+        val nh = OsmPathElementHolder()
+        nh.node = detour
+        var h = map.get(id)
+        if (h != null) {
+            while (h!!.nextHolder != null) {
+                h = h.nextHolder
+            }
+            h.nextHolder = nh
+        } else {
+            map.fastPut(id, nh)
+        }
+    }
 
     fun copyDetours(source: OsmTrack) {
         detourMap = source.detourMap?.let { FrozenLongMap(it) }
     }
 
-    fun addDetours(source: OsmTrack): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
+    fun addDetours(source: OsmTrack) {
+        val map = detourMap
+        if (map != null) {
+            val tmpDetourMap = CompactLongMap<OsmPathElementHolder>()
+
+            (map as FrozenLongMap<OsmPathElementHolder>).getValueList()
+            val oldidlist = map.getKeyArray()
+            for (i in oldidlist.indices) {
+                val id = oldidlist[i]
+                val v = map.get(id)
+
+                tmpDetourMap.put(id, v!!)
+            }
+
+            val sourceMap = source.detourMap
+            if (sourceMap != null) {
+                val idlist = (sourceMap as FrozenLongMap<OsmPathElementHolder>).getKeyArray()
+                for (i in idlist.indices) {
+                    val id = idlist[i]
+                    val v = sourceMap.get(id)
+                    if (!tmpDetourMap.contains(id) && source.nodesMap!!.contains(id)) {
+                        tmpDetourMap.put(id, v!!)
+                    }
+                }
+            }
+            detourMap = FrozenLongMap(tmpDetourMap)
+        }
+    }
 
     var lastorigin: OsmPathElement? = null
 
-    fun appendDetours(source: OsmTrack): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
+    fun appendDetours(source: OsmTrack) {
+        if (detourMap == null) {
+            detourMap = if (source.detourMap == null) null else CompactLongMap()
+        }
+        if (source.detourMap != null) {
+            val map = detourMap!!
+            val pos = nodes.size - source.nodes.size + 1
+            // Java reads this element and never uses it; read here too, so that an index out of range throws as Java's.
+            if (pos > 0) {
+                nodes[pos]
+            }
+            for (node in source.nodes) {
+                val id = node.getIdFromPos()
+                val nh = OsmPathElementHolder()
+                if (node.origin == null && lastorigin != null) {
+                    node.origin = lastorigin
+                }
+                nh.node = node
+                lastorigin = node
+                var h = map.get(id)
+                if (h != null) {
+                    while (h!!.nextHolder != null) {
+                        h = h.nextHolder
+                    }
+                    h.nextHolder = nh
+                } else {
+                    map.fastPut(id, nh)
+                }
+            }
+        }
+    }
 
     fun buildMap() {
         val map = CompactLongMap<OsmPathElementHolder>()
@@ -164,14 +236,25 @@ internal class OsmTrack {
         showSpeedProfile = showSpeedProfile or t.showSpeedProfile
     }
 
-    fun getMatchedWaypoint(idx: Int): MatchedWaypoint? = TODO("step 7: hint code, session 20 (RECORD -111)")
+    fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
+        val wps = matchedWaypoints ?: return null
+        for (wp in wps) {
+            if (idx == wp.indexInTrack) {
+                return wp
+            }
+        }
+        return null
+    }
 
     fun getTotalSeconds(): Int {
         val s = if (nodes.size < 2) 0f else nodes[nodes.size - 1].getTime() - nodes[0].getTime()
         return (s + 0.5).toInt()
     }
 
-    fun getFromDetourMap(id: Long): OsmPathElementHolder? = TODO("step 7: hint code, session 20 (RECORD -111)")
+    fun getFromDetourMap(id: Long): OsmPathElementHolder? {
+        val map = detourMap ?: return null
+        return map.get(id)
+    }
 
     fun prepareSpeedProfile(rc: RoutingContext) {
         // sendSpeedProfile = rc.keyValues != null && rc.keyValues.containsKey( "vmax" );
@@ -191,9 +274,32 @@ internal class OsmTrack {
         TODO("step 7: hint code, a later session (RECORD -111)")
     }
 
-    internal fun getMinDistance(): Int = TODO("step 7: hint code, session 20 (RECORD -111)")
+    internal fun getMinDistance(): Int {
+        val v = voiceHints
+        if (v != null) {
+            return when (v.transportMode()) {
+                VoiceHintList.TRANS_MODE_CAR -> 20
+                VoiceHintList.TRANS_MODE_FOOT -> 3
+                else -> 5
+            }
+        }
+        return 2
+    }
 
-    fun removeVoiceHint(i: Int): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
+    fun removeVoiceHint(i: Int) {
+        val v = voiceHints
+        if (v != null) {
+            var remove: VoiceHint? = null
+            for (vh in v.list) {
+                if (vh.indexInTrack == i) {
+                    remove = vh
+                }
+            }
+            if (remove != null) {
+                v.list.remove(remove)
+            }
+        }
+    }
 
     companion object {
         fun readBinary(

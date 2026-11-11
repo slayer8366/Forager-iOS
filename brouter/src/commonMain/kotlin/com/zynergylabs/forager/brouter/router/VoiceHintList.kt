@@ -14,13 +14,27 @@ internal class VoiceHintList {
         transportMode = if (isCar) TRANS_MODE_CAR else (if (isBike) TRANS_MODE_BIKE else TRANS_MODE_FOOT)
     }
 
-    fun setTransportMode(mode: Int): Unit = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
+    fun setTransportMode(mode: Int) {
+        transportMode = mode
+    }
 
-    fun getTransportMode(): String = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
+    fun getTransportMode(): String = when (transportMode) {
+        TRANS_MODE_FOOT -> "foot"
+        TRANS_MODE_CAR -> "car"
+        else -> "bike"
+    }
 
-    fun transportMode(): Int = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
+    fun transportMode(): Int = transportMode
 
-    fun getLocusRouteType(): Int = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
+    fun getLocusRouteType(): Int {
+        if (transportMode == TRANS_MODE_CAR) {
+            return 0
+        }
+        if (transportMode == TRANS_MODE_BIKE) {
+            return 5
+        }
+        return 3 // foot
+    }
 
     companion object {
         internal const val TRANS_MODE_NONE = 0
