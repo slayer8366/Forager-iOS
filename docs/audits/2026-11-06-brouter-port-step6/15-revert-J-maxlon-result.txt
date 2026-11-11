@@ -1,0 +1,15 @@
+Session 16, revert J: result (prediction in 15-revert-J-maxlon-prediction.txt, pushed in fa69d49 before the run).
+
+Run with revert.sh (copy in scratch, unchanged): edit 'maxlon = lon + 6000000' -> 'maxlon = lon + 5000000' in
+SearchBoundary.kt; filter *SearchBoundaryTest.
+- restored: cmp equal; compile errors: 0; fresh XML files: 1; TOTAL: tests 1, failures 1.
+- After the run, git status clean and 'maxlon = lon + 6000000' present once: the forward change is in place.
+- The whole message, read from the fresh XML with ElementTree:
+  "case 0 probe 0 direction 3: getBoundaryDistance expected:<133759> but was:<121599>"
+
+Against the prediction: SearchBoundaryTest failed, 1 of 1, 0 ' e: ', as predicted; on the second of the two
+predicted messages (the one named less likely): case 0 has direction 3, so probe 0's getBoundaryDistance fails
+before probe 9's isInBoundary is reached. The difference is one degree of longitude at that latitude: probe 0 sits
+on the outer west edge, 11 degrees from the true inner east edge and 10 from the moved one, and 133759/11 = 12160
+= 121599/10 (to the metre). Port lower, as the moved edge is nearer. Observed as predicted; the prediction did not
+pick between its two branches.
