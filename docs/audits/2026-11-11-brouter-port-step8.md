@@ -114,3 +114,46 @@ with a `NotImplementedError` naming a stub, over fresh XML with 0 ` e: `.
 **The revert I predict** (to run once 8a passes on F0): in `_findTrack`'s port (Java `:2218`), the best-path comparison
 `testPath.cost < bestPath.cost` flipped to `>`, so the costliest of a link's paths is kept. Prediction: at least one of
 F0's two routes fails, on its cost or its node digest first [I: which of the two, and which field, is not predicted].
+
+## 3. Session 29 (partial: stopped at the planner's handoff call)
+
+Plumb Ledger, session 29, `brouter-port-5b` `461e4d6` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. No stop hit.
+
+**Done:**
+1. **§1 and §2** pushed alone first (`22266d1`).
+2. **Red over stubs** (`15a4aa2`, red on purpose; `step8/01-red-f0.txt`): `router/RoutingEngine.kt` with the constructor
+   (profile parse; `debug.txt`/`stacks.txt` refused) and `doRun` as a `TODO` naming RECORD -90; `RoutingEngineF0Test` runs
+   F0's two cases through the oracle in this JVM (`E3CaseRun.run` on the oracle's folder), holds each to its
+   `expected-1b.tsv` row by `tupleDigest` (`exact`), then compares the port field by field (kind, nodes, cost, distance,
+   node digest, heights digest). Filtered run: fresh XML, 1 test, 1 failure, `NotImplementedError` naming
+   `RoutingEngine.doRun`, 0 ` e: `; the oracle-against-expected assertion passed before it. Full fresh
+   `:brouter:jvmTest --rerun-tasks`: 77 XML, 160 tests, 3 failures (CollectOutreachersTest 2, RoutingEngineF0Test 1 on
+   purpose), 0 ` e: ` (two grep hits are test output text, not compiler lines), no Maven 429 [R].
+3. **8a's port, written, not compiled or run:** `step8/02-partial-routingengine-8a.patch`, marked partial, not in the
+   tree. It covers `doRun`, `doRouting` (no output/log branches), `postElevationCheck`, `logException`, both `findTrack`s,
+   `tryFindTrack`, `snapPathConnection`'s guard (-24, throws past it), `recalcTrack`, `elevationFilter`,
+   `matchWaypointsToNodes`, `searchTrack`, `searchRoutedTrack`, `resetCache`, both `getStartPath`s, `_findTrack`
+   (as `findTrackInner`), `addToOpenset`, `compileTrack`, `mergeTrack`. The memory path and the open border list are
+   `TODO`s naming 8b; the time limit (`doRun` with a non-zero limit) a `TODO` naming 8c; `catch (Error)` not yet ported
+   (8c). Every option §1 leaves out throws `UnsupportedOperationException` naming it.
+4. **CI:** `15a4aa2` (run 43085259189) was still in progress at the handoff; not read.
+5. **E1:** 0 on both staged diffs; no hit to fix.
+
+**[I]/[?]:**
+- [I] The patch's `postElevationCheck` dereferences `tmp.message` with `!!` where Java does without a check; Java's
+  NPE would carry a helpful message, the port's would not. Believed unreached (re-tracked nodes all carry a message).
+- [I] Java's `for`-update `link.getNext(...)` runs after the body; the patch keeps that order in all three link loops.
+- [I] `continueStraight` refused only before a middle waypoint, as Java acts only there.
+- [?] `toDouble`, `Throwable.toString` on Native: step 10.
+
+**Questions for the planner:**
+- §1's `RouteOutcome.Found` has no heights; -111's heights change the public surface at 8d. Confirm that is wanted there.
+- The test compares in E3's unlogged regime only (the port refuses `debug.txt`). Is that the reading -90 intends?
+
+**Next, for session 30:**
+1. Read CI for `15a4aa2` (TOTAL lines, ` e: `, both `compileKotlinIos*`, the gate; simulator-checked).
+2. Apply `step8/02-partial-routingengine-8a.patch` (`git apply`), compile, fix compile errors only, read the patch
+   against Java `:858-1052`, `:1609-2350` once more, then run `*RoutingEngineF0Test`.
+3. On a pass: full fresh `jvmTest --rerun-tasks`, push; then revert per §2 (prediction pushed first).
+4. Then R (20 StdModel profiles; Kinematic refusals) and DL-lat/DL-lon, per §2.
