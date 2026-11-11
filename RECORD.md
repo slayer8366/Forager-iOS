@@ -4155,3 +4155,40 @@ paths from Forager's own ends (excepted, -93) and it asserts no position or hint
 **For the owner:** whether the unreached hint and detour code, and the `Format*` classes, are ported or left as named
 "unsupported"; and whether step 8's route result carries heights, as Android's does.
 **Notes:** Written by the planner session by hand. Next free ID -111.
+
+**Kind:** decision
+**ID:** 2026-10-28-111
+**Timestamp:** 2026-11-11T10:18:39Z
+**Continues:** 2026-10-28-90, 2026-10-28-109, 2026-10-28-110
+**Title:** The owner's rulings on step 7's scope and step 8's heights: BRouter's hints ported, the export formats ported,
+heights added; Forager's own next-turn code to be ported for the iOS app as well
+**Decision:** the owner, verbatim, to the planner's three questions:
+- On BRouter's hint and detour code: "Option 2. I just added turns directions the last update." (Option 2 read "Port it
+  all".) Asked again with the finding below, the owner chose "Both", whose option read: "Port BRouter's hint code now as
+  ruled, and also plan the port of Forager's own next-turn code for the iOS app."
+- On the export formats (GPX, JSON, KML, CSV): "Port them".
+- On heights in step 8's route result: "Add heights at step 8 (Recommended)".
+- On what to do with them: "Record it,Build it".
+**The finding put to the owner, checked by the planner** in Forager's `pre-main` (`e1fbb635`): Android's turn directions
+(PR #500, `next-turn`, merged 2026-11-09) come from Forager's own code, `domain/nextturn/` (`RouteTurns.kt` and its
+neighbours), built on the route's ways through Forager's own interface. They do not use BRouter's hint code. Android's
+profiles still set `turnInstructionMode` to 1, which leaves BRouter's hints off (-110).
+**Two wrong premises, the planner's:**
+- The first question said "Forager never switches turn hints on". That is true of BRouter's hints and was read as true of
+  Forager. The planner had not checked Forager's `pre-main` for new features before step 7, which its profile names as its
+  duty ("Keeping iOS level with Android is the planner's duty"). `pre-main` was read only at `947f1be2` for the E1 ends.
+- The formats question said "About 160 kept Java lines". That was T2's count of the lines Forager's path reaches. Ported
+  whole, the five format classes are 1,562 Java lines (-110's counts: 569 + 573 + 261 + 116 + 43). The ruling stands as
+  given. The corrected figure goes to the owner in the next message.
+**What this means for the plan (the planner's reading, labelled as such):**
+- **Step 7 grows** from 1,367 kept lines to about 3,000: `OsmTrack` whole, `VoiceHint`, `VoiceHintList`,
+  `VoiceHintProcessor`, `Formatter` and the four `Format*` classes. Each is compared with the oracle, with its test seen
+  failing over stubs first (-101). On Forager's own path, hints and formats stay unreached, so their tests switch them on
+  in test code. Inputs come from seeds or from Forager's own ends, and outputs are compared by digest, so no coordinate is
+  committed beyond Forager's own ends (E1).
+- **Order:** `OsmTrack`'s reached core first (session 19, -110's plan); then the hint code (one or two sessions); then the
+  formats. The revert for the core is `OsmTrack.java:346` (-110).
+- **Step 8** returns a height per route point, as Android's `BRouterTrailRouter.kt:219` does, compared with the oracle.
+- **Forager's next-turn code** is an app-layer port, not part of BRouter. It is an open item for the iOS app's plan, after
+  the BRouter port, and gets its own intent when planned.
+**Notes:** Written by the planner session by hand. Next free ID -112.
