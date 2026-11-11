@@ -4359,3 +4359,36 @@ harness's count.
 - **Disclosed as what it is:** a comparison changed after a result was seen, like -107's. The planner puts it beside -107's
   case for the independent reviewer, once that role is named.
 **Notes:** Written by the planner session by hand. Next free ID -117.
+
+**Kind:** outcome
+**ID:** 2026-10-28-117
+**Timestamp:** 2026-11-11T14:10:20Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-116
+**Title:** Step 7, Plumb's session 24: `readBinary` passing under -116's comparison; `FormatCsv`, `FormatKml` and
+`StringUtils` ported whole over failing stubs; revert (e) as predicted; `FormatJson` and `FormatGpx` not started
+**Observed:** Plumb Ledger, session 24, `brouter-port-5b` `2f2eb38` to `2f602b3` (partial, fast-forward only; trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name; checked by the planner). It ended at 178,184 by the
+harness's count, under the watcher's 180,000.
+- **`readBinary`:** `ReadBinaryTest` changed as -116 rules and seen red over the stubs (`60bb212`), then patch 16 applied with
+  a comment naming the difference (`12af1e9`): 9,029 reads, 1,549 of them on the error path [R].
+- **`FormatCsv`** whole, with `aggregateMessages` and `MessageData.toMessage`/`add`: red at `b1c735b`, passing at `8334bcd`
+  on 61 tracks, 11,266 lines and `Formatter.write`'s bytes [R].
+- **`FormatKml` and `btools.util.StringUtils`** whole: red at `0709046`, passing at `6abe8f3` on 248 placemarks, 7 null-name
+  throws matched by class, and 20,006 strings [R]. `StringUtils` is BRouter's own class, outside step 7's §1 file list; it
+  is not a new dependency.
+- **Revert (e)** (`linkdist +=` to `-=` in `MessageData.add`), predicted in a pushed file: "track 0: format", 4,637
+  characters on the oracle against 4,607, as predicted, `cmp`-equal restore [R].
+- **Slips, Plumb's own (§11):** a full run killed by its own 10-minute background limit, re-run whole. One local commit
+  scanned E1 at 1 (the KML header's fixed `<distance>` constant, not a position); never pushed, undone with
+  `reset --soft`, the literal split with a comment, output unchanged, re-committed at 0.
+**Checked by the planner:**
+- `git ls-remote`: `2f602b3`, a fast-forward of `2f2eb38`; no model name in any message.
+- E1 scan over `2f2eb38..2f602b3`: 0.
+- `ReadBinaryTest` at `60bb212`: the result compared exactly; on the error path, `debugInfo` compared by digest up to and
+  including `"Error reading rawTrack: "`, both paths asserted taken, text asserted after the prefix on each side; whole
+  elsewhere. This is -116's ruling as written.
+- **CI on `6abe8f3`** (run 43033483479): `jvm` 154, 2 failed, both `CollectOutreachersTest`'s; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". CI on the docs-only
+  `2f602b3` was still running and is not read.
+**Next:** session 25 ports `FormatJson` (261 lines) and `FormatGpx` (573), each red first, and closes step 7.
+**Notes:** Written by the planner session by hand. Next free ID -118.
