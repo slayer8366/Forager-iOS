@@ -1,0 +1,21 @@
+Revert (f), session 27, result. Prediction: 35-revert-f-prediction.txt (pushed in fc4d946, before this run).
+Runner: a scratch copy of docs/process/tools/revert.sh, filter *FormatGpxTest, from the clone root.
+
+Edit (diff of the saved copy against the reverted file, changed lines only):
+-                if (i < ml.size - 1) {
++                if (i < ml.size) {
+
+Runner output:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="formatGpxMatchesTheOracle[jvm]"
+message="org.junit.ComparisonFailure: track 0: format expected:&lt;[de047c1d2784bf68/63735]&gt; but was:&lt;[9d52854a12671725/63751]&gt;
+
+Checked outside the runner: FormatGpx.kt cmp-equal to a copy taken before the run; 'if (i < ml.size - 1)' present once.
+
+Observed against the prediction: compiled (0 e:), 1 fresh XML, 1 test 1 failure, first at 'track 0: format',
+the port 63751 against Java's 63735, longer by 16 (the last index has one digit), not a NotImplementedError, thrown
+text, reach-check or read failure. As predicted.

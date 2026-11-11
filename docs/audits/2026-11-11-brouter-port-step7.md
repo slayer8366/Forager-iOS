@@ -720,3 +720,92 @@ port); marked **partial**.
    the port; the revert run with a scratch `revert.sh`.
 4. Read CI for `7ddd4ef` (expect `jvm` 156, 4 failed, as at `3108507`).
 5. Step 7's close.
+
+## 14. Session 27: `FormatJson` under -119 and `FormatGpx` ported and passing; revert (f); step 7's close
+
+Plumb Ledger, session 27, `brouter-port-5b` `4f5791c` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Not partial: every dispatched step done; no stop hit.
+
+**Done:**
+1. **-119's premise checked first.** Patch 30 applied as held, plus a scratch counting test over `FormatJsonTest`'s own
+   float sample (never committed). Every tested value from 3e17 up to 2^63 matched Java (1,982 values, 0 differ).
+   Below 3e17: 222,747 values, 0 differ. At or above 2^63: 25,294 values (2 of them infinities), 16 differ. No value
+   below 2^63 differs, so this is no stop (`32-s27-formatjson-port-passing.txt`).
+2. **`formatDecimal3` under -119** (`f1a5f22`). Patch 30's `Double.toString` branch is removed. For finite |v| >= 2^63
+   the port throws `UnsupportedOperationException` naming 2^63 and RECORD -119, and never prints digits. A code comment
+   cites -119. No JDK code is copied. `FormatJsonTest` compares every tested value below 2^63 with Java exactly, and on
+   every finite tested value at or above it asserts the throw (type, "2^63", "RECORD -119"). A test comment cites -119.
+   - **For the planner:** the two infinities are at or above 2^63, but they print no digits ("∞") and match Java, so
+     they stay in the exact comparison rather than being made to throw. This reading of -119 is mine.
+   - **`FormatJsonTest`, fresh, 0 ` e: `:** 2 tests, 0 failures. 224,731 floats compared with Java; 25,292 throw.
+   - **E1** on the first staging: 3 hits, none a position. All three were the 2^63 limit written as a 19-digit
+     decimal. I rewrote them ("about 9.2e18"; `Math.scalb(1.0, 63)`) and reran. E1: 0.
+   - **Full fresh run** (GPX files moved out of the tree): 74 XML, 156 tests, 2 failures (CollectOutreachersTest 2),
+     0 ` e: `, no Maven 429. A first full run had overlapped with the GPX stub being written into the tree. Its counts
+     were the same (156, 2), but I reran it rather than cite it.
+3. **`FormatGpx` red over stubs** (`61a1377`, red on purpose): the public surface stubbed with `TODO`, and
+   `FormatGpxTest` from patch 29 unchanged. The first attempt did not compile, because I had extracted the test without
+   its `package` line; I re-extracted it whole. Fresh XML, 0 ` e: `, 1 test, 1 failure: "track 0: format", expected
+   `de047c1d2784bf68/63735`, got `NotImplementedError` naming `FormatGpx.format`. Full fresh run: 75 XML, 157 tests,
+   3 failures (CollectOutreachersTest 2, FormatGpxTest 1), 0 ` e: ` (`33-...`).
+4. **`FormatGpx` ported** (`fc4d946`): patch 29's `FormatGpx.kt` unchanged, and `getVoiceHint`/`getVoiceHintTime` from
+   its `OsmTrack` hunk.
+   - Run 1: 1 failure at "track 0: format", 63,733 characters against 63,735. A temporary diagnostic (both texts dumped;
+     the test restored from a saved copy) showed one line: `creator="BRouter-null"` against `"BRouter-1.7.10"`.
+   - Symptom 1, fix 1, a **test input** under -118. Patch 29's test predates -118, so it never set `OsmTrack.version`.
+     I added `FormatJsonTest`'s `@BeforeTest`. The comparison and the reach list are unchanged, and -118 was ruled
+     before any port result.
+   - Run 2: passing. 161 tracks, 152 texts, 9 thrown, 4,249 hints, 159 reads. Modes 2 to 9 each reached with hints.
+     Every required reach key was hit.
+   - Full fresh run: 75 XML, 157 tests, 2 failures (CollectOutreachersTest 2), 0 ` e: `, no Maven 429 (`34-...`).
+5. **Revert (f)**, prediction pushed first in `fc4d946` (`35-revert-f-prediction.txt`). The edit was §12's plan:
+   `if (i < ml.size - 1)` made `if (i < ml.size)`. It ran through a scratch copy of `revert.sh`, filter
+   `*FormatGpxTest`. The runner reported 0 compile errors and 1 fresh XML, with 1 test and 1 failure: "track 0: format",
+   the port at 63,751 against Java's 63,735, 16 longer. That is as predicted (one-digit last index). The runner reported
+   "restored: cmp equal". Checked outside the runner: `FormatGpx.kt` is cmp-equal to a copy taken before the run, and
+   the forward line is present once (`36-revert-f-gpx-last-message-wrapped-result.txt`).
+6. **CI** (each read for TOTAL lines, ` e: `, both `compileKotlinIos*` and the gate; iOS results are simulator-checked):
+   - `7ddd4ef` (run 224): `jvm` TOTAL 156, failures 4 (CollectOutreachersTest 2, FormatJsonTest 2 on purpose), 0 errors,
+     0 ` e: `. iOS klibs: both `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` succeeded. `ios-smoke`,
+     simulator-checked: 24 tests, 0 failures, in 10 files. arm64 JVM: 7 tests, 0 failures. Gate: "OK: all 2 classes
+     ran".
+   - `f1a5f22` (run 226): `jvm` 156 tests, 2 failed (CollectOutreachersTest), 0 ` e: `, both iOS compiles succeeded.
+     `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+   - `61a1377` (run 227): `jvm` 157 tests, 3 failed (CollectOutreachersTest 2, FormatGpxTest 1 on purpose), 0 ` e: `,
+     both iOS compiles succeeded. `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+   - `fc4d946` (run 228): `jvm` 157 tests, 2 failed (CollectOutreachersTest), 0 ` e: `, both iOS compiles succeeded.
+     `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+   - Each `jvm` job is red only on the failures named above.
+
+**Branches the GPX test does not assert reached:** `exportWaypoints`' per-type branches (`beeline`/`via`/`shaping` for
+middle waypoints) are compared whole but not counted. Thrown texts in modes 5, 6, 7 and 9 are not reached. Line
+coverage was not measured (no new dependency) [?].
+
+**Unverified:**
+- [?] Kotlin/Native number formatting (step 10): `formatDecimal3`'s from-2^53 branches; `Float`/`Double` `toString` in
+  JSON's and GPX's speed and coordinate text; `String.toDouble` in `FormatGpx.read`; GPX mode 4's `String.format`.
+  None is run on Native. The iOS test sets do not include these tests.
+- [I] -119's limit is checked on the tested sample only: 25,292 finite values at or above 2^63, and 224,731 values
+  below it.
+- [I] The infinities are read as outside -119's limit (item 2), for the planner to confirm.
+- [I] FormatGpxTest's `OsmTrack.version` `@BeforeTest` was added after a port result. Under -118 it is an input, but
+  it goes beside the seeded speeds (-119) for the planner.
+- §12's and §13's [I] items stand: the speed seeding uses values no profile gives; `read` decodes UTF-8;
+  `formatAsGpx` returns nothing.
+
+**Step 7 against §1 and -111: not complete.** All nine of §1's classes are now ported and compared with the oracle.
+A name check of Java's methods against the port finds none missing in `Formatter`, the four `Format*`, `VoiceHint`,
+`VoiceHintList` or `VoiceHintProcessor` [I: by name only]. The planner's reading of -111 is "`OsmTrack` whole", and
+three of its methods are not ported:
+- `writeBinary` (§10; the tests use the oracle's).
+- `equalsTrack`.
+- `addNodes`.
+
+Not covered, as §10 and §11 left them: EL/ER, and `OFFR` (unreachable). `formatDecimal3` from 2^63 up is unsupported
+by ruling (-119).
+
+**Next:**
+1. Planner: confirm the reading of the infinities under -119, and the GPX `@BeforeTest` under -118. Then rule whether
+   `writeBinary`, `equalsTrack` and `addNodes` are in step 7 (port them red-first, or record them as out of scope).
+2. If they are in scope: stubs and tests red over them, port, then a revert.
+3. Step 7's close by the planner, with the not-covered list above.
