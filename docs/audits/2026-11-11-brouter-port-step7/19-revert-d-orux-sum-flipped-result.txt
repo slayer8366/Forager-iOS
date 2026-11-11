@@ -1,0 +1,14 @@
+Session 23, revert (d), run after 17's prediction was pushed (3d64e31), with a scratch copy of docs/process/tools/revert.sh.
+The edit (the runner's diff):
+-        VoiceHint.RNDB, VoiceHint.RNLB -> 1008 + roundaboutExit
++        VoiceHint.RNDB, VoiceHint.RNLB -> 1008 - roundaboutExit
+The runner's output:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="formatterMatchesTheOracle[jvm]"
+message="org.junit.ComparisonFailure: getOruxAction(13, -12) expected:&lt;ok:[996]&gt; but was:&lt;ok:[1020]&gt;
+After: the forward line '1008 + roundaboutExit' present once in Formatter.kt; git status clean but for this file [R].
+Observed as predicted: 0 compile errors, 1 fresh XML, 1 test, 1 failure, getOruxAction(13, -12) expected 996, was 1020.
