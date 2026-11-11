@@ -167,6 +167,10 @@ internal class OsmTrack {
         nodesMap = FrozenLongMap(map)
     }
 
+    fun addNodes(t: OsmTrack) {
+        TODO("OsmTrack.addNodes (step 7, RECORD -120)")
+    }
+
     fun containsNode(node: OsmPos): Boolean = nodesMap!!.contains(node.getIdFromPos())
 
     fun getLink(n1: Long, n2: Long): OsmPathElement? {
@@ -332,6 +336,10 @@ internal class OsmTrack {
     fun getTotalSeconds(): Int {
         val s = if (nodes.size < 2) 0f else nodes[nodes.size - 1].getTime() - nodes[0].getTime()
         return (s + 0.5).toInt()
+    }
+
+    fun equalsTrack(t: OsmTrack): Boolean {
+        TODO("OsmTrack.equalsTrack (step 7, RECORD -120)")
     }
 
     fun getFromDetourMap(id: Long): OsmPathElementHolder? {
