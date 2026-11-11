@@ -1,0 +1,11 @@
+Session 24: FormatKml and StringUtils ported whole (Java's null dereferences are `!!`, Kotlin's NullPointerException).
+Run: :brouter:jvmTest --rerun-tasks --tests '*FormatKmlTest' --tests '*StringUtilsTest', test-results deleted first.
+Observed: BUILD SUCCESSFUL; 0 " e: "; 2 fresh XML; each tests 1, failures 0, errors 0.
+Printed: "7 FormatKml: 61 tracks, 248 placemarks, 7 thrown" (the 7: a null name, NullPointerException in both,
+compared by class); "7 StringUtils: 20006 inputs, both methods".
+[?] Native: formatILon/formatILat are integer arithmetic (Formatter, session 23); subList on an empty list and the NPE
+classes differ by platform, and are not reached by Forager's path.
+E1 scan: the first staged diff read 1, a false positive on BRouter's fixed KML sample header (`<distance>` with a
+six-decimal constant, not a position). That commit was local only; it was undone with `git reset --soft` before any
+push, the literal split in two with a comment (output unchanged), FormatKmlTest re-run: 1/1 passed, same counts. The
+staged diff then read 0.

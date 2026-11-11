@@ -1,0 +1,17 @@
+Revert (e) result (session 24). Prediction: 24-revert-e-prediction.txt, pushed at 8334bcd (with 0709046) before the run.
+Runner: a scratch copy of docs/process/tools/revert.sh. Edit diff:
+-        linkdist += d.linkdist
++        linkdist -= d.linkdist
+Runner output:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+Counts (fresh XML, then all):
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+Failure:
+testcase name="formatCsvMatchesTheOracle[jvm]"
+message="org.junit.ComparisonFailure: track 0: format expected:<[81bd3ea580c04d33/463]7> but was:<[ba4b57680881cc17/460]7>
+After: the forward line "linkdist += d.linkdist" is present once; git status clean.
+Observed: 0 compile errors, 1 fresh XML, 1 failure at "track 0: format", digests differing (4637 chars on the
+oracle, 4607 on the reverted port: merged distances shrink). As predicted, track index included.
