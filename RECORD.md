@@ -3911,3 +3911,28 @@ between 108k and 194k of context. That is the context at the end, not the tokens
 - **Still in scratch only, and lost with the container:** reverts D, E and F's result files (-101). Plumb's session 13
   commits them first, or re-runs the three reverts and says so.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -103.
+
+**Kind:** decision
+**ID:** 2026-10-28-103
+**Timestamp:** 2026-11-11T05:29:32Z
+**Continues:** 2026-10-28-90, 2026-10-28-101, 2026-10-28-102
+**Title:** A new planner session picks up from -102's handoff; Plumb Ledger's session 13 dispatched on `brouter-port-5b`
+**Decision:** the owner, verbatim: "Let's continue to BRouter port".
+- **The heads, checked by the planner** (`git ls-remote`, 05:2xZ) against -102: `brouter-port` `611ba54`, `brouter-port-5b`
+  `a83ff3f`, `brouter-port-5a` `2a8ba5e`, all as handed off. `main` is `d22a302`, the merge of PR #5 on the owner's word
+  ("Go ahead and merge PR 5 now"), so -102's step 2 (asking about PR #5) is closed.
+- **No older planner is live:** `ListAgents` lists no other session, and no watcher or coder was carried into this container.
+- **CI on `a83ff3f`, read by the planner** (run 42266943851): `jvm` 130 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines; both `compileKotlinIos*` ran. `ios-smoke`: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7,
+  the gate reading "OK: all 2 classes ran".
+- **The E1 ends rebuilt:** `make-forager-ends.sh` on a fresh shallow clone of Forager's `pre-main` (`947f1be2`, with
+  `a0535ece` reachable) gave 63 values, as at -102.
+- **Reverts D, E and F's result files are lost** with the old container, as -102 warned. Plumb re-runs the three at the
+  current head and says so.
+- **Plumb Ledger, session 13,** dispatched in the background on Opus, in -102's order: the three reverts re-run and
+  committed; `OsmPath` and `StdPath` under -97, each test seen failing over stubs first (-101); the path-cost comparison
+  (-99); the `(int)` and `interpolateEle` reverts; then `RoutingParamCollector` and `SearchBoundary`. The merge of
+  `brouter-port` into 5b waits for the step boundary. The context watcher runs at 180,000.
+- **The record branch is `ccr-7e682f25-4tqqon`,** this session's, cut from `main` at `d22a302`, in place of -102's
+  `ccr-362633cb-61f3bw`, whose PR is merged. The planner's call; the entries reach `main` by PR on the owner's word.
+**Notes:** Written by the planner session by hand. Next free ID -104.
