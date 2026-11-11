@@ -214,3 +214,66 @@ that does not reach the memory path. Its strata are not green: R and DL wait on 
    (CollectOutreachersTest 2, R 1, DL 2, as local); 0 ` e: `; both iOS klibs BUILD SUCCESSFUL; simulator 24/0; arm64
    gate 7/0. Simulator-checked.
 4. 8c (time limit, `catch (Error)`), 8d (heights in `RouteOutcome.Found`, -122).
+
+## 5. Session 31
+
+Plumb Ledger, session 31, `brouter-port-5b` `0ab64b6` to the head that carries this section (fast-forward only).
+Trailer on every commit `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan on every staged diff: 0, no hit to fix.
+
+**Done:**
+1. **A revert F0 catches** (`step8/05-revert-f0-endnode-cut.txt`; prediction pushed first, `b62ea53`): compileTrack's
+   final-track end-node cut removed (`RoutingEngine.kt:896`, Java `:2272-2275`). Chosen because every route ends with
+   the re-tracking pass, which compiles through that line. Predicted: nodes the first field to differ, the port one more,
+   cost equal. Observed: 0 ` e: `, fresh XML, F0 1 test 1 failure, "nodes expected:<226> but was:<227>"; the printed
+   tuple: kind and cost (5302) equal, distance 5047 against 5086, both digests differ. **The prediction held.** Restored
+   `cmp` equal. F0 has now been seen red on a wrong port.
+2. **8b, the memory path** (`543693e`): `RoutingEngine.java:1970-2040` into `findTrackInner`: `memoryPanicMode`,
+   `needNonPanicProcessing`, the open border list back into the open set when it empties, `collectOutreachers`, the
+   `canEscape` sweep, `clearTemp`, the second bounds check, "memory limit reached" and panic mode; the two `logInfo`
+   lines not kept (quite, no log). Compiled with 0 ` e: ` and no fix. **R and DL pass on first run** over the port:
+   R 1534 cases (oracle route 968, refused 354, error 212), 0 mismatches; DL-lat 59 (501 draws) and DL-lon 59 (326
+   draws), 0 mismatches. Full fresh `:brouter:jvmTest --rerun-tasks`: 79 XML, 163 tests, 2 failures
+   (CollectOutreachersTest), 0 ` e: `.
+3. **MP64, ML5, PM5** (`31aa7b1`, `RoutingEngineMemoryTest`): 1b's `RGenerator` as `E3MemoryTest` builds it (its seeds
+   and tile; the 20 km, ratio 5 arguments repeated, held by each oracle run's digest against its row), the ids of
+   `expected-1b`'s rows within 1b's cap, compared as DL. **All three pass on first run:** MP64 59 (86 draws), ML5 59
+   (246), PM5 55 (1180), 0 mismatches each (3 tests, fresh XML). `E3MemoryTest`'s companion made `internal` (visibility
+   only), as `E3DLTest`'s was in session 30.
+4. **-90's revert** (`step8/06-revert-isinmemorybounds.txt`; prediction pushed first, `e501548`): `return total <=
+   currentmaxmem` to `>` in `OsmNodesMap.isInMemoryBounds` (`:123`; the prediction said `:122`, same string). 0 ` e: `,
+   4 fresh XML, 7 tests, 6 failures. MP64 59/59, PM5 55/55, R 805, DL-lat 59/59, DL-lon 59/59 mismatches, all with the
+   port "memory limit reached"; ML5 0. **The prediction held** on every stratum it named; F0 (not predicted) also red, on
+   kind. Restored `cmp` equal.
+5. **A revert ML5 alone catches** (`step8/07-revert-ml5-limit-message.txt`; prediction pushed first, `7e24058`): the
+   limit's message (`RoutingEngine.kt:719`) to "memory limit". Only ML5's rows carry the limit. Observed: ML5 59/59 on
+   [kind] only; F0, R, DL-lat, DL-lon, MP64, PM5 0. **Held.** Restored `cmp` equal.
+6. **CollectOutreachersTest (-61), not touched:** its 2 failures are unchanged with the engine driving
+   `collectOutreachers`: the same `C` line (`oracle [C 38715 41099 41099] port [C 39396 37387 ...]`) and "canEscape did
+   not answer both ways: false/true 0/3587" as 5b's record. No news.
+7. **CI read:** `543693e` (run 43098746396): JVM `TOTAL: tests 163, failures 2` (CollectOutreachersTest), 0 ` e: `,
+   `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` BUILD SUCCESSFUL, simulator 24/0, arm64 gate 7/0
+   ("success"). `31aa7b1` (run 43099991963): JVM 166 tests, 2 failures (the same), 0 ` e: `, both iOS klibs, simulator
+   24/0, gate 7/0. Simulator-checked. `e501548`'s run was cancelled by the next push (docs only).
+
+**[I]/[?]:**
+- [I] The stratum-alone reverts: ML5's is item 5. PM5's and MP64's were not run. PM5's candidate is a panic-mode line
+  (only memory class 5 panics in 1b), but ML5's cases panic too (54 of 59), so a panic edit may not be PM5's alone.
+  MP64 showed neither panic nor the limit in 1b, and R and DL at memory class 64 reach the same collection, so no
+  revert MP64 alone catches has been found. Both are caught by -90's revert, with R and DL.
+- [I] ML5's own revert moves a message, not a decision; a wrong choice of when to throw the limit is not yet shown caught.
+- [I] No stack overflow or out-of-memory in any memory-path run (the 5b graph half is iterative).
+- [?] Kotlin/Native numbers and `Throwable.toString`: step 10. iOS: simulator-checked only.
+
+**Questions for the planner:**
+1. Is a revert that MP64 alone catches required, given that R and DL reach the same memory path at memory class 64? If
+   so, which property of MP64 (20 to 100 km in one tile) should it target?
+2. Is ML5's message revert enough for ML5, or should it also carry a revert of when the limit is thrown?
+
+**Are 8a and 8b complete?** 8a: R and DL now pass whole and F0 has caught a wrong port; by -123's terms, complete. 8b:
+the memory path is ported and its three strata pass, -90's revert bites as predicted; complete except for the
+stratum-alone reverts of MP64 and PM5 (question 1).
+
+**Next:**
+1. The planner's answers to questions 1 and 2; if owed, the MP64 and PM5 reverts, predictions pushed first.
+2. CI for this head (docs only).
+3. 8c (terminate, the time limit, the progress count, `catch (Error)`), 8d (heights in `RouteOutcome.Found`, -122).
