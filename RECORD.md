@@ -3936,3 +3936,30 @@ between 108k and 194k of context. That is the context at the end, not the tokens
 - **The record branch is `ccr-7e682f25-4tqqon`,** this session's, cut from `main` at `d22a302`, in place of -102's
   `ccr-362633cb-61f3bw`, whose PR is merged. The planner's call; the entries reach `main` by PR on the owner's word.
 **Notes:** Written by the planner session by hand. Next free ID -104.
+
+**Kind:** outcome
+**ID:** 2026-10-28-104
+**Timestamp:** 2026-11-11T05:42:16Z
+**Continues:** 2026-10-28-90, 2026-10-28-101, 2026-10-28-103
+**Title:** Step 6, Plumb's session 13: handed off at the watcher's limit after 12 minutes, with `OsmPath` and `StdPath`
+drafted but not compiled; a coder starts at about 61k of context; a wrong premise of the planner's
+**Observed:** Plumb Ledger, session 13, `brouter-port-5b` `a83ff3f` to `4815a6f` (one docs-only commit; clean tree; trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name; checked by the planner).
+- **Nothing in `brouter/` changed.** The drafts (`OsmPath`, `StdPath`, `PathEngines`, `StdPathTest`, `StartPathTest`, 1,457
+  lines) are under `docs/audits/2026-11-06-brouter-port-step6/s13-drafts/` as `.kt.txt`, outside the source sets. None has
+  been compiled, and none has been seen failing over stubs (-101). Section 10 of the step 6 report lists six steps for
+  session 14.
+- **Reverts D, E and F were not re-run.** Their result files are still missing (-102, -103).
+- **The baseline, read by the planner** from Plumb's own run at `a83ff3f`, which finished after the handoff
+  (`./gradlew :brouter:jvmTest --rerun-tasks`, 7m 31s): 130 tests, 2 failed, both `CollectOutreachersTest` (-61); 0 ` e: `
+  lines. Its first attempt failed before any test, on HTTP 429 from Maven Central for okio-jvm, annotations and
+  atomicfu-jvm [R, as reported]. That is infrastructure.
+- **Cost, measured by the planner from the transcript:** the first assistant turn already carried 60,764 tokens of
+  context, before any file was read. The watcher fired at 183,054 (05:39:57Z), and the last turn read 192,787. Plumb
+  estimated its own context at "about 80–90k". The estimate was about 100k low, so a coder's self-estimate is not used
+  as a measure. A coder has about 120k of working room per session.
+- **A wrong premise, the planner's:** -103's dispatch placed `coder-profile.md` on `brouter-port-5b`. It is only on
+  `main`. Plumb found it there.
+**So step 6 has not moved in code.** Session 14 starts from section 10's list, with the baseline already read. It reads
+the drafts against Java one method at a time, not both Java files whole.
+**Notes:** Written by the planner session by hand. Next free ID -105.
