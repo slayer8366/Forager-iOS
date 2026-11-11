@@ -1,0 +1,28 @@
+Step 8b, session 32: a revert in the condition that throws "memory limit reached" (RECORD -124, decision 3), on 8deeb46
+plus the §5 correction (docs only). Session 31's ML5 revert (07) moved the message, not the decision.
+
+Edit (one character, port only): router/RoutingEngine.kt:718, findTrackInner (Java :2027),
+  "if (maxTotalCost < 1000000000 || needNonPanicProcessing || fastPartialRecalc) {"
+  ->  "if (maxTotalCost <= 1000000000 || needNonPanicProcessing || fastPartialRecalc) {"
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh (timeout 1200 s, the planner's 20 minutes); filter
+*RoutingEngine*Test (F0, R, DL, MP64, ML5, PM5: 7 tests in 4 classes).
+
+WHAT IT DOES: maxTotalCost starts at 1000000000 (or a guide's cost + 5000, smaller) and only ever decreases (:781-785), so
+"<= 1000000000" is always true. The edit therefore throws "memory limit reached" at every point where Java would set
+memoryPanicMode instead (:2031), and changes nothing where Java already throws.
+
+CAN IT LOOP FOR EVER? No. It only turns a panic into a throw; the throw ends the search (doRouting catches it, :318).
+It removes no exit and adds no path to the open set. Run under the time limit all the same.
+
+PREDICTION (pushed before the run):
+- 0 "e: " lines; 4 fresh XML files, 7 tests; every oracle-against-expected-1b assertion passes (the oracle is untouched).
+- PM5 FAILS: 55 of 55 mismatches, each with the port's kind "memory limit reached" and the oracle's not (PM5 is
+  selected for panic mode without the limit, E3MemoryTest:43); the port's other five fields those of the empty track.
+- ML5 PASSES, 0 mismatches: every ML5 case already throws the limit in Java; where Java panicked first (54 of 59 in
+  1b), the port now throws at the panic instead of later, and the outcome is the same tuple (the limit, empty track).
+- MP64 PASSES, 0: 1b's selection saw neither panic nor the limit at memory class 64.
+- F0, R, DL-lat, DL-lon PASS, 0 each, on the premise that no case of theirs reaches panic mode. That premise is shown
+  for MP64 only; for R and DL it is inferred from "only memory class 5 panics in 1b" and not measured. If R or DL fail,
+  each failure must be the port's kind "memory limit reached" against an oracle that is not the limit; any other
+  failure means a stale or wrong run.
+- After restore: cmp equal; no src difference from the commit carrying this prediction.
