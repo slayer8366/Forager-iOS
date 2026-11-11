@@ -1,0 +1,38 @@
+Session 15, revert H at 15ac2a8 (prediction 09-revert-H-interpolateEle-prediction.txt, pushed in 4ffae38 before
+the run). revert.sh unchanged, run from a copy in scratch. 9-digit numbers redacted as <int>.
+
+Edit (OsmPath.kt interpolateEle):
+-        return (e1 * (1.0 - fraction) + e2 * fraction).toInt().toShort()
++        return (e1 * (1.0 - fraction) + e2 * fraction + 0.5).toInt().toShort()
+
+== runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 2
+TOTAL: tests 4, failures 2, errors 0, skipped 0 in 2 files
+TOTAL: tests 4, failures 2, errors 0, skipped 0 in 2 files
+testcase name="startPathsMatchTheOracleFromForagersEnds[jvm]"
+message="java.lang.AssertionError: fastbike-asia-pacific R-fastbike-asia-pacific-002 detail true: line 2 of 9/9: oracle [start1 cost=35 selev=103 airdistance=84 sourceNode=n<int>:<int> targetNode=n1053
+testcase name="interpolateEleMatchesTheOracle[jvm]"
+message="java.lang.AssertionError: case 2: interpolateEle(-26070, -484, 0.221) expected:&lt;-20415&gt; but was:&lt;-20414&gt;
+
+== full messages, read from the two fresh XML files (whole message attribute, token by token):
+StdPathTest.interpolateEleMatchesTheOracle (104 characters, whole):
+  case 2: interpolateEle(-26070, -484, 0.221) expected:<-20415> but was:<-20414>
+  (e1 is a seeded 40000-range value wrapped by toShort(); raw -20415.2, truncation -20415, revert -20414.)
+StartPathTest.startPathsMatchTheOracleFromForagersEnds (1,778 characters): fastbike-asia-pacific
+  R-fastbike-asia-pacific-002 detail true, line 2 of 9 (start1); 47 tokens each side; 6 differ:
+  originElement height 102 (oracle) / 103 (port), position equal; ehbu 175000 / 0; time, energy, totalTime,
+  totalEnergy (float bits) differ. cost=35 on both sides.
+
+Against the prediction:
+  - interpolateEleMatchesTheOracle: failed at case 2 (within the first 10), port = oracle + 1. As predicted.
+  - startPathsMatchTheOracleFromForagersEnds: failed on fastbike-asia-pacific, detail true, a start line, the
+    originElement's height one higher in the port. As predicted. NOT as predicted: the case. I expected F0h's
+    first case (or a later F0h case); it failed on R's second end on that profile, after all 2 F0 and 8 F0h cases
+    and R's first passed in both modes. Why F0h's cut starts did not bite is not known [?]: not checked whether
+    their raw interpolated heights are integral or their fractions fall on the unchanged side.
+    The deltaH feed showed as predicted ("possibly cost, through deltaH"): ehbu, time and energy moved; cost did not.
+  - pathsMatchTheOracleOnEveryStdProfile and startDirectionIsUnsupported passed. As predicted. 2 of 4 failed.
+Restored (cmp equal); git status after the run showed no source change. So the cut-start interpolation (RECORD -62)
+is covered by StartPathTest on R's ends; F0h's coverage of it is unshown.
