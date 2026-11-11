@@ -1,0 +1,18 @@
+Step 8c, session 34: the oracle alone (no port in the run), doRun(1) on FK9's 10 cases (RECORD -126, decision 1).
+Run from a scratch test copied from RoutingEngineStopTest's helpers (cases, oracle, params), not committed.
+Counted: the first word of each oracle message (getErrorMessage().substringBefore(' ')). Counts only (E1).
+
+Expectation, written before the run:
+  The limit is checked only at _findTrack's loop head (RoutingEngine.java:1979-1983), under the operation name it was
+  given. tryFindTrack runs findTrack("target-island-check", ...) for every section (:961) before any pass, and startTime
+  is taken at doRun's start, so waypoint matching and tile loading already use more than 1 ms. Expected: 10 of 10
+  first words "target-island-check" (message "target-island-check timeout after 0 seconds"), no "pass0".
+  A guess: that no case finishes its preparation inside 1 ms (I think none can, with tile loading).
+
+Observation:
+  Tree at 3840315 (the port not applied: RoutingEngine.kt's 8c members are stubs; the scratch calls only the oracle).
+  Log: 0 lines "^e: "; fresh JUnit XML (written seconds before it was read): tests 1, failures 0, errors 0.
+  First words of the oracle's messages: target-island-check 10 (of 10). pass0 0, pass1 0, re-tracking 0.
+  Kinds (E3Outcome.kindOf): family:timeout 10.
+  As expected. The ruling's premise has its evidence: on the oracle alone the island check is where the limit strikes
+  when it strikes early. The scratch test was deleted after the run; it is not in any commit.
