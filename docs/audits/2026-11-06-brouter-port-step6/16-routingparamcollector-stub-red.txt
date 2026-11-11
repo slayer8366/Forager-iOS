@@ -1,0 +1,14 @@
+Session 16: RoutingParamCollectorTest seen failing over the stub (before the port).
+
+Stub: RoutingParamCollector.kt, getWayPointList and setParams each TODO("RoutingParamCollector.<method> stub").
+The setParams tests build the port's waypoints by copying the oracle's, so they reach setParams's stub, not
+getWayPointList's (a first version reached getWayPointList's stub from all three tests; changed before this run).
+Run: filter *RoutingParamCollectorTest, from a stamp. ' e: ' 0; HTTP 429 0; fresh XML 1; TOTAL tests 3, failures 3.
+Messages (the whole of each read with ElementTree; positions left out here):
+- wayPointListMatchesTheOracle: "Forager's form, an F0h case expected:<[name=from ... ]> but was:<[throws
+  kotlin.NotImplementedError: An operation is not implemented: RoutingParamCollector.getWayPointList stub]>"
+- setParamsMatchesTheOracleOnForagersKeys: "26 of 26 profiles failed ...; by cause: {...car-eco-nocost.brf,
+  use_dynamic_range 0 ... but was:<[throws kotlin.NotImplementedError: An operation is not implemented:
+  RoutingParamCollector.setParams stub]>"
+- keysForagerNeverPassesAreRefusedAsUnsupported: "the fresh contexts expected:<[alternativeIdx=0 ...]> but was:<[throws
+  kotlin.NotImplementedError: An operation is not implemented: RoutingParamCollector.setParams stub]>"
