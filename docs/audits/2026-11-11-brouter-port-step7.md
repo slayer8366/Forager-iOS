@@ -283,3 +283,74 @@ tree clean.
 3. `VoiceHintProcessor` (`process`, `postProcess`), likely its own session; a revert on its catching-range comparison.
 4. Then `readBinary`'s file branch and the formats (`Formatter` whole, `FormatGpx`, `FormatJson`, `FormatKml`,
    `FormatCsv`), compared by digest.
+
+## 7. Session 20: the hint code's first half (partial; stopped on a test-comparison defect)
+
+Plumb Ledger, session 20, `brouter-port-5b` `737fdf2` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done:**
+- **Stubs and tests, red first** (`d2d8e34`, pushed red on purpose): `VoiceHint` whole (fields real, every method a
+  stub), `VoiceHintList`'s `setTransportMode(int)`, `getTransportMode`, `transportMode()`, `getLocusRouteType`;
+  `OsmTrack`'s `registerDetourForId`, `addDetours`, `appendDetours`, `getFromDetourMap`, `getMatchedWaypoint`,
+  `getMinDistance`, `removeVoiceHint`. Tests: `VoiceHintTest` (2 tests: 30,000 synthetic seeded hints, positions zero,
+  every Java field compared by name after set-up and after `calcCommand`, messages by index, floats by bits; Java's
+  constants by name; `VoiceHintList` on 48 int modes and the 4 flag pairs), `TrackDetourTest` (2 tests: detour maps
+  registered in test code on both engines over `TrackEngines`' walks, compared chain by chain as identity indices;
+  `addDetours`' five variants including the cast and the null `nodesMap`; `appendTrack`'s detour branch; `appendDetours`
+  twice, `lastorigin` and the origins it sets; the three hint helpers), and `TrackHeadTest`'s `copyDetours` on a real
+  detour map every other run.
+- **The port, written but NOT pushed** (the stop below): `03-s20-port-unpushed.patch` in `step7/` holds it, against
+  `d2d8e34`. `processVoiceHints`' hint body and `startSection` were not ported (see "A premise").
+
+**Runs** [R, read from fresh XML; result dir deleted before each run]:
+- Over the stubs: 5 tests, 5 failed, 0 ` e: `. Four on `NotImplementedError` naming a stub (`getFromDetourMap`,
+  `getMinDistance`, `registerDetourForId` in `TrackHeadTest`, `VoiceHintList.getTransportMode`); `voiceHintMatchesTheOracle`
+  as a comparison failure whose value is `throws NotImplementedError` from `getTime` (the test wraps calls so that
+  exceptions compare as values). No literal was changed for the E1 scan.
+- On the port, tests as committed: 5 tests, **2 failed**, 0 ` e: `. `TrackHeadTest`, `hintHelpersMatchTheOracle`,
+  `voiceHintListMatchesTheOracle` passed. The two failures are defects in my tests, not port mismatches:
+  1. `voiceHintMatchesTheOracle`, case 1: "calcCommand expected:<v[null]> but was:<v[kotlin.Unit]>". The test's `res`
+     renders a void reflective call as `null` and a Kotlin `Unit` call as `kotlin.Unit`. It was never reached over the
+     stubs (case 0 failed earlier, at `getTime`).
+  2. `detourMethodsMatchTheOracle`: an NPE in the **oracle's** `CompactLongMap.moveToFrozenArrays` under
+     `OsmTrack.copyDetours`, at the test's second copy from the same registered map: Java's `FrozenLongMap` empties the
+     map it is built from, and my set-up copied one source twice.
+- **Stopped there** (the dispatch's stop: changing a test's comparison after seeing the port's result, RECORD -107). The
+  committed tests are unchanged.
+- **A diagnostic only, not committed as tests:** with both defects fixed (`05-s20-diagnostic-test-changes-not-applied.patch`:
+  `Unit` rendered as null; a fresh registered map per copy; a probe of a second copy), the same three classes: 5 tests,
+  0 failed, 0 ` e: `. `VoiceHintTest` 30,000 cases, 50,552 bad ways, 4,031 give-ways, every command `calcCommand` makes
+  reached (15 of them, BL kept). `TrackDetourTest` 20 groups, 100 walks, 429 registered, 8,444 chains compared, the
+  `addDetours` cast (`ClassCastException`) and null `nodesMap` (NPE) thrown alike, `appendDetours`' out-of-range read
+  thrown alike 9 times; a second copy from a consumed map throws NPE on **both** engines (the port's `FrozenLongMap`
+  empties its source as Java's does). Helpers 400 cases, 247 hints removed, 603 waypoints matched. `TrackHeadTest` 100
+  runs, 50 detour maps copied.
+- **`copyDetours` over a null-returning stub** (`04-copydetours-null-stub-result.txt`, `revert.sh` from a scratch copy,
+  over the uncommitted port): 0 compile errors, 1 fresh XML, `TrackHeadTest` 1 of 1 failed: "fastbike-asia-pacific.brf
+  flags (false, false): detourMap expected:<FrozenLongMap> but was:<null>", the first run with a detour map. Restored by
+  `cmp`; the forward line present after. Session 19's [?] on that check is closed.
+- No full `:brouter:jvmTest --rerun-tasks` was run: no code was pushed.
+
+**A premise in §6 (item 2), for the planner:** `processVoiceHints`' hint body (`OsmTrack.java:462-534`) ends in
+`VoiceHintProcessor.process` and `postProcess`, and its inputs are a local list, so the body cannot be compared with the
+oracle until `VoiceHintProcessor` is ported. §6 lists the body with item 2 and `VoiceHintProcessor` as item 3; they are
+one unit for testing. `startSection` is private and reached only from the body, so it goes with it.
+
+**The revert:** not run. It is on this session's code, which is not pushed; it waits on the ruling below.
+
+**CI:** none read; the only code push was the red commit `d2d8e34`, which is red by design.
+
+**Unverified:**
+- [I] The port's `hasGiveWay` evaluates the give-way test before `wayKeyValues`' null check, the reverse of Java's order;
+  both throw the same NPE and nothing else has side effects, so the result is the same. Covered by the diagnostic only.
+- [I] Native: nothing here is tested off the JVM.
+- [?] Everything in the port is evidenced only by the diagnostic run, not by committed tests.
+
+**Next, for session 21** (after the planner's ruling on the two test defects):
+1. If the fixes in `05-...patch` are allowed: apply them to the tests and `03-...patch` to the sources, run the three
+   classes, then a full fresh `:brouter:jvmTest --rerun-tasks`, push, read CI.
+2. The one revert on that code, predicted in a committed file first (for instance `calcCommand`'s `cmdAngle < -5f`
+   boundary, or `addDetours`' `source.nodesMap!!.contains(id)` negated).
+3. `VoiceHintProcessor` together with `processVoiceHints`' hint body and `startSection`, stubs and red first.
+4. Then `readBinary`'s file branch and the formats.

@@ -1,0 +1,395 @@
+diff --git a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt
+index b6d8899..482129a 100644
+--- a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt
++++ b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt
+@@ -9,7 +9,9 @@ import com.zynergylabs.forager.brouter.util.FrozenLongMap
+  * BRouter 1.7.10's `btools.router.OsmTrack`. Step 7, session 19: the reached core (step 7's report, §5): the fields,
+  * `OsmPathElementHolder`, `addNode`, `copyDetours`, `buildMap`, `readBinary`'s null guard, `containsNode` (replacing
+  * RECORD -94's stub), `getLink`, `appendTrack`, `getTotalSeconds`, `prepareSpeedProfile` and `processVoiceHints`' head.
+- * The hint body, the detour methods and the file branch of `readBinary` are the hint code's sessions (RECORD -111).
++ * Session 20 (RECORD -111): the detour methods (`registerDetourForId`, `addDetours`, `appendDetours`,
++ * `getFromDetourMap`), `getMatchedWaypoint`, `getMinDistance` and `removeVoiceHint`. The hint body of
++ * `processVoiceHints` (with `startSection`) and the file branch of `readBinary` are later sessions.
+  * On Forager's path the reference track `OsmPath` takes is most likely always null (RECORD -94 [I], step 8 checks).
+  */
+ internal class OsmTrack {
+@@ -59,17 +61,87 @@ internal class OsmTrack {
+         nodes.add(0, node)
+     }
+ 
+-    fun registerDetourForId(id: Long, detour: OsmPathElement?): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
++    fun registerDetourForId(id: Long, detour: OsmPathElement?) {
++        val map = detourMap ?: CompactLongMap<OsmPathElementHolder>().also { detourMap = it }
++        val nh = OsmPathElementHolder()
++        nh.node = detour
++        var h = map.get(id)
++        if (h != null) {
++            while (h!!.nextHolder != null) {
++                h = h.nextHolder
++            }
++            h.nextHolder = nh
++        } else {
++            map.fastPut(id, nh)
++        }
++    }
+ 
+     fun copyDetours(source: OsmTrack) {
+         detourMap = source.detourMap?.let { FrozenLongMap(it) }
+     }
+ 
+-    fun addDetours(source: OsmTrack): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
++    fun addDetours(source: OsmTrack) {
++        val map = detourMap
++        if (map != null) {
++            val tmpDetourMap = CompactLongMap<OsmPathElementHolder>()
++
++            (map as FrozenLongMap<OsmPathElementHolder>).getValueList()
++            val oldidlist = map.getKeyArray()
++            for (i in oldidlist.indices) {
++                val id = oldidlist[i]
++                val v = map.get(id)
++
++                tmpDetourMap.put(id, v!!)
++            }
++
++            val sourceMap = source.detourMap
++            if (sourceMap != null) {
++                val idlist = (sourceMap as FrozenLongMap<OsmPathElementHolder>).getKeyArray()
++                for (i in idlist.indices) {
++                    val id = idlist[i]
++                    val v = sourceMap.get(id)
++                    if (!tmpDetourMap.contains(id) && source.nodesMap!!.contains(id)) {
++                        tmpDetourMap.put(id, v!!)
++                    }
++                }
++            }
++            detourMap = FrozenLongMap(tmpDetourMap)
++        }
++    }
+ 
+     var lastorigin: OsmPathElement? = null
+ 
+-    fun appendDetours(source: OsmTrack): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
++    fun appendDetours(source: OsmTrack) {
++        if (detourMap == null) {
++            detourMap = if (source.detourMap == null) null else CompactLongMap()
++        }
++        if (source.detourMap != null) {
++            val map = detourMap!!
++            val pos = nodes.size - source.nodes.size + 1
++            // Java reads this element and never uses it; read here too, so that an index out of range throws as Java's.
++            if (pos > 0) {
++                nodes[pos]
++            }
++            for (node in source.nodes) {
++                val id = node.getIdFromPos()
++                val nh = OsmPathElementHolder()
++                if (node.origin == null && lastorigin != null) {
++                    node.origin = lastorigin
++                }
++                nh.node = node
++                lastorigin = node
++                var h = map.get(id)
++                if (h != null) {
++                    while (h!!.nextHolder != null) {
++                        h = h.nextHolder
++                    }
++                    h.nextHolder = nh
++                } else {
++                    map.fastPut(id, nh)
++                }
++            }
++        }
++    }
+ 
+     fun buildMap() {
+         val map = CompactLongMap<OsmPathElementHolder>()
+@@ -164,14 +236,25 @@ internal class OsmTrack {
+         showSpeedProfile = showSpeedProfile or t.showSpeedProfile
+     }
+ 
+-    fun getMatchedWaypoint(idx: Int): MatchedWaypoint? = TODO("step 7: hint code, session 20 (RECORD -111)")
++    fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
++        val wps = matchedWaypoints ?: return null
++        for (wp in wps) {
++            if (idx == wp.indexInTrack) {
++                return wp
++            }
++        }
++        return null
++    }
+ 
+     fun getTotalSeconds(): Int {
+         val s = if (nodes.size < 2) 0f else nodes[nodes.size - 1].getTime() - nodes[0].getTime()
+         return (s + 0.5).toInt()
+     }
+ 
+-    fun getFromDetourMap(id: Long): OsmPathElementHolder? = TODO("step 7: hint code, session 20 (RECORD -111)")
++    fun getFromDetourMap(id: Long): OsmPathElementHolder? {
++        val map = detourMap ?: return null
++        return map.get(id)
++    }
+ 
+     fun prepareSpeedProfile(rc: RoutingContext) {
+         // sendSpeedProfile = rc.keyValues != null && rc.keyValues.containsKey( "vmax" );
+@@ -191,9 +274,32 @@ internal class OsmTrack {
+         TODO("step 7: hint code, a later session (RECORD -111)")
+     }
+ 
+-    internal fun getMinDistance(): Int = TODO("step 7: hint code, session 20 (RECORD -111)")
++    internal fun getMinDistance(): Int {
++        val v = voiceHints
++        if (v != null) {
++            return when (v.transportMode()) {
++                VoiceHintList.TRANS_MODE_CAR -> 20
++                VoiceHintList.TRANS_MODE_FOOT -> 3
++                else -> 5
++            }
++        }
++        return 2
++    }
+ 
+-    fun removeVoiceHint(i: Int): Unit = TODO("step 7: hint code, session 20 (RECORD -111)")
++    fun removeVoiceHint(i: Int) {
++        val v = voiceHints
++        if (v != null) {
++            var remove: VoiceHint? = null
++            for (vh in v.list) {
++                if (vh.indexInTrack == i) {
++                    remove = vh
++                }
++            }
++            if (remove != null) {
++                v.list.remove(remove)
++            }
++        }
++    }
+ 
+     companion object {
+         fun readBinary(
+diff --git a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHint.kt b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHint.kt
+index 18bba39..38dbcbc 100644
+--- a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHint.kt
++++ b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHint.kt
+@@ -15,7 +15,7 @@ internal class VoiceHint {
+     internal var distanceToNext: Double = 0.0
+     internal var indexInTrack: Int = 0
+ 
+-    fun getTime(): Float = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++    fun getTime(): Float = oldWay?.time ?: 0f
+ 
+     internal var angle: Float = Float.MAX_VALUE
+     internal var lowerBadWayAngle: Float = -181f
+@@ -27,17 +27,162 @@ internal class VoiceHint {
+ 
+     internal var roundaboutExit: Int = 0
+ 
+-    fun isRoundabout(): Boolean = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++    fun isRoundabout(): Boolean = roundaboutExit != 0
+ 
+-    fun addBadWay(badWay: MessageData?): Unit = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++    fun addBadWay(badWay: MessageData?) {
++        if (badWay == null) {
++            return
++        }
++        val b = badWays ?: ArrayList<MessageData>().also { badWays = it }
++        b.add(badWay)
++    }
++
++    fun getExitNumber(): Int = roundaboutExit
+ 
+-    fun getExitNumber(): Int = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++    fun calcCommand() {
++        val bw = badWays
++        if (bw != null) {
++            for (badWay in bw) {
++                if (badWay.isBadOneway()) {
++                    continue
++                }
++                if (lowerBadWayAngle < badWay.turnangle && badWay.turnangle < goodWay!!.turnangle) {
++                    lowerBadWayAngle = badWay.turnangle
++                }
++                if (higherBadWayAngle > badWay.turnangle && badWay.turnangle > goodWay!!.turnangle) {
++                    higherBadWayAngle = badWay.turnangle
++                }
++            }
++        }
+ 
+-    fun calcCommand(): Unit = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++        var cmdAngle = angle
+ 
+-    fun formatGeometry(): String = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++        // fall back to local angle if otherwise inconsistent
++        if (angle == Float.MAX_VALUE) {
++            cmdAngle = goodWay!!.turnangle
++        }
++        if (cmd == BL) return
+ 
+-    fun hasGiveWay(): Boolean = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++        if (roundaboutExit > 0) {
++            cmd = RNDB
++        } else if (roundaboutExit < 0) {
++            cmd = RNLB
++        } else if (is180DegAngle(cmdAngle) && cmdAngle <= -179f && higherBadWayAngle == 181f && lowerBadWayAngle == -181f) {
++            cmd = TU
++        } else if (cmdAngle < -159f) {
++            cmd = TLU
++        } else if (cmdAngle < -135f) {
++            cmd = TSHL
++        } else if (cmdAngle < -45f) {
++            // a TL can be pushed in either direction by a close-by alternative
++            if (cmdAngle < -95f && higherBadWayAngle < -30f && lowerBadWayAngle < -180f) {
++                cmd = TSHL
++            } else if (cmdAngle > -85f && lowerBadWayAngle > -180f && higherBadWayAngle > -10f) {
++                cmd = TSLL
++            } else {
++                if (cmdAngle < -110f) {
++                    cmd = TSHL
++                } else if (cmdAngle > -60f) {
++                    cmd = TSLL
++                } else {
++                    cmd = TL
++                }
++            }
++        } else if (cmdAngle < -21f) {
++            if (cmd != KR) { // don't overwrite KR with TSLL
++                cmd = TSLL
++            }
++        } else if (cmdAngle < -5f) {
++            if (lowerBadWayAngle < -100f && higherBadWayAngle < 45f) {
++                cmd = TSLL
++            } else if (lowerBadWayAngle >= -100f && higherBadWayAngle < 45f) {
++                cmd = KL
++            } else {
++                if (lowerBadWayAngle > -35f && higherBadWayAngle > 55f) {
++                    cmd = KR
++                } else {
++                    cmd = C
++                }
++            }
++        } else if (cmdAngle < 5f) {
++            if (lowerBadWayAngle > -30f) {
++                cmd = KR
++            } else if (higherBadWayAngle < 30f) {
++                cmd = KL
++            } else {
++                cmd = C
++            }
++        } else if (cmdAngle < 21f) {
++            // a TR can be pushed in either direction by a close-by alternative
++            if (lowerBadWayAngle > -45f && higherBadWayAngle > 100f) {
++                cmd = TSLR
++            } else if (lowerBadWayAngle > -45f && higherBadWayAngle <= 100f) {
++                cmd = KR
++            } else {
++                if (lowerBadWayAngle < -55f && higherBadWayAngle < 35f) {
++                    cmd = KL
++                } else {
++                    cmd = C
++                }
++            }
++        } else if (cmdAngle < 45f) {
++            cmd = TSLR
++        } else if (cmdAngle < 135f) {
++            if (cmdAngle < 85f && higherBadWayAngle < 180f && lowerBadWayAngle < 10f) {
++                cmd = TSLR
++            } else if (cmdAngle > 95f && lowerBadWayAngle > 30f && higherBadWayAngle > 180f) {
++                cmd = TSHR
++            } else {
++                // Java compares these two with double literals (110., 60.): the float widens, the result is the same.
++                if (cmdAngle.toDouble() > 110.0) {
++                    cmd = TSHR
++                } else if (cmdAngle.toDouble() < 60.0) {
++                    cmd = TSLR
++                } else {
++                    cmd = TR
++                }
++            }
++        } else if (cmdAngle < 159f) {
++            cmd = TSHR
++        } else if (is180DegAngle(cmdAngle) && cmdAngle >= 179f && higherBadWayAngle == 181f && lowerBadWayAngle == -181f) {
++            cmd = TU
++        } else {
++            cmd = TRU
++        }
++    }
++
++    fun formatGeometry(): String {
++        val oldPrio = oldWay?.priorityclassifier?.toFloat() ?: 0f
++        val sb = StringBuilder(30)
++        sb.append(' ').append(oldPrio.toInt())
++        appendTurnGeometry(sb, goodWay!!)
++        val bw = badWays
++        if (bw != null) {
++            for (badWay in bw) {
++                sb.append(" ")
++                appendTurnGeometry(sb, badWay)
++            }
++        }
++        return sb.toString()
++    }
++
++    private fun appendTurnGeometry(sb: StringBuilder, msg: MessageData) {
++        sb.append("(").append((msg.turnangle + 0.5).toInt()).append(")").append(msg.priorityclassifier)
++    }
++
++    fun hasGiveWay(): Boolean {
++        val o = oldWay
++        val nodeKv = o?.nodeKeyValues
++        if (o != null && nodeKv != null) {
++            val giveWay = nodeKv.contains("highway=give_way") || nodeKv.contains("highway=stop")
++            return if (o.wayKeyValues!!.contains("reversedirection=yes")) {
++                giveWay && nodeKv.contains("direction=backward")
++            } else {
++                giveWay && !nodeKv.contains("direction=backward")
++            }
++        }
++        return false
++    }
+ 
+     companion object {
+         internal const val C = 1 // continue (go straight)
+@@ -60,6 +205,6 @@ internal class VoiceHint {
+         internal const val ER = 18 // exit right
+         internal const val END = 100 // end point
+ 
+-        fun is180DegAngle(angle: Float): Boolean = TODO("step 7: VoiceHint, session 20 (RECORD -111)")
++        fun is180DegAngle(angle: Float): Boolean = kotlin.math.abs(angle) <= 180f && kotlin.math.abs(angle) >= 179f
+     }
+ }
+diff --git a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHintList.kt b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHintList.kt
+index a4eb369..c1ce88e 100644
+--- a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHintList.kt
++++ b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/VoiceHintList.kt
+@@ -14,13 +14,27 @@ internal class VoiceHintList {
+         transportMode = if (isCar) TRANS_MODE_CAR else (if (isBike) TRANS_MODE_BIKE else TRANS_MODE_FOOT)
+     }
+ 
+-    fun setTransportMode(mode: Int): Unit = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
++    fun setTransportMode(mode: Int) {
++        transportMode = mode
++    }
+ 
+-    fun getTransportMode(): String = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
++    fun getTransportMode(): String = when (transportMode) {
++        TRANS_MODE_FOOT -> "foot"
++        TRANS_MODE_CAR -> "car"
++        else -> "bike"
++    }
+ 
+-    fun transportMode(): Int = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
++    fun transportMode(): Int = transportMode
+ 
+-    fun getLocusRouteType(): Int = TODO("step 7: VoiceHintList, session 20 (RECORD -111)")
++    fun getLocusRouteType(): Int {
++        if (transportMode == TRANS_MODE_CAR) {
++            return 0
++        }
++        if (transportMode == TRANS_MODE_BIKE) {
++            return 5
++        }
++        return 3 // foot
++    }
+ 
+     companion object {
+         internal const val TRANS_MODE_NONE = 0
