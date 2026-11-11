@@ -3527,6 +3527,8 @@ step 10 answers -61. The draft milestone report is in the Phase 2 report, under 
 - **8, `RoutingEngine` and the entry point,** 2,009 lines, **less 429 for via points, left out by the owner at -24,** so 1,580.
   It has four sub-steps:
   - **8a,** matching and the search without memory pressure: F0 first, then R and DL;
+    **Corrected 2026-11-11 by the planner (-123):** R and DL are not free of memory pressure; 151 of R's StdModel cases
+    and 51 of DL's 118 reach 8b's memory path, so they pass only at 8b.
   - **8b,** the memory path: MP64, ML5, PM5. Revert: `isInMemoryBounds`' comparison flipped;
   - **8c,** terminate, the time limit and the progress count: FK 9 to 11. Revert: `terminated` written but not read;
   - **8d,** `route()` and `checkDataFile` over the engine.
@@ -4569,3 +4571,40 @@ the planner). No stops.
    folder], and logging to a file is not part of a route. **Recorded as not covered:** the port in E3's logged regime.
 **Next:** session 30 reads CI, applies the patch fixing compile errors only, runs F0, then the revert, then R and DL.
 **Notes:** Written by the planner session by hand. Next free ID -123.
+
+**Kind:** outcome
+**ID:** 2026-10-28-123
+**Timestamp:** 2026-11-11T20:12:38Z
+**Continues:** 2026-10-28-89, 2026-10-28-90, 2026-10-28-122
+**Title:** Step 8a, Plumb's session 30: the search ported, F0 passing; the planned revert not caught by F0; R and DL red on
+8b's memory path; -90's premise corrected; the planner's rulings
+**Observed:** Plumb Ledger, session 30, `brouter-port-5b` `2fddfcc` to `0ab64b6` (fast-forward only; ended at 137,970 by
+the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **The 8a port** (`4dcd049`): session 29's patch applied clean and compiled with 0 errors, no fix needed. F0 passes, both
+  routes equal to the oracle on all six fields. Full fresh run: 160 tests, 2 failed (`CollectOutreachersTest`'s) [R].
+- **The §2 revert** (`testPath.cost <` flipped to `>`), prediction pushed first (`70c4c20`): **the prediction failed.** The
+  reverted build compiled and ran, and F0 still passed. `cmp`-equal restore [R]. So F0 through the port has only been
+  seen red over the stub, never over a wrong port.
+- **R and DL** (`377d109`, red on purpose): both fail with a `NotImplementedError` naming 8b's memory path. Full run: 163
+  tests, 5 failed (the known 2, R 1, DL 2) [R].
+- **Diagnostics, run but not committed** (tests restored `cmp`-equal) [R, Plumb's only]: on R, 151 of the 1,180 StdModel
+  cases reach the 8b stub and the other 1,029 equal the oracle; the 354 Kinematic cases are refused by name (-89). On DL,
+  36 of 59 (lat) and 15 of 59 (lon) reach the stub, the rest equal. With the §2 revert applied, R shows 176 mismatches; F0
+  and DL none.
+- `E3DLTest`'s companion changed from `private` to `internal`, so the new DL test reads its seeds.
+**Checked by the planner:**
+- `git ls-remote` `0ab64b6`, a fast-forward of `2fddfcc`; no model name; E1 over `2fddfcc..0ab64b6`: 0.
+- The test diff: two new test files and the one visibility word in `E3DLTest`; no comparison in an existing test changed.
+- **CI on `377d109`** (run 43092122738): `jvm` 163, 5 failed: `CollectOutreachersTest`'s 2, `RoutingEngineRTest` 1,
+  `RoutingEngineDLTest` 2; 0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7,
+  the gate "OK". The earlier runs are Plumb's reading.
+**Corrected, the planner's own premise:** -90 put R and DL in 8a as "the search without memory pressure". That was not
+checked and is false: 151 of R's StdModel cases and 51 of DL's 118 reach the memory path. -90 is corrected in place.
+**Decisions (the planner's, technical):**
+1. **R and DL stay red until 8b,** whole. No split by whether a case reaches the memory path: that would change a
+   comparison after a port result, and 8b is next anyway.
+2. **F0 needs a revert of its own that bites.** R catching the §2 revert shows the search is tested, but a test that has
+   never caught a wrong port is not yet shown to test anything. Session 31 predicts one F0 catches, pushed first.
+3. **8a is not closed** until R and DL pass, which is at 8b. 8b then adds its own strata (MP64, ML5, PM5) and -90's revert
+   (`isInMemoryBounds`' comparison flipped).
+**Notes:** Written by the planner session by hand. Next free ID -124.
