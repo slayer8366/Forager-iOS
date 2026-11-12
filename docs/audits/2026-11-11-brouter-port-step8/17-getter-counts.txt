@@ -21,3 +21,39 @@ EXPECTED (written before the run): RTest's port runs only (the oracle is Java's 
 
 OBSERVED:
 Not run in session 36: stopped at the planner's handoff call (the getter run was started and killed before it wrote counts; the tree restored cmp-equal). The expectation above stands for the next session.
+
+Session 37 (the run): the patch as planned, applied by a script to a separate worktree at 1221a0f (its own build
+directory; this branch's tree never carried it), one run of RoutingEngineRTest, then removed: the three files cmp equal
+to the copies saved before the patch, the scratch counter file deleted, `git status --short` of the worktree empty.
+A first attempt is void and not cited: the script gave the node's getter index 40 in a 21-slot array, so every port run
+that reached it threw (RTest 885 mismatches, every one "Index 40 out of bounds"); restored cmp equal, the index fixed
+to 20, applied again, run again. The run below: 0 "e: " lines, BUILD SUCCESSFUL in 11m, RTest's own line "1534 cases;
+{route=968, refused=354, error=212}; 0 mismatches", as expected.
+
+Counts (calls on the port, one RTest run; the counters are plain increments, so a count is exact only if no two port
+threads increment at once, which I did not check [?]; a count > 0 holds either way):
+getCostfactor 617635307
+getTurncost 403124419
+getUphillCostfactor 403124419
+getDownhillCostfactor 403124419
+getInitialcost 189457238
+getNodeAccessGranted 53329868
+getInitialClassifier 189457238
+getTrafficSourceDensity 0
+getIsTrafficBackbone 8102
+getPriorityClassifier 592581657
+getClassifierMask 189446726
+getMaxspeed 368179
+getUphillcost 403124419
+getDownhillcost 403124419
+getUphillcutoff 403124419
+getDownhillcutoff 403124419
+getUphillmaxslope 403124419
+getDownhillmaxslope 403124419
+getUphillmaxslopecost 403124419
+getDownhillmaxslopecost 403124419
+node.getInitialcost 53329868
+
+RESULT: as expected. 20 of 21 reached. Not reached: getTrafficSourceDensity (0), the one with no call site in the port
+or in BRouter 1.7.10; no test added for it (-128 decision 3). getMaxspeed is reached (368179), so the guess that R's
+routes reach StdPath.computeKinematic's detail pass held as far as a count shows.

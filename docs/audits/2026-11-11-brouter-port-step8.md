@@ -711,3 +711,52 @@ route's cancel owed (rv24)?
 3. The getter counts as `17-getter-counts.txt` plans them (script: a counter per getter, one RTest run, about 11 min).
 4. The coverage read as `18-coverage-osmpath.txt` plans it (`e3Strata`, R6 per case, about 1182 cases).
 5. Item 7's closing list for step 8.
+
+## 12. Session 37 (partial: stopped at the planner's handoff call)
+
+Plumb Ledger, session 37, `brouter-port-5b` `e8b2a6e` to the head that carries this section (fast-forward only; `git
+ls-remote` read `e8b2a6e` before the first push). Trailer on every commit `Co-Authored-By: Claude <noreply@anthropic.com>`.
+E1 scan on every staged diff: 0, no hit to fix.
+
+**Done:**
+1. **CI on `9bf13a8`** (run 43146547580, completed): jvm job `TOTAL: tests 179, failures 2, errors 0` in 82 files
+   (`CollectOutreachersTest` 2 of 2, -61, not touched); 0 ` e: `; "JVM tests" 30m 35s (BUILD FAILED on those 2, as
+   before); "iOS klibs" ran `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64`, BUILD SUCCESSFUL in 52s.
+   ios-smoke: commonTest on the iOS simulator `tests 24, failures 0` (simulator-checked); the arm64 JVM step `tests 7,
+   failures 0`; the gate step success. Production run as printed: both F0 cases nodes, distance, node digest and heights
+   digest equal (true on all four). `grep -c 'caught a StackOverflowError'`: 6 log lines, 3 in the test output and the
+   same 3 in the XML dump.
+2. **Heights through `route()`** (-129 decision 1; `step8/19-8d-heights-and-public-cancel.txt`; predictions `7ae5c31`,
+   test and results `1221a0f`). The rule, written before any run: R's order is `RoutingEngineRTest`'s; its first profile
+   `hiking-mountain` is StdModel and all 59 of its rows route, so the first 10 routed cases are its first 10; no model
+   filter. Unreverted: tests 6, failures 0; R-hiking-mountain-001 to -010 equal on distance, node digest and heights
+   digest; every node of all 10 oracle routes has a height (1148 of 1148): no -62 stop. **rv17 bit** as predicted
+   (`R-hiking-mountain-001: heights digest`, failures 1).
+3. **The public cancel** (-129 decision 2; same file and commits): `aTerminateBeforeThePublicRouteFailsAsTheOracle`.
+   **rv24 bit** as predicted (`F0-inside-across-the-degree-line: Failed`, failures 1). Both reverts: 0 ` e: `, 1 fresh
+   XML, restored cmp-equal, forward change present; restored run tests 6, failures 0.
+4. **The getter counts** (`17-getter-counts.txt`, observed): on a separate worktree, one RTest run (0 mismatches): 20 of
+   21 reached; `getTrafficSourceDensity` 0, as expected; worktree restored cmp-equal and clean. A first attempt was void
+   (my script's index bug, named in the file).
+
+**Not done:**
+- **The full fresh `:brouter:jvmTest --rerun-tasks`**: started on `1221a0f`, killed at the handoff by my own
+  `./gradlew --stop` (meant for the coverage run's daemon; it stopped both). Before it died: 97 PASSED, FAILED only
+  `CollectOutreachersTest`'s 2. So `1221a0f` is pushed **without a completed full local run**; CI on it is the full run.
+- The coverage read (`18-coverage-osmpath.txt`): started under `e3Strata` on the pinned Temurin, killed at the handoff
+  before any count; scratch test deleted, worktree clean. No observation.
+- The closing list for step 8; the CI read of this push.
+
+**[I]/[?]:** [I] no other test newly failing: the killed full run's FAILED lines name `CollectOutreachersTest` only
+(`grep FAILED full.log`). [?] the getter counts are exact only if no two port threads increment at once (not checked).
+
+**Questions for the planner:** none new.
+
+**8d:** decisions 1 and 2 done and bitten; not complete (coverage read, closing list, CI of `1221a0f`). **Step 8:** not
+complete.
+
+**Next:** 1. CI read of this push (TOTAL, ` e: `, both `compileKotlinIos*`, the gate, minutes, `CollectOutreachersTest`,
+overflow count). 2. The coverage read as 18 plans it (scratch test in the session's scratch directory, about an hour on
+4 cores; run it alone). 3. The closing list (§1's rows, each with its section; the "not covered" items of §§4-12).
+
+Context: spent mostly on CI and run waits and reading the report for the closing list.
