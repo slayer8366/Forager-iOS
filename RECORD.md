@@ -5048,3 +5048,44 @@ by the planner).
    adapter and for Forager, reported to the owner.
 3. **Next:** F0h, the CI reads, then step 9's assembled count.
 **Notes:** Written by the planner session by hand. Next free ID -134.
+
+**Kind:** outcome
+**ID:** 2026-10-28-134
+**Timestamp:** 2026-11-12T05:00:34Z
+**Continues:** 2026-10-28-24, 2026-10-28-133
+**Title:** Step 9, Plumb's session 41: F0h equal to the oracle; NT's order plant caught; every one of the 2,126 rows now
+runs through the port in a logic run with 0 mismatches; the production runs are still owed; the planner's rulings
+**Observed:** Plumb Ledger, session 41, `brouter-port-5b` `696dd18` to `1ba6b06` (fast-forward only; called at 150,463,
+ended at 157,995 by the harness's count; 4 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked
+by the planner).
+- **F0h** (`e8ed646`, new `RoutingEngineF0hTest`, the comparison stated before any run): 8 cases, 0 mismatches on the six
+  fields. Its plant (a height one too high) was caught on 8 of 8, on the heights digest only, as predicted [R, Plumb's].
+- **NT's plant** (the entries reversed before the stable sort): **caught, on 23 of 59,** all on cost only, by -12 to +1;
+  nodes and both digests equal. 56 were predicted. LB and CR 0, as predicted [R, Plumb's].
+- **A run can end with no message and no track** [R, Plumb's, from the Java]: a `RuntimeException` with a null message.
+- **The assembled count** [C, Plumb's]: 2,126 rows expected, 2,126 run, 0 mismatches: 1,658 on all six fields, 354 on R's
+  refusal by name, 114 FK rows on the message's text or family.
+**Checked by the planner:**
+- `git ls-remote` `1ba6b06`, a fast-forward of `696dd18`; one trailer each, no model name. **E1, by `scan.sh <c>^ <c>` on
+  each of the 8 commits since `1bf57ca`: 0 each** (the form -133 corrected).
+- `RoutingEngineF0hTest` is new, 50 lines; no line of an existing test was removed.
+- **The null message** [R]: `RoutingEngine.java:812`, `errorMessage = t instanceof RuntimeException ? t.getMessage() :
+  t.toString()`, and `:62`, `foundTrack = new OsmTrack()`. **Forager already guards it** [R]: `BRouterTrailRouter.kt:107`
+  refuses a track of fewer than 2 nodes as `EngineFailed`, "no error reported and N route points".
+- **CI on `34277b6`,** the first full run with FK 1 to 8 (run 43155294643): `jvm` 193 tests, 2 failed, both
+  `CollectOutreachersTest`; 0 ` e: `; both `compileKotlinIos*`; the eight kinds print 0 mismatches, 84 cases; simulator
+  24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The caught-overflow line: 4 prints (Plumb read 2
+  console lines; the log holds each twice). CI on `e8ed646` (F0h) was still running. Not read.
+**What the 2,126 does and does not show:** these are E6's **logic runs**: the port with the oracle's maths library in
+place of its own, held exactly equal on the JVM. E6 also asks for **production runs**, the port as it would ship. So far
+that is 2 cases, F0's, recorded equal (-129, -130). Step 9 is not done until the production runs are in.
+**Decisions (the planner's, technical):**
+1. **NT does not go to the reviewer as a test that shows nothing.** A wrong order under an exact tie moves the cost on 23
+   of its 59 cases. The prediction of 56 is recorded as failed on its count. Open, named: why 36 cases do not move.
+2. **The iOS adapter refuses a `Found` of fewer than 2 nodes,** as Forager's Android caller does. That is for the adapter,
+   outside the port; `route()` keeps returning what the engine gave. It joins the constructor's exceptions (-129) as a
+   named requirement on the adapter.
+3. **Step 9's figure is 2,126,** the rows of `expected-1b.tsv` as it stands. The plan's 2,118 predates F0h's 8 (-62).
+4. **Next: the production runs,** surveyed first: what E6 asks under the option taken (fdlibm ported), what already
+   exists for it, then one recorded run over every group.
+**Notes:** Written by the planner session by hand. Next free ID -135.
