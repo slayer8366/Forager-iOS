@@ -5942,3 +5942,45 @@ not the wrapper's risk. -153's "Map first" stands as the order; what the map is 
 2. **The MapLibre spike is held** until that report is in: its purpose was to de-risk a wrapper the owner may not want.
 3. **What a first iOS build shows while a renderer is written** is the owner's, asked with the report.
 **Notes:** Written by the planner session by hand. Next free ID -156.
+
+**Kind:** outcome
+**ID:** 2026-10-28-156
+**Timestamp:** 2026-11-12T23:24:15Z
+**Continues:** 2026-10-28-121, 2026-10-28-150, 2026-10-28-154
+**Title:** The first difference between the simulator and the JVM (Plumb's session 58): NT's GPX in mode 7 differs on 5
+routes; the production record of the hints and formats; the logic test seen red
+**Observed:** Plumb Ledger, session 58, `brouter-port-5b` `65737ec` to `2f79117` (fast-forward only; ended at 130,348 by
+the harness's count, no handoff call; 5 commits, the first session 57's saved one, trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). Findings:
+`docs/audits/2026-11-12-brouter-port-step10/s58-hints-formats.md`.
+- **The production record** (the port on `MsunLibm` against the oracle; expectation `8128965` committed first): the
+  routes differ in 0 of 11 groups; **the hints differ in 1 case, NT-0062, hint 380, the angle;** GPX, JSON, KML and CSV
+  differ in 0. As expected [R, Plumb's, local and in `jvm-production`].
+- **The simulator's digests** (`f33e8a1`): 69 rows of lengths and digests from the port's production run on the JVM (F0
+  2, F0h 8, NT 59), held to it by a JVM test, recomputed on the simulator by `FormatDigestsCommonTest`.
+- **Plumb stopped, as the brief said:** on the simulator NT's GPX differs on 5 routes, NT-0009, -0031, -0045, -0053 and
+  -0061, each of the same length with another digest, all of them in mode 7; equal on the JVM. Nothing was changed.
+- **The logic test's planted error** (a hint command's threshold, `-21f` to `-25f`; prediction `f861f53` first; JVM
+  only, restored `cmp`-equal): the test failed with 1,395 differences: hints in 349 cases, GPX 348, JSON 349; KML and
+  CSV 0; the six fields equal everywhere [R, Plumb's]. So the test can fail, and KML and CSV carry no hint.
+**Checked by the planner:**
+- `git ls-remote` `2f79117`, a fast-forward of `65737ec`; no model name; E1 by `scan.sh <c>^ <c>`: 0 on each of the 5.
+  The port, CI and the build are untouched.
+- **Run 43319416821 on `f33e8a1`:** `jvm` 238 tests, 0 failures; `jvm-production` 2 tests, 0 failures; `ios-memory`
+  green; **`ios-smoke`: simulator 51 tests, 1 failure, `FormatDigestsCommonTest`;** arm64 7 of 7, the gate "OK".
+  **Simulator-checked.** The per-group lines of the digests test were not read by the planner; the 5 ids are Plumb's.
+- `FormatGpx.kt:166`, `:171` and `:172` append `"" + hint.distanceToNext`, `"" + ti` and `"" + speed`: the platform's
+  own text for a floating number, in the branch that one mode alone takes [R]. That is the likely cause [I]; it is not
+  shown.
+**What this is:** -121's question, answered yes once: a number printed by the platform reads differently on
+Kotlin/Native than on the JVM, in one of the four formats, in one hint mode. It is not on Forager's path (the hints are
+off there, -111). The routes and the other outputs are equal on the simulator.
+**The branch's head is red on the simulator on purpose** until this is fixed: the failing test is the red test.
+**Decisions (the planner's, technical):**
+1. **The cause is shown before it is fixed:** on the simulator, for those 5 routes, each floating value whose platform
+   text differs from Java's, with both texts. They are times, speeds and distances, not positions.
+2. **The fix is the port's own Java-text helpers at every place a format or a hint prints a floating number,** not only
+   the three lines. If a value is a `Double` and the port has no Java-compatible text for doubles, that stops and
+   comes to the planner: no JDK code is copied (-119).
+3. Each value found goes into a common unit test of the helper, so the JVM and the simulator both hold it.
+**Notes:** Written by the planner session by hand. Next free ID -157.
