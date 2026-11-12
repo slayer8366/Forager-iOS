@@ -4904,3 +4904,42 @@ planner).
 2. **8d closes** when CI on `6aa54b1` reads clean apart from the known pair, the coverage read is in, and the closing
    list is written. Session 38.
 **Notes:** Written by the planner session by hand. Next free ID -131.
+
+**Kind:** outcome
+**ID:** 2026-10-28-131
+**Timestamp:** 2026-11-12T04:17:39Z
+**Continues:** 2026-10-28-90, 2026-10-28-130
+**Title:** Step 8d: CI on the two new tests read clean apart from the known pair; Plumb's session 38 handed back a draft
+only; what step 9 has left, counted by the planner; the planner's rulings
+**Observed:** Plumb Ledger, session 38, `brouter-port-5b` `6aa54b1` to `e1940ed` (fast-forward only; called at 150,147
+after about eight minutes, ended at 160,351 by the harness's count; one commit, trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). Docs only.
+- §13, a closing list for step 8, **marked partial: no citation in it was checked.** §14 a stub. The coverage read was
+  killed before any count. CI was not read.
+- Plumb's questions: is a test of the constructor's exception through `route()` owed; and file 18 names
+  `OsmPath.java:279` where Forager's copy has the line at `:278`.
+**Checked by the planner:**
+- `git ls-remote` `e1940ed`, a fast-forward of `6aa54b1`; no model name; E1 over the range: 0; two docs files changed.
+- **CI on `6aa54b1`** (run 43150269539), the first full run with -129's two tests: `jvm` 181 tests, 2 failed, both
+  `CollectOutreachersTest`; 0 ` e: `; the test step ran 29 minutes; both `compileKotlinIos*`; simulator 24 of 24
+  (**simulator-checked**); arm64 7 of 7, the gate "OK". The log prints the 10 R cases through `route()` equal on nodes,
+  distance and both digests, every node with a height (1,148 in all), and the public terminate as the oracle's on both
+  cases. The caught-overflow line: 4 prints.
+- `OsmPath.java:278` is `if (rc.startDirectionValid)` in Forager's copy [R]. File 18's `:279` is wrong by one.
+- **What step 9 has left** [R, C], from `expected-1b.tsv`: 2,126 rows (the plan says 2,118; F0h's 8 were added later).
+  Through the port's engine in `jvmTest` today: R 1,534 (354 of them the refusal by name, -89), F0 2, DL 118, MP64 59,
+  ML5 59, PM5 55, FK 9 to 11 30: **1,857.** Not yet: NT 59, LB 59, CR 59, FK 1 to 8 84, F0h 8: **269.** The FK split is
+  the planner's subtraction from FK's 114 rows, not a count of kinds; session 39 checks it.
+**The planner's own error:** session 38's brief asked for a list citing every row of a report that has grown past what a
+session can read. It cost a session. Later briefs name files and line ranges, and step 9 reports in a new file.
+**Decisions (the planner's, technical):**
+1. **The constructor's exception through `route()`: a test is owed.** The iOS adapter will rely on it passing through
+   as Forager's Android caller catches it (`BRouterTrailRouter.kt:122-131`). Seen red under a revert.
+2. **The `OsmPath` coverage read changes method:** counters in the port at the lines for `OsmPath.java:278-283` and
+   `:350`, one run of R, never committed. The oracle run would take about two hours for the same question. File 18 says
+   so and corrects `:279`.
+3. **§13 stays an unchecked draft** and is not relied on. Step 8's "not covered" list is the record's: -121 to -130.
+4. **8d closes** when 1 and 2 are in. Nothing else is open in step 8.
+5. **Step 9 begins** with the 269 cases, group by group, in a new report (`docs/audits/2026-11-12-brouter-port-step9.md`).
+   Each group that passes on first run gets a planted error, prediction pushed first.
+**Notes:** Written by the planner session by hand. Next free ID -132.
