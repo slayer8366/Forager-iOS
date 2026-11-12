@@ -5779,3 +5779,48 @@ on 2026-11-09). The planner's profile makes keeping iOS level with Android its d
 4. **The designer's first job** (-13: where iOS follows iPhone habits and where it matches Android) is dispatched after
    the survey, which is its input.
 **Notes:** Written by the planner session by hand. Next free ID -152.
+
+**Kind:** outcome
+**ID:** 2026-10-28-152
+**Timestamp:** 2026-11-12T20:53:07Z
+**Continues:** 2026-10-28-151
+**Title:** The app port's survey is in (Madrone Gauge, dispatch 2026-11-12-01): what the Android app is today, what the
+port's adapter owes, and 9 decisions for the owner
+**Observed:** Madrone Gauge, one session on Fable (ended at 192,837 by the harness's count, past the watcher's 170,000,
+which fired as it finished), branch `research/app-port-survey`, head `3ea1d8f`, 4 commits from `origin/main`, trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Report: `docs/research/2026-11-12-app-port-survey.md` (444 lines), with
+52 evidence files. Method and predictions were committed first (`6f9b4b8`); 8 predictions right, 1 half, 7 wrong, 2 not
+scoreable. No build was run and nothing in Forager was changed or fetched. The findings, each the researcher's:
+- **The app:** one `:app` module and the vendored Java `:brouter`; 892 Kotlin files, 117,306 lines; `ui` 441 files,
+  `domain` 288 files with no `android` import. Five tabs, about 20 surfaces. Four things run without the screen: the
+  recording service with its 15 s watches, an inexact wake-up alarm, a periodic backup, MapLibre's offline downloads.
+- **Since the feasibility report:** `domain` grew by 61 files; next-turn, route plotting, the drop-off map, trail
+  heights, trip map downloads and the route-ways reader are new. The report's "66 files" was not re-run; a scan reads 74
+  domain files with a JVM-only API.
+- **Android-bound:** 418 files import a platform or JVM-library API, 234 leaving Compose out. The map (MapLibre) and the
+  camera are the renderer-level pieces. Three need a design: the fungi index's `createFromAsset`, the periodic backup,
+  and the 15 s tick. No exact alarm and no Google Play service exists.
+- **Routing:** the port's public surface covers the router and the snapper. **It does not cover the route-ways reader:**
+  its classes are ported but `internal`, with no public entry, and next-turn depends on it. The adapter owes 12
+  behaviours, the two already known among them (-129, -134), each cited to `BRouterTrailRouter.kt`.
+- **No Mac:** a simulator build needs no account [I]; a signed build needs the Apple Developer Program, "$99 annual
+  membership" as Apple's page states it.
+- **Tests on Android:** 1,012 files, 6,876 `@Test`, 574 on Robolectric, 1 instrumented, no screenshot library.
+- **Wrong premises of the dispatch, six,** among them: the snap is a route call, not a gap; the baseline's seven BRouter
+  classes are now fifteen; and -111, -129 and -134 are not on `origin/main`, whose record ends at -102.
+- **Not verified:** MapLibre Compose's offline store and PMTiles on iOS; whether Android can consume the port, which has
+  no Android target; several Apple pages that did not render.
+**Checked by the planner:**
+- `git ls-remote` `3ea1d8f`; no model name; E1 over the branch against `origin/main`: 0; the export is unchanged.
+- Counted again on the export [C]: 892 files; 117,306 lines; `domain` 288 files, 0 importing `android` or `androidx`; 0
+  files importing Google Play services or Firebase; 3 main files naming `btools.`.
+- Not checked by the planner: everything else. The report is the researcher's reading.
+**What follows (the planner's):**
+- **The port gains a public route-ways entry** before it is called finished: next-turn, which the owner ruled is ported
+  for iOS (-111), cannot work without it. Its shape is decided with the adapter.
+- **The record branch has run 49 entries past `main`.** The researcher could not read -111 from `main`. The PR is the
+  owner's word, asked for again below.
+- Four of the survey's nine owner decisions shape the plan's first phase and are asked now. The other five (the order of
+  the later surfaces, the fungi index, scheduled backup, device evidence, the app's public identity) come with the
+  designer's work.
+**Notes:** Written by the planner session by hand. Next free ID -153.
