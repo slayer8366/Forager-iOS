@@ -436,54 +436,80 @@ tile deeper than this one. [?] How much of the 8 MB the walk used: not read (-14
 **Next.** 1. R's fallback on the simulator (-140 decision 3): the timing above puts R's 1,180 cases far past any job
 (the ratio ~11), so the first 12 cases of each profile. 2. The planted error across all groups (-139 decision 1).
 
-## §6 Sessions 51 and 52 (Plumb Ledger, 2026-11-12): the stack ladder; the walk without recursion
+## §6 Sessions 51 to 53 (Plumb Ledger, 2026-11-12): the stack ladder; the walk without recursion; its checks
 
-**Session 51 wrote no section; this begins with its ladder and the planner's reading (RECORD -143).** The ladder
-(`StackLadderIosTest`, iosTest, gated on `BROUTER_STEP10_LADDER`, `ios-memory`'s last step) ran one MP64 case, the first
-stored one entering the walk, through `EngineRun` on POSIX threads made with `pthread_attr_setstacksize`: 8, 4, 2, 1 MB,
-512 KB, joined in turn. Each line ("starting", "survived") was also flushed to `ladder.txt`, which outlives a process that
-ends. Ids, sizes, depths and digest equality only (E1). The planner read run 43212726248 on `3d5bd11`: the case was
-MP64-0002, 3,378 deep; 8, 4 and 2 MB survived, equal to its stored row; after "starting 1048576" no line, and the step
-failed with "Child process terminated with signal 10: Bus error". The memory groups 173 of 173 and R's fallback 240 of
-240 equal before it; 802 cases in all; all simulator-checked. The owner then ruled (RECORD -144): "Rewrite without
-recursion (Recommended)".
+**The ladder (session 51; the planner's reading, RECORD -143).** `StackLadderIosTest` (iosTest, gated on
+`BROUTER_STEP10_LADDER`, `ios-memory`'s last step) runs a case through `EngineRun` on POSIX threads made with
+`pthread_attr_setstacksize`, 8, 4, 2, 1 MB and 512 KB, joined in turn; each "starting" and "survived" line is also flushed
+to `ladder.txt`, which outlives a process that ends. Ids, sizes, depths and digest equality only (E1). Run 43212726248 on
+`3d5bd11`, read by the planner: MP64-0002, 3,378 deep, survived 8, 4 and 2 MB equal to its stored row; after "starting
+1048576" no line, and "signal 10: Bus error". The owner then ruled (-144): "Rewrite without recursion (Recommended)".
 
-### Session 52
+**Red first (session 52, `ce1a193`).** The ladder asserts: four cases (MP64-0002; MP64-0005, M5-0060, M5-0304, the deepest
+of each memory group by run 43212726248's depth lines, 5,679 each), named in the test, each on the test's thread and then
+on all five sizes; every rung must survive and give its stored row (six fields, tuple digest) at the same depth. Red on the
+recursive port: run 43226744796, "starting MP64-0002 1048576", then the bus error (the planner's reading, -146).
 
-**1. The red test** (`ce1a193`, pushed alone, before the rewrite). The ladder now asserts. Four cases: MP64-0002 and the
-deepest case of each memory group as run 43212726248's depth lines named them, MP64-0005, M5-0060 (ML5), M5-0304 (PM5),
-each 5,679 deep. They are named in the test, not found: finding them on the simulator would run each group's 55 to 59
-cases again in that step. Each case runs on the test's thread first, then on all five sizes. Every rung must survive and
-give its stored row (six fields and the tuple digest) with the same deepest walk as on the test's thread. Failures are
-collected and fail the test at the end. Red on the present port by the process ending at 1 MB on MP64-0002, as run
-43212726248 already shows; not rerun before the rewrite. The CI step's name still says "one MP64 case": CI is not changed.
+**The rewrite (`f33828c`), mapped (the planner read it against `OsmNodesMap.java` statement by statement, -146):**
+1. A call `minVisitIdInSubtree(source, n)` is `enter`: a `WalkFrame` is pushed and the prologue runs at once (numbering,
+   `nodesCreated++`, `minId`, the first link).
+2. The link loop resumes from the frame's `next`, taken before the body as Java's for-update is; the tests in Java's order.
+3. Java's recursive call: the frame saves `t`, the link and `nodesCreatedUntilHere`, pushes the child, and breaks.
+4. Java's return: the frame pops; the frame below sees `child` set and runs the code after Java's call (peninsula test,
+   `nodesCreated` restored, unlink from both ends, then the minimum).
+5. `runCatchingStackOverflow` and its three files are gone; `PeninsulaDepth.current` counts the list's size.
+After it, the planner read run 43245049027 (-146): the ladder survives every rung on all four cases, down to 512 KB; the
+memory groups 173 and R's fallback 240 equal; `ios-smoke` 46 of 46; `jvm-production` 1,742 of 1,742; `jvm` 230 tests, 1
+failed (`collectOutreachersWithADestinationVanishesFarNodes`, "false/true 0/3587"). Every iOS result simulator-checked.
 
-**4. The planted error: the prediction, pushed before it is run.** The plant: in the rewrite's "return" step, drop the
-write `if (minIdSub < f.minId) f.minId = minIdSub`, so a frame never takes its children's minimum. Then a node whose way
-back to the visited graph runs only through a child's subtree reports a minimum above its parent's id, and the parent
-unlinks it as a peninsula when it is not one. Run by the scratch `revert.sh` on the JVM only, `cmp`-equal restore, once on
-`RoutingEngineMemoryTest` and once on `RoutingEngineRTest`. **Prediction [I, a guess]:** both catch it: in each memory
-group some of the cases that enter the walk route differently or fail (nodes, cost or digest), and in R some of the cases
-entering the walk do. How many is not predicted.
+### Session 53 (this one): JVM only, local; port, tests, CI and build unchanged
 
-### Session 53: predictions, pushed before each is run
+Predictions were pushed before each run: plant 1 in `c1ac7e1` (session 52's, the only plant it names), the rest in
+`5f151a6`. Runs: the scratch copy of `revert.sh` (one exact string, compile check, fresh XML, restore from a saved copy,
+`cmp`), `timeout 1500`, one Gradle run at a time. The unplanted rewrite: **173 of 173 memory cases and R's 1,534 equal**
+(two runs each way below, 0 mismatches every time). Evidence in `2026-11-12-brouter-port-step10/s53-*.txt`.
 
-**Plant 1** is session 52's, above (the only plant it names); its result follows in the full §6.
+**Plant 1: the return step's minimum write dropped** (`if (minIdSub < f.minId) f.minId = minIdSub` at a child's return).
+**Held: caught by every group.** Memory: MP64 59 of 59 mismatching, ML5 59 of 59, PM5 55 of 55 (first ids MP64-0002,
+M5-0001, M5-0010); R 775 of 1,534 (first R-hiking-mountain-001). The
+prediction said both catch it and gave no number; it holds. The planted build ran: 0 compile errors, fresh XML, and the
+deepest walk moved (MP64 5,250, ML5 5,675, PM5 4,050, against 5,679 each).
 
-**Plant 2, the other kind: the order children are walked in, reversed.** Each frame takes a snapshot of its node's links
-on first visit and walks them last to first; nothing else changes. **Prediction [I, reasoned, not shown]:** no group
-catches it, and that would be a property of the walk, not a gap in the tests. What the walk removes is a link whose far
-side, once the link is cut, holds no border node (and, in tree mode, no cycle); that is a bridge of the graph and its far
-side, both fixed by the graph and the root, not by the order of visit. The numbers the order does move are `visitID`s at
-or above `baseID`, and `nodesCreated`'s restore removes a subtree's size, which is the same in any order. So: 0
-mismatches in MP64, ML5, PM5 and R. If any case differs, the reasoning is wrong and the plant is caught.
+**Plant 2, the other kind: children walked last to first** (a per-node snapshot of the links, taken on first visit, walked
+backwards). **Not caught by any group: MP64 0 of 59, ML5 0 of 59, PM5 0 of 55, R 0 of 1,534.** The planted build ran:
+0 compile errors, fresh XML, deepest walk MP64 7,954, ML5 7,954, PM5 7,617, against 5,679, and the port's MP64 runs 124.8 s against
+113.8 s. This was the pushed prediction [I, reasoned]: what the walk removes is each bridge whose far side holds no border
+node (in tree mode, no cycle either), fixed by the graph and the root, not by the visit order; the order moves only
+`visitID`s at or above `baseID`, and the restore of `nodesCreated` removes a subtree's size, the same in any order. If that
+reasoning is right the plant is an equivalent change and no test could catch it; it is not shown. It is a stop by the
+dispatch's rule and is reported, not acted on.
 
-**The oracle's catch** (session 52's scratch class, put first on the test classpath by its `init.gradle`): this JVM's
-default `ThreadStackSize` is 1024 KB (OpenJDK 21.0.12, x86_64; the build sets no `-Xss` and no toolchain). **Expected [I]:
-0** on the 173 memory cases and on R's 1,534, as at -60: the deepest walk is 5,679 frames, and Java's frame for this
-method is small enough that 1 MB holds it.
+**The oracle's catch (-144's measurement): 0.** Session 52's scratch class (a load line, one line per catch) first on the
+test classpath by a scratch `init.gradle`: memory 173 cases, load line 1, catch lines 0; R 1,534 cases, load line 1, catch
+lines 0; 0 "StackOverflow" in either Gradle log. This JVM's default stack: `ThreadStackSize = 1024` (KB, OpenJDK 21.0.12,
+x86_64); the build sets no `-Xss`; the oracle runs on the test's thread or, for mid-run cancels, a `Thread()` with no size
+given. **No tested case reaches the difference** -144 names: on these 1,707 cases Java never overflows, so the port's
+finishing a subtree Java would skip is not exercised by any of them.
 
-**`canEscape` through the port** (a scratch counter, never committed), during `RoutingEngineMemoryTest`. **Expected [I]:**
-MP64 the oracle's own figures exactly, 576,094 false and 1,789,913 true (2,366,007 calls; phase 2's record, `4f815de`,
-"deterministic across E3's six regimes"), since the routes are equal; ML5 and PM5 both answers above 0. The red test's
-"0/3587" is its own region, where the oracle too answers only true (-60).
+**`canEscape`'s answers** (scratch counters, never committed; `s53-canescape.txt`), `RoutingEngineMemoryTest`, per group:
+| group | port true | port false | oracle true | oracle false |
+|---|---|---|---|---|
+| MP64 | 1,789,913 | 576,094 | 1,789,913 | 576,094 |
+| PM5 | 1,212,430 | 333,212 | 1,212,430 | 333,212 |
+| ML5 | 3,042,871 | 415,604 | not shown | not shown |
+MP64's oracle pair equals phase 2's record (`4f815de`: 576,094 false of 2,366,007), as predicted. ML5's oracle pair is not
+shown: the scratch class prints its total when a map is made, and none is made after ML5's last case. All 173 cases have
+at least one "false" through the port. `CollectOutreachersTest` is not touched; its "0/3587" is its own region (-60).
+
+**Seen in passing:** `PeninsulaDepth.overflowsCaught` is still read by three tests (`RoutingEngineMemoryTest`,
+`MemoryEngineCommonTest`, `REngineCommonTest`) and written by nothing since `f33828c`; it reads 0 by construction.
+
+**Not covered:** that no other recursion in the engine is deep (not shown); one tile; the ladder's four cases; the
+simulator only, no iPhone, no release build; Java's overflow path itself (0 cases reach it, so the port's one designed
+difference is untested); plant 2's equivalence (reasoned, not proved); the plants on the simulator's groups.
+
+**Handoff. Questions for the planner:** (1) plant 2: accept it as an equivalent change, or name a different plant of the
+"order" kind that should move a result? (2) `CollectOutreachersTest`'s second failure, with the counts above. (3) Keep or
+remove `PeninsulaDepth.overflowsCaught`, now never written? (4) A case where Java overflows, to exercise the one designed
+difference, would need a JVM with a smaller `-Xss` or a deeper map; worth building?
+**Next:** FK 9 to 11 on iOS; the planted error across the simulator's groups; number formatting and `catch (Error)` on Native.

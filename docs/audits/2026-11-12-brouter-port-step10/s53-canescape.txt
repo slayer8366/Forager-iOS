@@ -1,0 +1,16 @@
+# Session 53: canEscape's answers, RoutingEngineMemoryTest, JVM, f33828c. Never committed:
+# port: two counters at canEscape's two returns, the cumulative pair printed when the test reads PeninsulaDepth.overflowsCaught (once per case, after the port's run).
+# oracle: two static counters at canEscape's two returns in the scratch class (s53-oracle-catch.txt), the cumulative pair printed when an OsmNodesMap is made.
+## Port, cumulative at each group's last case (group order as run: MP64, PM5, ML5); 0 mismatches in each group
+s53 canEscape port cumulative true 1789913 false 576094
+s53 canEscape port cumulative true 3002343 false 909306
+s53 canEscape port cumulative true 6045214 false 1324910
+## Per group, port: MP64 true 1789913 false 576094 (calls 2366007); PM5 true 1212430 false 333212 (1545642); ML5 true 3042871 false 415604 (3458475). Each of the 173 cases has at least one false.
+## Oracle, cumulative printed at the line before and after each group line
+MP64 before: s53 canEscape oracle cumulative true 1789913 false 576094
+MP64 after: s53 canEscape oracle cumulative true 1789913 false 576094
+PM5 before: s53 canEscape oracle cumulative true 3002343 false 909306
+PM5 after: s53 canEscape oracle cumulative true 3002343 false 909306
+ML5 before: s53 canEscape oracle cumulative true 6044025 false 1324544
+## Per group, oracle: MP64 true 1789913 false 576094; PM5 true 1212430 false 333212. ML5 not shown: no map is made after ML5's last case, so its last oracle line misses that case's calls.
+## Phase 2's record for MP64's oracle (4f815de, docs/audits/2026-10-29-brouter-port-phase2.md): 576,094 false of 2,366,007 calls.

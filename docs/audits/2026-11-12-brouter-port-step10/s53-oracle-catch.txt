@@ -1,0 +1,24 @@
+# Session 53: the oracle's catch in cleanupPeninsulas, counted. Session 52's scratch OsmNodesMap.java (prints a load line and one line per catch),
+# plus two static canEscape counters, compiled with javac against build/oracle/brouter-1.7.10-ro.jar and put first on jvmTest's classpath by a scratch init.gradle (-I). Never committed.
+## This JVM: java -XX:+PrintFlagsFinal -version
+ intx CompilerThreadStackSize = 1024 {pd product} {default}
+ intx ThreadStackSize = 1024 {pd product} {default}
+ intx VMThreadStackSize = 1024 {pd product} {default}
+openjdk version "21.0.12.1" 2026-08-18
+## RoutingEngineMemoryTest, port unplanted (f33828c)
+BUILD SUCCESSFUL in 8m 56s
+compile errors: 0
+## RoutingEngineRTest, port unplanted (f33828c)
+BUILD SUCCESSFUL in 13m 38s
+compile errors: 0
+## Counts (grep -c on each run's fresh TEST-*.xml; the memory XML was read before the next run replaced it)
+RoutingEngineMemoryTest: load line 1; 'caught StackOverflowError' 0; 'StackOverflow' in the Gradle log 0
+8b MP64: 59 cases within 86 draws; 0 mismatches
+8b MP64 depth: deepest recursion 5679; 59 of 59 cases entered the walk; 0 overflows caught; the port's runs 113784 ms
+8b PM5: 55 cases within 1180 draws; 0 mismatches
+8b PM5 depth: deepest recursion 5679; 55 of 55 cases entered the walk; 0 overflows caught; the port's runs 67957 ms
+8b ML5: 59 cases within 246 draws; 0 mismatches
+8b ML5 depth: deepest recursion 5679; 59 of 59 cases entered the walk; 0 overflows caught; the port's runs 76657 ms
+RoutingEngineRTest: load line 1; 'caught StackOverflowError' 0; 'StackOverflow' in the Gradle log 0
+8a R: 1534 cases; {route=968, refused=354, error=212}; 0 mismatches
+## Result: the oracle's catch fired 0 times on 173 memory cases and 0 on R's 1,534.
