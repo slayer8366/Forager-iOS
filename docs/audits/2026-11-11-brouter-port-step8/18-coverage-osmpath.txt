@@ -26,3 +26,4 @@ EXPECTED (written before the run):
 
 OBSERVED:
 Not run in session 36: stopped at the planner's handoff call (the getter run was started and killed before it wrote counts; the tree restored cmp-equal). The expectation above stands for the next session.
+Session 38: started (e3Strata on the pinned Temurin, 1182 cases: F0 2 and R's 20 StdModel profiles x 59; 354 model-profile cases left out) and killed at the planner's handoff call at about case 52, before any count. No observation. Scratch test deleted, tree clean. The expectation above stands.

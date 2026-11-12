@@ -760,3 +760,154 @@ overflow count). 2. The coverage read as 18 plans it (scratch test in the sessio
 4 cores; run it alone). 3. The closing list (§1's rows, each with its section; the "not covered" items of §§4-12).
 
 Context: spent mostly on CI and run waits and reading the report for the closing list.
+## 13. The closing list for step 8 (session 38; PARTIAL: drafted, stopped at the planner's handoff call)
+
+**Partial.** Drafted from the report's sections without a line-by-line check of each citation; rows marked by section, not by line. Treat every row as unchecked until a later session checks it. CI on `6aa54b1` was not read (still in progress at the handoff), so "green in CI on `6aa54b1`" below is not yet shown.
+
+Written from this report, its `step8/` files and RECORD -124 to -130 only; nothing here is new evidence except the
+coverage read (`18-coverage-osmpath.txt`, this session). "Compared" means a test compares the port with the oracle (or,
+where the oracle cannot be given the input, with Java's text) and is green in CI on `6aa54b1` (§15). A row with no
+section to cite reads "no evidence found".
+
+### 13.1 Every row of §1, with its state
+
+Ported and compared:
+
+| §1 row (Java lines) | State | Evidence |
+|---|---|---|
+| 34 `BROUTER_ENGINEMODE_ROUTING` | ported, compared: every route comparison runs in this mode | §4 2, §5 2-3, §8 4 |
+| 40-67, 77-90, the search's state | ported, compared through the route strata (F0, R, DL) | §4 2, §5 2 |
+| 69, 86-87 `terminated`, `startTime`, `maxRunningTime` | ported, compared (FK9-11, the clock tests); revert (a) bit | §8 4-5 |
+| 47 `getLinksProcessed` | ported, compared exactly on FK11's 10 cases | §8 4; `RoutingEngineStopTest` |
+| 102-138 the six-argument constructor | ported, compared (every route builds it); the `debug.txt`/`stacks.txt` logs refused by name | §4 2; §1 |
+| 140-164 `hasInfo`, `logInfo`, `logThrowable` as no-ops | ported as no-ops; no test distinguishes them: no evidence found | §1 |
+| 170-197 `doRun`, the `ROUTING` branch | ported, compared | §4 2, §8 4 |
+| 199-361 `doRouting` | ported, compared; its catches and `finally` through FK9-11 | §4 2, §8 4 |
+| 325-328 `catch (Error)` / `cleanOnOOM` | ported; tested on an injected clock, not against the oracle (no E3 row reaches it); compiled for both iOS targets, not run there | §8 4, 6; `RoutingEngineStopTest` KDoc |
+| 696-809 `postElevationCheck` | ported, compared: heights digest on F0 (all "no height") and on R's first 10 (1148 of 1148 with a height); rv17 bit | §11 3, §12 2 |
+| 811-814 `logException` | ported, compared through the failure messages of R's error cases and FK9-11 | §5 2, §8 4 |
+| 854-856 `cleanOnOOM` | as 325-328 | §8 |
+| 858-877 `findTrack(refTracks, lastTracks)` | ported, compared (the island retry); `useDynamicDistance` left out | §4 2, §5 2 |
+| 879-1052 `tryFindTrack` | ported, compared, with its listed branches left out | §4 2, §5 2 |
+| 1482-1591 `recalcTrack` | ported, compared (always called) | §4 2 |
+| 1600-1606 `elevationFilter` | ported; whether any compared case runs it: no evidence found (§1's [I] stands) | §1 |
+| 1609-1689 `matchWaypointsToNodes` | ported, compared; the two left-out branches as §1 | §4 2, §5 2 |
+| 1691-1706 `searchTrack` | ported, compared; the beeline segment left out | §4 2 |
+| 1708-1805 `searchRoutedTrack` | ported, compared; the nearby-track branch left out; the timeout's dirty track: see 13.2 | §4 2, §8 4, §9.1 |
+| 1808-1816 `resetCache` | ported, compared (MP64, ML5, PM5 pass memory class through) | §5 3 |
+| 1818-1870 `getStartPath` (both) | ported, compared | §4 2 |
+| 1872-1887 `findTrack(operationName, …)` | ported, compared | §4 2 |
+| 1890-2261 `_findTrack` | ported, compared: 8a's part (§4 2, §5 2), the memory path 8b (MP64, ML5, PM5; -90's revert and ML5's bit; §5 3-5, §6), `terminated` and the timeout 8c (§8 4-5) | §4-§8 |
+| 2263-2267 `addToOpenset` | ported, compared | §4 2 |
+| 2269-2319 `compileTrack` | ported, compared; F0 caught its end-node revert | §5 1 |
+| 2321-2350 `mergeTrack` | ported; reached by the sloppy merge (§1); a compared case passing through it: no evidence found | §1 |
+| 2412-2414, 2428-2430 `getFoundTrack`, `getErrorMessage` | ported, compared | §4 2, §11 3 |
+| 2432-2438 `terminate`, `isTerminated` | ported, compared (FK10, FK11; through `route()` before the run and before the public run) | §8 4, §11 3, §12 3 |
+| (none) `route()` over the engine | ported, compared: logic run on F0 exact; production run on F0 printed equal (recorded, -24); heights on R's first 10; the public cancel | §11 1-3, §12 2-3 |
+| (none) `checkDataFile` | ported and tested at step 5a; 8d owes nothing | §1 (-128 decision 4), §9.3 |
+| 88 `boundary` as `null` | ported as `null`, compared as such (every route) | §1 |
+| 94 `directWeaving` as `true` | ported as `true`, compared as such; the JVM property unset [I] | §1 |
+| `OsmTrack.java:442-446` `getFromDetourMap` | ported in step 7; recorded, not changed | §1 |
+
+Ported and not covered:
+
+| §1 row | State | Evidence |
+|---|---|---|
+| 1749-1758, the timeout's dirty raw track | ported, not covered; nothing on Forager's path reads it | §9.1, §10 1 (-127 decision 2) |
+| the dirty-track guard's read of `terminated` (`:1752`) | ported, not covered by any test | §8 [?] |
+
+Left out, with its guard:
+
+| §1 row | Left out | Guard as the report names it |
+|---|---|---|
+| 35-38 the other modes | yes | no guard named: no evidence found |
+| 45, 52 `extraWaypoints`, `useNodePoints` | yes | never assigned in Java; no guard named |
+| 56, 58, 60 round trip, dynamic range | yes | no guard named (Forager sets the dynamic range to 0) |
+| 66, 71-76, 95 output and log files | yes | the `debug.txt`/`stacks.txt` refusal (constructor row) |
+| 92 `extract` | yes | never read or written in Java |
+| 96-100 the five-argument constructor | yes | not declared |
+| 166-168 `run()` | yes | not declared [I] |
+| 205-222 `allowSamewayback` | yes | no guard named |
+| 233 `ai` | yes | no guard named |
+| 243-296, 308-311 output, CSV, GPX, log branches | yes | no guard named (bases null, `quite = true`) |
+| 363-485 `doGetInfo`; 487-692 round trip | yes | no guard named |
+| 817-852 `doSearch` | yes | not declared [I] |
+| 1022-1027, 1054-1480 via points (-24, 424 lines) | yes | the `correctMisplacedViaPoints` guard kept; a named "unsupported" past it (§1) |
+| `tryFindTrack`'s nearby track, `inverseRouting`, `continueStraight`, `ai`, `pois` | yes | `continueStraight` refused before a middle waypoint (§3 [I]); the others: no guard named |
+| `_findTrack`'s early exit (`fastPartialRecalc`) and `maxRunningTime / 3` (`:1980`) | yes | the `check` holding `fastPartialRecalc` false (-125 decision 3) |
+| 2352-2386 `getPathPeak`, `getOpenSet`; 2388-2442's other getters | yes | not declared (§1: "nothing can return a made-up value") |
+| classes `AreaReader`, `StackSampler` | yes | with their mode; the `stacks.txt` refusal |
+| the six car profiles' `KinematicModel` | yes | refused by name; R holds the 354 cases to the refusal (§4 5, §5 2; -89) |
+| a heading or direction parameter (`OsmPath.java:282-283`) | yes | `setParams` refuses both (18); the oracle's lines read on 18's cases: §13.3 |
+
+### 13.2 Everything the report names "not covered" or [?], and where it is owed
+
+| Item | Where named | Owed |
+|---|---|---|
+| the dirty raw track on a timeout, and its guard's `terminated` read | §8 [?], §9.1, §10 1 | nowhere (-127 decision 2; the guard with it [I]) |
+| `maxRunningTime / 3` | §6 [I] | nowhere (-125 decision 3) |
+| `catch (Error)` on Kotlin/Native; whether Native raises a catchable `Error` | §7 [?], §8 | step 10 (-126, -127 decision 3) |
+| Kotlin/Native numbers, `Throwable.toString` | §3, §4, §5 [?] | step 10 |
+| the stack overflow in `cleanupPeninsulas` on iOS (no catch) | §5 [I] (-124) | step 10 |
+| any of step 8 on iOS beyond compiling | §9.6, -124, -127 decision 3 | step 10 |
+| FK9 blind to a limit that strikes at once | §8 [?] | the reviewer (-127 decision 1) |
+| FK9's dependence on the island check under 50 ms | §7 [?] | superseded by -126's widening (§8 3) |
+| the collection on `CollectOutreachersTest`'s region (2 of 2 failing, -61) | §5 6, -125 decision 2 | nowhere in step 8 (-125 decision 2); -61 stands |
+| the caught-overflow count varying between runs (0, 2, 3, 4) | §7 [?], §10 [?] | no ruling found |
+| revert (b)'s 13 unexplained cases (8b) | §6 [?] | nowhere (-125 decision 1) |
+| a revert MP64 or PM5 alone catches | §5 [I] | nowhere (-124 decision 2) |
+| `f0ThroughThePublicRouteIsRecorded` asserts only `Found` | §10 [?] | nowhere: production runs are recorded (-24); its digests printed equal (§11 2, §12 1) |
+| a terminate landing mid-run through `RouteCancel` | §9.6, §10 [?] | no ruling found; FK11 covers the engine's side |
+| a present height through `route()` (rv17) | §11 [?] | done: §12 2 (-129 decision 1) |
+| the public route's cancel (rv24) | §11 [?] | done: §12 3 (-129 decision 2) |
+| the constructor's exception passing through `route()` (a broken profile, both messages) | §9.6 ("owed, not in this session's red set") | **no test found in §§10-12 and no ruling found**: a question (§15) |
+| the null-message empty track through `route()` | §9.6 | nowhere: off Forager's path (`RDF` refuses the file first) |
+| Forager's own file checks (`RDF:26-41`) and `heightMetresOf` | §9.3, §9.4 | the iOS adapter |
+| -42's getters on the port | §9.5 | done: 20 of 21 reached, §12 4; `getTrafficSourceDensity` nowhere (-130 decision 1) |
+| the getter counts' exactness under threads | §12 [?] | no ruling found |
+| -49 `StorageConfigHelper` | §9.5 | answered (no difference on Forager's path); no ruling found beyond |
+| `OsmPath.java:282-283`, `:350` | §9.5 | read this session: §13.3 |
+| `postElevationCheck`'s `!!` | §3 [I] | no evidence found either way |
+| `elevationFilter`, `mergeTrack` reached by a compared case | §1 [I] | no evidence found |
+| the strata step 8 did not route through the port (NT, LB, CR, F0h, FK 1-8) | §14 | step 9 |
+
+### 13.3 The `OsmPath` coverage read
+
+Not observed: the run was started and killed at the handoff (see `18-coverage-osmpath.txt`).
+
+## 14. Step 9's survey (session 38; NOT WRITTEN: stopped at the planner's handoff call)
+
+Read for it, not yet written up: the plan's step table (verify report lines 1704-1705), E5's 2,118 (R 1,534; F0 2; eight
+targeted strata of 59; FK 110) and E6. Seen, unchecked [I]: `expected-1b.tsv` holds 2,126 rows (RECORD -89: F0h 8 added,
+PM5 55, FK 114), not E5's 2,118; the port runs in `jvmTest` today against R, F0, DL-lat, DL-lon, MP64, ML5, PM5 and FK
+9-11; no port test was found routing NT, LB, CR, F0h or FK 1-8 through the engine. To be written as §14 next session.
+
+## 15. Session 38 (partial: stopped at the planner's handoff call)
+
+Plumb Ledger, session 38, `brouter-port-5b` `6aa54b1` to the head that carries this section (fast-forward only; `git
+ls-remote` read `6aa54b1` at the start). Trailer `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan on the staged
+diff: see the commit.
+
+**Done:** §13 drafted, partial and unchecked (above). Temurin 21.0.13+9 fetched to scratch, matched its pins.
+
+**Not done:**
+- **CI on `6aa54b1`** (run 43150269539): still `in_progress` at the handoff; not read.
+- **The coverage read:** a scratch runner (e3Strata, R6 per case, 1,182 cases: F0 2 and R's 20 StdModel profiles x 59,
+  354 model-profile cases left out) compiled and ran; killed at the handoff at about case 52, before any count. Scratch
+  test deleted, `build/e3/COVOSM` removed, `git status` clean. At about 6 s a case, the full read is about 2 hours on 4
+  cores.
+- §14 (step 9's survey): read, not written.
+
+**[I]/[?]:** [?] 18's text puts `if (rc.startDirectionValid)` at `:279`; in Forager's `third_party/brouter` copy it is
+`:278` (`isStartpoint` `:277`), and `:282-283` are the two assignments inside both. Not checked against the 1.7.10 jar the
+reader uses. [?] §13 rows are unchecked (above).
+
+**Questions for the planner:** 1. §9.6 named a test of the constructor's exception passing through `route()` (a broken
+profile) as owed; I found none in §§10-12 and no ruling. Owed, or nowhere?
+
+**Step 8:** not complete (CI read, coverage read, §13's check).
+
+**Next:** 1. CI read of `6aa54b1`. 2. The coverage read, run alone in the background (about 2 hours). 3. Check §13 row by
+row and drop "PARTIAL". 4. §14 from the notes above.
+
+Context: spent on reading §§1, 3-12 of this report, RECORD -89 and -124 to -130, and the verify report's E4-E6 for §13 and §14.
