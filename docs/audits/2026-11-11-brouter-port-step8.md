@@ -558,7 +558,7 @@ header lists the nodes' fields and omits `track.distance`; the omission is §1's
 - **Today:** `Found(iLat: IntArray, iLon: IntArray, distance: Int)`, `Failed(message: String)` (`Route.kt:39-43`). The
   convention is Java's raw values; Forager's adapter converts them (`BRT:231`).
 - **Added:** `sElev: ShortArray`, one per node, aligned with `iLat`/`iLon`: `OsmPathElement.getSElev()` (Java `short`,
-  quarter metres). A missing height is `Short.MIN_VALUE` in Java (`OsmPathElement.java`, BRouter's "no height") and `null`
+  quarter metres). A missing height is `Short.MIN_VALUE` in Java (BRouter's "no height", as Forager's KDoc reads it, `BRT:222-227`) [I: not read in BRouter's writers myself] and `null`
   in Forager (`BRT:228`, never 0); the port keeps Java's raw value and the adapter keeps `heightMetresOf`, as for the
   positions. Appended last, so the three existing parameters keep their order. This is the type -122 decision 1 leaves to
   8d; the alternative (`Array<Double?>` in metres, Forager's conversion moved into the port) is named for the planner.
@@ -606,5 +606,5 @@ Every comparison is through `route()` with Forager's calls (the request as `BRT:
 built for it [I]); a terminate landing mid-run (`RouteCancel` cannot see the progress count, so a test cannot place the
 cancel past the engine's build; FK11 covers the engine's side in `RoutingEngineStopTest`); the null-message empty-track
 case through `route()` (a file cut below its header; Forager's `RDF` refuses it before the engine, so it is off its path);
-the constructor's exception passing through (the oracle logs it into its message rather than throwing, `RE:111-138`); any
-of it on iOS (step 10).
+the constructor's exception passing through (both engines throw from the constructor, `RE:133`; a test on a broken
+profile comparing the two thrown messages is owed, not in this session's red set); any of it on iOS (step 10).
