@@ -60,3 +60,81 @@ the same library, is the evidence that the digests are the right target for it [
    how `expected-1b.tsv` is carried). (1 to 2.)
 4. The full list or E5's 312 fallback by K's time; FK7-x1's message, number formatting and `catch (Error)` read on the way.
    (2 to 3.) About 5 to 8 sessions in all.
+
+## §1 Session 45 (Plumb Ledger, 2026-11-12): one tile, then F0, on the simulator
+
+On `brouter-port-5b` from `7f97edd`. Every iOS result here is **simulator-checked** (`ios-smoke`, `macos-26`,
+iosSimulatorArm64). Evidence: `2026-11-12-brouter-port-step10/` (grep extracts of each `ios-smoke` log). Marks as above.
+
+**Done.**
+1. `PinnedTileReadTest` (commonTest, so one source runs on both platforms): opens `f0/W75_N40.rd5` (F0's fixture, the
+   smallest pinned file and the one F0 reads) with okio's `FileSystem.SYSTEM`, holds size, bytes read and SHA-256 (okio's
+   `HashingSink`, no new dependency) to the pin row copied in. The path comes from `expect fun testSetting` in commonTest:
+   jvmTest's actual reads the system property `oracleJvm()` already sets (`brouter.tiles.dir`), so on the JVM the test
+   runs for real, and also holds the copied row to `tile-pins.tsv` (`brouter.tiles.pins`); iosTest's actual reads
+   `platform.posix.getenv("BROUTER_TILES_DIR")`. Why iosTest and not a skip: the JVM already has the tiles. Bites on the
+   JVM: a size off by one fails "size against tile-pins.tsv expected:<152666> but was:<152665>" (reverted from a copy, no
+   compile error, forward change confirmed present).
+2. `ios-smoke`: one new step before the simulator's tests, `./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle`
+   (the build's own tasks, so the release URL and pins are not copied into CI), and on the simulator step
+   `SIMCTL_CHILD_BROUTER_TILES_DIR` and `SIMCTL_CHILD_BROUTER_ORACLE_DIR` (workspace `brouter/build/tiles`, `.../oracle`).
+   No step removed or reordered; the arm64 steps untouched. That Gradle hands its environment to `xcrun simctl spawn` is
+   [C] in KGP 2.3.10's bytecode (`KotlinNativeTest` puts `SystemGetEnvSource.getAllEnvironmentVariables` into
+   `processOptions.environment`); that simctl strips the prefix is now shown by run 2.
+3. `F0RouteCommonTest` (commonTest): F0's two cases (Forager's own ends, `RoutingEngineF0Test.CASES`) through the public
+   `route()`, so `MsunLibm`, `hiking-mountain`, memory class 64 (RoutingContext's default), no limit, Forager's params;
+   F0's two expected-1b rows copied in. Bites on the JVM: a distance off by one fails "F0-inside-long distance: port 6713,
+   expected 6714" (reverted from a copy).
+
+**CI, read per push** (simulator TOTAL; arm64 TOTAL; jvm TOTAL; `ios-smoke` minutes):
+
+| run | commit | simulator | new tests on the simulator | arm64 | jvm | ios-smoke |
+|---|---|---|---|---|---|---|
+| 43168088740 | `bee36ec` red | 25, 1 failure | Pinned red: "no tiles folder: environment variable BROUTER_TILES_DIR ... is not set" | 7, 0; OK: all 2 classes ran | 196, 2 failures (CollectOutreachersTest's two, -61) | 5m22s |
+| 43169639835 | `eeefbf9` | 25, 0 | Pinned passed, size=152665 read=152665 sha256=ff6d9d8e...5990 | 7, 0; OK | 196, 2 failures (the same two) | 4m27s |
+| 43170250016 | `72744e6` red | 26, 1 failure | F0 red: "environment variable BROUTER_ORACLE_DIR ... is not set"; Pinned passed | 7, 0; OK | 197, 2 failures (the same two) | 5m49s |
+| 43171038917 | `71d7281` | 26, 0 | F0 passed, both cases; Pinned passed | 7, 0; OK | 197, 2 failures (the same two) | 4m45s |
+
+` e: ` 0 in every log read; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` ran in each jvm job read, BUILD
+SUCCESSFUL. `jvm-production` succeeded in each run read. No crash of the simulator's test process.
+
+**What the simulator can open (shown).** A host path, directly: the test process read
+`/Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles/f0/W75_N40.rd5`, all 152,665 bytes, SHA-256 equal to its
+pin; and `.../build/oracle/profiles2/hiking-mountain.brf` with `lookups.dat` (F0 routed). Environment variables reach it
+through the `SIMCTL_CHILD_` prefix. Not tried, since not needed: the simulator's data container, the test bundle's
+resources.
+
+**F0 on the simulator (simulator-checked).** Both cases equal F0's stored values in each field `route()` returns:
+`F0-inside-across-the-degree-line` route|226|5047|9ca48d05a90f4dcd|afc27854ee968af5, `F0-inside-long`
+route|306|6713|7d242f8dd2c428b4|4f6849ea59b5f775 (kind|nodes|distance|nodeDigest|heightsDigest). **Five of six fields:**
+cost is not in `RouteOutcome.Found`, so the public `route()` cannot give it, nor the tupleDigest (which covers cost). The
+prompt's "six fields through route()" does not hold as stated [C, `Route.kt:69`]; I held the five and asserted nothing
+about cost rather than route around the public call.
+
+**-61's recursion depth.** No test-only counter exists in `OsmNodesMap.cleanupPeninsulas` (`grep` for depth/counter in
+`mapaccess`: none); none added. Not measured. That F0's runs did not overflow the router's thread on the simulator is
+shown only for these two routes.
+
+**[I]/[?].** [I] F0 is a small fixture; a large tile (W75_N40, 119.8 MB) through the same path is not yet read on the
+simulator. [?] cost on iOS. [?] the stack depth on the simulator's thread.
+
+**For the owner's question (-137, decision 5)**, by what is now known:
+- *Generated on the macOS job's JVM at run time:* evidence for: that job already runs a JVM with every tile fetched (the
+  arm64 step's `jvmTest`, OK all 2 classes, each run), and the simulator reads host files the job writes (shown). Not
+  shown: the generators running on arm64 HotSpot draw the same ends as on x86_64 (they use `java.util.Random` and tiles;
+  not run there), nor the ordering cost (the arm64 step runs after the simulator's today).
+- *A CI artifact from the Linux job:* evidence for: `upload-artifact` is already in both jobs, and a file under the
+  workspace reaches the simulator (shown). Not shown: `ios-smoke` waiting on `jvm` (a `needs:`, which serialises about
+  20-30 minutes ahead of it), and whether an artifact counts as "committed" under E1.
+- *Ported generators (common code):* evidence for: commonTest reads tiles on the simulator (shown). Not shown: that a
+  common port of `java.util.Random`'s sequence and the generators reproduce the JVM's ends; nothing of it exists.
+
+**Questions for the planner.**
+1. Cost: widen what F0 is held to on iOS by a test-side engine run (commonTest can reach `RoutingEngine`, as
+   `RoutingEngineF0Test.port` does), or add cost to `RouteOutcome.Found`, or accept five fields through `route()`?
+2. A depth counter for -61 is a change to `OsmNodesMap`; is it wanted, test-only?
+
+**Next.** (1) The planner's call on cost; (2) a read of a large pinned tile (`segments/W75_N40.rd5`, 119.8 MB) on the
+simulator, for memory and time; (3) the owner's ruling on decision 5, then the case list.
+
+**Stops hit.** None of the listed stops. The false premise (six fields through `route()`) is reported above.
