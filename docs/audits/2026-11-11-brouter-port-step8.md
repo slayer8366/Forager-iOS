@@ -628,7 +628,12 @@ ls-remote` read `94db5d1` at the start and before the push). Trailer on every co
 4. **Full fresh `:brouter:jvmTest --rerun-tasks`** before the push: 82 of 82 XML newer than the stamp, 0 ` e: `, `TOTAL:
    tests 179, failures 6` (RouteTest 4, `CollectOutreachersTest` 2 of 2, -61, not touched); 2 caught-overflow lines (log
    and XML alike); BUILD in 31m 39s. No other test newly failing.
-5. **The port: not done.** The session passed 120k before item 5. Left for session 36.
+5. **CI on `1b7b688`** (run 43138707152, red on purpose): jvm `TOTAL: tests 179, failures 6` in 82 files (RouteTest 4 of 4,
+   `CollectOutreachersTest` 2 of 2), 0 ` e: `, the test step 30 min (BUILD FAILED in 29m 47s); "iOS klibs" SUCCESSFUL in
+   50s, both `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64`. ios-smoke: simulator 24 of 24
+   (**simulator-checked**), arm64 7 of 7, the gate "OK: all 2 classes ran". 4 caught-overflow lines. `3dcdfe7` (§10) is
+   docs only; not read.
+6. **The port: not done.** The session passed 120k before item 5. Left for session 36.
 
 **[I]/[?]:**
 - [I] "Nothing reads the raw track": `grep -rn 'getFoundRawTrack\|foundRawTrack\|rawTrackPath\|readBinary\|writeBinary'
