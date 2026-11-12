@@ -1,8 +1,10 @@
 package com.zynergylabs.forager.brouter.tiles
 
+import com.zynergylabs.forager.brouter.router.OsmTrack
 import com.zynergylabs.forager.brouter.router.RoutingContext
 import com.zynergylabs.forager.brouter.router.RoutingEngine
 import com.zynergylabs.forager.brouter.router.RoutingParamCollector
+import com.zynergylabs.forager.brouter.util.LibmSeam
 import com.zynergylabs.forager.brouter.util.MsunLibm
 import okio.FileSystem
 import okio.Path
@@ -29,10 +31,25 @@ internal object EngineRun {
      * case's doubles; here it is passed as text, so both platforms parse the same characters), [profile] the `.brf` file,
      * [segments] the tiles folder. `doRun(maxRunningTimeMillis)`, `quite`. An Exception gives `threw:`, as `port`'s.
      */
-    fun run(lonLats: String, profile: Path, segments: Path, memoryclass: Int = 64, maxRunningTimeMillis: Long = 0L): Outcome = try {
+    fun run(lonLats: String, profile: Path, segments: Path, memoryclass: Int = 64, maxRunningTimeMillis: Long = 0L): Outcome =
+        runTrack(lonLats, profile, segments, memoryclass, maxRunningTimeMillis).outcome
+
+    /** [run]'s outcome with the found track and the context it ran with (both null when it threw). */
+    class TrackRun(val outcome: Outcome, val track: OsmTrack?, val rc: RoutingContext?)
+
+    /**
+     * [run], keeping the track and the context. Session 55: [turnInstructionMode], when given, is written to the context
+     * after `setParams` (which refuses `timode`), as the oracle side of `HintsFormatsRun` (jvmTest) does.
+     * Session 57 (RECORD -150): [libm] is the context's library, `MsunLibm` (the port as it ships, a production run) unless
+     * a jvmTest passes `OracleLibm` (a logic run).
+     */
+    fun runTrack(
+        lonLats: String, profile: Path, segments: Path, memoryclass: Int = 64, maxRunningTimeMillis: Long = 0L,
+        turnInstructionMode: Int? = null, libm: LibmSeam = MsunLibm,
+    ): TrackRun = try {
         val collector = RoutingParamCollector()
         val waypoints = collector.getWayPointList(lonLats)
-        val rc = RoutingContext(MsunLibm)
+        val rc = RoutingContext(libm)
         val params = mapOf(
             "profile" to profile.toString(),
             "alternativeidx" to "0",
@@ -40,6 +57,7 @@ internal object EngineRun {
         )
         collector.setParams(rc, waypoints, params)
         rc.memoryclass = memoryclass
+        if (turnInstructionMode != null) rc.turnInstructionMode = turnInstructionMode
         val engine = RoutingEngine(FileSystem.SYSTEM, segments, waypoints, rc, RoutingEngine.BROUTER_ENGINEMODE_ROUTING)
         engine.quite = true
         engine.doRun(maxRunningTimeMillis)
@@ -48,9 +66,12 @@ internal object EngineRun {
         val lon = IntArray(track.nodes.size) { track.nodes[it].getILon() }
         val lat = IntArray(track.nodes.size) { track.nodes[it].getILat() }
         val heights = ShortArray(track.nodes.size) { track.nodes[it].getSElev() }
-        Outcome(kindOf(message), lon.size, track.cost, track.distance, fnv1a(lon, lat), fnv1aShorts(heights))
+        TrackRun(Outcome(kindOf(message), lon.size, track.cost, track.distance, fnv1a(lon, lat), fnv1aShorts(heights)), track, rc)
     } catch (e: Exception) {
-        Outcome("threw:" + (e.message ?: e::class.simpleName), 0, -1, -1, fnv1a(IntArray(0), IntArray(0)), fnv1aShorts(ShortArray(0)))
+        TrackRun(
+            Outcome("threw:" + (e.message ?: e::class.simpleName), 0, -1, -1, fnv1a(IntArray(0), IntArray(0)), fnv1aShorts(ShortArray(0))),
+            null, null,
+        )
     }
 
     /** `E3Outcome.kindOf`: the timeout and watchdog messages by family; every other message exactly. */
