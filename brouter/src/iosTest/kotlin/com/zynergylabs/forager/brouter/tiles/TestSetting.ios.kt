@@ -14,3 +14,8 @@ internal actual fun testSettingSource(jvmProperty: String, iosVariable: String):
 internal actual fun testEnvironment(name: String): String? = getenv(name)?.toKString()
 
 internal actual val onJvm: Boolean = false
+
+@OptIn(ExperimentalForeignApi::class)
+internal actual fun testThreadStack(): String =
+    "stack size ${platform.posix.pthread_get_stacksize_np(platform.posix.pthread_self())} bytes " +
+        "(pthread_get_stacksize_np); main thread ${platform.posix.pthread_main_np() == 1}"

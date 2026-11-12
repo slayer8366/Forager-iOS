@@ -128,6 +128,56 @@ jobs:
           name: ios-smoke-test-results
           path: brouter/build/test-results/
 
+  # RECORD -141, decisions 1 and 2: the memory groups (MP64, ML5, PM5; 173 cases), the ones that reach
+  # OsmNodesMap.cleanupPeninsulas's recursion through routing (RECORD -61), on the simulator in a job of their own, so a
+  # process ended by that recursion ends this job alone. The three classes are gated on BROUTER_STEP10_MEMORY (unset in
+  # `jvm` and `ios-smoke`, where each prints one line and does nothing). Checkout, Java, Xcode and the fetch step are
+  # `ios-smoke`'s; the writer step is the whole writer (it cannot be told to write the memory groups only), under
+  # brouter/build/step10/, outside test-results/ (the only folder uploaded; E1). The tests print ids, counts, digests,
+  # depths and the test thread's stack size only. Every result here is "simulator-checked".
+  ios-memory:
+    runs-on: macos-26 # arm64; not macos-latest, which moves
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: Select Xcode 26.0.1 (Kotlin 2.3.10's published Xcode is 26.0)
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app
+          xcodebuild -version
+          xcrun simctl list runtimes
+          xcrun simctl list devices available
+      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
+        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
+      - name: Step 10 - the generated groups' cases for the simulator, drawn on this runner's JVM
+        env:
+          BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+        run: ./gradlew --no-daemon :brouter:jvmTest -x msunReference --tests com.zynergylabs.forager.brouter.tiles.NtCasesWriteTest
+      - name: The memory groups on the iOS simulator (MP64, ML5, PM5)
+        env:
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+          SIMCTL_CHILD_BROUTER_STEP10_MEMORY: '1'
+        run: >-
+          ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
+          --tests com.zynergylabs.forager.brouter.tiles.Mp64EngineCommonTest
+          --tests com.zynergylabs.forager.brouter.tiles.Ml5EngineCommonTest
+          --tests com.zynergylabs.forager.brouter.tiles.Pm5EngineCommonTest
+      - name: Counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: ios-memory-test-results
+          path: brouter/build/test-results/
+
   # RECORD -136, decision 1: step 9's production run (RoutingEngineProductionRecordTest, gated on the variable; -135) as
   # its own job beside `jvm`, running that one class. It records, it does not judge: it gates nothing but its own counts.
   # The checkout and Java are `jvm`'s. A fresh runner has no earlier test output, so the task cannot be up to date here.

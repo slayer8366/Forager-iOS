@@ -11,6 +11,7 @@ import com.zynergylabs.forager.brouter.oracle.e3.NTGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.RGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3DLTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3F0hTest
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3MemoryTest
 import com.zynergylabs.forager.brouter.router.RoutingEngineFKTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
 import java.io.File
@@ -46,6 +47,11 @@ import kotlin.test.fail
  * tile is missing; kinds 7 and 8 each case in its own folder under [FK_TILES]`/` beside the NT file, holding only its cut
  * or flipped copy of E170_S50 (`RoutingEngineFKTest.fk7Cases`, `fk8Cases`). A case whose folder is not the segments
  * folder carries it as an eighth field. Edited tiles are written there only, never uploaded.
+ *
+ * Session 49, the memory groups ([MP64_FILE], [ML5_FILE], [PM5_FILE]): `RoutingEngineMemoryTest`'s draws, [RGenerator] on
+ * [TestTiles.segments] with [E3MemoryTest]'s seeds, `only` [E3MemoryTest.TILE], 20 km times 5^u, [E3Targeted.PROFILE]:
+ * MP64 labelled "MP64" at memory class 64; ML5 and PM5 each from its own generator over the one "M5" sequence at memory
+ * class 5, as that test draws them. The memory class is the line's third field.
  */
 class NtCasesWriteTest {
     @Test
@@ -98,6 +104,18 @@ class NtCasesWriteTest {
             val label = "FK${i + 1}"
             writeCases(label, cases, fk.rows(label).keys, File(dir, fkFile(i + 1)))
         }
+        for ((stratum, label, memoryclass, seed, count, name) in listOf(
+            Memory("MP64", "MP64", 64, E3MemoryTest.SEED_MP64, 59, MP64_FILE),
+            Memory("ML5", "M5", 5, E3MemoryTest.SEED_M5, 59, ML5_FILE),
+            Memory("PM5", "M5", 5, E3MemoryTest.SEED_M5, 55, PM5_FILE),
+        )) {
+            val gen = RGenerator(TestTiles.segments, seed, only = E3MemoryTest.TILE, minMetres = 20_000.0, ratio = 5.0)
+            try {
+                write(stratum, gen.draws(label, E3Targeted.PROFILE, memoryclass, TestTiles.segments), File(dir, name), count)
+            } finally {
+                gen.close()
+            }
+        }
     }
 
     private fun expected() = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
@@ -119,9 +137,11 @@ class NtCasesWriteTest {
         println("step10 $label cases: ${cases.size} of ${ids.size} stored ids built; $own in a folder of their own; written to $out")
     }
 
-    private fun write(stratum: String, draws: Iterator<E3Select.Draw>, out: File) {
+    private data class Memory(val stratum: String, val label: String, val memoryclass: Int, val seed: Long, val count: Int, val file: String)
+
+    private fun write(stratum: String, draws: Iterator<E3Select.Draw>, out: File, count: Int = 59) {
         val rows = expected().filter { it.stratum == stratum }.associateBy { it.id }
-        assertEquals(59, rows.size, "$stratum's rows in expected-1b")
+        assertEquals(count, rows.size, "$stratum's rows in expected-1b")
         val lines = ArrayList<String>()
         val seen = HashSet<String>()
         var n = 0
@@ -151,6 +171,9 @@ class NtCasesWriteTest {
         const val DL_LON_FILE = "dl-lon-cases.tsv"
         const val F0H_FILE = "f0h-cases.tsv"
         const val FK_TILES = "fk-tiles"
+        const val MP64_FILE = "mp64-cases.tsv"
+        const val ML5_FILE = "ml5-cases.tsv"
+        const val PM5_FILE = "pm5-cases.tsv"
 
         fun fkFile(kind: Int) = "fk$kind-cases.tsv"
         const val PROFILES = "profiles2"

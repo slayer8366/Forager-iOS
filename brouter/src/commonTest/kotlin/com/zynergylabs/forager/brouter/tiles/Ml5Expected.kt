@@ -1,0 +1,72 @@
+package com.zynergylabs.forager.brouter.tiles
+
+/**
+ * Step 10, session 49 (RECORD -140, decision 1): stratum ML5's 59 rows of brouter/src/jvmTest/resources/e3/expected-1b.tsv
+ * (memory class 5; every row "memory limit reached"), as [NtExpected] holds NT's: id, then kind, nodes, cost, distance, nodeDigest, heightsDigest (as
+ * [EngineRun.Outcome]), then the stored tupleDigest (every ML5 row is `exact`). No row holds a position: the file stores
+ * none and [NtExpected.Row]'s fields are an id, a kind, Ints and digests (E1); `Step10CommonDigestTest` holds this constant
+ * equal to the file's rows on the JVM.
+ */
+internal object Ml5Expected {
+    val ROWS: List<NtExpected.Row> = listOf(
+        NtExpected.Row("M5-0001", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0006", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0009", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0011", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0013", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0016", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0018", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0022", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0035", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0051", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0057", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0060", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0064", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0065", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0067", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0072", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0078", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0082", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0083", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0088", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0090", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0093", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0094", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0098", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0100", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0107", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0110", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0114", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0118", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0119", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0122", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0127", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0138", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0142", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0148", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0159", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0160", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0162", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0163", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0164", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0165", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0168", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0172", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0183", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0187", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0189", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0197", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0203", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0207", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0210", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0212", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0213", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0214", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0219", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0222", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0232", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0236", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0242", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+        NtExpected.Row("M5-0246", EngineRun.Outcome("memory limit reached", 0, 0, 0, "cbf29ce484222325", "cbf29ce484222325"), "4a3ceece8c6faa4f"),
+    )
+}

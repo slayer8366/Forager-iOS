@@ -8,3 +8,5 @@ internal actual fun testSettingSource(jvmProperty: String, iosVariable: String):
 internal actual fun testEnvironment(name: String): String? = System.getenv(name)
 
 internal actual val onJvm: Boolean = true
+
+internal actual fun testThreadStack(): String = "JVM thread ${Thread.currentThread().name}; stack size not read"

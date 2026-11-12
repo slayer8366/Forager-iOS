@@ -20,3 +20,10 @@ internal expect fun testSettingSource(jvmProperty: String, iosVariable: String):
 internal expect fun testEnvironment(name: String): String?
 
 internal expect val onJvm: Boolean
+
+/**
+ * Step 10, session 49 (RECORD -140, decision 2): the running test thread's stack, as text for one printed line. On iOS
+ * `pthread_get_stacksize_np(pthread_self())` in bytes and whether it is the main thread (`pthread_main_np`); on the JVM
+ * the thread's name only (its stack is `-Xss`'s or the JVM's default, not read here).
+ */
+internal expect fun testThreadStack(): String

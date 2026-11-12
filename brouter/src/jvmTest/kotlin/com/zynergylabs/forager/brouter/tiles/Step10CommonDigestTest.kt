@@ -57,6 +57,16 @@ class Step10CommonDigestTest {
         "FK", FkExpected.ROWS, 84, setOf("exact", "outcome"), Regex("FK[1-8]-.*"),
     )
 
+    /** Session 49: the memory groups' constants, MP64 and ML5 59 rows each, PM5 55, all `exact`. */
+    @Test
+    fun mp64ConstantEqualsTheFilesMp64Rows() = constantEqualsTheFilesRows("MP64", Mp64Expected.ROWS)
+
+    @Test
+    fun ml5ConstantEqualsTheFilesMl5Rows() = constantEqualsTheFilesRows("ML5", Ml5Expected.ROWS)
+
+    @Test
+    fun pm5ConstantEqualsTheFilesPm5Rows() = constantEqualsTheFilesRows("PM5", Pm5Expected.ROWS, 55)
+
     private fun constantEqualsTheFilesRows(
         stratum: String,
         constant: List<NtExpected.Row>,
