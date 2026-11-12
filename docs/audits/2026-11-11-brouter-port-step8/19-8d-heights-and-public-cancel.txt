@@ -1,0 +1,37 @@
+Step 8d, session 37: RouteTest's two new tests (RECORD -129, decisions 1 and 2) and their reverts, rv17 and rv24.
+
+The tests (RouteTest, jvmTest, package com.zynergylabs.forager.brouter; uncommitted until both reverts are observed):
+- rFirstTenRoutedCasesRouteThroughRouteAsThroughTheOracle: R's first 10 routed cases in R's own order. The rule, stated
+  before any run: R's order is RoutingEngineRTest's, its profiles in its seeds' order (E3RTest.PROFILE first, then
+  E3RProfilesTest.SEEDS), each profile's cases in RGenerator's order from that profile's seed. The first profile is
+  hiking-mountain, a StdModel profile (no "---model:" line in profiles2/hiking-mountain.brf), and expected-1b's 59
+  R-hiking-mountain rows are all of kind "route" (an awk count of column 4, no row printed). So the first 10 routed
+  cases are hiking-mountain's first 10 generated cases, R's order does not mix models there, and no StdModel filter is
+  applied. Each case: the oracle (E3CaseRun, this JVM) held to expected-1b's row; kind "route"; the oracle's nodes with
+  a height (E3CaseRun's heightsByTile, not Short.MIN_VALUE) summed and asserted > 0; then the internal route() with
+  OracleLibm, compared as f0RoutesThroughRouteAsThroughTheOracle compares (Found, nodes in all three arrays, distance,
+  node digest, heights digest). Asserts 10 cases compared.
+- aTerminateBeforeThePublicRouteFailsAsTheOracle: aTerminateBeforeTheRunFailsAsTheOracle's comparison, with the public
+  route(request, cancel) (MsunLibm) in place of the internal overload.
+
+Runner: as 16's (a scratch copy of docs/process/tools/revert.sh, timeout 1200 s in the copy only). Filter
+com.zynergylabs.forager.brouter.RouteTest (6 tests, 1 XML file). Both edits are in
+brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/Route.kt, the same strings as 16's rv17 and rv24.
+
+PREDICTIONS (pushed before any run). For each: 0 "e: " lines, 1 fresh XML, tests 6; restore cmp equal.
+
+unreverted: failures 0. The new R test prints, per case, nodes and the count of nodes with a height, and true on
+  distance, node digest and heights digest. If a case's oracle heights are all "no height", the session stops (-62).
+
+rv17 heights shifted by one node: "nodes[it].getSElev()" -> "nodes[minOf(it + 1, nodes.size - 1)].getSElev()".
+  rFirstTenRoutedCasesRouteThroughRouteAsThroughTheOracle FAILS on its first case's "heights digest"; nodes, distance
+  and node digest pass first. The F0 tests pass, as in 16 (every F0 height is "no height"). failures 1. It could pass
+  only if every pair of neighbouring nodes on the first case's route had the same height to the quarter metre; a guess
+  only in that sense.
+
+rv24 the public route dropping the caller's cancel: "= route(request, cancel, MsunLibm)" -> "= route(request,
+  RouteCancel(), MsunLibm)".
+  aTerminateBeforeThePublicRouteFailsAsTheOracle FAILS on "F0-inside-across-the-degree-line: Failed": the engine is
+  built with a fresh cancel, runs, and finds the route, so the outcome is a Found. The other five pass. failures 1.
+
+OBSERVED:
