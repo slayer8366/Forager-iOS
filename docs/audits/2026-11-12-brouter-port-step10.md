@@ -273,3 +273,84 @@ not done.
 **Next:** 1. Read run on `2cb3356`: simulator TOTAL (expect 41), F0h and each FK line, FK7-x1's message, E1 count, minutes.
 2. Read both runs' `jvm` (TOTAL, FAILED: expect only `CollectOutreachersTest`), `jvm-production` total, ` e: `, compileKotlinIos*.
 3. The timing table against `jvm-production`'s lines. 4. Then the memory groups' simulator step.
+
+## §4 Session 49 (Plumb Ledger, 2026-11-12): the recursion's depth; the memory groups held back by the time stop
+
+**Stop hit: the time estimate.** The memory step would push `ios-smoke` well past 40 minutes (below), so it was built,
+checked on the JVM and committed locally, **not pushed**. Pushed: the depth counter (`4d2bd15`) and this section. Trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>` only. E1 scan (`scan.sh`, staged diff) before each commit: 0.
+
+**1. The depth counter** (`4d2bd15`, RECORD -140 decision 2). `PeninsulaDepth`, a small internal object beside
+`OsmNodesMap` (`mapaccess/PeninsulaDepth.kt`): `current`, `deepest`, `overflowsCaught`, `reset()`. In the walk: an
+increment of `current` on entry to `minVisitIdInSubtree` with `deepest = max(deepest, current)`, a decrement before its
+one return; `cleanupPeninsulas` sets `current` to 0 after each top-level call (a JVM overflow caught there skips the
+unwound frames' decrements) and counts the calls `runCatchingStackOverflow` reports cut short, from the Boolean it already
+returned and the port discarded. Nothing in the port reads it. `RoutingEngineMemoryTest` resets it around each port run.
+
+**JVM depth table** (locally, x86_64 Linux, Temurin 21, the test JVM's default stack; `RoutingEngineMemoryTest`, port
+against oracle in one JVM) [R, Plumb's]:
+
+| group | cases | mismatches | deepest recursion | cases that entered the walk | overflows caught | port's runs |
+|---|---|---|---|---|---|---|
+| MP64 (class 64) | 59 (86 draws) | 0 | 5,679 | 59 | 0 | 101 s |
+| ML5 (class 5) | 59 (246 draws) | 0 | 5,679 | 59 | 0 | 63 s |
+| PM5 (class 5) | 55 (1,180 draws) | 0 | 5,679 | 55 | 0 | 58 s |
+
+Every one of the 173 cases enters the walk and every one reaches the same deepest depth, 5,679: the depth measured once
+on the JVM before (RECORD -50). The deepest cases named by the common tests: MP64-0005, M5-0060 (ML5), M5-0304 (PM5); all
+three groups route on `W75_N40` only. `CollectOutreachersTest`: 2 failures, both its methods, as in the `jvm` reads the record
+holds before -140; not touched. That run (`mapaccess.*` and the memory test): 32 tests, those 2 failed.
+
+**2. The memory groups on the simulator: built, not pushed** (local commit `27841ad` on branch `s49-memory-step` in
+`/home/user/forager-ios-5a`, a child of `4d2bd15`; also saved as a patch,
+`/tmp/claude-0/-home-user-Forager-iOS/a111d7c0-b933-58d6-aca3-0a232a6c0dae/scratchpad/s49-memory-step.patch`).
+- `Mp64Expected` (59), `Ml5Expected` (59), `Pm5Expected` (55): the rows without ends; `Step10CommonDigestTest` holds each
+  to expected-1b.tsv: 59, 59, 55 equal on the JVM.
+- `NtCasesWriteTest` writes `mp64-`, `ml5-`, `pm5-cases.tsv` beside the NT file from `RoutingEngineMemoryTest`'s draws:
+  59 of 59 in 86 draws, 59 of 59 in 246, 55 of 55 in 1,180; missing none.
+- `MemoryEngineCommonTest.kt`: three classes, `Mp64EngineCommonTest`, `Ml5EngineCommonTest`, `Pm5EngineCommonTest`, through
+  `Step10Cases`, printing per group: equal, mismatches, seconds, the deepest recursion and its case, the cases that entered
+  the walk, caught overflows, and on iOS the test thread's stack size (`pthread_get_stacksize_np(pthread_self())`) and
+  whether it is the main thread (`pthread_main_np`). JVM, locally, through these common tests: **59, 59, 55 equal on all
+  six fields and the tuple digest; 100 s, 62 s, 58 s; deepest 5,679 each; 0 overflows** [R]. The iOS test sources
+  cross-compile on Linux (`compileTestKotlinIosSimulatorArm64`, successful); never run on a simulator.
+- **Stack bytes in use at the deepest point: left out.** Common Kotlin cannot take a local's address, and Kotlin/Native's
+  `memScoped` allocates off the stack; reading the stack pointer would need a platform function called from the port at
+  the deepest entry, more than the counter. Only the stack size is read.
+- **The CI design** (in that commit; not run): job variable `MEMORY_SIM_CLASSES` names the three classes. Gradle's only
+  filter flag is `--tests`, and it only includes (Gradle 9.0's `AbstractTestTask` has no exclude option; KGP 2.3.10's
+  `KotlinNativeTest` turns includes into `--ktest_gradle_filter` and DSL excludes into `--ktest_negative_gradle_filter`,
+  which needs a build edit). So the present simulator step passes `--tests` for every top-level class of a commonTest or
+  iosTest file holding a `@Test`, read from the sources, less the three (19 classes, 41 `@Test`s locally). A new step after
+  the counts step, `if: always()`, copies the first step's XML to `iosSimulatorArm64Test-common/` (the task rewrites its
+  folder), runs only the three classes, counts them and exits with Gradle's code: a process ended by the recursion fails
+  that step alone; the arm64 steps and the upload after it are already `if: always()`.
+
+**The time estimate (the stop).** The memory groups' JVM seconds through the common tests: 100 + 62 + 58 = **220 s**.
+Simulator-to-JVM ratios seen on the same path: DL-lat 198/20 and DL-lon 64/7 (session 48's run), 245/20 and 87/7
+(run 43185488304): 9.1 to 12.4; the planner's ~11. **The memory step alone: about 2,400 s, 40 minutes (33 to 45)**, plus
+the runner's extra draws (PM5 needs 1,180) and a second test task. With the present 18 minutes, **about 59 minutes (52 to
+64), past the job's 45**; the prompt's line was 40.
+
+**3. CI.** See "CI read" below (filled after the push of this section).
+
+**E1.** No position committed, printed or uploaded. The new constants are ids, kinds, Ints and digests; the case files
+are written at run time under `brouter/build/step10/` (locally too, never read or printed); tests print ids, counts,
+depths, seconds and byte counts. `scan.sh` on each staged diff: 0 (`4d2bd15`, `27841ad`, this section).
+
+[I] Every case of all three groups reaches depth 5,679, so the stack question of -61 does not need all 173 on the
+simulator: one case of a group reaches the deepest point as every other does. [?] Whether the simulator's test thread is
+the main thread (8 MB on macOS) or a secondary one (512 KB by default) decides the answer; the stack line was built to
+show it and has not run.
+
+**Questions for the planner.**
+1. The memory step does not fit `ios-smoke`. Which: (a) a few cases per group (each reaches 5,679; e.g. the first 5 of
+   each, about 3 to 4 minutes on the simulator by the same ratio); (b) the three groups in a job of their own (about 40
+   minutes alone, near its own limit); (c) a longer timeout, the owner's call?
+2. May the stack bytes be read with a platform function in the port at the deepest entry (an expect/actual returning the
+   stack pointer's distance from the walk's start), or is the stack size enough for -61?
+
+**Next.** 1. The planner's choice on question 1; then push `27841ad` (reshaped as chosen) and read the memory step: per
+group equal, seconds, deepest recursion, stack size; or the crash, as found. 2. CI on this push: `jvm` (TOTAL, FAILED
+only `CollectOutreachersTest`, the three `8b <group> depth` lines), `jvm-production`, `ios-smoke` 41 of 41 with the
+counter compiled in. 3. Then R (-140 decision 3) and the planted error (decision 4).
