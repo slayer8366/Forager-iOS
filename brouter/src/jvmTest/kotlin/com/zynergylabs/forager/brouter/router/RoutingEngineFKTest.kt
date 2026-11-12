@@ -107,11 +107,11 @@ class RoutingEngineFKTest {
         assertTrue(mismatches.isEmpty(), "9 $label: ${mismatches.size} mismatches; first ${mismatches.take(5)}")
     }
 
-    private fun rows(label: String) = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
+    internal fun rows(label: String) = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
         .filter { it.stratum == "FK" && it.id.startsWith("$label-") }.associateBy { it.id }
 
     /** Kinds 1, 2 and 6: the generator's first [N] kept draws within [E3FKTest.CAP]; nothing chosen by the oracle. */
-    private fun firstTen(kind: Int): List<E3Case> = generator { gen ->
+    internal fun firstTen(kind: Int): List<E3Case> = generator { gen ->
         val profile = profileOf(kind)
         val rnd = Random(E3FKTest.SEED + kind)
         val cases = ArrayList<E3Case>()
@@ -127,7 +127,7 @@ class RoutingEngineFKTest {
     }
 
     /** Kinds 3 and 4: 1b's draws whose ids are the kind's rows (1b chose them by the oracle's R1), within [E3FKTest.CAP]. */
-    private fun byRow(label: String, kind: Int): List<E3Case> = generator { gen ->
+    internal fun byRow(label: String, kind: Int): List<E3Case> = generator { gen ->
         val ids = rows(label).keys
         val profile = profileOf(kind)
         val rnd = Random(E3FKTest.SEED + kind)
@@ -145,7 +145,7 @@ class RoutingEngineFKTest {
     }
 
     /** Kind 5: a usable start then an unusable end, each one draw, within [E3FKTest.CAP5]. */
-    private fun kind5(): List<E3Case> = generator { gen ->
+    internal fun kind5(): List<E3Case> = generator { gen ->
         val profile = profileOf(5)
         val rnd = Random(E3FKTest.SEED + 5)
         val cases = ArrayList<E3Case>()
@@ -167,7 +167,7 @@ class RoutingEngineFKTest {
     }
 
     /** Kinds 7 and 8: one pair of ends in E170_S50 from `SEED + 7`, and a scratch folder for the edited copies. */
-    private fun edited(body: (File, DoubleArray, File) -> Unit) {
+    internal fun edited(body: (File, DoubleArray, File) -> Unit) {
         val e = generator { gen ->
             val rnd = Random(E3FKTest.SEED + 7)
             var draws = 0
@@ -187,7 +187,7 @@ class RoutingEngineFKTest {
         }
     }
 
-    private fun case(tiles: File, id: String, e: DoubleArray, make: (File) -> Unit): E3Case {
+    internal fun case(tiles: File, id: String, e: DoubleArray, make: (File) -> Unit): E3Case {
         val dir = File(tiles, id)
         make(dir)
         return E3Case(id, dir, e[0], e[1], e[2], e[3], E3FKTest.PROFILE)
@@ -202,7 +202,7 @@ class RoutingEngineFKTest {
         }
     }
 
-    private companion object {
+    internal companion object {
         const val N = 10
 
         /** As `E3FKTest.profileOf`: kinds 3 and 4 on `trekking-noferries`, every other on `hiking-mountain`. */
