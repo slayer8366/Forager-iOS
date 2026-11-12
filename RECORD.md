@@ -4611,7 +4611,7 @@ checked and is false: 151 of R's StdModel cases and 51 of DL's 118 reach the mem
 
 **Kind:** outcome
 **ID:** 2026-10-28-124
-**Timestamp:** 2026-11-11T21:52:00Z
+**Timestamp:** 2026-11-11T21:50:45Z
 **Continues:** 2026-10-28-61, 2026-10-28-90, 2026-10-28-123
 **Title:** Steps 8a and 8b, Plumb's session 31: the memory path ported; R, DL, MP64, ML5 and PM5 equal to the oracle; three
 reverts caught as predicted; one false line in the report; the planner's rulings
@@ -4669,7 +4669,7 @@ corrects the line in place.
 
 **Kind:** outcome
 **ID:** 2026-10-28-125
-**Timestamp:** 2026-11-11T23:08:00Z
+**Timestamp:** 2026-11-11T23:05:13Z
 **Continues:** 2026-10-28-90, 2026-10-28-124
 **Title:** Step 8b closed: Plumb's session 32, two more reverts caught, one prediction failed on its counts; 8c drafted
 only; the planner's rulings
@@ -4705,7 +4705,7 @@ planner). Docs only: no code changed.
 
 **Kind:** outcome
 **ID:** 2026-10-28-126
-**Timestamp:** 2026-11-12T00:02:00Z
+**Timestamp:** 2026-11-11T23:53:22Z
 **Continues:** 2026-10-28-90, 2026-10-28-125
 **Title:** Step 8c, Plumb's session 33: tests red over stubs, the port held as a patch; a stop on a draft test's false
 premise; the JVM job hit its 30-minute limit; the planner's rulings
@@ -4754,7 +4754,7 @@ the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@
 
 **Kind:** outcome
 **ID:** 2026-10-28-127
-**Timestamp:** 2026-11-12T01:50:00Z
+**Timestamp:** 2026-11-12T01:22:34Z
 **Continues:** 2026-10-28-90, 2026-10-28-126
 **Title:** Step 8c closed on the JVM: Plumb's session 34, the port in the tree, 9 of 9 stop tests passing, two reverts
 caught; FK9 weakened by -126's change, named; the planner's rulings
@@ -4798,7 +4798,7 @@ catches that error is the two tests on a driven clock, which have no oracle besi
 
 **Kind:** outcome
 **ID:** 2026-10-28-128
-**Timestamp:** 2026-11-12T03:25:00Z
+**Timestamp:** 2026-11-12T02:36:05Z
 **Continues:** 2026-10-28-42, 2026-10-28-90, 2026-10-28-111, 2026-10-28-122, 2026-10-28-127
 **Title:** Step 8d begun: Plumb's session 35, the survey, the plan and 4 red tests; the dirty track is not read by
 Forager; heights stay raw in `Found`; the planner's rulings
