@@ -5909,3 +5909,36 @@ rare angles); anything of them on iOS; a planted error (the test has not been se
    production job.
 2. **Next:** the planted error for this test; the production record; the simulator's digests with their planted error.
 **Notes:** Written by the planner session by hand. Next free ID -155.
+
+**Kind:** intent
+**ID:** 2026-10-28-155
+**Timestamp:** 2026-11-12T23:22:27Z
+**Continues:** 2026-10-28-152, 2026-10-28-153
+**Title:** The owner wants to own the map outright, with what Forager does not use left out; a renderer of our own is
+to be sized before it is decided
+**Decision:** the owner, verbatim, in three messages:
+- "Compile a list of all non kotlin dependencies and where they belong, and rank them from least to most time
+  consuming." (Answered in conversation from -152's survey: 20 rows, MapLibre and the Compose interface ranked last.)
+- "We should consider working on our own map renderer for both operating systems, rather than port map libre".
+- Asked what draws them to it, the beta wrapper or owning the map: "I want to own the map outright, and debloat what we
+  can since some things are coded in that we don't use."
+**What the planner told the owner first, and stands by:**
+- The plan does not port MapLibre. MapLibre has an iOS SDK of its own; the open risk was the Compose wrapper over the two
+  SDKs (-152).
+- What Forager uses today, counted by the planner on the export at `12eb9697` [C]: `forager-street-v2.json` has 93
+  layers (60 line, 17 fill, 15 symbol, 1 background) on one vector source, with 155 properties given as expressions or
+  functions, glyphs and a sprite; 14 symbol layers set text, 6 place it along lines. The app's 39 map files (10,300
+  lines) import 54 MapLibre classes, among them runtime GeoJSON layers, a raster layer, the location component, the
+  camera and the offline region manager.
+- A renderer has no oracle of the kind the BRouter port had, and its chief risks, speed and battery, show only on a
+  phone, which is ruled out (-2).
+**Read as:** an intent, not yet a decision to build. The owner's reasons are ownership and leaving out what is unused,
+not the wrapper's risk. -153's "Map first" stands as the order; what the map is made of is now open.
+**The planner's calls (technical; the owner may overrule):**
+1. **The researcher sizes a renderer of Forager's own before anything is built:** exactly which features the styles and
+   the app use; what MapLibre carries beyond that, measured where it can be; what exists in Kotlin Multiplatform to build
+   on; the ways to "own" it (a renderer written in shared Kotlin; a trimmed fork of MapLibre's own engine; staying on the
+   SDKs); how each could be proved correct here, and what could not be shown without a phone.
+2. **The MapLibre spike is held** until that report is in: its purpose was to de-risk a wrapper the owner may not want.
+3. **What a first iOS build shows while a renderer is written** is the owner's, asked with the report.
+**Notes:** Written by the planner session by hand. Next free ID -156.
