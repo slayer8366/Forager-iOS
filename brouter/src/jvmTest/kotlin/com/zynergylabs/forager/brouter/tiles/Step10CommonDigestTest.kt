@@ -31,14 +31,23 @@ class Step10CommonDigestTest {
     }
 
     @Test
-    fun ntConstantEqualsTheFilesNtRows() {
-        val file = rows.filter { it.stratum == "NT" }
-        assertEquals(59, file.size, "NT's rows in expected-1b")
-        assertEquals(setOf("exact"), file.map { it.compare }.toSet(), "NT's rows are all held exactly")
+    fun ntConstantEqualsTheFilesNtRows() = constantEqualsTheFilesRows("NT", NtExpected.ROWS)
+
+    /** Session 47: LB's and CR's constants, held to the file as NT's is. */
+    @Test
+    fun lbConstantEqualsTheFilesLbRows() = constantEqualsTheFilesRows("LB", LbExpected.ROWS)
+
+    @Test
+    fun crConstantEqualsTheFilesCrRows() = constantEqualsTheFilesRows("CR", CrExpected.ROWS)
+
+    private fun constantEqualsTheFilesRows(stratum: String, constant: List<NtExpected.Row>) {
+        val file = rows.filter { it.stratum == stratum }
+        assertEquals(59, file.size, "$stratum's rows in expected-1b")
+        assertEquals(setOf("exact"), file.map { it.compare }.toSet(), "$stratum's rows are all held exactly")
         val want = file.map { listOf(it.id, common(it.outcome).toField(), it.tupleDigest) }
-        val got = NtExpected.ROWS.map { listOf(it.id, it.outcome.toField(), it.tupleDigest) }
-        assertEquals(want, got, "NtExpected.ROWS against expected-1b.tsv's NT rows, in file order")
-        assertEquals(NtExpected.ROWS.map { it.tupleDigest }, NtExpected.ROWS.map { it.outcome.tupleDigest }, "NtExpected's tuple digests")
-        println("step10 NtExpected: ${got.size} of ${want.size} rows equal to expected-1b.tsv's NT rows")
+        val got = constant.map { listOf(it.id, it.outcome.toField(), it.tupleDigest) }
+        assertEquals(want, got, "$stratum's constant against expected-1b.tsv's $stratum rows, in file order")
+        assertEquals(constant.map { it.tupleDigest }, constant.map { it.outcome.tupleDigest }, "$stratum's constant's tuple digests")
+        println("step10 ${stratum}'s constant: ${got.size} of ${want.size} rows equal to expected-1b.tsv's $stratum rows")
     }
 }

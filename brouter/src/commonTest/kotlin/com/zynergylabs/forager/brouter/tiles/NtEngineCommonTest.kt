@@ -1,89 +1,21 @@
 package com.zynergylabs.forager.brouter.tiles
 
-import okio.FileSystem
-import okio.Path.Companion.toPath
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.fail
-import kotlin.time.TimeSource
 
 /**
  * Step 10, session 46 (RECORD -138, decision 2): stratum NT through the engine ([EngineRun], `MsunLibm`), its cases read
- * from the file `NtCasesWriteTest` (jvmTest) wrote at run time on a JVM, named by the variable [VARIABLE]; never
+ * from the file `NtCasesWriteTest` (jvmTest) wrote at run time on a JVM, named by [Step10Cases.VARIABLE]; never
  * committed. Each case whose id is one of NT's 59 stored rows ([NtExpected]) is held to its row on the six fields and the
  * stored tuple digest. A case whose id is not among them is counted, not failed. The file must name all 59 stored ids.
+ * Session 47 moved the check into [Step10Cases], unchanged, so LB and CR share it; E1 is kept there as stated.
  *
- * On iOS the `ios-smoke` job runs the writer on the runner's JVM first and exports `SIMCTL_CHILD_`[VARIABLE]; unset there,
- * this test fails. On the JVM, unset (the `jvm` job), it prints one line and does not run.
- *
- * E1: the file holds ends; nothing of a case but its id is printed or put in a message. Mismatches name the id and the
- * field, with the tuple digests only. The tiles are `<tiles dir>/segments` (the JVM's `TestTiles.segments`), the
- * profiles `<oracle dir>/profiles2`, as [F0EngineCommonTest]'s.
+ * The tiles are `<tiles dir>/segments` (the JVM's `TestTiles.segments`), the profiles `<oracle dir>/profiles2`, as
+ * [F0EngineCommonTest]'s.
  */
 class NtEngineCommonTest {
     @Test
     fun ntCasesFromTheRunTimeFileThroughTheEngineMatchExpected1b() {
-        val file = testEnvironment(VARIABLE)
-        if (file.isNullOrEmpty()) {
-            if (onJvm) {
-                println("step10 NT engine: $VARIABLE is unset; not run")
-                return
-            }
-            fail("environment variable $VARIABLE is not set in the simulator's process (ios-smoke exports SIMCTL_CHILD_$VARIABLE)")
-        }
-        val segments = setting("brouter.tiles.dir", "BROUTER_TILES_DIR").toPath() / "segments"
-        val profiles = setting("brouter.oracle.dir", "BROUTER_ORACLE_DIR").toPath() / "profiles2"
-        val path = file.toPath()
-        for (p in listOf(path, segments, profiles / "lookups.dat")) {
-            if (!FileSystem.SYSTEM.exists(p)) fail("$p does not exist or cannot be read in this process")
-        }
-        val stored = NtExpected.ROWS.associateBy { it.id }
-        val lines = FileSystem.SYSTEM.read(path) { readUtf8() }.lines().filter { it.isNotEmpty() }
-        val seen = LinkedHashSet<String>()
-        val notStored = ArrayList<String>()
-        val mismatches = ArrayList<String>()
-        var equal = 0
-        val t0 = TimeSource.Monotonic.markNow()
-        for (line in lines) {
-            val f = line.split('\t')
-            if (f.size != 7) fail("a line of $path has ${f.size} fields, not 7 (id ${f[0]})")
-            val id = f[0]
-            val row = stored[id]
-            if (row == null) {
-                notStored += id
-                continue
-            }
-            if (!seen.add(id)) fail("$id appears twice in $path")
-            val profile = profiles / "${f[1]}.brf"
-            if (!FileSystem.SYSTEM.exists(profile)) fail("$id: $profile does not exist")
-            val got = EngineRun.run("${f[3]},${f[4]}|${f[5]},${f[6]}", profile, segments, f[2].toInt())
-            val w = row.outcome
-            val differ = listOfNotNull(
-                "kind".takeIf { got.kind != w.kind },
-                "nodes".takeIf { got.nodes != w.nodes },
-                "cost".takeIf { got.cost != w.cost },
-                "distance".takeIf { got.distance != w.distance },
-                "nodeDigest".takeIf { got.nodeDigest != w.nodeDigest },
-                "heightsDigest".takeIf { got.heightsDigest != w.heightsDigest },
-                "tupleDigest".takeIf { got.tupleDigest != row.tupleDigest },
-            )
-            if (differ.isEmpty()) equal++ else mismatches += "$id $differ (tuple port ${got.tupleDigest}, stored ${row.tupleDigest})"
-        }
-        val missing = stored.keys - seen
-        println(
-            "step10 NT engine: ${lines.size} cases in the file; ${seen.size} of ${stored.size} stored ids; ${notStored.size} not stored " +
-                "${notStored.take(20)}; equal on all six fields and the tuple digest ${equal}; mismatches ${mismatches.size}; " +
-                "missing ${missing.size}; ${t0.elapsedNow().inWholeSeconds} s",
-        )
-        mismatches.forEach { println("step10 NT engine mismatch $it") }
-        assertEquals(emptyList(), mismatches, "NT through the engine against expected-1b.tsv (id, fields, tuple digests)")
-        assertEquals(emptySet(), missing, "NT's stored ids the run-time file does not name")
-    }
-
-    private companion object {
-        const val VARIABLE = "BROUTER_STEP10_NT_CASES"
-
-        fun setting(jvmProperty: String, iosVariable: String): String =
-            testSetting(jvmProperty, iosVariable) ?: fail("${testSettingSource(jvmProperty, iosVariable)} is not set")
+        val file = Step10Cases.ntFile("NT") ?: return
+        Step10Cases.check("NT", file, NtExpected.ROWS)
     }
 }
