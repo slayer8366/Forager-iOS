@@ -265,3 +265,34 @@ costs read `OsmPath`'s own `selev` and the `OsmNode`'s, never an `OsmPathElement
 kind, nodes, cost, distance and the position digest stay equal; the test fails with `9 F0h: 8 mismatches`. Where this is
 a guess [I]: that no F0h node has no height (a `Short.MIN_VALUE` lifted by one would also change `postElevationCheck`'s
 filling; it would still show as heights only).
+
+**Plant, observed** [C] (`21-f0h-plant-out.txt`, `21-f0h-plant.diff`; scratch copy of `revert.sh`): compile errors 0,
+1 fresh XML, 1 test, 1 failure, `9 F0h: 8 cases; kinds {route=8}; 8 mismatches`, each of the 8 on `[heights digest]`
+alone. As predicted. Restored from the saved copy, `cmp` equal; `git status` clean after.
+
+### 3.2 NT's plant (RECORD -133, decision 1)
+
+**Whether the plant can bite, from the code** [R]. `WaypointMatcherImpl.kt`'s `updateWayList` appends one entry and sorts
+the whole `wayNearest` (stable `sortWith`, then the list cut to 5); `end()` calls it twice per link, once per direction
+(`_w_`, `_w2_`), then takes `wayNearest[0]` for the waypoint's `node1`, `node2`, crosspoint, radius and diff. So the list is
+not one entry per link: it holds both directions of every link seen. NT's construction (`NTGenerator`, steps 2 to 4)
+puts the start on junction J between two links A = N1-J and B = J-N2 that lie on one line, so A's entry in direction
+N1 to J and B's in direction J to N2 tie on both keys (-133, finding 1: all 59), and step 3 makes that pair the two
+smallest. Without the plant, the entry added first stays first among the tied pair; with the list reversed before each
+sort, the one added last goes first. So the reversal swaps which link is first in every NT case: A's entry gives
+`node1` = N1, `node2` = J; B's gives `node1` = J, `node2` = N2. No STOP.
+
+**The plant:** `ways.reverse()` inserted before `ways.sortWith(comparator)` in `updateWayList`. Run: the class
+`RoutingEngineStep9Test` (NT, LB, CR).
+
+**Prediction (pushed before the run).**
+- The swap itself [R]: all 59 NT cases start from the other link.
+- NT's 3 non-routes (1 "to-position not mapped", 2 "target island detected") pass: the end's mapping and the target's
+  island check do not read the start's link [I].
+- NT's 56 routes: **56 fail**, at least on `nodes` and the position digest; cost may move too. This count is a guess [I].
+  The reason I expect it: `getStartPath` makes paths n1 to n2 and n2 to n1 over the matched link with the crosspoint at
+  J. On link B the forward path leaves J at once; on link A the useful path is N1 to J, which ends at J after its
+  crosspoint, J, so I expect J twice at the head of the track. If the port (and the Java) drops a repeated node, or the
+  search makes the same tree from J either way, fewer fail, down to 0, and that would be the finding -133 names.
+- LB and CR: 0 mismatches each. Their starts are not built on an exact tie, so a reversal of tied entries should not
+  reach them [I]; a failure there would mean an exact tie that their construction does not name.

@@ -1,0 +1,16 @@
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="f0hRoutesThroughThePortAsThroughTheOracle[jvm]"
+EXIT 0
+9 F0h: 8 cases; kinds {route=8}; 8 mismatches
+9 F0h mismatch F0h-inside-across-the-degree-line: [heights digest]
+9 F0h mismatch F0h-inside-short: [heights digest]
+9 F0h mismatch F0h-inside-long: [heights digest]
+9 F0h mismatch F0h-edge-north-a: [heights digest]
+9 F0h mismatch F0h-edge-north-b: [heights digest]
+9 F0h mismatch F0h-detour-west: [heights digest]
+9 F0h mismatch F0h-outside-west-island: [heights digest]
+9 F0h mismatch F0h-outside-west-moved: [heights digest]

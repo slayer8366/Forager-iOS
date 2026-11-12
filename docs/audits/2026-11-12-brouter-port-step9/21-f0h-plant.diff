@@ -1,0 +1,11 @@
+--- OsmPathElement.kt (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmPathElement.kt
+@@ -71,7 +71,7 @@
+         /** `OsmPathElement.java:84-90`. */
+         fun create(path: OsmPath): OsmPathElement {
+             val n = path.getTargetNode()!!
+-            val pe = create(n.getILon(), n.getILat(), n.getSElev(), path.originElement)
++            val pe = create(n.getILon(), n.getILat(), (n.getSElev() + 1).toShort(), path.originElement)
+             pe.cost = path.cost
+             pe.message = path.message
+             return pe
