@@ -435,3 +435,33 @@ tile deeper than this one. [?] How much of the 8 MB the walk used: not read (-14
 
 **Next.** 1. R's fallback on the simulator (-140 decision 3): the timing above puts R's 1,180 cases far past any job
 (the ratio ~11), so the first 12 cases of each profile. 2. The planted error across all groups (-139 decision 1).
+
+## §6 Sessions 51 and 52 (Plumb Ledger, 2026-11-12): the stack ladder; the walk without recursion
+
+**Session 51 wrote no section; this begins with its ladder and the planner's reading (RECORD -143).** The ladder
+(`StackLadderIosTest`, iosTest, gated on `BROUTER_STEP10_LADDER`, `ios-memory`'s last step) ran one MP64 case, the first
+stored one entering the walk, through `EngineRun` on POSIX threads made with `pthread_attr_setstacksize`: 8, 4, 2, 1 MB,
+512 KB, joined in turn. Each line ("starting", "survived") was also flushed to `ladder.txt`, which outlives a process that
+ends. Ids, sizes, depths and digest equality only (E1). The planner read run 43212726248 on `3d5bd11`: the case was
+MP64-0002, 3,378 deep; 8, 4 and 2 MB survived, equal to its stored row; after "starting 1048576" no line, and the step
+failed with "Child process terminated with signal 10: Bus error". The memory groups 173 of 173 and R's fallback 240 of
+240 equal before it; 802 cases in all; all simulator-checked. The owner then ruled (RECORD -144): "Rewrite without
+recursion (Recommended)".
+
+### Session 52
+
+**1. The red test** (`ce1a193`, pushed alone, before the rewrite). The ladder now asserts. Four cases: MP64-0002 and the
+deepest case of each memory group as run 43212726248's depth lines named them, MP64-0005, M5-0060 (ML5), M5-0304 (PM5),
+each 5,679 deep. They are named in the test, not found: finding them on the simulator would run each group's 55 to 59
+cases again in that step. Each case runs on the test's thread first, then on all five sizes. Every rung must survive and
+give its stored row (six fields and the tuple digest) with the same deepest walk as on the test's thread. Failures are
+collected and fail the test at the end. Red on the present port by the process ending at 1 MB on MP64-0002, as run
+43212726248 already shows; not rerun before the rewrite. The CI step's name still says "one MP64 case": CI is not changed.
+
+**4. The planted error: the prediction, pushed before it is run.** The plant: in the rewrite's "return" step, drop the
+write `if (minIdSub < f.minId) f.minId = minIdSub`, so a frame never takes its children's minimum. Then a node whose way
+back to the visited graph runs only through a child's subtree reports a minimum above its parent's id, and the parent
+unlinks it as a peninsula when it is not one. Run by the scratch `revert.sh` on the JVM only, `cmp`-equal restore, once on
+`RoutingEngineMemoryTest` and once on `RoutingEngineRTest`. **Prediction [I, a guess]:** both catch it: in each memory
+group some of the cases that enter the walk route differently or fail (nodes, cost or digest), and in R some of the cases
+entering the walk do. How many is not predicted.
