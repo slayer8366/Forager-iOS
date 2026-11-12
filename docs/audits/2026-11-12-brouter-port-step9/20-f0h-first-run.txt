@@ -1,0 +1,6 @@
+RoutingEngineF0hTest[jvm] > f0hRoutesThroughThePortAsThroughTheOracle[jvm] STANDARD_OUT
+    9 F0h: 8 cases; kinds {route=8}; 0 mismatches
+RoutingEngineF0hTest[jvm] > f0hRoutesThroughThePortAsThroughTheOracle[jvm] PASSED
+BUILD SUCCESSFUL in 1s
+EXIT 0
+TOTAL: tests 1, failures 0, errors 0, skipped 0 in 1 files

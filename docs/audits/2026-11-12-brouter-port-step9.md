@@ -240,3 +240,28 @@ Next:
 2. F0h: the draft from the scratch folder or written new; compile, commit the comparison, run, then one heights plant with
    its prediction pushed first.
 3. NT, per the planner's answer to Q1.
+
+## 3. Session 41
+
+Plumb Ledger, session 41, dispatched by Cedar Datum: F0h through the port, NT's plant (RECORD -133, decision 1), one
+question from the Java (-133, decision 2), the assembled count. Branch `brouter-port-5b`, from `696dd18`, fast-forward
+only.
+
+### 3.1 F0h through the port
+
+The comparison was stated in `e8ed646` before any run: F0h's 8 cases (`E3F0hTest.ENDS`, in order); per case the oracle
+in this JVM held to its row's whole-tuple digest in `expected-1b.tsv` (compare `exact`), then port against oracle on the
+six fields of `E3Outcome` (kind, nodes, cost, distance, position digest, heights digest).
+
+First run, single class, local JVM [C] (`2026-11-12-brouter-port-step9/20-f0h-first-run.txt`): 8 cases, kinds
+`{route=8}`, 0 mismatches; JUnit 1 test, 0 failures.
+
+**Plant, prediction (pushed before the run).** In `OsmPathElement.kt`'s `create(path: OsmPath)` (the one-argument
+`create`, `OsmPathElement.java:84-90`), the height handed on is pushed up by one: `n.getSElev()` becomes
+`(n.getSElev() + 1).toShort()`. That `create` makes the track's own nodes (`compileTrack`'s elements and each path's
+`myElement`); the transfer nodes inside a link (the four-argument `create` from `OsmPath`) are not touched. The search's
+costs read `OsmPath`'s own `selev` and the `OsmNode`'s, never an `OsmPathElement`'s [R, `grep -n getSElev`], and
+`recalcTrack`'s distance is `calcDistance` over positions only, so: all 8 cases mismatch, each on `heights digest` only;
+kind, nodes, cost, distance and the position digest stay equal; the test fails with `9 F0h: 8 mismatches`. Where this is
+a guess [I]: that no F0h node has no height (a `Short.MIN_VALUE` lifted by one would also change `postElevationCheck`'s
+filling; it would still show as heights only).
