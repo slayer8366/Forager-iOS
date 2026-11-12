@@ -145,6 +145,28 @@ class RouteTest {
         }
     }
 
+    /**
+     * Step 8d's leftover (the planner's ruling, session 39): the constructor's exception passes through the public [route],
+     * as Forager's caller relies on (`BRouterTrailRouter.kt:122-131` at Forager 947f1be2 catches what the constructor
+     * throws). A profile path that does not exist, on F0's first case: the port's [route] and the oracle's constructor
+     * with the same call each throw; the same exception class and the same message, the path (and its file name) read as
+     * `*`. Before either is compared, the port's call is asserted to throw rather than return.
+     */
+    @Test
+    fun aMissingProfileThrowsThroughRouteAsTheOracle() {
+        val c = RoutingEngineF0Test.CASES.first()
+        val missing = File(OracleCalls.oracleDir, "profiles2/no-such-profile-s39.brf")
+        assertFalse(missing.exists(), "the profile does not exist")
+        val oracle = runCatching { oracleBuilt(c, missing) }.exceptionOrNull()
+        val port = runCatching { route(requestWith(c, missing), RouteCancel()) }
+        val pe = assertNotNull(port.exceptionOrNull(), "the port's route() throws (it returned ${port.getOrNull()?.let { it::class.simpleName }})")
+        val oe = assertNotNull(oracle, "the oracle's constructor throws")
+        fun masked(m: String?) = m?.replace(missing.absolutePath, "*")?.replace(missing.name, "*")
+        println("8d missing profile: oracle ${oe::class.qualifiedName} \"${masked(oe.message)}\"; port ${pe::class.qualifiedName} \"${masked(pe.message)}\"")
+        assertEquals(oe::class.qualifiedName, pe::class.qualifiedName, "the exception's class")
+        assertEquals(masked(oe.message), masked(pe.message), "the message, the path read as *")
+    }
+
     @Test
     fun theCancelReportsItsFlag() {
         val cancel = RouteCancel()
@@ -167,16 +189,31 @@ class RouteTest {
         val WATCHDOG = Regex("operation killed by thread-priority-watchdog after \\d+ seconds")
 
         /** The request as Forager's `BRouterTrailRouter.buildEngine` makes it (`:142-160`), on the case's tiles and limit. */
-        fun request(c: E3Case) = RouteRequest(
+        fun request(c: E3Case) = requestWith(c, File(OracleCalls.oracleDir, "profiles2/${c.profile}.brf"))
+
+        /** [request] with the profile file given. */
+        fun requestWith(c: E3Case, profile: File) = RouteRequest(
             startLon = c.startLon,
             startLat = c.startLat,
             endLon = c.endLon,
             endLat = c.endLat,
             routeData = c.segments.toOkioPath(),
-            profile = File(OracleCalls.oracleDir, "profiles2/${c.profile}.brf").toOkioPath(),
+            profile = profile.toOkioPath(),
             params = mapOf("alternativeidx" to "0", "profile:use_dynamic_range" to "0"),
             maxRunningTimeMillis = c.maxRunningTimeMillis,
         )
+
+        /** The oracle's constructor with Forager's calls ([OracleCalls]) on the profile file given; not run. */
+        fun oracleBuilt(c: E3Case, profile: File): btools.router.RoutingEngine {
+            val collector = btools.router.RoutingParamCollector()
+            val waypoints = collector.getWayPointList("${c.startLon},${c.startLat}|${c.endLon},${c.endLat}")
+            val rc = btools.router.RoutingContext()
+            collector.setParams(
+                rc, waypoints,
+                hashMapOf("profile" to profile.absolutePath, "alternativeidx" to "0", "profile:use_dynamic_range" to "0"),
+            )
+            return btools.router.RoutingEngine(null, null, c.segments, waypoints, rc, btools.router.RoutingEngine.BROUTER_ENGINEMODE_ROUTING)
+        }
 
         /** The oracle with Forager's calls ([OracleCalls]), `terminate()` before `doRun`: its message and `isTerminated()`. */
         fun oracleTerminatedFirst(c: E3Case): Pair<String?, Boolean> {
