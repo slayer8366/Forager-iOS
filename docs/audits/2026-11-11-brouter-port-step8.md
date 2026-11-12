@@ -408,3 +408,85 @@ every commit `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan on every 
 3. The second revert, in the time limit, the same way.
 4. The ruling on question 2.
 5. 8d (heights in `RouteOutcome.Found`, -122).
+
+## 8. Session 34
+
+Plumb Ledger, session 34, `brouter-port-5b` `486588d` to the head that carries this section (fast-forward only; `git
+ls-remote` read `486588d` at the start). Trailer on every commit `Co-Authored-By: Claude <noreply@anthropic.com>`. E1 scan
+on every staged diff: 0, no hit to fix. Under RECORD -126's rulings, in its order.
+
+**Done:**
+1. **CI limit** (`3840315`, -126 decision 2): `brouter.yml:18`, the `jvm` job's `timeout-minutes` 30 to 60, that line only.
+2. **Oracle-only evidence** (`47dcb5d`, before any test change): `step8/12-oracle-only-1ms-fk9.txt`. The oracle alone at
+   `doRun(1)` on FK9's 10 cases, from a scratch test not committed (deleted after the run). Expected first, in the file:
+   10 of 10 `target-island-check`. Observed: `target-island-check` 10, `pass0`/`pass1`/`re-tracking` 0; kinds
+   `family:timeout` 10; 0 ` e: `, fresh XML. The ruling's premise has its evidence.
+3. **The comparison change** (`af875c6`, naming -126, port out of the tree; its message says it is a comparison changed
+   after a port result): `theTimeLimitReadsTheInjectedClock` expects `target-island-check timeout after 30 seconds`;
+   `TIMEOUT_50` is `(target-island-check|pass0|pass1|re-tracking) timeout after 0 seconds`. `start-island-check` not
+   added. Also in that commit, not a comparison: the class KDoc's sentence on the pattern says the same and names -126.
+   Red over the stubs: `tests 9, failures 9`, every one a `NotImplementedError` (the time limit 5, terminate 2, the
+   progress count 2), 0 ` e: `, fresh XML.
+4. **The port** (`1d1488b`): `step8/11-8c-port.patch` applied unchanged (`git apply --check -R --cached` on the staged
+   diff). No fix needed. Class: `tests 9, failures 0`, 0 ` e: `, fresh XML; FK9 0 mismatches (`pass0` 20 of 20), FK10 0,
+   FK11 0. Full fresh `:brouter:jvmTest --rerun-tasks`: 81 of 81 XML newer than the run's start, 0 ` e: `, `TOTAL: tests
+   175, failures 2`, both `CollectOutreachersTest` (2 of 2, -61, not touched); 4 caught-overflow lines; BUILD in 34m 2s.
+5. **Two reverts**, each prediction pushed before its run (`fa3a76c`, `42c6913`), a scratch copy of `revert.sh` (several
+   `--tests` filters, `timeout 1200` per part), two parts each (StopTest, DL, F0, Memory: 15 tests; then R), restore `cmp`
+   equal after every part and to a copy taken before the first:
+   - **(a) `terminated` written but not read** (`step8/13-...`): loop head `if (terminated) {` to `if (false) {` (the
+     flag is still written; the dirty-track guard's read and `isTerminated` untouched, said in the prediction).
+     Predicted: FK10, FK11 and the watchdog-seconds test fail (3 of 9), FK10 and FK11 10 of 10 each; the 7 groups pass;
+     no hang. Observed: exactly that; FK10 10 of 10, FK11 10 of 10, all on [kind, message, track]; MP64, ML5, PM5, DL-lat,
+     DL-lon 0 mismatches, F0 passed, R 1534 cases 0; 680 s and 677 s. **Held**, except one count of mine: "13 tests"
+     (arithmetic; the classes hold 15).
+   - **(b) the time limit's comparison flipped** (`step8/14-...`): `> timeout` to `<= timeout`. Predicted: the stopped-
+     clock test and `theTimeLimitReadsTheInjectedClock` fail (2 of 9); FK9 **passes** (a weakness, named before the run;
+     the track part a guess); the 7 groups pass; no hang. Observed: those two fail and only those; FK9 0 mismatches, first
+     words `target-island-check` 10 (port), `pass0` 10 (oracle); the groups as predicted; 648 s and 680 s. **Held on which
+     fail; failed on one mechanism:** `theTimeLimit...` gives `re-tracking timeout after 30 seconds`, not a route. The
+     re-tracking reset (`:1797`, port `:549`) reads the clock again, so the elapsed time is 0 there and `<=` throws.
+6. **CI** (each code push; jvm job "JVM tests" then "iOS klibs"; ios-smoke):
+   - `3840315` (run 43123350423, over the stubs): jvm `TOTAL: tests 175, failures 11` (StopTest 9, CollectOutreachers 2),
+     0 ` e: `, test step 31 min (BUILD FAILED in 31m 2s); **"iOS klibs" reached**: `compileKotlinIosArm64` and
+     `compileKotlinIosSimulatorArm64` ran, BUILD SUCCESSFUL. ios-smoke: simulator 24 of 24, arm64 7 of 7, the gate "OK:
+     all 2 classes ran". 4 caught-overflow lines.
+   - `af875c6` (run 43123727399, over the stubs): the same counts (StopTest 9, CollectOutreachers 2), 0 ` e: `, test step
+     30 min (30m 9s), both klib compiles, simulator 24 of 24, the gate OK, 4 caught-overflow lines.
+   - `1d1488b` (run 43128205990, **the port**): jvm `TOTAL: tests 175, failures 2` (CollectOutreachers 2 of 2), 0 ` e: `,
+     test step 28 min; "iOS klibs" SUCCESSFUL in 41s: the port's first iOS compile, both targets, `catch (e: Error)`
+     included. ios-smoke: `compileKotlinIosSimulatorArm64`, simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, the
+     gate OK. 4 caught-overflow lines.
+   - The later pushes (`fa3a76c`, `42c6913`, `d398b39`, this one) change only docs; not read.
+
+**[I]/[?]:**
+- [I] No compile error in any local run: `grep -c '^e: '` over the oracle, red, port-class, full and four revert logs: 0
+  each. CI `grep -c ' e: '` over the three runs: 0 each.
+- [I] No hang in any revert: every part's runner printed `gradle exit` 0 or 1 (none 124) after 648-680 s.
+- [I] No stale result: every revert part read fresh XML only (`find -newer` the stamp: 4, 1, 4, 1 files), and after
+  each, `git diff --quiet HEAD -- brouter` held.
+- [I] `CollectOutreachersTest`: 2 of 2 failed in the local full run and in all three CI runs; `grep -c 'caught a
+  StackOverflowError'`: local full 4, CI 4, 4, 4; the class-only and revert logs 0 (the class was not in them). Not
+  touched. Session 33's local 1 of 2 with 0 lines is not repeated here.
+- [?] **FK9 is blind to a limit that strikes at once** (revert (b)): with `target-island-check` in the pattern, a port
+  that throws at its first loop head matches the oracle's `pass0` throw (same kind, both found tracks empty). Only the
+  two clock tests catch the flip. This follows from -126's widening; it was predicted, not found.
+- [?] Not covered by any test: the loop-head read is the only read of `terminated` a revert checked; the dirty-track
+  guard's (`!terminated && mp != null`, Java `:1752`) needs a guide track and a limit, which no 8c test sets.
+- [I] The jvm job's test step now takes 28-31 min of its 60; "iOS klibs" adds under a minute.
+
+**Questions for the planner:**
+1. FK9 (revert (b)): should a test hold that a 50 ms limit does not strike in the island check on the port, or that the
+   two sides' first words agree per case? Either is a comparison change, so not mine; or is the clock tests' cover enough?
+2. The dirty raw track on a timeout (`:1749-1758`) is ported but no test reaches it. Owed in 8c, or with 8d's `route()`?
+
+**Is 8c complete?** Yes, on the JVM: the port is in the tree, 9 of 9 pass locally and in CI, both reverts run with
+predictions pushed first, and the port compiles for both iOS targets (simulator-checked: 24 of 24). Open: the two
+questions, and `catch (Error)` on Kotlin/Native (step 10, -126 decision 4).
+
+**Next:**
+1. The planner's answers to questions 1 and 2.
+2. 8d: `route()`, with tests seen failing first.
+3. 8d: `checkDataFile`.
+4. 8d: heights in `RouteOutcome.Found` (-122).
+5. 8d: `Route.kt`'s three stubs.
