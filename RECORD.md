@@ -4873,3 +4873,34 @@ minutes late; -128's was in the future when written. They now read their commits
 3. These add tests. They change no existing comparison.
 4. **8d is not closed.** Left for session 37: 1, 2, the getter counts, the coverage read, the CI reads, the closing list.
 **Notes:** Written by the planner session by hand. Next free ID -130.
+
+**Kind:** outcome
+**ID:** 2026-10-28-130
+**Timestamp:** 2026-11-12T03:45:44Z
+**Continues:** 2026-10-28-42, 2026-10-28-129
+**Title:** Step 8d, Plumb's session 37: the two owed tests in, each seen red under its revert; the getter counts; CI on
+the `route()` port read; 8d not yet closed
+**Observed:** Plumb Ledger, session 37, `brouter-port-5b` `e8b2a6e` to `6aa54b1` (fast-forward only; called at 150,911,
+ended at 157,602 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner).
+- **Heights through `route()`** (`1221a0f`; prediction `7ae5c31`): R's first 10 routed cases, all 1,148 nodes with a
+  height. Passing; rv17 failed it as predicted [R, Plumb's].
+- **The public cancel** (`1221a0f`): passing; rv24 failed it as predicted [R, Plumb's].
+- **-42's getters:** 20 of 21 reached on R; `getTrafficSourceDensity` at 0, which has no call site in the port. A first
+  counting run was void (a bug in the scratch script) and is named as void in the file.
+- **No full local run finished** before the tests were pushed: Plumb's own `gradlew --stop` killed it at 97 tests.
+- Not done: the `OsmPath` coverage read, the closing list.
+**Checked by the planner:**
+- `git ls-remote` `6aa54b1`, a fast-forward of `e8b2a6e`; 3 commits, one trailer each, no model name; E1 over the range: 0.
+- Code changed: `RouteTest` only, 62 lines added, none removed. No existing comparison moved. The heights test asserts
+  that the oracle's heights are not all "no height".
+- **CI on `9bf13a8`, the `route()` port** (run 43146547580): `jvm` 179 tests, 2 failed, both `CollectOutreachersTest`; 0
+  ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The log
+  prints the production run equal to the oracle on nodes, distance and both digests for both F0 cases, and the logic run
+  the same. The caught-overflow line: 3 prints.
+- **CI on `6aa54b1`** (run 43150269539), the first full run with the two new tests, was in progress. Not read.
+**Decisions (the planner's, technical):**
+1. `getTrafficSourceDensity` is recorded as not reached. No test is added.
+2. **8d closes** when CI on `6aa54b1` reads clean apart from the known pair, the coverage read is in, and the closing
+   list is written. Session 38.
+**Notes:** Written by the planner session by hand. Next free ID -131.
