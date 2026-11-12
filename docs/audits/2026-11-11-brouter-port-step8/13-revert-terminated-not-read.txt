@@ -1,0 +1,38 @@
+Step 8c, session 34: revert (a), RECORD -90's: `terminated` written but not read (RECORD -126, decision 5).
+
+Edit (one line, port only): router/RoutingEngine.kt, findTrackInner's loop head (Java :1975-1977),
+  "if (terminated) {"  ->  "if (false) {"
+  The flag is still written (terminate(), cleanOnOOM()) and isTerminated() still returns it; the dirty-track guard
+  (`!terminated && mp != null`, Java :1752) still reads it. What is removed is the read that stops the search. Chosen
+  as the one read whose loss -90's revert names; the other two reads are untouched, and that is a choice, said here.
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh (several --tests filters; timeout 1200 s per part;
+saves a copy, edits one exact string, refuses on compile errors or no fresh XML, restores from the copy, cmp's). Two parts:
+  part 1: RoutingEngineStopTest, RoutingEngineDLTest, RoutingEngineF0Test, RoutingEngineMemoryTest (13 tests);
+  part 2: RoutingEngineRTest (1 test).
+
+WHAT IT DOES: terminate() before or during a run no longer ends it; the run goes on to whatever it would reach with no
+cancel (maxRunningTime 0 in every test that cancels).
+
+CAN IT HANG? No, by reading: every run that is no longer cancelled is a run that ends without a cancel (FK10's measured
+runs route, E3CaseRun's CANCEL_BEFORE plan; FK11's run uncancelled in fk11CountsLinks...). FK11's mid-run drive waits for
+the count to pass CANCEL_AFTER_LINKS or the thread to end, then join()s a thread that ends. Slower, not unbounded. Run
+under the 1200 s limit all the same.
+
+PREDICTION (pushed before the run):
+- 0 "e: " lines in both parts; fresh XML: part 1 4 files, 13 tests; part 2 1 file, 1 test.
+- RoutingEngineStopTest: 3 of 9 FAIL, 6 pass.
+  - fk10IsKilledBeforeTheRun...: FAILS, 10 of 10 mismatches, on kind (oracle the watchdog, port route) and track. 10 of
+    10 rests on E3CaseRun's CANCEL_BEFORE plan, which keeps only cases whose uncancelled run routes: not a guess.
+  - fk11IsKilledMidRun...: FAILS, 10 of 10 on kind (oracle the watchdog, port the uncancelled outcome). "10 of 10" is a
+    guess in one respect: a case whose uncancelled run ends in the watchdog's text cannot exist (nothing else writes
+    it), so every case must differ on kind; I expect the track to differ too on most, a guess.
+  - theWatchdogsSecondsReadTheInjectedClock: FAILS on the message (expected the watchdog after 7 seconds; the port's
+    message is the uncancelled outcome's, null for a route).
+  - Pass: fk9TimesOut... (no terminate), fk11CountsLinks... (no cancel), forager30sLimit..., theTimeLimitReads...,
+    anErrorDuringTheRun... (the clock's Error at the time-limit read; cleanOnOOM writes the flag, isTerminated reads it),
+    anExceptionDuringTheRun....
+- The 7 route groups (F0, R, DL-lat, DL-lon, MP64, ML5, PM5) PASS, 0 mismatches each: none calls terminate()
+  (RoutingEngineF0Test.port runs doRun(c.maxRunningTimeMillis), 0 for all their cases, with no cancel). Not a guess.
+- After each part's restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED:
