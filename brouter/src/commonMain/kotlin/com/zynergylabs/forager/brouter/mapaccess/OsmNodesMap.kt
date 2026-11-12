@@ -62,13 +62,16 @@ internal class OsmNodesMap {
             if (n.firstlink != null) {
                 if (n.visitID == 1) {
                     // Java: try { ... } catch (StackOverflowError soe) { }. JVM only; see the class comment.
-                    runCatchingStackOverflow { minVisitIdInSubtree(null, n) }
+                    if (runCatchingStackOverflow { minVisitIdInSubtree(null, n) }) PeninsulaDepth.overflowsCaught++
+                    PeninsulaDepth.current = 0 // the depth counter only (RECORD -140); see PeninsulaDepth
                 }
             }
         }
     }
 
     private fun minVisitIdInSubtree(source: OsmNode?, n: OsmNode): Int {
+        // The depth counter only (RECORD -140): read by tests, never by the port; see PeninsulaDepth.
+        if (++PeninsulaDepth.current > PeninsulaDepth.deepest) PeninsulaDepth.deepest = PeninsulaDepth.current
         if (n.visitID == 1) n.visitID = baseID // border node
         else n.visitID = lastVisitID++
         var minId = n.visitID
@@ -101,6 +104,7 @@ internal class OsmNodesMap {
             }
             if (minIdSub < minId) minId = minIdSub
         }
+        PeninsulaDepth.current--
         return minId
     }
 

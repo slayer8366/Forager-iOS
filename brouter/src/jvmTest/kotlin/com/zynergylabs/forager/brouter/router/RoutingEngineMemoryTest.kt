@@ -6,6 +6,7 @@ import com.zynergylabs.forager.brouter.oracle.e3.E3Expected
 import com.zynergylabs.forager.brouter.oracle.e3.RGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3MemoryTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
+import com.zynergylabs.forager.brouter.mapaccess.PeninsulaDepth
 import com.zynergylabs.forager.brouter.tiles.TestTiles
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,6 +21,10 @@ import kotlin.test.assertTrue
  * port's [RoutingEngine] and the oracle's in this JVM with Forager's calls ([RoutingEngineF0Test.port]), and is compared
  * as `E3Outcome` (kind, nodes, cost, distance, the position digest and the heights digest), as [RoutingEngineDLTest].
  * Only digests and counts are printed (E1).
+ *
+ * Session 49 (RECORD -140, decision 2): around each port run, [PeninsulaDepth] is reset and read; per stratum it prints the
+ * deepest `minVisitIdInSubtree` recursion of any case, how many cases entered the walk, the overflows the JVM caught, and
+ * the port's runs' time.
  */
 class RoutingEngineMemoryTest {
     @Test
@@ -37,6 +42,10 @@ class RoutingEngineMemoryTest {
         assertEquals(count, rows.size, "$stratum's rows in expected-1b")
         val mismatches = ArrayList<String>()
         val seen = HashSet<String>()
+        var deepest = 0
+        var walked = 0
+        var overflows = 0
+        var portNanos = 0L
         val gen = RGenerator(TestTiles.segments, seed, only = E3MemoryTest.TILE, minMetres = 20_000.0, ratio = 5.0)
         try {
             val draws = gen.draws(label, E3Targeted.PROFILE, memoryclass, TestTiles.segments)
@@ -49,7 +58,13 @@ class RoutingEngineMemoryTest {
                 assertEquals("exact", row.compare, "${c.id}: the row is held exactly")
                 val o = E3CaseRun.run(c, OracleCalls.oracleDir).outcome
                 assertEquals(row.tupleDigest, E3Expected.fnv1aText(o.toField()), "${c.id}: the oracle in this JVM against expected-1b")
+                PeninsulaDepth.reset()
+                val t0 = System.nanoTime()
                 val p = RoutingEngineF0Test.port(c)
+                portNanos += System.nanoTime() - t0
+                if (PeninsulaDepth.deepest > 0) walked++
+                deepest = maxOf(deepest, PeninsulaDepth.deepest)
+                overflows += PeninsulaDepth.overflowsCaught
                 val differ = listOfNotNull(
                     "kind".takeIf { o.kind != p.kind },
                     "nodes".takeIf { o.nodes != p.nodes },
@@ -61,6 +76,7 @@ class RoutingEngineMemoryTest {
                 if (differ.isNotEmpty()) mismatches += "${c.id}: $differ (oracle ${o.toField()}; port ${p.toField()})"
             }
             println("8b $stratum: ${seen.size} cases within $n draws; ${mismatches.size} mismatches")
+            println("8b $stratum depth: deepest recursion $deepest; $walked of ${seen.size} cases entered the walk; $overflows overflows caught; the port's runs ${portNanos / 1_000_000} ms")
         } finally {
             gen.close()
         }
