@@ -615,3 +615,26 @@ Native and terminates with its `toString()`.
 - **Next:** (1) the planted error across the simulator's groups; (2) number formatting on Native (the common tests pass
   ends as text to avoid it); (3) a revert check that the `F` lines bite (a one-line change to the port's `canEscape`
   false branch, predicted to fail the destination test), not run here.
+
+## §8 Session 55 (Plumb Ledger, 2026-11-12): the turn hints and the four export formats on the simulator
+
+### 8.1 Survey (written before any code)
+
+1. In `commonMain` (`router/`), `internal`, so reachable from `commonTest` in the same module: `VoiceHint`,
+   `VoiceHintList`, `VoiceHintProcessor`, `OsmTrack.processVoiceHints`; `FormatGpx`, `FormatJson`, `FormatKml`,
+   `FormatCsv`, each a `Formatter(rc)` with `format(t: OsmTrack): String`; the number helpers in `Formatter`'s companion
+   (`formatILon`/`formatILat` via `formatPos`, an integer digit writer; `format1`; `getFormattedTime3`) and
+   `FormatJson.formatDecimal3` (Java's `DecimalFormat`) and `FormatJson.speedText`.
+2. Not through the port's helpers: elevations are Kotlin `Double` concatenation (`"<ele>" + n.getElev()`, JSON's
+   `selev / 4.0`), i.e. the platform's `Double.toString`: the open question of RECORD -121.
+3. Step 7's jvmTest (`FormatGpxTest`, `FormatJsonTest`, `FormatKmlTest`, `FormatCsvTest`, `VoiceHint*Test`) compare the
+   WHOLE text, oracle against port, by SHA-256 prefix and length; hints field by field (digested). Their tracks are
+   random walks on F0's tiles (`TrackEngines.walks`), not engine routes; none of them runs on iOS.
+4. Not the route's: GPX's and JSON's `creator` (`"BRouter-" + OsmTrack.version`); the tests set the port's version from
+   the oracle's at run time (RECORD -118). The oracle's `OsmTrack.version` is `static final` (javap), so it cannot be set
+   to `null`. Times are the track's own (`getFormattedTime3` of a node's time), no wall clock; no file name in `format`.
+5. The engine as `EngineRun` drives it gives no hints: the profiles say `turnInstructionMode = 1` ("auto"), which
+   `readGlobalConfig` leaves at 0, and `setParams` refuses `timode` (`RoutingParamCollector.REFUSED`), so
+   `processVoiceHints` returns at its head (no detour map). To reach hints, this session sets
+   `rc.turnInstructionMode` after `setParams`, on the port and the oracle alike, cycling 2 to 9 by the case's position
+   in its group; the six route fields are held to the stored rows with it set (if they move, that is a stop).
