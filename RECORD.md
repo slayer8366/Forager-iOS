@@ -5677,3 +5677,41 @@ The assertion did not move, but the reviewer should see it.
 4. **Left in step 10:** the turn hints and the four export formats on the simulator, which no iOS test reaches yet; the
    planted error across the simulator's groups (-139); the closing list.
 **Notes:** Written by the planner session by hand. Next free ID -149.
+
+**Kind:** outcome
+**ID:** 2026-10-28-149
+**Timestamp:** 2026-11-12T19:27:12Z
+**Continues:** 2026-10-28-111, 2026-10-28-121, 2026-10-28-148
+**Title:** Step 10, Plumb's session 55: the hints and formats surveyed for the simulator; on engine routes one NT route's
+hints differ from the oracle's on the JVM; nothing but the survey pushed
+**Observed:** Plumb Ledger, session 55, `brouter-port-5b` `2929df0` to `b26d4c2` (fast-forward only; called at 152,742
+after about eight minutes, ended at 158,790 by the harness's count; one docs commit, trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). Work in progress is saved, not pushed: the
+clone's local commit `f8d757f` on `s55`.
+- **The survey** (§8.1) [R, Plumb's]:
+  - the hints, the four formats and the number helpers are `internal` in commonMain; commonTest can reach them;
+  - **elevations in the formats are printed with the platform's `Double.toString`,** not the port's helpers: -121's
+    question, still open;
+  - **step 7's JVM tests ran the hints and formats on random walks, not on routes the engine made;**
+  - with the engine run as Forager runs it there are no hints: the profile's mode 1 leaves them off (-110, -111). The
+    tests switch them on in test code on both engines, as -111 said they would.
+- **On the JVM, locally, on 71 engine routes** (F0 2, F0h 8, NT 59) with the hints switched on [R, Plumb's]: the six
+  fields equal on all 71; GPX, JSON, KML and CSV equal to the oracle's on all 71; **the hints of one NT route differ,
+  port against oracle.** The case id was not printed. Plumb stopped there and changed nothing.
+**Checked by the planner:** `git ls-remote` `b26d4c2`, a fast-forward of `2929df0`; E1 by `scan.sh <c>^ <c>`: 0 on the
+pushed commit and on the local one; the pushed diff is the report only.
+**What the one difference is, and is not:**
+- It is the first difference between port and oracle found since step 8, and it is in code the owner asked to have
+  ported (-111). It was not seen in step 7 because step 7's inputs were not engine routes.
+- It is not on Forager's path: Forager's turn directions come from its own code and BRouter's hints stay off there
+  (-111's finding). No route, cost, distance or height is touched.
+- One of 71 is a count on three small groups. How many of R's routes differ is not known.
+**The planner's own gap:** -121 closed step 7 with the hints "compared against the oracle" and did not say on what
+inputs. Step 9's 2,126 rows hold the six fields, not the hints. So the hints were never compared on a route the engine
+made until now.
+**Decisions (the planner's, technical):**
+1. **The difference is found before anything else:** the case, the hint and the field that differ, then the cause from
+   the Java, with at most two fixes, each from the Java, and a test that is red on that case first.
+2. **Then the hints are compared on every route group on the JVM,** not three: R's 968 routes and the rest, by digest.
+3. **Then the simulator,** as -148 planned.
+**Notes:** Written by the planner session by hand. Next free ID -150.
