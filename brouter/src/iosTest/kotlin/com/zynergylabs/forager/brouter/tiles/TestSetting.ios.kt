@@ -9,3 +9,8 @@ internal actual fun testSetting(jvmProperty: String, iosVariable: String): Strin
 
 internal actual fun testSettingSource(jvmProperty: String, iosVariable: String): String =
     "environment variable $iosVariable in the simulator's process (the ios-smoke job exports SIMCTL_CHILD_$iosVariable)"
+
+@OptIn(ExperimentalForeignApi::class)
+internal actual fun testEnvironment(name: String): String? = getenv(name)?.toKString()
+
+internal actual val onJvm: Boolean = false

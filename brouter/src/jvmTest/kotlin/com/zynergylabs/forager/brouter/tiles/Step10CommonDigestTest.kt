@@ -29,4 +29,16 @@ class Step10CommonDigestTest {
         println("step10 common tuple digest: ${rows.size - wrong.size} of ${rows.size} rows equal to the stored")
         assertEquals(emptyList(), wrong, "rows whose common tuple digest differs from the stored")
     }
+
+    @Test
+    fun ntConstantEqualsTheFilesNtRows() {
+        val file = rows.filter { it.stratum == "NT" }
+        assertEquals(59, file.size, "NT's rows in expected-1b")
+        assertEquals(setOf("exact"), file.map { it.compare }.toSet(), "NT's rows are all held exactly")
+        val want = file.map { listOf(it.id, common(it.outcome).toField(), it.tupleDigest) }
+        val got = NtExpected.ROWS.map { listOf(it.id, it.outcome.toField(), it.tupleDigest) }
+        assertEquals(want, got, "NtExpected.ROWS against expected-1b.tsv's NT rows, in file order")
+        assertEquals(NtExpected.ROWS.map { it.tupleDigest }, NtExpected.ROWS.map { it.outcome.tupleDigest }, "NtExpected's tuple digests")
+        println("step10 NtExpected: ${got.size} of ${want.size} rows equal to expected-1b.tsv's NT rows")
+    }
 }

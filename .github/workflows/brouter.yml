@@ -77,12 +77,20 @@ jobs:
       # and the oracle's profiles2/ (with lookups.dat) by fetchOracle (tools/fetch-oracle.sh, pinned), for F0's routes.
       - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
         run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
+      # Step 10 (RECORD -138, decision 2): NT's cases drawn at run time on this runner's JVM (NtCasesWriteTest, gated on the
+      # variable) and written under brouter/build/step10/, outside test-results/ (the only folder uploaded). Never committed
+      # or printed: the test prints ids and counts only. -x msunReference as the arm64 JVM step below (RECORD -36).
+      - name: Step 10 - NT's cases for the simulator, drawn on this runner's JVM
+        env:
+          BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+        run: ./gradlew --no-daemon :brouter:jvmTest -x msunReference --tests com.zynergylabs.forager.brouter.tiles.NtCasesWriteTest
       - name: commonTest on the iOS simulator
         env:
           # simctl hands SIMCTL_CHILD_X to the simulator's process as X (PinnedTileReadTest reads BROUTER_TILES_DIR;
-          # F0RouteCommonTest also BROUTER_ORACLE_DIR).
+          # F0RouteCommonTest also BROUTER_ORACLE_DIR; NtEngineCommonTest BROUTER_STEP10_NT_CASES).
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
           SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
         run: ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
       - name: Counts from the JUnit XML, and the XML itself
         if: always()

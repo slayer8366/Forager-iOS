@@ -4,3 +4,7 @@ internal actual fun testSetting(jvmProperty: String, iosVariable: String): Strin
 
 internal actual fun testSettingSource(jvmProperty: String, iosVariable: String): String =
     "system property $jvmProperty (set by brouter/build.gradle.kts for jvmTest)"
+
+internal actual fun testEnvironment(name: String): String? = System.getenv(name)
+
+internal actual val onJvm: Boolean = true

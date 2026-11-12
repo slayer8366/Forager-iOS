@@ -11,3 +11,12 @@ internal expect fun testSetting(jvmProperty: String, iosVariable: String): Strin
 
 /** Which mechanism [testSetting] reads on this platform, for failure messages. */
 internal expect fun testSettingSource(jvmProperty: String, iosVariable: String): String
+
+/**
+ * Step 10, session 46: the environment variable [name] of this test process on both platforms (on iOS the `ios-smoke` job
+ * exports `SIMCTL_CHILD_<name>`, as for [testSetting]); null when it is not set. [onJvm] tells the two apart, so a test may
+ * skip on the JVM where CI sets nothing and fail on iOS where CI must.
+ */
+internal expect fun testEnvironment(name: String): String?
+
+internal expect val onJvm: Boolean
