@@ -10,6 +10,8 @@ import com.zynergylabs.forager.brouter.oracle.e3.LBGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.NTGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.RGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3DLTest
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3F0hTest
+import com.zynergylabs.forager.brouter.router.RoutingEngineFKTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
 import java.io.File
 import kotlin.test.Test
@@ -37,6 +39,13 @@ import kotlin.test.fail
  *
  * Session 48: DL-lat and DL-lon the same way ([DL_LAT_FILE], [DL_LON_FILE]): `RoutingEngineDLTest`'s [DLGenerator] draws,
  * [E3DLTest.SEED_LAT] and [E3DLTest.SEED_LON], [E3Targeted.PROFILE], on [TestTiles.segments] (not the drop-off set).
+ *
+ * Session 48, F0h and FK 1 to 8 ([writeCases]): F0h's eight cases as `RoutingEngineF0hTest` builds them ([E3F0hTest.ENDS],
+ * on [TestTiles.f0h]), written here at run time like the others rather than committed in common code; FK's as
+ * `RoutingEngineFKTest` builds them, one file per kind ([fkFile]). Kind 6's folder is [TestTiles.segments], where its
+ * tile is missing; kinds 7 and 8 each case in its own folder under [FK_TILES]`/` beside the NT file, holding only its cut
+ * or flipped copy of E170_S50 (`RoutingEngineFKTest.fk7Cases`, `fk8Cases`). A case whose folder is not the segments
+ * folder carries it as an eighth field. Edited tiles are written there only, never uploaded.
  */
 class NtCasesWriteTest {
     @Test
@@ -72,11 +81,46 @@ class NtCasesWriteTest {
                 dl.close()
             }
         }
+        val f0hRows = expected().filter { it.stratum == "F0h" }.map { it.id }.toSet()
+        val f0h = E3F0hTest.ENDS.map { (name, e) -> E3Case("F0h-$name", TestTiles.f0h, e[0], e[1], e[2], e[3], E3F0hTest.PROFILE) }
+        writeCases("F0h", f0h, f0hRows, File(dir, F0H_FILE))
+        val fk = RoutingEngineFKTest()
+        val fkTiles = File(dir, FK_TILES)
+        fkTiles.deleteRecursively()
+        fkTiles.mkdirs()
+        val e = fk.editedEnds()
+        val tile = File(TestTiles.segments, "E170_S50.rd5")
+        val kinds = listOf(
+            fk.firstTen(1), fk.firstTen(2), fk.byRow("FK3", 3), fk.byRow("FK4", 4), fk.kind5(), fk.firstTen(6),
+            fk.fk7Cases(fkTiles, e, tile), fk.fk8Cases(fkTiles, e, tile),
+        )
+        kinds.forEachIndexed { i, cases ->
+            val label = "FK${i + 1}"
+            writeCases(label, cases, fk.rows(label).keys, File(dir, fkFile(i + 1)))
+        }
+    }
+
+    private fun expected() = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
+
+    /** [cases] built in full (not drawn against a cap), each id one of [ids] and every id there; one line each. */
+    private fun writeCases(label: String, cases: List<E3Case>, ids: Set<String>, out: File) {
+        assertEquals(ids, cases.map { it.id }.toSet(), "$label's cases are expected-1b's rows")
+        val lines = cases.map { c ->
+            if (c.maxRunningTimeMillis != 0L || c.plan != E3Case.Plan.NONE) fail("${c.id}: a time limit or a plan; the file cannot carry it")
+            val fields = mutableListOf(
+                c.id, c.profile, c.memoryclass.toString(),
+                c.startLon.toString(), c.startLat.toString(), c.endLon.toString(), c.endLat.toString(),
+            )
+            if (c.segments != TestTiles.segments) fields += c.segments.absolutePath
+            fields.joinToString("\t")
+        }
+        out.writeText(lines.joinToString("\n", postfix = "\n"))
+        val own = cases.count { it.segments != TestTiles.segments }
+        println("step10 $label cases: ${cases.size} of ${ids.size} stored ids built; $own in a folder of their own; written to $out")
     }
 
     private fun write(stratum: String, draws: Iterator<E3Select.Draw>, out: File) {
-        val rows = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
-            .filter { it.stratum == stratum }.associateBy { it.id }
+        val rows = expected().filter { it.stratum == stratum }.associateBy { it.id }
         assertEquals(59, rows.size, "$stratum's rows in expected-1b")
         val lines = ArrayList<String>()
         val seen = HashSet<String>()
@@ -105,6 +149,10 @@ class NtCasesWriteTest {
         const val CR_FILE = "cr-cases.tsv"
         const val DL_LAT_FILE = "dl-lat-cases.tsv"
         const val DL_LON_FILE = "dl-lon-cases.tsv"
+        const val F0H_FILE = "f0h-cases.tsv"
+        const val FK_TILES = "fk-tiles"
+
+        fun fkFile(kind: Int) = "fk$kind-cases.tsv"
         const val PROFILES = "profiles2"
     }
 }

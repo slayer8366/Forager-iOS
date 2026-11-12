@@ -54,24 +54,30 @@ class RoutingEngineFKTest {
     fun fk6RoutesThroughThePortAsThroughTheOracle() = run("FK6", firstTen(6))
 
     @Test
-    fun fk7RoutesThroughThePortAsThroughTheOracle() = edited { tiles, e, tile ->
+    fun fk7RoutesThroughThePortAsThroughTheOracle() = edited { tiles, e, tile -> run("FK7", fk7Cases(tiles, e, tile)) }
+
+    @Test
+    fun fk8RoutesThroughThePortAsThroughTheOracle() = edited { tiles, e, tile -> run("FK8", fk8Cases(tiles, e, tile)) }
+
+    /**
+     * Kind 7's cases, each in its own folder under [tiles] holding only its cut copy of [tile]. Session 48 moved them out of
+     * the test unchanged, so `NtCasesWriteTest` writes the same folders for the simulator.
+     */
+    internal fun fk7Cases(tiles: File, e: DoubleArray, tile: File): List<E3Case> {
         val end = FKGenerator.dataEnd(tile)
         val size = tile.length()
         val cuts = listOf(200L, 201L, 1_000L, end / 4, end / 2, 3 * end / 4, end - 1, end + 1, end + 56, end + 111)
-        val cases = cuts.mapIndexed { i, len -> case(tiles, "FK7-%02d".format(i + 1), e) { FKGenerator.cut(tile, len, it) } } +
+        return cuts.mapIndexed { i, len -> case(tiles, "FK7-%02d".format(i + 1), e) { FKGenerator.cut(tile, len, it) } } +
             case(tiles, "FK7-x1", e) { FKGenerator.cut(tile, end, it) } +
             case(tiles, "FK7-x2", e) { FKGenerator.cut(tile, size - 1, it) } +
             case(tiles, "FK7-c0", e) { it.mkdirs(); tile.copyTo(File(it, tile.name)) }
-        run("FK7", cases)
     }
 
-    @Test
-    fun fk8RoutesThroughThePortAsThroughTheOracle() = edited { tiles, e, tile ->
-        val cases = (0 until N).map { 8 + 20 * it }.mapIndexed { i, at ->
+    /** Kind 8's cases, as [fk7Cases]: each folder holds one flipped copy of [tile]. */
+    internal fun fk8Cases(tiles: File, e: DoubleArray, tile: File): List<E3Case> =
+        (0 until N).map { 8 + 20 * it }.mapIndexed { i, at ->
             case(tiles, "FK8-%02d".format(i + 1), e) { FKGenerator.flip(tile, at, it) }
         } + case(tiles, "FK8-x1", e) { FKGenerator.flip(tile, 203, it) }
-        run("FK8", cases)
-    }
 
     private fun run(label: String, cases: List<E3Case>) {
         val rows = rows(label)
@@ -168,23 +174,26 @@ class RoutingEngineFKTest {
 
     /** Kinds 7 and 8: one pair of ends in E170_S50 from `SEED + 7`, and a scratch folder for the edited copies. */
     internal fun edited(body: (File, DoubleArray, File) -> Unit) {
-        val e = generator { gen ->
-            val rnd = Random(E3FKTest.SEED + 7)
-            var draws = 0
-            var pair: DoubleArray? = null
-            while (pair == null && draws < E3FKTest.CAP) { // ends: draws rises by one each pass
-                draws++
-                val d = gen.local(rnd, E3FKTest.PROFILE)
-                if (d is FKGenerator.Drawn.Ends) pair = d.e
-            }
-            pair ?: error("FK: no pair of ends for kinds 7 and 8 within ${E3FKTest.CAP} draws")
-        }
+        val e = editedEnds()
         val tiles = Files.createTempDirectory("s9-fk").toFile()
         try {
             body(tiles, e, File(TestTiles.segments, "E170_S50.rd5"))
         } finally {
             tiles.deleteRecursively()
         }
+    }
+
+    /** The pair of ends kinds 7 and 8 share (session 48 moved it out of [edited], unchanged). */
+    internal fun editedEnds(): DoubleArray = generator { gen ->
+        val rnd = Random(E3FKTest.SEED + 7)
+        var draws = 0
+        var pair: DoubleArray? = null
+        while (pair == null && draws < E3FKTest.CAP) { // ends: draws rises by one each pass
+            draws++
+            val d = gen.local(rnd, E3FKTest.PROFILE)
+            if (d is FKGenerator.Drawn.Ends) pair = d.e
+        }
+        pair ?: error("FK: no pair of ends for kinds 7 and 8 within ${E3FKTest.CAP} draws")
     }
 
     internal fun case(tiles: File, id: String, e: DoubleArray, make: (File) -> Unit): E3Case {

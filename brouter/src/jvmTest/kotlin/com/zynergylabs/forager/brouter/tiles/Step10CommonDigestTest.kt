@@ -47,10 +47,26 @@ class Step10CommonDigestTest {
     @Test
     fun dlLonConstantEqualsTheFilesDlLonRows() = constantEqualsTheFilesRows("DL-lon", DlLonExpected.ROWS)
 
-    private fun constantEqualsTheFilesRows(stratum: String, constant: List<NtExpected.Row>) {
-        val file = rows.filter { it.stratum == stratum }
-        assertEquals(59, file.size, "$stratum's rows in expected-1b")
-        assertEquals(setOf("exact"), file.map { it.compare }.toSet(), "$stratum's rows are all held exactly")
+    /** Session 48: F0h's eight rows, all `exact`. */
+    @Test
+    fun f0hConstantEqualsTheFilesF0hRows() = constantEqualsTheFilesRows("F0h", F0hExpected.ROWS, 8)
+
+    /** Session 48: FK's 84 rows of kinds 1 to 8, 81 `exact` and the three `outcome` rows. */
+    @Test
+    fun fkConstantEqualsTheFilesFkRowsOfKinds1To8() = constantEqualsTheFilesRows(
+        "FK", FkExpected.ROWS, 84, setOf("exact", "outcome"), Regex("FK[1-8]-.*"),
+    )
+
+    private fun constantEqualsTheFilesRows(
+        stratum: String,
+        constant: List<NtExpected.Row>,
+        count: Int = 59,
+        compares: Set<String> = setOf("exact"),
+        ids: Regex = Regex(".*"),
+    ) {
+        val file = rows.filter { it.stratum == stratum && ids.matches(it.id) }
+        assertEquals(count, file.size, "$stratum's rows in expected-1b")
+        assertEquals(compares, file.map { it.compare }.toSet(), "$stratum's rows' compare modes")
         val want = file.map { listOf(it.id, common(it.outcome).toField(), it.tupleDigest) }
         val got = constant.map { listOf(it.id, it.outcome.toField(), it.tupleDigest) }
         assertEquals(want, got, "$stratum's constant against expected-1b.tsv's $stratum rows, in file order")
