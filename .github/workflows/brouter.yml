@@ -108,3 +108,31 @@ jobs:
         with:
           name: ios-smoke-test-results
           path: brouter/build/test-results/
+
+  # RECORD -136, decision 1: step 9's production run (RoutingEngineProductionRecordTest, gated on the variable; -135) as
+  # its own job beside `jvm`, running that one class. It records, it does not judge: it gates nothing but its own counts.
+  # The checkout and Java are `jvm`'s. A fresh runner has no earlier test output, so the task cannot be up to date here.
+  jvm-production:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      BROUTER_PRODUCTION_RECORD: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          # The oracle's JDK, pinned exactly (item E2: one HotSpot build, on x86_64).
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: The production run, recorded (step 9; the oracle is fetched and checked by the build, tools/fetch-oracle.sh)
+        run: ./gradlew --no-daemon :brouter:jvmTest --tests '*RoutingEngineProductionRecordTest'
+      - name: Counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/jvmTest
+          for f in brouter/build/test-results/jvmTest/*.xml; do echo "== $f"; cat "$f"; done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: jvm-production-test-results
+          path: brouter/build/test-results/
