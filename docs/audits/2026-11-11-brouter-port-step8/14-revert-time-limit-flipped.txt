@@ -32,3 +32,24 @@ PREDICTION (pushed before the run):
 - After each part's restore: cmp equal; no src difference from the commit carrying this prediction.
 
 OBSERVED:
+(The "15 tests" above was corrected from "13" after 13's run, before this run: an arithmetic slip, 9 + 2 + 1 + 3.)
+- Part 1, rv14a (StopTest, DL, F0, Memory): the edit applied once (one - and one + line, :724); 0 "e: " lines; 4 fresh
+  XML, 15 tests, 2 failures, 0 errors; gradle ended in 648 s.
+  - RoutingEngineStopTest: 2 of 9 FAIL, exactly the two predicted. HELD on which.
+    - forager30sLimitOnAStoppedClock...: oracle route, port family:timeout with the empty track. HELD.
+    - theTimeLimitReadsTheInjectedClock: FAILS, but NOT as predicted: the port does not route; it gives "re-tracking
+      timeout after 30 seconds". My mechanism missed the re-tracking reset (Java :1797, port :549, `startTime` read again
+      before findTrack("re-tracking", ...)): after the reset the elapsed time is 0, and 0 <= 30,000 throws. Island check,
+      pass0 and pass1 ran out unthrown (30,001 > 30,000); the run then threw at re-tracking's first loop head.
+    - fk9TimesOut...: PASSES, 10 cases, 0 mismatches; first words target-island-check 10, pass0 10 (the port and the
+      oracle). HELD, guess on the track included: both found tracks empty. THE WEAKNESS IS REAL: with the pattern RECORD
+      -126 widened, FK9 cannot tell a limit that strikes at once from one that strikes after 50 ms. Only the two clock
+      tests catch this revert.
+    - fk10, fk11, fk11CountsLinks, theWatchdogsSeconds, anError..., anException...: pass. HELD.
+  - MP64 59, 0; ML5 59, 0; PM5 55, 0; DL-lat 59, 0; DL-lon 59, 0; F0 passed. HELD.
+- Part 2, rv14b (R): 0 "e: "; 1 fresh XML, 1 test, 0 failures; gradle ended in 680 s; R 1534 cases
+  {route=968, refused=354, error=212}, 0 mismatches. HELD.
+- No hang: 648 s and 680 s, both inside 1200 s.
+- Restored: cmp equal after each part, cmp equal to a copy taken before revert (a)'s first part; src equal to HEAD.
+RESULT: held on which tests and groups fail; FAILED on one mechanism (theTimeLimit... ends in re-tracking's timeout, not
+in a route), which the re-tracking reset explains. A question for the planner follows from FK9 (step 8 report, §8).
