@@ -5490,3 +5490,32 @@ refuses and the oracle routes.
 - Not shown: a release build, whose frames are usually smaller; a real iPhone.
 **Decision:** none here. -61 is the owner's ("Decide after step 10"), and it is asked now with these numbers.
 **Notes:** Written by the planner session by hand. Next free ID -144.
+
+**Kind:** decision
+**ID:** 2026-10-28-144
+**Timestamp:** 2026-11-12T13:17:30Z
+**Continues:** 2026-10-28-50, 2026-10-28-61, 2026-10-28-143
+**Title:** The deep recursion in `cleanupPeninsulas` is rewritten without recursion (owner); -61 is answered
+**Decision:** asked how the port should handle the recursion now that step 10's measurement is in (-143: on the
+simulator the process ends with a bus error on a 1 MB thread at a depth of 3,378, survives at 2 MB; a background thread's
+default on iOS is 512 KB; the deepest case seen is 5,679), the owner chose, verbatim: "Rewrite without recursion
+(Recommended)". The option read: "The port's walk keeps its own list of nodes to visit in place of calling itself, so its
+depth no longer uses the thread's stack. It can't crash this way on any map. Cost: about 1 to 2 coder sessions, and this
+one function stops being a line-for-line copy of the Java. All 802 simulator cases and the JVM comparisons must stay
+equal. Where Java itself overflows and skips part of the cleanup, the port would differ from Java, and that difference
+gets measured and reported to you."
+- **Rejected:** "Keep recursion, big stack"; "Both"; "Measure more first".
+- **Asked with** AskUserQuestion, one question, four options; the first was marked as recommended by the planner.
+**What follows (the planner's calls, technical; the owner may overrule):**
+- **The red test exists already:** the stack ladder ends the process at 1 MB. It becomes an asserting test: every size
+  down to 512 KB survives and gives the stored row. It is extended to the deepest case of each memory group.
+- **The walk's result must not move:** the 173 memory cases, R's 240 and the rest of the 802 on the simulator; on the
+  JVM the 2,126 logic rows and the 1,742 production cases.
+- **`CollectOutreachersTest`** (-61's red pair) is read again after the rewrite. It was red because the port overflowed
+  where the oracle did not. Whatever it then reads is reported, not arranged: its second failure, the `canEscape`
+  coverage assertion (-60), may stand.
+- **Where Java overflows and skips a subtree, the port now will not.** How often the oracle's own catch fires on the
+  test cases is counted (it read 0 at -60) and reported to the owner, as the option says.
+- `StackOverflowCatch`'s JVM catch and the depth counter are kept or removed by what the rewrite leaves reachable; each
+  is named in the report.
+**Notes:** Written by the planner session by hand. Next free ID -145.
