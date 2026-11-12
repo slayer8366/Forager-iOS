@@ -403,3 +403,110 @@ Next:
 1. Read CI on `e8ed646` (F0h's first CI run): TOTAL, FAILED, ` e: `, iOS, the F0h line.
 2. The planner's answers to Q1 to Q3.
 3. Step 9's figure per E6 once the options and the 2,118 are settled.
+
+## 4. Session 42
+
+Plumb Ledger, session 42, `brouter-port-5b` from `1ba6b06`. Dispatch: step 9's production runs (RECORD -134, decision 4).
+**Stopped at step 3** before any code: the build forwards no system property it does not name to the test JVM (§4.3).
+
+### 4.1 Survey: what the JVM production run is held to, and what exists for it
+
+**What E6 says, under (c)** (`docs/audits/2026-10-28-brouter-port-verify.md:980`, the table's "JVM, production" row) [R]:
+"**recorded** against the default oracle: different by design at 54 rows. **Exact** against the oracle run with
+`-XX:-UseLibmIntrinsic`, whose table is `StrictMath`'s". The 54 are the rows where `Math.cos` (intrinsic) and
+`StrictMath.cos` give a different `kx` or `ky` (`:846`). E6 also says (c) "needs a second oracle JVM with the flag, run as
+its own Gradle test task" (`:988`). That cell assumes the port's table is `StrictMath`'s.
+
+**What -24 ruled** (`RECORD.md:915`, entry -24) [R]: the owner chose "Copy Android's maths": `cos` from bionic's FreeBSD
+msun, "a fourth option beside H's (a) to (c)"; H's (c), "Copy Java's reference maths", was **rejected**. The planner's
+calls: "the oracle runs ... with `-XX:-UseLibmIntrinsic`: fdlibm, 13 rows from Android rather than 59"; "production runs
+use the msun table and record any route difference".
+
+**What exists today** [R]:
+- **One oracle, and it is the no-intrinsic one.** `brouter/build.gradle.kts:141` gives every test JVM of `oracleJvm()`
+  (`jvmTest`, `:155`, and `e3Strata`, `:169`) `-XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic` on x86_64
+  (`:142`, `-XX:DisableIntrinsic=_dcos` on aarch64). The oracle's own child JVMs take the same `-XX:` flags
+  (`E3Launcher.kt:32`). `CheapLogicRunTest.kt:27-28` asserts the flag is in force.
+- **No oracle with the intrinsic on**: no second oracle task or JVM. `tasks.register` in the build: `e3Strata` only
+  (`:166`), on the same `oracleJvm()`.
+- **The production table against this oracle: 13 rows, pinned.** `CheapProductionRecordTest.kt:15` (rows 474 ... 1318),
+  `:18` asserts `msunCos` differs from the oracle's `Math.cos` at exactly those; CI on `e8ed646` printed "cos differs at 13
+  rows, kx or ky at 13" (§4.4). `atan2`: equal at every pair (`:38`).
+- **Route-level production runs:** only F0's 2 cases, `RouteTest.kt:102` (`f0ThroughThePublicRouteIsRecorded`), recorded
+  by `println` (`:108`), asserting only a `Found` of 2 or more nodes.
+- **No stored expected values from any other oracle**: the logic tests compare to `E3CaseRun` live; the no-intrinsic run
+  *is* the default. `git grep -n -i 'UseLibmIntrinsic\|production'` over the build and `jvmTest` shows no other (24 lines, the first 20 read,
+  all cited above, `LBGenerator.kt:14-28` and `E3LBTest.kt:24` naming the same 13 rows).
+
+**So, plainly:** the cell of E6 the dispatch quotes does not describe this repository. Its "default oracle" (intrinsic on,
+54 rows) does not exist here, and its "exact against the no-intrinsic oracle" assumed a port equal to `StrictMath`; the
+port is msun, which differs from that oracle at 13 rows. What applies is -24's: one production run, the port with
+`MsunLibm`, **recorded** against the one oracle there is (no-intrinsic), the difference confined by design to routes that
+touch the 13 rows. Nothing is missing for that run but the test itself; the second oracle JVM E6 names is not needed under
+-24 and was never built [R: the grep above].
+
+### 4.2 The production run over every group: not run
+
+Not written, not run (the STOP in §4.3). No counts.
+
+### 4.3 STOP: the gate the dispatch asks for cannot be passed without a build change
+
+The dispatch: "Gate it behind a system property ... pass the property on the command line; if the build does not forward
+system properties to the test JVM, STOP and report rather than change the build." [R] The build sets the test JVM's
+system properties one by one, by name (`build.gradle.kts:128-133`, `:179-180`); none is taken from Gradle's own `-D`, and
+nothing copies `System.getProperties()` (`grep -n 'systemProperty\|getProperties\|gradleProperty'`: those 9 lines and
+`:140`, `os.arch` read for the flag, `:165`, `brouter.e3.jdk`). A `gradlew -Dbrouter.production=1` therefore never reaches
+the test, and a test gated on it would never run. Stopped; nothing written.
+
+Ways the planner could take, none chosen:
+- (a) **one named forward in the build** (`providers.systemProperty("brouter.production")` passed on in `oracleJvm()`),
+  absent by default so CI does not run it. A build change, so the planner's.
+- (b) **an environment variable** as the gate: a Gradle `Test` JVM inherits the Gradle process's environment by default
+  [I, Gradle's documented default, not tried here]. No build change, but not the system property asked for.
+- (c) **`JAVA_TOOL_OPTIONS=-Dbrouter.production=1`** on the command line sets the property in the test JVM without a build
+  change [I], but it reaches every JVM in the run, the oracle's children too (they inherit the environment), and each prints
+  "Picked up JAVA_TOOL_OPTIONS" on stderr, which `E3Launcher.kt:37` merges into the oracle's log
+  (`redirectErrorStream(true)`). Whether that breaks the log's parsing was not checked [?]. Not recommended.
+
+The expectation the commit would have stated, kept here for whoever writes it: by -24 and `CheapProductionRecordTest`, a
+production case can differ only if its search reads a `kx` or `ky` from one of the 13 rows (latitudes inside the captured
+tiles among them: `LBGenerator.kt:14` generates LB there). Groups whose tiles hold none of the 13 should read all equal;
+any other count is a guess [?].
+
+### 4.4 CI on `e8ed646` (run 43157155479, F0h's first full run) [C]
+
+- **jvm** (job conclusion failure): `TOTAL: tests 194, failures 2, errors 0, skipped 0 in 85 files`. The only FAILED lines
+  are `CollectOutreachersTest`'s two (`collectOutreachersWithoutADestination`, `AssertionError at
+  CollectOutreachersTest.kt:141`; `collectOutreachersWithADestinationVanishesFarNodes`, `:116`), as on `34277b6`; not
+  touched. `:brouter:jvmTest FAILED`, `BUILD FAILED in 20m 54s`; the test step ran 04:48:17 to 05:09:13, **about 21
+  minutes**. ` e: ` 0. `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran after, `BUILD SUCCESSFUL in 34s`.
+- **F0h's line:** `9 F0h: 8 cases; kinds {route=8}; 0 mismatches`.
+- **`grep -c 'caught a StackOverflowError'`: 4** (2 console lines, 2 in the XML dump), as on `34277b6` (-61).
+- **ios-smoke** (success): `compileKotlinIosSimulatorArm64`, `TOTAL: tests 24, failures 0, errors 0, skipped 0 in 10
+  files`; then `TOTAL: tests 7, failures 0 ... in 2 files` (`CheapLogicRunTest` 5, `CheapProductionRecordTest` 2) and
+  **`OK: all 2 classes ran`**, the gate. Simulator-checked. `CheapProductionRecordTest` there printed "cos differs at 13
+  rows, kx or ky at 13" (§4.1).
+
+### 4.5 [I], [?], questions; Next
+
+[I]: §4.3 (b) and (c), that a Gradle `Test` JVM inherits the environment and that `JAVA_TOOL_OPTIONS` sets the property.
+[?]: whether `JAVA_TOOL_OPTIONS`'s stderr line breaks the oracle's log; how many production cases touch the 13 rows.
+"None" claims: no second oracle task (`grep -n 'register<Test>\|tasks.register' brouter/build.gradle.kts`: `e3Strata` at
+`:166` only, on `oracleJvm()`, `:169`); no generic property forward (`grep -n 'systemProperty\|getProperties\|gradleProperty'
+brouter/build.gradle.kts`: named ones only, §4.3); no stored no-intrinsic expected values beyond the live oracle (§4.1's
+`git grep`). No code written; the only change is this section. E1: `scan.sh` on the staged diff, 0 before the commit.
+
+Questions for the planner:
+1. **A premise, -134 and this dispatch against -24:** both say the port took E6's option (c), "fdlibm ported"; -24 records
+   the owner rejecting (c) for msun, a fourth option, and the oracle running without the intrinsic. E6's (c) cell (54 rows,
+   a second oracle) does not apply. Is the production run held to -24's reading, recorded against the no-intrinsic oracle
+   with the difference confined to the 13 rows (§4.1)?
+2. **The gate (§4.3):** (a) a one-line named forward in the build, (b) an environment variable, or (c) neither?
+
+STOP hit: §4.3 (the build does not forward system properties). Also reported: the premise in Q1.
+
+Next:
+1. The planner's answers to Q1 and Q2.
+2. The production test over every group as the dispatch's step 3, with the expectation of §4.3 in its commit; one local run;
+   counts to an evidence file and §4.2.
+3. If under budget: how each differing case differs (cost only, route, kind), counts only.
