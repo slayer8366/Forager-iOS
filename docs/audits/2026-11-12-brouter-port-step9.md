@@ -296,3 +296,110 @@ sort, the one added last goes first. So the reversal swaps which link is first i
   search makes the same tree from J either way, fewer fail, down to 0, and that would be the finding -133 names.
 - LB and CR: 0 mismatches each. Their starts are not built on an exact tie, so a reversal of tied entries should not
   reach them [I]; a failure there would mean an exact tie that their construction does not name.
+
+**Observed** [C] (`22-nt-order-plant-out.txt`, `22-nt-order-plant.diff`): compile errors 0, 1 fresh XML, 3 tests, 1
+failure (NT's). `9 NT: 59 cases within 89 draws; kinds {route=56, to-position not mapped ...=1, target island detected
+...=2}; 23 mismatches`. `9 LB: ... 0 mismatches`, `9 CR: ... 0 mismatches`, as predicted. Restored from the saved copy,
+`cmp` equal; `git status` showed no code change after.
+- **Caught, but not as predicted.** 23 of 59 fail, not 56. Of the 20 the test prints (it prints the first 20), all 20 are
+  routes and all 20 differ on `cost` alone: nodes, distance and both digests equal. The cost moves by -12 (1), -5 (1),
+  -1 (8), +1 (10). The remaining 3 are not printed; their fields and kinds are not known [?].
+- So my reason was wrong: no repeated node at J; the same track is found, and only its cost depends on which tied link
+  starts it. Where it does not move (36 cases, among them at least the 3 non-routes unless they are among the 3 unprinted),
+  the two start links give one cost [I].
+- The finding for -133: NT's outcomes **do** depend on which tied link is first, through the cost, in at least 23 of 59.
+  The port's order of entries reaching the sort matches the oracle's in all 59 (the unplanted run, 0 mismatches).
+
+### 3.3 Can an unplanted run end with no message and no track? (-133, decision 2)
+
+From the Java only [R], `third_party/brouter/src/main/java/btools/router/RoutingEngine.java`:
+1. Start state: `foundTrack = new OsmTrack()` (no nodes), `:62`; `errorMessage = null`, `:67`. Routing mode: `doRun`
+   `:170-177` calls `doRouting`; its argument checks throw out of `doRun` (`:174-175`), not a return.
+2. Normal end: `foundTrack = track` at `:292` or `:305`, message null. `track` is never null there: `searchRoutedTrack`
+   throws "no track found..." rather than return null (`:1770`, `:1773`). Its node count is not shown here [I, at least 1].
+3. `:233` `if (routingContext.ai != null) return;`: `ai` is set only in `doGetInfo` (`:626`, cleared `:654`), so not in
+   routing mode.
+4. The catches `:318-326` all call `logException` (`:811-812`): `errorMessage = t.getMessage()` for a
+   `RuntimeException`, `t.toString()` (never null) otherwise. **So yes: a `RuntimeException` with a null message, thrown
+   before `:292`/`:305`, ends the run with no message and `foundTrack` still `:62`'s empty track.** Which exceptions in
+   BRouter's routing can carry a null message was not searched [?]; its own throws carry text (e.g. `:1976`).
+5. Forager: `BRouterTrailRouter.kt:133-139` hands it on as `EngineOutcome.Ran` with the empty track; `foundRoute` then
+   refuses it at `:107-111` (`nodes.size < 2`: `EngineFailed("no error reported and 0 route points")`, logged). Not a route.
+
+### 3.4 The assembled count
+
+Rows: one `awk` over `expected-1b.tsv` by stratum, `compare` and kind (`route` or a message) [C]. Port: each test's
+printed line, from CI on `34277b6` (run 43155294643, jvm job) [C], except F0h, from this session's single-class run on
+`e8ed646` [C] (CI on it was still running at writing).
+
+| Group | Rows (`compare`; route / message) | Port test, cases run | Mismatches | Compared on |
+|---|---|---|---|---|
+| R | 1534 (exact; 1268 / 266) | `RoutingEngineRTest` 1534: 968 route, 212 error, 354 refused | 0 | 1180 on six fields; 354 on the refusal by name (`threw:unsupported: path model ...`) |
+| F0 | 2 (exact; 2 / 0) | `RoutingEngineF0Test` 2 | 0 | six fields |
+| F0h | 8 (exact; 8 / 0) | `RoutingEngineF0hTest` 8 | 0 | six fields |
+| DL-lat, DL-lon | 59 + 59 (exact; 118 / 0) | `RoutingEngineDLTest` 59 + 59 | 0 | six fields |
+| MP64 | 59 (exact; 59 / 0) | `RoutingEngineMemoryTest` 59 | 0 | six fields |
+| ML5 | 59 (exact; 0 / 59) | `RoutingEngineMemoryTest` 59 | 0 | six fields; kind is the message's text (`E3Outcome.kindOf`) |
+| PM5 | 55 (exact; 55 / 0) | `RoutingEngineMemoryTest` 55 | 0 | six fields |
+| NT | 59 (exact; 56 / 3) | `RoutingEngineStep9Test` 59 | 0 | six fields |
+| LB, CR | 59 + 59 (exact; 118 / 0) | `RoutingEngineStep9Test` 59 + 59 | 0 | six fields |
+| FK1-FK6 | 60 (exact; 0 / 60) | `RoutingEngineFKTest` 10 each | 0 | message text and the five other fields |
+| FK7 | 13 (11 exact, 2 outcome; 2 / 11) | `RoutingEngineFKTest` 13 | 0 | message family (digits masked, `familyOf`) and five fields |
+| FK8 | 11 (10 exact, 1 outcome; 1 / 10) | `RoutingEngineFKTest` 11 | 0 | message text and five fields |
+| FK9 | 10 (7 exact, 3 family; 0 / 10) | `RoutingEngineStopTest` 10 | 0 | kind, message's fixed part, nodes/cost/distance, terminated (no digests) |
+| FK10, FK11 | 20 (exact; 0 / 20) | `RoutingEngineStopTest` 10 + 10 | 0 | as FK9; FK11 also the link count at the cancel |
+| **Total** | **2,126** | **2,126** | **0** | |
+
+The total is 2,126, equal to `expected-1b.tsv`'s rows. On all six fields: 1,180 R + 2 F0 + 8 F0h + 118 DL + 173 memory
+(MP64, ML5, PM5) + 177 NT/LB/CR = **1,658**. On a refusal by name: **354** (R). On a message's text or family with the
+track's counts: **114** (FK; of these, FK9-11's 30 without the two digests). Messages among the six-field rows (R's 212,
+ML5's 59, NT's 3) are compared by their whole text, `kindOf` folding only timeouts and the watchdog into families.
+
+**The plan's line for step 9** (`2026-10-28-brouter-port-verify.md:1704`): "E's 2,118 cases, asserted or recorded per E6
+under the options ruled; JUnit XML counts against 2,118 less E3's unstable cases". What this table does not yet show:
+- **2,118 against 2,126.** The plan counts 2,118; `expected-1b.tsv` holds 2,126. The 8 more are not traced here [?]
+  (F0h's 8 is one candidate, FK's extra rows, -80/-85, another).
+- **"Less E3's unstable cases":** the file names 3 FK9 rows as unstable, compared by family only, and they are in the 2,126
+  above. No group shows a number "less" the unstable cases; the step's own figure is not computed.
+- **"JUnit XML counts":** each group is one JUnit test; the XML counts tests (193 jvm on `34277b6`), not the 2,126
+  cases. The cases come from printed lines, as here.
+- **"Asserted or recorded per E6":** every group above is asserted exactly on the JVM; nothing is recorded. E6 asks which
+  option was ruled (the table and `atan2`: (a), (b) or (c); `hmap`: (i), (ii) or (iii)) and whether each run is a logic or a
+  production run. The table does not name either; R's 354 refusals are neither asserted equal nor recorded with an
+  interval.
+- **One run:** the counts come from one CI run plus F0h locally, not one run over E.
+
+### 3.5 CI reads
+
+- **`34277b6`** (run 43155294643) [C]: jvm `TOTAL: tests 193, failures 2, errors 0, skipped 0 in 84 files`; the 2 FAILED
+  are `CollectOutreachersTest`'s two (not touched); `:brouter:jvmTest FAILED in 21m 56s` (the test step 04:31 to 04:53, about
+  22 minutes); ` e: ` 0. `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` ran after (BUILD SUCCESSFUL in 32s).
+  ios-smoke success, `TOTAL: tests 24 ... 0 failures in 10 files` and `tests 7 ... 0 failures in 2 files`,
+  simulator-checked. FK lines: FK1-FK8 84 cases, 0 mismatches each (§3.4). The caught-overflow print
+  (`cleanupPeninsulas caught a StackOverflowError`): 2 console lines (and 2 more in the XML dump). The gate: no line
+  naming a gate was found by `grep -iE 'gate|allowlist|known fail'` [?]: the job's conclusion is failure.
+- **`e8ed646`** (run 43157155479): still in progress at the handoff; not read.
+
+### 3.6 [I], [?], questions, done and not done; Next
+
+[I]: §3.2's reading that the 36 unmoved NT cases share one cost on both links; §3.3's "track has at least 1 node".
+[?]: the 3 unprinted NT mismatches; which BRouter routing exceptions can carry a null message; the 8 between 2,118 and
+2,126; the gate's line on `34277b6`. "None" claims: LB and CR under NT's plant, 0 mismatches (`22-nt-order-plant-out.txt`).
+E1: `scan.sh` on each staged diff, 0 before every commit (one hit, diff-header timestamps, removed before commit).
+
+Questions for the planner:
+1. NT's plant was caught (23 of 59, cost only). Does NT still go to the independent reviewer, or does this close -133's
+   decision 1?
+2. Item 4: a null-message `RuntimeException` leaves no message and an empty track. Forager refuses it at
+   `BRouterTrailRouter.kt:107-111`. Is the iOS adapter to be held to the same guard (not read this session)?
+3. 2,118 (plan) against 2,126 (`expected-1b.tsv`): which is step 9's figure?
+
+Done: F0h through the port (8, 0 mismatches) and its heights plant (8 of 8 caught, as predicted); NT's order plant
+(caught, 23, against a prediction of 56); item 4 from the Java; the assembled count (2,126 run, 0 mismatches); CI on
+`34277b6`. Not done: CI on `e8ed646`; the 3 unprinted NT mismatches; the plan's "recorded per E6" and "less unstable".
+No STOP was hit.
+
+Next:
+1. Read CI on `e8ed646` (F0h's first CI run): TOTAL, FAILED, ` e: `, iOS, the F0h line.
+2. The planner's answers to Q1 to Q3.
+3. Step 9's figure per E6 once the options and the 2,118 are settled.

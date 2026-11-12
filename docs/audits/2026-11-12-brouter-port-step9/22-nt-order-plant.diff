@@ -1,0 +1,10 @@
+--- WaypointMatcherImpl.kt (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/WaypointMatcherImpl.kt
+@@ -233,6 +233,7 @@
+     fun updateWayList(ways: MutableList<MatchedWaypoint>, mw: MatchedWaypoint) {
+         ways.add(mw)
+         // use only shortest distances by smallest direction difference. Java's Collections.sort is stable; so is sortWith.
++        ways.reverse()
+         ways.sortWith(comparator)
+         if (ways.size > MAX_POINTS) ways.removeAt(MAX_POINTS)
+     }
