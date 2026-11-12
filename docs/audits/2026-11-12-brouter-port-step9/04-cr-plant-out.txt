@@ -1,0 +1,7 @@
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="crRoutesThroughThePortAsThroughTheOracle[jvm]"
+message="java.lang.AssertionError: 9 CR: 50 mismatches; first [CR-0002: [nodes, cost, distance, node digest, heights digest] (oracle route|400|19848|9714|3793def08a218e1b|d361d2225dd83926; port route|349|17112

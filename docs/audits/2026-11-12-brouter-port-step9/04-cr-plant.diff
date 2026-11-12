@@ -1,0 +1,11 @@
+--- (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/StdPath.kt
+@@ -203,7 +203,7 @@
+         val nodeTags = rc.expctxNode!!.getKeyValueDescription(nodeAccessGranted, desc)
+         val classIndex = nodeTags.indexOf("estimated_crossing_class=")
+         if (classIndex <= -1) return 0
+-        val crossingClass = nodeTags.substring(classIndex + 25, classIndex + 26)
++        val crossingClass = nodeTags.substring(classIndex + 24, classIndex + 25)
+         return when (crossingClass) {
+             "1" -> if (toLeft) rc.cost_ToLeft_from_H_class1 else rc.cost_ToRight_from_H_class1
+             "2" -> if (toLeft) rc.cost_ToLeft_from_H_class2 else rc.cost_ToRight_from_H_class2

@@ -1,0 +1,5 @@
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 0, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 0, errors 0, skipped 0 in 1 files

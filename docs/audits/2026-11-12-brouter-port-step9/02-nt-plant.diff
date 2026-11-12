@@ -1,0 +1,11 @@
+--- (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/WaypointMatcherImpl.kt
+@@ -36,7 +36,7 @@
+     private val comparator = Comparator<MatchedWaypoint> { mw1, mw2 ->
+         val cmpDist = javaDoubleCompare(mw1.radius, mw2.radius)
+         if (cmpDist != 0) return@Comparator cmpDist
+-        javaDoubleCompare(mw1.directionDiff, mw2.directionDiff)
++        javaDoubleCompare(mw2.directionDiff, mw1.directionDiff)
+     }
+ 
+     init {

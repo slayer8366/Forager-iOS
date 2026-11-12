@@ -1,0 +1,7 @@
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="lbRoutesThroughThePortAsThroughTheOracle[jvm]"
+message="java.lang.AssertionError: 9 LB: 52 mismatches; first [LB-0001: [nodes, cost, distance, node digest, heights digest] (oracle route|334|11270|8773|5c2c4a0d44e493d|cb81da0c5e6ccfc7; port route|333|11263|

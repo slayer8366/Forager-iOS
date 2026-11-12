@@ -67,3 +67,13 @@ Planted errors, PREDICTION (pushed before any of the three runs; each by the scr
 - CR: `StdPath.kt:206`, the crossing class read one character early (`classIndex + 24, classIndex + 25`, the `=`), so
   no class matches and the added turn cost is 0. Expected: `crRoutes...` fails, mismatches on most of the 59 (cost at
   least; each case was taken for reaching `StdPath.java:105-113`).
+
+Planted errors, OBSERVED [C: the scratch `revert.sh`'s outputs, `02-`, `03-`, `04-*-plant-out.txt`, edits in the `.diff`
+beside them; each: 0 compile errors, 1 fresh XML, restored `cmp` equal; `git status` clean after all three]:
+- NT: **NOT CAUGHT, against the prediction.** 1 test, 0 failures; the run printed 59 cases within 89 draws, 0 mismatches,
+  so the reversed tie-break ran and moved no outcome. [I] `updateWayList` (`WaypointMatcherImpl.kt:232-237`) keeps up to
+  5 matched entries and the sort decides only their order; that order does not reach the six fields on these 59 cases.
+  So NT's test passes identically with and without that change: flagged, as Forager's Testing rules ask, as possibly not
+  covering the near-tie it is named for. No other plant chosen (Q2).
+- LB: caught as predicted: 1 failure, "52 mismatches" of 59 (first: nodes, cost, distance, both digests).
+- CR: caught as predicted: 1 failure, "50 mismatches" of 59 (first: nodes, cost, distance, both digests).
