@@ -10,10 +10,10 @@ import com.zynergylabs.forager.brouter.util.LibmSeam
  * Three differences from Java, each named:
  * - [hmap] is option (i) of RECORD -24, `java.util.HashMap`'s order in common code ([NodeHashMap]), as RECORD -50
  *   answers it.
- * - `cleanupPeninsulas` catches `StackOverflowError` in Java (`OsmNodesMap.java:62-64`) and carries on. The port keeps
- *   that catch on the JVM and logs it; on iOS there is no catch, and an overflow ends the process
- *   ([runCatchingStackOverflow], RECORD -50). How deep the recursion goes on the captured tiles is measured in the step
- *   5b report.
+ * - `minVisitIdInSubtree` is Java's recursion rewritten as a loop over a stack of its own (RECORD -144, the owner's
+ *   ruling), so its depth no longer uses the thread's stack, and `cleanupPeninsulas` has no `StackOverflowError` catch
+ *   (`OsmNodesMap.java:62-64`): nothing there can overflow. Where Java's recursion would overflow and its catch skip the
+ *   rest of a subtree's cleanup, the port finishes it; elsewhere the walk is Java's, step for step (see the function).
  * - [collectOutreachers] takes the [LibmSeam] for `calcDistance`, as `CheapRuler.distance` does.
  */
 internal class OsmNodesMap {
@@ -61,51 +61,130 @@ internal class OsmNodesMap {
             val n = nodes[i]
             if (n.firstlink != null) {
                 if (n.visitID == 1) {
-                    // Java: try { ... } catch (StackOverflowError soe) { }. JVM only; see the class comment.
-                    if (runCatchingStackOverflow { minVisitIdInSubtree(null, n) }) PeninsulaDepth.overflowsCaught++
-                    PeninsulaDepth.current = 0 // the depth counter only (RECORD -140); see PeninsulaDepth
+                    // Java: try { minVisitIdInSubtree(null, n); } catch (StackOverflowError soe) { }. The walk below keeps
+                    // its own stack (RECORD -144), so no stack overflow can reach here and the catch is gone: where Java
+                    // overflows and skips the rest of a subtree, the port finishes it (the one behaviour difference).
+                    minVisitIdInSubtree(n)
                 }
             }
         }
     }
 
-    private fun minVisitIdInSubtree(source: OsmNode?, n: OsmNode): Int {
-        // The depth counter only (RECORD -140): read by tests, never by the port; see PeninsulaDepth.
-        if (++PeninsulaDepth.current > PeninsulaDepth.deepest) PeninsulaDepth.deepest = PeninsulaDepth.current
-        if (n.visitID == 1) n.visitID = baseID // border node
-        else n.visitID = lastVisitID++
-        var minId = n.visitID
-        nodesCreated++
+    /**
+     * One frame of Java's `minVisitIdInSubtree(source, n)` recursion, held in [walk] instead of on the thread's stack
+     * (RECORD -144). [source], [n] and [minId] are the call's parameters and its local; [next] is its loop variable
+     * after Java's for-update (`nextLink`); [child], [childLink] and [nodesCreatedUntilHere] are the locals live across
+     * the recursive call (`t`, `l`, `nodesCreatedUntilHere`), set while a child's frame is above this one, else null.
+     */
+    private class WalkFrame {
+        var source: OsmNode? = null
+        lateinit var n: OsmNode
+        var minId = 0
+        var next: OsmLink? = null
+        var child: OsmNode? = null
+        var childLink: OsmLink? = null
+        var nodesCreatedUntilHere = 0
+    }
 
-        var l = n.firstlink
-        while (l != null) {
-            val link: OsmLink = l
-            l = link.getNext(n) // Java's for-update, taken before the body so that `continue` keeps it
+    /** The explicit stack: [walk]`[0 until depth]` are the live frames; the objects above `depth` are kept for reuse. */
+    private val walk = ArrayList<WalkFrame>()
 
-            val t = link.getTarget(n)!!
-            if (t === source) continue
-            if (t.isHollow()) continue
-
-            var minIdSub = t.visitID
-            if (minIdSub == 1) {
-                minIdSub = baseID
-            } else if (minIdSub == 0) {
-                val nodesCreatedUntilHere = nodesCreated
-                minIdSub = minVisitIdInSubtree(n, t)
-                if (minIdSub > n.visitID) { // peninsula ?
-                    nodesCreated = nodesCreatedUntilHere
-                    n.unlinkLink(link)
-                    t.unlinkLink(link)
-                }
-            } else if (minIdSub < baseID) {
-                continue
-            } else if (cleanupMode == 2) {
-                minIdSub = baseID // in tree-mode, hitting anything is like a gateway
-            }
-            if (minIdSub < minId) minId = minIdSub
+    /**
+     * Java's `minVisitIdInSubtree(null, root)` without recursion (RECORD -144, the owner's ruling). It visits the same
+     * nodes in the same order and writes the same fields at the same moments as Java's recursion, when Java does not
+     * overflow. How each step of the recursion maps to the loop:
+     * - **A call** `minVisitIdInSubtree(source, n)` is `enter`: a frame is pushed and the call's prologue runs there and
+     *   then (visitID, minId, `nodesCreated++`), the same moment the call would run it.
+     * - **The link loop** runs on the top frame, from its [WalkFrame.next], exactly as Java's for-loop: `nextLink` is taken
+     *   before the body, then the same tests in the same order (`t == source`, hollow, `visitID` 1, 0, below baseID,
+     *   tree mode), each `continue` going to the next link.
+     * - **The recursive call** (`visitID == 0`): the frame saves `t`, `l` and `nodesCreatedUntilHere`, which Java keeps
+     *   live across the call, and the child's frame is pushed by `enter`. The loop goes on with the child, so the
+     *   child's whole subtree is walked before anything more of the parent's links, as in Java.
+     * - **"return minId"**: when a frame's links run out, its minId is the returned value and the frame is popped. If a
+     *   frame is below it, that frame resumes exactly where Java's call returns: `minIdSub` is the returned value; if
+     *   `minIdSub > n.visitID` (peninsula) `nodesCreated` is restored and the link is unlinked from both ends; then
+     *   `if (minIdSub < minId) minId = minIdSub`; then its link loop goes on from the saved `nextLink`.
+     * - When the root's frame is popped the walk ends; Java's root call's return value is unused, as here.
+     *
+     * [PeninsulaDepth] (read by tests only, never by the port) now counts the explicit stack's size: its `current` is the
+     * number of live frames, one more on each push and one less on each pop, so its `deepest` is the depth Java's
+     * recursion reaches (the root is 1), as the recursive port counted it before.
+     */
+    private fun minVisitIdInSubtree(root: OsmNode) {
+        var depth = 0
+        fun enter(source: OsmNode?, n: OsmNode) {
+            if (depth == walk.size) walk.add(WalkFrame())
+            val f = walk[depth++]
+            if (++PeninsulaDepth.current > PeninsulaDepth.deepest) PeninsulaDepth.deepest = PeninsulaDepth.current
+            // The call's prologue, at the moment of the call.
+            if (n.visitID == 1) n.visitID = baseID // border node
+            else n.visitID = lastVisitID++
+            f.source = source
+            f.n = n
+            f.minId = n.visitID
+            f.next = n.firstlink
+            f.child = null
+            f.childLink = null
+            nodesCreated++
         }
-        PeninsulaDepth.current--
-        return minId
+
+        enter(null, root)
+        var returned = 0 // the value the last popped frame returned
+        while (depth > 0) {
+            val f = walk[depth - 1]
+            val n = f.n
+            val returnedFrom = f.child
+            if (returnedFrom != null) {
+                // Where Java's recursive call returns: minIdSub = minVisitIdInSubtree(n, t).
+                val link = f.childLink!!
+                val minIdSub = returned
+                if (minIdSub > n.visitID) { // peninsula ?
+                    nodesCreated = f.nodesCreatedUntilHere
+                    n.unlinkLink(link)
+                    returnedFrom.unlinkLink(link)
+                }
+                if (minIdSub < f.minId) f.minId = minIdSub
+                f.child = null
+                f.childLink = null
+            }
+            var descended = false
+            var l = f.next
+            while (l != null) {
+                val link: OsmLink = l
+                l = link.getNext(n) // Java's for-update, taken before the body so that `continue` keeps it
+                f.next = l
+
+                val t = link.getTarget(n)!!
+                if (t === f.source) continue
+                if (t.isHollow()) continue
+
+                var minIdSub = t.visitID
+                if (minIdSub == 1) {
+                    minIdSub = baseID
+                } else if (minIdSub == 0) {
+                    // Java's recursive call: keep what is live across it, then walk the child's subtree first.
+                    f.nodesCreatedUntilHere = nodesCreated
+                    f.child = t
+                    f.childLink = link
+                    enter(n, t)
+                    descended = true
+                    break
+                } else if (minIdSub < baseID) {
+                    continue
+                } else if (cleanupMode == 2) {
+                    minIdSub = baseID // in tree-mode, hitting anything is like a gateway
+                }
+                if (minIdSub < f.minId) f.minId = minIdSub
+            }
+            if (!descended) {
+                // Java's "return minId": pop the frame; the frame below, if any, resumes at its call's return.
+                returned = f.minId
+                f.source = null
+                depth--
+                PeninsulaDepth.current--
+            }
+        }
     }
 
     fun isInMemoryBounds(npaths: Int, extend: Boolean): Boolean {

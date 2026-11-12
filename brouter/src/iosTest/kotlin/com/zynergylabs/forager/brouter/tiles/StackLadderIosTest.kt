@@ -55,7 +55,7 @@ import kotlin.test.fail
  * the test's printed output reaches the log only through the JUnit XML, which a process that ends may not complete.
  *
  * Gated on [LADDER_GATE] (only `ios-memory`'s last step sets it, as `SIMCTL_CHILD_`[LADDER_GATE]); unset, it prints one
- * line and does nothing. Native only: the JVM catches an overflow (RECORD -140) and is not the question. Nothing of a
+ * line and does nothing. Native only: the question is a native thread's stack (RECORD -143). Nothing of a
  * case but its id is printed or written (E1): sizes, booleans, depths and the outcome's tuple digest equality.
  */
 internal const val LADDER_GATE = "BROUTER_STEP10_LADDER"
