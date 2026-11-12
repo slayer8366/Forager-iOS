@@ -4832,3 +4832,44 @@ the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@
 5. **Next:** session 36 ports 8d, runs its reverts, the getter counts and the coverage read of `OsmPath.java:282-283`
    and `:350`.
 **Notes:** Written by the planner session by hand. Next free ID -129.
+
+**Kind:** outcome
+**ID:** 2026-10-28-129
+**Timestamp:** 2026-11-12T03:16:12Z
+**Continues:** 2026-10-28-62, 2026-10-28-128
+**Title:** Step 8d, Plumb's session 36: `route()` ported, 4 of 4 passing; a planted error in the heights was not caught,
+since F0's routes have no heights; the public cancel has no test; the planner's rulings and two corrections of its own
+**Observed:** Plumb Ledger, session 36, `brouter-port-5b` `9e0c17f` to `e8b2a6e` (fast-forward only; called at 162,643,
+ended at 170,699 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner).
+- **The port** (`9bf13a8`): `route()` and `RouteCancel` in `Route.kt`. `RouteTest` 4 of 4 on the first run. Full run: 179
+  tests, 2 failed (`CollectOutreachersTest`), 3 caught-overflow lines [R, Plumb's].
+- **The production run** (the port's own libm, recorded, not asserted, -24): both F0 cases equal to the oracle on nodes,
+  distance and both digests [R, Plumb's].
+- **Reverts** (9, predictions pushed first in `536d1e1`, results `907c28d`): 7 caught as predicted. **rv24** (the public
+  `route()` dropping the caller's cancel) passed, as predicted. **rv17** (the heights shifted by one node) passed,
+  against the prediction: on both F0 routes every node's height is the "no height" value, so a shifted array is the same
+  array [R, Plumb's].
+- Plumb stopped on §9.6's premise, which had it backwards: what is not covered is a real height through `route()`.
+- Not done: the getter counts, the `OsmPath` coverage read, the CI read of `9bf13a8`, the closing list.
+**Checked by the planner:**
+- `git ls-remote` `e8b2a6e`, a fast-forward of `9e0c17f`; 4 commits, one trailer each, no model name; E1 over the range: 0.
+- Code changed: `Route.kt` only, and nothing after the port's commit, so every revert was restored. No test changed.
+- **`route()` against Forager's caller** (`BRouterTrailRouter.kt:120-175` at Forager `947f1be2`): the same calls in the
+  same order; the message first, the track only when it is null. The engine's constructor's exceptions pass through,
+  where Forager's Android code catches them. The iOS adapter has to do that catch.
+- CI on `9bf13a8` (run 43146547580) was still in progress. Not read.
+**The planner's own miss:** -62 already says F0 has no heights, "0 of 226, 0 of 306", and that R's routes do (427,924 of
+428,277 nodes). The planner accepted §9's plan in -128 without holding it against -62. The engine's heights are compared
+on R through `RoutingEngine` (8a, 8b). The copy of them into `Found` is compared on nothing yet.
+**Corrected in place, the planner's:** the timestamps of -124 to -128 were typed by hand as estimates and ran 2 to 49
+minutes late; -128's was in the future when written. They now read their commits' times.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: yes.** `RouteTest` gains a test on routes that have heights: R's first 10 routed cases in R's
+   order, through the internal `route` with the oracle's libm, compared as F0 is, with an assertion that the oracle's
+   heights are not all "no height". The stubs are gone, so it is seen red by rv17, prediction pushed first.
+2. **Plumb's question 2: yes.** A terminate before the run through the public `route()`, compared as the internal one
+   is. That is the call Forager's cancel makes. Seen red by rv24, prediction pushed first.
+3. These add tests. They change no existing comparison.
+4. **8d is not closed.** Left for session 37: 1, 2, the getter counts, the coverage read, the CI reads, the closing list.
+**Notes:** Written by the planner session by hand. Next free ID -130.
