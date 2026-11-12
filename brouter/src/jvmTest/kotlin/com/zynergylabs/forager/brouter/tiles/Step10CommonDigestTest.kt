@@ -40,6 +40,13 @@ class Step10CommonDigestTest {
     @Test
     fun crConstantEqualsTheFilesCrRows() = constantEqualsTheFilesRows("CR", CrExpected.ROWS)
 
+    /** Session 48: DL-lat's and DL-lon's constants, held to the file as NT's is. */
+    @Test
+    fun dlLatConstantEqualsTheFilesDlLatRows() = constantEqualsTheFilesRows("DL-lat", DlLatExpected.ROWS)
+
+    @Test
+    fun dlLonConstantEqualsTheFilesDlLonRows() = constantEqualsTheFilesRows("DL-lon", DlLonExpected.ROWS)
+
     private fun constantEqualsTheFilesRows(stratum: String, constant: List<NtExpected.Row>) {
         val file = rows.filter { it.stratum == stratum }
         assertEquals(59, file.size, "$stratum's rows in expected-1b")

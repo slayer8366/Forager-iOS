@@ -1,6 +1,7 @@
 package com.zynergylabs.forager.brouter.tiles
 
 import com.zynergylabs.forager.brouter.oracle.OracleCalls
+import com.zynergylabs.forager.brouter.oracle.e3.DLGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.E3Case
 import com.zynergylabs.forager.brouter.oracle.e3.E3Expected
 import com.zynergylabs.forager.brouter.oracle.e3.E3Profiles
@@ -8,6 +9,7 @@ import com.zynergylabs.forager.brouter.oracle.e3.E3Select
 import com.zynergylabs.forager.brouter.oracle.e3.LBGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.NTGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.RGenerator
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3DLTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
 import java.io.File
 import kotlin.test.Test
@@ -32,6 +34,9 @@ import kotlin.test.fail
  * so it is written as [E3Profiles.crossing] makes it into [PROFILES]`/` in the same folder, with the oracle's `lookups.dat`
  * beside it (the engine reads `lookups.dat` from the profile's folder). The profile is the oracle's pinned `trekking.brf`
  * with E4's assigns; it holds no position.
+ *
+ * Session 48: DL-lat and DL-lon the same way ([DL_LAT_FILE], [DL_LON_FILE]): `RoutingEngineDLTest`'s [DLGenerator] draws,
+ * [E3DLTest.SEED_LAT] and [E3DLTest.SEED_LON], [E3Targeted.PROFILE], on [TestTiles.segments] (not the drop-off set).
  */
 class NtCasesWriteTest {
     @Test
@@ -55,6 +60,17 @@ class NtCasesWriteTest {
             write("CR", cr.draws("CR", E3Profiles.CROSSING, 64, TestTiles.segments), File(dir, CR_FILE))
         } finally {
             cr.close()
+        }
+        for ((line, seed, name) in listOf(
+            Triple(DLGenerator.Line.LAT40, E3DLTest.SEED_LAT, DL_LAT_FILE),
+            Triple(DLGenerator.Line.LON70, E3DLTest.SEED_LON, DL_LON_FILE),
+        )) {
+            val dl = DLGenerator(TestTiles.segments, line, seed)
+            try {
+                write(line.stratum, dl.draws(E3Targeted.PROFILE, TestTiles.segments), File(dir, name))
+            } finally {
+                dl.close()
+            }
         }
     }
 
@@ -87,6 +103,8 @@ class NtCasesWriteTest {
         const val GATE = "BROUTER_STEP10_NT_CASES"
         const val LB_FILE = "lb-cases.tsv"
         const val CR_FILE = "cr-cases.tsv"
+        const val DL_LAT_FILE = "dl-lat-cases.tsv"
+        const val DL_LON_FILE = "dl-lon-cases.tsv"
         const val PROFILES = "profiles2"
     }
 }
