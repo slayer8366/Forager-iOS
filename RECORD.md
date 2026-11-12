@@ -5871,3 +5871,41 @@ All four first options were marked as recommended by the planner.
 **Still the owner's, not asked yet:** the order of the later surfaces; the fungi index; scheduled backup; device
 evidence; the app's public identity (-152).
 **Notes:** Written by the planner session by hand. Next free ID -154.
+
+**Kind:** outcome
+**ID:** 2026-10-28-154
+**Timestamp:** 2026-11-12T21:51:38Z
+**Continues:** 2026-10-28-111, 2026-10-28-149, 2026-10-28-150
+**Title:** The hints and the four formats equal the oracle's on 1,445 cases in a logic run, read in CI (Plumb's session
+57); step 7's gap on engine routes is closed
+**Observed:** Plumb Ledger, session 57, `brouter-port-5b` `b26d4c2` to `65737ec` (fast-forward only; called at 152,322,
+ended at 161,889 by the harness's count; one commit pushed, trailer `Co-Authored-By: Claude <noreply@anthropic.com>`;
+checked by the planner). More is saved, not pushed: the clone's local commit `274eede` on `s57` (the production record
+for the hints and formats, the simulator's digests and tests; written, not run).
+- **NT-0062 in a logic run** [R, Plumb's, a scratch test since deleted]: on `OracleLibm` its hints are the oracle's
+  exactly in every mode from 2 to 9. On `MsunLibm` it differs at hint 380's angle only. -150's reading holds.
+- **`HintsFormatsLogicTest`** (`65737ec`, committed before it ran): every route group, the port on `OracleLibm` against
+  the oracle with the hints switched on (modes 2 to 9 in turn), the hints list and the four formats by length and
+  digest, asserted equal.
+**Checked by the planner:**
+- `git ls-remote` `65737ec`, a fast-forward of `b26d4c2`; no model name; E1 by `scan.sh <c>^ <c>`: 0 (and 0 on the
+  local commit). The port, CI and the build are untouched. `EngineRun.run` gained a parameter for the library, with
+  the old value as its default.
+- **Run 43297048297 on `65737ec`.** Its `jvm` job first failed in 39 s with no test run: Maven Central answered 429 to
+  the Kotlin plugin's download. The planner re-ran the failed job once the run had ended. **Read after the re-run, every
+  job green:**
+  - `jvm`: **235 tests, 0 failures;** the test step ran 40 minutes of the job's 60. The logic table, per group: cases,
+    and "equal" on the six fields, the hints, GPX, JSON, KML and CSV: F0 2, F0h 8, NT 59, LB 59, CR 59, DL-lat 59, DL-lon
+    59, MP64 59, ML5 59, PM5 55, R 968 (all routed); every "differ" 0. **1,445 cases** [C].
+  - `jvm-production`: 1,742 cases, 1,742 equal.
+  - `ios-smoke`: 50 of 50; 14 group lines with "mismatches 0"; arm64 7 of 7, the gate "OK". `ios-memory`: memory 173 and
+    R's 240 equal; the ladder 20 of 20. **Simulator-checked.** So the changed `EngineRun` moved nothing there.
+**What this closes:** -149's gap. The hints and formats are now compared with the oracle on routes the engine made, in
+every group, not on random walks.
+**What it does not:** the production run of the hints and formats (the port as it ships; expected by -150 to differ in
+rare angles); anything of them on iOS; a planted error (the test has not been seen red).
+**Decisions (the planner's, technical):**
+1. **All of R stays in the `jvm` job.** 40 minutes of 60 is room enough; if it passes 50 the full R moves to the
+   production job.
+2. **Next:** the planted error for this test; the production record; the simulator's digests with their planted error.
+**Notes:** Written by the planner session by hand. Next free ID -155.
