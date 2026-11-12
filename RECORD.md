@@ -5533,3 +5533,51 @@ with the recursive `minVisitIdInSubtree`, the depth counter, and the stack ladde
   word.
 - `brouter-port-5b` goes on from the same commit with the rewrite.
 **Notes:** Written by the planner session by hand. Next free ID -146.
+
+**Kind:** outcome
+**ID:** 2026-10-28-146
+**Timestamp:** 2026-11-12T16:09:59Z
+**Continues:** 2026-10-28-60, 2026-10-28-61, 2026-10-28-144, 2026-10-28-145
+**Title:** The walk rewritten without recursion (Plumb's session 52): every comparison still equal; the ladder survives
+down to 512 KB on the simulator; one of `CollectOutreachersTest`'s two failures is gone
+**Observed:** Plumb Ledger, session 52, `brouter-port-5b` `3d5bd11` to `f33828c` (fast-forward only; called at 150,320,
+ended at 159,498 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The red test first** (`ce1a193`): the ladder asserts, on four cases (MP64-0002, MP64-0005, M5-0060, M5-0304), that
+  every stack size from 8 MB to 512 KB survives and gives the stored row.
+- **The rewrite** (`f33828c`): `minVisitIdInSubtree` keeps a list of frames in place of calling itself; the commit and a
+  comment map each step of the recursion to the loop. `runCatchingStackOverflow` and its three files are removed: with
+  no recursion the catch cannot fire. `PeninsulaDepth` now counts the list's size.
+- Not run: the planted error in the rewrite (prediction pushed, `c1ac7e1`); the oracle's own catch count.
+**Checked by the planner:**
+- `git ls-remote` `f33828c`, a fast-forward of `3d5bd11`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3. CI and the build are untouched.
+- **The rewrite read against `OsmNodesMap.java`'s `minVisitIdInSubtree`, statement by statement** [R]: the numbering
+  and `nodesCreated++` on entry; the next link taken before the body; the tests in Java's order (source, hollow,
+  `visitID` 1, 0, below `baseID`, tree mode); at a child's return, the peninsula test against the parent's
+  `visitID`, `nodesCreated` restored, the link unlinked from both ends, then the minimum. No difference found.
+- **The ladder was red on the recursive port:** run 43226744796 on `ce1a193`, "starting MP64-0002 1048576" and then
+  "Child process terminated with signal 10: Bus error".
+- **Run 43245049027 on `f33828c`, read by the planner:**
+  - **`ios-memory`: success, 55 minutes, no crash word.** The ladder: 20 "starting" lines and 20 "survived" lines: each
+    of the four cases at 8, 4, 2 and 1 MB and at **512 KB**, every one "equal to its stored row true", deepest 3,378 for
+    MP64-0002 and 5,679 for the other three. The memory groups: MP64 59, ML5 59, PM5 55, all equal on six fields and
+    the tuple digest. R's fallback: 240 of 240 equal.
+  - `ios-smoke`: 46 of 46; 14 group lines with "mismatches 0"; arm64 7 of 7, the gate "OK".
+  - `jvm-production`: 1,742 cases, 1,742 equal, 0 differing.
+  - **`jvm`: 230 tests, 1 failed.** `collectOutreachersWithoutADestination` passes. The one left is
+    `collectOutreachersWithADestinationVanishesFarNodes`: "canEscape did not answer both ways: false/true 0/3587", the
+    coverage assertion of -60. No caught-overflow line: the catch is gone.
+  - 0 ` e: ` in every job; both `compileKotlinIos*`. E1 on the simulator logs, timestamps cut: 0.
+  **Every iOS result simulator-checked.**
+**What this shows:** on the simulator the walk no longer depends on the thread's stack: the cases that ended the process
+at 1 MB now run in 512 KB, the default of a background thread. Nothing compared anywhere moved: 802 cases on the
+simulator, 1,742 production cases and the JVM suite.
+**What it does not:** that no other recursion in the engine is deep. The ladder runs four cases in one tile. A real
+iPhone is not shown.
+**-61's red pair:** the first failure was the overflow and is gone. The second never was: on that test's regions the
+oracle's `canEscape` answers "true" every time (-60), so the assertion that both answers are seen cannot be met there.
+It stays red and is not touched; what to do with it is ruled on once the port's own answers on MP64 are counted (-61
+names MP64 as where "false" occurs).
+**Open, owed to the owner by -144's option:** how often the oracle's own catch fires on the test cases.
+**Notes:** Written by the planner session by hand. Next free ID -147.
