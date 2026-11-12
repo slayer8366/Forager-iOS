@@ -5086,6 +5086,43 @@ that is 2 cases, F0's, recorded equal (-129, -130). Step 9 is not done until the
    outside the port; `route()` keeps returning what the engine gave. It joins the constructor's exceptions (-129) as a
    named requirement on the adapter.
 3. **Step 9's figure is 2,126,** the rows of `expected-1b.tsv` as it stands. The plan's 2,118 predates F0h's 8 (-62).
-4. **Next: the production runs,** surveyed first: what E6 asks under the option taken (fdlibm ported), what already
+4. **Next: the production runs,** surveyed first: what E6 asks under the option taken (~~fdlibm ported~~; false, corrected in -135: the owner
+   rejected that option in -24 and chose Android's msun), what already
    exists for it, then one recorded run over every group.
 **Notes:** Written by the planner session by hand. Next free ID -135.
+
+**Kind:** outcome
+**ID:** 2026-10-28-135
+**Timestamp:** 2026-11-12T05:11:30Z
+**Continues:** 2026-10-28-24, 2026-10-28-134
+**Title:** Step 9, Plumb's session 42: stopped twice, both rightly; the planner had the owner's maths ruling wrong;
+F0h's CI read; the production run's terms
+**Observed:** Plumb Ledger, session 42, `brouter-port-5b` `1ba6b06` to `06b97f2` (fast-forward only; ended at 103,962 by
+the harness's count, no handoff call; one commit, docs only, trailer `Co-Authored-By: Claude <noreply@anthropic.com>`;
+checked by the planner).
+- **No production run was written.** Plumb stopped on the gate: the build sets the test JVM's system properties one by
+  one and forwards none from the command line.
+- **Plumb stopped on the planner's premise** that the port took E6's option (c).
+**Checked by the planner:**
+- `git ls-remote` `06b97f2`, a fast-forward of `1ba6b06`; one docs file; E1 by `scan.sh <c>^ <c>`: 0.
+- **-24, read again** [R]: the owner chose "Copy Android's maths (Recommended)" and **rejected** "Copy Java's reference
+  maths", which is option (c). The port's `cos` and `atan2` are bionic's FreeBSD msun. The oracle runs with HotSpot's
+  intrinsic off, so its `cos` is fdlibm's, and msun differs from it at **13 rows**
+  (`CheapProductionRecordTest.kt:15`; `build.gradle.kts:141`). The option the owner chose says the tests "separately
+  record whether the 13 rows ever change a route".
+- `build.gradle.kts:128-133` and `:179-180`: named `systemProperty` lines only. Plumb's stop is right.
+- **CI on `e8ed646`,** the first full run with F0h (run 43157155479), is Plumb's reading, not re-read by the planner:
+  `jvm` 194 tests, 2 failed, both `CollectOutreachersTest`; F0h 8 cases, 0 mismatches; simulator 24 of 24
+  (simulator-checked); the gate "OK".
+**The planner's own error, the third in four entries:** -134 and session 42's brief said the port took "fdlibm ported",
+and the planner told the owner the production table differs "at 54 rows". Both came from reading E6's table without
+reading -24, the ruling that chose among its options. -134 is corrected in place. The figure is 13 rows, against the one
+oracle that exists. From here a brief that names a ruling quotes the entry, read in the same turn.
+**Decisions (the planner's, technical):**
+1. **The production run is recorded against the oracle that exists,** the one with the intrinsic off. No second oracle is
+   built: E6's second oracle belonged to the option the owner rejected. What -24 asks is the count of routes the 13 rows
+   change, by group.
+2. **The gate is an environment variable** read by the test (`BROUTER_PRODUCTION_RECORD`). No build change. The run is
+   local for now; whether it joins CI as its own job is ruled on once its length and its counts are known.
+3. **A case that differs in kind** is reported first and alone.
+**Notes:** Written by the planner session by hand. Next free ID -136.
