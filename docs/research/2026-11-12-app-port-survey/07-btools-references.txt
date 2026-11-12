@@ -1,0 +1,20 @@
+TEST:routing/BRouterTrailRouterCancelTest.kt:3:import btools.router.RoutingEngine
+TEST:routing/BRouterTrailHeightsTest.kt:3:import btools.router.OsmPathElement
+routing/RoutingDataFolder.kt:3:import btools.codec.DataBuffers
+routing/RoutingDataFolder.kt:4:import btools.mapaccess.PhysicalFile
+routing/BRouterRouteWays.kt:3:import btools.codec.DataBuffers
+routing/BRouterRouteWays.kt:4:import btools.expressions.BExpressionContextWay
+routing/BRouterRouteWays.kt:5:import btools.expressions.BExpressionMetaData
+routing/BRouterRouteWays.kt:6:import btools.mapaccess.GeometryDecoder
+routing/BRouterRouteWays.kt:7:import btools.mapaccess.OsmFile
+routing/BRouterRouteWays.kt:8:import btools.mapaccess.OsmLink
+routing/BRouterRouteWays.kt:9:import btools.mapaccess.OsmNode
+routing/BRouterRouteWays.kt:10:import btools.mapaccess.OsmNodesMap
+routing/BRouterRouteWays.kt:11:import btools.mapaccess.PhysicalFile
+routing/BRouterTrailRouter.kt:3:import btools.router.OsmNodeNamed
+routing/BRouterTrailRouter.kt:4:import btools.router.OsmPathElement
+routing/BRouterTrailRouter.kt:5:import btools.router.OsmTrack
+routing/BRouterTrailRouter.kt:6:import btools.router.RoutingContext
+routing/BRouterTrailRouter.kt:7:import btools.router.RoutingEngine
+routing/BRouterTrailRouter.kt:8:import btools.router.RoutingParamCollector
+routing/BRouterTrailRouter.kt:39: *   so a route here is the one `btools.server.BRouter` returns for the same query (the tests compare them).
