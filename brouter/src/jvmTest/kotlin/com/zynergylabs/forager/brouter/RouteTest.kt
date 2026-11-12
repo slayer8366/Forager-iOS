@@ -5,7 +5,11 @@ import com.zynergylabs.forager.brouter.oracle.e3.E3Case
 import com.zynergylabs.forager.brouter.oracle.e3.E3CaseRun
 import com.zynergylabs.forager.brouter.oracle.e3.E3Expected
 import com.zynergylabs.forager.brouter.oracle.e3.E3Outcome
+import com.zynergylabs.forager.brouter.oracle.e3.RGenerator
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3R
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RTest
 import com.zynergylabs.forager.brouter.router.RoutingEngineF0Test
+import com.zynergylabs.forager.brouter.tiles.TestTiles
 import com.zynergylabs.forager.brouter.util.OracleLibm
 import okio.Path.Companion.toOkioPath
 import java.io.File
@@ -28,6 +32,11 @@ import kotlin.test.assertTrue
  *   is recorded, not asserted (-24: production runs record any difference).
  * - **a terminate before the run** (FK10's plan): `Failed` on the port, a message on the oracle, the same kind, both
  *   matching Java's watchdog text (`RoutingEngine.java:1976`; the seconds are wall time), terminated on both.
+ * - **R's first 10 routed cases** (RECORD -129, decision 1), in R's own order (`RoutingEngineRTest`'s:
+ *   its first profile, `hiking-mountain`, StdModel, from its own seed): the logic run compared as F0's, with the oracle's
+ *   heights asserted not all "no height" (F0's routes have none, -62), so the copy of the heights into `Found` is compared.
+ * - **a terminate before the run through the public [route]** (-129, decision 2), compared as the internal one: the call
+ *   Forager's cancel makes.
  * - **the flag** with no route: Java's `isTerminated()` (`:2432-2438`), not the oracle.
  * Only digests and counts are printed (E1).
  */
@@ -54,6 +63,42 @@ class RouteTest {
     }
 
     @Test
+    fun rFirstTenRoutedCasesRouteThroughRouteAsThroughTheOracle() {
+        val rows = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
+            .filter { it.stratum == "R" }.associateBy { it.id }
+        val gen = RGenerator(TestTiles.segments, E3RTest.SEED)
+        val cases = try {
+            gen.generate("R", E3RTest.PROFILE, E3R.N, 20 * E3R.N, TestTiles.segments).cases
+        } finally {
+            gen.close()
+        }
+        var compared = 0
+        for (c in cases) {
+            if (compared == 10) break
+            val run = E3CaseRun.run(c, OracleCalls.oracleDir)
+            val o = run.outcome
+            assertEquals(rows.getValue(c.id).tupleDigest, E3Expected.fnv1aText(o.toField()), "${c.id}: the oracle against expected-1b")
+            if (o.kind != "route") continue
+            compared++
+            val byTile = assertNotNull(run.heightsByTile, "${c.id}: the oracle's heights")
+            val withHeight = byTile.values.sumOf { it[0] }
+            assertTrue(withHeight > 0, "${c.id}: the oracle's heights are not all \"no height\"")
+            val p = assertIs<RouteOutcome.Found>(route(request(c), RouteCancel(), OracleLibm), "${c.id}: Found")
+            val digests = Digests.of(p)
+            println("8d route ${c.id}: oracle nodes ${o.nodes}, with a height $withHeight; port nodes ${p.iLat.size}; " +
+                "distance equal ${o.distance == p.distance}, node digest equal ${o.nodeDigest == digests.nodes}, " +
+                "heights digest equal ${o.heightDigest == digests.heights}")
+            assertEquals(o.nodes, p.iLat.size, "${c.id}: nodes (iLat)")
+            assertEquals(o.nodes, p.iLon.size, "${c.id}: nodes (iLon)")
+            assertEquals(o.nodes, p.sElev.size, "${c.id}: a height per node")
+            assertEquals(o.distance, p.distance, "${c.id}: distance")
+            assertEquals(o.nodeDigest, digests.nodes, "${c.id}: node digest")
+            assertEquals(o.heightDigest, digests.heights, "${c.id}: heights digest")
+        }
+        assertEquals(10, compared, "R's first 10 routed cases")
+    }
+
+    @Test
     fun f0ThroughThePublicRouteIsRecorded() {
         for (c in RoutingEngineF0Test.CASES) {
             val o = E3CaseRun.run(c, OracleCalls.oracleDir).outcome
@@ -75,6 +120,23 @@ class RouteTest {
             val p = assertIs<RouteOutcome.Failed>(route(request(c), cancel, OracleLibm), "${c.id}: Failed")
             val o = assertNotNull(oracle.first, "${c.id}: the oracle's message")
             println("8d terminate ${c.id}: oracle ${E3Outcome.kindOf(o)}; port ${E3Outcome.kindOf(p.message)}")
+            assertEquals(E3Outcome.kindOf(o), E3Outcome.kindOf(p.message), "${c.id}: kind")
+            assertTrue(WATCHDOG.matches(o), "${c.id}: the oracle's text")
+            assertTrue(WATCHDOG.matches(p.message), "${c.id}: the port's text")
+            assertTrue(oracle.second, "${c.id}: the oracle is terminated")
+            assertTrue(cancel.isTerminated, "${c.id}: the port is terminated")
+        }
+    }
+
+    @Test
+    fun aTerminateBeforeThePublicRouteFailsAsTheOracle() {
+        for (c in RoutingEngineF0Test.CASES) {
+            val oracle = oracleTerminatedFirst(c)
+            val cancel = RouteCancel()
+            cancel.terminate()
+            val p = assertIs<RouteOutcome.Failed>(route(request(c), cancel), "${c.id}: Failed")
+            val o = assertNotNull(oracle.first, "${c.id}: the oracle's message")
+            println("8d public terminate ${c.id}: oracle ${E3Outcome.kindOf(o)}; port ${E3Outcome.kindOf(p.message)}")
             assertEquals(E3Outcome.kindOf(o), E3Outcome.kindOf(p.message), "${c.id}: kind")
             assertTrue(WATCHDOG.matches(o), "${c.id}: the oracle's text")
             assertTrue(WATCHDOG.matches(p.message), "${c.id}: the port's text")

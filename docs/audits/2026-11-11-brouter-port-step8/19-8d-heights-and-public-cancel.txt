@@ -35,3 +35,19 @@ rv24 the public route dropping the caller's cancel: "= route(request, cancel, Ms
   built with a fresh cancel, runs, and finds the route, so the outcome is a Found. The other five pass. failures 1.
 
 OBSERVED:
+All on the port at 7ae5c31's tree (Route.kt as 9bf13a8) with the two tests uncommitted (predictions pushed in 7ae5c31,
+before the first run). Every run: 0 "e: " lines, 1 fresh XML, tests 6, errors 0.
+
+unreverted: failures 0, gradle 45 s. The R test compared R-hiking-mountain-001 to -010, all of kind "route"; on each
+  every node of the oracle's route has a height (with a height = nodes, 10 of 10 cases; 1148 of 1148 nodes in all), and
+  distance, node digest and heights digest equal on all 10. No case is all "no height": no stop.
+rv17 (heights shifted by one node): failures 1, rFirstTenRoutedCasesRouteThroughRouteAsThroughTheOracle,
+  "R-hiking-mountain-001: heights digest" (the two digests differ); its printed line: distance and node digest equal,
+  heights digest not. Both F0 route lines heights digest equal, as predicted. The edit applied once (one - and one + line),
+  compileKotlinJvm executed. HELD.
+rv24 (the public route dropping the caller's cancel): failures 1, aTerminateBeforeThePublicRouteFailsAsTheOracle,
+  "F0-inside-across-the-degree-line: Failed" (expected a Failed, got another type). The edit applied once,
+  compileKotlinJvm executed. HELD.
+After each: Route.kt cmp equal to the runner's copy and to a copy taken before rv17; RouteTest.kt cmp equal to a copy of
+the forward change taken before rv17 (the new tests still present). Restored run: tests 6, failures 0, 1 fresh XML.
+RESULT: 2 of 2 bite as predicted. rv17's gap (16) and rv24's gap (16) are closed by these two tests.
