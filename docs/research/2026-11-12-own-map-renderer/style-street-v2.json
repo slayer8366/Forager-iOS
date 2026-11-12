@@ -1,0 +1,182 @@
+{
+ "file": "forager-street-v2.json",
+ "top_level_keys": [
+  "glyphs",
+  "layers",
+  "metadata",
+  "name",
+  "sources",
+  "sprite",
+  "version"
+ ],
+ "sources_by_type": {
+  "vector": 1
+ },
+ "source_keys": {
+  "vector.attribution": 1,
+  "vector.type": 1,
+  "vector.url": 1
+ },
+ "source_url_scheme_and_suffix": {
+  "https:json": 1
+ },
+ "glyphs": true,
+ "sprite": "str",
+ "layer_count": 93,
+ "layer_types": {
+  "background": 1,
+  "fill": 17,
+  "line": 60,
+  "symbol": 15
+ },
+ "layer_keys": {
+  "id": 93,
+  "type": 93,
+  "paint": 92,
+  "filter": 91,
+  "source": 92,
+  "source-layer": 92,
+  "minzoom": 43,
+  "layout": 33,
+  "maxzoom": 9
+ },
+ "source_layers": 9,
+ "properties_used": {
+  "background:paint.background-color": 1,
+  "fill:paint.fill-color": 15,
+  "fill:paint.fill-opacity": 4,
+  "fill:paint.fill-pattern": 2,
+  "line:layout.line-cap": 18,
+  "line:layout.line-join": 18,
+  "line:paint.line-color": 60,
+  "line:paint.line-dasharray": 27,
+  "line:paint.line-gap-width": 17,
+  "line:paint.line-opacity": 2,
+  "line:paint.line-width": 58,
+  "symbol:layout.icon-image": 4,
+  "symbol:layout.icon-padding": 2,
+  "symbol:layout.icon-rotate": 1,
+  "symbol:layout.icon-rotation-alignment": 1,
+  "symbol:layout.icon-size": 2,
+  "symbol:layout.symbol-placement": 6,
+  "symbol:layout.symbol-sort-key": 7,
+  "symbol:layout.symbol-spacing": 1,
+  "symbol:layout.text-anchor": 1,
+  "symbol:layout.text-field": 14,
+  "symbol:layout.text-font": 14,
+  "symbol:layout.text-justify": 2,
+  "symbol:layout.text-letter-spacing": 6,
+  "symbol:layout.text-max-width": 6,
+  "symbol:layout.text-offset": 1,
+  "symbol:layout.text-padding": 2,
+  "symbol:layout.text-radial-offset": 2,
+  "symbol:layout.text-rotation-alignment": 1,
+  "symbol:layout.text-size": 14,
+  "symbol:layout.text-transform": 4,
+  "symbol:layout.text-variable-anchor": 2,
+  "symbol:paint.text-color": 14,
+  "symbol:paint.text-halo-color": 13,
+  "symbol:paint.text-halo-width": 13
+ },
+ "distinct_properties": 35,
+ "properties_given_as_expression": 115,
+ "properties_given_as_stops_function": 0,
+ "stops_function_kinds": {},
+ "expression_operators_in_properties": {
+  "!": 77,
+  "*": 2,
+  "<": 9,
+  "<=": 1,
+  "==": 160,
+  ">=": 9,
+  "all": 56,
+  "any": 78,
+  "case": 259,
+  "coalesce": 234,
+  "concat": 5,
+  "format": 102,
+  "get": 781,
+  "has": 281,
+  "in": 3,
+  "interpolate": 85,
+  "interpolation:exponential": 54,
+  "interpolation:linear": 31,
+  "is-supported-script": 11,
+  "length": 3,
+  "literal": 319,
+  "match": 4,
+  "number-format": 2,
+  "round": 2,
+  "step": 5,
+  "to-number": 2,
+  "zoom": 90
+ },
+ "operators_in_filters": {
+  "!": 55,
+  "!=": 2,
+  "!has": 34,
+  "!in": 1,
+  "<=": 2,
+  "==": 69,
+  ">": 1,
+  ">=": 4,
+  "all": 55,
+  "any": 4,
+  "coalesce": 35,
+  "get": 89,
+  "has": 60,
+  "in": 81,
+  "length": 1,
+  "literal": 50,
+  "max": 2,
+  "zoom": 4
+ },
+ "layers_with_filter": 91,
+ "layers_with_legacy_filter": 70,
+ "layers_with_zoom_range": 45,
+ "symbol_layers_with_text": 14,
+ "symbol_layers_with_icon": 4,
+ "symbol_layers_placed_along_line": 5,
+ "token_strings": 0,
+ "fonts": {
+  "Noto Sans Italic": 6,
+  "Noto Sans Regular": 6,
+  "Noto Sans Medium": 3
+ },
+ "enum_values": {
+  "fill-pattern": {
+   "tree_dark_irregular": 1,
+   "tufts": 1
+  },
+  "icon-rotation-alignment": {
+   "viewport": 1
+  },
+  "line-cap": {
+   "butt": 17,
+   "round": 1
+  },
+  "line-join": {
+   "round": 18
+  },
+  "symbol-placement": {
+   "point": 1,
+   "line": 5
+  },
+  "text-anchor": {
+   "center": 1
+  },
+  "text-justify": {
+   "auto": 2
+  },
+  "text-rotation-alignment": {
+   "viewport": 1
+  },
+  "text-transform": {
+   "uppercase": 4
+  },
+  "text-variable-anchor": {
+   "left": 1,
+   "right": 1
+  }
+ }
+}

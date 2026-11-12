@@ -1,0 +1,1 @@
+all:3 coalesce:3 color:5 eq:3 equals:2 get:20 has:3 interpolate:3 linear:3 literal:14 neq:4 number:5 raw:4 stop:4 switchCase:4 toString:1 zoom:2 

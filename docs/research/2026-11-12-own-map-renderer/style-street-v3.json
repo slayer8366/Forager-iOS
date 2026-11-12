@@ -1,0 +1,187 @@
+{
+ "file": "forager-street-v3.json",
+ "top_level_keys": [
+  "glyphs",
+  "layers",
+  "metadata",
+  "name",
+  "sources",
+  "sprite",
+  "version"
+ ],
+ "sources_by_type": {
+  "vector": 2
+ },
+ "source_keys": {
+  "vector.attribution": 1,
+  "vector.maxzoom": 1,
+  "vector.minzoom": 1,
+  "vector.tiles": 1,
+  "vector.type": 2,
+  "vector.url": 1
+ },
+ "source_url_scheme_and_suffix": {
+  "https:json": 1,
+  "https:mvt": 1
+ },
+ "glyphs": true,
+ "sprite": "str",
+ "layer_count": 97,
+ "layer_types": {
+  "background": 1,
+  "fill": 17,
+  "line": 63,
+  "symbol": 16
+ },
+ "layer_keys": {
+  "id": 97,
+  "type": 97,
+  "paint": 96,
+  "filter": 94,
+  "source": 96,
+  "source-layer": 96,
+  "minzoom": 47,
+  "layout": 36,
+  "maxzoom": 9
+ },
+ "source_layers": 11,
+ "properties_used": {
+  "background:paint.background-color": 1,
+  "fill:paint.fill-color": 15,
+  "fill:paint.fill-opacity": 4,
+  "fill:paint.fill-pattern": 2,
+  "line:layout.line-cap": 20,
+  "line:layout.line-join": 20,
+  "line:paint.line-color": 63,
+  "line:paint.line-dasharray": 27,
+  "line:paint.line-gap-width": 17,
+  "line:paint.line-opacity": 4,
+  "line:paint.line-width": 61,
+  "symbol:layout.icon-image": 4,
+  "symbol:layout.icon-padding": 2,
+  "symbol:layout.icon-rotate": 1,
+  "symbol:layout.icon-rotation-alignment": 1,
+  "symbol:layout.icon-size": 2,
+  "symbol:layout.symbol-placement": 7,
+  "symbol:layout.symbol-sort-key": 7,
+  "symbol:layout.symbol-spacing": 1,
+  "symbol:layout.text-anchor": 1,
+  "symbol:layout.text-field": 15,
+  "symbol:layout.text-font": 15,
+  "symbol:layout.text-justify": 2,
+  "symbol:layout.text-letter-spacing": 6,
+  "symbol:layout.text-max-width": 6,
+  "symbol:layout.text-offset": 1,
+  "symbol:layout.text-padding": 2,
+  "symbol:layout.text-radial-offset": 2,
+  "symbol:layout.text-rotation-alignment": 1,
+  "symbol:layout.text-size": 15,
+  "symbol:layout.text-transform": 4,
+  "symbol:layout.text-variable-anchor": 2,
+  "symbol:paint.text-color": 15,
+  "symbol:paint.text-halo-color": 14,
+  "symbol:paint.text-halo-width": 14
+ },
+ "distinct_properties": 35,
+ "properties_given_as_expression": 120,
+ "properties_given_as_stops_function": 0,
+ "stops_function_kinds": {},
+ "expression_operators_in_properties": {
+  "!": 77,
+  "*": 2,
+  "<": 9,
+  "<=": 1,
+  "==": 160,
+  ">=": 9,
+  "all": 56,
+  "any": 78,
+  "case": 259,
+  "coalesce": 234,
+  "concat": 5,
+  "format": 102,
+  "get": 782,
+  "has": 281,
+  "in": 3,
+  "interpolate": 87,
+  "interpolation:exponential": 54,
+  "interpolation:linear": 33,
+  "is-supported-script": 11,
+  "length": 3,
+  "literal": 319,
+  "match": 4,
+  "number-format": 2,
+  "round": 2,
+  "step": 7,
+  "to-number": 2,
+  "zoom": 94
+ },
+ "operators_in_filters": {
+  "!": 55,
+  "!=": 2,
+  "!has": 34,
+  "!in": 1,
+  "<=": 2,
+  "==": 69,
+  ">": 1,
+  ">=": 4,
+  "all": 56,
+  "any": 4,
+  "coalesce": 37,
+  "get": 91,
+  "has": 61,
+  "in": 82,
+  "length": 1,
+  "literal": 50,
+  "match": 2,
+  "max": 2,
+  "zoom": 4
+ },
+ "layers_with_filter": 94,
+ "layers_with_legacy_filter": 72,
+ "layers_with_zoom_range": 49,
+ "symbol_layers_with_text": 15,
+ "symbol_layers_with_icon": 4,
+ "symbol_layers_placed_along_line": 6,
+ "token_strings": 0,
+ "fonts": {
+  "Noto Sans Regular": 7,
+  "Noto Sans Italic": 6,
+  "Noto Sans Medium": 3
+ },
+ "enum_values": {
+  "fill-pattern": {
+   "tree_dark_irregular": 1,
+   "tufts": 1
+  },
+  "icon-rotation-alignment": {
+   "viewport": 1
+  },
+  "line-cap": {
+   "round": 3,
+   "butt": 17
+  },
+  "line-join": {
+   "round": 20
+  },
+  "symbol-placement": {
+   "line": 6,
+   "point": 1
+  },
+  "text-anchor": {
+   "center": 1
+  },
+  "text-justify": {
+   "auto": 2
+  },
+  "text-rotation-alignment": {
+   "viewport": 1
+  },
+  "text-transform": {
+   "uppercase": 4
+  },
+  "text-variable-anchor": {
+   "left": 1,
+   "right": 1
+  }
+ }
+}

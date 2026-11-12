@@ -1,0 +1,204 @@
+{
+ "file": "forager-street-v4.json",
+ "top_level_keys": [
+  "glyphs",
+  "layers",
+  "metadata",
+  "name",
+  "sources",
+  "sprite",
+  "version"
+ ],
+ "sources_by_type": {
+  "vector": 2,
+  "raster-dem": 1
+ },
+ "source_keys": {
+  "raster-dem.attribution": 1,
+  "raster-dem.encoding": 1,
+  "raster-dem.maxzoom": 1,
+  "raster-dem.minzoom": 1,
+  "raster-dem.tileSize": 1,
+  "raster-dem.tiles": 1,
+  "raster-dem.type": 1,
+  "vector.attribution": 1,
+  "vector.maxzoom": 1,
+  "vector.minzoom": 1,
+  "vector.tiles": 1,
+  "vector.type": 2,
+  "vector.url": 1
+ },
+ "source_url_scheme_and_suffix": {
+  "https:json": 1,
+  "https:mvt": 1,
+  "https:png": 1
+ },
+ "glyphs": true,
+ "sprite": "str",
+ "layer_count": 182,
+ "layer_types": {
+  "background": 1,
+  "fill": 29,
+  "line": 85,
+  "hillshade": 1,
+  "symbol": 66
+ },
+ "layer_keys": {
+  "id": 182,
+  "type": 182,
+  "paint": 181,
+  "filter": 178,
+  "source": 181,
+  "source-layer": 180,
+  "minzoom": 162,
+  "layout": 89,
+  "maxzoom": 13
+ },
+ "source_layers": 11,
+ "properties_used": {
+  "background:paint.background-color": 1,
+  "fill:paint.fill-color": 26,
+  "fill:paint.fill-opacity": 13,
+  "fill:paint.fill-pattern": 3,
+  "hillshade:paint.hillshade-accent-color": 1,
+  "hillshade:paint.hillshade-exaggeration": 1,
+  "hillshade:paint.hillshade-highlight-color": 1,
+  "hillshade:paint.hillshade-illumination-anchor": 1,
+  "hillshade:paint.hillshade-illumination-direction": 1,
+  "hillshade:paint.hillshade-shadow-color": 1,
+  "line:layout.line-cap": 23,
+  "line:layout.line-join": 23,
+  "line:paint.line-color": 85,
+  "line:paint.line-dasharray": 37,
+  "line:paint.line-gap-width": 17,
+  "line:paint.line-opacity": 13,
+  "line:paint.line-width": 83,
+  "symbol:layout.icon-image": 27,
+  "symbol:layout.icon-padding": 11,
+  "symbol:layout.icon-rotate": 1,
+  "symbol:layout.icon-rotation-alignment": 4,
+  "symbol:layout.icon-size": 14,
+  "symbol:layout.symbol-placement": 13,
+  "symbol:layout.symbol-sort-key": 31,
+  "symbol:layout.symbol-spacing": 1,
+  "symbol:layout.text-anchor": 1,
+  "symbol:layout.text-field": 65,
+  "symbol:layout.text-font": 65,
+  "symbol:layout.text-justify": 22,
+  "symbol:layout.text-letter-spacing": 31,
+  "symbol:layout.text-max-width": 41,
+  "symbol:layout.text-offset": 12,
+  "symbol:layout.text-padding": 13,
+  "symbol:layout.text-radial-offset": 11,
+  "symbol:layout.text-rotation-alignment": 4,
+  "symbol:layout.text-size": 65,
+  "symbol:layout.text-transform": 7,
+  "symbol:layout.text-variable-anchor": 22,
+  "symbol:paint.text-color": 65,
+  "symbol:paint.text-halo-color": 61,
+  "symbol:paint.text-halo-width": 61
+ },
+ "distinct_properties": 41,
+ "properties_given_as_expression": 358,
+ "properties_given_as_stops_function": 0,
+ "stops_function_kinds": {},
+ "expression_operators_in_properties": {
+  "!": 399,
+  "*": 22,
+  "<": 63,
+  "<=": 10,
+  "==": 835,
+  ">=": 63,
+  "all": 300,
+  "any": 410,
+  "case": 1380,
+  "coalesce": 1210,
+  "concat": 34,
+  "format": 536,
+  "get": 4160,
+  "has": 1472,
+  "in": 13,
+  "interpolate": 190,
+  "interpolation:exponential": 59,
+  "interpolation:linear": 131,
+  "is-supported-script": 57,
+  "length": 12,
+  "literal": 1661,
+  "match": 101,
+  "number-format": 22,
+  "round": 22,
+  "step": 33,
+  "to-number": 22,
+  "zoom": 223
+ },
+ "operators_in_filters": {
+  "!": 113,
+  "!=": 3,
+  "!has": 28,
+  "<=": 5,
+  "==": 158,
+  ">": 5,
+  ">=": 2,
+  "all": 183,
+  "any": 28,
+  "coalesce": 33,
+  "geometry-type": 1,
+  "get": 369,
+  "has": 88,
+  "in": 247,
+  "length": 4,
+  "literal": 231,
+  "match": 2
+ },
+ "layers_with_filter": 178,
+ "layers_with_legacy_filter": 59,
+ "layers_with_zoom_range": 163,
+ "symbol_layers_with_text": 65,
+ "symbol_layers_with_icon": 27,
+ "symbol_layers_placed_along_line": 12,
+ "token_strings": 0,
+ "fonts": {
+  "Noto Sans Regular": 31,
+  "Noto Sans Italic": 29,
+  "Noto Sans Medium": 15
+ },
+ "enum_values": {
+  "fill-pattern": {
+   "tree_dark_irregular": 1,
+   "tufts": 1
+  },
+  "hillshade-illumination-anchor": {
+   "map": 1
+  },
+  "icon-rotation-alignment": {
+   "viewport": 4
+  },
+  "line-cap": {
+   "round": 3,
+   "butt": 20
+  },
+  "line-join": {
+   "round": 23
+  },
+  "symbol-placement": {
+   "line": 12,
+   "point": 1
+  },
+  "text-anchor": {
+   "center": 1
+  },
+  "text-justify": {
+   "auto": 22
+  },
+  "text-rotation-alignment": {
+   "viewport": 4
+  },
+  "text-transform": {
+   "uppercase": 7
+  },
+  "text-variable-anchor": {
+   "left": 12,
+   "right": 12
+  }
+ }
+}
