@@ -5126,3 +5126,48 @@ oracle that exists. From here a brief that names a ruling quotes the entry, read
    local for now; whether it joins CI as its own job is ruled on once its length and its counts are known.
 3. **A case that differs in kind** is reported first and alone.
 **Notes:** Written by the planner session by hand. Next free ID -136.
+
+**Kind:** outcome
+**ID:** 2026-10-28-136
+**Timestamp:** 2026-11-12T05:44:02Z
+**Continues:** 2026-10-28-24, 2026-10-28-135
+**Title:** Step 9, Plumb's session 43: the production run recorded, 1,742 cases, every one equal to the oracle; what that
+does and does not say about the 13 rows; the planner's rulings
+**Observed:** Plumb Ledger, session 43, `brouter-port-5b` `06b97f2` to `624f2c0` (fast-forward only; ended at 145,429 by
+the harness's count, no handoff call; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The recording test** (`2763f4c`, new `RoutingEngineProductionRecordTest`, gated on `BROUTER_PRODUCTION_RECORD`):
+  the port on its own maths library against the oracle, recorded, not asserted.
+- **The expectation, pushed before the run** (`a014538`): a few differences guessed in R, DL, LB, CR and the memory groups.
+- **One local run** [R, Plumb's]: 20 minutes, **1,742 cases, 1,742 equal on all six fields:** F0 2, R's StdModel 1,180,
+  DL-lat, DL-lon, MP64, ML5, NT, LB and CR 59 each, PM5 55, FK 1 to 8 84, F0h 8. None differs in kind. The expectation
+  was wrong on the high side.
+- **The test can show a difference** [R, Plumb's]: with a scratch change to the table at the rows inside the tiles, never
+  committed, LB differed on 59 of 59.
+- A first attempt ran nothing: an environment variable is not a task input, so Gradle called the task up to date. A local
+  run needs `--rerun`.
+**Checked by the planner:**
+- `git ls-remote` `624f2c0`, a fast-forward of `06b97f2`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3.
+- **The test runs the port's own library** [R]: `RoutingContext(MsunLibm)` at its `:249`, where the logic tests'
+  `port` has `RoutingContext(OracleLibm)` (`RoutingEngineF0Test.kt:55`). Its only assertions are counts.
+- Existing tests: seven `private` words made `internal` in `RoutingEngineFKTest`; no comparison changed.
+- **CI on `2763f4c`** (run 43160257745): `jvm` 195 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both
+  `compileKotlinIos*`; the recording test printed its "unset; not run" line; F0h 8 cases, 0 mismatches; simulator 24 of
+  24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The caught-overflow line: 4 prints.
+- 2 + 1,180 + 7 × 59 + 55 + 84 + 8 = 1,742 [C].
+**What this says about -24's 13 rows, and what it does not:**
+- By Plumb's reading of the table's row rule [I, not checked by the planner], **8 of the 13 rows lie in no captured
+  tile.** No case can reach them. The run speaks for the other 5.
+- How many of the 1,742 cases read a value from one of those 5 rows was not counted. LB's 59 do, by the scratch change.
+- So the record is: on 1,742 cases in the captured tiles, the port as it ships gives the oracle's route every time. It is
+  not: the 13 rows never change a route.
+- The run is local. No CI run of it exists, and the planner has not read one.
+- FK 9 to 11, the timing kinds, are left out of it. R's 354 car cases are refusals on both libraries.
+**Decisions (the planner's, technical):**
+1. **The production run gets its own CI job,** beside `jvm`, with the variable set, running that one class. It gates
+   nothing but its own counts. Step 9 closes on the planner's reading of that job.
+2. **The repeated FK7 and FK8 case lists stay.** The test's count against the group's rows catches drift.
+3. **The 8 rows outside the tiles** are named as not covered. Whether a tile is captured for them is a question for the
+   owner, with the cost stated, after step 10.
+**Notes:** Written by the planner session by hand. Next free ID -137.
