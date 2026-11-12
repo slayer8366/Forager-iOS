@@ -4925,7 +4925,9 @@ after about eight minutes, ended at 160,351 by the harness's count; one commit, 
   (**simulator-checked**); arm64 7 of 7, the gate "OK". The log prints the 10 R cases through `route()` equal on nodes,
   distance and both digests, every node with a height (1,148 in all), and the public terminate as the oracle's on both
   cases. The caught-overflow line: 4 prints.
-- `OsmPath.java:278` is `if (rc.startDirectionValid)` in Forager's copy [R]. File 18's `:279` is wrong by one.
+- ~~`OsmPath.java:278` is `if (rc.startDirectionValid)` in Forager's copy [R]. File 18's `:279` is wrong by one.~~
+  **Corrected in -132:** the planner miscounted. `grep -n` puts `if (isStartpoint)` at `:278` and
+  `if (rc.startDirectionValid)` at `:279` [R]. File 18 was right.
 - **What step 9 has left** [R, C], from `expected-1b.tsv`: 2,126 rows (the plan says 2,118; F0h's 8 were added later).
   Through the port's engine in `jvmTest` today: R 1,534 (354 of them the refusal by name, -89), F0 2, DL 118, MP64 59,
   ML5 59, PM5 55, FK 9 to 11 30: **1,857.** Not yet: NT 59, LB 59, CR 59, FK 1 to 8 84, F0h 8: **269.** The FK split is
@@ -4935,7 +4937,7 @@ session can read. It cost a session. Later briefs name files and line ranges, an
 **Decisions (the planner's, technical):**
 1. **The constructor's exception through `route()`: a test is owed.** The iOS adapter will rely on it passing through
    as Forager's Android caller catches it (`BRouterTrailRouter.kt:122-131`). Seen red under a revert.
-2. **The `OsmPath` coverage read changes method:** counters in the port at the lines for `OsmPath.java:278-283` and
+2. **The `OsmPath` coverage read changes method:** counters in the port at the lines for `OsmPath.java:279-283` (corrected in -132) and
    `:350`, one run of R, never committed. The oracle run would take about two hours for the same question. File 18 says
    so and corrects `:279`.
 3. **§13 stays an unchecked draft** and is not relied on. Step 8's "not covered" list is the record's: -121 to -130.
@@ -4943,3 +4945,53 @@ session can read. It cost a session. Later briefs name files and line ranges, an
 5. **Step 9 begins** with the 269 cases, group by group, in a new report (`docs/audits/2026-11-12-brouter-port-step9.md`).
    Each group that passes on first run gets a planted error, prediction pushed first.
 **Notes:** Written by the planner session by hand. Next free ID -132.
+
+**Kind:** outcome
+**ID:** 2026-10-28-132
+**Timestamp:** 2026-11-12T04:24:55Z
+**Continues:** 2026-10-28-90, 2026-10-28-131
+**Title:** Step 8 closed; step 9, Plumb's session 39: NT, LB and CR equal to the oracle through the port; NT's planted
+error not caught; a wrong line number of the planner's corrected; the planner's rulings
+**Observed:** Plumb Ledger, session 39, `brouter-port-5b` `e1940ed` to `1bf57ca` (fast-forward only; called at 151,793,
+ended at 157,114 by the harness's count; 9 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked
+by the planner).
+- **The constructor's exception through `route()`** (`8aef87e`, the comparison stated before any run): both engines throw
+  `IllegalArgumentException`, "profile * does not exist". Under the revert (the exception turned into a `Failed`) the
+  test failed as predicted [R, Plumb's].
+- **The `OsmPath` counters** (`3f925e6`, one run of R, never committed): `startDirectionValid` true 0 times of 11,540
+  start points; `refTrack != null` true 0 times of 189,134,014 [R, Plumb's].
+- **Step 9's count confirmed:** 2,126 rows; FK 1 to 8 are 84 (10 each for kinds 1 to 6, 13 for 7, 11 for 8).
+- **NT, LB, CR** (`554887e`, new `RoutingEngineStep9Test`): 59 cases each, 0 mismatches, on the first run.
+- **Planted errors** (predictions `4b584a4`, results `e309e45`): LB caught (52 of 59), CR caught (50 of 59). **NT not
+  caught:** the comparator's tie-break reversed (`WaypointMatcherImpl.kt:39`), 59 of 59 still equal [R, Plumb's].
+- Plumb stopped on the planner's `:278`, which was wrong, and left file 18 as it was.
+**Checked by the planner:**
+- `git ls-remote` `1bf57ca`, a fast-forward of `e1940ed`; 9 commits, one trailer each, no model name; E1 over the range:
+  0. Plumb reports `4b9409e` pushed with 2 non-position hits (timestamps in a diff's header), fixed in `100d00d`; the
+  planner's scan of that commit alone reads 0, so the two scans differ on it. Not resolved.
+- **Tests:** `RoutingEngineStep9Test` new; `RouteTest` one test added; `RoutingEngineF0Test.port` gains a parameter for
+  where the profiles sit, with the old value as its default. No comparison in an existing test changed.
+- **CI on `8aef87e`** (run 43151665608): `jvm` 182 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The caught-overflow
+  line: 4 prints.
+- **CI on `554887e`,** the step 9 test, was queued behind six other runs. Not read.
+**Corrected in place, the planner's:** -131 said `OsmPath.java:278` is the `startDirectionValid` line and tagged it [R].
+It is `:279`. The planner counted lines off a printed range by eye. A line number tagged [R] comes from `grep -n`.
+**On NT, the planner's reading [I]:** NT's cases are drawn for two start links whose radii differ by at most 4 ulps
+(`E3NTTest.kt:49`). The tie-break only runs when the radii are equal exactly. So the plant may have changed nothing
+because no case has an exact tie, which says the plant was wrong for the group, not that the group tests nothing.
+Plumb's reading is the other one: the order never reaches the six fields. One more plant tells them apart.
+**Decisions (the planner's, technical):**
+1. **Step 8d is closed, and with it step 8,** on the JVM. Not covered, the record's list: the collection on
+   `CollectOutreachersTest`'s region (-61, -124); `catch (Error)` on Kotlin/Native (-126); the third of the time limit,
+   left out (-125); the dirty track, read by nothing (-128); `getTrafficSourceDensity`, no call site (-130); the start
+   direction and the reference-track penalty, reached by no R case and by none of Forager's three parameters [I]; FK9
+   blind to an immediate limit (-127); and everything on iOS beyond compiling and the 24 simulator tests.
+2. **NT gets one more plant:** the comparator's first comparison made on the radii rounded to `Float`, which turns a
+   near-tie into a tie. Prediction pushed first. If NT still passes whole, that is a finding: NT does not show the
+   near-tie reaching an outcome, and it goes to the independent reviewer with the other flags.
+3. **CI stops running on docs-only pushes:** `paths-ignore: docs/**` on the push trigger. Seven half-hour runs were
+   queued behind predictions and report sections, and the code runs wait behind them. No check is removed from any
+   commit that changes code.
+4. **Next:** FK 1 to 8, then F0h, each with its planted error.
+**Notes:** Written by the planner session by hand. Next free ID -133.
