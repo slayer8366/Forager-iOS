@@ -658,3 +658,56 @@ ls-remote` read `94db5d1` at the start and before the push). Trailer on every co
 2. A revert per test from §9.6, each prediction pushed first.
 3. The coverage read of `OsmPath.java:282-283` and `:350` on R6 (§9.5).
 4. The planner's answers to questions 1-3.
+
+## 11. Session 36 (partial: stopped at the planner's handoff call)
+
+Plumb Ledger, session 36, `brouter-port-5b` `9e0c17f` to the head that carries this section (fast-forward only; `git
+ls-remote` read `9e0c17f` before the first push). Trailer on every commit `Co-Authored-By: Claude <noreply@anthropic.com>`.
+E1 scan on every staged diff: 0, no hit to fix.
+
+**Done:**
+1. **The port** (`9bf13a8`): `route()` as `BRT:142-174` builds and runs the engine (on the given libm; the public one
+   passes `MsunLibm`), `Failed` with the engine's message, else `Found` with the track's `iLat`, `iLon`, `distance` and raw
+   `sElev`. `RouteCancel` forwards `terminate()` to the engine of its `route()` (before `doRun` if already set);
+   `isTerminated` is the engine's, else the flag. No shape change beyond the red tests. `RouteTest` 4 of 4 at the first
+   run, no fix. Full fresh `:brouter:jvmTest --rerun-tasks`: 82 of 82 XML fresh, 0 ` e: `, `TOTAL: tests 179, failures 2`
+   (`CollectOutreachersTest` 2 of 2, -61, not touched), BUILD in 31m 40s; caught-overflow lines 3 (log), 3 (XML).
+2. **The production run** (recorded data, -24), in the full run: both F0 cases nodes equal, distance equal, node digest
+   equal, heights digest equal (true on all four fields, both cases). The logic run likewise: 226 and 306 nodes,
+   distances 5047 and 6713, both digests equal.
+3. **8d's reverts** (`16-8d-reverts.txt`; predictions `536d1e1`, observed `907c28d`): 9 runs, each 0 ` e: `, 1 fresh XML,
+   tests 4, restored cmp-equal. 7 bite as predicted (heights in metres; cancel not forwarded; `isTerminated` constant;
+   `iLat` from `getILon`; distance from the cost; the track read with a message; the public route not reaching the
+   engine). rv24 (the public route dropping the caller's cancel) passes, as predicted: a gap. **rv17 (heights shifted by one
+   node) passes, against the prediction:** a scratch count (never committed) finds every node's `sElev` on both F0 routes
+   is `Short.MIN_VALUE` (226 of 226, 306 of 306).
+4. **§1's `checkDataFile` row** corrected in place (`536d1e1`): 5a, ported and tested, marked as -128 decision 4's.
+
+**Not done:** -42's getter counts (`17-getter-counts.txt`: expectation written and pushed; the run was killed at the
+handoff call before it wrote counts; the tree restored cmp-equal, `git status` clean); the `OsmPath.java:282-283`/`:350`
+coverage read (`18-coverage-osmpath.txt`: expectation pushed; not run; Temurin 21.0.13+9 was fetched to scratch and matched
+its pins); the CI read of `9bf13a8` (run 43146547580 in progress at the handoff); item 7's closing list.
+
+**[I]/[?]:**
+- [?] **A false premise in §9.6** (a stop, reported, not chosen): its "not covered: a missing height (no fixture tile
+  without heights in F0)" is the wrong way round. F0's routes carry no height at all, so `RouteTest`'s heights digest holds
+  only "every node has none"; a present height through `route()` is not covered. Whether a test on a tile with heights is
+  owed is the planner's.
+- [?] The public route's cancel (rv24) is not covered by any test.
+- [?] 18's expectation for `:350`: I expect the line to read covered (its `refTrack != null` test runs) with `containsNode`
+  unreached, which would differ from §9.5's "should read not covered" as the reader reads lines. Not observed.
+- [I] "no other test newly failing": the full run's FAILED lines name `CollectOutreachersTest` only (`grep FAILED full log`).
+
+**Questions for the planner:** 1. Is a `route()` test on a tile with heights owed (rv17)? 2. Is a test of the public
+route's cancel owed (rv24)?
+
+**8d:** the port is done and passes; 8d is not complete (rv17's finding open, getter counts, coverage read, CI read).
+**Step 8:** not complete.
+
+**Next:**
+1. CI read of `9bf13a8` (run 43146547580): TOTAL, ` e: `, both `compileKotlinIos*`, the gate, the test step's minutes,
+   `CollectOutreachersTest`'s failures, the caught-overflow count; iOS "simulator-checked".
+2. The planner's answers on rv17 and rv24.
+3. The getter counts as `17-getter-counts.txt` plans them (script: a counter per getter, one RTest run, about 11 min).
+4. The coverage read as `18-coverage-osmpath.txt` plans it (`e3Strata`, R6 per case, about 1182 cases).
+5. Item 7's closing list for step 8.

@@ -25,3 +25,4 @@ EXPECTED (written before the run):
   line as the reader reads lines; that is reported, not settled here.
 
 OBSERVED:
+Not run in session 36: stopped at the planner's handoff call (the getter run was started and killed before it wrote counts; the tree restored cmp-equal). The expectation above stands for the next session.

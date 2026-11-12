@@ -20,3 +20,4 @@ EXPECTED (written before the run): RTest's port runs only (the oracle is Java's 
 - The tree cmp-equal to its saved copies after.
 
 OBSERVED:
+Not run in session 36: stopped at the planner's handoff call (the getter run was started and killed before it wrote counts; the tree restored cmp-equal). The expectation above stands for the next session.
