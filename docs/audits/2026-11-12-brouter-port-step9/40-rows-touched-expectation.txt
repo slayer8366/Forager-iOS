@@ -18,8 +18,9 @@ Expectation [?]:
 - Rows read at all: only some of 1295, 1297, 1310, 1311, 1318. None of the 8 (every ilat the engine passes is a node's,
   a waypoint's or a midpoint of two, all inside the tiles).
 - LB: 59 of 59 (both ends lie in one of the bands by construction; session 43's plant differed on 59 of 59).
-- DL-lat (ends either side of 40N): 0 to 8 of 59; the line sits in rows 1299/1300, 0.2 deg or more from 1297 and 1310.
-- DL-lon (ends either side of 70W, latitudes 40-45N): 10 to 30 of 59; 1310, 1311, 1318 are 3 of the 50 rows there and
+- DL-lat (ends either side of its line, DLGenerator.Line.LAT40): 0 to 8 of 59; the line is the edge between rows 1299 and 1300, 2 rows or more from 1297 and 1310.
+- DL-lon (ends either side of its line, DLGenerator.Line.LON70, in rows 1300-1349): 10 to 30 of 59; 1310, 1311, 1318 are 3 of the 50 rows there and
   routes run up to ~100 km.
 - NT (a short line through a junction, anywhere in the tiles): 3 to 12 of 59.
 - CR (R's draws with the crossing profile): 8 to 25 of 59.
+Edited in session 44 after the run, wording only: latitudes replaced by row numbers (the dispatch's rule); no guess changed.

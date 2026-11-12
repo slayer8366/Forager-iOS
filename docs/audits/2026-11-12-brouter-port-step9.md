@@ -612,3 +612,70 @@ Questions for the planner:
 Next:
 1. The planner's answers to Q1 and Q2.
 2. If the run joins CI: a job running only this class with the variable set; its length read on one run.
+
+## 6. Session 44
+
+Plumb Ledger, session 44, dispatched by the planner (Cedar Datum) on RECORD -136. `brouter-port-5b` `624f2c0` to this
+commit, fast-forward only. Every iOS result here is **simulator-checked**.
+
+**Done.**
+1. **The CI job** (`7a4d82b`, -136 decision 1): `jvm-production` in `brouter.yml`, appended after `ios-smoke`. `jvm`'s
+   checkout and Java (same pinned SHAs, Temurin `21.0.13+9`), 45 minutes, `BROUTER_PRODUCTION_RECORD: '1'`, one step
+   `:brouter:jvmTest --tests '*RoutingEngineProductionRecordTest'`, then `jvm`'s counts step and an artifact named
+   `jvm-production-test-results`. No `--rerun`: a fresh runner has no earlier test output (no build cache is configured:
+   `grep -rn 'caching\|buildCache' gradle.properties settings.gradle.kts` gives nothing), and the job's own log shows the
+   class ran (below). The file's first 110 lines are `cmp`-equal to `624f2c0`'s (`head -c` of the old size), so nothing
+   in `jvm` or `ios-smoke` moved.
+2. **Rows touched** (expectation `f0f0da6`, `step9/40-rows-touched-expectation.txt`, pushed before the run; result
+   `step9/41-rows-touched-run.txt`). A scratch counter at `CheapRuler.kt:53`, the port's only table read
+   (`LibmSeam.scales` has no other caller in commonMain: `grep -rn '\.scales(' brouter/src/commonMain` gives that line
+   only), cleared before each `portMsun` and read after it; groups DL-lat, DL-lon, NT, LB, CR only. Local, 2m 10s, 0 ` e: `,
+   BUILD SUCCESSFUL. Tree `cmp`-equal after (both files restored from saved copies; `git diff --quiet HEAD`).
+
+   | group | cases | equal | read one of the 13 rows | rows read | expected [?] |
+   |---|---|---|---|---|---|
+   | DL-lat | 59 | 59 | 28 | 1295, 1297 | 0 to 8 |
+   | DL-lon | 59 | 59 | 14 | 1318 | 10 to 30 |
+   | NT | 59 | 59 | 13 | 1310, 1311, 1318 | 3 to 12 |
+   | LB | 59 | 59 | 59 | all 5 | 59 |
+   | CR | 59 | 59 | 8 | 1295, 1297, 1318 | 8 to 25 |
+
+   **122 of 295** read at least one; every one of them equal to the oracle. Rows read at all: 1295, 1297, 1310, 1311, 1318.
+   The other 8 are never read, as expected. DL-lat was far above the guess (its routes reach rows 1295 and 1297); NT
+   one above; the rest inside.
+3. **Session 43's tile claim, by the rule [C]:** row = ilat / 100,000 (`CheapRuler.kt:53`); a tile's `latDeg0` = lat + 90
+   (`TileNodes.kt:32`); a row is in a tile when its band lies in the tile's 5 degrees (`LBGenerator.kt:53`), so a tile holds
+   rows 10 x latDeg0 to +49. Captured (`tools/tile-pins.tsv`): W75_N40 and W70_N40 rows 1300-1349 (1310, 1311, 1318);
+   W75_N35 rows 1250-1299 (1295, 1297); E170_S50 rows 400-449 (none). 474, 488, 502, 663, 675, 1046, 1053, 1079 lie in no
+   tile: **8 in none, confirmed.**
+
+**CI on `7a4d82b`** (run 43163533103):
+- **`jvm-production`**: 18m 39s (05:45:52 to 06:04:31), success; BUILD SUCCESSFUL in 18m 31s; `TOTAL: tests 1, failures 0`;
+  0 ` e: `; "19 groups in 1016.6 s". Per group, cases | equal | differing: F0 2|2|0, R 1,180|1,180|0, DL-lat, DL-lon, MP64,
+  ML5, NT, LB, CR 59|59|0 each, PM5 55|55|0, FK1-FK6 10|10|0 each, FK7 13|13|0 (`exactKindDiffers=0`), FK8 11|11|0,
+  F0h 8|8|0. **1,742 cases, 1,742 equal, 0 differing; oracleOffRow 0 everywhere. Identical to session 43's local table in
+  every count.**
+- **`jvm`**: 195 tests, 2 failed, both `CollectOutreachersTest` (`:141`, `:116`, as on `2763f4c`); 0 ` e: `; both
+  `compileKotlinIos*` ran, BUILD SUCCESSFUL in 48s; the recording test printed "unset; not run". `grep -c 'caught a
+  StackOverflowError'`: **2** (1 console, 1 XML), where `2763f4c`'s run gave 4 (2 and 2). Same test, same failures; the
+  catch fired once here instead of twice [I: the overflow point depends on the JVM's stack state, not on this change,
+  which touches only the workflow].
+- **`ios-smoke`**: commonTest 24 of 24 (**simulator-checked**); arm64 JVM 7 of 7; `OK: all 2 classes ran`.
+
+**[I]/[?].** [I] the overflow print's 4 to 2 is run-to-run; [?] whether it varies run to run on unchanged code (two runs
+read). "None" claims: no other table read (grep above); no case read one of the 8 rows (the counter's sets above); no
+commonTest file calls `RoutingEngine(` (`grep -rln 'RoutingEngine(' brouter/src/commonTest` gives nothing).
+
+**Questions for the planner.**
+1. The caught-overflow print went from 4 to 2 on a workflow-only commit. Is -61's count to be read as "at least one"?
+2. With 122 of 295 targeted cases reading a differing row and all equal: is that what -24's "whether the 13 rows ever change
+   a route" needs, beside -136's wording, or should R be counted too?
+3. Step 10's survey (`docs/audits/2026-11-12-brouter-port-step10.md`) proposes carrying the case list and digests into
+   commonTest; that touches how `expected-1b.tsv` is carried and needs a ruling first.
+
+**Step 9 by -136's terms:** the CI job exists and its reading is above (1,742 of 1,742, equal to the local table). By
+decision 1, step 9 closes on the planner's reading of that job; from this side it is complete.
+
+Next:
+1. The planner's reading of `jvm-production` on run 43163533103, and Q1 to Q3.
+2. Step 10, session 1 of the survey's order: one test that reads one pinned tile on the simulator (red first).
