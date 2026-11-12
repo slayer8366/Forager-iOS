@@ -77,3 +77,45 @@ beside them; each: 0 compile errors, 1 fresh XML, restored `cmp` equal; `git sta
   covering the near-tie it is named for. No other plant chosen (Q2).
 - LB: caught as predicted: 1 failure, "52 mismatches" of 59 (first: nodes, cost, distance, both digests).
 - CR: caught as predicted: 1 failure, "50 mismatches" of 59 (first: nodes, cost, distance, both digests).
+
+### 1.5 CI reads
+
+`8aef87e` (the constructor-exception test; run 43151665608) [C: `gh run view --log`, grepped]:
+- jvm: TOTAL tests 182, failures 2, errors 0, skipped 0 in 82 files. FAILED lines: only
+  `CollectOutreachersTest > collectOutreachersWithoutADestination` and `> collectOutreachersWithADestinationVanishesFarNodes`
+  (the known two; not touched), and the task line. ` e: ` 0. The new test ran (its print in the log: both
+  `IllegalArgumentException "profile * does not exist"`). JVM tests step 23.4 min (the previous run, `7ae5c31`, 23.9): not
+  near 60. iOS klibs: success; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both run.
+- ios-smoke, simulator-checked: commonTest on the iOS simulator TOTAL 24, 0 failures; the arm64 JVM half TOTAL 7, 0
+  failures; the gate ("Gating - the arm64 JVM step ran every class it names") success.
+- The caught-overflow print (`OsmNodesMap.cleanupPeninsulas caught a StackOverflowError`, -61): 4 lines in the log.
+`554887e` (RoutingEngineStep9Test): not finished when this was written; the next session reads it.
+
+### 1.6 [I], [?], and questions for the planner
+
+- [?] Q1, a false premise (a stop on that point): the prompt asked to correct file 18's `:279` to `:278`. At Forager
+  `947f1be2`, `OsmPath.java:278` is `if (isStartpoint)` and `:279` is `if (rc.startDirectionValid)`; 18 names `:279` for
+  startDirectionValid, which is right. Not changed. If the planner meant to add `:278` for `isStartpoint`, say so.
+- [?] Q2: NT's planted error (the tie-break reversed) was not caught. Is NT's port test to be held to another plant (for
+  example in the radius compare at `WaypointMatcherImpl.kt:37`, or `MAX_POINTS`), or is "near-ties do not reach the
+  outcome on these 59" a finding for the record? Not chosen here.
+- [I] The counters (§1.2) cover R's 1534 cases only, through the port; F0's two are not in that run.
+- [C] "None" claims: NT, LB, CR had no port test before (the `git grep` in §1.3, no hit); the scratch counters are not in
+  the tree (`git grep -c S39Counters`: no output).
+- E1: one pushed commit (`4b9409e`) read 2 on the scan, both diff-header timestamps, fixed in `100d00d` (§1.1).
+- Stops hit: Q1 only. No test outside the task newly failing (CI's two are the known `CollectOutreachersTest`).
+
+### 1.7 Groups done and not done; Next
+
+Done: NT, LB, CR (59 each, 0 mismatches; LB and CR plants caught, NT's not). Not done: FK 1 to 8 (84 rows), F0h (8).
+
+Next:
+1. Read CI on `554887e` and later pushes (TOTAL, FAILED, ` e: `, iOS compile, gate, jvm minutes: three more groups add
+   about 1 min locally).
+2. FK 1 to 8 through the port: `E3FKTest` builds kinds 1, 2, 6 in its test body (`Random(SEED + kind)`, `gen.draw`,
+   ids `FK<k>-NN`), kinds 3 and 5 in private `kind3`/`kind5`, kind 4 by `E3Select` from `Random(SEED + 4)`, kinds 7 and 8
+   on edited copies of E170_S50 under `E3Strata.work` (`edited(...)`), with E's own FK profiles (`E3Stability.ownProfiles`,
+   `profileOf`). Kind 7's family reads numbers as `*`. Expect named "unsupported" or left-out guards on some kinds;
+   record them, do not fix.
+3. F0h's 8 cases (`E3F0hTest`, `TestTiles.f0h`).
+4. Q1 and Q2 answered.
