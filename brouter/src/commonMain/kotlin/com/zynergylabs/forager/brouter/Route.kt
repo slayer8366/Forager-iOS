@@ -2,6 +2,7 @@ package com.zynergylabs.forager.brouter
 
 import com.zynergylabs.forager.brouter.codec.DataBuffers
 import com.zynergylabs.forager.brouter.mapaccess.PhysicalFile
+import com.zynergylabs.forager.brouter.util.LibmSeam
 import okio.FileSystem
 import okio.IOException
 import okio.Path
@@ -35,9 +36,13 @@ class RouteCancel {
         get() = TODO("ported with RoutingEngine, item I step 8")
 }
 
-/** What a route call returns: the found track's nodes and distance, or the engine's own message unchanged. */
+/**
+ * What a route call returns: the found track's nodes, their heights and its distance, or the engine's own message unchanged.
+ * [Found.sElev] is each node's `OsmPathElement.getSElev()`, in quarter metres, `Short.MIN_VALUE` where the data has no
+ * height (RECORD -111, -122; Forager's `BRouterTrailRouter.heightMetresOf` converts it, as it converts the positions).
+ */
 sealed interface RouteOutcome {
-    class Found(val iLat: IntArray, val iLon: IntArray, val distance: Int) : RouteOutcome
+    class Found(val iLat: IntArray, val iLon: IntArray, val distance: Int, val sElev: ShortArray) : RouteOutcome
 
     class Failed(val message: String) : RouteOutcome
 }
@@ -45,6 +50,10 @@ sealed interface RouteOutcome {
 /** Runs one route, blocking; the caller picks the thread. */
 fun route(request: RouteRequest, cancel: RouteCancel): RouteOutcome =
     TODO("ported with RoutingEngine, item I step 8")
+
+/** [route] with the libm seam given: tests' logic runs pass the oracle's (-24); the public call passes `MsunLibm`. */
+internal fun route(request: RouteRequest, cancel: RouteCancel, libm: LibmSeam): RouteOutcome =
+    TODO("ported with RoutingEngine, item I step 8d: route with a libm")
 
 /** The header check Forager's `RoutingDataFolder.headerProblem` makes: null when the file reads, else the reason. */
 fun checkDataFile(file: Path): String? = try {
