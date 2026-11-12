@@ -187,3 +187,56 @@ Each by a scratch copy of `revert.sh`, one exact string, the FK class alone, res
 - **E, kind 8** (top index CRC): `PhysicalFile.kt:69` `throw IOException("top index checksum error")` made `32` (the
   mismatch read as the new format). Predicted: FK8-01 to -10 fail on family (route or another failure, a guess per
   case); FK8-x1 passes; others pass.
+
+#### Plants, observed (`11-fk-plant[A-E].diff`, `-out.txt`)
+
+Each run: 0 compile errors, 1 fresh XML, restored `cmp`-equal [C, the runner's output]; 8 tests, 1 failure each.
+- **A** (range × 4): FK5 9 of 10 failed (port: route 6, "no track found at pass=0" 3, still not mapped 1); **FK1 and FK2
+  0 of 10**, not as I guessed "fewer": with no node within 300 m, nothing came into range at 1 km either [I]. Others 0.
+- **B** (no island check): FK4 10 of 10, port "no track found at pass=0", as predicted; FK3 and the rest 0.
+- **C** (missing file not flagged): FK6 10 of 10, port "to-position not mapped", as predicted; others 0.
+- **D** (too-short check at `len < pos`): FK7-08, -09, -10 failed, as predicted; others 0. The port's outcome read
+  **"route" with an empty track** (0 nodes): the read past the end throws `EOFException`, whose message is null;
+  `NodesCache.kt:188-189` wraps it as `RuntimeException(re.message)` as `NodesCache.java:197-198` does, and
+  `RoutingEngine.kt:234` (Java `:812`) keeps a RuntimeException's message, so `errorMessage` is null and `kindOf`
+  reads null as "route" [R for the lines; I that Java does the same under this edit, not run].
+- **E** (CRC mismatch read as the new format): FK8-01 to -10 failed (port: route on all 11); x1 and others 0.
+All five caught; every failure is one its own edit could produce.
+
+### 2.4 F0h: not done
+
+A draft test (six fields, as F0's) was written but never compiled or run. It was taken out of the tree at the handoff,
+not pushed. No plant was made.
+
+### 2.5 CI reads
+
+Not read this session. At the handoff, the runs on `554887e`, `4b584a4`, `e309e45` had finished (`failure`, the expected
+`CollectOutreachersTest` pair or more, unread); `1bf57ca`, `33de34b` and `34277b6` were still running. `3cfdbe9` (docs only)
+did not start a push run, as item 1 intends [C: `gh run list`, which shows no row for it].
+
+### 2.6 [I], [?], and E1
+
+- E1, session 39's `4b9409e` [C, scan.sh's three forms]: `scan.sh 4b9409e^ 4b9409e` and `scan.sh 4b9409e^..4b9409e`
+  read **2** (that commit's own added lines); `scan.sh 4b9409e` (one argument: the commit against the working tree)
+  reads 0, and so does the range `e1940ed 1bf57ca` (the fix removes the lines). The two readings come from the two forms.
+  This session: every staged diff scanned before its commit with
+  `ENDS=…/forager-ends.txt bash /home/user/Forager-iOS/docs/process/tools/scan.sh` (default `--cached`), all 0.
+- [?] Plant D: a RuntimeException with a null message reads as success with an empty track, in BRouter's own code as
+  much as in the port [I]. No R case is known to reach it.
+
+### 2.7 Questions for the planner
+
+1. -132's NT premise is false (§2.2): radii equal 59 of 59 (0), `directionDiff`s equal 59 of 59 (gap 0). Is the next
+   NT plant to be on `end()`'s insertion order (`WaypointMatcherImpl.kt:176-193`), or is NT sent to the reviewer as not
+   showing the near-tie reaching an outcome?
+2. Plant D's null-message "route" (§2.6): flag it for step 10, or leave it?
+
+### 2.8 Groups done and not done; Next
+
+Done: FK 1 to 8 (84, 0 mismatches; five plants, all caught). Not done: NT's second plant (stopped), F0h (8), CI reads.
+
+Next:
+1. Read CI on `554887e` and every later code push (`33de34b`, `34277b6`): TOTAL, FAILED, ` e: `, iOS, gate, jvm minutes.
+2. F0h: the draft from the scratch folder or written new; compile, commit the comparison, run, then one heights plant with
+   its prediction pushed first.
+3. NT, per the planner's answer to Q1.

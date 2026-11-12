@@ -1,0 +1,11 @@
+--- plantD.saved (the scratch copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/PhysicalFile.kt
+@@ -53,7 +53,7 @@
+             if ((len - pos) > extraLen) {
+                 extraLen++
+             }
+-            if (len < pos + extraLen) { // > is o.k. for future extensions!
++            if (len < pos) { // > is o.k. for future extensions!
+                 throw IOException("file of size " + len + " too short, should be " + (pos + extraLen))
+             }
+             ra.seek(pos)
