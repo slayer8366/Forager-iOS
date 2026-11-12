@@ -5171,3 +5171,46 @@ the planner).
 3. **The 8 rows outside the tiles** are named as not covered. Whether a tile is captured for them is a question for the
    owner, with the cost stated, after step 10.
 **Notes:** Written by the planner session by hand. Next free ID -137.
+
+**Kind:** outcome
+**ID:** 2026-10-28-137
+**Timestamp:** 2026-11-12T06:20:34Z
+**Continues:** 2026-10-28-24, 2026-10-28-61, 2026-10-28-136
+**Title:** Step 9 closed: the production run read in CI, 1,742 of 1,742 equal; 122 cases read a differing row; step 10
+surveyed; the planner's rulings
+**Observed:** Plumb Ledger, session 44, `brouter-port-5b` `624f2c0` to `7f97edd` (fast-forward only; ended at 140,887 by
+the harness's count, no handoff call; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The CI job** (`7a4d82b`): `jvm-production`, the variable set, the one class.
+- **Rows touched** (a scratch counter, never committed; expectation `f0f0da6` pushed first) [R, Plumb's]: of 295 cases in
+  DL-lat, DL-lon, NT, LB and CR, 122 read at least one of the 13 rows: DL-lat 28, DL-lon 14, NT 13, LB 59, CR 8. Only
+  rows 1295, 1297, 1310, 1311 and 1318 are read. By the code's row rule the other 8 lie in no captured tile. DL-lat's
+  expectation was 0 to 8, so it failed there. The expectation file's wording was edited after the run, latitudes to row
+  numbers, and says so; the planner's diff shows no guess moved.
+- **Step 10's survey,** a new file, no code.
+**Checked by the planner:**
+- `git ls-remote` `7f97edd`, a fast-forward of `624f2c0`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3.
+- The workflow diff adds the one job, 28 lines, and removes none.
+- **CI, run 43163533103 on `7a4d82b`, read by the planner:**
+  - `jvm-production`: success; 1 test; 19 groups in 1,017 s; **every group's "equal" is its "cases" and every "differing"
+    is 0:** R 1,180, DL-lat, DL-lon, MP64, ML5, NT, LB, CR 59 each, PM5 55, FK 1 to 6 ten each, FK7 13, FK8 11, F0 2,
+    F0h 8. 1,742 in all, as the local run.
+  - `jvm`: 195 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both `compileKotlinIos*`.
+  - `ios-smoke`: simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+  - The caught-overflow line: 2 prints, where the last six runs read 4, on a commit that changed only the workflow.
+**Decisions (the planner's, technical):**
+1. **Step 9 is closed.** On the JVM: 2,126 rows in logic runs, 0 mismatches (-134); 1,742 in production runs, 0
+   differing, in CI. Not covered, named: FK 9 to 11 and R's 354 refusals have no production comparison; the 8 rows in no
+   captured tile; R's cases were not counted for rows touched; FK9's 3 unstable rows are held by family only; none of it
+   runs on iOS.
+2. **-24's question, as far as the tiles reach:** at least 122 cases read a differing row, and the route is the oracle's
+   every time. The other 8 rows go to the owner after step 10, with the cost of a tile for them.
+3. **`CollectOutreachersTest`'s failure is not the same run to run** (0 to 4 caught overflows; 1 or 2 failures locally).
+   -61 reads as: the pair is red; how it fails depends on the stack. Step 10 measures it.
+4. **Step 10 begins with what needs no ruling:** one tile read on the simulator, then F0's cases there against their
+   stored digests. F0's ends are Forager's own, so E1 is not touched.
+5. **For the owner, not yet asked:** every other group's cases are positions drawn by generators that run only on the
+   JVM, and E1 forbids committing them. How the simulator gets them is a ruling on E1's reach, asked once session 45
+   shows what the simulator can read.
+**Notes:** Written by the planner session by hand. Next free ID -138.
