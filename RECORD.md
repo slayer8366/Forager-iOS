@@ -5369,8 +5369,9 @@ simulator's memory step held back by its time; the planner's rulings
 ended at 154,775 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
 the planner).
 - **The depth counter** (`4d2bd15`): a new internal object, `PeninsulaDepth`, written in `minVisitIdInSubtree`.
-- **On the JVM** [R, Plumb's, local]: MP64 59, ML5 59 and PM5 55 cases, 0 mismatches; **every one of the 173 reaches a
-  depth of 5,679**; 0 overflows caught.
+- **On the JVM** [R, Plumb's, local]: MP64 59, ML5 59 and PM5 55 cases, 0 mismatches; ~~**every one of the 173 reaches a
+  depth of 5,679**~~; 0 overflows caught. **Corrected in -143:** 5,679 is each group's deepest case. "Every one" was
+  Plumb's wording, repeated by the planner unchecked; the counter keeps a maximum, and one MP64 case alone reads 3,378.
 - **Nothing ran on the simulator.** Plumb stopped on the time estimate: the three groups take 220 s on the JVM; at the
   ratio seen so far, 9 to 12, that is about 40 minutes on the simulator, on top of the job's 18, against its limit of 45.
 - The work for the simulator is saved, not pushed: commit `27841ad` on the clone's branch `s49-memory-step`.
@@ -5439,3 +5440,53 @@ the planner).
 2. **`ios-memory` runs on every code push** until step 10 closes; then it is ruled on again.
 3. **Then R's fallback** (E5: the first 12 cases of each profile), then the planted error across the groups.
 **Notes:** Written by the planner session by hand. Next free ID -143.
+
+**Kind:** outcome
+**ID:** 2026-10-28-143
+**Timestamp:** 2026-11-12T12:50:14Z
+**Continues:** 2026-10-28-61, 2026-10-28-89, 2026-10-28-142
+**Title:** Step 10, Plumb's session 51: the stack ladder ends the simulator's process at 1 MB, "Bus error"; R's fallback
+240 of 240 equal on the simulator; -141's "every case" corrected; -61 goes to the owner
+**Observed:** Plumb Ledger, session 51, `brouter-port-5b` `ef033ef` to `3d5bd11` (fast-forward only; called at 153,457,
+ended at 160,402 by the harness's count; one commit, trailer `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The ladder** (`StackLadderIosTest`, iosTest, gated): one MP64 case on threads made with `pthread_create` and an
+  explicit stack size. Plumb's prediction, in the commit, a guess: 8, 4 and 2 MB survive, 1 MB ends the process.
+- **R's fallback** (`REngineCommonTest`, gated, in `ios-memory`): the first 12 cases of each of R's 20 StdModel
+  profiles, 240 cases. Locally on the JVM 240 of 240 equal, 201 of them entering the walk [R, Plumb's].
+- `ios-memory`'s limit raised from 75 to 95 minutes.
+- Plumb named a false premise: the six car-model profiles are not refused by both engines. The oracle routes them and
+  only the port refuses (-89, -95), so they have no stored refusal row and are left out.
+**Checked by the planner:**
+- `git ls-remote` `3d5bd11`, a fast-forward of `ef033ef`; no model name; E1 by `scan.sh <c>^ <c>`: 0. The port and the
+  build are untouched. The workflow diff adds two steps and their counts to `ios-memory` and changes its limit.
+- **Run 43212726248 on `3d5bd11`, read by the planner:**
+  - **The ladder, on the simulator,** the lines in order: the case is MP64-0002, deepest recursion **3,378** on the test's
+    own thread, equal to its stored row. Then: "starting 8388608", "survived", equal, deepest 3378, main thread false;
+    "starting 4194304", "survived", equal; "starting 2097152", "survived", equal; **"starting 1048576", and no line
+    after it.** The step failed with **"Child process terminated with signal 10: Bus error"**. 512 KB was never reached.
+  - The memory groups, before the ladder: MP64 59, ML5 59, PM5 55, each all equal on six fields and the tuple digest,
+    each group's deepest 5,679, as -142.
+  - **R's fallback on the simulator: 240 of 240 stored ids drawn on arm64; 240 equal on all six fields and the tuple
+    digest; 460 s.**
+  - `ios-smoke`: 46 of 46; arm64 7 of 7; the gate "OK". `jvm`: 230 tests, 2 failed, both `CollectOutreachersTest`.
+    `jvm-production`: success. E1 on the `ios-memory` log, timestamps cut: 0 on the step 10 and ladder lines.
+  **All simulator-checked.**
+**Where the simulator stands** [C]: 562 (-142) + 240 = **802 cases, 0 mismatches.** Not there: R's other 940 StdModel
+cases, FK 9 to 11.
+**Corrected in place:** -141 said every one of the 173 memory cases reaches 5,679. The counter keeps a maximum per
+group; this one case reaches 3,378. The planner repeated Plumb's sentence without checking it and told the owner so.
+**The planner's own error:** the brief said the car-model profiles are refused on both engines. -89 says the port
+refuses and the oracle routes.
+**What the ladder shows for -61:**
+- On the simulator's debug build, a walk 3,378 deep fits in a 2 MB thread stack and **does not fit in 1 MB: the process
+  ends.** There is no catch on iOS (-50).
+- A secondary thread's default on iOS, 512 KB [I, the platform's documented default], is below the size that already
+  fails. So with the port as it is, an app that routes on a thread of its own with the default stack would end on this
+  case.
+- The deepest case seen, 5,679, was not run on the ladder. Scaled from 3,378 [I, a straight proportion, not measured]:
+  between about 1.7 and 3.4 MB.
+- These are one tile's depths. No measurement bounds the depth on another map.
+- Not shown: a release build, whose frames are usually smaller; a real iPhone.
+**Decision:** none here. -61 is the owner's ("Decide after step 10"), and it is asked now with these numbers.
+**Notes:** Written by the planner session by hand. Next free ID -144.
