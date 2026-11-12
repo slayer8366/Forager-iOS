@@ -57,3 +57,13 @@ First run [C: the class's XML, single class; 0 compile errors]: 3 tests, 0 failu
 - NT: 59 cases within 89 draws; kinds route 56, "to-position not mapped" 1, "target island detected" 2; 0 mismatches.
 - LB: 59 cases within 99 draws; route 59; 0 mismatches.
 - CR: 59 cases within 83 draws; route 59; 0 mismatches.
+
+Planted errors, PREDICTION (pushed before any of the three runs; each by the scratch `revert.sh`, filter one method):
+- NT: `WaypointMatcherImpl.kt:39`, the tie-break reversed (`mw2.directionDiff, mw1.directionDiff`). NT's cases are
+  chosen for two start links at one radius within 4 ulps, so the other link is matched first. Expected: `ntRoutes...`
+  fails with mismatches, at least 1 and I guess most of the 59 (node digest at least); the oracle's digest asserts pass.
+- LB: `CheapRuler.kt:53`, the row read one too high (`ilat / SCALE_CACHE_INCREMENT + 1`). Every distance in the run
+  moves. Expected: `lbRoutes...` fails, mismatches on most of the 59 (cost at least).
+- CR: `StdPath.kt:206`, the crossing class read one character early (`classIndex + 24, classIndex + 25`, the `=`), so
+  no class matches and the added turn cost is 0. Expected: `crRoutes...` fails, mismatches on most of the 59 (cost at
+  least; each case was taken for reaching `StdPath.java:105-113`).
