@@ -4977,8 +4977,9 @@ by the planner).
 - **CI on `554887e`,** the step 9 test, was queued behind six other runs. Not read.
 **Corrected in place, the planner's:** -131 said `OsmPath.java:278` is the `startDirectionValid` line and tagged it [R].
 It is `:279`. The planner counted lines off a printed range by eye. A line number tagged [R] comes from `grep -n`.
-**On NT, the planner's reading [I]:** NT's cases are drawn for two start links whose radii differ by at most 4 ulps
-(`E3NTTest.kt:49`). The tie-break only runs when the radii are equal exactly. So the plant may have changed nothing
+**On NT, the planner's reading [I], false, corrected in -133:** ~~NT's cases are drawn for two start links whose radii
+differ by at most 4 ulps (`E3NTTest.kt:49`).~~ The radii are equal (both 0) and the 4 ulps are between the
+`directionDiff`s; all 59 cases read a gap of 0. The tie-break only runs when the radii are equal exactly. So the plant may have changed nothing
 because no case has an exact tie, which says the plant was wrong for the group, not that the group tests nothing.
 Plumb's reading is the other one: the order never reaches the six fields. One more plant tells them apart.
 **Decisions (the planner's, technical):**
@@ -4995,3 +4996,55 @@ Plumb's reading is the other one: the order never reaches the six fields. One mo
    commit that changes code.
 4. **Next:** FK 1 to 8, then F0h, each with its planted error.
 **Notes:** Written by the planner session by hand. Next free ID -133.
+
+**Kind:** outcome
+**ID:** 2026-10-28-133
+**Timestamp:** 2026-11-12T04:46:37Z
+**Continues:** 2026-10-28-93, 2026-10-28-132
+**Title:** Step 9, Plumb's session 40: FK 1 to 8 equal to the oracle, five planted errors caught; -132's reading of NT
+was false; the planner's E1 scans were void and are redone; the planner's rulings
+**Observed:** Plumb Ledger, session 40, `brouter-port-5b` `1bf57ca` to `696dd18` (fast-forward only; called at 151,537,
+ended at 161,382 by the harness's count; 4 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked
+by the planner).
+- **CI change** (`33de34b`): `paths-ignore: 'docs/**'` under `push:`.
+- **FK 1 to 8** (`34277b6`, new `RoutingEngineFKTest`, the comparison stated before any run): 84 cases, 0 mismatches on
+  the first run; no refusal by name [R, Plumb's].
+- **Five planted errors, five caught** [R, Plumb's]: the catching range (FK5 9 of 10; FK1 and FK2 0, where "fewer" was
+  predicted); the island check (FK4 10 of 10); a missing file (FK6 10 of 10); the too-short check (FK7, 3 cases); the
+  CRC (FK8, 10 cases).
+- **NT's second plant was not run:** Plumb stopped on -132's premise.
+- Not done: F0h; the CI reads.
+**Checked by the planner:**
+- `git ls-remote` `696dd18`, a fast-forward of `1bf57ca`; one trailer each, no model name.
+- The workflow diff is the two lines. `RoutingEngineFKTest` is new; no line of an existing test was removed.
+- **NT** [R]: `NTGenerator.kt:26-27` puts the start on the junction so that every link has radius 0; `:95` refuses a draw
+  whose two radii differ; `E3NTTest.kt:43-49` measures the gap between the two `directionDiff`s;
+  `step1b/23-nt-select.tsv` reads "gap 0 ulps" on 59 of 59. Plumb is right.
+- **CI on `554887e`,** the first full run with NT, LB and CR (run 43153534814): `jvm` 185 tests, 2 failed, both
+  `CollectOutreachersTest`; 0 ` e: `; the test step ran 20 minutes; both `compileKotlinIos*`; the three groups print 59
+  cases and 0 mismatches each; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The
+  caught-overflow line: 4 prints. CI on `34277b6` (FK 1 to 8) was still running. Not read.
+**The planner's own errors, two:**
+1. **-132's reading of NT was false,** and is corrected in place. The planner read one line of the test and took the 4
+   ulps for the radii. On every NT case both keys of the comparator are equal, so no change to the comparator can move
+   the order. Neither -132's plant nor Plumb's first one could have been caught.
+2. **The planner's E1 scans were void.** `scan.sh` takes `git diff` arguments and ignores its input; the planner piped a
+   diff into it, so it scanned the clone's empty staged diff and always printed 0. Every "E1 over the range: 0" the
+   planner wrote from that command showed nothing. How far back the wrong form goes is not known from the record.
+   **Redone, the right way** (`scan.sh <commit>^ <commit>`), commit by commit over the whole branch, 327 commits [C]:
+   - after `ffa06ab` (2026-11-06) one commit has hits: `4b9409e`, 2, the timestamps in a diff's header that Plumb named
+     and fixed in `100d00d`. So Plumb's count on it was right and the planner's 0 was the void scan;
+   - 37 commits up to 2026-11-06 have hits. Sampled by shape with every digit masked: CI logs' timestamps, process ids,
+     pairs of 9-digit integers in 1b's logs, and `82d310a`'s position file, which the owner ruled on in -83 and -84 and
+     which is gone from the tree. At the head, the files that still hit are logs and the `msun` constants. This is a
+     reading of shapes, not a re-audit of that history; -84, -87 and -93 stand as they are.
+   The coders' own scans, run on their staged diffs, were the right form throughout.
+**Decisions (the planner's, technical):**
+1. **NT gets one plant aimed at what does decide an exact tie:** the order the entries reach the sort (the list reversed
+   before it; the sort is stable). Prediction pushed first. If NT still passes whole, the finding is that NT's outcomes do
+   not depend on which tied link is first, and NT goes to the independent reviewer.
+2. **Plant D's "route" with an empty track** [I, Plumb's, Java not run]: session 41 shows from the Java, by file and
+   line, whether any unplanted path can end a run with no message and no track. If one can, it is a finding for the iOS
+   adapter and for Forager, reported to the owner.
+3. **Next:** F0h, the CI reads, then step 9's assembled count.
+**Notes:** Written by the planner session by hand. Next free ID -134.
