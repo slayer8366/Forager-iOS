@@ -513,3 +513,33 @@ difference is untested); plant 2's equivalence (reasoned, not proved); the plant
 remove `PeninsulaDepth.overflowsCaught`, now never written? (4) A case where Java overflows, to exercise the one designed
 difference, would need a JVM with a smaller `-Xss` or a deeper map; worth building?
 **Next:** FK 9 to 11 on iOS; the planted error across the simulator's groups; number formatting and `catch (Error)` on Native.
+
+## §7 Session 54 (Plumb Ledger, 2026-11-12): `CollectOutreachersTest`'s last failure; `overflowsCaught`; the timing kinds on iOS
+
+### A1. Why the test sees "true" 3,587 times and routing sees "false" (written before any run)
+
+1. `hmap` holds the hollow nodes only (and the two end nodes): a node is removed from it when its own cache loads
+   (`OsmNode.java:152`, `DirectWeaver.java:48`; `OsmNodesMap.remove`).
+2. `collectOutreachers` floods from every `hmap` node and gives each node it reaches `visitID = baseID`. It pushes a
+   node's targets before it vanishes that node, so the flood covers the whole of the hollow nodes' component as it was.
+3. `canEscape(n0)`: a node with `visitID < baseID` is walked; one with `baseID <= visitID < lastVisitID` means "reached
+   by the collection", so the answer is "true". If `n0` itself was reached, it answers "true" on its first pop.
+4. The test asks on every 37th node of `reachableNodes(hollow nodes)` taken *before* the collection: by (2) every one of
+   them was reached by it, so by (3) every answer is "true", whatever the region and whatever the destination. 3,587 of
+   3,587 is not a property of the regions; no other region or destination can change it.
+5. Routing (`RoutingEngine.java:2012-2016`) collects again at every later check out of memory bounds, and asks on the
+   open paths' target nodes. The nodes an earlier collection vanished have lost their links to non-hollow nodes; the
+   next flood does not reach those cut off from every hollow node, so `canEscape` on them walks only unreached nodes
+   and answers "false" (and vanishes what it walked). That is where routing's hundreds of thousands of "false" come
+   from [I, reasoned from the code; not counted per round]. An island loaded whole, with no hollow node, would also
+   answer "false" in the first round; the test never asks about one, since it starts from hollow nodes.
+
+### A2. What is added, and the prediction (pushed before the run)
+
+Not another region or destination (by A1.4 neither can give "false"), but another *state* of the same map: in
+`collectOutreachersWithADestinationVanishesFarNodes`, after the existing round, a **second `collectOutreachers`** on the
+same map with the same destination and bound, then `canEscape` on the same every-37th nodes, into the same `escapes`
+counter, each answer written to both transcripts (`F` lines) and compared. The assertion text, the existing regions and
+the existing round are unchanged; lines are added. No position is added (the destination is the existing one).
+**Prediction:** the oracle answers "false" N > 0 times in the second round; the port's answer equals the oracle's on
+every node (the transcripts equal); `CollectOutreachersTest` passes 2 of 2.

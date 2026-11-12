@@ -109,6 +109,24 @@ class CollectOutreachersTest {
             p.map.clearTemp()
             ot.reachable(ot.mapState(o.map), holders = false)
             pt.reachable(pt.mapState(p.map), holders = false)
+
+            // A second collection on the same map, as RoutingEngine.java:2012 makes at each later check out of memory
+            // bounds. The first one marked every node it reached, so canEscape on them answered "true" at once; the
+            // nodes it vanished far from the destination are now cut off from every hollow node, the second does not
+            // reach them, and canEscape on them answers "false", as in routing (RECORD -147, decision 2).
+            o.map.collectOutreachers()
+            p.map.collectOutreachers(logicLibm)
+            for (i in oNodes.indices step 37) {
+                val oe = o.map.canEscape(oNodes[i])
+                val pe = if (i < pNodes.size) p.map.canEscape(pNodes[i]) else null
+                escapes[if (oe) 1 else 0]++
+                ot.line("F $i $oe ${o.map.nodesCreated} ${o.map.lastVisitID}")
+                pt.line("F $i $pe ${p.map.nodesCreated} ${p.map.lastVisitID}")
+            }
+            o.map.clearTemp()
+            p.map.clearTemp()
+            ot.reachable(ot.mapState(o.map), holders = false)
+            pt.reachable(pt.mapState(p.map), holders = false)
             compare(where, ot, pt)
         }
         println("5b collectOutreachers with destination: $regions regions, nodes no longer reachable after it $vanished, canEscape false/true ${escapes[0]}/${escapes[1]}")
