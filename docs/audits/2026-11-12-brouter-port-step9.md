@@ -26,3 +26,5 @@ Revert, OBSERVED [C: the scratch `revert.sh`'s output, `2026-11-12-brouter-port-
 `01-ctor-revert.diff`]: compile errors 0, 1 fresh XML; `RouteTest` 7 tests, 1 failure,
 `aMissingProfileThrowsThroughRouteAsTheOracle`, "the port's route() throws (it returned Failed)", as predicted. Restored:
 `cmp` equal; `git status` clean after, the forward `Route.kt` unchanged (the revert's `catch` string: 0 occurrences).
+
+E1: the commit `4b9409e` was pushed with the scan reading 2 (my order of commands committed on the scan instead of after reading it). Both hits were non-position: the two `diff -u` header timestamps (seconds to nine places) in `01-ctor-revert.diff`. Fixed in the next commit by dropping the header timestamps; no position or height was in either hit.

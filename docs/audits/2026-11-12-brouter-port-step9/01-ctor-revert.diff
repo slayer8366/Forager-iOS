@@ -1,5 +1,5 @@
---- /tmp/claude-0/-home-user-Forager-iOS/a111d7c0-b933-58d6-aca3-0a232a6c0dae/scratchpad/rv/ctor.saved	2026-11-12 03:59:20.238424510 +0000
-+++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/Route.kt	2026-11-12 03:59:20.253697731 +0000
+--- Route.kt (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/Route.kt
 @@ -82,7 +82,7 @@
      val waypoints = collector.getWayPointList("${request.startLon},${request.startLat}|${request.endLon},${request.endLat}")
      val context = RoutingContext(libm)
