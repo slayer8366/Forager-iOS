@@ -5396,3 +5396,46 @@ tile, not a bound for any map.
    not, that is -61's answer for the simulator.
 4. **A process that ends is reported and nothing is changed** (-61 is the owner's).
 **Notes:** Written by the planner session by hand. Next free ID -142.
+
+**Kind:** outcome
+**ID:** 2026-10-28-142
+**Timestamp:** 2026-11-12T10:58:33Z
+**Continues:** 2026-10-28-50, 2026-10-28-61, 2026-10-28-141
+**Title:** Step 10, Plumb's session 50: the memory groups on the iOS simulator, 173 of 173 equal; the recursion reaches
+5,679 there and the process survives on an 8 MB main-thread stack; what that does not answer for -61
+**Observed:** Plumb Ledger, session 50, `brouter-port-5b` `09f3be8` to `ef033ef` (fast-forward only; ended at 137,724 by
+the harness's count, no handoff call; 2 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- `c4a6965`: the three memory tests gated on `BROUTER_STEP10_MEMORY`, and the new job `ios-memory`, as -141 ruled.
+- The counter's own CI (`4d2bd15`, run 43192349936) is Plumb's reading: clean apart from the known pair.
+**Checked by the planner:**
+- `git ls-remote` `ef033ef`, a fast-forward of `09f3be8`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on both. The workflow diff removes no line; the port and the build are untouched; two lines of the writer test moved.
+- **Run 43196471268 on `c4a6965`, read by the planner:**
+  - **`ios-memory`: success, 51 minutes, 3 tests, 0 failures, no crash or signal word in the log.** On the simulator:
+    - MP64: 59 of 59 stored ids drawn on arm64; **59 equal on all six fields and the tuple digest;** 1,192 s;
+    - ML5: 59 of 59 drawn; **59 equal;** 638 s;
+    - PM5: 55 of 55 drawn; **55 equal;** 707 s;
+    - each group: "deepest recursion 5679"; every case entered the walk; "stack size 8372224 bytes"; "main thread true".
+    **Simulator-checked.**
+  - `ios-smoke`: simulator 44 of 44 (the 41 and the three that print "unset; not run"), arm64 7 of 7, the gate "OK",
+    17 minutes.
+  - `jvm`: 228 tests, 2 failed, both `CollectOutreachersTest`. `jvm-production`: success.
+  - E1 on the `ios-memory`, `ios-smoke` and `jvm-production` logs, timestamps cut: 0 on the step 10 lines, no
+    tab-separated row of ends.
+**Where the simulator stands** [C]: 389 (-140) + 173 = **562 cases, 0 mismatches,** every group but R and FK 9 to 11.
+**What this says for -61, and what it does not:**
+- On the simulator, a walk 5,679 deep fits in an 8 MB stack on a debug build, and the memory path gives the stored
+  routes.
+- The 8 MB is the simulator test process's main thread. **An app does not route on that stack.** Forager's Android
+  caller runs the engine on a thread of its own; a secondary thread on iOS has 512 KB unless the app asks for more [I, the
+  platform's documented default, not measured here]. Whether the walk fits in 512 KB, 1 MB or 2 MB is not shown.
+- 5,679 is this tile's depth (-141). A real iPhone and a release build are not shown.
+**Decisions (the planner's, technical):**
+1. **A stack ladder, before the owner is asked:** one memory case, run on a thread made with an explicit stack size,
+   from large to small (8 MB, 4, 2, 1 MB, 512 KB), each size printing before it starts and after it ends, as the last
+   step of `ios-memory`, gated. The first size that ends the process is the answer on the simulator's debug build; the
+   173 results above it stand. This changes nothing in the port.
+2. **`ios-memory` runs on every code push** until step 10 closes; then it is ruled on again.
+3. **Then R's fallback** (E5: the first 12 cases of each profile), then the planted error across the groups.
+**Notes:** Written by the planner session by hand. Next free ID -143.
