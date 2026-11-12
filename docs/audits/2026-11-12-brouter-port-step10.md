@@ -354,3 +354,84 @@ show it and has not run.
 group equal, seconds, deepest recursion, stack size; or the crash, as found. 2. CI on this push: `jvm` (TOTAL, FAILED
 only `CollectOutreachersTest`, the three `8b <group> depth` lines), `jvm-production`, `ios-smoke` 41 of 41 with the
 counter compiled in. 3. Then R (-140 decision 3) and the planted error (decision 4).
+
+## §5 Session 50 (Plumb Ledger, 2026-11-12): the memory groups on the simulator, in `ios-memory`
+
+**No stop hit.** Pushed: `c4a6965` (the memory step, as -141 rules) and this section, fast-forward from `09f3be8`.
+Trailer `Co-Authored-By: Claude <noreply@anthropic.com>` only. E1 scan (`scan.sh`, staged diff) before each commit: 0.
+**The simulator's process survived all 173 cases at a recursion depth of 5,679, on an 8 MB main-thread stack**
+(simulator-checked).
+
+**1. The design (-141).** Session 49's saved commit `27841ad` taken without its workflow change (cherry-pick, then
+`.github` restored to HEAD): its tests, constants and writer change kept.
+- `Mp64EngineCommonTest`, `Ml5EngineCommonTest`, `Pm5EngineCommonTest` are gated on `BROUTER_STEP10_MEMORY`
+  (`MEMORY_GATE`, read with `testEnvironment`, as the production run reads its gate): unset, each prints
+  `step10 <group> memory: BROUTER_STEP10_MEMORY is unset; not run (RECORD -141)` and returns.
+- `ios-memory` (`macos-26`, `timeout-minutes: 75`): `ios-smoke`'s checkout, Java, Xcode selection and fetch steps, copied;
+  the whole writer (`NtCasesWriteTest` is one test method and cannot be told to write the memory groups only); then
+  `:brouter:iosSimulatorArm64Test` with `--tests` for the three classes (KGP passes them as `--ktest_gradle_filter`) and
+  `SIMCTL_CHILD_BROUTER_STEP10_MEMORY: '1'` beside the three variables `ios-smoke` passes; then the counts step and the
+  upload (`ios-memory-test-results`), both `if: always()`. `ios-smoke`, `jvm`, `jvm-production` and the build unchanged:
+  the workflow diff adds 50 lines and removes none.
+- Per group the tests print (Step10Cases) stored ids, equal on six fields and the tuple digest, mismatches, seconds; and
+  (the depth line) `PeninsulaDepth.deepest`, cases that entered the walk, overflows caught, and on iOS
+  `pthread_get_stacksize_np(pthread_self())` and `pthread_main_np()`. The port reads no stack pointer.
+
+**Locally** [R, Plumb's; x86_64 Linux, Temurin 21]: the writer, then the three classes with the gate set: MP64 59 of 59,
+ML5 59 of 59, PM5 55 of 55 equal, 0 mismatches, 104 s, 65 s, 57 s, deepest 5,679 each, 0 overflows. Gate unset (with
+`--rerun`: the first unset run was up to date, environment variables not being task inputs, and its XML was the set run's;
+not cited): the one line each, 0.02 s or less. `Step10CommonDigestTest` 12 of 12 (the three new constants held to the
+tsv). `compileTestKotlinIosSimulatorArm64` on Linux: 0 errors, the test klib rebuilt with the gate.
+
+**2. CI on the counter** (`4d2bd15`). No run carries that sha: it was pushed with `20d5fcc` (docs only on top), so its
+first full run is **43192349936 on `20d5fcc`**. `jvm`: TOTAL 222, failures 2, both `CollectOutreachersTest` (the known
+pair); `8b` depth lines MP64, ML5, PM5 each 5,679, every case entering the walk, 0 overflows; 0 ` e: `;
+`compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` built. `ios-smoke`: TOTAL 41, failures 0; arm64 JVM 7 tests,
+`OK: all 2 classes ran`. `jvm-production`: 19 groups, 1,742 cases, all equal, 0 differing, in 820.9 s.
+
+**3. CI on `c4a6965`, run 43196471268.**
+- `jvm`: TOTAL 228 (222 + the three constants tests + the three skipped-run tests), failures 2, the known pair only;
+  0 ` e: `; the three unset lines.
+- `ios-smoke`: TOTAL **44** (the 41 + the three skipped-run tests), failures 0; the three unset lines once each; arm64 JVM
+  `OK: all 2 classes ran`; 16 min 54 s (10:00:33 to 10:17:27).
+- `jvm-production`: success.
+- `ios-memory`: success, 51 min 21 s (10:00:33 to 10:51:54); the simulator step 45 min 4 s by Gradle. The writer on the
+  arm64 runner's JVM drew the same: MP64 59 of 59 within 86 draws, ML5 59 within 246, PM5 55 within 1,180, as on x86_64.
+
+**The simulator's result** (debug test binary, `iosSimulatorArm64`, shared `macos-26` runner) [simulator-checked]:
+
+| group | stored ids drawn | equal (six fields + tuple) | mismatches | seconds | deepest recursion (case) | entered the walk | stack size | main thread |
+|---|---|---|---|---|---|---|---|---|
+| MP64 | 59 of 59 | 59 | 0 | 1,192 | 5,679 (MP64-0005) | 59 | 8,372,224 bytes | true |
+| ML5 | 59 of 59 | 59 | 0 | 638 | 5,679 (M5-0060) | 59 | 8,372,224 bytes | true |
+| PM5 | 55 of 55 | 55 | 0 | 707 | 5,679 (M5-0304) | 55 | 8,372,224 bytes | true |
+
+The test runs on the main thread, whose stack is 8,372,224 bytes (8 MB less 16 KB). No signal, crash or termination line in
+the log (`grep -i 'signal|EXC_BAD_ACCESS|crash|terminated'`: 0).
+
+**Timing** (seconds per group, the common test's path on both; JVM locally on x86_64, simulator in CI; a debug test
+binary on a shared runner, so the ratio is not a release figure):
+
+| group | JVM | simulator | ratio |
+|---|---|---|---|
+| MP64 | 104 | 1,192 | 11.5 |
+| ML5 | 65 | 638 | 9.8 |
+| PM5 | 57 | 707 | 12.4 |
+| all | 226 | 2,537 | 11.2 |
+
+**E1.** No position committed, printed, written into XML or uploaded. Case files at run time under `brouter/build/step10/`,
+outside `test-results/`. `grep 'step10 ' | grep -cE '[0-9]{1,3}\.[0-9]{5,}'` with timestamps cut: 0 on `ios-memory`'s log,
+0 on `ios-smoke`'s, 0 on `jvm`'s; the `ios-memory-test-results` artifact (11 files): 0 matches of the pattern anywhere.
+
+[I] The walk to 5,679 fits the simulator's 8 MB main-thread stack on a debug build. It says nothing of a secondary thread
+(512 KB by default on Apple platforms), where an app might run routing, nor of a release build's frame size, nor of any
+tile deeper than this one. [?] How much of the 8 MB the walk used: not read (-141 decision 3).
+
+**Questions for the planner.**
+1. -61 is the owner's: does survival on the main thread's 8 MB answer it, or does the owner want the walk run on a thread
+   of the size the app will route on (e.g. a 512 KB secondary thread, in a test of its own)?
+2. `ios-memory` takes 51 minutes of 75 on every push to the branch. Keep it on every push, or gate it (e.g.
+   `workflow_dispatch` or a path filter) now that it has answered?
+
+**Next.** 1. R's fallback on the simulator (-140 decision 3): the timing above puts R's 1,180 cases far past any job
+(the ratio ~11), so the first 12 cases of each profile. 2. The planted error across all groups (-139 decision 1).
