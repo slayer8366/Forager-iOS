@@ -5519,3 +5519,17 @@ gets measured and reported to you."
 - `StackOverflowCatch`'s JVM catch and the depth counter are kept or removed by what the rewrite leaves reachable; each
   is named in the report.
 **Notes:** Written by the planner session by hand. Next free ID -145.
+
+**Kind:** decision
+**ID:** 2026-10-28-145
+**Timestamp:** 2026-11-12T13:18:47Z
+**Continues:** 2026-10-28-144
+**Title:** The recursive walk is kept on a branch of its own (owner)
+**Decision:** the owner said, verbatim: "Keep the old code safe on a separate branch".
+**Done by the planner:** the branch `brouter-port-5b-recursive-walk` on slayer8366/Forager-iOS, at `3d5bd11`, the last
+commit of `brouter-port-5b` before session 52's work. `git ls-remote` reads it at that commit [R]. It holds the port
+with the recursive `minVisitIdInSubtree`, the depth counter, and the stack ladder that ends the process at 1 MB (-143).
+- Nothing builds on that branch and nothing is pushed to it again. It is never merged or deleted without the owner's
+  word.
+- `brouter-port-5b` goes on from the same commit with the rewrite.
+**Notes:** Written by the planner session by hand. Next free ID -146.
