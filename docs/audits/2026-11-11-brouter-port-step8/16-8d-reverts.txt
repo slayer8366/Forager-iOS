@@ -45,3 +45,29 @@ rv24 the public route dropping the caller's cancel: "= route(request, cancel, Ms
   gap, not a bite: the public route's cancel is not covered by RouteTest.
 
 OBSERVED:
+All nine on the port at 9bf13a8 (predictions pushed in 536d1e1, before the first run). Every run: the edit applied once
+(one - and one + line in its diff), 0 "e: " lines, compileKotlinJvm executed, 1 fresh XML, tests 4, errors 0; gradle
+4 s each; restored cmp equal to the runner's copy and to a copy taken before rv16.
+
+rv16 (heights in metres): failures 1, f0RoutesThroughRouteAsThroughTheOracle, "F0-inside-across-the-degree-line: heights
+  digest" (the two digests differ). HELD.
+rv17 (heights shifted by one node): failures 0. NOT HELD: the test passes on the shifted heights.
+  Why, by a scratch count (a test file written, run once and deleted, never committed; counts only): on both F0 routes
+  every node's sElev is Short.MIN_VALUE, BRouter's "no height": F0-inside-across-the-degree-line 226 of 226 nodes,
+  F0-inside-long 306 of 306; 1 distinct value; 0 changes between neighbours. A shift of a constant array is the same
+  array. rv16 bit only because MIN_VALUE / 4 rounded is not MIN_VALUE, not because any height was compared.
+  So F0's heights digest holds only "every node has no height": RouteTest does not cover a real height through route().
+  The plan's guess ("F0's tile is hill country") was wrong, and §9.6's "not covered: a missing height (no fixture tile
+  without heights in F0)" has it the wrong way round: F0 has no heights at all; what is not covered is a present height.
+rv18 (the cancel not forwarded): failures 1, aTerminateBeforeTheRunFailsAsTheOracle, "F0-inside-across-the-degree-line:
+  Failed" (a Found). HELD.
+rv19 (isTerminated constant true): failures 1, theCancelReportsItsFlag, "before terminate()". HELD.
+rv20 (iLat read from getILon): failures 1, test 1, "F0-inside-across-the-degree-line: node digest". HELD.
+rv21 (distance from the cost): failures 1, test 1, "F0-inside-across-the-degree-line: distance" (expected 5047, was
+  5302). HELD.
+rv22 (the track read with the message set): failures 1, test 3, "F0-inside-across-the-degree-line: Failed". HELD.
+rv23 (the public route not reaching the engine): failures 1, f0ThroughThePublicRouteIsRecorded,
+  "F0-inside-across-the-degree-line: Found". HELD.
+rv24 (the public route dropping the caller's cancel): failures 0, as predicted: a gap, not a bite. HELD as a gap.
+RESULT: 7 of 9 bite as predicted; rv24 passes as predicted (the public route's cancel is not covered); rv17 passes
+against the prediction, because F0's routes carry no height at all (a false premise in §9.6, for the planner).
