@@ -1,0 +1,27 @@
+Step 8, session 36: the coverage read of OsmPath.java:282-283 and :350 (RECORD -94, -97; the step 8 report §9.5), on R6
+(the oracle under JaCoCo's pinned agent, E3's regime) over the cases the port is compared on: F0's two cases (RouteTest,
+RoutingEngineF0Test) and R's cases on its 20 StdModel profiles (RoutingEngineRTest compares the port's outcome there; on
+the six `---model:` profiles the port is held only to its refusal, so they are left out of this read).
+
+Runner (scratch, never committed): a test in the e3Strata package, run by `e3Strata` on the pinned Temurin 21.0.13+9
+(tools/fetch-temurin.sh into the session's scratch directory): one R6 JVM per case (E3Stability.launch, as E3Stability
+and E3CoverageTest do), E3Coverage.read on the two spans, per case; counted per line: cases where the line has at least
+one instruction executed (E3Coverage's rule for "covered"), and the instructions. The test file is deleted after.
+
+The lines (BRouter 1.7.10, third_party/brouter/src/main/java/btools/router/OsmPath.java, as the oracle jar is built):
+- :282-283, the start direction: inside `if (rc.startDirectionValid)` (:279), inside `if (isStartpoint)`.
+- :350, `if (refTrack != null && refTrack.containsNode(targetNode) && refTrack.containsNode(sourceNode))`, inside
+  `if (transferNode == null)`.
+
+EXPECTED (written before the run):
+- :282 and :283: not covered on any case. startDirectionValid is set only from a heading or direction parameter, and
+  Forager passes neither (the port's setParams refuses both); not a guess for R, whose cases are built with Forager's
+  calls.
+- :350: COVERED on every routed case, but partly: the `refTrack != null` test is on the line and runs for every link
+  reached with no transfer node, so JaCoCo counts some of the line's instructions; `refTrack.containsNode` is not reached
+  when refTrack is null, which I expect it to be with alternativeidx=0 (a guess: I have not read where refTrack is set
+  in RoutingEngine.java beyond this). So the line reads "covered" by E3Coverage's rule, with covered instructions fewer
+  than the line's total. If so, §9.5's "both should read not covered" is right about the branch and wrong about the
+  line as the reader reads lines; that is reported, not settled here.
+
+OBSERVED:

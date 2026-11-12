@@ -1,0 +1,22 @@
+Step 8, session 36: RECORD -42's way getters and the node's getInitialcost, counted on one run of RoutingEngineRTest
+(RECORD -128, decision 3: a scratch counting patch, never committed; no JaCoCo on the port).
+
+The patch (scratch, applied by a script, removed after; never committed): every one of BExpressionContextWay's 20 named
+getters and BExpressionContextNode.getInitialcost increments its own counter (a LongArray in a scratch internal object),
+and RoutingEngineRTest writes the 21 counts to a file before its final assertion. -42 names 19 of the 20 way getters
+as never called by a test; all 20 are counted, so the 19 are among them whichever one -42 left out.
+
+EXPECTED (written before the run): RTest's port runs only (the oracle is Java's and is not counted).
+- Reached (count > 0): every way getter that has a call site in the port's commonMain: getCostfactor (OsmPath, StdPath),
+  getTurncost, getUphillCostfactor, getDownhillCostfactor, getInitialcost, getNodeAccessGranted, getPriorityClassifier,
+  getUphillcost, getDownhillcost, getUphillcutoff, getDownhillcutoff, getUphillmaxslope, getDownhillmaxslope,
+  getUphillmaxslopecost, getDownhillmaxslopecost (StdPath), getIsTrafficBackbone, getInitialClassifier,
+  getClassifierMask (OsmPath), getMaxspeed (StdPath.computeKinematic, detail mode only: a guess that R's routes reach the
+  detail pass, which every found track's recompute should); the node's getInitialcost (StdPath).
+- Not reached (0): getTrafficSourceDensity. `grep -rn 'getTrafficSourceDensity()' brouter/src/commonMain` finds only its
+  declaration, and BRouter 1.7.10's sources call it nowhere (grep over third_party/brouter/src/main/java: the
+  declaration only). Not a gap in the port: Java does not call it either.
+- RTest's own result unchanged: 1534 cases, 0 mismatches (the counters change no value).
+- The tree cmp-equal to its saved copies after.
+
+OBSERVED:

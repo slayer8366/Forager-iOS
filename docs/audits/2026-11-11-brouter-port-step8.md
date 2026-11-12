@@ -76,7 +76,8 @@ other public method of the engine finds none [C]. Its profile is `hiking-mountai
 | 2392-2394 | `getLinksProcessed` | 8c | E3's FK 11 reads it |
 | 2412-2414, 2428-2430 | `getFoundTrack`, `getErrorMessage` | 8a | |
 | 2432-2438 | `terminate`, `isTerminated` | 8c | |
-| (none) | `route()` and `checkDataFile` over the engine (`Route.kt`) | 8d | `RouteOutcome.Found` has no heights yet; -111 adds them, so 8d changes the public surface [R: `Route.kt:39-43`] |
+| (none) | `route()` over the engine (`Route.kt`) | 8d | `RouteOutcome.Found` has no heights yet; -111 adds them, so 8d changes the public surface [R: `Route.kt:39-43`] |
+| (none) | `checkDataFile` (`Route.kt`) | 5a (corrected in place, RECORD -128 decision 4: this row first read 8d) | ported and tested at step 5a, by `CheckDataFileTest` and `FileFailureKindsTest`; it reaches `PhysicalFile`'s constructor, not the engine; 8d owes nothing for it (§9.3) |
 
 **Counts** [C, from the ranges above]: via points 39 + 169 + 216 = 424 lines in `RoutingEngine`, plus `getFromDetourMap`'s 5
 in `OsmTrack`, which step 7 ported: -24's 429.
