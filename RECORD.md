@@ -4795,3 +4795,40 @@ catches that error is the two tests on a driven clock, which have no oracle besi
    (-125); the dirty track, until 2 is answered; nothing in 8c runs on iOS beyond compiling.
 4. **Next: 8d.**
 **Notes:** Written by the planner session by hand. Next free ID -128.
+
+**Kind:** outcome
+**ID:** 2026-10-28-128
+**Timestamp:** 2026-11-12T03:25:00Z
+**Continues:** 2026-10-28-42, 2026-10-28-90, 2026-10-28-111, 2026-10-28-122, 2026-10-28-127
+**Title:** Step 8d begun: Plumb's session 35, the survey, the plan and 4 red tests; the dirty track is not read by
+Forager; heights stay raw in `Found`; the planner's rulings
+**Observed:** Plumb Ledger, session 35, `brouter-port-5b` `94db5d1` to `9e0c17f` (fast-forward only; ended at 157,585 by
+the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- §9 of the step 8 report: 8d's survey and test plan, written and corrected before any code.
+- `RouteTest` (`1b7b688`), red on purpose: 4 tests, 4 `NotImplementedError`. `RouteOutcome.Found` gains
+  `sElev: ShortArray`; an internal `route` takes the libm.
+- The port is left for session 36.
+**Checked by the planner:**
+- `git ls-remote` `9e0c17f`, a fast-forward of `94db5d1`; 5 commits, one trailer each, no model name; E1 over the range: 0.
+- Code changed: `Route.kt` (the new field, the internal overload as a stub) and the new `RouteTest`. No existing test
+  changed.
+- **The dirty track** [R]: Forager returns the failure as soon as `getErrorMessage()` is not null and reads
+  `getFoundTrack()` only otherwise (`BRouterTrailRouter.kt:133-139` at Forager `947f1be2`); no `.kt` file under `app`
+  names `getFoundRawTrack`, `foundRawTrack`, `rawTrackPath` or `readBinary`.
+- **Heights in Forager** [R]: `heightMetresOf(selev)` is `null` for `Short.MIN_VALUE`, else `selev / 4.0`
+  (`BRouterTrailRouter.kt:219`, `:228`), read from each node's `getSElev()`.
+- **CI on `1b7b688`** (run 43138707152): `jvm` 179 tests, 6 failed: `RouteTest`'s 4 red on purpose and
+  `CollectOutreachersTest`'s 2; 0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7
+  of 7, the gate "OK". The caught-overflow line: 4 prints.
+**Decisions (the planner's, technical):**
+1. **The dirty track is ported and not covered** (-127, decision 2). Nothing on Forager's path reads it; no test is owed.
+2. **Plumb's question 1: `Found` carries Java's raw `sElev`,** quarter metres, `Short.MIN_VALUE` for no height. `Found`
+   already carries raw `iLat` and `iLon`, and Forager's Android adapter does all three conversions. The iOS adapter will
+   use Forager's rule as read above. This is the owner's -111 ruling in code (-122), not a new shape.
+3. **Plumb's question 2: no JaCoCo on the port's tests.** -42's 19 getters are shown by a scratch counting patch, never
+   committed: a counter in each, one run of R, the counts reported. A getter at 0 is named as not reached.
+4. **Plumb's question 3: nothing more of `checkDataFile`.** It was ported and tested at 5a; §1's row is corrected in
+   place to say so.
+5. **Next:** session 36 ports 8d, runs its reverts, the getter counts and the coverage read of `OsmPath.java:282-283`
+   and `:350`.
+**Notes:** Written by the planner session by hand. Next free ID -129.
