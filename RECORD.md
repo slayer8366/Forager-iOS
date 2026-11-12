@@ -6017,3 +6017,30 @@ known. It gives an order and counts and no dates. It says of itself that the rec
 **Read as:** two instructions. The plan is filed, and it reaches `main` with the record's PR, on the owner's word. And
 the BRouter port's remaining items come before any app phase is dispatched: the map spike (-157) waits behind them.
 **Notes:** Written by the planner session by hand. Next free ID -159.
+
+**Kind:** outcome
+**ID:** 2026-10-28-159
+**Timestamp:** 2026-11-12T23:49:10Z
+**Continues:** 2026-10-28-158
+**Title:** The planner's handoff at the session's limit (owner: "Go ahead and wrap it up")
+**State, for the next planner session:**
+- **The record** is this branch, `ccr-7e682f25-4tqqon`, at this commit; `main`'s record ends at -102. Next free ID -160.
+  The plan is `docs/plans/2026-11-12-app-port-plan.md`; its part one lists the BRouter port's eight remaining items.
+- **The code** is `brouter-port-5b`. At this writing its head is `69ffcd1` (session 59's diagnostic test). The last head
+  the planner read whole in CI is `f33e8a1` (run 43319416821): `jvm` 238 tests, 0 failures; `jvm-production` green;
+  `ios-memory` green; **`ios-smoke` red on purpose,** 1 of 51, `FormatDigestsCommonTest` (-156).
+- **Running and unread:** Plumb's session 59, a diagnosis only, and run 43329465498 on `69ffcd1`. Its findings are to
+  land in `docs/audits/2026-11-12-brouter-port-step10/s59-gpx-numbers.md`. **Nothing of it is checked.** If the session
+  was lost with this one, the diagnostic test is on the branch and the run's `ios-smoke` and `jvm` logs hold its
+  `gpxnum` lines to compare.
+- **Next, in order:** read session 59's result; bring the owner the decision on printing a double as Java does (-156;
+  no JDK code is copied, -119); the fix, with the digest test as its red test; then the plan's items 3 to 6.
+- **Kept, not to be touched:** `brouter-port-5b-recursive-walk` (-145); `research/app-port-survey`;
+  `research/own-map-renderer`, partial and set aside (-157).
+- **Waiting on the owner's word:** the merge of `brouter-port-5b` into `brouter-port`; this branch's PR to `main`; an
+  independent reviewer for -107, -116, -119, -126 and -148.
+- **How the planner works here:** coders on Opus as background agents in `/home/user/forager-ios-5a`; every claim
+  checked against `git ls-remote` and CI; the E1 scan as `scan.sh <commit>^ <commit>`, never with a diff piped in
+  (-133); a ruling is quoted from its entry, read in the same turn (-135); briefs name files and line ranges and give
+  one item (-131, -149).
+**Notes:** Written by the planner session by hand. Next free ID -160.
