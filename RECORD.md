@@ -4751,3 +4751,47 @@ the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@
 4. **Not covered:** `catch (Error)` on Kotlin/Native, where an out-of-memory normally ends the process. Step 10.
 5. **Next:** session 34 does 1 and 2, applies the patch, runs 8c's two reverts.
 **Notes:** Written by the planner session by hand. Next free ID -127.
+
+**Kind:** outcome
+**ID:** 2026-10-28-127
+**Timestamp:** 2026-11-12T01:50:00Z
+**Continues:** 2026-10-28-90, 2026-10-28-126
+**Title:** Step 8c closed on the JVM: Plumb's session 34, the port in the tree, 9 of 9 stop tests passing, two reverts
+caught; FK9 weakened by -126's change, named; the planner's rulings
+**Observed:** Plumb Ledger, session 34, `brouter-port-5b` `486588d` to `94db5d1` (fast-forward only; ended at 141,180 by
+the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **In -126's order:** the CI limit (`3840315`); the oracle alone at 1 ms on FK9's cases names `target-island-check` 10
+  of 10 (`47dcb5d`) [R, Plumb's]; the comparison change with the port out of the tree, red 9 of 9 over the stubs
+  (`af875c6`); the patch applied unchanged, 9 of 9 passing (`1d1488b`).
+- **Revert (a), `terminated` written but not read** (prediction `fa3a76c`): FK10, FK11 and the watchdog test fail, the
+  7 route groups pass. Held [R, Plumb's].
+- **Revert (b), the time limit's comparison flipped** (prediction in `42c6913`, result `d398b39`): the stopped-clock and
+  injected-clock tests fail, as predicted; one predicted message was wrong (the port said "re-tracking", since
+  re-tracking resets the clock, `RoutingEngine.java:1797`). **FK9 passes under this revert** [R, Plumb's].
+**Checked by the planner:**
+- `git ls-remote` `94db5d1`, a fast-forward of `486588d`; 8 commits, one trailer each, no model name; E1 over the range: 0.
+- **The CI change is the one line** (`timeout-minutes: 30` to `60`).
+- **The test change is what -126 allowed and no more:** the one expected text, the one pattern, and the class comment
+  that describes them. The oracle-only evidence and the change both precede the port's commit.
+- **The tree's port equals the patch** session 33 held back, line for line.
+- **The port against the Java, line by line:** the loop head (`:1975-1984`, without the third), the dirty track on a
+  timeout (`:1748-1760`), the clock's reset before re-tracking (`:1797`), `terminate`, `isTerminated`, `cleanOnOOM`, and
+  `doRun`'s three catches (`:318-326`). The same statements in the same order; the log lines are left out.
+- **CI on `1d1488b`** (run 43128205990): `jvm` 175 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; the test
+  step ran 28 minutes and "iOS klibs" was reached, both `compileKotlinIos*`; FK9, FK10 and FK11 print 0 mismatches of 10
+  each, FK11's link counts equal on all 10; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The
+  caught-overflow line: 4 prints. The three later runs were in progress at this reading.
+**A cost of -126's ruling, the planner's own:** widening FK9's pattern made FK9 blind to a time limit that strikes at
+once. Before the change its pattern would have refused "target-island-check"; now a flipped limit passes it. What still
+catches that error is the two tests on a driven clock, which have no oracle beside them. In CI both engines answered
+"pass0" on 20 of 20, so the widening was not needed for that run; it was needed for a slow machine.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: FK9 is not changed again.** A guard would be a second comparison change after a result. The
+   weakening is named here and goes to the independent reviewer with -126.
+2. **Plumb's question 2: the dirty track on a timeout is settled in 8d.** Session 35 first shows whether anything on
+   Forager's path reads `foundRawTrack` after a failed run. If something does, a test on a driven clock that strikes in
+   pass1 is owed. If nothing does, it is recorded as ported and not covered.
+3. **8c is closed on the JVM.** Not covered: `catch (Error)` on Kotlin/Native (-126); the third of the limit, left out
+   (-125); the dirty track, until 2 is answered; nothing in 8c runs on iOS beyond compiling.
+4. **Next: 8d.**
+**Notes:** Written by the planner session by hand. Next free ID -128.
