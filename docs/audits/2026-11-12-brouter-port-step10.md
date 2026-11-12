@@ -577,3 +577,41 @@ assertion as in `RoutingEngineStopTest`, through the existing `EngineClock` seam
 **`catch (Error)` on Native (RECORD -126):** no new seam was needed: the clock is read inside `doRun`, so the Error test
 throws from inside the run. If it passes on the simulator, the engine's `catch (e: Error)` catches a `kotlin.Error` on
 Native and terminates with its `toString()`.
+
+### D. CI, run 43277598212 on `4e311ce` (all four jobs green)
+
+- **`jvm`: TOTAL tests 234, failures 0, errors 0, skipped 0, in 102 files; no FAILED line; 0 ` e: `.** `CollectOutreachersTest`
+  prints `canEscape false/true 1616/5558`, as locally; `EngineStopCommonTest` 4 of 4. 230 plus the four new tests. The
+  planner reads it before anyone calls it the first fully passing JVM run since 5b.
+- `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran (in `jvm`); `ios-smoke` also ran
+  `compileTestKotlinIosSimulatorArm64`.
+- **`ios-smoke`: simulator TOTAL tests 50, failures 0, in 25 files; `EngineStopCommonTest` tests 4, failures 0
+  (simulator-checked);** arm64 JVM step 7 of 7, "OK: all 2 classes ran"; 0 ` e: `. The Error test's line on the simulator:
+  `kind ...EngineStopCommonTest.ClockError: the clock failed (87 chars)|0|0|0|terminated true`. **So a `kotlin.Error`
+  thrown inside the run is caught by the engine's `catch (e: Error)` on Native, which terminates and keeps its
+  `toString()` (simulator-checked; RECORD -126's open question).** Native's `toString()` names the class with a `.`
+  where the JVM writes `$`; the assertion compares it with the same platform's `toString()`, so it holds on both.
+- **`ios-memory`:** MP64 59 of 59, ML5 59 of 59, PM5 55 of 55 equal on all six fields and the tuple digest (173); R 240
+  of 240, 20 of 20 profiles; the ladder 20 survived (each line appears twice in the log, stdout and the XML); deepest
+  5,679 as before; 0 ` e: ` (simulator-checked).
+- **`jvm-production`:** every group equal, 0 differing (F0 2, R 1,180, DL-lat 59, DL-lon 59, MP64 59, ML5 59, PM5 55, NT
+  59); 1 of 1.
+- **E1 on the simulator logs**, timestamps cut: `grep -E 'step10 |ladder' | grep -cE '[0-9]{1,3}\.[0-9]{5,}'` reads 0 in
+  `ios-smoke` and 0 in `ios-memory`. E1 scan on each staged diff before its commit: 0, 0, 0.
+
+### Handoff
+
+- [R] `CollectOutreachersTest` 2 of 2, JVM total 0 failures, locally and in CI; `EngineStopCommonTest` 4 of 4 on the
+  JVM and on the simulator (simulator-checked); memory, R, ladder and production counts unchanged.
+- [I] That routing's "false" answers come from nodes an earlier collection vanished (A1.5): reasoned from the code, not
+  counted per round in a routing run. The test now shows the mechanism on the oracle; it does not show that it is the
+  only source in routing (an island loaded whole is the other).
+- [?] The ruling asked for a *region*; what was added is a second *state* of the existing regions (A1.4: no region or
+  destination can give "false" with the test's first round as written). The assertion and the regions are unchanged.
+  The planner may want to rule whether this carries out -147, decision 2.
+- **Questions:** (1) Is the second collection accepted as -147's "region where the oracle answers false"? (2)
+  `forager30sLimitOnAStoppedClock...` could be mirrored against F0's stored row in place of a live oracle run; that
+  changes its reference, so it was not done: wanted?
+- **Next:** (1) the planted error across the simulator's groups; (2) number formatting on Native (the common tests pass
+  ends as text to avoid it); (3) a revert check that the `F` lines bite (a one-line change to the port's `canEscape`
+  false branch, predicted to fail the destination test), not run here.
