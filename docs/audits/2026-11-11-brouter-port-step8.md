@@ -608,3 +608,47 @@ cancel past the engine's build; FK11 covers the engine's side in `RoutingEngineS
 case through `route()` (a file cut below its header; Forager's `RDF` refuses it before the engine, so it is off its path);
 the constructor's exception passing through (both engines throw from the constructor, `RE:133`; a test on a broken
 profile comparing the two thrown messages is owed, not in this session's red set); any of it on iOS (step 10).
+
+## 10. Session 35
+
+Plumb Ledger, session 35, `brouter-port-5b` `94db5d1` to the head that carries this section (fast-forward only; `git
+ls-remote` read `94db5d1` at the start and before the push). Trailer on every commit `Co-Authored-By: Claude
+<noreply@anthropic.com>`. E1 scan on the staged code diff: 0, no hit to fix.
+
+**Done:**
+1. **The dirty track** (§9.1, -127 decision 2): nothing on Forager's path reads it. **Ported and not covered**; no test owed.
+2. **§9, the survey** (`312858a`, corrected in `ec7bc6e` before any code: the constructor throws on both sides, not "the
+   oracle logs it"; the height sentinel's source is Forager's KDoc, not a BRouter file I read).
+3. **§9.6, the test plan**, then **the red tests** (`1b7b688`): `RouteTest`, 4 tests; `Route.kt` gains `Found.sElev:
+   ShortArray` (last parameter) and an `internal route(request, cancel, libm)` stub. Over the stubs: `tests 4, failures 4`,
+   0 ` e: `, fresh XML (1 of 1 newer than the stamp). Each failure a `NotImplementedError`: the internal `route`
+   ("step 8d: route with a libm", `RouteTest.kt:43`), the public `route` (`:60`), `RouteCancel.terminate` (`:74`, `:89`).
+   The public `route` and `terminate` stubs share one text ("item I step 8"); the line tells them apart. None fails on an
+   assertion: every test reaches a stub first.
+4. **Full fresh `:brouter:jvmTest --rerun-tasks`** before the push: 82 of 82 XML newer than the stamp, 0 ` e: `, `TOTAL:
+   tests 179, failures 6` (RouteTest 4, `CollectOutreachersTest` 2 of 2, -61, not touched); 2 caught-overflow lines (log
+   and XML alike); BUILD in 31m 39s. No other test newly failing.
+5. **The port: not done.** The session passed 120k before item 5. Left for session 36.
+
+**[I]/[?]:**
+- [I] "Nothing reads the raw track": `grep -rn 'getFoundRawTrack\|foundRawTrack\|rawTrackPath\|readBinary\|writeBinary'
+  --include=*.kt .` over Forager outside `third_party/`: no line; `grep -rn 'getFoundRawTrack' --include=*.java` over
+  Forager: `RoutingEngine.java` only.
+- [I] "No `storageconfig.txt` on Forager's path": Forager's `RegionRouteFetchTest.kt:197-206` asserts it; `grep -rn
+  storageconfig` over Forager's `.kt/.java/.kts` outside `third_party/` gives that test's line only.
+- [?] The caught-overflow count is 2 in this local full run, against 4 in session 34's local run and in CI. Not touched.
+- [?] `f0ThroughThePublicRouteIsRecorded` asserts only `Found` with 2 or more nodes; its oracle equality is printed. It
+  would pass identically on a port that routes wrongly; named as weak in the plan, by -24's rule.
+- [?] A terminate landing mid-run, through `RouteCancel`, has no test (§9.6).
+
+**Questions for the planner:**
+1. `Found.sElev` as Java's raw `ShortArray` (`Short.MIN_VALUE` for none), with Forager's `heightMetresOf` left in the
+   adapter, or heights in metres with `null` in the port (§9.4)? The red tests hold the first.
+2. -42's getters: showing the port's call sites execute needs JaCoCo on the port's `jvmTest`, a build change (§9.5).
+3. `checkDataFile`: §1 puts it in 8d, but it was ported and tested at 5a (§9.3). Is anything more wanted of it?
+
+**Next:**
+1. Session 36: the port of the three stubs and the internal `route`, from §9.3, then `RouteTest` 4 of 4.
+2. A revert per test from §9.6, each prediction pushed first.
+3. The coverage read of `OsmPath.java:282-283` and `:350` on R6 (§9.5).
+4. The planner's answers to questions 1-3.
