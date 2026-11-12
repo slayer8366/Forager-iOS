@@ -5,6 +5,8 @@ name: brouter
 
 on:
   push:
+    paths-ignore:
+      - 'docs/**'
   pull_request:
 
 permissions:
