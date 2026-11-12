@@ -332,7 +332,7 @@ Simulator-to-JVM ratios seen on the same path: DL-lat 198/20 and DL-lon 64/7 (se
 the runner's extra draws (PM5 needs 1,180) and a second test task. With the present 18 minutes, **about 59 minutes (52 to
 64), past the job's 45**; the prompt's line was 40.
 
-**3. CI.** See "CI read" below (filled after the push of this section).
+**3. CI.** Run 43192349936 on `20d5fcc` (the counter and this section) was in progress at the planner's handoff call: **not read**. No memory step ran: none was pushed.
 
 **E1.** No position committed, printed or uploaded. The new constants are ids, kinds, Ints and digests; the case files
 are written at run time under `brouter/build/step10/` (locally too, never read or printed); tests print ids, counts,
