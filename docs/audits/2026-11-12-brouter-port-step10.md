@@ -138,3 +138,91 @@ simulator. [?] cost on iOS. [?] the stack depth on the simulator's thread.
 simulator, for memory and time; (3) the owner's ruling on decision 5, then the case list.
 
 **Stops hit.** None of the listed stops. The false premise (six fields through `route()`) is reported above.
+
+## §2 Sessions 46 and 47 (Plumb Ledger, 2026-11-12): F0 on six fields; NT, LB and CR on the simulator
+
+On `brouter-port-5b` from `a4b3ce1`, branch `s46` pushed fast-forward. Every iOS result here is **simulator-checked**
+(`ios-smoke`, `macos-26`, iosSimulatorArm64). Evidence: `2026-11-12-brouter-port-step10/ios-smoke-run5..7-*.txt` (grep
+extracts of each `ios-smoke` log, timestamps cut). Session 46 ended at the handoff call with the NT work uncommitted in the
+tree; session 47 checked it, committed it and read CI. Marks as above.
+
+**Session 46: F0 through the engine, six fields (RECORD -138, decision 1).**
+1. `938b14f`: `EngineRun` (commonTest) drives `RoutingEngine` as jvmTest's `RoutingEngineF0Test.port` does, on `MsunLibm`,
+   and computes the tuple digest in common code (FNV-1a over `kind|nodes|cost|distance|nodeDigest|heightsDigest`, as
+   `E3Expected.row`). `F0EngineCommonTest` holds F0's two rows on all six fields and the stored tuple digest;
+   `Step10CommonDigestTest` (jvmTest) holds the common digest to the stored one on F0's rows by name and on all 2,126 rows.
+   `Found` unchanged; `F0RouteCommonTest` stays at five fields.
+2. **The planted error** (the test has no stub to be red over): `4dc33ec` changed `OsmTrack.appendTrack`'s
+   `cost += t.cost` to `cost += t.cost + 1`. Prediction, written in that commit before any run: four mismatches, both rows'
+   cost and tupleDigest (port 5303 and 7406), every other field equal, `F0RouteCommonTest` passing. JVM, locally: exactly
+   those four. Simulator, run 43175838279 (read by the planner, not re-read here): `ios-smoke` 27 tests, 1 failure,
+   `F0EngineCommonTest`, the port's cost 7406 against 7405, the other fields equal. `9bac0fc` restored the line from a
+   copy saved before the plant, equal to `938b14f`.
+3. **CI on `9bac0fc`** (run 43176688650): simulator **27 of 27**; `F0EngineCommonTest` 1 test, 0 failures, printing
+   `F0-inside-across-the-degree-line` route|226|5302|5047|9ca48d05a90f4dcd|afc27854ee968af5 tuple e5aadbeff215a44e and
+   `F0-inside-long` route|306|7405|6713|7d242f8dd2c428b4|4f6849ea59b5f775 tuple 177bcede53dc1beb, each equal to its
+   expected (kind|nodes|cost|distance|nodeDigest|heightsDigest). arm64 7 of 7, "OK: all 2 classes ran". `ios-smoke` 5m27s.
+   **F0 on all six fields and the tuple digest: simulator-checked.**
+
+**Session 46 (written), 47 (checked, committed): NT (decision 2), `a557b58`.**
+- `NtCasesWriteTest` (jvmTest, gated on `BROUTER_STEP10_NT_CASES`, unset in the `jvm` job): NT's draws as
+  `RoutingEngineStep9Test`'s (`NTGenerator`, seed 20261205, `E3Targeted.PROFILE`, within `E3Targeted.CAP`), no oracle run;
+  the cases with a stored id are written, one line each (id, profile, memory class, the four ends as the JVM's
+  `Double.toString`), to `brouter/build/step10/nt-cases.tsv`.
+- `NtEngineCommonTest` (commonTest): reads that file, routes each case through `EngineRun`, and holds it to its row of
+  `NtExpected` on six fields and the tuple digest; a case with no stored id is counted, not failed; all 59 ids must appear.
+- `NtExpected` (commonTest): NT's 59 rows; `Step10CommonDigestTest` holds it equal to the tsv's NT rows on the JVM.
+- `ios-smoke`: one step before the simulator step (the writer on the runner's JVM, `-x msunReference` as the arm64 step)
+  and one variable, `SIMCTL_CHILD_BROUTER_STEP10_NT_CASES`; nothing removed. The diff's one deleted line is the comment
+  above the variables, extended. No build change, no new dependency.
+- Checked before the commit: the E1 scan on the staged diff 0; `NtExpected` has no decimal (`grep -cE '[0-9]+\.[0-9]+'`
+  0), and by type a row cannot hold an end (id `String`, kind `String`, nodes/cost/distance `Int`, three hex digests);
+  every `println` and message in both tests carries ids, counts, paths, field names or tuple digests only. JVM locally:
+  the writer 59 of 59 stored ids within 89 draws; the common test 59 of 59 equal; with the variable unset both print one
+  line and do nothing.
+- **CI on `a557b58`** (run 43177102690): the arm64 JVM's writer **59 of 59 stored ids within 89 draws** (as on x86_64
+  locally: same count, same draw count); simulator **28 of 28**; `NtEngineCommonTest` **59 of 59 stored ids, 0 not
+  stored, 59 equal on all six fields and the tuple digest, 0 mismatches, 0 missing**, 111 s. arm64 7 of 7, OK.
+  `ios-smoke` 6m48s. `jvm`: 203 tests, 2 failed, both `CollectOutreachersTest` (-61); ` e: ` 0; `compileKotlinIosArm64`
+  and `compileKotlinIosSimulatorArm64` BUILD SUCCESSFUL. `jvm-production`: 19 groups, R 1,180 of 1,180, success.
+  **NT: simulator-checked.**
+
+**Session 47: LB and CR, `314b77c`.**
+- `LbExpected`, `CrExpected`: 59 rows each (all `exact`), generated from the tsv; held to it by `Step10CommonDigestTest`.
+- `NtCasesWriteTest` extended: LB (`LBGenerator`, seed 20261207, `E3Targeted.PROFILE`) and CR (`RGenerator`, seed
+  20261206, `trekking-crossing`, memory class 64), as `RoutingEngineStep9Test`, written to `lb-cases.tsv` and
+  `cr-cases.tsv` beside the NT file. CR's profile is not among the oracle's, so `E3Profiles.crossing()` (the pinned
+  `trekking.brf` with E4's assigns, no position) is written with the oracle's `lookups.dat` into `step10/profiles2/`.
+- `NtEngineCommonTest`'s check moved into `Step10Cases`, unchanged but for the group's name, its rows and the profiles
+  folder; `LbEngineCommonTest` and `CrEngineCommonTest` use it. The files lie beside the NT file, so **no CI change**.
+- JVM locally: writer NT 59/59 (89 draws), LB 59/59 (99), CR 59/59 (83); each common test 59 of 59 equal.
+- **CI on `314b77c`** (run 43178576702): writer on the arm64 JVM NT 59 of 59 (89 draws), **LB 59 of 59 (99), CR 59 of
+  59 (83)**; simulator **30 of 30**; `LbEngineCommonTest` **59 of 59 equal** (34 s), `CrEngineCommonTest` **59 of 59
+  equal** (115 s), NT 59 of 59 (123 s); 0 not stored, 0 mismatches, 0 missing in each. arm64 7 of 7, OK. `ios-smoke`
+  9m59s. `jvm`: 207 tests, 2 failed, both `CollectOutreachersTest` (-61); ` e: ` 0; both `compileKotlinIos*` BUILD
+  SUCCESSFUL. `jvm-production`: 19 groups, R 1,180 of 1,180, success. **LB and CR: simulator-checked.**
+
+**How E1 was kept.** Committed: only rows of ids, Ints and digests (scan 0 on each staged diff). Case files: under
+`brouter/build/step10/`, outside `test-results/`, the only folder `ios-smoke` uploads or prints; `build/` is git-ignored.
+Printed: ids, counts and paths. **The check on the log**, per run, on the `ios-smoke` job log fetched with
+`gh api repos/slayer8366/Forager-iOS/actions/jobs/<job>/logs`, its leading BOM and timestamps cut
+(`sed -E 's/^\xEF\xBB\xBF//; s/^[0-9T:.-]+Z //'`, since every raw timestamp matches the pattern):
+`sed -n '<write step>p' log | grep -cE '[0-9]{1,3}\.[0-9]{5,}'` and `grep 'step10 ' log | grep -cE '[0-9]{1,3}\.[0-9]{5,}'`.
+On `a557b58`: write step (lines 351-427) 0, the 9 `step10` lines 0. On `314b77c`: write step (lines 351-430) 0, the 13 `step10` lines 0.
+The whole cut log: one hit, `FloatTextCommonTest`'s literal list (an existing test's constants, not a position).
+
+**[I]/[?].** [I] That the arm64 JVM draws what x86_64 drew is shown for these three generators by the counts and by every
+case matching its stored row, not in general. [I] No planted error was run for LB or CR; their check is NT's code, which
+the F0 plant showed red on the simulator only through F0's own test. [?] Whether the planner's read of run 43175838279
+also showed F0-inside-across-the-degree-line's 5303 (predicted); the summary handed to me names only 7406. [?] Simulator
+time: the three groups take 4m32s of `ios-smoke`'s 9m59s; the memory groups and R would add more.
+
+**Questions for the planner.** 1. A plant for LB/CR's path (a wrong ownProfiles, or one row's cost off by one in the
+case file at run time), or is NT's shared code with F0's plant enough? 2. Keep growing one writer step (it now runs 3
+generators, 80 s), or split per group when the memory groups come?
+
+**Next.** (1) The memory groups the same way (their memory class is in each line already); (2) R; (3) -61's depth, on its
+own (decision 3).
+
+**Stops hit.** None. No position in any log read, XML or artifact by the check above; no simulator route differing from
+its row; the arm64 JVM drew the same cases; no CI change beyond NT's step and variable.
