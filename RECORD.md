@@ -6000,3 +6000,20 @@ it exists, is left as it is and is not built on.
 - **-153's "Map first" stands as it was ruled,** with the map on MapLibre. The spike the planner held in -155 is no
   longer held: it is dispatched after the BRouter port's present items, as -153 planned.
 **Notes:** Written by the planner session by hand. Next free ID -158.
+
+**Kind:** intent
+**ID:** 2026-10-28-158
+**Timestamp:** 2026-11-12T23:45:08Z
+**Continues:** 2026-10-28-151, 2026-10-28-152, 2026-10-28-153, 2026-10-28-157
+**Title:** The plan for the rest of the port is filed (owner); the BRouter port is finished first
+**Decision:** the owner said, verbatim: "Let's file the plan for the rest of the port in the repo, and finish where we're
+at with the BRouter port."
+**Done by the planner:** `docs/plans/2026-11-12-app-port-plan.md`, on the record's branch. It holds: the rulings that are
+not asked again, each with its entry; part one, the eight items left of the BRouter port, in order, and what the port
+will not have shown when it closes; part two, the app in six phases (the shell and the map; the shared domain; routing
+in the app with the adapter's 12 behaviours; the designer; the remaining screens; what only a phone can show); the 20
+dependencies that are not Kotlin, ranked; the decisions still the owner's and those that are the planner's; what is not
+known. It gives an order and counts and no dates. It says of itself that the record wins where they disagree.
+**Read as:** two instructions. The plan is filed, and it reaches `main` with the record's PR, on the owner's word. And
+the BRouter port's remaining items come before any app phase is dispatched: the map spike (-157) waits behind them.
+**Notes:** Written by the planner session by hand. Next free ID -159.
