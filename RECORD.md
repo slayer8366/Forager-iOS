@@ -5262,3 +5262,52 @@ recorded that `Found` carries no cost.
 3. **-61's depth** is measured after 1 and 2, on its own: it needs a counter in the port and a run that may end the
    process, so it gets its own session and its own CI step.
 **Notes:** Written by the planner session by hand. Next free ID -139.
+
+**Kind:** outcome
+**ID:** 2026-10-28-139
+**Timestamp:** 2026-11-12T08:21:26Z
+**Continues:** 2026-10-28-61, 2026-10-28-138
+**Title:** Step 10, Plumb's sessions 46 and 47: F0 on six fields and NT, LB and CR on the iOS simulator, 179 cases equal
+to their stored rows; a planted error caught there; no position in the log; the planner's rulings
+**Observed:** Plumb Ledger, sessions 46 and 47, `brouter-port-5b` `a4b3ce1` to `852dd5b` (fast-forward only; session 46
+was ended by the harness at 141,274 with NT's work uncommitted in the clone, session 47 took it up and ended at 140,770;
+6 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **F0 through the engine in commonTest** (`938b14f`): `EngineRun` drives `RoutingEngine` with the port's own maths
+  library and computes the tuple digest in common code; a JVM test holds that hash to the stored digest on 2,126 of 2,126
+  rows [R, Plumb's].
+- **A planted error, pushed on purpose and named** (`4dc33ec`, the track's cost one too high; reverted in `9bac0fc`).
+- **NT** (`a557b58`), then **LB and CR** (`314b77c`): the cases are drawn at run time by the macOS runner's JVM into
+  `brouter/build/step10/`, read by the simulator's tests, and held to constants that carry each stored row without its
+  ends.
+**Checked by the planner:**
+- `git ls-remote` `852dd5b`, a fast-forward of `a4b3ce1`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 6. `9bac0fc`'s tree equals `938b14f`'s.
+- The workflow diff: one step before the simulator step and one more variable; nothing removed. No build change.
+- **The planted error on the simulator** (run 43175838279 on `4dc33ec`): 27 tests, 1 failure, `F0EngineCommonTest`; the
+  one line the planner read shows cost 7,406 against 7,405 with the other fields equal. The other case's line was not
+  read.
+- **CI on `314b77c`** (run 43178576702), read by the planner:
+  - `ios-smoke`: simulator **30 of 30**. The runner's arm64 JVM drew 59 of 59 stored ids for each of NT, LB and CR, in
+    89, 99 and 83 draws, the x86_64 counts. On the simulator each group reads "59 of 59 stored ids; equal on all six
+    fields and the tuple digest 59; mismatches 0; missing 0". F0's two cases print equal on six fields and the tuple
+    digest. arm64 7 of 7, the gate "OK". The job took 10 minutes. **Simulator-checked.**
+  - `jvm`: 207 tests, 2 failed, both `CollectOutreachersTest`; each constant equals its 59 rows of `expected-1b.tsv`.
+  - `jvm-production`: 19 groups, as before.
+- **E1 on that `ios-smoke` log** [C], timestamps cut: the pattern reads 0 on the lines the step 10 tests printed and 1 on
+  the whole log, an older test's list of float literals; no tab-separated row of ends is in it. The run's artifacts are
+  the three `test-results` folders; the case files are outside them. The constants' rows, digits masked, hold an id,
+  a kind, three integers and three hex digests.
+**What this shows:** on the simulator, the port as it ships gives the stored route on 179 cases: F0 2, NT 59, LB 59, CR
+59. And the generators draw the same cases on the Mac runner as on Linux, for these three groups.
+**What it does not:** a real iPhone; the memory groups, where the deep recursion runs (-61); DL, FK, F0h and R; speed.
+**Seen on the way, not a finding yet [?]:** NT's 59 cases took 123 s on the simulator against 11 s on the JVM locally
+(Plumb's). The simulator runs a debug test binary, so this says nothing yet about -24's 25% flag.
+**Decisions (the planner's, technical):**
+1. **Pushing a planted port line is allowed on this branch for iOS only,** where a red result can be seen nowhere else:
+   named as planted in its message, reverted in the next commit, the revert shown tree-equal. One more is owed when all
+   the generated groups are in: every group's test must fail under it.
+2. **Next: DL, F0h and FK 1 to 8** on the simulator the same way. Then the memory groups in a simulator step of their
+   own, so that a process ended by the recursion (-61) does not take the other results with it.
+3. **R's 1,180 would not fit the job's 45 minutes** at this speed. E5's fallback of 312 is the plan's answer; it is ruled
+   on when the timing on the simulator is measured, not guessed.
+**Notes:** Written by the planner session by hand. Next free ID -140.
