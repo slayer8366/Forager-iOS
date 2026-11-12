@@ -2,7 +2,12 @@ package com.zynergylabs.forager.brouter
 
 import com.zynergylabs.forager.brouter.codec.DataBuffers
 import com.zynergylabs.forager.brouter.mapaccess.PhysicalFile
+import com.zynergylabs.forager.brouter.router.RoutingContext
+import com.zynergylabs.forager.brouter.router.RoutingEngine
+import com.zynergylabs.forager.brouter.router.RoutingParamCollector
 import com.zynergylabs.forager.brouter.util.LibmSeam
+import com.zynergylabs.forager.brouter.util.MsunLibm
+import kotlin.concurrent.Volatile
 import okio.FileSystem
 import okio.IOException
 import okio.Path
@@ -30,10 +35,29 @@ class RouteRequest(
 
 /** The engine's terminate flag, which a second thread sets (item B, row 7). */
 class RouteCancel {
-    fun terminate(): Unit = TODO("ported with RoutingEngine, item I step 8")
+    // Forager calls terminate() from another thread than the run's (BRouterTrailRouter.kt:166-174 at Forager 947f1be2).
+    // Both fields are volatile: terminate() writes the flag then reads the engine, route() writes the engine then reads
+    // the flag, so at least one of the two forwards Java's terminate() to the engine (step 8 report §9.3).
+    @Volatile
+    private var requested = false
 
+    @Volatile
+    private var engine: RoutingEngine? = null
+
+    /** Java's `RoutingEngine.terminate()` (`RoutingEngine.java:2432-2434`) on the engine of the [route] given this cancel. */
+    fun terminate() {
+        requested = true
+        engine?.terminate()
+    }
+
+    /** Java's `isTerminated()` (`RoutingEngine.java:2436-2438`); before [route] builds the engine, the flag set here. */
     val isTerminated: Boolean
-        get() = TODO("ported with RoutingEngine, item I step 8")
+        get() = engine?.isTerminated() ?: requested
+
+    internal fun attach(e: RoutingEngine) {
+        engine = e
+        if (requested) e.terminate()
+    }
 }
 
 /**
@@ -48,12 +72,31 @@ sealed interface RouteOutcome {
 }
 
 /** Runs one route, blocking; the caller picks the thread. */
-fun route(request: RouteRequest, cancel: RouteCancel): RouteOutcome =
-    TODO("ported with RoutingEngine, item I step 8")
+fun route(request: RouteRequest, cancel: RouteCancel): RouteOutcome = route(request, cancel, MsunLibm)
 
 /** [route] with the libm seam given: tests' logic runs pass the oracle's (-24); the public call passes `MsunLibm`. */
-internal fun route(request: RouteRequest, cancel: RouteCancel, libm: LibmSeam): RouteOutcome =
-    TODO("ported with RoutingEngine, item I step 8d: route with a libm")
+internal fun route(request: RouteRequest, cancel: RouteCancel, libm: LibmSeam): RouteOutcome {
+    // BRouterTrailRouter.buildEngine (:142-160 at Forager 947f1be2): the waypoints as "lon,lat|lon,lat", a context, the
+    // profile and Forager's params, the engine on the tiles, quite. The constructor's exceptions pass through (:126-131).
+    val collector = RoutingParamCollector()
+    val waypoints = collector.getWayPointList("${request.startLon},${request.startLat}|${request.endLon},${request.endLat}")
+    val context = RoutingContext(libm)
+    collector.setParams(context, waypoints, request.params + ("profile" to request.profile.toString()))
+    val engine = RoutingEngine(FileSystem.SYSTEM, request.routeData, waypoints, context, RoutingEngine.BROUTER_ENGINEMODE_ROUTING)
+    engine.quite = true
+    cancel.attach(engine)
+    // runToEnd (:166-174): doRun with the limit. Then (:133-139) the message if set, else the found track.
+    engine.doRun(request.maxRunningTimeMillis)
+    val message = engine.getErrorMessage()
+    if (message != null) return RouteOutcome.Failed(message)
+    val nodes = engine.getFoundTrack().nodes
+    return RouteOutcome.Found(
+        IntArray(nodes.size) { nodes[it].getILat() },
+        IntArray(nodes.size) { nodes[it].getILon() },
+        engine.getFoundTrack().distance,
+        ShortArray(nodes.size) { nodes[it].getSElev() },
+    )
+}
 
 /** The header check Forager's `RoutingDataFolder.headerProblem` makes: null when the file reads, else the reason. */
 fun checkDataFile(file: Path): String? = try {
