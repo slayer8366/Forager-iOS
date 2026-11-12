@@ -67,6 +67,13 @@ class Step10CommonDigestTest {
     @Test
     fun pm5ConstantEqualsTheFilesPm5Rows() = constantEqualsTheFilesRows("PM5", Pm5Expected.ROWS, 55)
 
+    /** Session 51: R's fallback, the first 12 rows of each of its 20 StdModel profiles, 240 rows, all `exact`. */
+    @Test
+    fun rConstantEqualsTheFilesFirst12RowsOfEachStdModelProfile() = constantEqualsTheFilesRows(
+        "R", RExpected.ROWS, 240,
+        ids = Regex("R-(${RExpected.PROFILES.joinToString("|") { Regex.escape(it) }})-0(0[1-9]|1[0-2])"),
+    )
+
     private fun constantEqualsTheFilesRows(
         stratum: String,
         constant: List<NtExpected.Row>,

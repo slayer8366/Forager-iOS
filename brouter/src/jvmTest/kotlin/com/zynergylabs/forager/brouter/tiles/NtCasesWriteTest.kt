@@ -12,6 +12,9 @@ import com.zynergylabs.forager.brouter.oracle.e3.RGenerator
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3DLTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3F0hTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3MemoryTest
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3R
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RProfilesTest
+import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RTest
 import com.zynergylabs.forager.brouter.router.RoutingEngineFKTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
 import java.io.File
@@ -52,6 +55,12 @@ import kotlin.test.fail
  * [TestTiles.segments] with [E3MemoryTest]'s seeds, `only` [E3MemoryTest.TILE], 20 km times 5^u, [E3Targeted.PROFILE]:
  * MP64 labelled "MP64" at memory class 64; ML5 and PM5 each from its own generator over the one "M5" sequence at memory
  * class 5, as that test draws them. The memory class is the line's third field.
+ *
+ * Session 51, R's fallback ([R_FILE]; RECORD -142, decision 3; E5): the first [RExpected.PER_PROFILE] cases of each of R's
+ * 20 StdModel profiles ([RExpected.PROFILES]), each built as `RoutingEngineProductionRecordTest.recordR` builds R: one
+ * [RGenerator] per profile on [TestTiles.segments] with its seed ([E3RTest.SEED], [E3RProfilesTest.SEEDS]), `generate`
+ * within `20 * E3R.N` candidates. `generate` numbers its cases in order, so the first 12 are R-<profile>-001 to -012 whether
+ * it is asked for 12 or 59. The six car profiles are not built (see [RExpected]).
  */
 class NtCasesWriteTest {
     @Test
@@ -116,6 +125,16 @@ class NtCasesWriteTest {
                 gen.close()
             }
         }
+        val seeds = linkedMapOf(E3RTest.PROFILE to E3RTest.SEED) + E3RProfilesTest.SEEDS
+        val rCases = RExpected.PROFILES.flatMap { profile ->
+            val gen = RGenerator(TestTiles.segments, seeds[profile] ?: fail("$profile: no seed in R's profiles"))
+            try {
+                gen.generate("R", profile, RExpected.PER_PROFILE, 20 * E3R.N, TestTiles.segments).cases
+            } finally {
+                gen.close()
+            }
+        }
+        writeCases("R", rCases, RExpected.ROWS.map { it.id }.toSet(), File(dir, R_FILE))
     }
 
     private fun expected() = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
@@ -174,6 +193,7 @@ class NtCasesWriteTest {
         const val MP64_FILE = "mp64-cases.tsv"
         const val ML5_FILE = "ml5-cases.tsv"
         const val PM5_FILE = "pm5-cases.tsv"
+        const val R_FILE = "r-cases.tsv"
 
         fun fkFile(kind: Int) = "fk$kind-cases.tsv"
         const val PROFILES = "profiles2"

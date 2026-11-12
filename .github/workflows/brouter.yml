@@ -137,7 +137,7 @@ jobs:
   # depths and the test thread's stack size only. Every result here is "simulator-checked".
   ios-memory:
     runs-on: macos-26 # arm64; not macos-latest, which moves
-    timeout-minutes: 75
+    timeout-minutes: 95 # 75 until session 51, which adds R's fallback (about 10 minutes) and the ladder
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
@@ -171,6 +171,40 @@ jobs:
         if: always()
         run: |
           python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 51 (RECORD -142, decision 3): R's fallback, the first 12 cases of each StdModel profile, gated on its own
+      # variable. Its cases reach cleanupPeninsulas' recursion (201 of 240 on the JVM), so it runs here, not in ios-smoke
+      # (RECORD -141). Gradle empties the task's XML folder on each run, so the memory groups' XML is copied aside first.
+      - name: R's fallback on the iOS simulator (first 12 cases of each StdModel profile)
+        env:
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+          SIMCTL_CHILD_BROUTER_STEP10_R: '1'
+        run: |
+          cp -R brouter/build/test-results/iosSimulatorArm64Test brouter/build/test-results/ios-memory-groups
+          ./gradlew --no-daemon :brouter:iosSimulatorArm64Test --tests com.zynergylabs.forager.brouter.tiles.REngineCommonTest
+      - name: R's counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 51 (RECORD -142, decision 1): the stack ladder, last, so everything above is printed and counted before it
+      # can end the process. Each ladder line is also flushed to ladder.txt, which outlives a process that ends.
+      - name: The stack ladder on the iOS simulator (one MP64 case on threads of 8 MB down to 512 KB)
+        env:
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+          SIMCTL_CHILD_BROUTER_STEP10_LADDER: '1'
+        run: |
+          cp -R brouter/build/test-results/iosSimulatorArm64Test brouter/build/test-results/ios-r-fallback
+          ./gradlew --no-daemon :brouter:iosSimulatorArm64Test --tests com.zynergylabs.forager.brouter.tiles.StackLadderIosTest
+      - name: The ladder's lines, its counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          if [ -f brouter/build/step10/ladder.txt ]; then grep '^ladder: ' brouter/build/step10/ladder.txt; else echo "no ladder.txt"; fi
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test || true
           for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
