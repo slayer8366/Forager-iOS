@@ -490,3 +490,121 @@ questions, and `catch (Error)` on Kotlin/Native (step 10, -126 decision 4).
 3. 8d: `checkDataFile`.
 4. 8d: heights in `RouteOutcome.Found` (-122).
 5. 8d: `Route.kt`'s three stubs.
+
+## 9. 8d: the survey and the test plan (session 35, written before any code)
+
+Plumb Ledger, session 35, on `94db5d1`. Forager is read at `slayer8366/Forager` `pre-main` `947f1be2`; `BRT` is
+`app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt` there, `RDF` its `RoutingDataFolder.kt`,
+`RE` is `RoutingEngine.java`.
+
+### 9.1 The dirty track (RECORD -127, decision 2): nothing on Forager's path reads it
+
+- **What Java writes on a timeout** [R]: `RE:1752-1758` sets `foundRawTrack` (a `mergeTrack` of `matchPath` and `track`)
+  and rethrows. `mergeTrack` (`RE:2321-2350`) builds a new track and changes neither input. `foundRawTrack` is read only by
+  `getFoundRawTrack()` (`RE:2424-2425`): `grep -n 'foundRawTrack\|getFoundRawTrack' RE` gives `:63`, `:1754-1758`, `:1786`,
+  `:2424-2425` and nothing else [C]. `matchPath` is non-null there only if pass1's guide was matched, and that branch reads
+  `costCuttingTrack.cost` (`RE:2107-2112`), so `track` is non-null and `mergeTrack` cannot throw for a null [R].
+- **What Forager reads after a failed run** [R]: `BRT:133-138`: a non-null `getErrorMessage()` returns
+  `EngineOutcome.Failed` at once; `getFoundTrack()` (`BRT:139`) is read only when the message is null. Nothing reads the
+  raw track: `grep -rn 'getFoundRawTrack\|foundRawTrack\|rawTrackPath\|readBinary\|writeBinary' --include=*.kt .` over
+  Forager outside `third_party/` prints nothing; `grep -rn 'getFoundRawTrack' --include=*.java` over Forager prints only
+  `RE` itself [C]. No raw-track file either: Forager never passes `rawTrackPath` (`BRT:148-156`, three parameters).
+- **So: ported and not covered.** The port's `RoutingEngine.kt:513-520` is recorded as ported, not covered by any test, and
+  no 8d test is owed for it (-127's rule). Not decided beyond that.
+
+### 9.2 What Forager reads from the engine, and what it does with each [R: `BRT`]
+
+| Read | `BRT` line | What Forager does with it |
+|---|---|---|
+| the constructor's exception (`Exception`, not `CancellationException`) | `:122-131` | logs "BRouter threw", returns `EngineFailed(e.message ?: simpleName)`. The constructor parses the profile. |
+| `getErrorMessage()` | `:133` | non-null: `BRouterFailures.classify(message)` (`:135`), logged if `EngineFailed`; returned as the failure. Null is success, never the track (`:41-42`). |
+| `getFoundTrack()` | `:139` | only when the message is null. |
+| `track.nodes.size` | `:103` | under 2: "no error reported and N route points", `EngineFailed`, never a route. |
+| each node's `getILat()`, `getILon()` | `:216`, `:231` | `(i - 90_000_000) / 1e6`, `(i - 180_000_000) / 1e6`. |
+| each node's `getSElev()` | `:218`, `:228` | `heightMetresOf`: `null` for `Short.MIN_VALUE`, else `selev / 4.0` metres. |
+| `track.distance` (an `OsmTrack` field, not the engine's `getDistance()`) | `:110`, `:217` | `TrailRoute.lengthMetres`. |
+| `terminate()` | `:172` | on a cancel while `doRun` runs, then joins the run. |
+| the first node (`firstRoutePoint`, the snapper) | `:89-98` | its position; no node: `EngineFailed`. Same run, same reads. |
+
+Nothing else: `isTerminated`, `getDistance`, `getFoundInfo`, `getFoundRawTrack`, `getLinksProcessed`, `cost` are not read
+(`grep` of `BRT` for `engine\.` and `track\.`, by eye over the 233 lines) [C]. Nothing §1 marked "left out" is read:
+`track.distance` is the track's field, ported with `OsmTrack` in step 7, not the engine's left-out `getDistance` [R]. §1's
+header lists the nodes' fields and omits `track.distance`; the omission is §1's, not a reach into a left-out row.
+
+### 9.3 `Route.kt`'s three stubs, and `checkDataFile`
+
+- `RouteCancel.terminate()`, `RouteCancel.isTerminated` and `route()` are the three (`Route.kt:31-35`, `:47-48`).
+- **`route()`** does what `BRT:142-160` and `:166-174` do, with the request's fields: `getWayPointList("lon,lat|lon,lat")`,
+  a `RoutingContext`, `setParams` with `profile` and the request's `params`, the engine on the request's `routeData`,
+  `quite = true`, `doRun(maxRunningTimeMillis)`; then the message if non-null (`Failed`), else the found track's nodes,
+  heights and distance (`Found`, with whatever node count, as Forager judges the count itself, `BRT:103`). The
+  constructor's exceptions pass through unchanged (Forager catches them, `BRT:126-131`); so does the port's named
+  "unsupported" for `debug.txt`. No shape change beyond the heights.
+- **`RouteCancel`** forwards `terminate()` to the engine of the `route()` it was given to. Forager only calls
+  `terminate()` once the engine exists (`BRT:168-172`); a `terminate()` before `route()` builds the engine is forwarded
+  before `doRun`, which Java answers at its first loop head (`RE:1975-1976`, FK10's case). `isTerminated` is Java's
+  `isTerminated()` (`RE:2436-2438`); Forager does not read it.
+- **The libm:** `RoutingContext` takes a `LibmSeam` (`MsunLibm` by default). -24's rule: logic runs inject the oracle's
+  table, production runs use msun and record any difference. So `route()` gets an `internal` overload taking the seam;
+  the public one passes `MsunLibm`. Not public surface.
+- **`checkDataFile` is already ported** (step 5a, `Route.kt:50-57`, against `RDF:48-53`), and tested by
+  `CheckDataFileTest` and `FileFailureKindsTest` [R]. It reaches `PhysicalFile`'s constructor (`RDF:49`), not Java's
+  `PhysicalFile.checkFileIntegrity` (`PhysicalFile.java:67`). §1's row places it in 8d; 8d owes nothing for it. Forager's
+  other checks (`RDF:26-41`: the folder, the `.rd5` names, the square's file name) are Forager's own code, not the
+  engine's, and stay the adapter's.
+
+### 9.4 The height per route point in `RouteOutcome.Found`
+
+- **Today:** `Found(iLat: IntArray, iLon: IntArray, distance: Int)`, `Failed(message: String)` (`Route.kt:39-43`). The
+  convention is Java's raw values; Forager's adapter converts them (`BRT:231`).
+- **Added:** `sElev: ShortArray`, one per node, aligned with `iLat`/`iLon`: `OsmPathElement.getSElev()` (Java `short`,
+  quarter metres). A missing height is `Short.MIN_VALUE` in Java (`OsmPathElement.java`, BRouter's "no height") and `null`
+  in Forager (`BRT:228`, never 0); the port keeps Java's raw value and the adapter keeps `heightMetresOf`, as for the
+  positions. Appended last, so the three existing parameters keep their order. This is the type -122 decision 1 leaves to
+  8d; the alternative (`Array<Double?>` in metres, Forager's conversion moved into the port) is named for the planner.
+
+### 9.5 -90's three reviews for step 8
+
+- **-49, `StorageConfigHelper` catches only `IOException`** (`StorageConfigHelper.kt:33`; Java `:39` catches every
+  `Exception`): on Forager's path `storageconfig.txt` is never present: Forager's own test asserts no such file is ever
+  written under the route folders (`RegionRouteFetchTest.kt:197-206`) [R]. Missing, Java's `FileNotFoundException` and
+  okio's are both caught, both give `null`. They differ only with the file present and a non-I/O exception. Answered:
+  no difference on Forager's path; the choice stands unless the planner rules otherwise.
+- **`OsmPath.java:350` (`refTrack.containsNode`) and `:282-283` (the start direction)**: -94 and -97 put both on step 8's
+  coverage reader: both should read not covered on R's R6 runs. Not run in this session: **scheduled** for the session
+  that runs `e3Strata`'s R6 with `E3Coverage` (no new code; a read of the existing reader on two lines).
+- **-42's 19 way getters**: -106 records them paid by inference ("step 8's coverage reader can show it"). That reader
+  reads the oracle's Java coverage (R6's JaCoCo agent on the oracle, `build.gradle.kts:113-122`), not the port's Kotlin.
+  Showing the port's call sites execute needs JaCoCo on the port's `jvmTest`, a build change: **a question for the
+  planner**, not scheduled by me.
+
+### 9.6 8d's test plan (`RouteTest`, `jvmTest`, package `com.zynergylabs.forager.brouter`)
+
+Every comparison is through `route()` with Forager's calls (the request as `BRT:142-160` builds it: `hiking-mountain`,
+`alternativeidx=0`, `profile:use_dynamic_range=0`). The oracle side is `E3CaseRun.run` (as `RoutingEngineF0Test`) or
+`OracleCalls`' calls with the oracle's own `terminate()`. Only digests and counts are printed (E1).
+
+1. **`f0RoutesThroughRouteAsThroughTheOracle`** (logic run: the `internal` overload with `OracleLibm`). Reuses F0's two
+   cases (`RoutingEngineF0Test.CASES`), each first held to its `expected-1b` row. Compared per case: `Found` (oracle
+   message null), node count `= iLat.size = iLon.size = sElev.size`, distance, the node digest over `(iLon, iLat)` and
+   the height digest over `sElev` (`E3Outcome.fnv1a`, `fnv1aShorts`), each against the oracle's. Not compared: cost
+   (`Found` does not carry it; Forager does not read it). Reverts it should catch: `sElev` from `getElev()` (rounded) or
+   from a shifted node; `iLat`/`iLon` swapped; `distance` from the cost.
+2. **`f0ThroughThePublicRouteIsRecorded`** (production run, `MsunLibm`): the same two cases through the public `route()`.
+   Asserted: a `Found` with 2 or more nodes. Recorded, not asserted: whether each digest equals the oracle's (-24: a
+   production difference is recorded). Revert: the public `route()` not reaching the engine. It cannot be held to the
+   oracle exactly, by -24's rule.
+3. **`aTerminateBeforeTheRunFailsAsTheOracle`**: F0's two cases, `RouteCancel.terminate()` before `route()`; the oracle
+   given `terminate()` before `doRun` (FK10's plan). Compared: `Failed` on the port, a non-null message on the oracle;
+   the message's kind (`E3Outcome.kindOf`) equal, and both matching `RoutingEngineStopTest`'s watchdog text (the seconds
+   are wall time, so not the whole text); `isTerminated` true on both. Reverts: `terminate()` not forwarded (the port
+   then routes: `Found`); `route()` reading the track when the message is set.
+4. **`theCancelReportsItsFlag`**: `RouteCancel().isTerminated` false, then true after `terminate()`, with no route. Held to
+   Java's `isTerminated()` (`RE:2432-2438`), not the oracle (no engine). Revert: `isTerminated` returning a constant.
+
+**Not covered by this plan, and why:** a missing height (no fixture tile without heights in F0; `TestTiles` has none
+built for it [I]); a terminate landing mid-run (`RouteCancel` cannot see the progress count, so a test cannot place the
+cancel past the engine's build; FK11 covers the engine's side in `RoutingEngineStopTest`); the null-message empty-track
+case through `route()` (a file cut below its header; Forager's `RDF` refuses it before the engine, so it is off its path);
+the constructor's exception passing through (the oracle logs it into its message rather than throwing, `RE:111-138`); any
+of it on iOS (step 10).
