@@ -34,12 +34,14 @@ import kotlin.test.Test
 import kotlin.test.fail
 
 /**
- * Step 10, session 51 (RECORD -142, decision 1; for -61): the stack ladder. One MP64 case, the first of `mp64-cases.tsv`
- * (stored ids only, in file order) that enters `cleanupPeninsulas`' walk on the test's own thread, run through [EngineRun]
- * on a thread made with an explicit stack size, joined before the next: [SIZES], 8 MB down to 512 KB. Before each size it
- * prints "ladder: starting <bytes>"; after it, "ladder: survived <bytes>; equal to its stored row <b>; deepest <n>" and the
- * thread's own stack as `pthread_get_stacksize_np` reads it. An overflow of the recursion ends the process on iOS (no
- * catch there), so the first size that ends it leaves its "starting" line as the last ladder line: that is the reading.
+ * Step 10, the stack ladder: session 51 (RECORD -142, decision 1) made it, one MP64 case read by eye; session 52 (RECORD
+ * -144, the owner's ruling "Rewrite without recursion") makes it assert. [LADDER_CASES], each run first on the test's own
+ * thread and then through [EngineRun] on threads made with an explicit stack size, joined before the next: [SIZES], 8 MB
+ * down to 512 KB. **Every case must survive every size and give its stored row** (all six fields and the tuple digest)
+ * with the same deepest walk as on the test's thread. Before each rung it prints "ladder: starting <case> <bytes>"; after
+ * it, "ladder: survived <case> <bytes>; equal to its stored row <b>; deepest <n>" and the thread's own stack as
+ * `pthread_get_stacksize_np` reads it. A stack overflow ends the process on iOS (no catch there), so a rung that ends it
+ * leaves its "starting" line as the last ladder line, and the step fails: that is the test's red.
  *
  * The thread is a POSIX one: `pthread_attr_setstacksize` on an attribute, `pthread_create` with a [staticCFunction]
  * entry ([rungEntry]) and a [StableRef] to the [Rung] as its argument, `pthread_join`. Kotlin/Native's `Worker` takes no
@@ -53,8 +55,8 @@ import kotlin.test.fail
  * the test's printed output reaches the log only through the JUnit XML, which a process that ends may not complete.
  *
  * Gated on [LADDER_GATE] (only `ios-memory`'s last step sets it, as `SIMCTL_CHILD_`[LADDER_GATE]); unset, it prints one
- * line and does nothing. Native only: the JVM catches the overflow (RECORD -140) and is not the question. Nothing of the
- * case but its id is printed or written (E1): sizes, a boolean, depths and the outcome's tuple digest equality.
+ * line and does nothing. Native only: the JVM catches an overflow (RECORD -140) and is not the question. Nothing of a
+ * case but its id is printed or written (E1): sizes, booleans, depths and the outcome's tuple digest equality.
  */
 internal const val LADDER_GATE = "BROUTER_STEP10_LADDER"
 
@@ -108,9 +110,25 @@ private fun onThread(stackBytes: Long, rung: Rung) {
     }
 }
 
+/** One ladder case: its group, the group's run-time file beside the NT file, the group's stored rows, and its id. */
+private class LadderCase(val group: String, val file: String, val rows: List<NtExpected.Row>, val id: String)
+
+/**
+ * The deepest case of each memory group, as `MemoryEngineCommonTest`'s depth lines named them in run 43212726248 (each
+ * 5,679 deep), and MP64-0002 (3,378 deep), the case that run's ladder ended the process on at 1 MB (RECORD -143). Named
+ * here, not found: finding each group's deepest on the simulator would run its 55 to 59 cases again in this step.
+ * MP64-0002 first, so the reading -143 recorded is the first one this test repeats.
+ */
+private val LADDER_CASES: List<LadderCase> = listOf(
+    LadderCase("MP64", "mp64-cases.tsv", Mp64Expected.ROWS, "MP64-0002"),
+    LadderCase("MP64", "mp64-cases.tsv", Mp64Expected.ROWS, "MP64-0005"),
+    LadderCase("ML5", "ml5-cases.tsv", Ml5Expected.ROWS, "M5-0060"),
+    LadderCase("PM5", "pm5-cases.tsv", Pm5Expected.ROWS, "M5-0304"),
+)
+
 class StackLadderIosTest {
     @Test
-    fun oneMp64CaseOnThreadsOfFallingStackSize() {
+    fun deepCasesOnThreadsOfFallingStackSizeSurviveAndGiveTheirStoredRows() {
         if (testEnvironment(LADDER_GATE).isNullOrEmpty()) {
             println("ladder: $LADDER_GATE is unset; not run (RECORD -142)")
             return
@@ -131,47 +149,49 @@ class StackLadderIosTest {
         }
         val segments = (testSetting("brouter.tiles.dir", "BROUTER_TILES_DIR") ?: fail("BROUTER_TILES_DIR is not set")).toPath() / "segments"
         val profiles = (testSetting("brouter.oracle.dir", "BROUTER_ORACLE_DIR") ?: fail("BROUTER_ORACLE_DIR is not set")).toPath() / "profiles2"
-        val stored = Mp64Expected.ROWS.associateBy { it.id }
-        val lines = FileSystem.SYSTEM.read(nt.parent!! / "mp64-cases.tsv") { readUtf8() }.lines().filter { it.isNotEmpty() }
 
-        // The case: the first stored one in file order that enters the walk, on this (the test's) thread.
-        var chosen: Pair<NtExpected.Row, Rung>? = null
-        var tried = 0
-        for (line in lines) {
-            val f = line.split('\t')
-            if (f.size != 7) fail("a line of mp64-cases.tsv has ${f.size} fields, not 7 (id ${f[0]})")
-            val row = stored[f[0]] ?: continue
-            val rung = Rung("${f[3]},${f[4]}|${f[5]},${f[6]}", profiles / "${f[1]}.brf", segments, f[2].toInt())
-            tried++
+        val failures = ArrayList<String>()
+        var rungs = 0
+        for (case in LADDER_CASES) {
+            val row = case.rows.firstOrNull { it.id == case.id } ?: fail("ladder: ${case.id} is not a stored ${case.group} row")
+            val f = FileSystem.SYSTEM.read(nt.parent!! / case.file) { readUtf8() }.lines()
+                .map { it.split('\t') }.firstOrNull { it[0] == case.id }
+                ?: fail("ladder: ${case.id} is not in ${case.file}")
+            if (f.size != 7) fail("ladder: ${case.id}'s line of ${case.file} has ${f.size} fields, not 7")
+            val template = Rung("${f[3]},${f[4]}|${f[5]},${f[6]}", profiles / "${f[1]}.brf", segments, f[2].toInt())
+
+            // On the test's own thread first: the depth every rung must repeat.
             PeninsulaDepth.reset()
-            val got = EngineRun.run(rung.lonLats, rung.profile, rung.segments, rung.memoryclass)
-            if (PeninsulaDepth.deepest > 0) {
+            val own = EngineRun.run(template.lonLats, template.profile, template.segments, template.memoryclass)
+            val ownDeepest = PeninsulaDepth.deepest
+            val ownEqual = own.tupleDigest == row.tupleDigest && own == row.outcome
+            say("ladder: case ${case.id} (${case.group}); on the test's thread deepest $ownDeepest, equal to its stored row $ownEqual; ${testThreadStack()}")
+            if (!ownEqual) failures += "${case.id} on the test's thread: unequal to its stored row"
+            if (ownDeepest == 0) failures += "${case.id} on the test's thread: did not enter the walk"
+
+            for (size in SIZES) {
+                say("ladder: starting ${case.id} $size")
+                val rung = Rung(template.lonLats, template.profile, template.segments, template.memoryclass)
+                onThread(size, rung)
+                rungs++
+                val thrown = rung.thrown
+                val got = rung.outcome
+                if (thrown != null || got == null) {
+                    failures += "${case.id} $size: ${thrown?.let { "threw $it" } ?: "no outcome"}"
+                    say("ladder: ended ${case.id} $size without an outcome; ${thrown?.let { "threw $it" } ?: "no outcome"}")
+                    continue
+                }
+                val equal = got.tupleDigest == row.tupleDigest && got == row.outcome
+                if (!equal) failures += "${case.id} $size: unequal to its stored row"
+                if (rung.deepest != ownDeepest) failures += "${case.id} $size: deepest ${rung.deepest}, not $ownDeepest"
                 say(
-                    "ladder: case ${row.id}, the first of $tried stored cases tried that enters the walk; on the test's thread " +
-                        "deepest ${PeninsulaDepth.deepest}, equal to its stored row ${got.tupleDigest == row.tupleDigest && got == row.outcome}; " +
-                        testThreadStack(),
+                    "ladder: survived ${case.id} $size; equal to its stored row $equal; " +
+                        "deepest ${rung.deepest}; the thread's stack ${rung.stackBytes} bytes (pthread_get_stacksize_np); " +
+                        "main thread ${rung.mainThread}",
                 )
-                chosen = row to rung
-                break
             }
         }
-        val (row, template) = chosen ?: fail("none of $tried stored MP64 cases entered the walk")
-        val unequal = ArrayList<Long>()
-        for (size in SIZES) {
-            say("ladder: starting $size")
-            val rung = Rung(template.lonLats, template.profile, template.segments, template.memoryclass)
-            onThread(size, rung)
-            rung.thrown?.let { fail("ladder: $size: the rung threw $it") }
-            val got = rung.outcome ?: fail("ladder: $size: no outcome")
-            val equal = got.tupleDigest == row.tupleDigest && got == row.outcome
-            if (!equal) unequal += size
-            say(
-                "ladder: survived $size; equal to its stored row $equal; " +
-                    "deepest ${rung.deepest}; the thread's stack ${rung.stackBytes} bytes (pthread_get_stacksize_np); " +
-                    "main thread ${rung.mainThread}",
-            )
-        }
-        say("ladder: done; ${SIZES.size} of ${SIZES.size} sizes survived; unequal to the stored row at ${unequal.size}")
-        if (unequal.isNotEmpty()) fail("ladder: ${row.id} unequal to its stored row on the stacks of $unequal bytes")
+        say("ladder: done; ${LADDER_CASES.size} cases, $rungs of ${LADDER_CASES.size * SIZES.size} rungs ran; failures ${failures.size}")
+        if (failures.isNotEmpty()) fail("ladder: ${failures.size} failures: $failures")
     }
 }
