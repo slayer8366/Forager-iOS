@@ -48,13 +48,13 @@ class RoutingEngineF0Test {
             E3Case("F0-inside-long", TestTiles.f0, 41.2772811, -74.0422743, 41.292043, -73.996678, "hiking-mountain"),
         )
 
-        /** [E3CaseRun]'s unlogged attempt, with the port's classes in place of the oracle's. */
-        fun port(c: E3Case): E3Outcome = try {
+        /** [E3CaseRun]'s unlogged attempt, with the port's classes in place of the oracle's; [base] holds `profiles2/`. */
+        fun port(c: E3Case, base: File = OracleCalls.oracleDir): E3Outcome = try {
             val collector = RoutingParamCollector()
             val waypoints = collector.getWayPointList("${c.startLon},${c.startLat}|${c.endLon},${c.endLat}")
             val rc = RoutingContext(OracleLibm)
             val params = mapOf(
-                "profile" to File(OracleCalls.oracleDir, "profiles2/${c.profile}.brf").absolutePath,
+                "profile" to File(base, "profiles2/${c.profile}.brf").absolutePath,
                 "alternativeidx" to "0",
                 "profile:use_dynamic_range" to "0",
             )
