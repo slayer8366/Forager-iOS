@@ -5581,3 +5581,47 @@ It stays red and is not touched; what to do with it is ruled on once the port's 
 names MP64 as where "false" occurs).
 **Open, owed to the owner by -144's option:** how often the oracle's own catch fires on the test cases.
 **Notes:** Written by the planner session by hand. Next free ID -147.
+
+**Kind:** outcome
+**ID:** 2026-10-28-147
+**Timestamp:** 2026-11-12T17:26:32Z
+**Continues:** 2026-10-28-60, 2026-10-28-61, 2026-10-28-144, 2026-10-28-146
+**Title:** After the rewrite, Plumb's session 53: the oracle's own catch fires 0 times on 1,707 cases; one planted error
+caught by every group, one by none; `canEscape`'s answers counted; the planner's rulings
+**Observed:** Plumb Ledger, session 53, `brouter-port-5b` `f33828c` to `004cd75` (fast-forward only; ended at 137,411 by
+the harness's count, no handoff call; 2 commits, docs and evidence only, trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). All of it local JVM runs: Plumb's reading.
+- **The oracle's catch** (-144's promise to the owner): with a patched oracle class, never committed, the
+  `catch (StackOverflowError)` in `cleanupPeninsulas` fired **0 times** on the 173 memory cases and 0 times on R's
+  1,534, at this JVM's default stack of 1,024 KB.
+- **Plant 1** (the minimum not written at a child's return; prediction `c1ac7e1`): caught. MP64 59 of 59, ML5 59 of 59,
+  PM5 55 of 55, R 775 of 1,534.
+- **Plant 2** (children walked last to first; prediction `5f151a6`, which expected no catch): **caught by no group,** 0
+  mismatches in all four. The planted build ran: the deepest walk moved from 5,679 to 7,954.
+- **`canEscape` through the port,** true and false per group: MP64 1,789,913 and 576,094; PM5 1,212,430 and 333,212; ML5
+  3,042,871 and 415,604. The oracle's counts are the same for MP64 and PM5; ML5's oracle count could not be read. Every
+  one of the 173 cases has at least one "false".
+- `PeninsulaDepth.overflowsCaught` is read by three tests and written by nothing since the rewrite.
+**Checked by the planner:** `git ls-remote` `004cd75`, a fast-forward of `f33828c`; one trailer each, no model name; E1 by
+`scan.sh <c>^ <c>`: 0 on both; nothing outside `docs/` changed; plant 2's evidence file reads 0 mismatches per group
+with the deeper depths, and "restored: cmp equal".
+**What the counts say:**
+- **For the owner, -144:** no tested case reaches the one place where the port now differs from Java by design. On
+  1,707 cases the oracle never overflows, so the two do the same thing. Not shown: Android's own runtime, whose frames
+  and stack are not this JVM's; a deeper map.
+- **The order in which children are walked is not shown tested.** A change of order moved the depth and no route.
+  Plumb's reading [I, not proved], which the planner shares: the links the walk removes are the ones whose subtree has
+  no other way back, and that does not depend on the order of the walk. If so the plant is an equal program, not a gap.
+  It is recorded as argued, not shown.
+- **The depth is not a property of the map alone:** it is 5,679 in Java's order and 7,954 in the other.
+**Decisions (the planner's, technical):**
+1. **Plant 2 is accepted as not caught, for the reason above.** No further order plant.
+2. **`CollectOutreachersTest`'s last failure: -61's call is carried out before anything else is considered.** -61 said the
+   assertion stays and a region is sought where the oracle answers "false". The counts now say where to look: every
+   memory case has such answers. Session 54 finds, from one memory case, the map state at a call that answers "false",
+   and adds that region to the test. The assertion is not changed. If no region can be loaded that way, that goes to the
+   planner, and a change to the assertion would go to the independent reviewer.
+3. **`overflowsCaught` is removed,** with its three reads, which only print it.
+4. **No small-stack run of the oracle is built now.** It would show an overflow the test JVM never has. It is named for
+   the owner as something that can be measured if wanted.
+**Notes:** Written by the planner session by hand. Next free ID -148.
