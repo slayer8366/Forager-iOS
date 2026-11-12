@@ -5984,3 +5984,19 @@ off there, -111). The routes and the other outputs are equal on the simulator.
    comes to the planner: no JDK code is copied (-119).
 3. Each value found goes into a common unit test of the helper, so the JVM and the simulator both hold it.
 **Notes:** Written by the planner session by hand. Next free ID -157.
+
+**Kind:** decision
+**ID:** 2026-10-28-157
+**Timestamp:** 2026-11-12T23:28:47Z
+**Continues:** 2026-10-28-155
+**Title:** The renderer is set aside (owner); the sizing dispatch is stopped
+**Decision:** the owner said, verbatim: "Forget the renderer for now. I'll think about it another time."
+**Done by the planner:** dispatch 2026-11-12-02 (Madrone Gauge, the sizing of a renderer of Forager's own) was stopped
+while running. Whatever it had pushed to `research/own-map-renderer` is partial and is cited by nothing; the branch, if
+it exists, is left as it is and is not built on.
+**What follows (the planner's):**
+- -155's intent is closed without a decision. Nothing about a renderer is planned, and the question is not raised again
+  by the planner.
+- **-153's "Map first" stands as it was ruled,** with the map on MapLibre. The spike the planner held in -155 is no
+  longer held: it is dispatched after the BRouter port's present items, as -153 planned.
+**Notes:** Written by the planner session by hand. Next free ID -158.
