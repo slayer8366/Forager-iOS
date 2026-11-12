@@ -510,3 +510,105 @@ Next:
 2. The production test over every group as the dispatch's step 3, with the expectation of §4.3 in its commit; one local run;
    counts to an evidence file and §4.2.
 3. If under budget: how each differing case differs (cost only, route, kind), counts only.
+
+## 5. Session 43
+
+Plumb Ledger, session 43, `brouter-port-5b` from `06b97f2` (`git ls-remote` checked). Dispatch: step 9's recorded
+production run on the terms of RECORD -135 (quoting -24). Done: items 1, 2, 3, 6; item 4 not reached (no difference in
+kind); item 5 moot (no differing case).
+
+### 5.1 The recording test (`2763f4c`)
+
+`RoutingEngineProductionRecordTest` (jvmTest, `router`), what it does stated in its commit before any run. Gate: the
+environment variable `BROUTER_PRODUCTION_RECORD`, non-empty; unset, one printed line and nothing else. Set: the logic tests'
+own cases, built as they build them, through the oracle in this JVM (`E3CaseRun`) and the port on **`MsunLibm`**
+(`portMsun`, `RoutingEngineF0Test.port` with `RoutingContext(MsunLibm)`), compared on E3Outcome's six fields. Groups: F0,
+R's 1,180 StdModel cases (the six `---model:` profiles left out), DL-lat, DL-lon, MP64, ML5, PM5, NT, LB, CR (selected from
+their generators by `expected-1b.tsv`'s row ids within `E3Targeted.CAP`, as the logic tests), FK 1 to 8, F0h. **FK 9 to 11
+are timing cases and are left out.** FK7's kind is compared by family, as `RoutingEngineFKTest`; its exact-kind differences
+are counted beside. Asserted: only that every case produced an outcome and that the counts add up to the group's rows.
+Recorded beside: whether the oracle in this JVM matched its `expected-1b` row (`oracleOffRow`).
+
+Visibility words, named: in `RoutingEngineFKTest`, `rows`, `firstTen`, `byRow`, `kind5`, `edited`, `case` and the companion
+object, `private` to `internal`. Nothing else in an existing test changed. FK7's and FK8's case lists are built inline in
+that test's two `@Test` bodies, so they are **repeated** in the new test (10 + 3 and 10 + 1 cases); `oracleOffRow` 0 on both
+shows they are 1b's. No build change.
+
+### 5.2 The expectation (`a014538`, pushed before the run)
+
+`docs/audits/2026-11-12-brouter-port-step9/30-production-expectation.txt`. By CheapRuler's row rule, 8 of the 13 rows lie in
+no captured tile; rows 1295 and 1297 lie in the N35 band, 1310, 1311 and 1318 in N40; E170_S50 none. Guesses (all marked
+so): F0, F0h, FK7, FK8, FK1 to 6 zero; R 0 to 10; DL 0 to 3 each; MP64, ML5, PM5 1 to 10 each; NT 0 to 2; LB 1 to 15;
+CR 0 to 5; no difference in kind.
+
+### 5.3 The run: 1,742 cases, every one equal
+
+One local run, `BROUTER_PRODUCTION_RECORD=1 timeout 5400 ./gradlew :brouter:jvmTest --rerun --tests '...RoutingEngineProductionRecordTest'`.
+**Wall time 1,203 s** (Gradle: `BUILD SUCCESSFUL in 20m 2s`; the test's own line, 1,201.0 s). Evidence:
+`31-production-run.txt` (every line verbatim).
+
+| Group | Cases | Equal | Differing | In kind | oracleOffRow |
+|---|---|---|---|---|---|
+| F0 | 2 | 2 | 0 | 0 | 0 |
+| R (StdModel) | 1,180 | 1,180 | 0 | 0 | 0 |
+| DL-lat | 59 | 59 | 0 | 0 | 0 |
+| DL-lon | 59 | 59 | 0 | 0 | 0 |
+| MP64 | 59 | 59 | 0 | 0 | 0 |
+| ML5 | 59 | 59 | 0 | 0 | 0 |
+| PM5 | 55 | 55 | 0 | 0 | 0 |
+| NT | 59 | 59 | 0 | 0 | 0 |
+| LB | 59 | 59 | 0 | 0 | 0 |
+| CR | 59 | 59 | 0 | 0 | 0 |
+| FK1 to FK6 | 10 each | 10 each | 0 | 0 | 0 |
+| FK7 | 13 | 13 | 0 | 0 (exact kind too) | 0 |
+| FK8 | 11 | 11 | 0 | 0 | 0 |
+| F0h | 8 | 8 | 0 | 0 | 0 |
+
+**So, on these cases, the 13 rows change no route:** no kind, node count, cost, distance, node digest or heights digest
+differs in any group. My expectation guessed a few in LB and the memory groups; it was wrong on the high side.
+
+**The test is not vacuous** (CLAUDE.md: a check that passes identically is suspect): a scratch plant, never committed, made
+`portMsun`'s libm return `kx * 1.01` at the five in-tile rows and ran LB alone. `compileTestKotlinJvm` executed, ` e: ` 0;
+LB read **59 cases, 0 equal, 59 differing** (kind 1, nodes 5, cost 59, distance 59, node digest 16, heights 10; split: cost
+only 0, same nodes other distance 43, different route 15, other 1). Restored from a saved copy, `git status` clean after.
+Evidence: `32-production-plant.txt` (the diff and the lines). So the seam reaches the engine at those rows; msun's own
+difference there (an ulp or so in `kx` or `ky`) moves no integer on these 1,742 cases.
+
+**Found on the way:** the first attempt without `--rerun` ran nothing: `jvmTest` was `UP-TO-DATE`, since an environment
+variable is not a task input. Not counted as a run (`31-production-run.txt`, line 3). A CI job for this run, if the planner
+rules one, starts fresh and is not affected; locally it needs `--rerun` (or `--rerun-tasks`). [R: the log]
+
+### 5.4 CI on `2763f4c` (run 43160257745) [C]
+
+- **jvm** (failure): `TOTAL: tests 195, failures 2, errors 0, skipped 0 in 86 files` (194 + the new test). FAILED lines:
+  only `CollectOutreachersTest`'s two (`collectOutreachersWithoutADestination`, `collectOutreachersWithADestinationVanishesFarNodes`),
+  as before; not touched. ` e: ` 0. `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` ran, `BUILD SUCCESSFUL in 38s`.
+  `grep -c 'caught a StackOverflowError'`: 4, as before (-61).
+- **The new test's line:** `production record: BROUTER_PRODUCTION_RECORD is unset; not run (RECORD -135)`; its XML time
+  `0.003` s.
+- **The jvm test step's minutes: 24.5** (05:16:20 to 05:40:51) against about 21 on `e8ed646`. Not the new test (0.003 s):
+  the whole runner was slower, e.g. `jvmTest` start to F0h's line 6m21s against 5m09s, F0h to R's line 13m06s against
+  11m17s. [C, both runs' logs] Whether a later run returns to 21 is not known [?].
+- **ios-smoke** (success): `TOTAL: tests 24, failures 0 ... in 10 files`; `TOTAL: tests 7 ... in 2 files`; **`OK: all 2
+  classes ran`**. Simulator-checked.
+
+### 5.5 [I], [?], questions; Next
+
+[I]: none new. [?]: whether the jvm step's 24.5 minutes is runner variance (§5.4); whether cases outside these strata (other
+tiles, other latitudes among the 8 rows no captured tile holds) would differ.
+"None" claims: no case differs (`grep 'production record: ' 31-production-run.txt`: every group line reads `differing` 0);
+no other test newly failing (`grep ' FAILED'` on the CI log: only `CollectOutreachersTest`'s two and the task/build lines);
+no build change (`git diff 06b97f2 a014538 --stat`: the new test, `RoutingEngineFKTest.kt` (7 visibility words), the
+evidence file). E1: `scan.sh` on each staged diff, 0 before each commit.
+
+Item 5 (how differing cases differ; which pass through a row): moot, no differing case; no scratch count made.
+
+Questions for the planner:
+1. -24's "separately record whether the 13 rows ever change a route": on these 1,742 cases, never. Is that the record, or
+   does the owner want the run in CI as its own job (~20 minutes locally, with `--rerun` not needed on a fresh runner)?
+2. The repeated FK7/FK8 case lists in the new test: acceptable, or should they move to a shared builder (a change to
+   `RoutingEngineFKTest` beyond a visibility word, so the planner's)?
+
+Next:
+1. The planner's answers to Q1 and Q2.
+2. If the run joins CI: a job running only this class with the variable set; its length read on one run.

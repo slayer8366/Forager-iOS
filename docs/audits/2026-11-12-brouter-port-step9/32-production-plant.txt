@@ -1,0 +1,79 @@
+Step 9, session 43: plant, scratch only (never committed), restored from a saved copy; git status clean after.
+The plant: portMsun's libm returns kx * 1.01 at rows 1295, 1297, 1310, 1311, 1318 (the 13 rows inside the tiles); only LB run.
+compileTestKotlinJvm executed; ' e: ' count 0. Output lines:
+RoutingEngineProductionRecordTest[jvm] > productionRunIsRecordedAgainstTheOracle[jvm] STANDARD_OUT
+production record: LB | 59 | 0 | 59 | 1 5 59 59 16 10 | 0 43 15 1 | 0 | -
+production record: group | cases | equal | differing | kind nodes cost distance nodeDigest heightsDigest | costOnly sameNodesDistance differentRoute other | oracleOffRow | extra
+production record: LB | 59 | 0 | 59 | 1 5 59 59 16 10 | 0 43 15 1 | 0 | -
+production record: 1 groups in 14.5 s
+RoutingEngineProductionRecordTest[jvm] > productionRunIsRecordedAgainstTheOracle[jvm] PASSED
+BUILD SUCCESSFUL in 17s
+--- the diff:
+diff --git a/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/RoutingEngineProductionRecordTest.kt b/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/RoutingEngineProductionRecordTest.kt
+index 2aa3a16..1f034eb 100644
+--- a/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/RoutingEngineProductionRecordTest.kt
++++ b/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/RoutingEngineProductionRecordTest.kt
+@@ -69,45 +69,9 @@ class RoutingEngineProductionRecordTest {
+             return
+         }
+         val t0 = System.nanoTime()
+-        record("F0", rowsOf("F0"), RoutingEngineF0Test.CASES)
+-        recordR()
+-        record("DL-lat", rowsOf("DL-lat"), dl(DLGenerator.Line.LAT40, E3DLTest.SEED_LAT))
+-        record("DL-lon", rowsOf("DL-lon"), dl(DLGenerator.Line.LON70, E3DLTest.SEED_LON))
+-        record("MP64", rowsOf("MP64"), memory("MP64", "MP64", 64, E3MemoryTest.SEED_MP64))
+-        record("ML5", rowsOf("ML5"), memory("ML5", "M5", 5, E3MemoryTest.SEED_M5))
+-        record("PM5", rowsOf("PM5"), memory("PM5", "M5", 5, E3MemoryTest.SEED_M5))
+-        NTGenerator(TestTiles.segments, 20261205L).use { gen ->
+-            record("NT", rowsOf("NT"), select(rowsOf("NT"), gen.draws("NT", E3Targeted.PROFILE)))
+-        }
+         LBGenerator(TestTiles.segments, 20261207L).use { gen ->
+             record("LB", rowsOf("LB"), select(rowsOf("LB"), gen.draws("LB", E3Targeted.PROFILE)))
+         }
+-        recordCR()
+-        val fk = RoutingEngineFKTest()
+-        record("FK1", fk.rows("FK1"), fk.firstTen(1))
+-        record("FK2", fk.rows("FK2"), fk.firstTen(2))
+-        record("FK3", fk.rows("FK3"), fk.byRow("FK3", 3))
+-        record("FK4", fk.rows("FK4"), fk.byRow("FK4", 4))
+-        record("FK5", fk.rows("FK5"), fk.kind5())
+-        record("FK6", fk.rows("FK6"), fk.firstTen(6))
+-        fk.edited { tiles, e, tile -> // as RoutingEngineFKTest.fk7RoutesThroughThePortAsThroughTheOracle
+-            val end = FKGenerator.dataEnd(tile)
+-            val size = tile.length()
+-            val cuts = listOf(200L, 201L, 1_000L, end / 4, end / 2, 3 * end / 4, end - 1, end + 1, end + 56, end + 111)
+-            val cases = cuts.mapIndexed { i, len -> fk.case(tiles, "FK7-%02d".format(i + 1), e) { FKGenerator.cut(tile, len, it) } } +
+-                fk.case(tiles, "FK7-x1", e) { FKGenerator.cut(tile, end, it) } +
+-                fk.case(tiles, "FK7-x2", e) { FKGenerator.cut(tile, size - 1, it) } +
+-                fk.case(tiles, "FK7-c0", e) { it.mkdirs(); tile.copyTo(File(it, tile.name)) }
+-            record("FK7", fk.rows("FK7"), cases, family = { RoutingEngineFKTest.familyOf("FK7", it) })
+-        }
+-        fk.edited { tiles, e, tile -> // as RoutingEngineFKTest.fk8RoutesThroughThePortAsThroughTheOracle
+-            val cases = (0 until RoutingEngineFKTest.N).map { 8 + 20 * it }.mapIndexed { i, at ->
+-                fk.case(tiles, "FK8-%02d".format(i + 1), e) { FKGenerator.flip(tile, at, it) }
+-            } + fk.case(tiles, "FK8-x1", e) { FKGenerator.flip(tile, 203, it) }
+-            record("FK8", fk.rows("FK8"), cases)
+-        }
+-        val f0hCases = E3F0hTest.ENDS.map { (name, e) -> E3Case("F0h-$name", TestTiles.f0h, e[0], e[1], e[2], e[3], E3F0hTest.PROFILE) }
+-        record("F0h", rowsOf("F0h"), f0hCases)
+         println("production record: group | cases | equal | differing | kind nodes cost distance nodeDigest heightsDigest | " +
+             "costOnly sameNodesDistance differentRoute other | oracleOffRow | extra")
+         lines.forEach { println(it) }
+@@ -241,12 +205,16 @@ class RoutingEngineProductionRecordTest {
+ 
+     companion object {
+         const val GATE = "BROUTER_PRODUCTION_RECORD"
++        val PLANT = setOf(1295, 1297, 1310, 1311, 1318)
+ 
+         /** [RoutingEngineF0Test.port] with the production libm: the same calls, `RoutingContext(MsunLibm)`. */
+         fun portMsun(c: E3Case, base: File): E3Outcome = try {
+             val collector = RoutingParamCollector()
+             val waypoints = collector.getWayPointList("${c.startLon},${c.startLat}|${c.endLon},${c.endLat}")
+-            val rc = RoutingContext(MsunLibm)
++            val rc = RoutingContext(object : com.zynergylabs.forager.brouter.util.LibmSeam {
++                override fun scales(row: Int): DoubleArray = MsunLibm.scales(row).let { if (row in PLANT) doubleArrayOf(it[0] * 1.01, it[1]) else it }
++                override fun atan2(y: Double, x: Double): Double = MsunLibm.atan2(y, x)
++            })
+             val params = mapOf(
+                 "profile" to File(base, "profiles2/${c.profile}.brf").absolutePath,
+                 "alternativeidx" to "0",
