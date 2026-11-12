@@ -5824,3 +5824,50 @@ scoreable. No build was run and nothing in Forager was changed or fetched. The f
   the later surfaces, the fungi index, scheduled backup, device evidence, the app's public identity) come with the
   designer's work.
 **Notes:** Written by the planner session by hand. Next free ID -153.
+
+**Kind:** decision
+**ID:** 2026-10-28-153
+**Timestamp:** 2026-11-12T21:01:37Z
+**Continues:** 2026-10-28-2, 2026-10-28-151, 2026-10-28-152
+**Title:** The app port's first four rulings (owner): the map first; the domain shared now; the Apple account when a
+signed build is wanted; the camera out of the first release
+**Decision:** asked four questions together with AskUserQuestion, after the survey (-152), the owner chose, verbatim:
+- **What the first runnable iOS build contains:** "Map first (Recommended)". The option read: "The app shell plus the map
+  screen. The map is the largest unknown: 39 Android files depend on MapLibre, and the Compose Multiplatform wrapper for
+  it is pre-1.0 and marked beta on iOS, with its offline store unverified. Proving or disproving it early protects
+  everything built after. Routing and the other screens come next."
+  - Rejected: "Simple screens first"; "Routing first".
+- **Where shared code lives and when Android moves onto it:** "Share the domain now (Recommended)". The option read: "The
+  domain becomes one shared module that both apps build from, moved piece by piece. One copy of the safety logic from the
+  start and no drift. Cost: it changes the shipping Android app and its tests as each piece moves (75 files use Java's
+  date and time classes, for example), and it needs your word that shared code may be written into the Forager
+  repository, which today's rule forbids."
+  - Rejected: "Copy now, converge later"; "Decide after first build".
+- **The Apple Developer Program:** "When a signed build is wanted (Recommended)". The option read: "No cost until there
+  is an app worth putting on a real phone. Every iOS check until then is an unsigned simulator build, as now. The signing
+  setup on CI gets proven later, in one step."
+  - Rejected: "Now".
+- **The camera with RAW and DNG:** "Out of the first release (Recommended)". The option read: "Finds on iOS carry imported
+  photos only at first. The camera comes in a later release, ideally once someone can test on a real iPhone. Keeps
+  untestable code out of the first version."
+  - Rejected: "In the first release".
+All four first options were marked as recommended by the planner.
+**Read narrowly, the planner's:**
+- **"Share the domain now" rules the direction, not a write.** The option itself says a write into Forager "needs your
+  word". This repository's `CLAUDE.md` still says nothing for iOS is written to slayer8366/Forager "until the owner rules
+  otherwise", this session cannot reach that repository, and Forager has its own planner and record. So before anything
+  is written there the planner brings the owner a concrete proposal: which repository holds the shared module, how the
+  Android build consumes it, who dispatches the Android side, and the first piece to move. `CLAUDE.md` is changed only
+  on that word.
+- **The map's unknowns come first as a spike, not a build-out:** one screen on the simulator that shows the map from the
+  project's own tiles, with the offline store and PMTiles tried, on the wrapper the survey names. If it fails, the
+  second way (MapLibre's own iOS SDK in a native view) is tried before any other screen is started.
+**The plan's shape from here (the planner's, technical; each phase gets its own intent entry):**
+1. **Finish the BRouter port:** step 10's last items, and a public route-ways entry (-152).
+2. **The map spike** on the simulator, with the app shell around it: module layout, the Xcode project made on a runner.
+3. **The shared-domain proposal** to the owner, then the first piece moved.
+4. **The designer's first job** (-13), with the survey as input.
+5. Routing in the app through the adapter (the survey's 12 behaviours), then the surfaces in an order ruled later.
+**Still the owner's, not asked yet:** the order of the later surfaces; the fungi index; scheduled backup; device
+evidence; the app's public identity (-152).
+**Notes:** Written by the planner session by hand. Next free ID -154.
