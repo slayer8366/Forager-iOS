@@ -73,13 +73,16 @@ jobs:
           xcrun simctl list runtimes
           xcrun simctl list devices available
       # Step 10 (RECORD -137, decision 4): the pinned tiles for the simulator's tests, fetched by the build's own fetchTiles
-      # (tools/fetch-tiles.sh, the same pins and release as the JVM; each file refused unless its size and SHA-256 match).
-      - name: Step 10 - the pinned tiles for the simulator (fetchTiles)
-        run: ./gradlew --no-daemon :brouter:fetchTiles
+      # (tools/fetch-tiles.sh, the same pins and release as the JVM; each file refused unless its size and SHA-256 match),
+      # and the oracle's profiles2/ (with lookups.dat) by fetchOracle (tools/fetch-oracle.sh, pinned), for F0's routes.
+      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
+        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
       - name: commonTest on the iOS simulator
         env:
-          # simctl hands SIMCTL_CHILD_X to the simulator's process as X (PinnedTileReadTest reads BROUTER_TILES_DIR).
+          # simctl hands SIMCTL_CHILD_X to the simulator's process as X (PinnedTileReadTest reads BROUTER_TILES_DIR;
+          # F0RouteCommonTest also BROUTER_ORACLE_DIR).
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
         run: ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
       - name: Counts from the JUnit XML, and the XML itself
         if: always()
