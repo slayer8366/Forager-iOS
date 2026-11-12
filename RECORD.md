@@ -6044,3 +6044,23 @@ the BRouter port's remaining items come before any app phase is dispatched: the 
   (-133); a ruling is quoted from its entry, read in the same turn (-135); briefs name files and line ranges and give
   one item (-131, -149).
 **Notes:** Written by the planner session by hand. Next free ID -160.
+
+**Kind:** outcome
+**ID:** 2026-10-28-160
+**Timestamp:** 2026-11-12T23:53:16Z
+**Continues:** 2026-10-28-156, 2026-10-28-159
+**Title:** Session 59's diagnosis arrived as the planner's session ended: 5 numbers, a tie in the 17th digit; none of
+it checked by the planner
+**Observed (Plumb's report, not verified beyond the head):** `brouter-port-5b` reads `b359671` by `git ls-remote`; Plumb
+names `b359671`. Run 43329465498. Findings: `docs/audits/2026-11-12-brouter-port-step10/s59-gpx-numbers.md`.
+- All 1,287 values printed in GPX's mode 7 on the five routes have the same raw bits on the JVM and the simulator.
+- **5 print differently, one per route, all the time `ti` (`FormatGpx.kt:171`),** each in the last of 17 digits only.
+  `ti` is a `Float` widened to a `Double`, so its value lies exactly halfway between two 17-digit decimals; Java's
+  documented rule takes the even last digit and the simulator takes the other. Both texts read back to the same bits.
+- Other places a format prints a floating number as the platform's text: `FormatGpx` `:162`, `:166`, `:172`, `:195`,
+  `:276`, `:507`, `:529`; `FormatJson` `:104`, `:184`, `:223`, `:332`. KML, CSV, the hints and `Formatter`: none.
+- The brief said three numbers in that branch; there are four (the elevation at `:162`).
+**Not done by the planner:** the verification (trailers, E1 by `scan.sh <c>^ <c>`, the run's four jobs, the five pairs).
+**For the next session:** verify, then bring the owner the question -156 named. The finding narrows it: the difference
+is one rounding rule at an exact tie, on values that are floats widened to doubles.
+**Notes:** Written by the planner session by hand. Next free ID -161.
