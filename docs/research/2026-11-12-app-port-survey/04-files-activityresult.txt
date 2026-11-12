@@ -1,0 +1,6 @@
+MainActivity.kt
+ui/backup/BackupSection.kt
+ui/log/CartographyEntryReportScreen.kt
+ui/log/PhotoAcquisitionLaunchers.kt
+ui/log/PhotoViewerDialog.kt
+ui/track/ImportGpxButton.kt

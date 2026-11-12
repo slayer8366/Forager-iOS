@@ -1,0 +1,17 @@
+map/OfflineReliefTileStore.kt
+photo/CameraXCapabilityReader.kt
+photo/CameraXCaptureSession.kt
+photo/CameraXRawCapture.kt
+photo/PhotoOrientation.kt
+ui/log/DecodedPhoto.kt
+ui/log/PhotoViewerDialog.kt
+ui/map/FanOutLayers.kt
+ui/map/FanOutRenderSignal.kt
+ui/map/MapPosition.kt
+ui/map/MapReturnCover.kt
+ui/map/MarkerGlyphs.kt
+ui/map/NightImageApply.kt
+ui/map/PlainMapNudge.kt
+ui/map/RouteHomeLayers.kt
+ui/map/SightingsMap.kt
+ui/map/WaypointNameLayers.kt

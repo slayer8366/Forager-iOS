@@ -1,0 +1,59 @@
+package	files	lines
+alert	5	703
+data	93	10711
+domain	288	22418
+export	1	116
+importgpx	4	252
+location	5	479
+map	16	1910
+net	3	107
+photo	14	2822
+routing	8	685
+sensor	4	391
+service	2	611
+ui	441	74328
+(root)	8	1773
+TOTAL app/src/main	892	117306
+
+second-level packages (files):
+domain/dropoff	4
+domain/mapdata	12
+domain/model	48
+domain/nextturn	14
+domain/raw	1
+domain/referencetrails	1
+domain/relief	1
+domain/route	10
+domain/routedata	3
+domain/routing	4
+domain/wayhome	9
+domain/wayto	7
+domain (direct)	174
+ui/adaptive	3
+ui/availability	175
+ui/backup	3
+ui/credits	4
+ui/format	2
+ui/log	90
+ui/map	117
+ui/motion	12
+ui/route	10
+ui/theme	10
+ui/track	15
+ui (direct)	0
+data/backup	8
+data/dropoffmap	4
+data/local	26
+data/mapdetail	2
+data/raw	6
+data/remote	11
+data/repository	29
+data/routedata	7
+data (direct)	0
+
+source sets (kt files):
+app/src/androidTest/	1
+app/src/main/	892
+app/src/test/	1007
+app/src/testDebug/	4
+third_party/brouter java	101	19327

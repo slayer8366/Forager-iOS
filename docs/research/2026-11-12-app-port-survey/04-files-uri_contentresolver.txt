@@ -1,0 +1,14 @@
+data/backup/ContentResolverBackupFiles.kt
+importgpx/ContentUriGpxFileSource.kt
+importgpx/GpxImportActivity.kt
+photo/CameraCaptureFiles.kt
+photo/CameraCapturePhotoSource.kt
+photo/FilePhotoStore.kt
+photo/GalleryImportPhotoSource.kt
+photo/PhotoExporter.kt
+ui/availability/AvailabilityPureFunctions.kt
+ui/availability/BackgroundRunPrompt.kt
+ui/log/PhotoViewerDialog.kt
+ui/log/RecordsTab.kt
+ui/motion/ReduceMotion.kt
+ui/track/ImportGpxButton.kt

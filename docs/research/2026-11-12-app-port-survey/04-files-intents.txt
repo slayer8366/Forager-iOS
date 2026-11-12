@@ -1,0 +1,14 @@
+MainActivity.kt
+alert/AndroidAlertDelivery.kt
+alert/AndroidWakeUpAlarms.kt
+data/backup/AndroidBackupNotifier.kt
+data/backup/ContentResolverBackupFiles.kt
+importgpx/GpxImportActivity.kt
+importgpx/GpxImportNotice.kt
+service/TrackRecordingService.kt
+ui/availability/AvailabilityPureFunctions.kt
+ui/availability/AvailabilityScreen.kt
+ui/availability/BackgroundRunPrompt.kt
+ui/credits/OpenMeteoCredit.kt
+ui/log/PhotoViewerDialog.kt
+ui/track/TrackExportPanel.kt

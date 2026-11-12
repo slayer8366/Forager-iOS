@@ -1,0 +1,40 @@
+maplibre	39	ui/map=35 map=4 
+camerax	3	photo=3 
+camera2	2	photo=2 
+location	5	ui/map=1 location=4 
+sensors	5	ui/map=1 sensor=4 
+notifications	5	data/backup=1 service=1 alert=3 
+alarms	5	ui/map=1 data/backup=1 service=1 alert=2 
+workmanager	2	data/backup=2 
+room	25	data/local=25 
+datastore	13	data/repository=13 
+retrofit	4	data/remote=4 
+okhttp	9	data/dropoffmap=2 net=1 data/mapdetail=1 data/routedata=1 data/remote=1 map=3 
+serialization	19	ui/map=7 data/routedata=2 data/local=1 data/remote=5 ui/credits=1 domain=3 
+permissions	11	ui/map=2 ui/backup=2 (root)=1 data/backup=1 ui/log=2 photo=1 location=1 alert=1 
+activityresult	6	ui/backup=1 (root)=1 ui/log=3 ui/track=1 
+intents	14	(root)=1 data/backup=2 ui/log=1 ui/availability=3 service=1 ui/credits=1 ui/track=1 importgpx=2 alert=2 
+uri_contentresolver	14	ui/motion=1 data/backup=1 ui/log=2 ui/availability=2 photo=5 ui/track=1 importgpx=2 
+fileprovider	2	photo=1 ui/track=1 
+context	66	ui/map=10 (root)=2 net=1 data/backup=4 ui/log=2 ui/availability=4 photo=5 service=1 data/local=2 location=5 routing=1 ui/credits=1 data/repository=12 map=5 ui/track=1 export=1 importgpx=1 alert=5 sensor=3 
+log	98	ui/map=36 (root)=3 net=1 data/backup=2 ui/log=15 ui/availability=8 photo=9 service=1 location=3 ui/credits=2 data/repository=4 map=5 ui/track=1 export=1 ui/theme=1 alert=4 sensor=2 
+graphics_bitmap	17	ui/map=10 ui/log=2 photo=4 map=1 
+exif	8	photo=6 alert=2 
+connectivity	1	net=1 
+os	28	ui/map=5 ui/backup=1 ui/motion=1 (root)=1 net=1 data/backup=1 ui/log=3 photo=5 service=1 location=3 map=2 importgpx=1 alert=2 sensor=1 
+view_window	22	ui/map=7 ui/log=6 ui/availability=4 photo=1 ui/credits=1 ui/adaptive=1 ui/track=1 sensor=1 
+lifecycle	22	ui/route=1 ui/map=3 ui/backup=1 ui/motion=1 (root)=1 ui/log=8 ui/availability=2 photo=2 ui/track=1 importgpx=2 
+activity	29	ui/map=4 ui/backup=1 ui/motion=2 (root)=1 ui/log=10 ui/availability=9 ui/track=1 importgpx=1 
+compose	267	ui/route=8 ui/map=57 ui/backup=2 ui/motion=12 (root)=1 ui/log=61 ui/availability=107 photo=1 ui/credits=2 ui/format=2 ui/adaptive=3 ui/track=2 ui/theme=9 
+compose_platform	41	ui/map=4 ui/backup=2 ui/motion=2 ui/log=15 ui/availability=11 photo=1 ui/credits=2 ui/format=1 ui/adaptive=2 ui/track=1 
+material_icons	58	ui/route=1 ui/map=3 ui/log=24 ui/availability=28 ui/track=2 
+r_resources	10	ui/map=3 ui/backup=1 data/backup=1 ui/log=2 service=1 ui/theme=1 alert=1 
+java_time	75	ui/route=2 ui/map=5 ui/log=12 ui/availability=18 data/repository=6 ui/format=1 domain=27 ui/track=3 export=1 
+java_io	75	ui/map=2 data/dropoffmap=3 (root)=1 data/backup=4 data/mapdetail=1 ui/log=2 ui/availability=1 data/routedata=5 photo=12 location=1 routing=7 map=6 domain=22 ui/track=1 export=1 data/raw=5 importgpx=1 
+java_util	50	ui/map=1 data/dropoffmap=2 data/backup=4 data/mapdetail=1 ui/log=3 ui/availability=3 data/routedata=2 photo=4 location=1 routing=1 data/remote=1 ui/format=1 map=6 domain=19 alert=1 
+java_other	9	data/backup=1 ui/availability=1 data/routedata=1 photo=2 map=1 domain=3 
+mgrs	1	domain=1 
+btools	3	routing=3 
+any_android	418	ui/route=9 ui/map=83 ui/backup=3 ui/motion=12 data/dropoffmap=2 (root)=4 net=3 data/backup=4 data/mapdetail=1 ui/log=75 ui/availability=110 data/routedata=1 photo=13 service=1 data/local=25 location=5 routing=4 data/remote=4 ui/credits=3 data/repository=14 ui/format=2 map=10 domain=1 ui/adaptive=3 ui/track=3 export=1 ui/theme=9 importgpx=4 alert=5 sensor=4 
+android_not_compose	234	ui/route=1 ui/map=57 ui/backup=3 ui/motion=3 data/dropoffmap=2 (root)=4 net=3 data/backup=4 data/mapdetail=1 ui/log=32 ui/availability=22 data/routedata=1 photo=13 service=1 data/local=25 location=5 routing=4 data/remote=4 ui/credits=3 data/repository=14 ui/format=1 map=10 domain=1 ui/adaptive=2 ui/track=3 export=1 ui/theme=1 importgpx=4 alert=5 sensor=4 
+only_log (subset of android_not_compose bound by android.util.Log alone)	21

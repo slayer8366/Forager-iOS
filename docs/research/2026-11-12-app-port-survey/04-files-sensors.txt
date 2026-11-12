@@ -1,0 +1,5 @@
+sensor/AndroidCompassProvider.kt
+sensor/AndroidDeclinationProvider.kt
+sensor/AndroidLevelProvider.kt
+sensor/AndroidPressureProvider.kt
+ui/map/NavigationView.kt

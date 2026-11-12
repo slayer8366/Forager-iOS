@@ -1,0 +1,41 @@
+#!/bin/sh
+# usage: 05-baseline-recount.sh <export root>. Re-runs the counts the 2026-10-26 feasibility report states a method for.
+cd "$1" || exit 1
+A=app/src/main/java/com/zynergylabs/forager/app
+T=app/src/test
+c() { printf '%s\t%s\n' "$1" "$2"; }
+c 'domain files (baseline 227)' "$(find $A/domain -name '*.kt' | wc -l)"
+c 'domain lines (baseline 16,871)' "$(find $A/domain -name '*.kt' -print0 | xargs -0 cat | wc -l)"
+c 'domain files importing java. or javax. (scan; baseline compiler figure 66 not re-run)' "$(grep -rlE '^import javax?\.' $A/domain | wc -l)"
+c 'domain files importing java.time (baseline cause count 27)' "$(grep -rlE '^import java\.time' $A/domain | wc -l)"
+c 'domain files importing java.io or java.nio' "$(grep -rlE '^import java\.n?io' $A/domain | wc -l)"
+c 'domain files importing java.util.UUID (baseline 8)' "$(grep -rlE '^import java\.util\.UUID' $A/domain | wc -l)"
+c 'domain files using Math. (no import; baseline 8)' "$(grep -rlE '(^|[^A-Za-z.])Math\.[a-z]' $A/domain | wc -l)"
+c 'domain files using String.format or .format( with Locale (baseline 6)' "$(grep -rlE 'String\.format|Locale\.' $A/domain | wc -l)"
+c 'domain files using System. (baseline 5)' "$(grep -rlE '(^|[^A-Za-z.])System\.[a-z]' $A/domain | wc -l)"
+c 'domain files using synchronized (baseline 4)' "$(grep -rlE 'synchronized\(|@Synchronized' $A/domain | wc -l)"
+c 'domain files with any of: java import, Math., String.format, Locale., System., synchronized (scan union)' "$(grep -rlE '^import javax?\.|(^|[^A-Za-z.])Math\.[a-z]|String\.format|Locale\.|(^|[^A-Za-z.])System\.[a-z]|synchronized\(|@Synchronized|javaClass' $A/domain | wc -l)"
+c 'domain files importing android. or androidx. (baseline: none stated)' "$(grep -rlE '^import androidx?\.' $A/domain | wc -l)"
+c 'domain interfaces (baseline "about 60 more" ports)' "$(grep -rhE '^(fun |internal |public )?(fun )?interface [A-Z]' $A/domain | wc -l)"
+c 'files importing org.maplibre.android (baseline 30: 26 ui/map, 4 map)' "$(grep -rlE '^import org\.maplibre\.android' $A | wc -l)"
+c 'map/MapLibreOfflineMapRepository.kt lines (baseline 494)' "$(wc -l < $A/map/MapLibreOfflineMapRepository.kt)"
+c 'photo/ lines (baseline 2,822)' "$(cat $A/photo/*.kt | wc -l)"
+c 'data/remote lines (baseline 463)' "$(find $A/data/remote -name '*.kt' -print0 | xargs -0 cat | wc -l)"
+c 'Migrations.kt SupportSQLiteDatabase references (baseline 20)' "$(grep -c 'SupportSQLiteDatabase' $A/data/local/Migrations.kt)"
+c 'files importing android.util.Log (baseline 80)' "$(grep -rlE '^import android\.util\.Log' $A | wc -l)"
+c 'Material icon import lines (baseline 181)' "$(grep -rhE '^import androidx\.compose\.material\.icons' $A | wc -l)"
+c 'files importing Compose (baseline 213)' "$(grep -rlE '^import androidx\.compose' $A | wc -l)"
+c 'lines in files importing Compose (baseline 44,186)' "$(grep -rlE '^import androidx\.compose' $A | xargs cat | wc -l)"
+c 'Compose files also importing android., MapLibre or CameraX (baseline 69)' "$(grep -rlE '^import androidx\.compose' $A | xargs grep -lE '^import (android\.|org\.maplibre|androidx\.camera)' | wc -l)"
+c 'all Kotlin lines under app/src/main (baseline "~98k")' "$(find app/src/main -name '*.kt' -print0 | xargs -0 cat | wc -l)"
+c 'test files, app/src/test + testDebug + androidTest, *.kt (baseline 696)' "$(find app/src/test app/src/testDebug app/src/androidTest -name '*.kt' | wc -l)"
+c '@Test in those (baseline 5,121)' "$(find app/src/test app/src/testDebug app/src/androidTest -name '*.kt' -print0 | xargs -0 grep -hE '^\s*@Test\b' | wc -l)"
+c 'test files using Robolectric or AndroidJUnit4 (baseline 365)' "$(find app/src/test app/src/testDebug app/src/androidTest -name '*.kt' -print0 | xargs -0 grep -lE 'Robolectric|AndroidJUnit4' | wc -l)"
+D=$(find $T -type d -path '*/app/domain' | head -1)
+c 'domain test files (baseline 138)' "$(find $D -name '*.kt' | wc -l)"
+c 'domain test files using Robolectric or AndroidJUnit4 (baseline 5)' "$(find $D -name '*.kt' -print0 | xargs -0 grep -lE 'Robolectric|AndroidJUnit4' | wc -l)"
+c 'domain test files with no @Test (baseline 8 fakes or fixtures)' "$(find $D -name '*.kt' -print0 | xargs -0 grep -LE '@Test' | wc -l)"
+c 'test files using createComposeRule/createAndroidComposeRule (Compose UI tests on Robolectric)' "$(find app/src/test app/src/testDebug -name '*.kt' -print0 | xargs -0 grep -lE 'create(Android)?ComposeRule|runComposeUiTest' | wc -l)"
+c 'androidTest files' "$(find app/src/androidTest -type f | wc -l)"
+c 'test files mentioning captureToImage/captureRoboImage/Paparazzi/Roborazzi' "$(find app/src/test app/src/testDebug app/src/androidTest -name '*.kt' -print0 | xargs -0 grep -lE 'captureToImage|captureRoboImage|Paparazzi|Roborazzi' | wc -l)"
+c 'brouter java files / lines (baseline 101 / 19,327)' "$(find third_party/brouter -name '*.java' | wc -l) / $(find third_party/brouter -name '*.java' -print0 | xargs -0 cat | wc -l)"

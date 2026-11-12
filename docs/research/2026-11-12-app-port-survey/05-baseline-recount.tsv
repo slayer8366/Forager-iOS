@@ -1,0 +1,34 @@
+domain files (baseline 227)	288
+domain lines (baseline 16,871)	22418
+domain files importing java. or javax. (scan; baseline compiler figure 66 not re-run)	60
+domain files importing java.time (baseline cause count 27)	27
+domain files importing java.io or java.nio	22
+domain files importing java.util.UUID (baseline 8)	9
+domain files using Math. (no import; baseline 8)	12
+domain files using String.format or .format( with Locale (baseline 6)	5
+domain files using System. (baseline 5)	1
+domain files using synchronized (baseline 4)	4
+domain files with any of: java import, Math., String.format, Locale., System., synchronized (scan union)	74
+domain files importing android. or androidx. (baseline: none stated)	0
+domain interfaces (baseline "about 60 more" ports)	70
+files importing org.maplibre.android (baseline 30: 26 ui/map, 4 map)	39
+map/MapLibreOfflineMapRepository.kt lines (baseline 494)	511
+photo/ lines (baseline 2,822)	2822
+data/remote lines (baseline 463)	463
+Migrations.kt SupportSQLiteDatabase references (baseline 20)	20
+files importing android.util.Log (baseline 80)	98
+Material icon import lines (baseline 181)	190
+files importing Compose (baseline 213)	267
+lines in files importing Compose (baseline 44,186)	52110
+Compose files also importing android., MapLibre or CameraX (baseline 69)	65
+all Kotlin lines under app/src/main (baseline "~98k")	117306
+test files, app/src/test + testDebug + androidTest, *.kt (baseline 696)	1012
+@Test in those (baseline 5,121)	6876
+test files using Robolectric or AndroidJUnit4 (baseline 365)	574
+domain test files (baseline 138)	191
+domain test files using Robolectric or AndroidJUnit4 (baseline 5)	8
+domain test files with no @Test (baseline 8 fakes or fixtures)	12
+test files using createComposeRule/createAndroidComposeRule (Compose UI tests on Robolectric)	353
+androidTest files	1
+test files mentioning captureToImage/captureRoboImage/Paparazzi/Roborazzi	34
+brouter java files / lines (baseline 101 / 19,327)	101 / 19327
