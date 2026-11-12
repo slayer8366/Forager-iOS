@@ -27,3 +27,22 @@ EXPECTED (written before the run):
 OBSERVED:
 Not run in session 36: stopped at the planner's handoff call (the getter run was started and killed before it wrote counts; the tree restored cmp-equal). The expectation above stands for the next session.
 Session 38: started (e3Strata on the pinned Temurin, 1182 cases: F0 2 and R's 20 StdModel profiles x 59; 354 model-profile cases left out) and killed at the planner's handoff call at about case 52, before any count. No observation. Scratch test deleted, tree clean. The expectation above stands.
+
+Session 39, BY A CHANGED METHOD: the port's own counters, not the oracle under JaCoCo (the planner's ruling: the oracle
+run costs two hours; the port's counters answer the same question for the comparison). A scratch patch, never committed:
+counters in the port's OsmPath.kt at the lines that correspond to the Java's, and one print in RoutingEngineRTest; one run
+of RoutingEngineRTest (single class, the shared JDK, 11 min 10 s; 0 compile errors; 1 test, 0 failures; its own line:
+1534 cases, route 968, refused 354, error 212, 0 mismatches). Counts are evaluations over the run, summed over all cases
+(the port's runs only; the refused 354 never reach OsmPath). F0's two cases are not in this run. Both files restored
+cmp-equal from saved copies after; git status showed neither.
+- Java :278 `if (isStartpoint)` (port OsmPath.kt:264): reached 403124419, true 11540.
+- Java :279 `if (rc.startDirectionValid)` (port :265): reached 11540, true 0. So :280-283 (port :266-267, the named
+  "unsupported" throw) NOT REACHED.
+- Java :350 (port :332): the line reached 189134014; `refTrack != null` true 0, so `refTrack.containsNode` NOT REACHED
+  and the penalty (:351-352) NOT REACHED.
+Against the expectation: :282-283 not reached, as expected. :350 runs on every link reached with no transfer node, with
+refTrack null on every evaluation, as the expectation guessed for alternativeidx=0; read here as the port's evaluations,
+not as JaCoCo's instruction counts, so the "partly covered" half of the expectation is not tested by this method.
+Line numbers: :278 is `if (isStartpoint)` and :279 is `if (rc.startDirectionValid)` [R: OsmPath.java at Forager
+947f1be2, sed -n 278,279p]. The "(:279)" above names startDirectionValid's line and is right as written, so it was NOT
+changed to :278; the planner's correction is put back to the planner (step 9 report, §1).
