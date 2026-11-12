@@ -5715,3 +5715,40 @@ made until now.
 2. **Then the hints are compared on every route group on the JVM,** not three: R's 968 routes and the rest, by digest.
 3. **Then the simulator,** as -148 planned.
 **Notes:** Written by the planner session by hand. Next free ID -150.
+
+**Kind:** outcome
+**ID:** 2026-10-28-150
+**Timestamp:** 2026-11-12T19:35:12Z
+**Continues:** 2026-10-28-24, 2026-10-28-137, 2026-10-28-149
+**Title:** The one hints difference is -24's 13 rows, not a fault in the port (Plumb's session 56); the first effect of
+those rows seen anywhere; the planner's correction and rulings
+**Observed:** Plumb Ledger, session 56, local JVM work on the clone's branch `s55` (ended at 106,667 by the harness's
+count, no handoff call; nothing pushed; test code saved as the local commit `34d2809`; findings in the scratchpad's
+`s56-hints-finding.md`). All of it is Plumb's reading.
+- **The case** is NT-0062. Both sides have 610 hints. One field of one hint differs: hint 380's `angle` is 0.0 on the
+  port and 2.6748896E-15 on the oracle. Its command, distance, exit, bad ways and place in the track are equal, and the
+  hints before and after are equal. It differs in every mode from 2 to 9.
+- **The cause is not in the hints code.** The three track points there lie on one line, so the angle is rounding
+  residue, and the residue depends on the last bits of the scale table. The port's table is built with msun's `cos`, the
+  oracle's with fdlibm's, and they differ in 13 of 1,800 rows.
+- LB's 59 routes at mode 8: 0 differ.
+**Checked by the planner:** the harness runs the port on `MsunLibm` (`EngineRun.kt:49`): it is a production run, the
+port as it ships. So this is the difference the owner chose in -24, "Copy Android's maths", whose option said the tests
+would "separately record whether the 13 rows ever change a route".
+**Corrected, the planner's:** -149 and the planner's message to the owner called this "the first difference between port
+and oracle since step 8" and said it would be "found and fixed". It is found. There is nothing to fix: it is the port
+agreeing with Android where Android and desktop Java differ. The planner wrote that before knowing which library the
+comparison ran on.
+**What it adds to -24's record:** on 1,742 production cases the 13 rows change no route (-137). On 130 routes with the
+hints switched on, they change one hint's angle, from an exact zero to a number 15 places after the point. That angle is
+a turn of zero degrees either way; the hint's command is the same.
+**Not shown:** that a logic run of NT-0062, the port on the oracle's library, gives the oracle's hints exactly. It is
+what the finding predicts and it has not been run.
+**Decisions (the planner's, technical):**
+1. **The hints and formats follow E6 as the routes do:** in a logic run, port on the oracle's library, they are asserted
+   equal to the oracle's on every route group; in a production run they are recorded, with the count that differs.
+2. **The simulator's stored digests are made from the port's own production run on the JVM,** not from the oracle: the
+   simulator runs msun too, so the two must be equal exactly, and a difference there is a platform difference, which is
+   what -121 asked about.
+3. **A real gap stays from -149:** step 7 compared the hints on random walks. Decision 1 closes it on engine routes.
+**Notes:** Written by the planner session by hand. Next free ID -151.
