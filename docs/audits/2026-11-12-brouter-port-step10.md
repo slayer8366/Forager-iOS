@@ -465,3 +465,25 @@ unlinks it as a peninsula when it is not one. Run by the scratch `revert.sh` on 
 `RoutingEngineMemoryTest` and once on `RoutingEngineRTest`. **Prediction [I, a guess]:** both catch it: in each memory
 group some of the cases that enter the walk route differently or fail (nodes, cost or digest), and in R some of the cases
 entering the walk do. How many is not predicted.
+
+### Session 53: predictions, pushed before each is run
+
+**Plant 1** is session 52's, above (the only plant it names); its result follows in the full §6.
+
+**Plant 2, the other kind: the order children are walked in, reversed.** Each frame takes a snapshot of its node's links
+on first visit and walks them last to first; nothing else changes. **Prediction [I, reasoned, not shown]:** no group
+catches it, and that would be a property of the walk, not a gap in the tests. What the walk removes is a link whose far
+side, once the link is cut, holds no border node (and, in tree mode, no cycle); that is a bridge of the graph and its far
+side, both fixed by the graph and the root, not by the order of visit. The numbers the order does move are `visitID`s at
+or above `baseID`, and `nodesCreated`'s restore removes a subtree's size, which is the same in any order. So: 0
+mismatches in MP64, ML5, PM5 and R. If any case differs, the reasoning is wrong and the plant is caught.
+
+**The oracle's catch** (session 52's scratch class, put first on the test classpath by its `init.gradle`): this JVM's
+default `ThreadStackSize` is 1024 KB (OpenJDK 21.0.12, x86_64; the build sets no `-Xss` and no toolchain). **Expected [I]:
+0** on the 173 memory cases and on R's 1,534, as at -60: the deepest walk is 5,679 frames, and Java's frame for this
+method is small enough that 1 MB holds it.
+
+**`canEscape` through the port** (a scratch counter, never committed), during `RoutingEngineMemoryTest`. **Expected [I]:**
+MP64 the oracle's own figures exactly, 576,094 false and 1,789,913 true (2,366,007 calls; phase 2's record, `4f815de`,
+"deterministic across E3's six regimes"), since the routes are equal; ML5 and PM5 both answers above 0. The red test's
+"0/3587" is its own region, where the oracle too answers only true (-60).
