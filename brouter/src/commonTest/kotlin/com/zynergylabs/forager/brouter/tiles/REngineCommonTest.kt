@@ -29,7 +29,6 @@ class REngineCommonTest {
         var deepest = 0
         var deepestId = ""
         var walked = 0
-        var overflows = 0
         PeninsulaDepth.reset()
         try {
             Step10Cases.check("R", nt.parent!! / "r-cases.tsv", RExpected.ROWS) { id, _ ->
@@ -39,13 +38,12 @@ class REngineCommonTest {
                     deepest = PeninsulaDepth.deepest
                     deepestId = id
                 }
-                overflows += PeninsulaDepth.overflowsCaught
                 PeninsulaDepth.reset()
             }
         } finally {
             println(
                 "step10 R profiles: ${profiles.size} of ${RExpected.PROFILES.size} covered; deepest recursion $deepest " +
-                    "(case $deepestId); $walked cases entered the walk; $overflows overflows caught; ${testThreadStack()}",
+                    "(case $deepestId); $walked cases entered the walk; ${testThreadStack()}",
             )
         }
         assertEquals(RExpected.PROFILES, profiles.toList(), "R's profiles covered, in the file's order")

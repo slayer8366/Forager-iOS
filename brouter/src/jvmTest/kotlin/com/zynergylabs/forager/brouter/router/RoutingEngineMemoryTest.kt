@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
  * Only digests and counts are printed (E1).
  *
  * Session 49 (RECORD -140, decision 2): around each port run, [PeninsulaDepth] is reset and read; per stratum it prints the
- * deepest `minVisitIdInSubtree` recursion of any case, how many cases entered the walk, the overflows the JVM caught, and
+ * deepest `minVisitIdInSubtree` recursion of any case, how many cases entered the walk, and
  * the port's runs' time.
  */
 class RoutingEngineMemoryTest {
@@ -44,7 +44,6 @@ class RoutingEngineMemoryTest {
         val seen = HashSet<String>()
         var deepest = 0
         var walked = 0
-        var overflows = 0
         var portNanos = 0L
         val gen = RGenerator(TestTiles.segments, seed, only = E3MemoryTest.TILE, minMetres = 20_000.0, ratio = 5.0)
         try {
@@ -64,7 +63,6 @@ class RoutingEngineMemoryTest {
                 portNanos += System.nanoTime() - t0
                 if (PeninsulaDepth.deepest > 0) walked++
                 deepest = maxOf(deepest, PeninsulaDepth.deepest)
-                overflows += PeninsulaDepth.overflowsCaught
                 val differ = listOfNotNull(
                     "kind".takeIf { o.kind != p.kind },
                     "nodes".takeIf { o.nodes != p.nodes },
@@ -76,7 +74,7 @@ class RoutingEngineMemoryTest {
                 if (differ.isNotEmpty()) mismatches += "${c.id}: $differ (oracle ${o.toField()}; port ${p.toField()})"
             }
             println("8b $stratum: ${seen.size} cases within $n draws; ${mismatches.size} mismatches")
-            println("8b $stratum depth: deepest recursion $deepest; $walked of ${seen.size} cases entered the walk; $overflows overflows caught; the port's runs ${portNanos / 1_000_000} ms")
+            println("8b $stratum depth: deepest recursion $deepest; $walked of ${seen.size} cases entered the walk; the port's runs ${portNanos / 1_000_000} ms")
         } finally {
             gen.close()
         }

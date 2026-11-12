@@ -15,8 +15,8 @@ import kotlin.test.Test
  * production run is gated (session 50, RECORD -141, decisions 1 and 2): unset (`jvm`, `ios-smoke`), each prints one line
  * and does nothing; the `ios-memory` job sets it (as `SIMCTL_CHILD_`[MEMORY_GATE]) and runs only these three classes, so a
  * process ended by the recursion ends that job alone. Per group it prints the deepest `minVisitIdInSubtree`
- * recursion of any case ([PeninsulaDepth], reset before each case), how many cases entered the walk, the overflows caught
- * (JVM only) and the test thread's stack ([testThreadStack]). Stack bytes in use at the deepest point are not read: no
+ * recursion of any case ([PeninsulaDepth], reset before each case), how many cases entered the walk
+ * and the test thread's stack ([testThreadStack]). Stack bytes in use at the deepest point are not read: no
  * stack address can be taken in common Kotlin, and reading one in the port would take more than the counter (session 49).
  * E1 as in [Step10Cases]: ids, counts, depths, byte counts and digests only.
  */
@@ -30,7 +30,6 @@ private fun memoryGroup(stratum: String, file: String, rows: List<NtExpected.Row
     val nt = Step10Cases.ntFile(stratum) ?: return
     var deepest = 0
     var walked = 0
-    var overflows = 0
     var deepestId = ""
     PeninsulaDepth.reset()
     try {
@@ -40,13 +39,12 @@ private fun memoryGroup(stratum: String, file: String, rows: List<NtExpected.Row
                 deepest = PeninsulaDepth.deepest
                 deepestId = id
             }
-            overflows += PeninsulaDepth.overflowsCaught
             PeninsulaDepth.reset()
         }
     } finally {
         println(
             "step10 $stratum depth: deepest recursion $deepest (case $deepestId); $walked cases entered the walk; " +
-                "$overflows overflows caught; ${testThreadStack()}",
+                "${testThreadStack()}",
         )
     }
 }
