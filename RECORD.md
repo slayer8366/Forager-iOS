@@ -5752,3 +5752,30 @@ what the finding predicts and it has not been run.
    what -121 asked about.
 3. **A real gap stays from -149:** step 7 compared the hints on random walks. Decision 1 closes it on engine routes.
 **Notes:** Written by the planner session by hand. Next free ID -151.
+
+**Kind:** intent
+**ID:** 2026-10-28-151
+**Timestamp:** 2026-11-12T20:42:30Z
+**Continues:** 2026-10-28-2, 2026-10-28-3, 2026-10-28-11, 2026-10-28-13, 2026-10-28-111
+**Title:** The app port itself is to be planned (owner); it starts with a survey of Android as it stands
+**Decision:** the owner said, verbatim: "We'll need to plan the app port itself."
+**What is already ruled and is not asked again** (-2, the owner's words there): Kotlin Multiplatform with Compose
+Multiplatform ("Option B stands"); routing by the Kotlin port of BRouter; alerts on iOS limited to "be back by" at the
+set time and the full sundown line; no Mac, builds on GitHub's macOS runners; no iPhone, simulator checks only. -11 and
+-13: an iOS designer is on the team, starting after Phase 1 of the BRouter port; it has not been started. -111:
+Forager's own next-turn code is ported for the iOS app.
+**What the plan cannot be written from:** Forager's feasibility report is dated 2026-10-26 to -28 and was written before
+anything was built. Android has moved since (`pre-main` is at `12eb9697`, 2026-11-11; the next-turn feature alone landed
+on 2026-11-09). The planner's profile makes keeping iOS level with Android its duty, checked at the start of each phase.
+**The planner's calls (technical; the owner may overrule):**
+1. **First, a survey by the researcher, Madrone Gauge,** read-only, of Forager at `12eb9697` (exported to the
+   scratchpad from the local clone; nothing is fetched from or written to slayer8366/Forager): what the app is now,
+   screen by screen and module by module; what of it is Android-bound and by which API; what of the feasibility
+   report's findings still holds; what a build and a release without a Mac need. Report on its own branch,
+   `research/app-port-survey`, in `docs/research/`.
+2. **Then the planner brings the owner the plan's open decisions,** with the survey's evidence: scope and order of the
+   first build, and whatever the survey shows is the owner's to choose.
+3. **The BRouter port's last items go on beside it** (step 10's hints and formats on the simulator, the closing list).
+4. **The designer's first job** (-13: where iOS follows iPhone habits and where it matches Android) is dispatched after
+   the survey, which is its input.
+**Notes:** Written by the planner session by hand. Next free ID -152.
