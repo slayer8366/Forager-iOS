@@ -7,6 +7,7 @@ import com.zynergylabs.forager.brouter.mapaccess.OsmNode
 import com.zynergylabs.forager.brouter.mapaccess.OsmNodePairSet
 import com.zynergylabs.forager.brouter.mapaccess.OsmPos
 import com.zynergylabs.forager.brouter.util.SortedHeap
+import kotlin.concurrent.Volatile
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
@@ -19,8 +20,8 @@ import okio.Path.Companion.toPath
  * Java's `Thread` base is not kept: Forager calls `doRun` on a thread of its own. `synchronized (openSet)` is not kept:
  * its only other reader, `getOpenSet`, is left out (§1).
  *
- * 8a ports matching and the search; 8b the memory path (`collectOutreachers`, `canEscape`, panic mode). Still to come,
- * each a `TODO` naming its sub-step: terminate, the time limit, the progress count and `catch (Error)` (8c).
+ * 8a ports matching and the search; 8b the memory path (`collectOutreachers`, `canEscape`, panic mode); 8c terminate,
+ * the time limit, the progress count and `catch (Error)`. Java reads `System.currentTimeMillis()`; the port reads [clock].
  */
 internal class RoutingEngine(
     private val fileSystem: FileSystem,
@@ -41,6 +42,12 @@ internal class RoutingEngine(
     private var foundRawTrack: OsmTrack? = null
     private var alternativeIndex = 0
     private var errorMessage: String? = null
+
+    // RoutingEngine.java:69, :86-87. Java's `volatile`: Forager's cancel calls terminate() from another thread.
+    @Volatile
+    private var terminated = false
+    private var startTime = 0L
+    private var maxRunningTime = 0L
     private var airDistanceCostFactor = 0.0
     private var lastAirDistanceCostFactor = 0.0
     private var guideTrack: OsmTrack? = null
@@ -74,7 +81,9 @@ internal class RoutingEngine(
     // RoutingEngine.java:199-361. No output or log file, `quite` (§1): the found track is the alternative asked for.
     private fun doRouting(maxRunningTime: Long) {
         try {
-            if (maxRunningTime != 0L) TODO("RoutingEngine: the time limit, step 8c, RECORD -90")
+            // Java's startTime0 and endTime (:202, :316) only feed the execution-time log line, not ported (§1).
+            startTime = clock.nowMillis()
+            this.maxRunningTime = maxRunningTime
             if (routingContext.allowSamewayback) unsupported("allowSamewayback")
             val nsections = waypoints.size - 1
             val refTracks = arrayOfNulls<OsmTrack>(nsections) // used ways for alternatives
@@ -105,6 +114,9 @@ internal class RoutingEngine(
         } catch (e: IllegalArgumentException) {
             logException(e)
         } catch (e: Exception) {
+            logException(e) // Java's logThrowable writes the info log only, which is not ported (§1)
+        } catch (e: Error) {
+            cleanOnOOM()
             logException(e)
         } finally {
             ProfileCache.releaseProfile(routingContext)
@@ -481,7 +493,7 @@ internal class RoutingEngine(
         }
     }
 
-    // RoutingEngine.java:1708-1805, with no nearby track (§1). The timeout's dirty track (:1749-1758) is 8c's.
+    // RoutingEngine.java:1708-1805, with no nearby track (§1).
     private fun searchRoutedTrack(startWp: MatchedWaypoint, endWp: MatchedWaypoint, refTrack: OsmTrack?): OsmTrack {
         var track: OsmTrack? = null
         val airDistanceCostFactors = doubleArrayOf(routingContext.pass1coefficient, routingContext.pass2coefficient)
@@ -492,8 +504,23 @@ internal class RoutingEngine(
 
             if (airDistanceCostFactor < 0.0) continue
 
-            var t = findTrack(if (cfi == 0) "pass0" else "pass1", startWp, endWp, track, refTrack, false)
-            if (routingContext.ai != null) unsupported("area info (routingContext.ai)")
+            var t: OsmTrack?
+            try {
+                t = findTrack(if (cfi == 0) "pass0" else "pass1", startWp, endWp, track, refTrack, false)
+                if (routingContext.ai != null) unsupported("area info (routingContext.ai)")
+            } catch (iae: IllegalArgumentException) {
+                val mp = matchPath
+                if (!terminated && mp != null) { // timeout, but eventually prepare a dirty ref track
+                    // matchPath is set only against a cost-cutting track (:2112), so track is not null here, as in Java.
+                    val raw = mergeTrack(mp, track!!)
+                    raw.endPoint = endWp
+                    raw.nogoChecksums = routingContext.getNogoChecksums()
+                    raw.profileTimestamp = routingContext.profileTimestamp
+                    raw.isDirty = true
+                    foundRawTrack = raw
+                }
+                throw iae
+            }
 
             if (t == null && track != null && matchPath != null) {
                 // ups, didn't find it, use a merge
@@ -519,6 +546,7 @@ internal class RoutingEngine(
         airDistanceCostFactor = 0.0
         lastAirDistanceCostFactor = 0.0
         guideTrack = track
+        startTime = clock.nowMillis() // reset timeout...
         try {
             return findTrack("re-tracking", startWp, endWp, null, refTrack, false)
                 ?: throw IllegalArgumentException("error re-tracking track")
@@ -684,6 +712,20 @@ internal class RoutingEngine(
         var needNonPanicProcessing = false
 
         while (true) {
+            // RoutingEngine.java:1975-1984. Java's `maxRunningTime / 3` (:1980) needs fastPartialRecalc, refused above
+            // (§1, RECORD -125), so the timeout is the plain limit; the third is left out.
+            if (terminated) {
+                throw IllegalArgumentException(
+                    "operation killed by thread-priority-watchdog after " + (clock.nowMillis() - startTime) / 1000 + " seconds",
+                )
+            }
+            if (maxRunningTime > 0) {
+                val timeout = maxRunningTime
+                if (clock.nowMillis() - startTime > timeout) {
+                    throw IllegalArgumentException(operationName + " timeout after " + (timeout / 1000) + " seconds")
+                }
+            }
+
             val path = openSet.popLowestKeyValue()
             if (path == null) {
                 if (openBorderList.isEmpty()) break
@@ -995,11 +1037,20 @@ internal class RoutingEngine(
 
     fun getErrorMessage(): String? = errorMessage
 
-    fun getLinksProcessed(): Int = TODO("RoutingEngine: the progress count, step 8c, RECORD -90")
+    // RoutingEngine.java:2392-2394.
+    fun getLinksProcessed(): Int = linksProcessed
 
-    fun terminate(): Unit = TODO("RoutingEngine: terminate, step 8c, RECORD -90")
+    // RoutingEngine.java:854-856.
+    private fun cleanOnOOM() {
+        terminate()
+    }
 
-    fun isTerminated(): Boolean = TODO("RoutingEngine: isTerminated, step 8c, RECORD -90")
+    // RoutingEngine.java:2432-2438.
+    fun terminate() {
+        terminated = true
+    }
+
+    fun isTerminated(): Boolean = terminated
 
     private fun unsupported(what: String): Nothing =
         throw UnsupportedOperationException("RoutingEngine: $what is not supported (step 8 report §1)")
