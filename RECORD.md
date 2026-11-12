@@ -5625,3 +5625,55 @@ with the deeper depths, and "restored: cmp equal".
 4. **No small-stack run of the oracle is built now.** It would show an overflow the test JVM never has. It is named for
    the owner as something that can be measured if wanted.
 **Notes:** Written by the planner session by hand. Next free ID -148.
+
+**Kind:** outcome
+**ID:** 2026-10-28-148
+**Timestamp:** 2026-11-12T19:18:00Z
+**Continues:** 2026-10-28-60, 2026-10-28-61, 2026-10-28-126, 2026-10-28-147
+**Title:** The first CI run with every job green (Plumb's session 54): `CollectOutreachersTest` passes with its assertion
+unchanged; four clock tests on the simulator; `catch (Error)` shown on Native; the planner's rulings
+**Observed:** Plumb Ledger, session 54, `brouter-port-5b` `004cd75` to `2929df0` (fast-forward only; called at 153,270,
+ended at 158,353 by the harness's count; 4 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **Why the test never saw "false"** [R, Plumb's reading of the code]: `collectOutreachers` marks every node it reaches
+  from the hollow nodes, and `canEscape` answers "true" at once for a marked node. The test asked only about such nodes.
+- **What was added** (`041d8b5`, prediction in the same commit before the run): a second `collectOutreachers` on the same
+  map, as the engine makes at its next check out of memory bounds (`RoutingEngine.java:2012`, then `canEscape` at
+  `:2016`), and the same every-37th `canEscape` calls, traced on both engines.
+- `overflowsCaught` removed with its three reads, all prints (`97965dd`).
+- **`EngineStopCommonTest`** (`4e311ce`): four of the JVM's clock tests in commonTest, on F0's first case: the time limit
+  and the watchdog's seconds on an injected clock, an `Error` caught, an `Exception` caught. Not moved: FK 9 to 11 and
+  FK11's count (they run the oracle), the stopped-clock test (a live oracle run), the mid-run cancel (a JVM thread).
+**Checked by the planner:**
+- `git ls-remote` `2929df0`, a fast-forward of `004cd75`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 4. CI and the build are untouched.
+- **`CollectOutreachersTest`'s diff: 18 lines added, none removed.** The assertion and the regions are as they were. The
+  added calls are the ones `RoutingEngine.java` makes in its memory path, made on both engines and traced on both.
+- The port's diff: the dead field and its comment. Other tests: the lines that printed it.
+- **Run 43277598212 on `4e311ce`: the run's conclusion is "success", the first on this branch.** Read by the planner:
+  - `jvm`: **234 tests, 0 failures.** `CollectOutreachersTest` prints, with a destination, "canEscape false/true
+    1616/5558" over 12 regions; without one, 0/3587 as before. 0 ` e: `; both `compileKotlinIos*`.
+  - `ios-smoke`: simulator **50 of 50**; `EngineStopCommonTest` 4 tests, 0 failures, on `iosSimulatorArm64`, the four
+    named above; arm64 7 of 7, the gate "OK".
+  - `ios-memory`: MP64 59, ML5 59, PM5 55 and R's 240 all equal; the ladder 20 of 20 survived and equal; no crash word.
+  - `jvm-production`: 1,742 cases, 1,742 equal.
+  - E1 on the simulator logs, timestamps cut: 0.
+  **Every iOS result simulator-checked.**
+- Run 43270264347's `ios-smoke` shows "cancelled"; why is not known. The run after it is whole.
+**What this answers:**
+- **-61 is closed in full:** the overflow is gone by the owner's ruling (-144), and the coverage assertion is met where
+  the engine's own sequence makes both answers.
+- **-126's open question:** on Kotlin/Native a `kotlin.Error` thrown inside the run is caught, the engine terminates and
+  keeps its message. A real out-of-memory on iOS is not that: the system ends the process before any catch [I].
+**For the independent reviewer, added to -107, -116, -119, -126:** a red test turned green by an addition to its setup.
+The assertion did not move, but the reviewer should see it.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: yes.** A second state of the same regions carries out -61's call: the assertion is unchanged
+   and is now met on the oracle.
+2. **Plumb's question 2:** the stopped-clock test gets a common sibling held to F0's stored row. The JVM test stays as
+   it is. That adds a test and changes none.
+3. **`brouter-port-5b` may now merge into `brouter-port` as far as -61's condition goes** ("5b can't merge while the
+   test is red"). Merges are on the owner's word only; none is made.
+4. **Left in step 10:** the turn hints and the four export formats on the simulator, which no iOS test reaches yet; the
+   planted error across the simulator's groups (-139); the closing list.
+**Notes:** Written by the planner session by hand. Next free ID -149.
