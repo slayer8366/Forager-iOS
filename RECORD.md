@@ -5311,3 +5311,50 @@ was ended by the harness at 141,274 with NT's work uncommitted in the clone, ses
 3. **R's 1,180 would not fit the job's 45 minutes** at this speed. E5's fallback of 312 is the plan's answer; it is ruled
    on when the timing on the simulator is measured, not guessed.
 **Notes:** Written by the planner session by hand. Next free ID -140.
+
+**Kind:** outcome
+**ID:** 2026-10-28-140
+**Timestamp:** 2026-11-12T09:04:44Z
+**Continues:** 2026-10-28-61, 2026-10-28-80, 2026-10-28-139
+**Title:** Step 10, Plumb's session 48: DL, F0h and FK 1 to 8 on the iOS simulator; 389 cases equal to their stored rows;
+FK7-x1's message read on iOS; the planner's rulings
+**Observed:** Plumb Ledger, session 48, `brouter-port-5b` `852dd5b` to `d9fc91c` (fast-forward only; called at 150,034,
+ended at 155,139 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **DL-lat and DL-lon** (`0ec7e85`), **F0h and FK 1 to 8** (`2cb3356`), as NT was done. F0h's ends are written at run
+  time like the others and are not committed. FK 7 and 8's edited tile folders are made by the same JVM step.
+- `RoutingEngineFKTest`'s kind 7 and 8 case builders moved out of the tests so the writer builds the same folders.
+- Plumb read `ios-smoke` on `0ec7e85` only. Not done: the timing table.
+**Checked by the planner:**
+- `git ls-remote` `d9fc91c`, a fast-forward of `852dd5b`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3.
+- The workflow diff is a comment and a step's name. `RoutingEngineFKTest`'s diff, 49 changed lines, touches no
+  assertion and no comparison.
+- **`ios-smoke` on `2cb3356`** (run 43185488304), read by the planner: simulator **41 of 41**; arm64 7 of 7, the gate
+  "OK"; 0 ` e: `; 18 minutes. Per group, drawn or built on the runner's arm64 JVM, then on the simulator:
+  - NT, LB, CR, DL-lat, DL-lon: 59 of 59 stored ids each, **59 of 59 equal on all six fields and the tuple digest** each
+    (119 s, 31 s, 131 s, 245 s, 87 s);
+  - F0h: 8 of 8 built, 8 of 8 equal on all six fields and the tuple digest;
+  - FK 1 to 6 and FK8: 10, 10, 10, 10, 10, 10 and 11, every one equal on all six fields and the tuple digest;
+  - FK7: 13 of 13 equal on the kind's family and the five track fields, as the JVM test compares it;
+  - F0: both cases equal on six fields and the tuple digest.
+  **Simulator-checked.** 2 + 295 + 8 + 84 = 389 cases, 0 mismatches [C].
+- **FK7-x1's message on iOS** (-80's question for this step): the simulator prints the port's text,
+  "to-position not mapped in existing datafile", the stored family's text, "same text true".
+- **E1 on that log** [C], timestamps cut: 0 on the step 10 lines; 1 on the whole log, the older float-literal list; no
+  tab-separated row of ends.
+- That run's `jvm` and `jvm-production` jobs were still running. Not read.
+**What this shows:** F0h's routes carry heights (-62), so heights computed on the simulator now equal the stored ones on
+8 routes. The eight failure kinds fail on iOS as on the JVM, with the same messages where the message is compared.
+**What it does not:** a real iPhone; the memory groups (173 cases) and the recursion (-61); R; FK 9 to 11; speed.
+**Decisions (the planner's, technical):**
+1. **Next, the memory groups (MP64, ML5, PM5) in a simulator step of their own,** after the present one, so a process
+   ended by the recursion leaves the 389 standing.
+2. **A depth counter goes into the port's recursion** for -61: one internal field, written in `cleanupPeninsulas`'s walk,
+   read by tests only; the JVM suite shows nothing else moved. On the simulator the test prints, per group, the deepest
+   recursion reached, the test thread's stack size, and the stack bytes used at that depth. That is the number the owner
+   asked to see before deciding (-61).
+3. **R on the simulator is E5's fallback,** the first 12 cases of each profile, unless the memory step's timing shows
+   the whole fits.
+4. **The planted error across all groups** (-139, decision 1) comes last.
+**Notes:** Written by the planner session by hand. Next free ID -141.
