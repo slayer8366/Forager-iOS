@@ -119,3 +119,71 @@ Next:
    record them, do not fix.
 3. F0h's 8 cases (`E3F0hTest`, `TestTiles.f0h`).
 4. Q1 and Q2 answered.
+
+## 2. Session 40
+
+Plumb Ledger, session 40, dispatched by Cedar Datum: one CI change, NT's second plant, FK 1 to 8 and F0h through the
+port. Branch `brouter-port-5b`, from `1bf57ca`, fast-forward only.
+
+### 2.1 CI stops running on docs-only pushes (`33de34b`)
+
+`.github/workflows/brouter.yml`: the bare `push:` at line 7 [R] gains `paths-ignore:` with `'docs/**'`; `pull_request:`
+unchanged; nothing else moved (`git diff --stat`: 2 insertions) [C]. From here, docs go up with the next code push.
+
+### 2.2 NT's second plant: STOP, a false premise in -132
+
+-132's reading says NT's cases are drawn for two start links whose *radii* differ by at most 4 ulps. They are not:
+- `NTGenerator.kt:26-27` [R]: the start is exactly on the junction J, "every link at J has radius 0 ... so the comparator
+  orders them by `directionDiff` alone"; `:93` rejects a draw whose crosspoint is not J, `:95` one whose two links' radii
+  differ, `:97` one whose `directionDiff` gap is over 4 ulps. `E3NTTest.kt:43` marks a case only when
+  `first.radius == second.radius`. The 4 ulps are between the two `directionDiff`s, not the radii.
+- `docs/audits/2026-10-29-brouter-port-phase2/step1b/23-nt-select.tsv` [C: `grep -o 'gap [0-9]* ulps' | sort | uniq -c`]:
+  the 59 taken rows read `gap 0 ulps`, all 59.
+
+So the count asked for: on 59 of 59 NT cases the two nearest start links' radii are exactly equal (both 0, the start on
+J), and on 59 of 59 their `directionDiff`s are exactly equal too [C, the select table, the oracle's own probe]. The
+comparator returns 0 for that pair under the true order, under session 39's reversed tie-break and under the Float plant
+alike, so the stable sort keeps insertion order: neither plant can reorder the near-tied pair [I, from the code].
+The Float plant changes 0.0 to 0.0f and back, and can reorder only entries of nonzero radius, below the radius-0 ones;
+`wayNearest[0]` is unchanged [I]. A run would pass whole by construction, and "NT passes whole" would then say nothing
+about decision 2's question. Per the dispatch's stop on a false premise, **the plant was not run** and no order count
+under it was made. For the planner: NT's near-tie is an exact tie of both keys in all 59 cases, so no comparator plant on
+radius or `directionDiff` can reach it; what decides the pair is the order the links are added in (`end()`'s insertion
+order, `WaypointMatcherImpl.kt:176-193`), which a plant there could test.
+
+### 2.3 FK 1 to 8 through the port
+
+`RoutingEngineFKTest` (new, `34277b6`, the comparison stated in its commit before any run): the cases built as
+`E3FKTest` builds them (seeds `SEED + kind`, its caps; kinds 3 and 4 by 1b's draw ids; kinds 7 and 8 on edited copies of
+E170_S50 in a scratch folder); per case the oracle held to its row (exact: the whole tuple's digest; outcome: the kind),
+then port against oracle on the family (kind 7's numbers as `*`) and the five track fields.
+
+First run [C: the class's XML, 0 compile errors, `10-fk-first-run.txt`]: 8 tests, 0 failures; PASSED ON FIRST RUN, all 8.
+- FK1 10: "from-position not mapped" 10. FK2 10: "to-position not mapped" 10. FK5 10: "to-position not mapped" 10.
+- FK3 10: "no track found at pass=0" 10. FK4 10: "target island detected for section 0" 10.
+- FK6 10: "datafile W80_N40.rd5 not found" 10.
+- FK7 13: "file of size * too short, should be *" 10, "to-position not mapped" 1 (x1), route 2 (x2, c0).
+- FK8 11: "top index checksum error" 10, route 1 (x1).
+- 84 cases, 0 mismatches. No refusal by name: no port outcome was an "unsupported", a "left out" or a throw (the port's
+  kinds above are all the oracle's).
+
+#### Plants, predictions (pushed before any plant run)
+
+Each by a scratch copy of `revert.sh`, one exact string, the FK class alone, restored `cmp`-equal.
+- **A, kinds 1, 2, 5** (position not mapped): `RoutingEngine.kt:475` `val range = routingContext.waypointCatchingRange`
+  made `* 4` (250 m to 1,000 m). Predicted: FK1, FK2, FK5 fail on the cases with a usable link between 300 m and the cells
+  the matcher preloads (about 1 km); the count in each is a guess (I would guess most of FK5, fewer of FK1 and FK2, whose
+  points are in water with no *node* within 300 m). The failing cases' port family becomes a route or another failure.
+  FK3, FK4, FK6, FK7, FK8 pass: the nearest link of a mapped point is unchanged, and the file errors come first [I].
+- **B, kinds 3, 4** (islands): `:291` `if (seg == null && nodeLimit > 0)` made `nodeLimit < 0` (no island is ever
+  detected). Predicted: FK4 10 of 10 fail on family (the port's family then most likely "no track found at pass=0", a
+  guess); FK3 passes (its island is the start, the inverse search from the mainland target uses up the node limit and
+  detects nothing in either build) [I]; every other kind passes.
+- **C, kind 6** (missing file): `NodesCache.kt:369` `first_file_access_failed = osmf.filename == null` made `= false`.
+  Predicted: FK6 10 of 10 fail on family, the port reading "*-position not mapped" (which side is a guess); others pass.
+- **D, kind 7** (too short): `PhysicalFile.kt:56` `if (len < pos + extraLen)` made `if (len < pos)`. Predicted: FK7-08,
+  -09, -10 (cut to D+1, D+56, D+111) fail on family (the port reading past the file's end; the message a guess); FK7-01
+  to -07 pass (still shorter than D, same message: the "should be" number is unchanged), x1, x2, c0 pass; others pass.
+- **E, kind 8** (top index CRC): `PhysicalFile.kt:69` `throw IOException("top index checksum error")` made `32` (the
+  mismatch read as the new format). Predicted: FK8-01 to -10 fail on family (route or another failure, a guess per
+  case); FK8-x1 passes; others pass.
