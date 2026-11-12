@@ -5358,3 +5358,41 @@ the planner).
    the whole fits.
 4. **The planted error across all groups** (-139, decision 1) comes last.
 **Notes:** Written by the planner session by hand. Next free ID -141.
+
+**Kind:** outcome
+**ID:** 2026-10-28-141
+**Timestamp:** 2026-11-12T09:33:54Z
+**Continues:** 2026-10-28-50, 2026-10-28-61, 2026-10-28-140
+**Title:** Step 10, Plumb's session 49: the recursion's depth counted on the JVM, 5,679 on every memory case; the
+simulator's memory step held back by its time; the planner's rulings
+**Observed:** Plumb Ledger, session 49, `brouter-port-5b` `d9fc91c` to `09f3be8` (fast-forward only; called at 150,920,
+ended at 154,775 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The depth counter** (`4d2bd15`): a new internal object, `PeninsulaDepth`, written in `minVisitIdInSubtree`.
+- **On the JVM** [R, Plumb's, local]: MP64 59, ML5 59 and PM5 55 cases, 0 mismatches; **every one of the 173 reaches a
+  depth of 5,679**; 0 overflows caught.
+- **Nothing ran on the simulator.** Plumb stopped on the time estimate: the three groups take 220 s on the JVM; at the
+  ratio seen so far, 9 to 12, that is about 40 minutes on the simulator, on top of the job's 18, against its limit of 45.
+- The work for the simulator is saved, not pushed: commit `27841ad` on the clone's branch `s49-memory-step`.
+- The stack bytes in use were left out: reading them needs more than a counter in the port.
+**Checked by the planner:**
+- `git ls-remote` `09f3be8`, a fast-forward of `d9fc91c`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3 and on the saved commit.
+- **The port's diff** [R]: one increment and a comparison on entry to the walk, one decrement on its return, a reset
+  after each top-level call, a count of the JVM's caught overflows. Nothing in the port reads any of it.
+  `RoutingEngineMemoryTest` gains 16 lines and loses none.
+- CI on `4d2bd15`, the counter's first run, was not read by anyone yet.
+**Read with care:** 5,679 is the depth -50 measured on `CollectOutreachersTest`'s region. All 173 cases lie in the same
+tile, so one figure for all of them is what one deep structure in that tile would give [I]. It is the depth on this
+tile, not a bound for any map.
+**Decisions (the planner's, technical):**
+1. **The memory groups get a job of their own on the simulator,** `ios-memory`, with its own limit of 75 minutes, all
+   173 cases. It does what `ios-smoke` does to fetch the tiles and draw the cases, then runs the three classes.
+2. **The three tests are gated on a variable,** as the production run is: unset, they print one line and do nothing, so
+   `ios-smoke` is unchanged and stays near 18 minutes. The saved commit's way, naming every other class in shell, is not
+   taken: a class missed by that list would silently not run.
+3. **The port does not read the stack pointer.** What the simulator gives is: whether the process survives a depth of
+   5,679, and the test thread's stack size. If it survives, the walk fits in that stack on a debug build. If it does
+   not, that is -61's answer for the simulator.
+4. **A process that ends is reported and nothing is changed** (-61 is the owner's).
+**Notes:** Written by the planner session by hand. Next free ID -142.
