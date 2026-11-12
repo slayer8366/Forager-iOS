@@ -226,3 +226,50 @@ own (decision 3).
 
 **Stops hit.** None. No position in any log read, XML or artifact by the check above; no simulator route differing from
 its row; the arm64 JVM drew the same cases; no CI change beyond NT's step and variable.
+
+## §3 Session 48 (Plumb Ledger, 2026-11-12): DL-lat, DL-lon, F0h and FK 1 to 8 on the simulator
+
+Ended early by the planner's handoff call. Two code commits, fast-forward on `brouter-port-5b`: `0ec7e85` (DL) and
+`2cb3356` (F0h, FK 1 to 8). Trailer `Co-Authored-By: Claude <noreply@anthropic.com>` only. E1 scan on each staged diff: 0.
+
+**Done.**
+- **DL-lat, DL-lon** (`0ec7e85`): `DlLatExpected`, `DlLonExpected` (59 rows each, no ends), held to expected-1b.tsv by
+  `Step10CommonDigestTest`; `NtCasesWriteTest` writes `dl-lat-cases.tsv`, `dl-lon-cases.tsv` from `RoutingEngineDLTest`'s
+  draws; `DlEngineCommonTest` reads them through `Step10Cases`. The DL tiles are `TestTiles.segments` (fetchTiles), not the
+  drop-off set: the prompt's conditional did not apply and the fetch step is unchanged. The writer step's name and comment
+  were renamed; its variable kept its name.
+- **F0h, FK 1 to 8** (`2cb3356`): `F0hExpected` (8), `FkExpected` (84: 81 exact, 3 outcome). F0h's ends are written at run
+  time like the others (not committed), on `TestTiles.f0h` (fetchF0h, already a jvmTest dependency). FK kind 6 uses the
+  segments folder (its tile missing there); each FK 7 and 8 case has its own folder of one edited E170_S50 under
+  `brouter/build/step10/fk-tiles/`, named in an eighth field of its line. `RoutingEngineFKTest`'s kind 7/8 builders moved
+  out of its tests unchanged (`fk7Cases`, `fk8Cases`, `editedEnds`) so the writer builds the same folders. FK compared as
+  `RoutingEngineFKTest`: kind exactly (kind 7 by family, numbers `*`), the five track fields, the tuple digest except kind 7.
+  No CI change in this commit. The writer step's comment still lists only NT to DL; left so, as a CI edit was not allowed.
+
+**CI read: run 43183291503 on `0ec7e85`, `ios-smoke` only** (success, 13 min 41 s of 45). Simulator TOTAL 32 tests, 0
+failures. arm64 JVM drew 59 of 59 stored ids for NT/LB/CR (89/99/83 draws) and DL-lat/DL-lon (501/326). On the simulator
+each of NT, LB, CR, DL-lat, DL-lon: "59 of 59 stored ids; equal on all six fields and the tuple digest 59; mismatches 0;
+missing 0". F0's two cases equal. arm64 7 of 7, `OK: all 2 classes ran`. **Simulator-checked.** E1, timestamps cut:
+`step10 ` lines 0; whole log 2: the first line (its timestamp not cut, a byte-order mark before it) and the older
+`FloatTextCommonTest` literal list, as -139. `jvm` and `jvm-production` of that run were still running at handoff: not read.
+
+**Not read in CI:** run 43183291503's `jvm`, `jvm-production`; the whole run on `2cb3356` (F0h, FK, FK7-x1 on the simulator).
+
+**FK7-x1:** on the JVM locally, the port's message reads "to-position not mapped in existing datafile", the same text as the
+stored family. On the simulator: not yet read (it prints `step10 FK7-x1 message: ...` in the `2cb3356` run).
+
+**Timing, simulator (debug test binary, shared runner; not the shipped app's speed), seconds:** NT 109, LB 25, CR 100,
+DL-lat 198, DL-lon 64. JVM locally through the same common tests: DL-lat 20, DL-lon 7. The `jvm-production` comparison was
+not done.
+
+**JVM, locally [R, Plumb's]:** all F0h and FK cases built; through `Step10Cases` on the JVM, F0h 8 of 8, FK1 to 8 all equal
+(10,10,10,10,10,10,13,11); `RoutingEngineFKTest` 8 of 8 after the move.
+
+[I] F0h's ends were not committed in common code, so the scan question did not arise. [?] DL-lat is the slowest group so far
+(198 s); R's budget question (-139, 3) gets harder.
+
+**Questions:** may the writer step's comment be updated to name F0h and FK?
+
+**Next:** 1. Read run on `2cb3356`: simulator TOTAL (expect 41), F0h and each FK line, FK7-x1's message, E1 count, minutes.
+2. Read both runs' `jvm` (TOTAL, FAILED: expect only `CollectOutreachersTest`), `jvm-production` total, ` e: `, compileKotlinIos*.
+3. The timing table against `jvm-production`'s lines. 4. Then the memory groups' simulator step.
