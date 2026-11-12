@@ -543,3 +543,37 @@ counter, each answer written to both transcripts (`F` lines) and compared. The a
 the existing round are unchanged; lines are added. No position is added (the destination is the existing one).
 **Prediction:** the oracle answers "false" N > 0 times in the second round; the port's answer equals the oracle's on
 every node (the transcripts equal); `CollectOutreachersTest` passes 2 of 2.
+
+### A4. The run: the prediction held
+
+Prediction pushed in `041d8b5`, then run (local JVM, fresh XML, `compileTestKotlinJvm` ran on the edited source).
+`CollectOutreachersTest` **2 of 2 passed**. The destination test prints `12 regions, nodes no longer reachable after it
+60118, canEscape false/true 1616/5558`: the existing round's 3,587 "true" and the second round's **1,616 "false" and
+1,971 "true"** on the oracle; the port's answer equal on every node (the `F` lines compare equal in all 12 regions). The
+test without a destination is unchanged (`0/3587`; it asserts no "false").
+**The full `jvmTest` (A and B in the tree): TOTAL tests 230, failures 0, errors 0, skipped 0, in 101 files; no FAILED
+line.** That would be the first fully passing JVM run since 5b, locally; the planner reads it in CI before it is said.
+
+### B. `PeninsulaDepth.overflowsCaught` removed (`97965dd`)
+
+The field, its reset and its three reads (`RoutingEngineMemoryTest`, `MemoryEngineCommonTest`, `REngineCommonTest`).
+Each read only summed it into a printed "overflows caught" clause; no assertion read it, and no CI step greps the
+clause (`.github/`, `docs/process`: 0 hits). The printed lines lose that clause. Nothing else in the port changed.
+
+### C. The timing kinds on iOS: `EngineStopCommonTest` (commonTest, so `ios-smoke` and `jvm` both run it)
+
+Mirrored (the JVM tests stay), on F0's first case (`F0-inside-across-the-degree-line`, its ends as waypoint text), each
+assertion as in `RoutingEngineStopTest`, through the existing `EngineClock` seam; JVM: 4 of 4 passed.
+| test | JVM's case | here |
+|---|---|---|
+| `theTimeLimitReadsTheInjectedClock` | FK10's first | mirrored |
+| `theWatchdogsSecondsReadTheInjectedClock` | FK10's first | mirrored |
+| `anErrorDuringTheRunIsCaughtAndTerminates` | FK10's first | mirrored: a `kotlin.Error` from the clock, inside the run |
+| `anExceptionDuringTheRunIsCaughtWithoutTerminating` | FK10's first | mirrored |
+| `forager30sLimitOnAStoppedClockRoutesAsTheOracleWithNoLimit` | FK10's first | not mirrored: its assertion is against a live oracle run |
+| FK 9, 10, 11 against the oracle; FK11's count | 10 cases each | not possible: they run the oracle |
+| (FK11's mid-run cancel) | | not possible: a JVM `Thread` (`drive`, `Cancel.MID`) |
+
+**`catch (Error)` on Native (RECORD -126):** no new seam was needed: the clock is read inside `doRun`, so the Error test
+throws from inside the run. If it passes on the simulator, the engine's `catch (e: Error)` catches a `kotlin.Error` on
+Native and terminates with its `toString()`.
