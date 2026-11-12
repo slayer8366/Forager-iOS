@@ -5214,3 +5214,51 @@ the planner).
    JVM, and E1 forbids committing them. How the simulator gets them is a ruling on E1's reach, asked once session 45
    shows what the simulator can read.
 **Notes:** Written by the planner session by hand. Next free ID -138.
+
+**Kind:** outcome
+**ID:** 2026-10-28-138
+**Timestamp:** 2026-11-12T07:24:38Z
+**Continues:** 2026-10-28-61, 2026-10-28-137
+**Title:** Step 10, Plumb's session 45: a pinned tile read and F0's two routes computed on the iOS simulator, equal to
+the stored values on five fields; the planner's rulings
+**Observed:** Plumb Ledger, session 45, `brouter-port-5b` `7f97edd` to `a4b3ce1` (fast-forward only; ended at 143,704 by
+the harness's count, no handoff call; 5 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **`PinnedTileReadTest`** (`bee36ec`, red on the simulator on purpose, then `eeefbf9`): the simulator's test process
+  opens a path on the runner's disk, handed to it as a `SIMCTL_CHILD_` variable. F0's fixture reads at its pinned size
+  and SHA-256.
+- **`F0RouteCommonTest`** (`72744e6`, red on purpose, then `71d7281`): F0's two cases through the public `route()` on
+  the port's own maths library, held to their rows of `expected-1b.tsv`.
+- Both are commonTest, so they run on the JVM too.
+- Plumb named a false premise: `RouteOutcome.Found` has no cost, so `route()` gives five of the six fields.
+- No hook for the recursion's depth exists; none was added; -61's depth was not measured.
+**Checked by the planner:**
+- `git ls-remote` `a4b3ce1`, a fast-forward of `7f97edd`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 5.
+- The workflow diff: one fetch step in `ios-smoke` and two variables on the simulator step; nothing removed. No build
+  change. No line of an existing test removed.
+- **CI on `71d7281`** (run 43171038917), read by the planner:
+  - `ios-smoke`: simulator **26 of 26**; `F0RouteCommonTest` and `PinnedTileReadTest` each 1 test, 0 failures, on
+    `iosSimulatorArm64`. The simulator's own log prints both routes: kind route, nodes 226 and 306, distance 5,047 and
+    6,713, and the node and heights digests, each equal to the expected row's. So the test routed; it did not skip.
+    arm64 7 of 7, the gate "OK". The job took 5 minutes. **Simulator-checked.**
+  - `jvm`: 197 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both `compileKotlinIos*`.
+  - `jvm-production`: 19 groups, R 1,180 of 1,180 equal, as before.
+**What this is:** the first routes the port has computed on iOS, 2 cases, on the simulator, on the tile Forager ships
+as a fixture. **What it is not:** a real iPhone; any other group; the memory path; cost. F0's routes have no heights
+(-62), so the heights digest equal says only that both sides have none.
+**The planner's own error:** the brief asked for six fields through `route()`, which returns five. -129 had already
+recorded that `Found` carries no cost.
+**Decisions (the planner's, technical):**
+1. **Cost on iOS comes from the engine, not from `Found`.** commonTest is in the port's module and can drive
+   `RoutingEngine` as the JVM tests' `port` does. The stored-digest runs use that and hold all six fields and the tuple
+   digest. `Found` does not change. The `route()` test stays at five.
+2. **The other groups' ends reach the simulator without being committed:** generated at run time by the JVM that the
+   macOS job already has, written under the build folder outside `test-results`, read by the simulator's tests, never
+   uploaded or printed. Nothing is committed, so E1 is not touched and no ruling of the owner's is needed for it. Not
+   shown yet: that the generators draw on arm64 what they drew on x86_64. The stored digests check that by themselves: a
+   case drawn differently does not match its row. If this fails, the alternatives go to the owner, since a CI artifact
+   would make positions downloadable.
+3. **-61's depth** is measured after 1 and 2, on its own: it needs a counter in the port and a run that may end the
+   process, so it gets its own session and its own CI step.
+**Notes:** Written by the planner session by hand. Next free ID -139.
