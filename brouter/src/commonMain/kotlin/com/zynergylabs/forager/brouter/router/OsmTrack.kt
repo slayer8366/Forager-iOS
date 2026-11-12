@@ -239,7 +239,7 @@ internal class OsmTrack {
         distance += t.distance
         ascend += t.ascend
         plainAscend += t.plainAscend
-        cost += t.cost
+        cost += t.cost + 1
         energy = nodes[nodes.size - 1].getEnergy().toInt()
 
         showspeed = showspeed or t.showspeed
