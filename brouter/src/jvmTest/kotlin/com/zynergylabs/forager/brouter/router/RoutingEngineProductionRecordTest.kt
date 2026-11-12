@@ -19,6 +19,7 @@ import com.zynergylabs.forager.brouter.oracle.e3.strata.E3R
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RProfilesTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
+import com.zynergylabs.forager.brouter.tiles.HintsFormatsRun
 import com.zynergylabs.forager.brouter.tiles.TestTiles
 import com.zynergylabs.forager.brouter.util.MsunLibm
 import okio.FileSystem
@@ -112,6 +113,37 @@ class RoutingEngineProductionRecordTest {
             "costOnly sameNodesDistance differentRoute other | oracleOffRow | extra")
         lines.forEach { println(it) }
         println("production record: ${lines.size} groups in %.1f s".format((System.nanoTime() - t0) / 1e9))
+    }
+
+    /**
+     * Step 10, session 57 (RECORD -150, decision 1): the turn hints and the four formats in a PRODUCTION run, recorded, not
+     * asserted. The groups, modes and comparisons are [HintsFormatsRun]'s (as `HintsFormatsLogicTest`'s, there asserted on
+     * `OracleLibm`); here the port runs on `MsunLibm`. Per group: cases, routes, route equal, and per output how many
+     * differ; for the hints also how many differ in anything but an angle. It asserts only that each group ran all its
+     * cases. Up to 10 differences per group print where they first differ (a hint's index and field, or a character index
+     * and two classes), never text (E1). Same gate as the routes' record.
+     */
+    @Test
+    fun hintsAndFormatsProductionRunIsRecordedAgainstTheOracle() {
+        val gate = System.getenv(GATE)
+        if (gate.isNullOrEmpty()) {
+            println("hints-formats production record: $GATE is unset; not run (RECORD -135)")
+            return
+        }
+        val t0 = System.nanoTime()
+        val table = ArrayList<String>()
+        HintsFormatsRun.forEachGroup { g ->
+            val t = HintsFormatsRun.compare(g, MsunLibm)
+            assertEquals(g.cases.size, t.cases, "${g.name}: every case ran")
+            t.problems.take(10).forEach { println("hints-formats production record: difference $it") }
+            table += "hints-formats production record: ${g.name} | ${t.cases} | ${t.routes} | ${t.cases - t.routeEqual} | " +
+                (0 until 5).joinToString(" ") { (t.cases - t.equal[it]).toString() } + " | ${t.hintsBeyondAngle} | %.1f s".format(t.seconds)
+        }
+        println("hints-formats production record: group | cases | routes | route differs | differ: hints gpx json kml csv | " +
+            "hints differing beyond the angle | time")
+        table.forEach { println(it) }
+        println("hints-formats production record: R ${HintsFormatsRun.R_FIRST?.let { "first $it routed per profile" } ?: "all routed"}; " +
+            "${table.size} groups in %.1f s".format((System.nanoTime() - t0) / 1e9))
     }
 
     private fun rowsOf(stratum: String) = expected.filter { it.stratum == stratum }.associateBy { it.id }

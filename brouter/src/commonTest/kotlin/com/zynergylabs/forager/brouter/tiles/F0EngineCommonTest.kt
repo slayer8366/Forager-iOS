@@ -40,12 +40,12 @@ class F0EngineCommonTest {
         assertEquals(emptyList(), mismatches, "F0 through the engine against expected-1b.tsv (six fields and the tuple digest)")
     }
 
-    private class Case(
+    internal class Case(
         val id: String, val startLat: Double, val startLon: Double, val endLat: Double, val endLon: Double,
         val want: EngineRun.Outcome, val tupleDigest: String,
     )
 
-    private companion object {
+    internal companion object {
         // Ends: RoutingEngineF0Test.CASES. Values: expected-1b.tsv's F0 rows (kind, nodes, cost, distance, nodeDigest,
         // heightsDigest, tupleDigest), written on the no-intrinsic oracle (RECORD -88).
         val CASES = listOf(

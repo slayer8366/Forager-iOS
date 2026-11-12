@@ -69,8 +69,8 @@ internal object HintsFormatsRun {
     fun forEachGroup(block: (Group) -> Unit) {
         val o = OracleCalls.oracleDir
         block(Group("F0", RoutingEngineF0Test.CASES, o))
-        block(Group("F0h", E3F0hTest.ENDS.map { (name, e) -> E3Case("F0h-$name", TestTiles.f0h, e[0], e[1], e[2], e[3], E3F0hTest.PROFILE) }, o))
-        NTGenerator(TestTiles.segments, 20261205L).use { block(Group("NT", select(rowsOf("NT"), it.draws("NT", E3Targeted.PROFILE)), o)) }
+        block(Group("F0h", f0h(), o))
+        block(Group("NT", nt(), o))
         LBGenerator(TestTiles.segments, 20261207L).use { block(Group("LB", select(rowsOf("LB"), it.draws("LB", E3Targeted.PROFILE)), o)) }
         val base = Files.createTempDirectory("s57-cr").toFile()
         try {
@@ -94,7 +94,10 @@ internal object HintsFormatsRun {
         block(Group("R", routedR(), o))
     }
 
-    /** NT's 59 cases, in draw order (the simulator's constants are made from them). */
+    /** F0h's 8 cases on the heighted square (the simulator's constants are made from them, with F0's and NT's). */
+    fun f0h(): List<E3Case> = E3F0hTest.ENDS.map { (name, e) -> E3Case("F0h-$name", TestTiles.f0h, e[0], e[1], e[2], e[3], E3F0hTest.PROFILE) }
+
+    /** NT's 59 cases, in draw order. */
     fun nt(): List<E3Case> = NTGenerator(TestTiles.segments, 20261205L).use { select(rowsOf("NT"), it.draws("NT", E3Targeted.PROFILE)) }
 
     private fun routedR(): List<E3Case> {
