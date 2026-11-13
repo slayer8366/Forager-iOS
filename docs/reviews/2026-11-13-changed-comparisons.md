@@ -2,7 +2,7 @@
 
 Reviewer: Samphire Witness. Dispatch 2026-11-13-01 from Cedar Datum. First review.
 
-Status: PARTIAL. Done: 1 (-107), 2 (-116), 3 (-119). Untouched: 4 (-126), 5 (-148). Verdict and scoring not yet written.
+Status: COMPLETE. All five read, three planted-error checks run, verdict and scoring at the end.
 
 Code under review: branch `brouter-port-5b` of slayer8366/Forager-iOS, read at head `b359671` in a detached worktree of my own.
 Record under review: `RECORD.md` as checked out in `/home/user/Forager-iOS`.
@@ -140,3 +140,135 @@ Two changes sit in this entry.
 **(e) The record's account.** "the comparison and the reached-branch list are unchanged" for the seeding: accurate [R]. "the test checks every value below the limit and checks for the error above it": accurate [R]. "Not yet shown: that the port matches Java on every tested value from 3e17 up to 2^63": an honest gap, closed by -120's count (1,982 values, 0 differ) which I did not recompute [?]. "`FormatJson.java:82-85`" and "`OsmPathElement.java:47`": correct [R]. One imprecision: the entry says Plumb seeded the speeds "then" (after run 1) "in `7ddd4ef`"; the commit order fits [R, `git log`], the run order is the coder's word [?].
 
 **Finding for 3.** Both changes justified. The seeding by the Java source; the limit by the owner's ruling, which is authority and not evidence, and is honestly labelled as a narrowing.
+
+## 4. RECORD -126 and -127: `RoutingEngineStopTest` (step 8c, sessions 33 and 34)
+
+**(a) The change.** Commit `af875c6`, `router/RoutingEngineStopTest.kt`, diff in `04-RoutingEngineStopTest-af875c6.diff` (34 lines) [R]. Three hunks and no more:
+
+1. Line 86: `theTimeLimitReadsTheInjectedClock` expected "pass0 timeout after 30 seconds", now "target-island-check timeout after 30 seconds". This test has no oracle beside it: the port runs on a clock that reads 0 once and 30,001 after.
+2. Line 243: `TIMEOUT_50`, the pattern FK9 holds both the oracle's and the port's message to, gains `target-island-check`.
+3. The class comment that describes both.
+
+The file has two commits in all, `124e6da` (red) and `af875c6` [C: `git log -- <file>`]. The order in `486588d..94db5d1` is: CI limit `3840315`, oracle-only evidence `47dcb5d` (23:56), the test change `af875c6` (23:57), the port `1d1488b` (00:33) [C: `git log`]. So the evidence and the change do precede the port's commit, as -127 says.
+
+**(b) What had been seen, and by whom.** Plumb, session 33, with the port held as a patch: 8 of 9 pass, and the injected-clock test gives "target-island-check" where "pass0" was expected [?, the record's report]. FK9 had passed.
+
+**(c) The evidence, checked.**
+
+- `btools/router/RoutingEngine.java:961`: `findTrack("target-island-check", ...)`, inside a loop over the sections (`:952`) that runs before any pass; its last argument, `fastPartialRecalc`, is `false`, so the limit there is the whole `maxRunningTime` (`:1980`) [R]. A section whose first point is a direct waypoint is skipped (`:954`) [R].
+- `:1979-1983`: the limit is checked at `_findTrack`'s loop head and the message is `operationName + " timeout after " + (timeout / 1000) + " seconds"` [R].
+- So on a clock already past the limit at the first check, Java says "target-island-check". The old expected text was wrong by the Java. This stands without the port's result.
+- The oracle-only run (`docs/audits/.../12-oracle-only-1ms-fk9.txt`, commit `47dcb5d`): expectation written before the run, 10 of 10 "target-island-check" at a 1 ms limit [R, the file]. Its scratch test was deleted and is in no commit, so the run cannot be repeated from the tree [R, the file says so]. I did not rebuild it [?]. The Java lines carry the point without it.
+
+**(d) My planted error** [C: `./gradlew :brouter:jvmTest --tests '*RoutingEngineStopTest'`; excerpt in `04-run4P-no-limit-in-island-check.txt`]. In the scratch copy, the port's limit check (`RoutingEngine.kt:722`) was made to skip the operation "target-island-check". The build compiled (`compileKotlinJvm` ran, 0 ` e: `), 9 tests ran, 1 failed:
+
+- `theTimeLimitReadsTheInjectedClock` FAILED: "expected:<[target-island-check] timeout after 30 se...> but was:<[pass0] timeout after 30 se...>".
+- FK9 PASSED: "0 mismatches; first words of the messages, both sides: {pass0=20}".
+
+The planted port gives exactly the text the test expected before the change. **So the old expected text would have passed a port that never applies the limit in the island check, and the corrected text catches it.** Change 1 made the test stronger, not weaker. The failure is one this plant can produce. The file was restored from a saved copy and compared equal with the code worktree [C: `cmp`].
+
+**What the widened FK9 can and cannot catch.** Before: it refused "target-island-check" on either side. That refused a port whose limit strikes at once, and it would equally have refused the oracle's own correct answer on a machine slow enough for the island check to pass 50 ms. After: FK9 holds each side to the message's form, the kind, the empty track and `terminated`. **Wrong ports the widened FK9 passes:** a port whose limit strikes at once (Plumb's revert (b), reported in -127; I did not rerun it [?]); and a port with no limit in the island check (my run). The first is caught by the stopped-clock and injected-clock tests, the second by the injected-clock test. Neither of those has an oracle beside it.
+
+**(e) The record's account.**
+
+- -126, "The premise is false by the Java": right [R].
+- -126, "The expected text was session 32's hand-written reading, never an oracle's output": consistent with the test, which calls only the port there [R, lines 82 to 89].
+- -126, "FK9's pattern has the same gap ... It passes only while the island check finishes inside the 50 ms limit, on both engines": right by the Java [I].
+- -127, "The test change is what -126 allowed and no more: the one expected text, the one pattern, and the class comment": accurate [R].
+- -127, "widening FK9's pattern made FK9 blind to a time limit that strikes at once ... What still catches that error is the two tests on a driven clock, which have no oracle beside them": accurate, and candid. My run adds a second error FK9 is blind to.
+- -127, "In CI both engines answered pass0 on 20 of 20": I read the same line in the `jvm` job of a later run, 43277598212 on `4e311ce` [C: `gh api .../jobs/131390061349/logs | grep '8c FK9'`]. The run -127 cites, 43128205990, I did not read [?].
+- -127, decision 1, "A guard would be a second comparison change after a result": I read this differently. See should-fix.
+
+**Finding for 4.** My prediction was wrong on the widening. Both parts are justified by the Java. The corrected text is the stronger test. The widening removed a check FK9 only had by accident of a wrong pattern, and the record says what was lost.
+
+## 5. RECORD -148: `CollectOutreachersTest` (red since step 5b; -60, -61, -147)
+
+**(a) The change.** Commit `041d8b5`, `mapaccess/CollectOutreachersTest.kt`, diff in `05-CollectOutreachersTest-041d8b5.diff`: 18 lines added, none removed [R]. After the existing round (collection, every-37th `canEscape`, `clearTemp`, map state traced), a second round on the same map: `collectOutreachers` on both engines, `canEscape` on every 37th node of the same list, each answer traced with `nodesCreated` and `lastVisitID` on both sides, `clearTemp`, the map state traced again, then the existing `compare(where, ot, pt)`. The assertion at line 134, `escapes[0] > 0 && escapes[1] > 0`, is untouched.
+
+**(b) What had been seen, and by whom.** Since step 5b: "canEscape did not answer both ways: false/true 0/3587" [R, -60 and -61]. The counts come from the oracle's answers alone (`escapes[if (oe) 1 else 0]++`, lines 104 and 122) [R]. So the red was a statement about the oracle on these inputs. The port's result played no part in it.
+
+**(c) The evidence, checked.**
+
+- `RoutingEngine.java:2012` calls `collectOutreachers()`, `:2016` calls `canEscape(p3.getTargetNode())`, `:2020` calls `clearTemp()`, inside the check out of memory bounds (`:2008`) [R]. The engine does make these calls again at each later check.
+- `btools/mapaccess/OsmNodesMap.java:129-163`: `canEscape` returns "true" as soon as it meets a node marked earlier, and otherwise walks the nodes again, counts them back down and vanishes them [R]. That fits Plumb's reading of why the first round never answered "false".
+- CI, run 43277598212 on `4e311ce`, conclusion "success"; the `jvm` job prints "5b collectOutreachers with destination: 12 regions, nodes no longer reachable after it 60118, canEscape false/true 1616/5558" and both tests PASSED; without a destination "0/3587" [C: `gh api .../runs/43277598212/jobs` and `.../jobs/131390061349/logs | grep`]. The record's figures match. I did not read the iOS jobs' logs: their results are the record's, simulator-checked at most [?].
+
+**(d) My planted error** [C: `./gradlew :brouter:jvmTest --tests '*CollectOutreachersTest'`; excerpt in `05-run5P-false-branch-does-not-walk.txt`, the region's description cut out by me]. The worry: a node already vanished has few links left, so the new "false" answers might run the false branch on single nodes only and prove little. In the scratch copy the port's `canEscape` false branch (`OsmNodesMap.kt:247`) was made not to walk on from the first node. The build compiled, 2 tests ran, 1 failed:
+
+- the with-destination test FAILED on a second-round line: "oracle [F 1258 false 809 1076] port [F 1258 false 853 1076]", `nodesCreated` 44 apart;
+- the without-destination test PASSED (it has no "false" answer, so it cannot see this).
+
+So the second round runs the false branch over many nodes, and the trace compares its effect. Before the change no call answered "false", so no error in that branch could be seen by this test at all. The file was restored from a saved copy; every file under `brouter/src` and the build file compared equal with the code worktree afterwards [C: `cmp` over `git ls-files`].
+
+**What the test can catch before and after.** Before: nothing in `canEscape`'s false branch; and it was red on its own reach assertion. After: the false branch on 1,616 calls, compared line by line. **A wrong port the changed test would pass:** none that the change lets through, since nothing was removed. What remains unseen by this test: `canEscape` on a map that has grown between two collections, and asked about the open paths' targets, which is what the engine does. The test asks at once, on the same map, about every 37th node of the earlier list. That state is covered, if at all, by the memory groups (-147's plant 1) [?].
+
+**(e) The record's account.**
+
+- "`CollectOutreachersTest`'s diff: 18 lines added, none removed. The assertion and the regions are as they were": accurate [R].
+- "The added calls are the ones `RoutingEngine.java` makes in its memory path, made on both engines and traced on both": **true of the calls, too strong as written.** The engine makes them after more routing and asks about open paths' targets (`:2014-2016`); the test makes them back to back and asks about a fixed sample. It is the engine's sequence of methods on a state the test builds.
+- -147's decision 2 said session 54 "finds, from one memory case, the map state at a call that answers false, and adds that region to the test". That is not what was done: no region was added. -148 says so in its own decision 1 ("A second state of the same regions carries out -61's call"). The substitution is disclosed; -148's "What was added" bullet does not mark it as a departure from -147.
+- "-61 is closed in full ... the coverage assertion is met where the engine's own sequence makes both answers": met, yes [C, CI line]; "the engine's own sequence" with the caveat above.
+
+**Finding for 5.** Justified. The red did not depend on the port, the assertion did not move, and the addition makes the test see a branch it could not see. My plant shows the new reach is real.
+
+One thing outside the five: this test's failure message names the map file and the cell indexes of the region. I cut them from my evidence. Whether that message meets E1 is for the planner [?].
+
+## Verdict
+
+### Blocking
+
+None. No change of the five turned a wrong port green that I could find, and three planted errors were caught where the changed tests claim reach.
+
+### Should-fix
+
+1. **-107, `SearchBoundaryTest`: take the stricter route.** With `-XX:-OmitStackTraceInFastThrow` on the test JVM, a test that compares the message on every throw passes [C, run 1B]. The committed test passes a port with a wrong out-of-range table row; the strict one fails it [C, runs 1P]. The flag changes the build, so it is the owner's call, as the planner said. Until then the cause of the null message stays inferred: it did not reproduce here.
+2. **-116, `ReadBinaryTest`: assert the error path is reached.** `errorPaths` is printed and not asserted (lines 157 and 158). Without the two empty tracks the test stays green and tests nothing of the ruling.
+3. **-116: the loosening is wider than its evidence.** It was argued for the null-pointer text and applied to every catch, 1,549 of 4,522 debug texts by the coder's count. Either narrow it on the JVM or record its breadth.
+4. **-127, FK9: add the guard.** The planner refused it as "a second comparison change after a result". An assertion that is only added, predicted before it runs and seen red under revert (b), loosens nothing; the discipline is against moving a comparison toward a result. The guard would be: when the port reports a timeout, its own clock has passed the limit. This is the planner's ruling to revisit, not mine to make.
+5. **-126: commit the oracle-only run.** The 1 ms evidence came from a scratch test that was deleted. Evidence for a changed comparison should be rerunnable from the tree.
+
+### Notes
+
+- -119: the limit is authorised by the owner, not shown by evidence, and nothing needs showing above it since the port refuses there. The count below the limit (-120: 1,982 values from 3e17 to 2^63, 0 differ) I did not recompute [?].
+- -119: the seeded speeds draw from the same generator, so the cases after them are not the cases fixed at the red commit. Harmless here; worth knowing when a seed is called "fixed".
+- -148: the second round is a state the test builds, not one the engine was caught in. -147's decision 2 asked for the latter.
+- All my runs were on this machine's OpenJDK 21.0.12.1, not CI's JDK. Nothing here says anything about iOS; every iOS figure cited is the record's and is simulator-checked.
+- The dispatch's five were each findable from their entries. The restricted object was not met.
+
+### Where the record was inaccurate
+
+1. -107: "not the 168,000 compared results". 1,380 of the 168,000 are throws compared by class only; 166,620 values are compared.
+2. -116: silent on the breadth of the loosening (the end-of-file cuts too).
+3. -148: "The added calls are the ones `RoutingEngine.java` makes" overstates; and the departure from -147's decision 2 is not marked where the addition is described.
+
+Where the planner was right: every Java line cited in -116, -119, -126 and -148 that I read says what the record says it says; -127's account of its own ruling's cost is accurate; each of the five was correctly named as a change after a result, except that -107's first change and -148's addition are not loosenings at all.
+
+### One line each
+
+1. **-107: justified in part.** Wrapping the oracle's own throw is justified by `CheapRuler.java:57`; dropping the message comparison rests on an untested inference, hides no present error, and was avoidable.
+2. **-116: justified by independent evidence.** `OsmTrack.java:286-290` appends the JVM's own exception text, which a port in common code cannot and should not copy.
+3. **-119: justified in part.** The seeded speeds are justified by the Java source; the limit at 2^63 is justified by the owner's ruling, which is authority to narrow and not evidence, and which I could read only in the record.
+4. **-126: justified by independent evidence.** `RoutingEngine.java:961` and `:1979-1983` put the first strike in the island check, and a planted port without that limit fails the corrected test where it would have passed the old one.
+5. **-148: justified by independent evidence.** The red came from the oracle's own counts, nothing was removed, and a planted error in the newly reached branch is caught.
+
+**Overall: justified in part.** Three of five stand on evidence independent of the port; two stand in part, one of them on the owner's word; none is "not justified".
+
+## Predictions, scored
+
+| # | Predicted | Found | Score |
+|---|---|---|---|
+| 1 | justified in part | justified in part | Hit. The reason held: a real cause, and reach lost that nobody restored. |
+| 2 | justified by independent evidence | justified by independent evidence | Hit, though I guessed a harness defect and it was the JVM's wording. |
+| 3 | justified in part | justified in part | Hit on the line. Half the reasoning missed: the range below the limit was closed by -120, not left untested. |
+| 4 | justified in part (widening unjustified) | justified by independent evidence | **Miss.** The widening is what the Java requires; I took -127's candour about its cost for an admission that it was wrong. |
+| 5 | justified by independent evidence | justified by independent evidence | Hit. The lower-confidence worry (setup steering away from the failing case) was tested by a plant and did not hold. |
+
+4 of 5 on the line. Overall prediction, "at least two leave the test weaker than the record says": held for -107 (the count) and -116 (the breadth), weakly. Mechanism prediction for the revert check: not tested as written; in its place, FK9 passed a planted port as predicted in spirit, and the driven-clock test caught it.
+
+## Not verified
+
+- Anything on iOS (the record's claims, simulator-checked).
+- The order of the coder's local runs within a session, wherever git shows one commit.
+- -120's counts for `formatDecimal3`; -127's revert (b); CI run 43128205990; Forager's `pre-main` never setting `rawTrackPath`.
+- The JIT cause of -107's null message: supported, not reproduced.
+- The owner's words in -119, read only as the record quotes them.

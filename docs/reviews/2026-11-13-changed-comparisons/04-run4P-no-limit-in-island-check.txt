@@ -1,0 +1,16 @@
+> Task :brouter:compileKotlinJvm
+RoutingEngineStopTest[jvm] > anErrorDuringTheRunIsCaughtAndTerminates[jvm] PASSED
+    8c FK9: 10 cases; 0 mismatches; first words of the messages, both sides: {pass0=20}
+RoutingEngineStopTest[jvm] > fk9TimesOutThroughThePortAsThroughTheOracle[jvm] PASSED
+RoutingEngineStopTest[jvm] > theTimeLimitReadsTheInjectedClock[jvm] FAILED
+    org.junit.ComparisonFailure at RoutingEngineStopTest.kt:86
+RoutingEngineStopTest[jvm] > forager30sLimitOnAStoppedClockRoutesAsTheOracleWithNoLimit[jvm] PASSED
+RoutingEngineStopTest[jvm] > theWatchdogsSecondsReadTheInjectedClock[jvm] PASSED
+RoutingEngineStopTest[jvm] > fk11IsKilledMidRunThroughThePortAsThroughTheOracle[jvm] PASSED
+RoutingEngineStopTest[jvm] > fk10IsKilledBeforeTheRunThroughThePortAsThroughTheOracle[jvm] PASSED
+RoutingEngineStopTest[jvm] > anExceptionDuringTheRunIsCaughtWithoutTerminating[jvm] PASSED
+RoutingEngineStopTest[jvm] > fk11CountsLinksThroughThePortAsThroughTheOracle[jvm] PASSED
+9 tests completed, 1 failed
+BUILD FAILED in 1m 22s
+exit 1
+failure message="org.junit.ComparisonFailure: FK10-0005 expected:&lt;[target-island-check] timeout after 30 se...&gt; but was:&lt;[pass0] timeout after 30 se...&gt;"

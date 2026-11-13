@@ -1,0 +1,8 @@
+> Task :brouter:compileKotlinJvm
+    5b collectOutreachers without destination: 12 regions, canEscape false/true 0/3587
+CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] PASSED
+CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+2 tests completed, 1 failed
+BUILD FAILED in 9s
+exit 1
+failure message="java.lang.AssertionError: [region description cut by the reviewer]: line 6784 of 10144/10144: oracle [F 1258 false 809 1076] port [F 1258 false 853 1076]"
