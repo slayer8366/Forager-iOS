@@ -20,8 +20,9 @@ import kotlin.test.fail
  * tile, `hiking-mountain`, memory class 64) in place of FK10's first, which needs jvmTest's generator. Paths as
  * [F0RouteCommonTest]'s. The JVM tests stay where they are.
  *
- * Not mirrored: the FK 9 to 11 comparisons and the progress count (they run the oracle), the 30 s limit on a stopped
- * clock (held to the oracle's own run), and the mid-run cancel (a JVM `Thread`).
+ * Not mirrored: the FK 9 to 11 comparisons and the progress count (they run the oracle), and the mid-run cancel (a JVM
+ * `Thread`). Session 64 (RECORD -148, decision 2): the 30 s limit on a stopped clock, held to the oracle's own run on the
+ * JVM, has a sibling here held to F0's stored row instead; the JVM test stays as it is.
  *
  * The [Error] test answers RECORD -126's question on Native: a `kotlin.Error` thrown from inside the run (the clock) is
  * caught by the engine's `catch (e: Error)`, which terminates and keeps its `toString()`.
@@ -64,6 +65,39 @@ class EngineStopCommonTest {
         val p = run(30_000L, cancelFirst = false) { if (reads++ == 0) 0L else throw IllegalStateException("the clock stopped") }
         assertEquals("the clock stopped", p.message, ID)
         assertEquals(false, p.terminated, ID)
+    }
+
+    /**
+     * Session 64 (RECORD -148, decision 2): the JVM's `forager30sLimitOnAStoppedClockRoutesAsTheOracleWithNoLimit`, held
+     * to F0's stored row in place of the oracle. Forager's own limit (`doRun(30_000)`) on a clock that never moves: the
+     * limit never strikes, the route is the row. The row and its ends are [F0EngineCommonTest]'s first case, compared as
+     * that test compares it (six fields and the tuple digest).
+     */
+    @Test
+    fun forager30sLimitOnAStoppedClockRoutesAsF0sStoredRow() {
+        val c = F0EngineCommonTest.CASES.first()
+        assertEquals(ID, c.id)
+        val (tiles, profile) = paths()
+        val collector = RoutingParamCollector()
+        val waypoints = collector.getWayPointList("${c.startLon},${c.startLat}|${c.endLon},${c.endLat}")
+        val rc = RoutingContext(MsunLibm)
+        collector.setParams(
+            rc, waypoints,
+            mapOf("profile" to profile.toString(), "alternativeidx" to "0", "profile:use_dynamic_range" to "0"),
+        )
+        rc.memoryclass = 64
+        val engine = RoutingEngine(FileSystem.SYSTEM, tiles, waypoints, rc, RoutingEngine.BROUTER_ENGINEMODE_ROUTING) { 0L }
+        engine.quite = true
+        engine.doRun(30_000L)
+        val t = engine.getFoundTrack()
+        val got = EngineRun.Outcome(
+            EngineRun.kindOf(engine.getErrorMessage()), t.nodes.size, t.cost, t.distance,
+            EngineRun.fnv1a(IntArray(t.nodes.size) { t.nodes[it].getILon() }, IntArray(t.nodes.size) { t.nodes[it].getILat() }),
+            EngineRun.fnv1aShorts(ShortArray(t.nodes.size) { t.nodes[it].getSElev() }),
+        )
+        println("step10 stop $ID stopped clock: port ${got.toField()} tuple ${got.tupleDigest}")
+        assertEquals(c.want.toField(), got.toField(), "$ID: 30 s limit on a stopped clock against expected-1b.tsv")
+        assertEquals(c.tupleDigest, got.tupleDigest, "$ID: tuple digest")
     }
 
     private class ClockError(message: String) : Error(message)
