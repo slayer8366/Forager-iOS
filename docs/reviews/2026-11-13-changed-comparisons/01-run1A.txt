@@ -1,0 +1,11 @@
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestProcessResources UP-TO-DATE
+> Task :brouter:jvmTestClasses UP-TO-DATE
+> Task :brouter:jvmTest
+    SearchBoundaryTest: 168000 isInBoundary cases; {direction 0=11087, direction 1=11665, direction 2=12253, direction 3=11983, distance throws=1368, inner false=33641, inner true=8863, outer false=12144, outer true=30360, radius false=70460, radius throws=1380, radius true=11152, undefined direction=35644}
+SearchBoundaryTest[jvm] > searchBoundaryMatchesTheOracle[jvm] PASSED
+BUILD SUCCESSFUL in 2s
+exit 0

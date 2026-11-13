@@ -1,0 +1,11 @@
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:jvmTestProcessResources UP-TO-DATE
+> Task :brouter:compileTestKotlinJvm
+> Task :brouter:compileJvmTestJava NO-SOURCE
+> Task :brouter:jvmTestClasses
+> Task :brouter:jvmTest FAILED
+SearchBoundaryTest[jvm] > searchBoundaryMatchesTheOracle[jvm] FAILED
+BUILD FAILED in 2s
+exit 1
+failure message="org.junit.ComparisonFailure: case 3 probe 0 direction 3: message expected:&lt;Index -4[8] out of bounds for l...&gt; but was:&lt;Index -4[9] out of bounds for l...&gt;"

@@ -1,0 +1,44 @@
+diff --git a/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/SearchBoundaryTest.kt b/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/SearchBoundaryTest.kt
+index 082ef63..8161595 100644
+--- a/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/SearchBoundaryTest.kt
++++ b/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/SearchBoundaryTest.kt
+@@ -11,7 +11,8 @@ import kotlin.test.assertTrue
+  * Step 6: `SearchBoundary` against the oracle's, on seeded positions. Java's bounds are private, so they are read
+  * through behaviour: `isInBoundary` on points placed at and around each bound and around the radius, and
+  * `getBoundaryDistance` in all four directions, with an undefined direction's exception compared by class and
+- * message. `getFileName` on the same positions, both hemispheres. Forager never reaches this class (only a field at
++ * message. `getFileName` on the same positions, both hemispheres. Probes can fall outside BRouter's latitude range
++ * (below 0 or above 180,000,000), where `CheapRuler`'s table lookup throws in both; a throw is compared by class. Forager never reaches this class (only a field at
+  * `RoutingEngine.java:88`); it is on T2's port list. The port's distance runs on [OracleLibm] (step 2b).
+  */
+ class SearchBoundaryTest {
+@@ -53,18 +54,24 @@ class SearchBoundaryTest {
+             assertEquals(btools.router.SearchBoundary.getFileName(jn(c)), SearchBoundary.getFileName(c), "case $i: getFileName")
+             for ((k, q) in probes(c, rnd).withIndex()) {
+                 for (cost in intArrayOf(0, 1 + rnd.nextInt(100_000))) {
+-                    val ov = o.isInBoundary(jn(q), cost)
+-                    assertEquals(ov, p.isInBoundary(q, cost), "case $i probe $k cost $cost radius $radius: isInBoundary")
++                    val ov = runCatching { o.isInBoundary(jn(q), cost) }
++                    val pv = runCatching { p.isInBoundary(q, cost) }
++                    val where = "case $i probe $k cost $cost radius $radius: isInBoundary"
++                    assertEquals(ov.exceptionOrNull()?.javaClass, pv.exceptionOrNull()?.javaClass, "$where, exception")
++                    assertEquals(ov.getOrNull(), pv.getOrNull(), where)
+                     val mode = if (radius > 0) "radius" else if (cost == 0) "outer" else "inner"
+-                    seen.merge("$mode $ov", 1, Int::plus)
++                    seen.merge("$mode ${ov.getOrElse { "throws" }}", 1, Int::plus)
+                     cases++
+                 }
+                 val od = runCatching { o.getBoundaryDistance(jn(q)) }
+                 val pd = runCatching { p.getBoundaryDistance(q) }
+                 assertEquals(od.exceptionOrNull()?.javaClass, pd.exceptionOrNull()?.javaClass, "case $i probe $k direction $direction: exception")
+-                assertEquals(od.exceptionOrNull()?.message, pd.exceptionOrNull()?.message, "case $i probe $k direction $direction: message")
++                // The message is compared for Java's own throw only: a JIT-compiled array index error can lose its message.
++                if (od.exceptionOrNull() is IllegalArgumentException) {
++                    assertEquals(od.exceptionOrNull()?.message, pd.exceptionOrNull()?.message, "case $i probe $k direction $direction: message")
++                }
+                 assertEquals(od.getOrNull(), pd.getOrNull(), "case $i probe $k direction $direction: getBoundaryDistance")
+-                seen.merge(if (od.isSuccess) "direction $direction" else "undefined direction", 1, Int::plus)
++                seen.merge(if (od.isSuccess) "direction $direction" else if (od.exceptionOrNull() is IllegalArgumentException) "undefined direction" else "distance throws", 1, Int::plus)
+             }
+         }
+         println("SearchBoundaryTest: $cases isInBoundary cases; ${seen.toSortedMap()}")
