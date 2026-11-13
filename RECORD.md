@@ -6064,3 +6064,41 @@ names `b359671`. Run 43329465498. Findings: `docs/audits/2026-11-12-brouter-port
 **For the next session:** verify, then bring the owner the question -156 named. The finding narrows it: the difference
 is one rounding rule at an exact tie, on values that are floats widened to doubles.
 **Notes:** Written by the planner session by hand. Next free ID -161.
+
+**Kind:** decision
+**ID:** 2026-10-28-161
+**Timestamp:** 2026-11-13T00:53:17Z
+**Continues:** 2026-10-28-48, 2026-10-28-61, 2026-10-28-148, 2026-10-28-156, 2026-10-28-160
+**Title:** `brouter-port-5b` merged into `brouter-port` at its last green commit, and the record's PR opened (owner:
+"Yes", "Yes"); session 59's diagnosis verified
+**Decision:** the planner's last message listed three things waiting on the owner's word, in this order: merging
+`brouter-port-5b` into `brouter-port`; the record branch's PR to `main`, which also carries the plan; naming an
+independent reviewer for the five flagged tests. The owner answered, verbatim, on three lines: "Yes", "Yes", "What are
+the name options?"
+**Read as:** the merge is to be made; the PR is to be opened; the reviewer's names are to be put to the owner.
+**The merge, done by the planner:**
+- **What was merged is `65737ec`, not the branch's head.** -48's rule is "When green, the branch is merged into
+  `brouter-port` by a merge commit, never a rebase". `65737ec` is `brouter-port-5b`'s last commit whose run has every
+  job green (run 43297048297, read in -154: `jvm` 235 tests, 0 failures; `jvm-production` 1,742 of 1,742; `ios-smoke`
+  50 of 50 and `ios-memory` green, simulator-checked). The four commits after it hold `FormatDigestsCommonTest`, red on
+  the simulator on purpose (-156), and the diagnostic for it. They stay on `brouter-port-5b` until that is ruled on and
+  fixed.
+- `brouter-port` moved from `611ba54` to the merge commit `b769ebf` (`--no-ff`, parents `611ba54` and `65737ec`); its
+  tree equals `65737ec`'s (an empty diff); trailer `Co-Authored-By: Claude <noreply@anthropic.com>`; `git ls-remote`
+  reads it. 222 commits came in: steps 5b to 9 and step 10 as far as the hints and formats' logic run.
+- -61's condition ("5b can't merge into brouter-port while the test is red") was met at -148.
+- Nothing is merged into `main`: code reaches `main` only on the owner's word, which was not asked or given.
+**The PR:** this branch into `main`, carrying `RECORD.md` from -103 and `docs/plans/2026-11-12-app-port-plan.md`. By
+the precedent of PRs #3 to #5 it is merged on the owner's word naming it, not on this one.
+**Session 59's diagnosis (-160), now checked by the planner:**
+- `brouter-port-5b` is at `b359671`, a fast-forward of `2f79117`; 2 commits, one trailer each, no model name; E1 by
+  `scan.sh <c>^ <c>`: 0 on both; the port, CI and the build are untouched.
+- Run 43329465498 on `69ffcd1`: `jvm` 239 tests, 0 failures; `jvm-production` and `ios-memory` green; `ios-smoke` 52
+  tests, 1 failure, `FormatDigestsCommonTest`, as before. Simulator-checked.
+- **The five numbers, recomputed by the planner** [C]: the simulator's log holds 1,287 `gpxnum` lines, each with a
+  value's raw bits and the simulator's text. A small Java program, run here on those bits, printed Java's own text for
+  each: **1,282 are the same text and 5 differ,** the five Plumb named (NT-0009 hint 2, -0031 hint 1, -0045 hint 1, -0053
+  hint 4, -0061 hint 3), all the time `ti`, each in the 17th digit only (Java ends in 2, the simulator in 3). Each of
+  the five is a `Float` widened to a `Double`, and the simulator's text reads back to the same bits.
+- Not checked by the planner: Plumb's list of the eleven other places a format prints a floating number.
+**Notes:** Written by the planner session by hand. Next free ID -162.
