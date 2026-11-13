@@ -4067,7 +4067,8 @@ planner asked for the handoff and told Plumb to leave the merge. It ended at 189
 port unchanged. Out-of-range latitudes throw in both engines, and the test now compares those throws by class, and by
 message only for Java's own `IllegalArgumentException`. Plumb's stated reason: an index error lost its message on a
 JIT-compiled path [I]. That is a check loosened after the data was seen, against "fix choices before data". It touches only
-the throwing cases, not the 168,000 compared results. A stricter route, a test-JVM flag that keeps those messages, changes
+the throwing cases, not the 168,000 compared results. (**Corrected after the review, -163:** 1,380 of the 168,000 are
+throws compared by class only; 166,620 values are compared.) A stricter route, a test-JVM flag that keeps those messages, changes
 the build and is the owner's call. The planner proposes that the independent reviewer read it, once that role is named.
 **Notes:** Written by the planner session by hand. Next free ID -108.
 
@@ -4358,6 +4359,9 @@ harness's count.
   compares the result exactly, and `debugInfo` exactly up to and including `"Error reading rawTrack: "`. It asserts that
   both engines took that path and that each wrote some text after the prefix. On every other path, `debugInfo` is
   compared whole, as now. The port's code names the difference in a comment.
+  (**Added after the review, -163:** the entry did not say how wide this is. The prefix rule applies to every caught
+  exception there, the end-of-file cuts too: 1,549 of 4,522 debug texts by the coder's count, not only the null-pointer
+  case it was argued from.)
 - **Disclosed as what it is:** a comparison changed after a result was seen, like -107's. The planner puts it beside -107's
   case for the independent reviewer, once that role is named.
 **Notes:** Written by the planner session by hand. Next free ID -117.
@@ -5647,8 +5651,10 @@ the planner).
 **Checked by the planner:**
 - `git ls-remote` `2929df0`, a fast-forward of `004cd75`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
   on each of the 4. CI and the build are untouched.
-- **`CollectOutreachersTest`'s diff: 18 lines added, none removed.** The assertion and the regions are as they were. The
-  added calls are the ones `RoutingEngine.java` makes in its memory path, made on both engines and traced on both.
+- **`CollectOutreachersTest`'s diff: 18 lines added, none removed.** The assertion and the regions are as they were. ~~The added calls are the ones `RoutingEngine.java` makes in its memory path, made on both engines and traced on both.~~
+  **Corrected after the review, -163:** the calls are of the kind the engine makes, but the second round is a state the
+  test builds, not one the engine was caught in, which is what -147's decision 2 asked for. They are made and traced on
+  both engines.
 - The port's diff: the dead field and its comment. Other tests: the lines that printed it.
 - **Run 43277598212 on `4e311ce`: the run's conclusion is "success", the first on this branch.** Read by the planner:
   - `jvm`: **234 tests, 0 failures.** `CollectOutreachersTest` prints, with a destination, "canEscape false/true
@@ -6121,3 +6127,58 @@ the owner's "Yes" (-161). It is not merged: PRs #3 to #5 were each merged on the
 result had been seen: -107, -116, -119, -126, -148. It reads the commits and the tests themselves, not the planner's
 account of them.
 **Notes:** Written by the planner session by hand. Next free ID -163.
+
+**Kind:** outcome
+**ID:** 2026-10-28-163
+**Timestamp:** 2026-11-13T03:50:39Z
+**Continues:** 2026-10-28-107, 2026-10-28-116, 2026-10-28-119, 2026-10-28-126, 2026-10-28-127, 2026-10-28-148,
+2026-10-28-156, 2026-10-28-161, 2026-10-28-162
+**Title:** The first independent review (Samphire Witness): nothing blocking, five should-fix, three inaccuracies in the
+record; and the owner's ruling on the number text
+**The owner's ruling.** Asked with AskUserQuestion what the port does about the 5 of 1,287 numbers whose text differs on
+the simulator in its last digit (-156, -161), the owner chose, verbatim: "Record it, compare by value (Recommended)". The
+option read: "Leave the port's printing as it is and record this as a known platform difference: on iOS a printed number
+in these exports can differ from Java's in its last digit while meaning the same value. The simulator test that is red
+now is changed to compare those numbers by value, and that change goes to the independent reviewer. Cost: about one
+short session. iOS exports would then not be byte-for-byte identical to Java's in the 12 places that print a number
+this way."
+- **Rejected:** "Write our own Java-style printer"; "Leave the test red for now".
+- The first option was marked as recommended by the planner. The question was asked before the planner had read the
+  review below; the review does not bear on it.
+**The review.** Samphire Witness, dispatch 2026-11-13-01, one session on Fable; branch `review/changed-comparisons`, head
+`ed8a899`, 3 commits from `origin/main`, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; report
+`docs/reviews/2026-11-13-changed-comparisons.md` (274 lines). Its method and predictions were committed first
+(`e59275c`); 4 of 5 predictions held. Its runs were on this machine's JDK, not CI's. Checked by the planner: the head by
+`git ls-remote`, no model name, E1 over the branch 0. The findings are the reviewer's and are not re-run by the planner:
+- **Blocking: none.** "No change of the five turned a wrong port green that I could find, and three planted errors were
+  caught where the changed tests claim reach."
+- **One line each:** -107 justified in part; -116 justified by independent evidence; -119 justified in part (the limit
+  rests on the owner's ruling, "authority to narrow and not evidence"); -126 justified by independent evidence; -148
+  justified by independent evidence. Overall: justified in part.
+- **Should-fix, five:**
+  1. -107, `SearchBoundaryTest`: with `-XX:-OmitStackTraceInFastThrow` on the test JVM a test that compares the message
+     on every throw passes; the committed test passes a port with a wrong out-of-range table row, and the strict one
+     fails it. The cause of the lost message did not reproduce for the reviewer.
+  2. -116, `ReadBinaryTest`: that the error path is reached is printed, not asserted.
+  3. -116: the loosening is wider than its evidence: argued from the null-pointer text, applied to every caught
+     exception, 1,549 of 4,522 debug texts.
+  4. -127, FK9: add the guard the planner refused. "An assertion that is only added, predicted before it runs and seen
+     red under revert (b), loosens nothing; the discipline is against moving a comparison toward a result."
+  5. -126: the oracle-only run that justified the change was a scratch test, since deleted; it belongs in the tree.
+- **Where the record was inaccurate, three:** -107's "not the 168,000 compared results" (1,380 of them are throws
+  compared by class only); -116's silence on the breadth; -148's "The added calls are the ones `RoutingEngine.java`
+  makes", which overstates, with the departure from -147's decision 2 unmarked. **Each is corrected in place.**
+- **Where the planner was right,** in the reviewer's words: every Java line cited in -116, -119, -126 and -148 that it
+  read says what the record says; -127's account of its own ruling's cost is accurate.
+**Decisions (the planner's, technical):**
+1. **Should-fix 4 is taken: the planner was wrong in -127.** An added assertion, predicted first and seen red, is not a
+   comparison moved toward a result. FK9 gets its guard.
+2. **Should-fix 2 and 5 are taken** as additions: the error path's reach asserted; the oracle-only run committed as a
+   test.
+3. **Should-fix 3:** the loosening is narrowed on the JVM to the texts that differ for a named reason, if one session
+   can do it; if not, its breadth stays as now recorded in -116.
+4. **Should-fix 1 is the owner's,** as -107 said: it adds a flag to the test JVM. Asked below.
+5. **The number text, as ruled:** `FormatDigestsCommonTest` compares the floating numbers in the exports by value and
+   everything else by text; the change is stated before it is run, seen red first where it can be, and goes to Samphire.
+   The 12 places and the difference are named in the port's documentation of what it does not match.
+**Notes:** Written by the planner session by hand. Next free ID -164.
