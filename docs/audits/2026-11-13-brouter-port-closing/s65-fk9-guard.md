@@ -67,3 +67,53 @@ The other tests in the class under the plant, from session 34's run: `forager30s
 
 **Prediction with no plant.** FK9 passes, 10 cases, 0 mismatches, every case's elapsed above 50 ms; the class 9 of 9.
 Run at least 5 times; one failure in 5 is a finding.
+
+## Results (appended after the runs; the sections above are unchanged since `a85e7b8`)
+The test landed in `890bc42` as designed, with two details settled while writing it: a port that reports a timeout but
+never read its clock also fails the guard (elapsed `null`), rather than throwing in the test; and the per-case print
+gives the read count beside the elapsed time.
+
+**Baseline, before the guard** (FK9's method alone, `--rerun-tasks`): 0 ` e: `, fresh XML, 1 test, 0 failures; first
+words `{target-island-check=2, pass0=18}`.
+
+**Unplanted port, with the guard, the whole class, 5 runs** (each `--rerun-tasks`, a stamp touched before each, 0 ` e: `
+lines and 1 fresh XML each): 9 tests, 0 failures, every run. FK9's port clock, ms first read to last, per case:
+- run 1: 51, 52, 51, 51, 51, 52, 52, 51, 51, 54 (first words `{pass0=20}`)
+- run 2: 51, 56, 51, 51, 51, 51, 51, 53, 51, 51 (`{pass0=20}`)
+- run 3: 52, 56, 51, 51, 51, 52, 51, 51, 51, 51 (`{target-island-check=3, pass0=17}`)
+- run 4: 51, 53, 53, 51, 51, 51, 51, 52, 51, 51 (`{pass0=20}`)
+- run 5: 51, 56, 51, 51, 51, 51, 52, 51, 51, 51 (`{pass0=20}`)
+50 of 50 cases above 50 ms; the least is 51, the first whole millisecond past the limit, as the trace predicts for a
+port whose last read is the one that tripped. Run 3's first case read the clock only 35 times, so it likely struck early, perhaps in the island check [I: the
+first-words count does not split port from oracle], and still
+read 52.
+
+**Plant, revert (b), `revert.sh` name `s65p`, filter `*RoutingEngineStopTest`.** The edit applied once at
+`RoutingEngine.kt:724` (`> timeout` to `<= timeout`). 0 ` e: ` lines; 1 fresh XML (stamp 19:26:12, XML 19:27:42).
+Class: 9 tests, 3 failures, as predicted: FK9, `theTimeLimitReadsTheInjectedClock` (`expected:<[target-island-check]
+timeout after 30 se...> but was:<[re-tracking] timeout after 30 se...>`, as in session 34) and
+`forager30sLimitOnAStoppedClockRoutesAsTheOracleWithNoLimit` (oracle route, port `family:timeout`). FK9's message, first
+of five shown:
+`java.lang.AssertionError: 8c FK9: 10 mismatches; first [FK9-0001: [port's clock not past the limit at its timeout (13 ms
+over 2 reads)] (oracle family:timeout (29 chars)|0|0|0|1443 links|terminated false; port family:timeout (43
+chars)|0|0|0|0 links|terminated false), ...]`.
+All 10 cases fail, and each case's reason list holds the guard's reason and nothing else; elapsed 13, 28, 25, 4, 5, 6,
+8, 2, 5, 5 ms, each over 2 reads (`:85`, then the first `:724`); first words `{target-island-check=10, pass0=10}`.
+**FK9's other comparisons passed this wrong port on all 10 cases** (kind, both messages against `TIMEOUT_50`, the empty
+track, `terminated`): the review's point, seen. Port 43 characters is `target-island-check timeout after 0 seconds`,
+the oracle's 29 `pass0 timeout after 0 seconds` [I, from the lengths; messages are not printed].
+After: `cmp` of the port against the saved copy equal; the test file `cmp` equal to a copy taken before the plant, so
+the guard was in the tree throughout.
+
+**CI, run 43492461810 on `890bc42`.** All four jobs `success`, 0 ` e: ` lines in each log:
+- `jvm`: TOTAL 245 tests, 0 failures (245 before; this change adds an assertion, not a test).
+  `RoutingEngineStopTest` 9 tests, 0 failures. FK9: 10 cases, 0 mismatches, `{pass0=20}`; the port's clock per case 51,
+  51, 52, 53, 51, 52, 51, 51, 51, 51 ms, all past 50.
+- `ios-smoke`: TOTAL 58, 0 failures; arm64 TOTAL 7, 0 failures; gate `OK: all 2 classes ran`. Unchanged, as expected for
+  a JVM-only change. Simulator-checked.
+- `ios-memory`: TOTALs 3, 1, 1, 0 failures. `jvm-production`: TOTAL 2, 0 failures.
+
+**Not shown.** The guard runs only on the JVM (FK9 has no oracle on iOS). The plant ran once; the 50 ms cases in CI are
+one machine's timing. The gap named in the design (a limit that strikes early in re-tracking after slow passes) was
+not planted. The unplanted runs show 50 of 50 local cases and 10 of 10 CI cases at 51 to 56 ms; that the guard can
+never fail on a correct port rests on the trace above, not on these counts.
