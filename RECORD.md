@@ -6273,3 +6273,42 @@ one lower when `ilat / SCALE_CACHE_INCREMENT` is below 0). Its prediction is com
 stays in the findings file as it is.
 **Cost:** session 61 ended at about 117k of context.
 **Notes:** Written by the planner session by hand. Next free ID -167.
+
+**Kind:** outcome
+**ID:** 2026-10-28-167
+**Timestamp:** 2026-11-13T16:47:19Z
+**Continues:** 2026-10-28-107, 2026-10-28-163, 2026-10-28-165, 2026-10-28-166
+**Title:** The review's should-fix 1 closed: `SearchBoundaryTest` compares every throw by class and message, seen red
+under the corrected plant; CI green on the change (Plumb's session 62)
+**Observed:** Plumb Ledger, session 62, `brouter-port-5b` `ae4dfa2` to `647741c` (3 commits; no stop). Findings appended to
+`docs/audits/2026-11-13-brouter-port-closing/s61-searchboundary-strict.md`.
+- **The prediction first** (`ac33403`): plant P2 (the row one lower only where the row is below 0), with (a) pass, (b)
+  fail on an index one lower, (c) pass.
+- **(a) The committed test with P2: passed,** 1 test, 0 failures, with 1,380 and 1,368 throwing calls reached. That is
+  the gap the review named, reproduced by a second hand.
+- **(b) The strict test with P2: failed,** 1 test, 1 failure: "case 3 probe 0 direction 3: message expected:<Index -4[8]
+  out of bounds for l...> but was:<Index -4[9] out of bounds for l...>". It is the same message the reviewer's run
+  1P-strict gave (-163), and one P2 alone can produce.
+- **(c) The strict test on the port as it is: passed.**
+- Full `:brouter:jvmTest`, local, 1 h 8 min: 244 tests, 0 failures. [All four are Plumb's runs.]
+**Checked by the planner:**
+- The head by `git ls-remote`; a clean tree; one trailer on each commit, no model name; E1 by `scan.sh <c>^ <c>`: 0 on
+  each of the three.
+- **The diff read:** `SearchBoundaryTest.kt` gains a message comparison on `isInBoundary` and loses the
+  `IllegalArgumentException` condition on `getBoundaryDistance`; the sampling and the reach assertions are untouched.
+  `brouter/build.gradle.kts` gains `jvmArgs("-XX:-OmitStackTraceInFastThrow")` in the `jvmTest` block only. No port file
+  changed.
+- **Run 43447798521 on `5ca6310`:** all four jobs `success`; `jvm` 244 tests, 0 failures; `jvm-production` 2 of 2;
+  `ios-smoke` 57 of 57 with the gate "OK: all 2 classes ran", arm64 7 of 7; 0 ` e: ` lines in any log.
+  **Simulator-checked.** `647741c`, the head, is a docs commit after it with no run of its own.
+**What this does not show:**
+- **That the flag is what keeps the messages.** The lost message of -107 has never reproduced: not for the reviewer, with
+  or without the flag, and not here. So the flag is a guard against a cause that is still inferred [I], and (c) would
+  pass without it on these runs.
+- That the flag reaches the test JVM's command line. It is read in the build file, not seen on a running JVM.
+- That no other test's result moved because of the flag in a way the totals hide: the counts are equal before and
+  after, and the tests were not compared one by one.
+**So:** -107's loosened comparison is gone, and -163's decision 4 is carried out. Next is plant (b) alone (-164).
+**Cost:** session 62 ended at about 114k of context. The full JVM run takes over an hour here, against CI's own run.
+From now, a coder pushes and the planner reads CI for the full suite, instead of a local full run.
+**Notes:** Written by the planner session by hand. Next free ID -168.
