@@ -3527,6 +3527,8 @@ step 10 answers -61. The draft milestone report is in the Phase 2 report, under 
 - **8, `RoutingEngine` and the entry point,** 2,009 lines, **less 429 for via points, left out by the owner at -24,** so 1,580.
   It has four sub-steps:
   - **8a,** matching and the search without memory pressure: F0 first, then R and DL;
+    **Corrected 2026-11-11 by the planner (-123):** R and DL are not free of memory pressure; 151 of R's StdModel cases
+    and 51 of DL's 118 reach 8b's memory path, so they pass only at 8b.
   - **8b,** the memory path: MP64, ML5, PM5. Revert: `isInMemoryBounds`' comparison flipped;
   - **8c,** terminate, the time limit and the progress count: FK 9 to 11. Revert: `terminated` written but not read;
   - **8d,** `route()` and `checkDataFile` over the engine.
@@ -3911,3 +3913,2272 @@ between 108k and 194k of context. That is the context at the end, not the tokens
 - **Still in scratch only, and lost with the container:** reverts D, E and F's result files (-101). Plumb's session 13
   commits them first, or re-runs the three reverts and says so.
 **Notes:** Written by the planner session of -56 by hand. Next free ID -103.
+
+**Kind:** decision
+**ID:** 2026-10-28-103
+**Timestamp:** 2026-11-11T05:29:32Z
+**Continues:** 2026-10-28-90, 2026-10-28-101, 2026-10-28-102
+**Title:** A new planner session picks up from -102's handoff; Plumb Ledger's session 13 dispatched on `brouter-port-5b`
+**Decision:** the owner, verbatim: "Let's continue to BRouter port".
+- **The heads, checked by the planner** (`git ls-remote`, 05:2xZ) against -102: `brouter-port` `611ba54`, `brouter-port-5b`
+  `a83ff3f`, `brouter-port-5a` `2a8ba5e`, all as handed off. `main` is `d22a302`, the merge of PR #5 on the owner's word
+  ("Go ahead and merge PR 5 now"), so -102's step 2 (asking about PR #5) is closed.
+- **No older planner is live:** `ListAgents` lists no other session, and no watcher or coder was carried into this container.
+- **CI on `a83ff3f`, read by the planner** (run 42266943851): `jvm` 130 tests, 2 failures, both `CollectOutreachersTest`
+  (-61); 0 ` e: ` lines; both `compileKotlinIos*` ran. `ios-smoke`: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7,
+  the gate reading "OK: all 2 classes ran".
+- **The E1 ends rebuilt:** `make-forager-ends.sh` on a fresh shallow clone of Forager's `pre-main` (`947f1be2`, with
+  `a0535ece` reachable) gave 63 values, as at -102.
+- **Reverts D, E and F's result files are lost** with the old container, as -102 warned. Plumb re-runs the three at the
+  current head and says so.
+- **Plumb Ledger, session 13,** dispatched in the background on Opus, in -102's order: the three reverts re-run and
+  committed; `OsmPath` and `StdPath` under -97, each test seen failing over stubs first (-101); the path-cost comparison
+  (-99); the `(int)` and `interpolateEle` reverts; then `RoutingParamCollector` and `SearchBoundary`. The merge of
+  `brouter-port` into 5b waits for the step boundary. The context watcher runs at 180,000.
+- **The record branch is `ccr-7e682f25-4tqqon`,** this session's, cut from `main` at `d22a302`, in place of -102's
+  `ccr-362633cb-61f3bw`, whose PR is merged. The planner's call; the entries reach `main` by PR on the owner's word.
+**Notes:** Written by the planner session by hand. Next free ID -104.
+
+**Kind:** outcome
+**ID:** 2026-10-28-104
+**Timestamp:** 2026-11-11T05:42:16Z
+**Continues:** 2026-10-28-90, 2026-10-28-101, 2026-10-28-103
+**Title:** Step 6, Plumb's session 13: handed off at the watcher's limit after 12 minutes, with `OsmPath` and `StdPath`
+drafted but not compiled; a coder starts at about 61k of context; a wrong premise of the planner's
+**Observed:** Plumb Ledger, session 13, `brouter-port-5b` `a83ff3f` to `4815a6f` (one docs-only commit; clean tree; trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name; checked by the planner).
+- **Nothing in `brouter/` changed.** The drafts (`OsmPath`, `StdPath`, `PathEngines`, `StdPathTest`, `StartPathTest`, 1,457
+  lines) are under `docs/audits/2026-11-06-brouter-port-step6/s13-drafts/` as `.kt.txt`, outside the source sets. None has
+  been compiled, and none has been seen failing over stubs (-101). Section 10 of the step 6 report lists six steps for
+  session 14.
+- **Reverts D, E and F were not re-run.** Their result files are still missing (-102, -103).
+- **The baseline, read by the planner** from Plumb's own run at `a83ff3f`, which finished after the handoff
+  (`./gradlew :brouter:jvmTest --rerun-tasks`, 7m 31s): 130 tests, 2 failed, both `CollectOutreachersTest` (-61); 0 ` e: `
+  lines. Its first attempt failed before any test, on HTTP 429 from Maven Central for okio-jvm, annotations and
+  atomicfu-jvm [R, as reported]. That is infrastructure.
+- **Cost, measured by the planner from the transcript:** the first assistant turn already carried 60,764 tokens of
+  context, before any file was read. The watcher fired at 183,054 (05:39:57Z), and the last turn read 192,787. Plumb
+  estimated its own context at "about 80–90k". The estimate was about 100k low, so a coder's self-estimate is not used
+  as a measure. A coder has about 120k of working room per session.
+- **A wrong premise, the planner's:** -103's dispatch placed `coder-profile.md` on `brouter-port-5b`. It is only on
+  `main`. Plumb found it there.
+**So step 6 has not moved in code.** Session 14 starts from section 10's list, with the baseline already read. It reads
+the drafts against Java one method at a time, not both Java files whole.
+**Notes:** Written by the planner session by hand. Next free ID -105.
+
+**Kind:** outcome
+**ID:** 2026-10-28-105
+**Timestamp:** 2026-11-11T06:15:09Z
+**Continues:** 2026-10-28-90, 2026-10-28-97, 2026-10-28-99, 2026-10-28-101, 2026-10-28-104
+**Title:** Step 6, Plumb's session 14: `OsmPath` and `StdPath` ported, their tests seen failing over stubs first; reverts
+D, E and F re-run and committed; revert G (the turncost cast) as predicted, with the port's side of its line unread
+**Observed:** Plumb Ledger, session 14, `brouter-port-5b` `4815a6f` to `7282c67` (six commits; clean tree; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name; checked by the planner). It ended at 167,215 tokens by
+the harness's count; the watcher did not fire.
+- **Reverts D, E and F, re-run at `4815a6f`** (predictions at `7928c2a`, results at `ecf4506`). **Checked by the planner**
+  in the three result files: each has 0 compile errors, 1 fresh XML and a `cmp`-equal restore, and each failure message is
+  specific to its own edit and matches session 12's observation (D: line 3, an `obtain` line, oracle `true`, port `false`,
+  6,915 against 5,391 lines; E: `case 1: copy's extraTime`, port 0; F: `case 0: calcDistance`, oracle 1, port 0).
+  -101's missing files are now committed, as re-runs, not the originals.
+- **Tests over stubs first (-101), at `128dffd`, red on purpose:** `StdPathTest` (3) and `StartPathTest` (1), 4 of 4
+  `NotImplementedError: ... step 6: OsmPath`, 0 compile errors, 2 fresh XML (planner read the file).
+- **The port, at `bce3a3a`:** the drafts checked against Java method by method, with two compile fixes
+  (`anglemeter.cosAngle`; `@JvmField` on `sourceNode`, `targetNode`, `link`) [R, as reported]. The four path classes 7 of 7.
+  - **-97 carried out, checked by the planner:** `OsmPath.kt:267` throws `UnsupportedOperationException("unsupported:
+    OsmPath's start direction (OsmPath.java:282-283)")`, and `startDirectionIsUnsupported` asserts that exact message, then
+    the same path without a start direction. `OsmPath.kt:132` refuses `AreaInfo.checkAreaInfo` the same way.
+- **Revert G, the `(int)` cast** (prediction pushed in `bce3a3a` before the run): it named the 16 of 20 Std profiles whose
+  `turncost` is above 0, read from the brf files, and expected `fastbike-asia-pacific` first. Observed: `StdPathTest` 1 of
+  3 and `StartPathTest` 1 of 1 failed, both on `fastbike-asia-pacific`, `F0-inside-across-the-degree-line`, at a cost line
+  (oracle `cost=26923`; start, oracle `cost=2847`). The other two tests passed, as predicted. **Not confirmed:** the
+  prediction's "port lower". The runner cuts messages at 200 characters, so the port's value is not in the result file.
+- **CI on `bce3a3a`, read by the planner** (run 42969696836): `jvm` 134 tests, 2 failed, both `CollectOutreachersTest`
+  (-61); 0 ` e: `; both `compileKotlinIos*` ran. `ios-smoke`: simulator 24 of 24 (**simulator-checked**), arm64 7 of 7, the
+  gate reading "OK: all 2 classes ran". The two docs commits after it were still running at writing.
+- **An anomaly in the container [?]:** Plumb's full local run left 10 of 59 XML files empty, while Gradle's log and CI both
+  give 134. Not explained.
+- **Plumb asked about the trailer:** the harness suggested one naming the model with a session link. Plumb used the
+  dispatch's trailer. That is right: the record's rule is no model name in commits (-102's handoff), and the harness's own
+  guidance also forbids model identifiers in commits.
+**Left in step 6:** -62's `interpolateEle` revert; the empty XML; `StartPathTest`'s end-cut sample; revert G's port value;
+`RoutingParamCollector` and `SearchBoundary`. Then the merge of `brouter-port` into 5b at the step boundary.
+**Notes:** Written by the planner session by hand. Next free ID -106.
+
+**Kind:** outcome
+**ID:** 2026-10-28-106
+**Timestamp:** 2026-11-11T06:56:40Z
+**Continues:** 2026-10-28-61, 2026-10-28-62, 2026-10-28-90, 2026-10-28-105
+**Title:** Step 6, Plumb's session 15: revert G's port value read (lower, as predicted); reverts H and I; `StartPathTest`'s
+end cuts widened from 6 to 668; the empty XML not seen again
+**Observed:** Plumb Ledger, session 15, `brouter-port-5b` `7282c67` to `d2c6993` (six commits; clean tree; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 141,920 tokens by the harness's
+count; the watcher did not fire.
+- **The empty XML of -105 did not recur:** the full fresh run at `7282c67` gave 134 tests in 59 XML files, none empty, 0
+  ` e: ` (`10-full-run-7282c67.txt`). Its cause is unknown; Plumb's hypothesis, a process overlapping the moment all 59
+  files are written, is [I].
+- **Revert G's "port lower" is confirmed,** read from the whole XML messages (`11-revert-G3-port-value-result.txt`, read by
+  the planner): oracle `cost=26923`, port `26914`; at the start, `2847` against `2842` [R for the second].
+- **Revert H, -62's `interpolateEle` revert** (prediction at `4ffae38`, result at `016327f`): 0 compile errors, 2 fresh XML,
+  `cmp`-equal restore; 2 of 4 failed, `interpolateEleMatchesTheOracle` and `startPathsMatchTheOracleFromForagersEnds`, as
+  predicted. **One part missed:** the start-path failure came on one of R's ends, not on F0h's. Why F0h's cut starts pass
+  the revert is [?].
+- **`StartPathTest` widened:** synthetic end waypoints at each extension link's midpoint reach 668 of 1,868 end cuts,
+  against 6 final links before [R, as reported]. Revert I (the end cut's height left unchanged), predicted at `61a8e4f`
+  and observed at `370f384`, failed on an F0h cut line, as predicted [R, as reported].
+- **CI, read by the planner** on `61a8e4f` (run 42974370259) and `370f384` (run 42974441912): `jvm` 134 tests, 2 failed, both
+  `CollectOutreachersTest` (-61); 0 ` e: `; both `compileKotlinIos*` ran. `ios-smoke`: simulator 24 of 24
+  (**simulator-checked**), arm64 7 of 7, the gate reading "OK".
+- **`collectOutreachersWithoutADestination` passed once** in Plumb's local run at `7282c67`, and was red again in the next run
+  and in CI, with no code change between. This matches what the record already holds for Question A: at the default stack,
+  the port overflows 2 to 4 times a run, and at 1g this test passes. It is the deep-recursion question that waits for step
+  10 (-61). Not touched.
+**Left in step 6:** `SearchBoundary` (87 Java lines) and `RoutingParamCollector` (374), neither stubbed yet; then the merge
+of `brouter-port` (`611ba54`) into 5b at the step boundary (-96).
+**Notes:** Written by the planner session by hand. Next free ID -107.
+
+**Kind:** outcome
+**ID:** 2026-10-28-107
+**Timestamp:** 2026-11-11T08:18:20Z
+**Continues:** 2026-10-28-90, 2026-10-28-96, 2026-10-28-101, 2026-10-28-106
+**Title:** Step 6, Plumb's session 16: `SearchBoundary` and `RoutingParamCollector` ported, each over a failing stub first;
+reverts J and K; the boundary merge made but not pushed; a test loosened after the port first ran
+**Observed:** Plumb Ledger, session 16, `brouter-port-5b` `d2c6993` to `028783c` (nine commits; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). The watcher fired at 180,895 (07:52:34Z); the
+planner asked for the handoff and told Plumb to leave the merge. It ended at 189,487 by the harness's count.
+- **`SearchBoundary`, ported whole:** over the stub (`ca11871`, red on purpose) 1 of 1 failed, `NotImplementedError` naming
+  `getFileName`'s stub; on the port it passes on 168,000 `isInBoundary` cases [R, as reported].
+- **`RoutingParamCollector`, ported for Forager's calls:** `getWayPointList`, both `readPosition`s, and `setParams` for
+  `profile`, `alternativeidx` and `profile:`. Over the stubs (`30293c8`, red on purpose) 3 of 3 failed. **Checked by the
+  planner:** a non-empty `nogoLats`, each of the 18 other keys Java acts on, and a second `profile:` key throw
+  `UnsupportedOperationException("unsupported: ...")` (`RoutingParamCollector.kt:92-117`). The 8 methods Forager never
+  calls are not ported; §13 of the step 6 report names them.
+- **Reverts,** each predicted in a pushed file before it ran: J (`SearchBoundary`'s inner east bound) failed on
+  `getBoundaryDistance` direction 3, off by one degree, the branch Plumb had called less likely; K (`getWayPointList`'s
+  latitude truncated) failed one lower on Forager-form ends, as predicted, but on F0h case 3, not the first [R, as
+  reported].
+- **CI, read by the planner:** on `30293c8` (run 42981080608), `jvm` 138 tests, 5 failed: the three
+  `RoutingParamCollectorTest` stubs and `CollectOutreachersTest`'s two. On `6cd2ab9`, `12ae393` and `028783c` (runs
+  42982527896, 42982592547, 42982873596), `jvm` 138, 2 failed, both `CollectOutreachersTest` (-61). Every run: 0 ` e: `;
+  both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **The merge of `brouter-port` (`611ba54`) was not pushed.** **Checked by the planner:** `611ba54` is not an ancestor of
+  the remote `brouter-port-5b`. Plumb's local merge commit `4f5492f` (clean, no conflicts) stays on a local branch; session
+  17 redoes the merge from the remote and compares the trees.
+**A flag of the planner's, for the owner:** after the port first ran, Plumb changed `SearchBoundaryTest` twice, with the
+port unchanged. Out-of-range latitudes throw in both engines, and the test now compares those throws by class, and by
+message only for Java's own `IllegalArgumentException`. Plumb's stated reason: an index error lost its message on a
+JIT-compiled path [I]. That is a check loosened after the data was seen, against "fix choices before data". It touches only
+the throwing cases, not the 168,000 compared results. (**Corrected after the review, -163:** 1,380 of the 168,000 are
+throws compared by class only; 166,620 values are compared.) A stricter route, a test-JVM flag that keeps those messages, changes
+the build and is the owner's call. The planner proposes that the independent reviewer read it, once that role is named.
+**Notes:** Written by the planner session by hand. Next free ID -108.
+
+**Kind:** outcome
+**ID:** 2026-10-28-108
+**Timestamp:** 2026-11-11T08:20:40Z
+**Continues:** 2026-10-28-42, 2026-10-28-62, 2026-10-28-90, 2026-10-28-94, 2026-10-28-96, 2026-10-28-107
+**Closes:** step 6 of 2026-10-28-90
+**Title:** Step 6 closed: `brouter-port` merged into `brouter-port-5b` at the boundary (Plumb's session 17); every file on
+-94's list ported
+**Observed:** Plumb Ledger, session 17, `brouter-port-5b` `028783c` to `7125739` (two commits; trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 97,993 by the harness's count.
+- **The merge, `7491f3a`** (`028783c` and `611ba54`), clean. **Checked by the planner:** `611ba54` is now an ancestor of
+  `brouter-port-5b`; the merge's diff against `028783c` is byte-identical, `index` lines aside, to `brouter-port`'s own
+  `fcd35ff..611ba54`, so it adds nothing `brouter-port` did not carry, and its E1 scan is that branch's (0). The redone
+  merge's tree matches session 16's unpushed `4f5492f` apart from §13 [R, as reported].
+- **Tests:** local fresh run 138, 2 failed, both `CollectOutreachersTest` (-61), 61 of 61 XML non-empty [R]. Of the classes
+  the merge changed, only `E3ExpectedFileTest` is in `jvmTest`, 6 of 6 [R]; `E3FKTest` and `E3ExpectedWriteTest` are strata
+  tests outside it.
+- **CI on `7491f3a`, read by the planner** (run 42984411711): `jvm` 138, 2 failed, both `CollectOutreachersTest`; 0 ` e: `;
+  both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **Step 6 against -94's list, checked by the planner:** `router/` holds all 15 classes named there, `RoutingContext` split
+  in two (`RoutingContextNogo.kt`), as -94 allowed, plus `OsmTrack.kt` holding only the type. The one stub left in
+  `router/` is `OsmTrack.containsNode`, which throws a named "unsupported", as -94 ruled; step 7 fills it.
+- **-90's debts for step 6:**
+  - -62's `interpolateEle` cast: shown, by revert H (-106).
+  - The step's own revert, the `(int)` cast: shown, by revert G (-105, -106).
+  - -42's way getters: 19 named getters are called from `OsmPath.kt` and `StdPath.kt` (planner's `grep`), and the oracle
+    comparisons that run those classes pass. That each call site executes is not counted [I], so -42 is paid by
+    inference, not shown. Step 8's coverage reader can show it.
+**So step 6, the path model, is done and compared with the oracle.** About 3,000 Java lines remain in steps 7 and 8 (-90's
+counts: 1,367 and 1,580).
+**Notes:** Written by the planner session by hand. Next free ID -109.
+
+**Kind:** intent
+**ID:** 2026-10-28-109
+**Timestamp:** 2026-11-11T08:20:40Z
+**Continues:** 2026-10-28-90, 2026-10-28-94, 2026-10-28-108
+**Title:** Step 7, the track and hints, on `brouter-port-5b`: a verify-first session before any port
+**Intent:** under -90 ("7, the track and hints, 1,367 lines in 9 classes: `OsmTrack`, `VoiceHint*` and `Format*` as far as
+reached") and -94 (step 7 follows 6 on the same branch). The planner's calls, technical:
+- **Plumb Ledger takes step 7,** since the branch has one coder at a time and Plumb holds step 6's knowledge.
+- **The first session reads and reports, and builds nothing beyond stubs:** step 7's file list; which methods Forager's
+  path reaches from `RoutingEngine` and `OsmPath`, traced to their callers; what Phase 1's item I says step 7 holds; and
+  a test plan. -90 says step 7 is "exercised through step 8's routes; the hints are recorded, not asserted (E1)". Under
+  -101, each test is seen failing over stubs first, so the report says what step 7 can test against the oracle on its
+  own before step 8, and what must wait. Its revert, from -90: "one distance rounding replaced by `roundToLong`".
+- **Stops:** anything that would assert a hint or a route coordinate (E1); any change to the plan's scope, such as
+  `Format*` classes Forager never reaches. Those come to the planner, and scope to the owner.
+**Notes:** Written by the planner session by hand. Next free ID -110.
+
+**Kind:** outcome
+**ID:** 2026-10-28-110
+**Timestamp:** 2026-11-11T08:32:07Z
+**Continues:** 2026-10-28-90, 2026-10-28-94, 2026-10-28-109
+**Title:** Step 7's verify-first report (Plumb's session 18): the hints and every `Format*` output are unreached on
+Forager's path; -90's revert has no target; Android's routes carry heights and the port's do not
+**Observed:** Plumb Ledger, session 18, `brouter-port-5b` `7125739` to `916cb8f` (one docs commit,
+`docs/audits/2026-11-11-brouter-port-step7.md`; trailer `Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 [R]).
+No code was built. The watcher fired at 190,601 (08:30:28Z), nine minutes in; the report was pushed before the planner's
+handoff call landed. It ended at 196,212 by the harness's count. Plumb names the cost: a `grep` loop over `OsmTrack`'s
+members, about 600 lines of Java in ranges, and item I's wide rows.
+- **Step 7's files** (Java lines / T2's kept lines) [R]: `OsmTrack` 587/444, `VoiceHint` 223/201, `VoiceHintList` 61/33,
+  `VoiceHintProcessor` 529/529, `Formatter` 569/84, `FormatGpx` 573/26, `FormatJson` 261/22, `FormatKml` 116/15,
+  `FormatCsv` 43/13. 1,367 kept lines, as -90 says.
+- **The hints are off on Forager's path. Checked by the planner** in Forager's vendored BRouter: every one of the 24 profiles
+  that sets `turnInstructionMode` sets it to 1, "auto-choose", and `RoutingContext.java:177-179` leaves the field at its
+  default 0 when the value is 1. Only `RoutingParamCollector.java:224-231` sets it otherwise, and the port refuses those
+  keys (-107). So `processVoiceHints` returns early (`OsmTrack.java:457-460`, [R]), and `VoiceHint`, `VoiceHintProcessor`,
+  the detour methods and `containsNode` are not reached. Phase 1's JaCoCo run agrees [R].
+- **Reached** [R]: `OsmTrack`'s fields, `buildMap`, `getLink`, `appendTrack` (its one-section branch), `copyDetours`,
+  `readBinary`'s null check, `prepareSpeedProfile`, the start of `processVoiceHints`, and `VoiceHintList`'s constructor and
+  `setTransportMode`. `getTotalSeconds` and `Formatter`'s three methods are reached but only write `track.message`, which
+  nothing reads. No `Format*` output is taken by Forager. `addNode` runs only on a timeout: unknown.
+- **-90's revert has no target.** No distance is rounded in step 7. Plumb proposes instead `OsmTrack.java:346`'s
+  `if (i > 0 || ourSize == 0)` made `if (i > 0)`, which drops the first node when tracks are joined.
+- **A premise for step 8, checked by the planner:** Android's router keeps a height for every route point since 2026-10-30
+  (`BRouterTrailRouter.kt:219`, `nodes.map { heightMetresOf(it.getSElev()) }`; Forager `ba6a52d7`, dispatch 2026-10-30-06
+  Amendment 1). The port's `RouteOutcome.Found` carries `iLat`, `iLon` and `distance`, and no heights [R for the line,
+  `Route.kt:40`]. That is a gap with Android, the planner's to raise.
+- **Tests proposed** [R]: `TrackMapTest`, `AppendTrackTest`, `TrackHeadTest` and `TrackTimeTest`, each seen failing over stubs
+  first, over tracks built from step 6's paths. They compare by index, bits and digest, and assert no positions and no
+  hints. Real routes wait for step 8.
+**Decision (the planner's, technical):** -90's revert is replaced by Plumb's `OsmTrack.java:346` revert, since the original
+names a rounding step 7 does not have. `TrackTimeTest` asserts its time and energy values, since its inputs are step 6's
+paths from Forager's own ends (excepted, -93) and it asserts no position or hint.
+**For the owner:** whether the unreached hint and detour code, and the `Format*` classes, are ported or left as named
+"unsupported"; and whether step 8's route result carries heights, as Android's does.
+**Notes:** Written by the planner session by hand. Next free ID -111.
+
+**Kind:** decision
+**ID:** 2026-10-28-111
+**Timestamp:** 2026-11-11T10:18:39Z
+**Continues:** 2026-10-28-90, 2026-10-28-109, 2026-10-28-110
+**Title:** The owner's rulings on step 7's scope and step 8's heights: BRouter's hints ported, the export formats ported,
+heights added; Forager's own next-turn code to be ported for the iOS app as well
+**Decision:** the owner, verbatim, to the planner's three questions:
+- On BRouter's hint and detour code: "Option 2. I just added turns directions the last update." (Option 2 read "Port it
+  all".) Asked again with the finding below, the owner chose "Both", whose option read: "Port BRouter's hint code now as
+  ruled, and also plan the port of Forager's own next-turn code for the iOS app."
+- On the export formats (GPX, JSON, KML, CSV): "Port them".
+- On heights in step 8's route result: "Add heights at step 8 (Recommended)".
+- On what to do with them: "Record it,Build it".
+**The finding put to the owner, checked by the planner** in Forager's `pre-main` (`e1fbb635`): Android's turn directions
+(PR #500, `next-turn`, merged 2026-11-09) come from Forager's own code, `domain/nextturn/` (`RouteTurns.kt` and its
+neighbours), built on the route's ways through Forager's own interface. They do not use BRouter's hint code. Android's
+profiles still set `turnInstructionMode` to 1, which leaves BRouter's hints off (-110).
+**Two wrong premises, the planner's:**
+- The first question said "Forager never switches turn hints on". That is true of BRouter's hints and was read as true of
+  Forager. The planner had not checked Forager's `pre-main` for new features before step 7, which its profile names as its
+  duty ("Keeping iOS level with Android is the planner's duty"). `pre-main` was read only at `947f1be2` for the E1 ends.
+- The formats question said "About 160 kept Java lines". That was T2's count of the lines Forager's path reaches. Ported
+  whole, the five format classes are 1,562 Java lines (-110's counts: 569 + 573 + 261 + 116 + 43). The ruling stands as
+  given. The corrected figure goes to the owner in the next message.
+**What this means for the plan (the planner's reading, labelled as such):**
+- **Step 7 grows** from 1,367 kept lines to about 3,000: `OsmTrack` whole, `VoiceHint`, `VoiceHintList`,
+  `VoiceHintProcessor`, `Formatter` and the four `Format*` classes. Each is compared with the oracle, with its test seen
+  failing over stubs first (-101). On Forager's own path, hints and formats stay unreached, so their tests switch them on
+  in test code. Inputs come from seeds or from Forager's own ends, and outputs are compared by digest, so no coordinate is
+  committed beyond Forager's own ends (E1).
+- **Order:** `OsmTrack`'s reached core first (session 19, -110's plan); then the hint code (one or two sessions); then the
+  formats. The revert for the core is `OsmTrack.java:346` (-110).
+- **Step 8** returns a height per route point, as Android's `BRouterTrailRouter.kt:219` does, compared with the oracle.
+- **Forager's next-turn code** is an app-layer port, not part of BRouter. It is an open item for the iOS app's plan, after
+  the BRouter port, and gets its own intent when planned.
+**Notes:** Written by the planner session by hand. Next free ID -112.
+
+**Kind:** outcome
+**ID:** 2026-10-28-112
+**Timestamp:** 2026-11-11T10:49:47Z
+**Continues:** 2026-10-28-94, 2026-10-28-101, 2026-10-28-110, 2026-10-28-111
+**Title:** Step 7, Plumb's session 19: `OsmTrack`'s reached core ported over failing stubs; revert (a) as predicted
+**Observed:** Plumb Ledger, session 19, `brouter-port-5b` `916cb8f` to `737fdf2` (five commits; clean tree; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 170,728 by the harness's count; the
+watcher did not fire.
+- **Ported** (`cbd31d6`): `OsmTrack`'s fields, `addNode`, `copyDetours`, `buildMap`, `containsNode` (replacing -94's stub),
+  `getLink`, `appendTrack`, `getTotalSeconds`, `prepareSpeedProfile`, `readBinary`'s null guard and `processVoiceHints`'
+  head; `VoiceHintList`'s constructor, fields and `setTransportMode`; `Formatter`'s three statics. The hint body,
+  `addDetours` and `readBinary`'s file branch are `TODO("step 7: hint code, a later session (RECORD -111)")` [R].
+- **Tests, over stubs first** (`bf48f79`, red on purpose): `TrackMapTest`, `AppendTrackTest`, `TrackHeadTest`,
+  `TrackTimeTest`, 6 of 6 `NotImplementedError` naming the stubs, 0 compile errors; on the port 6 of 6 [R]. Full fresh run
+  144 tests, 2 failed, both `CollectOutreachersTest` [R].
+- **Revert (a)** (`OsmTrack.java:346`, -110), prediction pushed at `c898514` before the run. **Checked by the planner** in
+  the result file: 0 compile errors, 4 fresh XML, `cmp`-equal restore; 2 of 6 failed, as predicted:
+  `appendTrackMatchesTheOracle` at mode 0, the first case, node count 564 against 563; and
+  `totalSecondsOnBuiltTracksMatchTheOracle` on seconds and time (15,747 against 15,739), energy equal.
+- **CI on `cbd31d6`, read by the planner** (run 43005311784): `jvm` 144, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **Disclosed by Plumb:**
+  - A test literal changed to pass the E1 scan: a double in `TrackTimeTest`'s list, `0.0499` followed by one more 9, was
+    cut to `0.0499`, because the scan's decimal pattern caught it. That was before the port existed, and the red run was
+    repeated after it. It is not a coordinate; the scan's pattern is wider than E1.
+  - A weak check [?]: `TrackHeadTest` asserts that `copyDetours` on a track with no detours gives null, which a stub
+    returning null would also pass. Session 20 strengthens it with a real detour map.
+**Next:** session 20, the hint code (-111): `VoiceHint`, `VoiceHintList`'s rest, `OsmTrack`'s detour methods and hint body;
+then `VoiceHintProcessor`; then `readBinary`'s file branch and the formats.
+**Notes:** Written by the planner session by hand. Next free ID -113.
+
+**Kind:** outcome
+**ID:** 2026-10-28-113
+**Timestamp:** 2026-11-11T10:59:56Z
+**Continues:** 2026-10-28-101, 2026-10-28-107, 2026-10-28-111, 2026-10-28-112
+**Title:** Step 7, Plumb's session 20: the hint code's first half red over stubs; the port written, held at the stop on
+changing tests after the result; two harness fixes accepted on conditions
+**Observed:** Plumb Ledger, session 20, `brouter-port-5b` `737fdf2` to `46626f3` (two commits; trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 150,206 by the harness's count.
+- **Red over stubs, `d2d8e34`:** `VoiceHintTest` (`VoiceHint` whole and `VoiceHintList`'s rest, on 30,000 seeded hints with
+  zero positions), `TrackDetourTest` (the four detour methods, `getMinDistance`, `getMatchedWaypoint`, `removeVoiceHint`),
+  and `TrackHeadTest`'s `copyDetours` on a real detour map. 5 of 5 failed, 0 ` e: ` [R].
+- **The weak check of -112 is closed:** the stronger `copyDetours` check fails over a null-returning stub, "detourMap
+  expected:<FrozenLongMap> but was:<null>" (`step7/04-copydetours-null-stub-result.txt`) [R].
+- **The port is written and not pushed:** `step7/03-s20-port-unpushed.patch`, and a local stash.
+- **The stop this prompt set, hit:** on the port, 2 of 5 failed on defects of the tests, not the port [R]:
+  - `calcCommand`'s comparison read Java's void result as null, and Kotlin's as `Unit`;
+  - the set-up froze one Java detour map twice, and Java's `FrozenLongMap` empties the map it is built from, so the oracle
+    side threw an NPE.
+  - With both fixed, uncommitted (`step7/05-s20-diagnostic-test-changes-not-applied.patch`), 5 of 5 passed [R].
+- **E1:** the scan flagged 6 timestamps in the two patch files' diff headers. They were stripped, and the rescan read 0.
+- **A false premise in -112's plan:** `processVoiceHints`' hint body cannot be compared with the oracle before
+  `VoiceHintProcessor` is ported. The two, with `startSection`, are tested as one unit.
+**Decision (the planner's, technical), after reading patch 05's lines:** both fixes are accepted.
+- The first maps `Unit` to null and nothing else. A port method returning `Unit` where Java returns a value still fails,
+  since the value is not null. So it cannot hide a port defect.
+- The second makes a fresh map for each copy, which changes the set-up, not a comparison. It adds a check that a second
+  copy from an emptied map throws on both engines alike.
+  - **Corrected 2026-11-11T11:27:54Z by the planner (-114):** it adds a logged outcome, not an asserted check. In the
+    committed test (`79f8d93`) the second copy's result is written to the log (an NPE on both engines, 20 of 20), and no
+    assertion reads it. Plumb left it unasserted rather than add an assertion after seeing the port's result.
+- **On a condition:** the fixed tests are committed and seen failing over the stubs again before the port goes in, so
+  -101's evidence is about the tests that are kept.
+- **Why this is not -107's case:** there a comparison of results was narrowed (throws compared by class) after the data
+  was seen. Here no comparison of values is narrowed.
+**Notes:** Written by the planner session by hand. Next free ID -114.
+
+**Kind:** outcome
+**ID:** 2026-10-28-114
+**Timestamp:** 2026-11-11T11:27:54Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-113
+**Title:** Step 7, Plumb's session 21: the hint code's first half ported over the fixed tests, red first; revert (b) as
+predicted; `VoiceHintProcessor`'s unit red over stubs; -113 corrected in place
+**Observed:** Plumb Ledger, session 21, `brouter-port-5b` `46626f3` to `7193465` (six commits; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 165,287 by the harness's count.
+- **-113's condition met:** the two fixes committed with their reasons, and run over the stubs first (`79f8d93`, red on
+  purpose): 5 of 5 failed, 0 ` e: ` [R]. Then the port, unchanged from session 20's (`7e3fb60`): the three classes 5 of 5.
+  The stash was dropped only after it diffed equal to the pushed commit [R]; the planner saw no stash left.
+- **Full fresh run:** 148 tests, 2 failed, both `CollectOutreachersTest` [R].
+- **Revert (b)** (`addDetours`' `source.nodesMap!!.contains(id)` negated), predicted at `c6da1d1` before the run. **Checked
+  by the planner** in the result file: 0 compile errors, 5 fresh XML, `cmp`-equal restore; 1 of 8 failed, "group 0
+  addDetours variant 0: getFromDetourMap, candidate 26 expected:<[835]> but was:<null>", as predicted.
+- **CI on `7e3fb60`, read by the planner** (run 43010170082): `jvm` 148, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **The next unit, red over stubs (`24603fb`):** `VoiceHintProcessor`, `startSection` and `processVoiceHints`' body, with
+  `VoiceHintProcessTest` (100 cases, hints switched on in test code on both engines, compared by digest). 1 of 1 failed on
+  the body's stub, 0 ` e: `. The oracle side alone gives 1,934 hints and 12 commands; commands 1, 10, 12 and 13 are not
+  reached by this sample [R].
+- **-113 corrected in place,** under the owner's rule: "The rule is corrections go into the same record that was recorded"
+  (Forager's planner profile, "Keeping the record"). -113 said fix 2 "adds a check"; it adds a logged outcome, not an
+  asserted one. The planner's misreading of patch 05.
+**Next:** session 22 ports the `VoiceHintProcessor` unit. Its sample is widened to reach the four missing commands, if it
+can be, before the port runs, while only the oracle's side has been seen.
+**Notes:** Written by the planner session by hand. Next free ID -115.
+
+**Kind:** outcome
+**ID:** 2026-10-28-115
+**Timestamp:** 2026-11-11T11:58:35Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-114
+**Title:** Step 7, Plumb's session 22: `VoiceHintProcessor`, `startSection` and `processVoiceHints`' body ported over a
+sample widened first; revert (c) as predicted; `OFFR` unreachable, `EL`/`ER` not reached on these inputs
+**Observed:** Plumb Ledger, session 22, `brouter-port-5b` `7193465` to `dd43676` (five commits; every trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 167,529 by the harness's count.
+- **The sample widened before the port (`5ba7488`, red on purpose):** only the inputs changed, from 10 walks of up to 25
+  steps per end to 40 of up to 80, so from 100 cases to 400. An oracle-side coverage check was added for commands 1 to 16
+  except 12, with the comparison untouched. Over the stubs 1 of 1 failed, 0 ` e: ` [R]. On the oracle's side: 17,279
+  hints, every command 1 to 16 but 12 reached, 10 three times and 13 six times [R].
+- **`OFFR` (12) cannot be reached. Checked by the planner:** it appears only in `Formatter.java`'s switches (`:165`, `:211`,
+  `:259`, `:303`, `:516`), and no line sets it.
+- **`EL`/`ER` (17, 18) are not reached on these inputs.** They are set at `VoiceHintProcessor.java:385-387` and `:444-446`
+  (planner's `grep`), on a motorway link. Plumb reads Forager's profile as pricing motorways at 100000, so no walk takes one
+  [I, not traced through the cost code].
+- **The port (`080885f`):** the processor, `startSection` and the hint body; `VoiceHintProcessTest` and the three track
+  tests 6 of 6 on the first run. Full fresh run 149 tests, 2 failed, both `CollectOutreachersTest` [R].
+- **Revert (c)** (`postProcess`' catching-range check, `<` made `>`), predicted at `bf66b05` before the run: "case 26: hint
+  count expected:<62> but was:<66>", as predicted, 0 compile errors, `cmp`-equal restore [R].
+- **CI on `080885f`, read by the planner** (run 43014941206): `jvm` 149, 2 failed, both `CollectOutreachersTest` (-61);
+  0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+**Decision (the planner's, technical):** session 23 first tries to reach `EL`/`ER` with a test-only set-up applied alike on
+both engines, such as an input that takes a motorway link. If that is not cheap, the four lines are recorded as not
+covered, with the reason. `OFFR` is recorded as unreachable. The low counts for 10 and 13 stand: each is reached and
+compared.
+**A slip, the planner's:** its message to the owner before this entry put revert (c)'s figures the wrong way round. The
+oracle gives 62; the reverted port gives 66.
+**Next:** session 23: `EL`/`ER` as above, then `readBinary`'s file branch and the formats (-111), 1,562 Java lines whole,
+likely two sessions.
+**Notes:** Written by the planner session by hand. Next free ID -116.
+
+**Kind:** outcome
+**ID:** 2026-10-28-116
+**Timestamp:** 2026-11-11T12:38:07Z
+**Continues:** 2026-10-28-101, 2026-10-28-107, 2026-10-28-111, 2026-10-28-115
+**Title:** Step 7, Plumb's session 23: `Formatter` ported whole over failing stubs; revert (d) as predicted; `EL`/`ER` not
+covered; `readBinary`'s file branch stopped on JDK 21's null-pointer wording; the planner's ruling on it
+**Observed:** Plumb Ledger, session 23, `brouter-port-5b` `dd43676` to `2f2eb38` (partial, handed off at the watcher's
+182,127; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). It ended at 188,576 by the
+harness's count.
+- **`EL`/`ER`, recorded not covered** (`d413679`): a probe on `fastbike` with motorways allowed reached `goodWay` prio 29
+  142 times, but never beside a motorway (`maxBadPrio` 30) [R]. The committed test is unchanged.
+- **`Formatter` whole**, red over stubs at `08fdbba`, then passing at `3d64e31` on 63,728 calls against the oracle [R].
+- **Revert (d)** (`getOruxAction`'s sum flipped), predicted in `3d64e31` before it ran: "getOruxAction(13, -12) expected
+  996, was 1020", as predicted, `cmp`-equal restore [R].
+- **CI, read by the planner:** on `08fdbba` (run 43017985612), `jvm` 151, 4 failed: `FormatterTest` and `ReadBinaryTest` red
+  on purpose, and `CollectOutreachersTest`'s two. On `3d64e31` (run 43020174261), `jvm` 151, 3 failed: `ReadBinaryTest` red
+  on purpose and `CollectOutreachersTest`'s two. Both: 0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24
+  (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **The stop:** `ReadBinaryTest` passes tracks 0 to 29, then fails at track 30, the first empty one. The result is equal, but
+  the debug text is 145 characters on the oracle and 93 on the port. With no nodes, Java's `last_pe.cost`
+  (`OsmTrack.java:258`) throws a null-pointer exception, and JDK 21 adds its own message [I: inferred from the length].
+  The port is held in `16-s23-readbinary-port-not-passing.patch`; the source keeps its stubs.
+**Checked by the planner:**
+- Java catches every exception there and only appends `"Error reading rawTrack: " + e` to `debugInfo`
+  (`OsmTrack.java:286-290`). The differing text is the JVM's wording of its exception, not BRouter's.
+- The branch is unreachable on Forager's path: it needs `rawTrackPath` (`RoutingEngine.java:914`), which Forager's
+  `pre-main` never sets, and `RoutingParamCollector` has no key for it (both by `git grep`, no hit).
+**Decision (the planner's, technical):** neither of Plumb's options.
+- (a), JDK 21's wording copied into common code, would put a made-up JVM message on iOS, against "never a fabricated
+  plausible value".
+- (b), the empty track ruled out, removes the one input that reaches the error path.
+- **Instead:** the port writes its own exception's description after BRouter's prefix. On the error path, the test
+  compares the result exactly, and `debugInfo` exactly up to and including `"Error reading rawTrack: "`. It asserts that
+  both engines took that path and that each wrote some text after the prefix. On every other path, `debugInfo` is
+  compared whole, as now. The port's code names the difference in a comment.
+  (**Added after the review, -163:** the entry did not say how wide this is. The prefix rule applies to every caught
+  exception there, the end-of-file cuts too: 1,549 of 4,522 debug texts by the coder's count, not only the null-pointer
+  case it was argued from.)
+- **Disclosed as what it is:** a comparison changed after a result was seen, like -107's. The planner puts it beside -107's
+  case for the independent reviewer, once that role is named.
+**Notes:** Written by the planner session by hand. Next free ID -117.
+
+**Kind:** outcome
+**ID:** 2026-10-28-117
+**Timestamp:** 2026-11-11T14:10:20Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-116
+**Title:** Step 7, Plumb's session 24: `readBinary` passing under -116's comparison; `FormatCsv`, `FormatKml` and
+`StringUtils` ported whole over failing stubs; revert (e) as predicted; `FormatJson` and `FormatGpx` not started
+**Observed:** Plumb Ledger, session 24, `brouter-port-5b` `2f2eb38` to `2f602b3` (partial, fast-forward only; trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`, no model name; checked by the planner). It ended at 178,184 by the
+harness's count, under the watcher's 180,000.
+- **`readBinary`:** `ReadBinaryTest` changed as -116 rules and seen red over the stubs (`60bb212`), then patch 16 applied with
+  a comment naming the difference (`12af1e9`): 9,029 reads, 1,549 of them on the error path [R].
+- **`FormatCsv`** whole, with `aggregateMessages` and `MessageData.toMessage`/`add`: red at `b1c735b`, passing at `8334bcd`
+  on 61 tracks, 11,266 lines and `Formatter.write`'s bytes [R].
+- **`FormatKml` and `btools.util.StringUtils`** whole: red at `0709046`, passing at `6abe8f3` on 248 placemarks, 7 null-name
+  throws matched by class, and 20,006 strings [R]. `StringUtils` is BRouter's own class, outside step 7's §1 file list; it
+  is not a new dependency.
+- **Revert (e)** (`linkdist +=` to `-=` in `MessageData.add`), predicted in a pushed file: "track 0: format", 4,637
+  characters on the oracle against 4,607, as predicted, `cmp`-equal restore [R].
+- **Slips, Plumb's own (§11):** a full run killed by its own 10-minute background limit, re-run whole. One local commit
+  scanned E1 at 1 (the KML header's fixed `<distance>` constant, not a position); never pushed, undone with
+  `reset --soft`, the literal split with a comment, output unchanged, re-committed at 0.
+**Checked by the planner:**
+- `git ls-remote`: `2f602b3`, a fast-forward of `2f2eb38`; no model name in any message.
+- E1 scan over `2f2eb38..2f602b3`: 0.
+- `ReadBinaryTest` at `60bb212`: the result compared exactly; on the error path, `debugInfo` compared by digest up to and
+  including `"Error reading rawTrack: "`, both paths asserted taken, text asserted after the prefix on each side; whole
+  elsewhere. This is -116's ruling as written.
+- **CI on `6abe8f3`** (run 43033483479): `jvm` 154, 2 failed, both `CollectOutreachersTest`'s; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". CI on the docs-only
+  `2f602b3` was still running and is not read.
+**Next:** session 25 ports `FormatJson` (261 lines) and `FormatGpx` (573), each red first, and closes step 7.
+**Notes:** Written by the planner session by hand. Next free ID -118.
+
+**Kind:** outcome
+**ID:** 2026-10-28-118
+**Timestamp:** 2026-11-11T14:33:49Z
+**Continues:** 2026-10-28-101, 2026-10-28-111, 2026-10-28-117
+**Title:** Step 7, Plumb's session 25: `FormatJson` stubbed and red on purpose; JSON and GPX ports held unrun in patch 29;
+the planner's ruling on `OsmTrack.version`
+**Observed:** Plumb Ledger, session 25, `brouter-port-5b` `2f602b3` to `a775e5c` (partial, handed off at the watcher's
+182,216; ended at 189,019 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner).
+- **`3108507`, red on purpose:** `FormatJson` stubbed (`format`, `formatAsWaypoint`, `formatDecimal3` for Java's
+  `DecimalFormat`), with `OsmTrack.aggregateSpeedProfile`, `getVoiceHint` and `getVoiceHintTime`. `FormatJsonTest` sets
+  hints through `processVoiceHints` for modes 0 to 9, with speed, speed profile, itinerary, POIs, waypoints and export
+  flags; `formatDecimal3` against `DecimalFormat` on 250,023 floats. Full fresh run: 156 tests, 4 failed
+  (`CollectOutreachersTest`'s 2, `FormatJsonTest`'s 2 as `NotImplementedError` naming a stub), 0 ` e: ` [R].
+- **E1:** a first scan of 1 on a float test constant, not a position; rewritten as the same value before the commit, 0 [R].
+- **Held, never compiled or run:** `29-s25-partial-formatjson-formatgpx-port.patch` (the `FormatJson` port, the
+  `OsmTrack` helpers, `FormatGpx` whole with `read`, and `FormatGpxTest`). `FormatGpx` was never seen red. The revert
+  has a prediction in §12 but none was pushed, and it did not run. CI on `3108507` was not read.
+**Checked by the planner:** `git ls-remote` `a775e5c`, a fast-forward of `2f602b3`; no model name; E1 over
+`2f602b3..a775e5c`: 0. CI on `3108507` and `a775e5c` was still running and is not read here.
+**Found by the planner, not raised by Plumb:** the stub sets `OsmTrack.version` to the constant `"1.7.10"`, the oracle
+jar's `Implementation-Version`. Java reads it at run time from the package manifest (`OsmTrack.java:26`) and writes it
+into GPX's and JSON's `creator` (`FormatGpx.java:497`, `FormatJson.java:219`). Forager builds BRouter as a plain
+`java-library` whose `build.gradle.kts` sets no `Implementation-Version` (read on `pre-main`), so Forager's own output
+would read `BRouter-null` [I: from the build file; not run on Android]. The constant matches the test's oracle, not
+Forager.
+**Decision (the planner's, technical):** `OsmTrack.version` becomes a settable `String?`, `null` by default, which is
+what Forager's build gives. The port writes it as Java does (`"BRouter-" + version`, so `BRouter-null` when unset). The
+tests set it from the oracle's own `OsmTrack.version` at run time and compare outputs whole. No version number is written
+into common code. This is ruled before any port result for it was seen, so it is not a comparison changed after a result.
+**Next:** session 26 applies -118, compiles and runs patch 29, ports `FormatGpx` red first, runs the GPX revert with its
+prediction pushed first, reads CI, and closes step 7 if reached.
+**Notes:** Written by the planner session by hand. Next free ID -119.
+
+**Kind:** outcome
+**ID:** 2026-10-28-119
+**Timestamp:** 2026-11-11T16:57:23Z
+**Continues:** 2026-10-28-107, 2026-10-28-116, 2026-10-28-118
+**Title:** Step 7, Plumb's session 26: -118 applied; `FormatJson` matching the oracle, held on `formatDecimal3` above
+2^63; the owner's ruling on it; the planner's ruling on the seeded speeds
+**Observed:** Plumb Ledger, session 26, `brouter-port-5b` `a775e5c` to `4f5791c` (partial, a stop; ended at 144,549 by the
+harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **-118 applied** (`7ddd4ef`): `OsmTrack.version` a settable `String?`, `null` by default; `FormatJsonTest` sets it from
+  the oracle's value. Full fresh run: 156 tests, 4 failed (`CollectOutreachersTest`'s 2, `FormatJsonTest`'s 2 on purpose
+  naming the stubs), 0 ` e: ` [R].
+- **JSON port, run 1:** every JSON comparison equal, but the test's own reached-branch check on the speed profile failed:
+  step 6's paths never set message speeds, so the profile was empty in both engines. Plumb then seeded those speeds alike
+  in both engines (in `7ddd4ef`); the comparison and the reached-branch list are unchanged [R].
+- **`formatDecimal3`** (Java's `DecimalFormat` `"0.###"`, used only on `getTime()`, `FormatJson.java:82-85`): wrong
+  digits near 3e17 on run 1, fixed with the JDK's integer fast path. Run 2: `formatJsonMatchesTheOracle` passes;
+  `formatDecimal3` fails near 2.8e22, above 2^63, 17 digits on Java against 16 [R]. Plumb stopped there: matching it means
+  porting about 360 lines of the JDK's GPLv2 digit code. Port held in patch 30, runs in file 31. `FormatGpx` not started
+  (patch 29's GPX calls `FormatJson.speedText`); no revert.
+- **CI on `3108507`**, read by Plumb: `jvm` 156, 4 failed as expected, 0 ` e: `; simulator 24 and arm64 7, 0 failed, the
+  gate "OK" (**simulator-checked**).
+**Checked by the planner:** `git ls-remote` `4f5791c`, a fast-forward of `a775e5c`; no model name; E1 over
+`a775e5c..4f5791c`: 0. BRouter's licence is MIT (`third_party/brouter/LICENSE`). `getTime()` returns a `float` of seconds
+(`OsmPathElement.java:47`); 2^63 seconds is about 9.2e18, beyond any route (the universe is about 4e17 seconds old).
+CI on `7ddd4ef` not read.
+**Decision (the planner's, technical), on the seeded speeds:** not a stop. The failing check was a reached-branch
+assertion, not an oracle comparison; the change adds inputs alike to both engines so the branch the test already demands
+is reached, and loosens nothing. Recorded because inputs changed after a result was seen.
+**Decision (the owner's), asked with the recommendation first, on `formatDecimal3` above 2^63:** "Stop at the limit
+(Recommended)". The port matches Java exactly below 2^63 and throws a clear error above it, never printing wrong digits;
+the test checks every value below the limit and checks for the error above it. No JDK code is copied. Because this narrows
+a test after a result was seen, it goes beside -107's and -116's cases for the independent reviewer, once named.
+- **Not yet shown:** that the port matches Java on every tested value from 3e17 up to 2^63 (session 26 named its failure
+  near 2.8e22 only). If any value below 2^63 differs, that is a stop, not part of this ruling.
+**Notes:** Written by the planner session by hand. Next free ID -120.
+
+**Kind:** outcome
+**ID:** 2026-10-28-120
+**Timestamp:** 2026-11-11T18:18:07Z
+**Continues:** 2026-10-28-111, 2026-10-28-118, 2026-10-28-119
+**Title:** Step 7, Plumb's session 27: `FormatJson` and `FormatGpx` ported and passing; revert (f) as predicted; step 7
+left open on `equalsTrack`, `addNodes` and `writeBinary`; the planner's rulings on them
+**Observed:** Plumb Ledger, session 27, `brouter-port-5b` `4f5791c` to `f29366e` (fast-forward only; ended at 180,473 by
+the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **-119's premise, checked first:** every tested value from 3e17 up to 2^63 matches Java (1,982, 0 differ); below 3e17,
+  222,747 match; at or above 2^63, 16 of 25,294 differ [R]. So -119's "not yet shown" is now shown on the tested values.
+- **`FormatJson`** (`f1a5f22`): `formatDecimal3` throws `UnsupportedOperationException` naming 2^63 and -119 for finite
+  values at or above 2^63. The test compares 224,731 floats exactly and asserts the throw on 25,292. Full run 156, 2 failed
+  (`CollectOutreachersTest`'s) [R]. Plumb kept the infinities in the exact comparison (they match Java and print no
+  digits); its own reading of -119.
+- **`FormatGpx`:** red over stubs at `61a1377` (157, 3 failed, the GPX one a `NotImplementedError` naming
+  `FormatGpx.format`), passing at `fc4d946` (157, 2 failed) [R]. Run 1 failed on `creator="BRouter-null"`: patch 29's test
+  lacked -118's `@BeforeTest` setting `OsmTrack.version` from the oracle; Plumb added it, the comparison unchanged.
+- **Revert (f)**, prediction pushed first: "track 0: format", the port 16 characters longer, as predicted, `cmp`-equal
+  restore [R].
+- **E1:** a first scan of 3 on the 2^63 constant written as a long decimal, not a position; rewritten before the commit.
+- **Not covered:** `EL`/`ER`, `OFFR`, GPX's middle-waypoint type branches (compared, not counted). Kotlin/Native number
+  formatting is [?] for step 10.
+**Checked by the planner:**
+- `git ls-remote` `f29366e`, a fast-forward of `4f5791c`; no model name; E1 over `4f5791c..f29366e`: 0.
+- **CI on `fc4d946`** (run 43074102819): `jvm` 157, 2 failed, both `CollectOutreachersTest`'s; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The earlier runs are
+  Plumb's reading; `f29366e` (docs only) not read.
+- `FormatGpxTest`'s `@BeforeTest` sets the version from the oracle's own value, as -118 rules.
+- Callers, by `grep` over the vendored tree and Forager's `app/src/main`: `equalsTrack` at `RoutingEngine.java:261`,
+  `addNodes` at `RoutingEngine.java:991`; `writeBinary` has no caller anywhere.
+**Decisions (the planner's, technical):**
+- **The infinities:** Plumb's reading stands. -119 forbids wrong digits; an infinity prints none and matches Java.
+- **The GPX `@BeforeTest`:** not a comparison change. It applies -118, ruled before any result, to a test written before
+  -118. Recorded because it was added after a port result.
+- **`equalsTrack` and `addNodes`:** ported in step 7, red first, since step 8's `RoutingEngine` calls both.
+- **`writeBinary`:** not ported, recorded out of scope. Nothing in BRouter or Forager calls it, and a missing method
+  cannot return a wrong value. The tests keep using the oracle's to feed `readBinary`. If a caller ever appears, it is
+  ported then.
+**Next:** session 28 ports `equalsTrack` and `addNodes` and closes step 7.
+**Notes:** Written by the planner session by hand. Next free ID -121.
+
+**Kind:** outcome
+**ID:** 2026-10-28-121
+**Timestamp:** 2026-11-11T18:50:13Z
+**Continues:** 2026-10-28-111, 2026-10-28-120
+**Title:** Step 7 closed: Plumb's session 28 ports `equalsTrack` and `addNodes`; revert (g) as predicted; the planner's
+check of the close
+**Observed:** Plumb Ledger, session 28, `brouter-port-5b` `f29366e` to `461e4d6` (fast-forward only; ended at 127,241 by
+the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). No stops.
+- **Red first** (`cb8e1e1`): `equalsTrack` and `addNodes` stubbed with `TrackEqualsAddNodesTest`; 2 tests, 2 failures,
+  each a `NotImplementedError` naming its stub [R].
+- **Port** (`d49a3ff`), passing on the first run, the test unchanged: `equalsTrack` 240 true and 1,180 false, every
+  variant reached; `addNodes` 120 runs, 111,426 nodes, digests equal. Full fresh run: 159 tests, 2 failed
+  (`CollectOutreachersTest`'s), 0 ` e: ` [R].
+- **Revert (g)** (the latitude comparison dropped), prediction pushed first: "walk 0: lat at 0, direction 0: equalsTrack
+  expected false, was true", as predicted, `cmp`-equal restore [R].
+- **§15** of the step 7 report holds the closing table.
+**Checked by the planner:**
+- `git ls-remote` `461e4d6`, a fast-forward of `f29366e`; no model name; E1 over `f29366e..461e4d6`: 0.
+- **CI on `d49a3ff`** (run 43079285759): `jvm` 159, 2 failed, both `CollectOutreachersTest`'s; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". `461e4d6` (docs only) was
+  still running and is not read.
+- Stubs in `commonMain` at `461e4d6`, by `git grep`: 3, all in `Route.kt` and all marked for step 8's
+  `RoutingEngine`; none in step 7's files.
+**Step 7 is closed,** with these left open and named:
+- **Not ported:** `writeBinary` (-120, no caller).
+- **Not covered by a test:** `EL`/`ER`, `OFFR`, GPX's middle-waypoint type branches (compared, not counted).
+- **Unverified:** Kotlin/Native number formatting [?], for step 10. Every iOS result is simulator-checked only.
+- **For the independent reviewer, once named:** the comparisons changed after a result in -107, -116 and -119.
+- **Still failing, known:** `CollectOutreachersTest`'s 2 (-61), for step 10.
+**Next:** step 8, `RoutingEngine`, with heights per route point (-111) and via points out (-24).
+**Notes:** Written by the planner session by hand. Next free ID -122.
+
+**Kind:** outcome
+**ID:** 2026-10-28-122
+**Timestamp:** 2026-11-11T19:15:27Z
+**Continues:** 2026-10-28-24, 2026-10-28-90, 2026-10-28-111, 2026-10-28-121
+**Title:** Step 8a, Plumb's session 29: `RoutingEngine`'s survey and test plan; F0's test red over the stub; the 8a port
+held uncompiled in a patch; the planner's answers to two questions
+**Observed:** Plumb Ledger, session 29, `brouter-port-5b` `461e4d6` to `2fddfcc` (partial, handed off at the watcher's
+181,688; ended at 212,100 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner). No stops.
+- **`22266d1`, pushed alone first:** `docs/audits/2026-11-11-brouter-port-step8.md` §1 places every method and field
+  group of `RoutingEngine` in 8a, 8b, 8c, 8d or "left out", with its evidence; §2 is 8a's test plan, the revert named
+  (`testPath.cost <` flipped to `>`). Via points are 424 lines in `RoutingEngine`; -24's other 5 (`getFromDetourMap`)
+  were ported at step 7. Unported classes it calls: `AreaReader` and `StackSampler`, both left out.
+- **`15a4aa2`, red on purpose:** `RoutingEngine` stubbed with `RoutingEngineF0Test`, which first holds the in-JVM oracle
+  to `expected-1b.tsv` (passed), then compares the port field by field. 1 test, 1 failure, a `NotImplementedError` naming
+  `RoutingEngine.doRun`. Full fresh run: 160 tests, 3 failed (`CollectOutreachersTest`'s 2, F0 on purpose), 0 ` e: ` [R].
+- **Held, never compiled or run:** `02-partial-routingengine-8a.patch`. CI not read by Plumb.
+**Checked by the planner:**
+- `git ls-remote` `2fddfcc`, a fast-forward of `461e4d6`; no model name; E1 over `461e4d6..2fddfcc`: 0. CI on
+  `15a4aa2` and `2fddfcc` was still running and is not read.
+- **§1's premises about Forager, read on `pre-main` at `12eb9697`** (5 commits past the coder's checkout; no diff under
+  `app/.../routing` or `third_party/brouter`): `BRouterTrailRouter.kt` passes three parameters only (`profile`,
+  `alternativeidx` "0", `profile:use_dynamic_range` "0"), sets `quite = true`, builds the six-argument engine with both
+  file bases `null` in `ROUTING` mode, and calls `doRun(maxRunningTimeMillis)` on its own thread. These hold.
+- **Not checked by the planner:** §1's other "left out" rows, line by line. Each throws by name if reached, so a wrong
+  row shows as a refusal, not as a wrong route.
+**Decisions (the planner's, technical), on Plumb's two questions:**
+1. **Heights at 8d change `RouteOutcome.Found`:** yes, wanted. That is what the owner's -111 ruling means in code.
+2. **`debug.txt`:** the port throws a named "unsupported" if it or `stacks.txt` exists where Java looks, and is compared
+   in E3's unlogged regime only. That is the right reading: Forager puts no such file there [I: Plumb's, from the profile
+   folder], and logging to a file is not part of a route. **Recorded as not covered:** the port in E3's logged regime.
+**Next:** session 30 reads CI, applies the patch fixing compile errors only, runs F0, then the revert, then R and DL.
+**Notes:** Written by the planner session by hand. Next free ID -123.
+
+**Kind:** outcome
+**ID:** 2026-10-28-123
+**Timestamp:** 2026-11-11T20:12:38Z
+**Continues:** 2026-10-28-89, 2026-10-28-90, 2026-10-28-122
+**Title:** Step 8a, Plumb's session 30: the search ported, F0 passing; the planned revert not caught by F0; R and DL red on
+8b's memory path; -90's premise corrected; the planner's rulings
+**Observed:** Plumb Ledger, session 30, `brouter-port-5b` `2fddfcc` to `0ab64b6` (fast-forward only; ended at 137,970 by
+the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **The 8a port** (`4dcd049`): session 29's patch applied clean and compiled with 0 errors, no fix needed. F0 passes, both
+  routes equal to the oracle on all six fields. Full fresh run: 160 tests, 2 failed (`CollectOutreachersTest`'s) [R].
+- **The §2 revert** (`testPath.cost <` flipped to `>`), prediction pushed first (`70c4c20`): **the prediction failed.** The
+  reverted build compiled and ran, and F0 still passed. `cmp`-equal restore [R]. So F0 through the port has only been
+  seen red over the stub, never over a wrong port.
+- **R and DL** (`377d109`, red on purpose): both fail with a `NotImplementedError` naming 8b's memory path. Full run: 163
+  tests, 5 failed (the known 2, R 1, DL 2) [R].
+- **Diagnostics, run but not committed** (tests restored `cmp`-equal) [R, Plumb's only]: on R, 151 of the 1,180 StdModel
+  cases reach the 8b stub and the other 1,029 equal the oracle; the 354 Kinematic cases are refused by name (-89). On DL,
+  36 of 59 (lat) and 15 of 59 (lon) reach the stub, the rest equal. With the §2 revert applied, R shows 176 mismatches; F0
+  and DL none.
+- `E3DLTest`'s companion changed from `private` to `internal`, so the new DL test reads its seeds.
+**Checked by the planner:**
+- `git ls-remote` `0ab64b6`, a fast-forward of `2fddfcc`; no model name; E1 over `2fddfcc..0ab64b6`: 0.
+- The test diff: two new test files and the one visibility word in `E3DLTest`; no comparison in an existing test changed.
+- **CI on `377d109`** (run 43092122738): `jvm` 163, 5 failed: `CollectOutreachersTest`'s 2, `RoutingEngineRTest` 1,
+  `RoutingEngineDLTest` 2; 0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7,
+  the gate "OK". The earlier runs are Plumb's reading.
+**Corrected, the planner's own premise:** -90 put R and DL in 8a as "the search without memory pressure". That was not
+checked and is false: 151 of R's StdModel cases and 51 of DL's 118 reach the memory path. -90 is corrected in place.
+**Decisions (the planner's, technical):**
+1. **R and DL stay red until 8b,** whole. No split by whether a case reaches the memory path: that would change a
+   comparison after a port result, and 8b is next anyway.
+2. **F0 needs a revert of its own that bites.** R catching the §2 revert shows the search is tested, but a test that has
+   never caught a wrong port is not yet shown to test anything. Session 31 predicts one F0 catches, pushed first.
+3. **8a is not closed** until R and DL pass, which is at 8b. 8b then adds its own strata (MP64, ML5, PM5) and -90's revert
+   (`isInMemoryBounds`' comparison flipped).
+**Notes:** Written by the planner session by hand. Next free ID -124.
+
+**Kind:** outcome
+**ID:** 2026-10-28-124
+**Timestamp:** 2026-11-11T21:50:45Z
+**Continues:** 2026-10-28-61, 2026-10-28-90, 2026-10-28-123
+**Title:** Steps 8a and 8b, Plumb's session 31: the memory path ported; R, DL, MP64, ML5 and PM5 equal to the oracle; three
+reverts caught as predicted; one false line in the report; the planner's rulings
+**Observed:** Plumb Ledger, session 31, `brouter-port-5b` `0ab64b6` to `8deeb46` (fast-forward only; ended at 162,038 by
+the harness's count, under the watcher's 170,000; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **A revert F0 catches** (prediction pushed first, `b62ea53`; result `97b4167`): `compileTrack`'s end-node cut on the
+  final track removed. F0 failed on nodes, 226 expected against 227, cost equal, as predicted [R, Plumb's]. Restored.
+- **8b, the memory path** (`543693e`): `RoutingEngine.java:1970-2040` into `findTrackInner`. R passes with 1,534 cases and
+  0 mismatches; DL-lat and DL-lon 59 each, 0 mismatches.
+- **MP64, ML5, PM5** (`31aa7b1`, new `RoutingEngineMemoryTest`): 59, 59 and 55 cases, 0 mismatches each.
+  `E3MemoryTest`'s companion changed from `private` to `internal`.
+- **-90's revert** (`isInMemoryBounds`' `<=` flipped; prediction `e501548`, result `a3a246b`): MP64 59 of 59, PM5 55 of
+  55, DL 59 and 59, R 805 mismatches; ML5 0; F0 also red (not predicted) [R, Plumb's]. Restored.
+- **A revert only ML5 catches** (the limit's message changed; prediction `7e24058`, result `45c653b`): ML5 59 of 59 on
+  kind, the other six groups 0 [R, Plumb's]. Restored.
+- `CollectOutreachersTest`'s 2 failures are unchanged (-61).
+**Checked by the planner:**
+- `git ls-remote` `8deeb46`, a fast-forward of `0ab64b6`; 9 commits, one trailer each, no model name; E1 over
+  `0ab64b6..8deeb46`: 0.
+- **The port against the Java, line by line** (`RoutingEngine.java:1970-2038`): the same statements in the same order.
+  The two `logInfo` lines and their two counters are left out; nothing else differs.
+- **The reverts were restored:** no code differs between `0ab64b6` and `97b4167`, nor between `31aa7b1` and `8deeb46`.
+- **The test diff:** one new test file and the one visibility word in `E3MemoryTest`. No comparison in an existing test
+  changed.
+- **CI on `543693e`** (run 43098746396): `jvm` 163 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+- **CI on `31aa7b1`** (run 43099991963): `jvm` 166 tests, the same 2 failed; 0 ` e: `; both `compileKotlinIos*`;
+  simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". Its log prints all six groups at 0
+  mismatches. The head's own run (docs only) was still in progress at this reading.
+- The three reverts' own results are Plumb's reading; their runs were local.
+**A false line in the report (§5, `:264`):** "No stack overflow or out-of-memory in any memory-path run (the 5b graph
+half is iterative)." The port's `cleanupPeninsulas` is recursive (`OsmNodesMap.kt:58-65`), and on the JVM it catches a
+`StackOverflowError` and carries on, as Java does; -61's rejected option was the rewrite without recursion. What CI's
+log on `31aa7b1` does show [R]: the catch's line is printed 3 times, all by `CollectOutreachersTest`, and by none of the
+six route groups. So the first half of the line holds on the JVM in CI, and the reason given for it is wrong. Session 32
+corrects the line in place.
+**What this does not show:**
+- **The collection itself still differs from Java's on one loaded region** (`CollectOutreachersTest`, -61), while every
+  route through it is equal. Equal routes on 1,825 cases do not show the two collections equal.
+- No overflow in the route groups on the JVM says nothing about iOS, where the stack is smaller and there is no catch
+  (-50). That stays with step 10.
+- None of the route comparisons runs on iOS. They are JVM tests.
+**Decisions (the planner's, technical):**
+1. **8a is closed.** R and DL pass whole, and F0 has caught a wrong port (-123's terms).
+2. **Plumb's question 1: no revert that MP64 alone catches is owed.** -90 asked that a wrong memory path turn its strata
+   red, and -90's revert turned MP64 red on 59 of 59. "Alone" was never the requirement. The same holds for PM5.
+3. **Plumb's question 2: yes.** A changed message is not a changed decision. Session 32 runs two more reverts,
+   predictions pushed first: one in the condition that throws the limit, one in a panic-mode line (the refill of the open
+   set, or one of the two flags). Each prediction names the groups expected to fail. A revert that could loop for ever is
+   run under a time limit, and a hang is reported as such.
+4. **8b closes when those two reverts are caught,** or their misses are reported and ruled on.
+5. **Next: 8c** (terminate, the time limit, the progress count, `catch (Error)`), then 8d.
+**Notes:** Written by the planner session by hand. Next free ID -125.
+
+**Kind:** outcome
+**ID:** 2026-10-28-125
+**Timestamp:** 2026-11-11T23:05:13Z
+**Continues:** 2026-10-28-90, 2026-10-28-124
+**Title:** Step 8b closed: Plumb's session 32, two more reverts caught, one prediction failed on its counts; 8c drafted
+only; the planner's rulings
+**Observed:** Plumb Ledger, session 32, `brouter-port-5b` `8deeb46` to `3fc4341` (fast-forward only; called at 170,243,
+ended at 181,509 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner). Docs only: no code changed.
+- **§5's false line corrected in place** (`4c096b7`), marked as the planner's correction. A fresh full run on `8deeb46`:
+  166 tests, 2 failed (`CollectOutreachersTest`); the caught-overflow line 3 times, all in that class [R, Plumb's].
+- **Revert (a), the limit's condition** (`maxTotalCost < 1000000000` to `<=`; prediction `1adb40c`, result `fdc5ec9`):
+  PM5 55 of 55 mismatches, the other six groups 0. The prediction held [R, Plumb's].
+- **Revert (b), panic mode's refill** (the refill's `openSet.add` removed; prediction `71a466e`, result `3fc4341`): PM5
+  48 of 55, ML5 53 of 59, the other five groups 0. **The prediction failed on its counts** (at least 50 and 54 were
+  predicted) and held on which groups fail [R, Plumb's]. Which 7 PM5 and 6 ML5 cases stay equal, and why, is not
+  explained.
+- **8c is not in code.** Two uncompiled drafts are saved as text (`step8/10-8c-draft-*.txt`).
+**Checked by the planner:**
+- `git ls-remote` `3fc4341`, a fast-forward of `8deeb46`; 5 commits, one trailer each, no model name; E1 over the range:
+  0; nothing outside `docs/` changed, so both reverts were restored and no test changed.
+- Both predictions precede their results in the history.
+- `fastPartialRecalc` in the port: `findTrackInner` refuses it with a `check` (`RoutingEngine.kt:619`), and in Java it is
+  the only way to `maxRunningTime / 3` (`RoutingEngine.java:1980`).
+- No code CI to read. The revert results are Plumb's reading of local runs.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: no second try is owed for revert (b).** What -124 asked is shown: a wrong refill turns 101
+   cases red in the two groups that panic and none elsewhere. The prediction stays recorded as failed on its counts, and
+   the unexplained 13 cases stay named as unexplained. They are not pursued: the port was `cmp`-equal throughout, so the
+   miss is in the coder's model of the cases, not in the port.
+2. **8b is closed.** Not covered, as -124 names: the collection on `CollectOutreachersTest`'s region (-61), and iOS.
+3. **Plumb's question 2: no test of `maxRunningTime / 3` is owed.** No test can reach it while the port refuses
+   `fastPartialRecalc`. 8c ports the plain time limit and names the third as left out, with the `check` as its guard.
+4. **Next: 8c** in code, from the drafts, tests seen failing first.
+**Notes:** Written by the planner session by hand. Next free ID -126.
+
+**Kind:** outcome
+**ID:** 2026-10-28-126
+**Timestamp:** 2026-11-11T23:53:22Z
+**Continues:** 2026-10-28-90, 2026-10-28-125
+**Title:** Step 8c, Plumb's session 33: tests red over stubs, the port held as a patch; a stop on a draft test's false
+premise; the JVM job hit its 30-minute limit; the planner's rulings
+**Observed:** Plumb Ledger, session 33, `brouter-port-5b` `3fc4341` to `486588d` (fast-forward only; ended at 150,599 by
+the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **Red, pushed** (`124e6da`): `RoutingEngineStopTest` (9 tests: FK9, FK10, FK11, FK11's link count, and five on an
+  injected clock or a thrown error), `EngineClock`, three stubs. 9 of 9 fail on a `NotImplementedError`.
+  `E3FKTest`'s companion changed from `private` to `internal`.
+- **The port, not in the tree** (`step8/11-8c-port.patch`, per the stop rule): with it, 8 of 9 pass; full run 175 tests,
+  2 failed [R, Plumb's].
+- **The stop:** `theTimeLimitReadsTheInjectedClock` expects "pass0 timeout after 30 seconds" and the port gives
+  "target-island-check timeout after 30 seconds". Plumb made no fix. No revert was run.
+- Locally `CollectOutreachersTest` failed 1 of 2 with 0 caught-overflow lines [R, Plumb's; ?].
+**Checked by the planner:**
+- `git ls-remote` `486588d`, a fast-forward of `3fc4341`; 2 commits, one trailer each, no model name; E1 over the range: 0.
+- **The premise is false by the Java** [R]: `RoutingEngine.java:961` runs `findTrack("target-island-check", ...)` for
+  every section before any pass, and the time limit is checked inside `_findTrack`'s loop (`:1979-1983`) under whatever
+  operation name it was given. On a clock already past the limit, the first operation to strike is the island check. The
+  expected text was session 32's hand-written reading, never an oracle's output. The port's answer agrees with the Java.
+- **FK9's pattern has the same gap:** `(pass0|pass1|re-tracking) timeout after 0 seconds` leaves the island check out. It
+  passes only while the island check finishes inside the 50 ms limit, on both engines.
+- **CI on `124e6da`** (run 43118062551): `jvm` 175 tests, 11 failed: the 9 red on purpose and `CollectOutreachersTest`'s
+  2; 0 ` e: `. **The job was cancelled at its 30-minute limit:** the test step alone ran 29.5 minutes, so "iOS klibs" was
+  cancelled and `compileKotlinIosArm64` did not run. `ios-smoke`: `compileKotlinIosSimulatorArm64` ran, simulator 24 of
+  24 (**simulator-checked**), arm64 7 of 7, the gate "OK". This run is over the stubs.
+- **The caught-overflow line in that CI log: 4 prints,** against 3 in the earlier runs. With Plumb's local 0 and 1 of 2,
+  the known pair is not stable in how it fails. That fits a stack-depth effect (-61) and shows nothing new about the port.
+- The patch, skimmed against the Java, not yet line by line: the loop head (`:1975-1984`), the dirty track on a timeout
+  (`:1749-1758`), `terminate`, `cleanOnOOM`, the link count. It reads a monotonic clock where Java reads the wall clock;
+  the difference is named in `EngineClock`.
+**Decisions (the planner's, technical):**
+1. **The test's expected text is corrected to the Java's, and FK9's pattern gains `target-island-check`.** This is a
+   comparison changed after a port result, so it is done under these terms and **flagged for the independent reviewer**
+   with -107, -116 and -119:
+   - evidence from the oracle alone is pushed first: the oracle run with a 1 ms limit on FK9's cases, the first words of
+     its messages counted, no port in the run;
+   - the change is a commit of its own, naming this entry, made while the port is still out of the tree, and seen red over
+     the stubs again;
+   - nothing else in either comparison moves. `start-island-check` is not added: Forager never routes inverse.
+2. **The JVM job's limit goes from 30 to 60 minutes** (`brouter.yml:18`). It weakens no check; at 30 the klib compile is
+   lost. The suite's length is now a cost on every push and is named as such.
+3. **The monotonic clock is accepted** as a named difference from Java.
+4. **Not covered:** `catch (Error)` on Kotlin/Native, where an out-of-memory normally ends the process. Step 10.
+5. **Next:** session 34 does 1 and 2, applies the patch, runs 8c's two reverts.
+**Notes:** Written by the planner session by hand. Next free ID -127.
+
+**Kind:** outcome
+**ID:** 2026-10-28-127
+**Timestamp:** 2026-11-12T01:22:34Z
+**Continues:** 2026-10-28-90, 2026-10-28-126
+**Title:** Step 8c closed on the JVM: Plumb's session 34, the port in the tree, 9 of 9 stop tests passing, two reverts
+caught; FK9 weakened by -126's change, named; the planner's rulings
+**Observed:** Plumb Ledger, session 34, `brouter-port-5b` `486588d` to `94db5d1` (fast-forward only; ended at 141,180 by
+the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **In -126's order:** the CI limit (`3840315`); the oracle alone at 1 ms on FK9's cases names `target-island-check` 10
+  of 10 (`47dcb5d`) [R, Plumb's]; the comparison change with the port out of the tree, red 9 of 9 over the stubs
+  (`af875c6`); the patch applied unchanged, 9 of 9 passing (`1d1488b`).
+- **Revert (a), `terminated` written but not read** (prediction `fa3a76c`): FK10, FK11 and the watchdog test fail, the
+  7 route groups pass. Held [R, Plumb's].
+- **Revert (b), the time limit's comparison flipped** (prediction in `42c6913`, result `d398b39`): the stopped-clock and
+  injected-clock tests fail, as predicted; one predicted message was wrong (the port said "re-tracking", since
+  re-tracking resets the clock, `RoutingEngine.java:1797`). **FK9 passes under this revert** [R, Plumb's].
+**Checked by the planner:**
+- `git ls-remote` `94db5d1`, a fast-forward of `486588d`; 8 commits, one trailer each, no model name; E1 over the range: 0.
+- **The CI change is the one line** (`timeout-minutes: 30` to `60`).
+- **The test change is what -126 allowed and no more:** the one expected text, the one pattern, and the class comment
+  that describes them. The oracle-only evidence and the change both precede the port's commit.
+- **The tree's port equals the patch** session 33 held back, line for line.
+- **The port against the Java, line by line:** the loop head (`:1975-1984`, without the third), the dirty track on a
+  timeout (`:1748-1760`), the clock's reset before re-tracking (`:1797`), `terminate`, `isTerminated`, `cleanOnOOM`, and
+  `doRun`'s three catches (`:318-326`). The same statements in the same order; the log lines are left out.
+- **CI on `1d1488b`** (run 43128205990): `jvm` 175 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; the test
+  step ran 28 minutes and "iOS klibs" was reached, both `compileKotlinIos*`; FK9, FK10 and FK11 print 0 mismatches of 10
+  each, FK11's link counts equal on all 10; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The
+  caught-overflow line: 4 prints. The three later runs were in progress at this reading.
+**A cost of -126's ruling, the planner's own:** widening FK9's pattern made FK9 blind to a time limit that strikes at
+once. Before the change its pattern would have refused "target-island-check"; now a flipped limit passes it. What still
+catches that error is the two tests on a driven clock, which have no oracle beside them. In CI both engines answered
+"pass0" on 20 of 20, so the widening was not needed for that run; it was needed for a slow machine.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: FK9 is not changed again.** A guard would be a second comparison change after a result. The
+   weakening is named here and goes to the independent reviewer with -126.
+2. **Plumb's question 2: the dirty track on a timeout is settled in 8d.** Session 35 first shows whether anything on
+   Forager's path reads `foundRawTrack` after a failed run. If something does, a test on a driven clock that strikes in
+   pass1 is owed. If nothing does, it is recorded as ported and not covered.
+3. **8c is closed on the JVM.** Not covered: `catch (Error)` on Kotlin/Native (-126); the third of the limit, left out
+   (-125); the dirty track, until 2 is answered; nothing in 8c runs on iOS beyond compiling.
+4. **Next: 8d.**
+**Notes:** Written by the planner session by hand. Next free ID -128.
+
+**Kind:** outcome
+**ID:** 2026-10-28-128
+**Timestamp:** 2026-11-12T02:36:05Z
+**Continues:** 2026-10-28-42, 2026-10-28-90, 2026-10-28-111, 2026-10-28-122, 2026-10-28-127
+**Title:** Step 8d begun: Plumb's session 35, the survey, the plan and 4 red tests; the dirty track is not read by
+Forager; heights stay raw in `Found`; the planner's rulings
+**Observed:** Plumb Ledger, session 35, `brouter-port-5b` `94db5d1` to `9e0c17f` (fast-forward only; ended at 157,585 by
+the harness's count, no handoff call; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- §9 of the step 8 report: 8d's survey and test plan, written and corrected before any code.
+- `RouteTest` (`1b7b688`), red on purpose: 4 tests, 4 `NotImplementedError`. `RouteOutcome.Found` gains
+  `sElev: ShortArray`; an internal `route` takes the libm.
+- The port is left for session 36.
+**Checked by the planner:**
+- `git ls-remote` `9e0c17f`, a fast-forward of `94db5d1`; 5 commits, one trailer each, no model name; E1 over the range: 0.
+- Code changed: `Route.kt` (the new field, the internal overload as a stub) and the new `RouteTest`. No existing test
+  changed.
+- **The dirty track** [R]: Forager returns the failure as soon as `getErrorMessage()` is not null and reads
+  `getFoundTrack()` only otherwise (`BRouterTrailRouter.kt:133-139` at Forager `947f1be2`); no `.kt` file under `app`
+  names `getFoundRawTrack`, `foundRawTrack`, `rawTrackPath` or `readBinary`.
+- **Heights in Forager** [R]: `heightMetresOf(selev)` is `null` for `Short.MIN_VALUE`, else `selev / 4.0`
+  (`BRouterTrailRouter.kt:219`, `:228`), read from each node's `getSElev()`.
+- **CI on `1b7b688`** (run 43138707152): `jvm` 179 tests, 6 failed: `RouteTest`'s 4 red on purpose and
+  `CollectOutreachersTest`'s 2; 0 ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7
+  of 7, the gate "OK". The caught-overflow line: 4 prints.
+**Decisions (the planner's, technical):**
+1. **The dirty track is ported and not covered** (-127, decision 2). Nothing on Forager's path reads it; no test is owed.
+2. **Plumb's question 1: `Found` carries Java's raw `sElev`,** quarter metres, `Short.MIN_VALUE` for no height. `Found`
+   already carries raw `iLat` and `iLon`, and Forager's Android adapter does all three conversions. The iOS adapter will
+   use Forager's rule as read above. This is the owner's -111 ruling in code (-122), not a new shape.
+3. **Plumb's question 2: no JaCoCo on the port's tests.** -42's 19 getters are shown by a scratch counting patch, never
+   committed: a counter in each, one run of R, the counts reported. A getter at 0 is named as not reached.
+4. **Plumb's question 3: nothing more of `checkDataFile`.** It was ported and tested at 5a; §1's row is corrected in
+   place to say so.
+5. **Next:** session 36 ports 8d, runs its reverts, the getter counts and the coverage read of `OsmPath.java:282-283`
+   and `:350`.
+**Notes:** Written by the planner session by hand. Next free ID -129.
+
+**Kind:** outcome
+**ID:** 2026-10-28-129
+**Timestamp:** 2026-11-12T03:16:12Z
+**Continues:** 2026-10-28-62, 2026-10-28-128
+**Title:** Step 8d, Plumb's session 36: `route()` ported, 4 of 4 passing; a planted error in the heights was not caught,
+since F0's routes have no heights; the public cancel has no test; the planner's rulings and two corrections of its own
+**Observed:** Plumb Ledger, session 36, `brouter-port-5b` `9e0c17f` to `e8b2a6e` (fast-forward only; called at 162,643,
+ended at 170,699 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner).
+- **The port** (`9bf13a8`): `route()` and `RouteCancel` in `Route.kt`. `RouteTest` 4 of 4 on the first run. Full run: 179
+  tests, 2 failed (`CollectOutreachersTest`), 3 caught-overflow lines [R, Plumb's].
+- **The production run** (the port's own libm, recorded, not asserted, -24): both F0 cases equal to the oracle on nodes,
+  distance and both digests [R, Plumb's].
+- **Reverts** (9, predictions pushed first in `536d1e1`, results `907c28d`): 7 caught as predicted. **rv24** (the public
+  `route()` dropping the caller's cancel) passed, as predicted. **rv17** (the heights shifted by one node) passed,
+  against the prediction: on both F0 routes every node's height is the "no height" value, so a shifted array is the same
+  array [R, Plumb's].
+- Plumb stopped on §9.6's premise, which had it backwards: what is not covered is a real height through `route()`.
+- Not done: the getter counts, the `OsmPath` coverage read, the CI read of `9bf13a8`, the closing list.
+**Checked by the planner:**
+- `git ls-remote` `e8b2a6e`, a fast-forward of `9e0c17f`; 4 commits, one trailer each, no model name; E1 over the range: 0.
+- Code changed: `Route.kt` only, and nothing after the port's commit, so every revert was restored. No test changed.
+- **`route()` against Forager's caller** (`BRouterTrailRouter.kt:120-175` at Forager `947f1be2`): the same calls in the
+  same order; the message first, the track only when it is null. The engine's constructor's exceptions pass through,
+  where Forager's Android code catches them. The iOS adapter has to do that catch.
+- CI on `9bf13a8` (run 43146547580) was still in progress. Not read.
+**The planner's own miss:** -62 already says F0 has no heights, "0 of 226, 0 of 306", and that R's routes do (427,924 of
+428,277 nodes). The planner accepted §9's plan in -128 without holding it against -62. The engine's heights are compared
+on R through `RoutingEngine` (8a, 8b). The copy of them into `Found` is compared on nothing yet.
+**Corrected in place, the planner's:** the timestamps of -124 to -128 were typed by hand as estimates and ran 2 to 49
+minutes late; -128's was in the future when written. They now read their commits' times.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: yes.** `RouteTest` gains a test on routes that have heights: R's first 10 routed cases in R's
+   order, through the internal `route` with the oracle's libm, compared as F0 is, with an assertion that the oracle's
+   heights are not all "no height". The stubs are gone, so it is seen red by rv17, prediction pushed first.
+2. **Plumb's question 2: yes.** A terminate before the run through the public `route()`, compared as the internal one
+   is. That is the call Forager's cancel makes. Seen red by rv24, prediction pushed first.
+3. These add tests. They change no existing comparison.
+4. **8d is not closed.** Left for session 37: 1, 2, the getter counts, the coverage read, the CI reads, the closing list.
+**Notes:** Written by the planner session by hand. Next free ID -130.
+
+**Kind:** outcome
+**ID:** 2026-10-28-130
+**Timestamp:** 2026-11-12T03:45:44Z
+**Continues:** 2026-10-28-42, 2026-10-28-129
+**Title:** Step 8d, Plumb's session 37: the two owed tests in, each seen red under its revert; the getter counts; CI on
+the `route()` port read; 8d not yet closed
+**Observed:** Plumb Ledger, session 37, `brouter-port-5b` `e8b2a6e` to `6aa54b1` (fast-forward only; called at 150,911,
+ended at 157,602 by the harness's count; trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the
+planner).
+- **Heights through `route()`** (`1221a0f`; prediction `7ae5c31`): R's first 10 routed cases, all 1,148 nodes with a
+  height. Passing; rv17 failed it as predicted [R, Plumb's].
+- **The public cancel** (`1221a0f`): passing; rv24 failed it as predicted [R, Plumb's].
+- **-42's getters:** 20 of 21 reached on R; `getTrafficSourceDensity` at 0, which has no call site in the port. A first
+  counting run was void (a bug in the scratch script) and is named as void in the file.
+- **No full local run finished** before the tests were pushed: Plumb's own `gradlew --stop` killed it at 97 tests.
+- Not done: the `OsmPath` coverage read, the closing list.
+**Checked by the planner:**
+- `git ls-remote` `6aa54b1`, a fast-forward of `e8b2a6e`; 3 commits, one trailer each, no model name; E1 over the range: 0.
+- Code changed: `RouteTest` only, 62 lines added, none removed. No existing comparison moved. The heights test asserts
+  that the oracle's heights are not all "no height".
+- **CI on `9bf13a8`, the `route()` port** (run 43146547580): `jvm` 179 tests, 2 failed, both `CollectOutreachersTest`; 0
+  ` e: `; both `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The log
+  prints the production run equal to the oracle on nodes, distance and both digests for both F0 cases, and the logic run
+  the same. The caught-overflow line: 3 prints.
+- **CI on `6aa54b1`** (run 43150269539), the first full run with the two new tests, was in progress. Not read.
+**Decisions (the planner's, technical):**
+1. `getTrafficSourceDensity` is recorded as not reached. No test is added.
+2. **8d closes** when CI on `6aa54b1` reads clean apart from the known pair, the coverage read is in, and the closing
+   list is written. Session 38.
+**Notes:** Written by the planner session by hand. Next free ID -131.
+
+**Kind:** outcome
+**ID:** 2026-10-28-131
+**Timestamp:** 2026-11-12T04:17:39Z
+**Continues:** 2026-10-28-90, 2026-10-28-130
+**Title:** Step 8d: CI on the two new tests read clean apart from the known pair; Plumb's session 38 handed back a draft
+only; what step 9 has left, counted by the planner; the planner's rulings
+**Observed:** Plumb Ledger, session 38, `brouter-port-5b` `6aa54b1` to `e1940ed` (fast-forward only; called at 150,147
+after about eight minutes, ended at 160,351 by the harness's count; one commit, trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). Docs only.
+- §13, a closing list for step 8, **marked partial: no citation in it was checked.** §14 a stub. The coverage read was
+  killed before any count. CI was not read.
+- Plumb's questions: is a test of the constructor's exception through `route()` owed; and file 18 names
+  `OsmPath.java:279` where Forager's copy has the line at `:278`.
+**Checked by the planner:**
+- `git ls-remote` `e1940ed`, a fast-forward of `6aa54b1`; no model name; E1 over the range: 0; two docs files changed.
+- **CI on `6aa54b1`** (run 43150269539), the first full run with -129's two tests: `jvm` 181 tests, 2 failed, both
+  `CollectOutreachersTest`; 0 ` e: `; the test step ran 29 minutes; both `compileKotlinIos*`; simulator 24 of 24
+  (**simulator-checked**); arm64 7 of 7, the gate "OK". The log prints the 10 R cases through `route()` equal on nodes,
+  distance and both digests, every node with a height (1,148 in all), and the public terminate as the oracle's on both
+  cases. The caught-overflow line: 4 prints.
+- ~~`OsmPath.java:278` is `if (rc.startDirectionValid)` in Forager's copy [R]. File 18's `:279` is wrong by one.~~
+  **Corrected in -132:** the planner miscounted. `grep -n` puts `if (isStartpoint)` at `:278` and
+  `if (rc.startDirectionValid)` at `:279` [R]. File 18 was right.
+- **What step 9 has left** [R, C], from `expected-1b.tsv`: 2,126 rows (the plan says 2,118; F0h's 8 were added later).
+  Through the port's engine in `jvmTest` today: R 1,534 (354 of them the refusal by name, -89), F0 2, DL 118, MP64 59,
+  ML5 59, PM5 55, FK 9 to 11 30: **1,857.** Not yet: NT 59, LB 59, CR 59, FK 1 to 8 84, F0h 8: **269.** The FK split is
+  the planner's subtraction from FK's 114 rows, not a count of kinds; session 39 checks it.
+**The planner's own error:** session 38's brief asked for a list citing every row of a report that has grown past what a
+session can read. It cost a session. Later briefs name files and line ranges, and step 9 reports in a new file.
+**Decisions (the planner's, technical):**
+1. **The constructor's exception through `route()`: a test is owed.** The iOS adapter will rely on it passing through
+   as Forager's Android caller catches it (`BRouterTrailRouter.kt:122-131`). Seen red under a revert.
+2. **The `OsmPath` coverage read changes method:** counters in the port at the lines for `OsmPath.java:279-283` (corrected in -132) and
+   `:350`, one run of R, never committed. The oracle run would take about two hours for the same question. File 18 says
+   so and corrects `:279`.
+3. **§13 stays an unchecked draft** and is not relied on. Step 8's "not covered" list is the record's: -121 to -130.
+4. **8d closes** when 1 and 2 are in. Nothing else is open in step 8.
+5. **Step 9 begins** with the 269 cases, group by group, in a new report (`docs/audits/2026-11-12-brouter-port-step9.md`).
+   Each group that passes on first run gets a planted error, prediction pushed first.
+**Notes:** Written by the planner session by hand. Next free ID -132.
+
+**Kind:** outcome
+**ID:** 2026-10-28-132
+**Timestamp:** 2026-11-12T04:24:55Z
+**Continues:** 2026-10-28-90, 2026-10-28-131
+**Title:** Step 8 closed; step 9, Plumb's session 39: NT, LB and CR equal to the oracle through the port; NT's planted
+error not caught; a wrong line number of the planner's corrected; the planner's rulings
+**Observed:** Plumb Ledger, session 39, `brouter-port-5b` `e1940ed` to `1bf57ca` (fast-forward only; called at 151,793,
+ended at 157,114 by the harness's count; 9 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked
+by the planner).
+- **The constructor's exception through `route()`** (`8aef87e`, the comparison stated before any run): both engines throw
+  `IllegalArgumentException`, "profile * does not exist". Under the revert (the exception turned into a `Failed`) the
+  test failed as predicted [R, Plumb's].
+- **The `OsmPath` counters** (`3f925e6`, one run of R, never committed): `startDirectionValid` true 0 times of 11,540
+  start points; `refTrack != null` true 0 times of 189,134,014 [R, Plumb's].
+- **Step 9's count confirmed:** 2,126 rows; FK 1 to 8 are 84 (10 each for kinds 1 to 6, 13 for 7, 11 for 8).
+- **NT, LB, CR** (`554887e`, new `RoutingEngineStep9Test`): 59 cases each, 0 mismatches, on the first run.
+- **Planted errors** (predictions `4b584a4`, results `e309e45`): LB caught (52 of 59), CR caught (50 of 59). **NT not
+  caught:** the comparator's tie-break reversed (`WaypointMatcherImpl.kt:39`), 59 of 59 still equal [R, Plumb's].
+- Plumb stopped on the planner's `:278`, which was wrong, and left file 18 as it was.
+**Checked by the planner:**
+- `git ls-remote` `1bf57ca`, a fast-forward of `e1940ed`; 9 commits, one trailer each, no model name; E1 over the range:
+  0. Plumb reports `4b9409e` pushed with 2 non-position hits (timestamps in a diff's header), fixed in `100d00d`; the
+  planner's scan of that commit alone reads 0, so the two scans differ on it. Not resolved.
+- **Tests:** `RoutingEngineStep9Test` new; `RouteTest` one test added; `RoutingEngineF0Test.port` gains a parameter for
+  where the profiles sit, with the old value as its default. No comparison in an existing test changed.
+- **CI on `8aef87e`** (run 43151665608): `jvm` 182 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both
+  `compileKotlinIos*`; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The caught-overflow
+  line: 4 prints.
+- **CI on `554887e`,** the step 9 test, was queued behind six other runs. Not read.
+**Corrected in place, the planner's:** -131 said `OsmPath.java:278` is the `startDirectionValid` line and tagged it [R].
+It is `:279`. The planner counted lines off a printed range by eye. A line number tagged [R] comes from `grep -n`.
+**On NT, the planner's reading [I], false, corrected in -133:** ~~NT's cases are drawn for two start links whose radii
+differ by at most 4 ulps (`E3NTTest.kt:49`).~~ The radii are equal (both 0) and the 4 ulps are between the
+`directionDiff`s; all 59 cases read a gap of 0. The tie-break only runs when the radii are equal exactly. So the plant may have changed nothing
+because no case has an exact tie, which says the plant was wrong for the group, not that the group tests nothing.
+Plumb's reading is the other one: the order never reaches the six fields. One more plant tells them apart.
+**Decisions (the planner's, technical):**
+1. **Step 8d is closed, and with it step 8,** on the JVM. Not covered, the record's list: the collection on
+   `CollectOutreachersTest`'s region (-61, -124); `catch (Error)` on Kotlin/Native (-126); the third of the time limit,
+   left out (-125); the dirty track, read by nothing (-128); `getTrafficSourceDensity`, no call site (-130); the start
+   direction and the reference-track penalty, reached by no R case and by none of Forager's three parameters [I]; FK9
+   blind to an immediate limit (-127); and everything on iOS beyond compiling and the 24 simulator tests.
+2. **NT gets one more plant:** the comparator's first comparison made on the radii rounded to `Float`, which turns a
+   near-tie into a tie. Prediction pushed first. If NT still passes whole, that is a finding: NT does not show the
+   near-tie reaching an outcome, and it goes to the independent reviewer with the other flags.
+3. **CI stops running on docs-only pushes:** `paths-ignore: docs/**` on the push trigger. Seven half-hour runs were
+   queued behind predictions and report sections, and the code runs wait behind them. No check is removed from any
+   commit that changes code.
+4. **Next:** FK 1 to 8, then F0h, each with its planted error.
+**Notes:** Written by the planner session by hand. Next free ID -133.
+
+**Kind:** outcome
+**ID:** 2026-10-28-133
+**Timestamp:** 2026-11-12T04:46:37Z
+**Continues:** 2026-10-28-93, 2026-10-28-132
+**Title:** Step 9, Plumb's session 40: FK 1 to 8 equal to the oracle, five planted errors caught; -132's reading of NT
+was false; the planner's E1 scans were void and are redone; the planner's rulings
+**Observed:** Plumb Ledger, session 40, `brouter-port-5b` `1bf57ca` to `696dd18` (fast-forward only; called at 151,537,
+ended at 161,382 by the harness's count; 4 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked
+by the planner).
+- **CI change** (`33de34b`): `paths-ignore: 'docs/**'` under `push:`.
+- **FK 1 to 8** (`34277b6`, new `RoutingEngineFKTest`, the comparison stated before any run): 84 cases, 0 mismatches on
+  the first run; no refusal by name [R, Plumb's].
+- **Five planted errors, five caught** [R, Plumb's]: the catching range (FK5 9 of 10; FK1 and FK2 0, where "fewer" was
+  predicted); the island check (FK4 10 of 10); a missing file (FK6 10 of 10); the too-short check (FK7, 3 cases); the
+  CRC (FK8, 10 cases).
+- **NT's second plant was not run:** Plumb stopped on -132's premise.
+- Not done: F0h; the CI reads.
+**Checked by the planner:**
+- `git ls-remote` `696dd18`, a fast-forward of `1bf57ca`; one trailer each, no model name.
+- The workflow diff is the two lines. `RoutingEngineFKTest` is new; no line of an existing test was removed.
+- **NT** [R]: `NTGenerator.kt:26-27` puts the start on the junction so that every link has radius 0; `:95` refuses a draw
+  whose two radii differ; `E3NTTest.kt:43-49` measures the gap between the two `directionDiff`s;
+  `step1b/23-nt-select.tsv` reads "gap 0 ulps" on 59 of 59. Plumb is right.
+- **CI on `554887e`,** the first full run with NT, LB and CR (run 43153534814): `jvm` 185 tests, 2 failed, both
+  `CollectOutreachersTest`; 0 ` e: `; the test step ran 20 minutes; both `compileKotlinIos*`; the three groups print 59
+  cases and 0 mismatches each; simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The
+  caught-overflow line: 4 prints. CI on `34277b6` (FK 1 to 8) was still running. Not read.
+**The planner's own errors, two:**
+1. **-132's reading of NT was false,** and is corrected in place. The planner read one line of the test and took the 4
+   ulps for the radii. On every NT case both keys of the comparator are equal, so no change to the comparator can move
+   the order. Neither -132's plant nor Plumb's first one could have been caught.
+2. **The planner's E1 scans were void.** `scan.sh` takes `git diff` arguments and ignores its input; the planner piped a
+   diff into it, so it scanned the clone's empty staged diff and always printed 0. Every "E1 over the range: 0" the
+   planner wrote from that command showed nothing. How far back the wrong form goes is not known from the record.
+   **Redone, the right way** (`scan.sh <commit>^ <commit>`), commit by commit over the whole branch, 327 commits [C]:
+   - after `ffa06ab` (2026-11-06) one commit has hits: `4b9409e`, 2, the timestamps in a diff's header that Plumb named
+     and fixed in `100d00d`. So Plumb's count on it was right and the planner's 0 was the void scan;
+   - 37 commits up to 2026-11-06 have hits. Sampled by shape with every digit masked: CI logs' timestamps, process ids,
+     pairs of 9-digit integers in 1b's logs, and `82d310a`'s position file, which the owner ruled on in -83 and -84 and
+     which is gone from the tree. At the head, the files that still hit are logs and the `msun` constants. This is a
+     reading of shapes, not a re-audit of that history; -84, -87 and -93 stand as they are.
+   The coders' own scans, run on their staged diffs, were the right form throughout.
+**Decisions (the planner's, technical):**
+1. **NT gets one plant aimed at what does decide an exact tie:** the order the entries reach the sort (the list reversed
+   before it; the sort is stable). Prediction pushed first. If NT still passes whole, the finding is that NT's outcomes do
+   not depend on which tied link is first, and NT goes to the independent reviewer.
+2. **Plant D's "route" with an empty track** [I, Plumb's, Java not run]: session 41 shows from the Java, by file and
+   line, whether any unplanted path can end a run with no message and no track. If one can, it is a finding for the iOS
+   adapter and for Forager, reported to the owner.
+3. **Next:** F0h, the CI reads, then step 9's assembled count.
+**Notes:** Written by the planner session by hand. Next free ID -134.
+
+**Kind:** outcome
+**ID:** 2026-10-28-134
+**Timestamp:** 2026-11-12T05:00:34Z
+**Continues:** 2026-10-28-24, 2026-10-28-133
+**Title:** Step 9, Plumb's session 41: F0h equal to the oracle; NT's order plant caught; every one of the 2,126 rows now
+runs through the port in a logic run with 0 mismatches; the production runs are still owed; the planner's rulings
+**Observed:** Plumb Ledger, session 41, `brouter-port-5b` `696dd18` to `1ba6b06` (fast-forward only; called at 150,463,
+ended at 157,995 by the harness's count; 4 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked
+by the planner).
+- **F0h** (`e8ed646`, new `RoutingEngineF0hTest`, the comparison stated before any run): 8 cases, 0 mismatches on the six
+  fields. Its plant (a height one too high) was caught on 8 of 8, on the heights digest only, as predicted [R, Plumb's].
+- **NT's plant** (the entries reversed before the stable sort): **caught, on 23 of 59,** all on cost only, by -12 to +1;
+  nodes and both digests equal. 56 were predicted. LB and CR 0, as predicted [R, Plumb's].
+- **A run can end with no message and no track** [R, Plumb's, from the Java]: a `RuntimeException` with a null message.
+- **The assembled count** [C, Plumb's]: 2,126 rows expected, 2,126 run, 0 mismatches: 1,658 on all six fields, 354 on R's
+  refusal by name, 114 FK rows on the message's text or family.
+**Checked by the planner:**
+- `git ls-remote` `1ba6b06`, a fast-forward of `696dd18`; one trailer each, no model name. **E1, by `scan.sh <c>^ <c>` on
+  each of the 8 commits since `1bf57ca`: 0 each** (the form -133 corrected).
+- `RoutingEngineF0hTest` is new, 50 lines; no line of an existing test was removed.
+- **The null message** [R]: `RoutingEngine.java:812`, `errorMessage = t instanceof RuntimeException ? t.getMessage() :
+  t.toString()`, and `:62`, `foundTrack = new OsmTrack()`. **Forager already guards it** [R]: `BRouterTrailRouter.kt:107`
+  refuses a track of fewer than 2 nodes as `EngineFailed`, "no error reported and N route points".
+- **CI on `34277b6`,** the first full run with FK 1 to 8 (run 43155294643): `jvm` 193 tests, 2 failed, both
+  `CollectOutreachersTest`; 0 ` e: `; both `compileKotlinIos*`; the eight kinds print 0 mismatches, 84 cases; simulator
+  24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The caught-overflow line: 4 prints (Plumb read 2
+  console lines; the log holds each twice). CI on `e8ed646` (F0h) was still running. Not read.
+**What the 2,126 does and does not show:** these are E6's **logic runs**: the port with the oracle's maths library in
+place of its own, held exactly equal on the JVM. E6 also asks for **production runs**, the port as it would ship. So far
+that is 2 cases, F0's, recorded equal (-129, -130). Step 9 is not done until the production runs are in.
+**Decisions (the planner's, technical):**
+1. **NT does not go to the reviewer as a test that shows nothing.** A wrong order under an exact tie moves the cost on 23
+   of its 59 cases. The prediction of 56 is recorded as failed on its count. Open, named: why 36 cases do not move.
+2. **The iOS adapter refuses a `Found` of fewer than 2 nodes,** as Forager's Android caller does. That is for the adapter,
+   outside the port; `route()` keeps returning what the engine gave. It joins the constructor's exceptions (-129) as a
+   named requirement on the adapter.
+3. **Step 9's figure is 2,126,** the rows of `expected-1b.tsv` as it stands. The plan's 2,118 predates F0h's 8 (-62).
+4. **Next: the production runs,** surveyed first: what E6 asks under the option taken (~~fdlibm ported~~; false, corrected in -135: the owner
+   rejected that option in -24 and chose Android's msun), what already
+   exists for it, then one recorded run over every group.
+**Notes:** Written by the planner session by hand. Next free ID -135.
+
+**Kind:** outcome
+**ID:** 2026-10-28-135
+**Timestamp:** 2026-11-12T05:11:30Z
+**Continues:** 2026-10-28-24, 2026-10-28-134
+**Title:** Step 9, Plumb's session 42: stopped twice, both rightly; the planner had the owner's maths ruling wrong;
+F0h's CI read; the production run's terms
+**Observed:** Plumb Ledger, session 42, `brouter-port-5b` `1ba6b06` to `06b97f2` (fast-forward only; ended at 103,962 by
+the harness's count, no handoff call; one commit, docs only, trailer `Co-Authored-By: Claude <noreply@anthropic.com>`;
+checked by the planner).
+- **No production run was written.** Plumb stopped on the gate: the build sets the test JVM's system properties one by
+  one and forwards none from the command line.
+- **Plumb stopped on the planner's premise** that the port took E6's option (c).
+**Checked by the planner:**
+- `git ls-remote` `06b97f2`, a fast-forward of `1ba6b06`; one docs file; E1 by `scan.sh <c>^ <c>`: 0.
+- **-24, read again** [R]: the owner chose "Copy Android's maths (Recommended)" and **rejected** "Copy Java's reference
+  maths", which is option (c). The port's `cos` and `atan2` are bionic's FreeBSD msun. The oracle runs with HotSpot's
+  intrinsic off, so its `cos` is fdlibm's, and msun differs from it at **13 rows**
+  (`CheapProductionRecordTest.kt:15`; `build.gradle.kts:141`). The option the owner chose says the tests "separately
+  record whether the 13 rows ever change a route".
+- `build.gradle.kts:128-133` and `:179-180`: named `systemProperty` lines only. Plumb's stop is right.
+- **CI on `e8ed646`,** the first full run with F0h (run 43157155479), is Plumb's reading, not re-read by the planner:
+  `jvm` 194 tests, 2 failed, both `CollectOutreachersTest`; F0h 8 cases, 0 mismatches; simulator 24 of 24
+  (simulator-checked); the gate "OK".
+**The planner's own error, the third in four entries:** -134 and session 42's brief said the port took "fdlibm ported",
+and the planner told the owner the production table differs "at 54 rows". Both came from reading E6's table without
+reading -24, the ruling that chose among its options. -134 is corrected in place. The figure is 13 rows, against the one
+oracle that exists. From here a brief that names a ruling quotes the entry, read in the same turn.
+**Decisions (the planner's, technical):**
+1. **The production run is recorded against the oracle that exists,** the one with the intrinsic off. No second oracle is
+   built: E6's second oracle belonged to the option the owner rejected. What -24 asks is the count of routes the 13 rows
+   change, by group.
+2. **The gate is an environment variable** read by the test (`BROUTER_PRODUCTION_RECORD`). No build change. The run is
+   local for now; whether it joins CI as its own job is ruled on once its length and its counts are known.
+3. **A case that differs in kind** is reported first and alone.
+**Notes:** Written by the planner session by hand. Next free ID -136.
+
+**Kind:** outcome
+**ID:** 2026-10-28-136
+**Timestamp:** 2026-11-12T05:44:02Z
+**Continues:** 2026-10-28-24, 2026-10-28-135
+**Title:** Step 9, Plumb's session 43: the production run recorded, 1,742 cases, every one equal to the oracle; what that
+does and does not say about the 13 rows; the planner's rulings
+**Observed:** Plumb Ledger, session 43, `brouter-port-5b` `06b97f2` to `624f2c0` (fast-forward only; ended at 145,429 by
+the harness's count, no handoff call; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The recording test** (`2763f4c`, new `RoutingEngineProductionRecordTest`, gated on `BROUTER_PRODUCTION_RECORD`):
+  the port on its own maths library against the oracle, recorded, not asserted.
+- **The expectation, pushed before the run** (`a014538`): a few differences guessed in R, DL, LB, CR and the memory groups.
+- **One local run** [R, Plumb's]: 20 minutes, **1,742 cases, 1,742 equal on all six fields:** F0 2, R's StdModel 1,180,
+  DL-lat, DL-lon, MP64, ML5, NT, LB and CR 59 each, PM5 55, FK 1 to 8 84, F0h 8. None differs in kind. The expectation
+  was wrong on the high side.
+- **The test can show a difference** [R, Plumb's]: with a scratch change to the table at the rows inside the tiles, never
+  committed, LB differed on 59 of 59.
+- A first attempt ran nothing: an environment variable is not a task input, so Gradle called the task up to date. A local
+  run needs `--rerun`.
+**Checked by the planner:**
+- `git ls-remote` `624f2c0`, a fast-forward of `06b97f2`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3.
+- **The test runs the port's own library** [R]: `RoutingContext(MsunLibm)` at its `:249`, where the logic tests'
+  `port` has `RoutingContext(OracleLibm)` (`RoutingEngineF0Test.kt:55`). Its only assertions are counts.
+- Existing tests: seven `private` words made `internal` in `RoutingEngineFKTest`; no comparison changed.
+- **CI on `2763f4c`** (run 43160257745): `jvm` 195 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both
+  `compileKotlinIos*`; the recording test printed its "unset; not run" line; F0h 8 cases, 0 mismatches; simulator 24 of
+  24 (**simulator-checked**); arm64 7 of 7, the gate "OK". The caught-overflow line: 4 prints.
+- 2 + 1,180 + 7 × 59 + 55 + 84 + 8 = 1,742 [C].
+**What this says about -24's 13 rows, and what it does not:**
+- By Plumb's reading of the table's row rule [I, not checked by the planner], **8 of the 13 rows lie in no captured
+  tile.** No case can reach them. The run speaks for the other 5.
+- How many of the 1,742 cases read a value from one of those 5 rows was not counted. LB's 59 do, by the scratch change.
+- So the record is: on 1,742 cases in the captured tiles, the port as it ships gives the oracle's route every time. It is
+  not: the 13 rows never change a route.
+- The run is local. No CI run of it exists, and the planner has not read one.
+- FK 9 to 11, the timing kinds, are left out of it. R's 354 car cases are refusals on both libraries.
+**Decisions (the planner's, technical):**
+1. **The production run gets its own CI job,** beside `jvm`, with the variable set, running that one class. It gates
+   nothing but its own counts. Step 9 closes on the planner's reading of that job.
+2. **The repeated FK7 and FK8 case lists stay.** The test's count against the group's rows catches drift.
+3. **The 8 rows outside the tiles** are named as not covered. Whether a tile is captured for them is a question for the
+   owner, with the cost stated, after step 10.
+**Notes:** Written by the planner session by hand. Next free ID -137.
+
+**Kind:** outcome
+**ID:** 2026-10-28-137
+**Timestamp:** 2026-11-12T06:20:34Z
+**Continues:** 2026-10-28-24, 2026-10-28-61, 2026-10-28-136
+**Title:** Step 9 closed: the production run read in CI, 1,742 of 1,742 equal; 122 cases read a differing row; step 10
+surveyed; the planner's rulings
+**Observed:** Plumb Ledger, session 44, `brouter-port-5b` `624f2c0` to `7f97edd` (fast-forward only; ended at 140,887 by
+the harness's count, no handoff call; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The CI job** (`7a4d82b`): `jvm-production`, the variable set, the one class.
+- **Rows touched** (a scratch counter, never committed; expectation `f0f0da6` pushed first) [R, Plumb's]: of 295 cases in
+  DL-lat, DL-lon, NT, LB and CR, 122 read at least one of the 13 rows: DL-lat 28, DL-lon 14, NT 13, LB 59, CR 8. Only
+  rows 1295, 1297, 1310, 1311 and 1318 are read. By the code's row rule the other 8 lie in no captured tile. DL-lat's
+  expectation was 0 to 8, so it failed there. The expectation file's wording was edited after the run, latitudes to row
+  numbers, and says so; the planner's diff shows no guess moved.
+- **Step 10's survey,** a new file, no code.
+**Checked by the planner:**
+- `git ls-remote` `7f97edd`, a fast-forward of `624f2c0`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3.
+- The workflow diff adds the one job, 28 lines, and removes none.
+- **CI, run 43163533103 on `7a4d82b`, read by the planner:**
+  - `jvm-production`: success; 1 test; 19 groups in 1,017 s; **every group's "equal" is its "cases" and every "differing"
+    is 0:** R 1,180, DL-lat, DL-lon, MP64, ML5, NT, LB, CR 59 each, PM5 55, FK 1 to 6 ten each, FK7 13, FK8 11, F0 2,
+    F0h 8. 1,742 in all, as the local run.
+  - `jvm`: 195 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both `compileKotlinIos*`.
+  - `ios-smoke`: simulator 24 of 24 (**simulator-checked**); arm64 7 of 7, the gate "OK".
+  - The caught-overflow line: 2 prints, where the last six runs read 4, on a commit that changed only the workflow.
+**Decisions (the planner's, technical):**
+1. **Step 9 is closed.** On the JVM: 2,126 rows in logic runs, 0 mismatches (-134); 1,742 in production runs, 0
+   differing, in CI. Not covered, named: FK 9 to 11 and R's 354 refusals have no production comparison; the 8 rows in no
+   captured tile; R's cases were not counted for rows touched; FK9's 3 unstable rows are held by family only; none of it
+   runs on iOS.
+2. **-24's question, as far as the tiles reach:** at least 122 cases read a differing row, and the route is the oracle's
+   every time. The other 8 rows go to the owner after step 10, with the cost of a tile for them.
+3. **`CollectOutreachersTest`'s failure is not the same run to run** (0 to 4 caught overflows; 1 or 2 failures locally).
+   -61 reads as: the pair is red; how it fails depends on the stack. Step 10 measures it.
+4. **Step 10 begins with what needs no ruling:** one tile read on the simulator, then F0's cases there against their
+   stored digests. F0's ends are Forager's own, so E1 is not touched.
+5. **For the owner, not yet asked:** every other group's cases are positions drawn by generators that run only on the
+   JVM, and E1 forbids committing them. How the simulator gets them is a ruling on E1's reach, asked once session 45
+   shows what the simulator can read.
+**Notes:** Written by the planner session by hand. Next free ID -138.
+
+**Kind:** outcome
+**ID:** 2026-10-28-138
+**Timestamp:** 2026-11-12T07:24:38Z
+**Continues:** 2026-10-28-61, 2026-10-28-137
+**Title:** Step 10, Plumb's session 45: a pinned tile read and F0's two routes computed on the iOS simulator, equal to
+the stored values on five fields; the planner's rulings
+**Observed:** Plumb Ledger, session 45, `brouter-port-5b` `7f97edd` to `a4b3ce1` (fast-forward only; ended at 143,704 by
+the harness's count, no handoff call; 5 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **`PinnedTileReadTest`** (`bee36ec`, red on the simulator on purpose, then `eeefbf9`): the simulator's test process
+  opens a path on the runner's disk, handed to it as a `SIMCTL_CHILD_` variable. F0's fixture reads at its pinned size
+  and SHA-256.
+- **`F0RouteCommonTest`** (`72744e6`, red on purpose, then `71d7281`): F0's two cases through the public `route()` on
+  the port's own maths library, held to their rows of `expected-1b.tsv`.
+- Both are commonTest, so they run on the JVM too.
+- Plumb named a false premise: `RouteOutcome.Found` has no cost, so `route()` gives five of the six fields.
+- No hook for the recursion's depth exists; none was added; -61's depth was not measured.
+**Checked by the planner:**
+- `git ls-remote` `a4b3ce1`, a fast-forward of `7f97edd`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 5.
+- The workflow diff: one fetch step in `ios-smoke` and two variables on the simulator step; nothing removed. No build
+  change. No line of an existing test removed.
+- **CI on `71d7281`** (run 43171038917), read by the planner:
+  - `ios-smoke`: simulator **26 of 26**; `F0RouteCommonTest` and `PinnedTileReadTest` each 1 test, 0 failures, on
+    `iosSimulatorArm64`. The simulator's own log prints both routes: kind route, nodes 226 and 306, distance 5,047 and
+    6,713, and the node and heights digests, each equal to the expected row's. So the test routed; it did not skip.
+    arm64 7 of 7, the gate "OK". The job took 5 minutes. **Simulator-checked.**
+  - `jvm`: 197 tests, 2 failed, both `CollectOutreachersTest`; 0 ` e: `; both `compileKotlinIos*`.
+  - `jvm-production`: 19 groups, R 1,180 of 1,180 equal, as before.
+**What this is:** the first routes the port has computed on iOS, 2 cases, on the simulator, on the tile Forager ships
+as a fixture. **What it is not:** a real iPhone; any other group; the memory path; cost. F0's routes have no heights
+(-62), so the heights digest equal says only that both sides have none.
+**The planner's own error:** the brief asked for six fields through `route()`, which returns five. -129 had already
+recorded that `Found` carries no cost.
+**Decisions (the planner's, technical):**
+1. **Cost on iOS comes from the engine, not from `Found`.** commonTest is in the port's module and can drive
+   `RoutingEngine` as the JVM tests' `port` does. The stored-digest runs use that and hold all six fields and the tuple
+   digest. `Found` does not change. The `route()` test stays at five.
+2. **The other groups' ends reach the simulator without being committed:** generated at run time by the JVM that the
+   macOS job already has, written under the build folder outside `test-results`, read by the simulator's tests, never
+   uploaded or printed. Nothing is committed, so E1 is not touched and no ruling of the owner's is needed for it. Not
+   shown yet: that the generators draw on arm64 what they drew on x86_64. The stored digests check that by themselves: a
+   case drawn differently does not match its row. If this fails, the alternatives go to the owner, since a CI artifact
+   would make positions downloadable.
+3. **-61's depth** is measured after 1 and 2, on its own: it needs a counter in the port and a run that may end the
+   process, so it gets its own session and its own CI step.
+**Notes:** Written by the planner session by hand. Next free ID -139.
+
+**Kind:** outcome
+**ID:** 2026-10-28-139
+**Timestamp:** 2026-11-12T08:21:26Z
+**Continues:** 2026-10-28-61, 2026-10-28-138
+**Title:** Step 10, Plumb's sessions 46 and 47: F0 on six fields and NT, LB and CR on the iOS simulator, 179 cases equal
+to their stored rows; a planted error caught there; no position in the log; the planner's rulings
+**Observed:** Plumb Ledger, sessions 46 and 47, `brouter-port-5b` `a4b3ce1` to `852dd5b` (fast-forward only; session 46
+was ended by the harness at 141,274 with NT's work uncommitted in the clone, session 47 took it up and ended at 140,770;
+6 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner).
+- **F0 through the engine in commonTest** (`938b14f`): `EngineRun` drives `RoutingEngine` with the port's own maths
+  library and computes the tuple digest in common code; a JVM test holds that hash to the stored digest on 2,126 of 2,126
+  rows [R, Plumb's].
+- **A planted error, pushed on purpose and named** (`4dc33ec`, the track's cost one too high; reverted in `9bac0fc`).
+- **NT** (`a557b58`), then **LB and CR** (`314b77c`): the cases are drawn at run time by the macOS runner's JVM into
+  `brouter/build/step10/`, read by the simulator's tests, and held to constants that carry each stored row without its
+  ends.
+**Checked by the planner:**
+- `git ls-remote` `852dd5b`, a fast-forward of `a4b3ce1`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 6. `9bac0fc`'s tree equals `938b14f`'s.
+- The workflow diff: one step before the simulator step and one more variable; nothing removed. No build change.
+- **The planted error on the simulator** (run 43175838279 on `4dc33ec`): 27 tests, 1 failure, `F0EngineCommonTest`; the
+  one line the planner read shows cost 7,406 against 7,405 with the other fields equal. The other case's line was not
+  read.
+- **CI on `314b77c`** (run 43178576702), read by the planner:
+  - `ios-smoke`: simulator **30 of 30**. The runner's arm64 JVM drew 59 of 59 stored ids for each of NT, LB and CR, in
+    89, 99 and 83 draws, the x86_64 counts. On the simulator each group reads "59 of 59 stored ids; equal on all six
+    fields and the tuple digest 59; mismatches 0; missing 0". F0's two cases print equal on six fields and the tuple
+    digest. arm64 7 of 7, the gate "OK". The job took 10 minutes. **Simulator-checked.**
+  - `jvm`: 207 tests, 2 failed, both `CollectOutreachersTest`; each constant equals its 59 rows of `expected-1b.tsv`.
+  - `jvm-production`: 19 groups, as before.
+- **E1 on that `ios-smoke` log** [C], timestamps cut: the pattern reads 0 on the lines the step 10 tests printed and 1 on
+  the whole log, an older test's list of float literals; no tab-separated row of ends is in it. The run's artifacts are
+  the three `test-results` folders; the case files are outside them. The constants' rows, digits masked, hold an id,
+  a kind, three integers and three hex digests.
+**What this shows:** on the simulator, the port as it ships gives the stored route on 179 cases: F0 2, NT 59, LB 59, CR
+59. And the generators draw the same cases on the Mac runner as on Linux, for these three groups.
+**What it does not:** a real iPhone; the memory groups, where the deep recursion runs (-61); DL, FK, F0h and R; speed.
+**Seen on the way, not a finding yet [?]:** NT's 59 cases took 123 s on the simulator against 11 s on the JVM locally
+(Plumb's). The simulator runs a debug test binary, so this says nothing yet about -24's 25% flag.
+**Decisions (the planner's, technical):**
+1. **Pushing a planted port line is allowed on this branch for iOS only,** where a red result can be seen nowhere else:
+   named as planted in its message, reverted in the next commit, the revert shown tree-equal. One more is owed when all
+   the generated groups are in: every group's test must fail under it.
+2. **Next: DL, F0h and FK 1 to 8** on the simulator the same way. Then the memory groups in a simulator step of their
+   own, so that a process ended by the recursion (-61) does not take the other results with it.
+3. **R's 1,180 would not fit the job's 45 minutes** at this speed. E5's fallback of 312 is the plan's answer; it is ruled
+   on when the timing on the simulator is measured, not guessed.
+**Notes:** Written by the planner session by hand. Next free ID -140.
+
+**Kind:** outcome
+**ID:** 2026-10-28-140
+**Timestamp:** 2026-11-12T09:04:44Z
+**Continues:** 2026-10-28-61, 2026-10-28-80, 2026-10-28-139
+**Title:** Step 10, Plumb's session 48: DL, F0h and FK 1 to 8 on the iOS simulator; 389 cases equal to their stored rows;
+FK7-x1's message read on iOS; the planner's rulings
+**Observed:** Plumb Ledger, session 48, `brouter-port-5b` `852dd5b` to `d9fc91c` (fast-forward only; called at 150,034,
+ended at 155,139 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **DL-lat and DL-lon** (`0ec7e85`), **F0h and FK 1 to 8** (`2cb3356`), as NT was done. F0h's ends are written at run
+  time like the others and are not committed. FK 7 and 8's edited tile folders are made by the same JVM step.
+- `RoutingEngineFKTest`'s kind 7 and 8 case builders moved out of the tests so the writer builds the same folders.
+- Plumb read `ios-smoke` on `0ec7e85` only. Not done: the timing table.
+**Checked by the planner:**
+- `git ls-remote` `d9fc91c`, a fast-forward of `852dd5b`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3.
+- The workflow diff is a comment and a step's name. `RoutingEngineFKTest`'s diff, 49 changed lines, touches no
+  assertion and no comparison.
+- **`ios-smoke` on `2cb3356`** (run 43185488304), read by the planner: simulator **41 of 41**; arm64 7 of 7, the gate
+  "OK"; 0 ` e: `; 18 minutes. Per group, drawn or built on the runner's arm64 JVM, then on the simulator:
+  - NT, LB, CR, DL-lat, DL-lon: 59 of 59 stored ids each, **59 of 59 equal on all six fields and the tuple digest** each
+    (119 s, 31 s, 131 s, 245 s, 87 s);
+  - F0h: 8 of 8 built, 8 of 8 equal on all six fields and the tuple digest;
+  - FK 1 to 6 and FK8: 10, 10, 10, 10, 10, 10 and 11, every one equal on all six fields and the tuple digest;
+  - FK7: 13 of 13 equal on the kind's family and the five track fields, as the JVM test compares it;
+  - F0: both cases equal on six fields and the tuple digest.
+  **Simulator-checked.** 2 + 295 + 8 + 84 = 389 cases, 0 mismatches [C].
+- **FK7-x1's message on iOS** (-80's question for this step): the simulator prints the port's text,
+  "to-position not mapped in existing datafile", the stored family's text, "same text true".
+- **E1 on that log** [C], timestamps cut: 0 on the step 10 lines; 1 on the whole log, the older float-literal list; no
+  tab-separated row of ends.
+- That run's `jvm` and `jvm-production` jobs were still running. Not read.
+**What this shows:** F0h's routes carry heights (-62), so heights computed on the simulator now equal the stored ones on
+8 routes. The eight failure kinds fail on iOS as on the JVM, with the same messages where the message is compared.
+**What it does not:** a real iPhone; the memory groups (173 cases) and the recursion (-61); R; FK 9 to 11; speed.
+**Decisions (the planner's, technical):**
+1. **Next, the memory groups (MP64, ML5, PM5) in a simulator step of their own,** after the present one, so a process
+   ended by the recursion leaves the 389 standing.
+2. **A depth counter goes into the port's recursion** for -61: one internal field, written in `cleanupPeninsulas`'s walk,
+   read by tests only; the JVM suite shows nothing else moved. On the simulator the test prints, per group, the deepest
+   recursion reached, the test thread's stack size, and the stack bytes used at that depth. That is the number the owner
+   asked to see before deciding (-61).
+3. **R on the simulator is E5's fallback,** the first 12 cases of each profile, unless the memory step's timing shows
+   the whole fits.
+4. **The planted error across all groups** (-139, decision 1) comes last.
+**Notes:** Written by the planner session by hand. Next free ID -141.
+
+**Kind:** outcome
+**ID:** 2026-10-28-141
+**Timestamp:** 2026-11-12T09:33:54Z
+**Continues:** 2026-10-28-50, 2026-10-28-61, 2026-10-28-140
+**Title:** Step 10, Plumb's session 49: the recursion's depth counted on the JVM, 5,679 on every memory case; the
+simulator's memory step held back by its time; the planner's rulings
+**Observed:** Plumb Ledger, session 49, `brouter-port-5b` `d9fc91c` to `09f3be8` (fast-forward only; called at 150,920,
+ended at 154,775 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The depth counter** (`4d2bd15`): a new internal object, `PeninsulaDepth`, written in `minVisitIdInSubtree`.
+- **On the JVM** [R, Plumb's, local]: MP64 59, ML5 59 and PM5 55 cases, 0 mismatches; ~~**every one of the 173 reaches a
+  depth of 5,679**~~; 0 overflows caught. **Corrected in -143:** 5,679 is each group's deepest case. "Every one" was
+  Plumb's wording, repeated by the planner unchecked; the counter keeps a maximum, and one MP64 case alone reads 3,378.
+- **Nothing ran on the simulator.** Plumb stopped on the time estimate: the three groups take 220 s on the JVM; at the
+  ratio seen so far, 9 to 12, that is about 40 minutes on the simulator, on top of the job's 18, against its limit of 45.
+- The work for the simulator is saved, not pushed: commit `27841ad` on the clone's branch `s49-memory-step`.
+- The stack bytes in use were left out: reading them needs more than a counter in the port.
+**Checked by the planner:**
+- `git ls-remote` `09f3be8`, a fast-forward of `d9fc91c`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3 and on the saved commit.
+- **The port's diff** [R]: one increment and a comparison on entry to the walk, one decrement on its return, a reset
+  after each top-level call, a count of the JVM's caught overflows. Nothing in the port reads any of it.
+  `RoutingEngineMemoryTest` gains 16 lines and loses none.
+- CI on `4d2bd15`, the counter's first run, was not read by anyone yet.
+**Read with care:** 5,679 is the depth -50 measured on `CollectOutreachersTest`'s region. All 173 cases lie in the same
+tile, so one figure for all of them is what one deep structure in that tile would give [I]. It is the depth on this
+tile, not a bound for any map.
+**Decisions (the planner's, technical):**
+1. **The memory groups get a job of their own on the simulator,** `ios-memory`, with its own limit of 75 minutes, all
+   173 cases. It does what `ios-smoke` does to fetch the tiles and draw the cases, then runs the three classes.
+2. **The three tests are gated on a variable,** as the production run is: unset, they print one line and do nothing, so
+   `ios-smoke` is unchanged and stays near 18 minutes. The saved commit's way, naming every other class in shell, is not
+   taken: a class missed by that list would silently not run.
+3. **The port does not read the stack pointer.** What the simulator gives is: whether the process survives a depth of
+   5,679, and the test thread's stack size. If it survives, the walk fits in that stack on a debug build. If it does
+   not, that is -61's answer for the simulator.
+4. **A process that ends is reported and nothing is changed** (-61 is the owner's).
+**Notes:** Written by the planner session by hand. Next free ID -142.
+
+**Kind:** outcome
+**ID:** 2026-10-28-142
+**Timestamp:** 2026-11-12T10:58:33Z
+**Continues:** 2026-10-28-50, 2026-10-28-61, 2026-10-28-141
+**Title:** Step 10, Plumb's session 50: the memory groups on the iOS simulator, 173 of 173 equal; the recursion reaches
+5,679 there and the process survives on an 8 MB main-thread stack; what that does not answer for -61
+**Observed:** Plumb Ledger, session 50, `brouter-port-5b` `09f3be8` to `ef033ef` (fast-forward only; ended at 137,724 by
+the harness's count, no handoff call; 2 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- `c4a6965`: the three memory tests gated on `BROUTER_STEP10_MEMORY`, and the new job `ios-memory`, as -141 ruled.
+- The counter's own CI (`4d2bd15`, run 43192349936) is Plumb's reading: clean apart from the known pair.
+**Checked by the planner:**
+- `git ls-remote` `ef033ef`, a fast-forward of `09f3be8`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on both. The workflow diff removes no line; the port and the build are untouched; two lines of the writer test moved.
+- **Run 43196471268 on `c4a6965`, read by the planner:**
+  - **`ios-memory`: success, 51 minutes, 3 tests, 0 failures, no crash or signal word in the log.** On the simulator:
+    - MP64: 59 of 59 stored ids drawn on arm64; **59 equal on all six fields and the tuple digest;** 1,192 s;
+    - ML5: 59 of 59 drawn; **59 equal;** 638 s;
+    - PM5: 55 of 55 drawn; **55 equal;** 707 s;
+    - each group: "deepest recursion 5679"; every case entered the walk; "stack size 8372224 bytes"; "main thread true".
+    **Simulator-checked.**
+  - `ios-smoke`: simulator 44 of 44 (the 41 and the three that print "unset; not run"), arm64 7 of 7, the gate "OK",
+    17 minutes.
+  - `jvm`: 228 tests, 2 failed, both `CollectOutreachersTest`. `jvm-production`: success.
+  - E1 on the `ios-memory`, `ios-smoke` and `jvm-production` logs, timestamps cut: 0 on the step 10 lines, no
+    tab-separated row of ends.
+**Where the simulator stands** [C]: 389 (-140) + 173 = **562 cases, 0 mismatches,** every group but R and FK 9 to 11.
+**What this says for -61, and what it does not:**
+- On the simulator, a walk 5,679 deep fits in an 8 MB stack on a debug build, and the memory path gives the stored
+  routes.
+- The 8 MB is the simulator test process's main thread. **An app does not route on that stack.** Forager's Android
+  caller runs the engine on a thread of its own; a secondary thread on iOS has 512 KB unless the app asks for more [I, the
+  platform's documented default, not measured here]. Whether the walk fits in 512 KB, 1 MB or 2 MB is not shown.
+- 5,679 is this tile's depth (-141). A real iPhone and a release build are not shown.
+**Decisions (the planner's, technical):**
+1. **A stack ladder, before the owner is asked:** one memory case, run on a thread made with an explicit stack size,
+   from large to small (8 MB, 4, 2, 1 MB, 512 KB), each size printing before it starts and after it ends, as the last
+   step of `ios-memory`, gated. The first size that ends the process is the answer on the simulator's debug build; the
+   173 results above it stand. This changes nothing in the port.
+2. **`ios-memory` runs on every code push** until step 10 closes; then it is ruled on again.
+3. **Then R's fallback** (E5: the first 12 cases of each profile), then the planted error across the groups.
+**Notes:** Written by the planner session by hand. Next free ID -143.
+
+**Kind:** outcome
+**ID:** 2026-10-28-143
+**Timestamp:** 2026-11-12T12:50:14Z
+**Continues:** 2026-10-28-61, 2026-10-28-89, 2026-10-28-142
+**Title:** Step 10, Plumb's session 51: the stack ladder ends the simulator's process at 1 MB, "Bus error"; R's fallback
+240 of 240 equal on the simulator; -141's "every case" corrected; -61 goes to the owner
+**Observed:** Plumb Ledger, session 51, `brouter-port-5b` `ef033ef` to `3d5bd11` (fast-forward only; called at 153,457,
+ended at 160,402 by the harness's count; one commit, trailer `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The ladder** (`StackLadderIosTest`, iosTest, gated): one MP64 case on threads made with `pthread_create` and an
+  explicit stack size. Plumb's prediction, in the commit, a guess: 8, 4 and 2 MB survive, 1 MB ends the process.
+- **R's fallback** (`REngineCommonTest`, gated, in `ios-memory`): the first 12 cases of each of R's 20 StdModel
+  profiles, 240 cases. Locally on the JVM 240 of 240 equal, 201 of them entering the walk [R, Plumb's].
+- `ios-memory`'s limit raised from 75 to 95 minutes.
+- Plumb named a false premise: the six car-model profiles are not refused by both engines. The oracle routes them and
+  only the port refuses (-89, -95), so they have no stored refusal row and are left out.
+**Checked by the planner:**
+- `git ls-remote` `3d5bd11`, a fast-forward of `ef033ef`; no model name; E1 by `scan.sh <c>^ <c>`: 0. The port and the
+  build are untouched. The workflow diff adds two steps and their counts to `ios-memory` and changes its limit.
+- **Run 43212726248 on `3d5bd11`, read by the planner:**
+  - **The ladder, on the simulator,** the lines in order: the case is MP64-0002, deepest recursion **3,378** on the test's
+    own thread, equal to its stored row. Then: "starting 8388608", "survived", equal, deepest 3378, main thread false;
+    "starting 4194304", "survived", equal; "starting 2097152", "survived", equal; **"starting 1048576", and no line
+    after it.** The step failed with **"Child process terminated with signal 10: Bus error"**. 512 KB was never reached.
+  - The memory groups, before the ladder: MP64 59, ML5 59, PM5 55, each all equal on six fields and the tuple digest,
+    each group's deepest 5,679, as -142.
+  - **R's fallback on the simulator: 240 of 240 stored ids drawn on arm64; 240 equal on all six fields and the tuple
+    digest; 460 s.**
+  - `ios-smoke`: 46 of 46; arm64 7 of 7; the gate "OK". `jvm`: 230 tests, 2 failed, both `CollectOutreachersTest`.
+    `jvm-production`: success. E1 on the `ios-memory` log, timestamps cut: 0 on the step 10 and ladder lines.
+  **All simulator-checked.**
+**Where the simulator stands** [C]: 562 (-142) + 240 = **802 cases, 0 mismatches.** Not there: R's other 940 StdModel
+cases, FK 9 to 11.
+**Corrected in place:** -141 said every one of the 173 memory cases reaches 5,679. The counter keeps a maximum per
+group; this one case reaches 3,378. The planner repeated Plumb's sentence without checking it and told the owner so.
+**The planner's own error:** the brief said the car-model profiles are refused on both engines. -89 says the port
+refuses and the oracle routes.
+**What the ladder shows for -61:**
+- On the simulator's debug build, a walk 3,378 deep fits in a 2 MB thread stack and **does not fit in 1 MB: the process
+  ends.** There is no catch on iOS (-50).
+- A secondary thread's default on iOS, 512 KB [I, the platform's documented default], is below the size that already
+  fails. So with the port as it is, an app that routes on a thread of its own with the default stack would end on this
+  case.
+- The deepest case seen, 5,679, was not run on the ladder. Scaled from 3,378 [I, a straight proportion, not measured]:
+  between about 1.7 and 3.4 MB.
+- These are one tile's depths. No measurement bounds the depth on another map.
+- Not shown: a release build, whose frames are usually smaller; a real iPhone.
+**Decision:** none here. -61 is the owner's ("Decide after step 10"), and it is asked now with these numbers.
+**Notes:** Written by the planner session by hand. Next free ID -144.
+
+**Kind:** decision
+**ID:** 2026-10-28-144
+**Timestamp:** 2026-11-12T13:17:30Z
+**Continues:** 2026-10-28-50, 2026-10-28-61, 2026-10-28-143
+**Title:** The deep recursion in `cleanupPeninsulas` is rewritten without recursion (owner); -61 is answered
+**Decision:** asked how the port should handle the recursion now that step 10's measurement is in (-143: on the
+simulator the process ends with a bus error on a 1 MB thread at a depth of 3,378, survives at 2 MB; a background thread's
+default on iOS is 512 KB; the deepest case seen is 5,679), the owner chose, verbatim: "Rewrite without recursion
+(Recommended)". The option read: "The port's walk keeps its own list of nodes to visit in place of calling itself, so its
+depth no longer uses the thread's stack. It can't crash this way on any map. Cost: about 1 to 2 coder sessions, and this
+one function stops being a line-for-line copy of the Java. All 802 simulator cases and the JVM comparisons must stay
+equal. Where Java itself overflows and skips part of the cleanup, the port would differ from Java, and that difference
+gets measured and reported to you."
+- **Rejected:** "Keep recursion, big stack"; "Both"; "Measure more first".
+- **Asked with** AskUserQuestion, one question, four options; the first was marked as recommended by the planner.
+**What follows (the planner's calls, technical; the owner may overrule):**
+- **The red test exists already:** the stack ladder ends the process at 1 MB. It becomes an asserting test: every size
+  down to 512 KB survives and gives the stored row. It is extended to the deepest case of each memory group.
+- **The walk's result must not move:** the 173 memory cases, R's 240 and the rest of the 802 on the simulator; on the
+  JVM the 2,126 logic rows and the 1,742 production cases.
+- **`CollectOutreachersTest`** (-61's red pair) is read again after the rewrite. It was red because the port overflowed
+  where the oracle did not. Whatever it then reads is reported, not arranged: its second failure, the `canEscape`
+  coverage assertion (-60), may stand.
+- **Where Java overflows and skips a subtree, the port now will not.** How often the oracle's own catch fires on the
+  test cases is counted (it read 0 at -60) and reported to the owner, as the option says.
+- `StackOverflowCatch`'s JVM catch and the depth counter are kept or removed by what the rewrite leaves reachable; each
+  is named in the report.
+**Notes:** Written by the planner session by hand. Next free ID -145.
+
+**Kind:** decision
+**ID:** 2026-10-28-145
+**Timestamp:** 2026-11-12T13:18:47Z
+**Continues:** 2026-10-28-144
+**Title:** The recursive walk is kept on a branch of its own (owner)
+**Decision:** the owner said, verbatim: "Keep the old code safe on a separate branch".
+**Done by the planner:** the branch `brouter-port-5b-recursive-walk` on slayer8366/Forager-iOS, at `3d5bd11`, the last
+commit of `brouter-port-5b` before session 52's work. `git ls-remote` reads it at that commit [R]. It holds the port
+with the recursive `minVisitIdInSubtree`, the depth counter, and the stack ladder that ends the process at 1 MB (-143).
+- Nothing builds on that branch and nothing is pushed to it again. It is never merged or deleted without the owner's
+  word.
+- `brouter-port-5b` goes on from the same commit with the rewrite.
+**Notes:** Written by the planner session by hand. Next free ID -146.
+
+**Kind:** outcome
+**ID:** 2026-10-28-146
+**Timestamp:** 2026-11-12T16:09:59Z
+**Continues:** 2026-10-28-60, 2026-10-28-61, 2026-10-28-144, 2026-10-28-145
+**Title:** The walk rewritten without recursion (Plumb's session 52): every comparison still equal; the ladder survives
+down to 512 KB on the simulator; one of `CollectOutreachersTest`'s two failures is gone
+**Observed:** Plumb Ledger, session 52, `brouter-port-5b` `3d5bd11` to `f33828c` (fast-forward only; called at 150,320,
+ended at 159,498 by the harness's count; 3 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **The red test first** (`ce1a193`): the ladder asserts, on four cases (MP64-0002, MP64-0005, M5-0060, M5-0304), that
+  every stack size from 8 MB to 512 KB survives and gives the stored row.
+- **The rewrite** (`f33828c`): `minVisitIdInSubtree` keeps a list of frames in place of calling itself; the commit and a
+  comment map each step of the recursion to the loop. `runCatchingStackOverflow` and its three files are removed: with
+  no recursion the catch cannot fire. `PeninsulaDepth` now counts the list's size.
+- Not run: the planted error in the rewrite (prediction pushed, `c1ac7e1`); the oracle's own catch count.
+**Checked by the planner:**
+- `git ls-remote` `f33828c`, a fast-forward of `3d5bd11`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 3. CI and the build are untouched.
+- **The rewrite read against `OsmNodesMap.java`'s `minVisitIdInSubtree`, statement by statement** [R]: the numbering
+  and `nodesCreated++` on entry; the next link taken before the body; the tests in Java's order (source, hollow,
+  `visitID` 1, 0, below `baseID`, tree mode); at a child's return, the peninsula test against the parent's
+  `visitID`, `nodesCreated` restored, the link unlinked from both ends, then the minimum. No difference found.
+- **The ladder was red on the recursive port:** run 43226744796 on `ce1a193`, "starting MP64-0002 1048576" and then
+  "Child process terminated with signal 10: Bus error".
+- **Run 43245049027 on `f33828c`, read by the planner:**
+  - **`ios-memory`: success, 55 minutes, no crash word.** The ladder: 20 "starting" lines and 20 "survived" lines: each
+    of the four cases at 8, 4, 2 and 1 MB and at **512 KB**, every one "equal to its stored row true", deepest 3,378 for
+    MP64-0002 and 5,679 for the other three. The memory groups: MP64 59, ML5 59, PM5 55, all equal on six fields and
+    the tuple digest. R's fallback: 240 of 240 equal.
+  - `ios-smoke`: 46 of 46; 14 group lines with "mismatches 0"; arm64 7 of 7, the gate "OK".
+  - `jvm-production`: 1,742 cases, 1,742 equal, 0 differing.
+  - **`jvm`: 230 tests, 1 failed.** `collectOutreachersWithoutADestination` passes. The one left is
+    `collectOutreachersWithADestinationVanishesFarNodes`: "canEscape did not answer both ways: false/true 0/3587", the
+    coverage assertion of -60. No caught-overflow line: the catch is gone.
+  - 0 ` e: ` in every job; both `compileKotlinIos*`. E1 on the simulator logs, timestamps cut: 0.
+  **Every iOS result simulator-checked.**
+**What this shows:** on the simulator the walk no longer depends on the thread's stack: the cases that ended the process
+at 1 MB now run in 512 KB, the default of a background thread. Nothing compared anywhere moved: 802 cases on the
+simulator, 1,742 production cases and the JVM suite.
+**What it does not:** that no other recursion in the engine is deep. The ladder runs four cases in one tile. A real
+iPhone is not shown.
+**-61's red pair:** the first failure was the overflow and is gone. The second never was: on that test's regions the
+oracle's `canEscape` answers "true" every time (-60), so the assertion that both answers are seen cannot be met there.
+It stays red and is not touched; what to do with it is ruled on once the port's own answers on MP64 are counted (-61
+names MP64 as where "false" occurs).
+**Open, owed to the owner by -144's option:** how often the oracle's own catch fires on the test cases.
+**Notes:** Written by the planner session by hand. Next free ID -147.
+
+**Kind:** outcome
+**ID:** 2026-10-28-147
+**Timestamp:** 2026-11-12T17:26:32Z
+**Continues:** 2026-10-28-60, 2026-10-28-61, 2026-10-28-144, 2026-10-28-146
+**Title:** After the rewrite, Plumb's session 53: the oracle's own catch fires 0 times on 1,707 cases; one planted error
+caught by every group, one by none; `canEscape`'s answers counted; the planner's rulings
+**Observed:** Plumb Ledger, session 53, `brouter-port-5b` `f33828c` to `004cd75` (fast-forward only; ended at 137,411 by
+the harness's count, no handoff call; 2 commits, docs and evidence only, trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). All of it local JVM runs: Plumb's reading.
+- **The oracle's catch** (-144's promise to the owner): with a patched oracle class, never committed, the
+  `catch (StackOverflowError)` in `cleanupPeninsulas` fired **0 times** on the 173 memory cases and 0 times on R's
+  1,534, at this JVM's default stack of 1,024 KB.
+- **Plant 1** (the minimum not written at a child's return; prediction `c1ac7e1`): caught. MP64 59 of 59, ML5 59 of 59,
+  PM5 55 of 55, R 775 of 1,534.
+- **Plant 2** (children walked last to first; prediction `5f151a6`, which expected no catch): **caught by no group,** 0
+  mismatches in all four. The planted build ran: the deepest walk moved from 5,679 to 7,954.
+- **`canEscape` through the port,** true and false per group: MP64 1,789,913 and 576,094; PM5 1,212,430 and 333,212; ML5
+  3,042,871 and 415,604. The oracle's counts are the same for MP64 and PM5; ML5's oracle count could not be read. Every
+  one of the 173 cases has at least one "false".
+- `PeninsulaDepth.overflowsCaught` is read by three tests and written by nothing since the rewrite.
+**Checked by the planner:** `git ls-remote` `004cd75`, a fast-forward of `f33828c`; one trailer each, no model name; E1 by
+`scan.sh <c>^ <c>`: 0 on both; nothing outside `docs/` changed; plant 2's evidence file reads 0 mismatches per group
+with the deeper depths, and "restored: cmp equal".
+**What the counts say:**
+- **For the owner, -144:** no tested case reaches the one place where the port now differs from Java by design. On
+  1,707 cases the oracle never overflows, so the two do the same thing. Not shown: Android's own runtime, whose frames
+  and stack are not this JVM's; a deeper map.
+- **The order in which children are walked is not shown tested.** A change of order moved the depth and no route.
+  Plumb's reading [I, not proved], which the planner shares: the links the walk removes are the ones whose subtree has
+  no other way back, and that does not depend on the order of the walk. If so the plant is an equal program, not a gap.
+  It is recorded as argued, not shown.
+- **The depth is not a property of the map alone:** it is 5,679 in Java's order and 7,954 in the other.
+**Decisions (the planner's, technical):**
+1. **Plant 2 is accepted as not caught, for the reason above.** No further order plant.
+2. **`CollectOutreachersTest`'s last failure: -61's call is carried out before anything else is considered.** -61 said the
+   assertion stays and a region is sought where the oracle answers "false". The counts now say where to look: every
+   memory case has such answers. Session 54 finds, from one memory case, the map state at a call that answers "false",
+   and adds that region to the test. The assertion is not changed. If no region can be loaded that way, that goes to the
+   planner, and a change to the assertion would go to the independent reviewer.
+3. **`overflowsCaught` is removed,** with its three reads, which only print it.
+4. **No small-stack run of the oracle is built now.** It would show an overflow the test JVM never has. It is named for
+   the owner as something that can be measured if wanted.
+**Notes:** Written by the planner session by hand. Next free ID -148.
+
+**Kind:** outcome
+**ID:** 2026-10-28-148
+**Timestamp:** 2026-11-12T19:18:00Z
+**Continues:** 2026-10-28-60, 2026-10-28-61, 2026-10-28-126, 2026-10-28-147
+**Title:** The first CI run with every job green (Plumb's session 54): `CollectOutreachersTest` passes with its assertion
+unchanged; four clock tests on the simulator; `catch (Error)` shown on Native; the planner's rulings
+**Observed:** Plumb Ledger, session 54, `brouter-port-5b` `004cd75` to `2929df0` (fast-forward only; called at 153,270,
+ended at 158,353 by the harness's count; 4 commits, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; checked by
+the planner).
+- **Why the test never saw "false"** [R, Plumb's reading of the code]: `collectOutreachers` marks every node it reaches
+  from the hollow nodes, and `canEscape` answers "true" at once for a marked node. The test asked only about such nodes.
+- **What was added** (`041d8b5`, prediction in the same commit before the run): a second `collectOutreachers` on the same
+  map, as the engine makes at its next check out of memory bounds (`RoutingEngine.java:2012`, then `canEscape` at
+  `:2016`), and the same every-37th `canEscape` calls, traced on both engines.
+- `overflowsCaught` removed with its three reads, all prints (`97965dd`).
+- **`EngineStopCommonTest`** (`4e311ce`): four of the JVM's clock tests in commonTest, on F0's first case: the time limit
+  and the watchdog's seconds on an injected clock, an `Error` caught, an `Exception` caught. Not moved: FK 9 to 11 and
+  FK11's count (they run the oracle), the stopped-clock test (a live oracle run), the mid-run cancel (a JVM thread).
+**Checked by the planner:**
+- `git ls-remote` `2929df0`, a fast-forward of `004cd75`; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0
+  on each of the 4. CI and the build are untouched.
+- **`CollectOutreachersTest`'s diff: 18 lines added, none removed.** The assertion and the regions are as they were. ~~The added calls are the ones `RoutingEngine.java` makes in its memory path, made on both engines and traced on both.~~
+  **Corrected after the review, -163:** the calls are of the kind the engine makes, but the second round is a state the
+  test builds, not one the engine was caught in, which is what -147's decision 2 asked for. They are made and traced on
+  both engines.
+- The port's diff: the dead field and its comment. Other tests: the lines that printed it.
+- **Run 43277598212 on `4e311ce`: the run's conclusion is "success", the first on this branch.** Read by the planner:
+  - `jvm`: **234 tests, 0 failures.** `CollectOutreachersTest` prints, with a destination, "canEscape false/true
+    1616/5558" over 12 regions; without one, 0/3587 as before. 0 ` e: `; both `compileKotlinIos*`.
+  - `ios-smoke`: simulator **50 of 50**; `EngineStopCommonTest` 4 tests, 0 failures, on `iosSimulatorArm64`, the four
+    named above; arm64 7 of 7, the gate "OK".
+  - `ios-memory`: MP64 59, ML5 59, PM5 55 and R's 240 all equal; the ladder 20 of 20 survived and equal; no crash word.
+  - `jvm-production`: 1,742 cases, 1,742 equal.
+  - E1 on the simulator logs, timestamps cut: 0.
+  **Every iOS result simulator-checked.**
+- Run 43270264347's `ios-smoke` shows "cancelled"; why is not known. The run after it is whole.
+**What this answers:**
+- **-61 is closed in full:** the overflow is gone by the owner's ruling (-144), and the coverage assertion is met where
+  the engine's own sequence makes both answers.
+- **-126's open question:** on Kotlin/Native a `kotlin.Error` thrown inside the run is caught, the engine terminates and
+  keeps its message. A real out-of-memory on iOS is not that: the system ends the process before any catch [I].
+**For the independent reviewer, added to -107, -116, -119, -126:** a red test turned green by an addition to its setup.
+The assertion did not move, but the reviewer should see it.
+**Decisions (the planner's, technical):**
+1. **Plumb's question 1: yes.** A second state of the same regions carries out -61's call: the assertion is unchanged
+   and is now met on the oracle.
+2. **Plumb's question 2:** the stopped-clock test gets a common sibling held to F0's stored row. The JVM test stays as
+   it is. That adds a test and changes none.
+3. **`brouter-port-5b` may now merge into `brouter-port` as far as -61's condition goes** ("5b can't merge while the
+   test is red"). Merges are on the owner's word only; none is made.
+4. **Left in step 10:** the turn hints and the four export formats on the simulator, which no iOS test reaches yet; the
+   planted error across the simulator's groups (-139); the closing list.
+**Notes:** Written by the planner session by hand. Next free ID -149.
+
+**Kind:** outcome
+**ID:** 2026-10-28-149
+**Timestamp:** 2026-11-12T19:27:12Z
+**Continues:** 2026-10-28-111, 2026-10-28-121, 2026-10-28-148
+**Title:** Step 10, Plumb's session 55: the hints and formats surveyed for the simulator; on engine routes one NT route's
+hints differ from the oracle's on the JVM; nothing but the survey pushed
+**Observed:** Plumb Ledger, session 55, `brouter-port-5b` `2929df0` to `b26d4c2` (fast-forward only; called at 152,742
+after about eight minutes, ended at 158,790 by the harness's count; one docs commit, trailer
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). Work in progress is saved, not pushed: the
+clone's local commit `f8d757f` on `s55`.
+- **The survey** (§8.1) [R, Plumb's]:
+  - the hints, the four formats and the number helpers are `internal` in commonMain; commonTest can reach them;
+  - **elevations in the formats are printed with the platform's `Double.toString`,** not the port's helpers: -121's
+    question, still open;
+  - **step 7's JVM tests ran the hints and formats on random walks, not on routes the engine made;**
+  - with the engine run as Forager runs it there are no hints: the profile's mode 1 leaves them off (-110, -111). The
+    tests switch them on in test code on both engines, as -111 said they would.
+- **On the JVM, locally, on 71 engine routes** (F0 2, F0h 8, NT 59) with the hints switched on [R, Plumb's]: the six
+  fields equal on all 71; GPX, JSON, KML and CSV equal to the oracle's on all 71; **the hints of one NT route differ,
+  port against oracle.** The case id was not printed. Plumb stopped there and changed nothing.
+**Checked by the planner:** `git ls-remote` `b26d4c2`, a fast-forward of `2929df0`; E1 by `scan.sh <c>^ <c>`: 0 on the
+pushed commit and on the local one; the pushed diff is the report only.
+**What the one difference is, and is not:**
+- It is the first difference between port and oracle found since step 8, and it is in code the owner asked to have
+  ported (-111). It was not seen in step 7 because step 7's inputs were not engine routes.
+- It is not on Forager's path: Forager's turn directions come from its own code and BRouter's hints stay off there
+  (-111's finding). No route, cost, distance or height is touched.
+- One of 71 is a count on three small groups. How many of R's routes differ is not known.
+**The planner's own gap:** -121 closed step 7 with the hints "compared against the oracle" and did not say on what
+inputs. Step 9's 2,126 rows hold the six fields, not the hints. So the hints were never compared on a route the engine
+made until now.
+**Decisions (the planner's, technical):**
+1. **The difference is found before anything else:** the case, the hint and the field that differ, then the cause from
+   the Java, with at most two fixes, each from the Java, and a test that is red on that case first.
+2. **Then the hints are compared on every route group on the JVM,** not three: R's 968 routes and the rest, by digest.
+3. **Then the simulator,** as -148 planned.
+**Notes:** Written by the planner session by hand. Next free ID -150.
+
+**Kind:** outcome
+**ID:** 2026-10-28-150
+**Timestamp:** 2026-11-12T19:35:12Z
+**Continues:** 2026-10-28-24, 2026-10-28-137, 2026-10-28-149
+**Title:** The one hints difference is -24's 13 rows, not a fault in the port (Plumb's session 56); the first effect of
+those rows seen anywhere; the planner's correction and rulings
+**Observed:** Plumb Ledger, session 56, local JVM work on the clone's branch `s55` (ended at 106,667 by the harness's
+count, no handoff call; nothing pushed; test code saved as the local commit `34d2809`; findings in the scratchpad's
+`s56-hints-finding.md`). All of it is Plumb's reading.
+- **The case** is NT-0062. Both sides have 610 hints. One field of one hint differs: hint 380's `angle` is 0.0 on the
+  port and 2.6748896E-15 on the oracle. Its command, distance, exit, bad ways and place in the track are equal, and the
+  hints before and after are equal. It differs in every mode from 2 to 9.
+- **The cause is not in the hints code.** The three track points there lie on one line, so the angle is rounding
+  residue, and the residue depends on the last bits of the scale table. The port's table is built with msun's `cos`, the
+  oracle's with fdlibm's, and they differ in 13 of 1,800 rows.
+- LB's 59 routes at mode 8: 0 differ.
+**Checked by the planner:** the harness runs the port on `MsunLibm` (`EngineRun.kt:49`): it is a production run, the
+port as it ships. So this is the difference the owner chose in -24, "Copy Android's maths", whose option said the tests
+would "separately record whether the 13 rows ever change a route".
+**Corrected, the planner's:** -149 and the planner's message to the owner called this "the first difference between port
+and oracle since step 8" and said it would be "found and fixed". It is found. There is nothing to fix: it is the port
+agreeing with Android where Android and desktop Java differ. The planner wrote that before knowing which library the
+comparison ran on.
+**What it adds to -24's record:** on 1,742 production cases the 13 rows change no route (-137). On 130 routes with the
+hints switched on, they change one hint's angle, from an exact zero to a number 15 places after the point. That angle is
+a turn of zero degrees either way; the hint's command is the same.
+**Not shown:** that a logic run of NT-0062, the port on the oracle's library, gives the oracle's hints exactly. It is
+what the finding predicts and it has not been run.
+**Decisions (the planner's, technical):**
+1. **The hints and formats follow E6 as the routes do:** in a logic run, port on the oracle's library, they are asserted
+   equal to the oracle's on every route group; in a production run they are recorded, with the count that differs.
+2. **The simulator's stored digests are made from the port's own production run on the JVM,** not from the oracle: the
+   simulator runs msun too, so the two must be equal exactly, and a difference there is a platform difference, which is
+   what -121 asked about.
+3. **A real gap stays from -149:** step 7 compared the hints on random walks. Decision 1 closes it on engine routes.
+**Notes:** Written by the planner session by hand. Next free ID -151.
+
+**Kind:** intent
+**ID:** 2026-10-28-151
+**Timestamp:** 2026-11-12T20:42:30Z
+**Continues:** 2026-10-28-2, 2026-10-28-3, 2026-10-28-11, 2026-10-28-13, 2026-10-28-111
+**Title:** The app port itself is to be planned (owner); it starts with a survey of Android as it stands
+**Decision:** the owner said, verbatim: "We'll need to plan the app port itself."
+**What is already ruled and is not asked again** (-2, the owner's words there): Kotlin Multiplatform with Compose
+Multiplatform ("Option B stands"); routing by the Kotlin port of BRouter; alerts on iOS limited to "be back by" at the
+set time and the full sundown line; no Mac, builds on GitHub's macOS runners; no iPhone, simulator checks only. -11 and
+-13: an iOS designer is on the team, starting after Phase 1 of the BRouter port; it has not been started. -111:
+Forager's own next-turn code is ported for the iOS app.
+**What the plan cannot be written from:** Forager's feasibility report is dated 2026-10-26 to -28 and was written before
+anything was built. Android has moved since (`pre-main` is at `12eb9697`, 2026-11-11; the next-turn feature alone landed
+on 2026-11-09). The planner's profile makes keeping iOS level with Android its duty, checked at the start of each phase.
+**The planner's calls (technical; the owner may overrule):**
+1. **First, a survey by the researcher, Madrone Gauge,** read-only, of Forager at `12eb9697` (exported to the
+   scratchpad from the local clone; nothing is fetched from or written to slayer8366/Forager): what the app is now,
+   screen by screen and module by module; what of it is Android-bound and by which API; what of the feasibility
+   report's findings still holds; what a build and a release without a Mac need. Report on its own branch,
+   `research/app-port-survey`, in `docs/research/`.
+2. **Then the planner brings the owner the plan's open decisions,** with the survey's evidence: scope and order of the
+   first build, and whatever the survey shows is the owner's to choose.
+3. **The BRouter port's last items go on beside it** (step 10's hints and formats on the simulator, the closing list).
+4. **The designer's first job** (-13: where iOS follows iPhone habits and where it matches Android) is dispatched after
+   the survey, which is its input.
+**Notes:** Written by the planner session by hand. Next free ID -152.
+
+**Kind:** outcome
+**ID:** 2026-10-28-152
+**Timestamp:** 2026-11-12T20:53:07Z
+**Continues:** 2026-10-28-151
+**Title:** The app port's survey is in (Madrone Gauge, dispatch 2026-11-12-01): what the Android app is today, what the
+port's adapter owes, and 9 decisions for the owner
+**Observed:** Madrone Gauge, one session on Fable (ended at 192,837 by the harness's count, past the watcher's 170,000,
+which fired as it finished), branch `research/app-port-survey`, head `3ea1d8f`, 4 commits from `origin/main`, trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Report: `docs/research/2026-11-12-app-port-survey.md` (444 lines), with
+52 evidence files. Method and predictions were committed first (`6f9b4b8`); 8 predictions right, 1 half, 7 wrong, 2 not
+scoreable. No build was run and nothing in Forager was changed or fetched. The findings, each the researcher's:
+- **The app:** one `:app` module and the vendored Java `:brouter`; 892 Kotlin files, 117,306 lines; `ui` 441 files,
+  `domain` 288 files with no `android` import. Five tabs, about 20 surfaces. Four things run without the screen: the
+  recording service with its 15 s watches, an inexact wake-up alarm, a periodic backup, MapLibre's offline downloads.
+- **Since the feasibility report:** `domain` grew by 61 files; next-turn, route plotting, the drop-off map, trail
+  heights, trip map downloads and the route-ways reader are new. The report's "66 files" was not re-run; a scan reads 74
+  domain files with a JVM-only API.
+- **Android-bound:** 418 files import a platform or JVM-library API, 234 leaving Compose out. The map (MapLibre) and the
+  camera are the renderer-level pieces. Three need a design: the fungi index's `createFromAsset`, the periodic backup,
+  and the 15 s tick. No exact alarm and no Google Play service exists.
+- **Routing:** the port's public surface covers the router and the snapper. **It does not cover the route-ways reader:**
+  its classes are ported but `internal`, with no public entry, and next-turn depends on it. The adapter owes 12
+  behaviours, the two already known among them (-129, -134), each cited to `BRouterTrailRouter.kt`.
+- **No Mac:** a simulator build needs no account [I]; a signed build needs the Apple Developer Program, "$99 annual
+  membership" as Apple's page states it.
+- **Tests on Android:** 1,012 files, 6,876 `@Test`, 574 on Robolectric, 1 instrumented, no screenshot library.
+- **Wrong premises of the dispatch, six,** among them: the snap is a route call, not a gap; the baseline's seven BRouter
+  classes are now fifteen; and -111, -129 and -134 are not on `origin/main`, whose record ends at -102.
+- **Not verified:** MapLibre Compose's offline store and PMTiles on iOS; whether Android can consume the port, which has
+  no Android target; several Apple pages that did not render.
+**Checked by the planner:**
+- `git ls-remote` `3ea1d8f`; no model name; E1 over the branch against `origin/main`: 0; the export is unchanged.
+- Counted again on the export [C]: 892 files; 117,306 lines; `domain` 288 files, 0 importing `android` or `androidx`; 0
+  files importing Google Play services or Firebase; 3 main files naming `btools.`.
+- Not checked by the planner: everything else. The report is the researcher's reading.
+**What follows (the planner's):**
+- **The port gains a public route-ways entry** before it is called finished: next-turn, which the owner ruled is ported
+  for iOS (-111), cannot work without it. Its shape is decided with the adapter.
+- **The record branch has run 49 entries past `main`.** The researcher could not read -111 from `main`. The PR is the
+  owner's word, asked for again below.
+- Four of the survey's nine owner decisions shape the plan's first phase and are asked now. The other five (the order of
+  the later surfaces, the fungi index, scheduled backup, device evidence, the app's public identity) come with the
+  designer's work.
+**Notes:** Written by the planner session by hand. Next free ID -153.
+
+**Kind:** decision
+**ID:** 2026-10-28-153
+**Timestamp:** 2026-11-12T21:01:37Z
+**Continues:** 2026-10-28-2, 2026-10-28-151, 2026-10-28-152
+**Title:** The app port's first four rulings (owner): the map first; the domain shared now; the Apple account when a
+signed build is wanted; the camera out of the first release
+**Decision:** asked four questions together with AskUserQuestion, after the survey (-152), the owner chose, verbatim:
+- **What the first runnable iOS build contains:** "Map first (Recommended)". The option read: "The app shell plus the map
+  screen. The map is the largest unknown: 39 Android files depend on MapLibre, and the Compose Multiplatform wrapper for
+  it is pre-1.0 and marked beta on iOS, with its offline store unverified. Proving or disproving it early protects
+  everything built after. Routing and the other screens come next."
+  - Rejected: "Simple screens first"; "Routing first".
+- **Where shared code lives and when Android moves onto it:** "Share the domain now (Recommended)". The option read: "The
+  domain becomes one shared module that both apps build from, moved piece by piece. One copy of the safety logic from the
+  start and no drift. Cost: it changes the shipping Android app and its tests as each piece moves (75 files use Java's
+  date and time classes, for example), and it needs your word that shared code may be written into the Forager
+  repository, which today's rule forbids."
+  - Rejected: "Copy now, converge later"; "Decide after first build".
+- **The Apple Developer Program:** "When a signed build is wanted (Recommended)". The option read: "No cost until there
+  is an app worth putting on a real phone. Every iOS check until then is an unsigned simulator build, as now. The signing
+  setup on CI gets proven later, in one step."
+  - Rejected: "Now".
+- **The camera with RAW and DNG:** "Out of the first release (Recommended)". The option read: "Finds on iOS carry imported
+  photos only at first. The camera comes in a later release, ideally once someone can test on a real iPhone. Keeps
+  untestable code out of the first version."
+  - Rejected: "In the first release".
+All four first options were marked as recommended by the planner.
+**Read narrowly, the planner's:**
+- **"Share the domain now" rules the direction, not a write.** The option itself says a write into Forager "needs your
+  word". This repository's `CLAUDE.md` still says nothing for iOS is written to slayer8366/Forager "until the owner rules
+  otherwise", this session cannot reach that repository, and Forager has its own planner and record. So before anything
+  is written there the planner brings the owner a concrete proposal: which repository holds the shared module, how the
+  Android build consumes it, who dispatches the Android side, and the first piece to move. `CLAUDE.md` is changed only
+  on that word.
+- **The map's unknowns come first as a spike, not a build-out:** one screen on the simulator that shows the map from the
+  project's own tiles, with the offline store and PMTiles tried, on the wrapper the survey names. If it fails, the
+  second way (MapLibre's own iOS SDK in a native view) is tried before any other screen is started.
+**The plan's shape from here (the planner's, technical; each phase gets its own intent entry):**
+1. **Finish the BRouter port:** step 10's last items, and a public route-ways entry (-152).
+2. **The map spike** on the simulator, with the app shell around it: module layout, the Xcode project made on a runner.
+3. **The shared-domain proposal** to the owner, then the first piece moved.
+4. **The designer's first job** (-13), with the survey as input.
+5. Routing in the app through the adapter (the survey's 12 behaviours), then the surfaces in an order ruled later.
+**Still the owner's, not asked yet:** the order of the later surfaces; the fungi index; scheduled backup; device
+evidence; the app's public identity (-152).
+**Notes:** Written by the planner session by hand. Next free ID -154.
+
+**Kind:** outcome
+**ID:** 2026-10-28-154
+**Timestamp:** 2026-11-12T21:51:38Z
+**Continues:** 2026-10-28-111, 2026-10-28-149, 2026-10-28-150
+**Title:** The hints and the four formats equal the oracle's on 1,445 cases in a logic run, read in CI (Plumb's session
+57); step 7's gap on engine routes is closed
+**Observed:** Plumb Ledger, session 57, `brouter-port-5b` `b26d4c2` to `65737ec` (fast-forward only; called at 152,322,
+ended at 161,889 by the harness's count; one commit pushed, trailer `Co-Authored-By: Claude <noreply@anthropic.com>`;
+checked by the planner). More is saved, not pushed: the clone's local commit `274eede` on `s57` (the production record
+for the hints and formats, the simulator's digests and tests; written, not run).
+- **NT-0062 in a logic run** [R, Plumb's, a scratch test since deleted]: on `OracleLibm` its hints are the oracle's
+  exactly in every mode from 2 to 9. On `MsunLibm` it differs at hint 380's angle only. -150's reading holds.
+- **`HintsFormatsLogicTest`** (`65737ec`, committed before it ran): every route group, the port on `OracleLibm` against
+  the oracle with the hints switched on (modes 2 to 9 in turn), the hints list and the four formats by length and
+  digest, asserted equal.
+**Checked by the planner:**
+- `git ls-remote` `65737ec`, a fast-forward of `b26d4c2`; no model name; E1 by `scan.sh <c>^ <c>`: 0 (and 0 on the
+  local commit). The port, CI and the build are untouched. `EngineRun.run` gained a parameter for the library, with
+  the old value as its default.
+- **Run 43297048297 on `65737ec`.** Its `jvm` job first failed in 39 s with no test run: Maven Central answered 429 to
+  the Kotlin plugin's download. The planner re-ran the failed job once the run had ended. **Read after the re-run, every
+  job green:**
+  - `jvm`: **235 tests, 0 failures;** the test step ran 40 minutes of the job's 60. The logic table, per group: cases,
+    and "equal" on the six fields, the hints, GPX, JSON, KML and CSV: F0 2, F0h 8, NT 59, LB 59, CR 59, DL-lat 59, DL-lon
+    59, MP64 59, ML5 59, PM5 55, R 968 (all routed); every "differ" 0. **1,445 cases** [C].
+  - `jvm-production`: 1,742 cases, 1,742 equal.
+  - `ios-smoke`: 50 of 50; 14 group lines with "mismatches 0"; arm64 7 of 7, the gate "OK". `ios-memory`: memory 173 and
+    R's 240 equal; the ladder 20 of 20. **Simulator-checked.** So the changed `EngineRun` moved nothing there.
+**What this closes:** -149's gap. The hints and formats are now compared with the oracle on routes the engine made, in
+every group, not on random walks.
+**What it does not:** the production run of the hints and formats (the port as it ships; expected by -150 to differ in
+rare angles); anything of them on iOS; a planted error (the test has not been seen red).
+**Decisions (the planner's, technical):**
+1. **All of R stays in the `jvm` job.** 40 minutes of 60 is room enough; if it passes 50 the full R moves to the
+   production job.
+2. **Next:** the planted error for this test; the production record; the simulator's digests with their planted error.
+**Notes:** Written by the planner session by hand. Next free ID -155.
+
+**Kind:** intent
+**ID:** 2026-10-28-155
+**Timestamp:** 2026-11-12T23:22:27Z
+**Continues:** 2026-10-28-152, 2026-10-28-153
+**Title:** The owner wants to own the map outright, with what Forager does not use left out; a renderer of our own is
+to be sized before it is decided
+**Decision:** the owner, verbatim, in three messages:
+- "Compile a list of all non kotlin dependencies and where they belong, and rank them from least to most time
+  consuming." (Answered in conversation from -152's survey: 20 rows, MapLibre and the Compose interface ranked last.)
+- "We should consider working on our own map renderer for both operating systems, rather than port map libre".
+- Asked what draws them to it, the beta wrapper or owning the map: "I want to own the map outright, and debloat what we
+  can since some things are coded in that we don't use."
+**What the planner told the owner first, and stands by:**
+- The plan does not port MapLibre. MapLibre has an iOS SDK of its own; the open risk was the Compose wrapper over the two
+  SDKs (-152).
+- What Forager uses today, counted by the planner on the export at `12eb9697` [C]: `forager-street-v2.json` has 93
+  layers (60 line, 17 fill, 15 symbol, 1 background) on one vector source, with 155 properties given as expressions or
+  functions, glyphs and a sprite; 14 symbol layers set text, 6 place it along lines. The app's 39 map files (10,300
+  lines) import 54 MapLibre classes, among them runtime GeoJSON layers, a raster layer, the location component, the
+  camera and the offline region manager.
+- A renderer has no oracle of the kind the BRouter port had, and its chief risks, speed and battery, show only on a
+  phone, which is ruled out (-2).
+**Read as:** an intent, not yet a decision to build. The owner's reasons are ownership and leaving out what is unused,
+not the wrapper's risk. -153's "Map first" stands as the order; what the map is made of is now open.
+**The planner's calls (technical; the owner may overrule):**
+1. **The researcher sizes a renderer of Forager's own before anything is built:** exactly which features the styles and
+   the app use; what MapLibre carries beyond that, measured where it can be; what exists in Kotlin Multiplatform to build
+   on; the ways to "own" it (a renderer written in shared Kotlin; a trimmed fork of MapLibre's own engine; staying on the
+   SDKs); how each could be proved correct here, and what could not be shown without a phone.
+2. **The MapLibre spike is held** until that report is in: its purpose was to de-risk a wrapper the owner may not want.
+3. **What a first iOS build shows while a renderer is written** is the owner's, asked with the report.
+**Notes:** Written by the planner session by hand. Next free ID -156.
+
+**Kind:** outcome
+**ID:** 2026-10-28-156
+**Timestamp:** 2026-11-12T23:24:15Z
+**Continues:** 2026-10-28-121, 2026-10-28-150, 2026-10-28-154
+**Title:** The first difference between the simulator and the JVM (Plumb's session 58): NT's GPX in mode 7 differs on 5
+routes; the production record of the hints and formats; the logic test seen red
+**Observed:** Plumb Ledger, session 58, `brouter-port-5b` `65737ec` to `2f79117` (fast-forward only; ended at 130,348 by
+the harness's count, no handoff call; 5 commits, the first session 57's saved one, trailers
+`Co-Authored-By: Claude <noreply@anthropic.com>`; checked by the planner). Findings:
+`docs/audits/2026-11-12-brouter-port-step10/s58-hints-formats.md`.
+- **The production record** (the port on `MsunLibm` against the oracle; expectation `8128965` committed first): the
+  routes differ in 0 of 11 groups; **the hints differ in 1 case, NT-0062, hint 380, the angle;** GPX, JSON, KML and CSV
+  differ in 0. As expected [R, Plumb's, local and in `jvm-production`].
+- **The simulator's digests** (`f33e8a1`): 69 rows of lengths and digests from the port's production run on the JVM (F0
+  2, F0h 8, NT 59), held to it by a JVM test, recomputed on the simulator by `FormatDigestsCommonTest`.
+- **Plumb stopped, as the brief said:** on the simulator NT's GPX differs on 5 routes, NT-0009, -0031, -0045, -0053 and
+  -0061, each of the same length with another digest, all of them in mode 7; equal on the JVM. Nothing was changed.
+- **The logic test's planted error** (a hint command's threshold, `-21f` to `-25f`; prediction `f861f53` first; JVM
+  only, restored `cmp`-equal): the test failed with 1,395 differences: hints in 349 cases, GPX 348, JSON 349; KML and
+  CSV 0; the six fields equal everywhere [R, Plumb's]. So the test can fail, and KML and CSV carry no hint.
+**Checked by the planner:**
+- `git ls-remote` `2f79117`, a fast-forward of `65737ec`; no model name; E1 by `scan.sh <c>^ <c>`: 0 on each of the 5.
+  The port, CI and the build are untouched.
+- **Run 43319416821 on `f33e8a1`:** `jvm` 238 tests, 0 failures; `jvm-production` 2 tests, 0 failures; `ios-memory`
+  green; **`ios-smoke`: simulator 51 tests, 1 failure, `FormatDigestsCommonTest`;** arm64 7 of 7, the gate "OK".
+  **Simulator-checked.** The per-group lines of the digests test were not read by the planner; the 5 ids are Plumb's.
+- `FormatGpx.kt:166`, `:171` and `:172` append `"" + hint.distanceToNext`, `"" + ti` and `"" + speed`: the platform's
+  own text for a floating number, in the branch that one mode alone takes [R]. That is the likely cause [I]; it is not
+  shown.
+**What this is:** -121's question, answered yes once: a number printed by the platform reads differently on
+Kotlin/Native than on the JVM, in one of the four formats, in one hint mode. It is not on Forager's path (the hints are
+off there, -111). The routes and the other outputs are equal on the simulator.
+**The branch's head is red on the simulator on purpose** until this is fixed: the failing test is the red test.
+**Decisions (the planner's, technical):**
+1. **The cause is shown before it is fixed:** on the simulator, for those 5 routes, each floating value whose platform
+   text differs from Java's, with both texts. They are times, speeds and distances, not positions.
+2. **The fix is the port's own Java-text helpers at every place a format or a hint prints a floating number,** not only
+   the three lines. If a value is a `Double` and the port has no Java-compatible text for doubles, that stops and
+   comes to the planner: no JDK code is copied (-119).
+3. Each value found goes into a common unit test of the helper, so the JVM and the simulator both hold it.
+**Notes:** Written by the planner session by hand. Next free ID -157.
+
+**Kind:** decision
+**ID:** 2026-10-28-157
+**Timestamp:** 2026-11-12T23:28:47Z
+**Continues:** 2026-10-28-155
+**Title:** The renderer is set aside (owner); the sizing dispatch is stopped
+**Decision:** the owner said, verbatim: "Forget the renderer for now. I'll think about it another time."
+**Done by the planner:** dispatch 2026-11-12-02 (Madrone Gauge, the sizing of a renderer of Forager's own) was stopped
+while running. Whatever it had pushed to `research/own-map-renderer` is partial and is cited by nothing; the branch, if
+it exists, is left as it is and is not built on.
+**What follows (the planner's):**
+- -155's intent is closed without a decision. Nothing about a renderer is planned, and the question is not raised again
+  by the planner.
+- **-153's "Map first" stands as it was ruled,** with the map on MapLibre. The spike the planner held in -155 is no
+  longer held: it is dispatched after the BRouter port's present items, as -153 planned.
+**Notes:** Written by the planner session by hand. Next free ID -158.
+
+**Kind:** intent
+**ID:** 2026-10-28-158
+**Timestamp:** 2026-11-12T23:45:08Z
+**Continues:** 2026-10-28-151, 2026-10-28-152, 2026-10-28-153, 2026-10-28-157
+**Title:** The plan for the rest of the port is filed (owner); the BRouter port is finished first
+**Decision:** the owner said, verbatim: "Let's file the plan for the rest of the port in the repo, and finish where we're
+at with the BRouter port."
+**Done by the planner:** `docs/plans/2026-11-12-app-port-plan.md`, on the record's branch. It holds: the rulings that are
+not asked again, each with its entry; part one, the eight items left of the BRouter port, in order, and what the port
+will not have shown when it closes; part two, the app in six phases (the shell and the map; the shared domain; routing
+in the app with the adapter's 12 behaviours; the designer; the remaining screens; what only a phone can show); the 20
+dependencies that are not Kotlin, ranked; the decisions still the owner's and those that are the planner's; what is not
+known. It gives an order and counts and no dates. It says of itself that the record wins where they disagree.
+**Read as:** two instructions. The plan is filed, and it reaches `main` with the record's PR, on the owner's word. And
+the BRouter port's remaining items come before any app phase is dispatched: the map spike (-157) waits behind them.
+**Notes:** Written by the planner session by hand. Next free ID -159.
+
+**Kind:** outcome
+**ID:** 2026-10-28-159
+**Timestamp:** 2026-11-12T23:49:10Z
+**Continues:** 2026-10-28-158
+**Title:** The planner's handoff at the session's limit (owner: "Go ahead and wrap it up")
+**State, for the next planner session:**
+- **The record** is this branch, `ccr-7e682f25-4tqqon`, at this commit; `main`'s record ends at -102. Next free ID -160.
+  The plan is `docs/plans/2026-11-12-app-port-plan.md`; its part one lists the BRouter port's eight remaining items.
+- **The code** is `brouter-port-5b`. At this writing its head is `69ffcd1` (session 59's diagnostic test). The last head
+  the planner read whole in CI is `f33e8a1` (run 43319416821): `jvm` 238 tests, 0 failures; `jvm-production` green;
+  `ios-memory` green; **`ios-smoke` red on purpose,** 1 of 51, `FormatDigestsCommonTest` (-156).
+- **Running and unread:** Plumb's session 59, a diagnosis only, and run 43329465498 on `69ffcd1`. Its findings are to
+  land in `docs/audits/2026-11-12-brouter-port-step10/s59-gpx-numbers.md`. **Nothing of it is checked.** If the session
+  was lost with this one, the diagnostic test is on the branch and the run's `ios-smoke` and `jvm` logs hold its
+  `gpxnum` lines to compare.
+- **Next, in order:** read session 59's result; bring the owner the decision on printing a double as Java does (-156;
+  no JDK code is copied, -119); the fix, with the digest test as its red test; then the plan's items 3 to 6.
+- **Kept, not to be touched:** `brouter-port-5b-recursive-walk` (-145); `research/app-port-survey`;
+  `research/own-map-renderer`, partial and set aside (-157).
+- **Waiting on the owner's word:** the merge of `brouter-port-5b` into `brouter-port`; this branch's PR to `main`; an
+  independent reviewer for -107, -116, -119, -126 and -148.
+- **How the planner works here:** coders on Opus as background agents in `/home/user/forager-ios-5a`; every claim
+  checked against `git ls-remote` and CI; the E1 scan as `scan.sh <commit>^ <commit>`, never with a diff piped in
+  (-133); a ruling is quoted from its entry, read in the same turn (-135); briefs name files and line ranges and give
+  one item (-131, -149).
+**Notes:** Written by the planner session by hand. Next free ID -160.
+
+**Kind:** outcome
+**ID:** 2026-10-28-160
+**Timestamp:** 2026-11-12T23:53:16Z
+**Continues:** 2026-10-28-156, 2026-10-28-159
+**Title:** Session 59's diagnosis arrived as the planner's session ended: 5 numbers, a tie in the 17th digit; none of
+it checked by the planner
+**Observed (Plumb's report, not verified beyond the head):** `brouter-port-5b` reads `b359671` by `git ls-remote`; Plumb
+names `b359671`. Run 43329465498. Findings: `docs/audits/2026-11-12-brouter-port-step10/s59-gpx-numbers.md`.
+- All 1,287 values printed in GPX's mode 7 on the five routes have the same raw bits on the JVM and the simulator.
+- **5 print differently, one per route, all the time `ti` (`FormatGpx.kt:171`),** each in the last of 17 digits only.
+  `ti` is a `Float` widened to a `Double`, so its value lies exactly halfway between two 17-digit decimals; Java's
+  documented rule takes the even last digit and the simulator takes the other. Both texts read back to the same bits.
+- Other places a format prints a floating number as the platform's text: `FormatGpx` `:162`, `:166`, `:172`, `:195`,
+  `:276`, `:507`, `:529`; `FormatJson` `:104`, `:184`, `:223`, `:332`. KML, CSV, the hints and `Formatter`: none.
+- The brief said three numbers in that branch; there are four (the elevation at `:162`).
+**Not done by the planner:** the verification (trailers, E1 by `scan.sh <c>^ <c>`, the run's four jobs, the five pairs).
+**For the next session:** verify, then bring the owner the question -156 named. The finding narrows it: the difference
+is one rounding rule at an exact tie, on values that are floats widened to doubles.
+**Notes:** Written by the planner session by hand. Next free ID -161.
+
+**Kind:** decision
+**ID:** 2026-10-28-161
+**Timestamp:** 2026-11-13T00:53:17Z
+**Continues:** 2026-10-28-48, 2026-10-28-61, 2026-10-28-148, 2026-10-28-156, 2026-10-28-160
+**Title:** `brouter-port-5b` merged into `brouter-port` at its last green commit, and the record's PR opened (owner:
+"Yes", "Yes"); session 59's diagnosis verified
+**Decision:** the planner's last message listed three things waiting on the owner's word, in this order: merging
+`brouter-port-5b` into `brouter-port`; the record branch's PR to `main`, which also carries the plan; naming an
+independent reviewer for the five flagged tests. The owner answered, verbatim, on three lines: "Yes", "Yes", "What are
+the name options?"
+**Read as:** the merge is to be made; the PR is to be opened; the reviewer's names are to be put to the owner.
+**The merge, done by the planner:**
+- **What was merged is `65737ec`, not the branch's head.** -48's rule is "When green, the branch is merged into
+  `brouter-port` by a merge commit, never a rebase". `65737ec` is `brouter-port-5b`'s last commit whose run has every
+  job green (run 43297048297, read in -154: `jvm` 235 tests, 0 failures; `jvm-production` 1,742 of 1,742; `ios-smoke`
+  50 of 50 and `ios-memory` green, simulator-checked). The four commits after it hold `FormatDigestsCommonTest`, red on
+  the simulator on purpose (-156), and the diagnostic for it. They stay on `brouter-port-5b` until that is ruled on and
+  fixed.
+- `brouter-port` moved from `611ba54` to the merge commit `b769ebf` (`--no-ff`, parents `611ba54` and `65737ec`); its
+  tree equals `65737ec`'s (an empty diff); trailer `Co-Authored-By: Claude <noreply@anthropic.com>`; `git ls-remote`
+  reads it. 222 commits came in: steps 5b to 9 and step 10 as far as the hints and formats' logic run.
+- -61's condition ("5b can't merge into brouter-port while the test is red") was met at -148.
+- Nothing is merged into `main`: code reaches `main` only on the owner's word, which was not asked or given.
+**The PR:** this branch into `main`, carrying `RECORD.md` from -103 and `docs/plans/2026-11-12-app-port-plan.md`. By
+the precedent of PRs #3 to #5 it is merged on the owner's word naming it, not on this one.
+**Session 59's diagnosis (-160), now checked by the planner:**
+- `brouter-port-5b` is at `b359671`, a fast-forward of `2f79117`; 2 commits, one trailer each, no model name; E1 by
+  `scan.sh <c>^ <c>`: 0 on both; the port, CI and the build are untouched.
+- Run 43329465498 on `69ffcd1`: `jvm` 239 tests, 0 failures; `jvm-production` and `ios-memory` green; `ios-smoke` 52
+  tests, 1 failure, `FormatDigestsCommonTest`, as before. Simulator-checked.
+- **The five numbers, recomputed by the planner** [C]: the simulator's log holds 1,287 `gpxnum` lines, each with a
+  value's raw bits and the simulator's text. A small Java program, run here on those bits, printed Java's own text for
+  each: **1,282 are the same text and 5 differ,** the five Plumb named (NT-0009 hint 2, -0031 hint 1, -0045 hint 1, -0053
+  hint 4, -0061 hint 3), all the time `ti`, each in the 17th digit only (Java ends in 2, the simulator in 3). Each of
+  the five is a `Float` widened to a `Double`, and the simulator's text reads back to the same bits.
+- Not checked by the planner: Plumb's list of the eleven other places a format prints a floating number.
+**Notes:** Written by the planner session by hand. Next free ID -162.
+
+**Kind:** decision
+**ID:** 2026-10-28-162
+**Timestamp:** 2026-11-13T03:10:24Z
+**Continues:** 2026-10-28-3, 2026-10-28-161
+**Title:** The independent reviewer is Samphire Witness (owner); PR #6 is open
+**Decision:** asked "What are the name options?" (-161), the owner was given the three names the role proposed for itself
+on a first run made for that purpose (one session on Fable, which read Forager's reviewer profile and the team table
+and wrote no file): Juniper Assay, Hawthorn Touchstone, Samphire Witness, each with the role's own reason. The owner
+answered, verbatim: "Samphire Witness".
+- **Rejected:** Juniper Assay; Hawthorn Touchstone.
+- **Profile:** `docs/process/reviewer-profile.md`, which works from Forager's reviewer profile and lists what differs
+  here. The team table in `docs/process/planner-profile.md` now names the role.
+**Also done:** PR #6, this branch into `main`, "RECORD -103 to -161, and the plan for the rest of the port", opened on
+the owner's "Yes" (-161). It is not merged: PRs #3 to #5 were each merged on the owner's word naming them.
+**What follows (the planner's):** Samphire's first dispatch is the five tests whose comparison or setup changed after a
+result had been seen: -107, -116, -119, -126, -148. It reads the commits and the tests themselves, not the planner's
+account of them.
+**Notes:** Written by the planner session by hand. Next free ID -163.
+
+**Kind:** outcome
+**ID:** 2026-10-28-163
+**Timestamp:** 2026-11-13T03:50:39Z
+**Continues:** 2026-10-28-107, 2026-10-28-116, 2026-10-28-119, 2026-10-28-126, 2026-10-28-127, 2026-10-28-148,
+2026-10-28-156, 2026-10-28-161, 2026-10-28-162
+**Title:** The first independent review (Samphire Witness): nothing blocking, five should-fix, three inaccuracies in the
+record; and the owner's ruling on the number text
+**The owner's ruling.** Asked with AskUserQuestion what the port does about the 5 of 1,287 numbers whose text differs on
+the simulator in its last digit (-156, -161), the owner chose, verbatim: "Record it, compare by value (Recommended)". The
+option read: "Leave the port's printing as it is and record this as a known platform difference: on iOS a printed number
+in these exports can differ from Java's in its last digit while meaning the same value. The simulator test that is red
+now is changed to compare those numbers by value, and that change goes to the independent reviewer. Cost: about one
+short session. iOS exports would then not be byte-for-byte identical to Java's in the 12 places that print a number
+this way."
+- **Rejected:** "Write our own Java-style printer"; "Leave the test red for now".
+- The first option was marked as recommended by the planner. The question was asked before the planner had read the
+  review below; the review does not bear on it.
+**The review.** Samphire Witness, dispatch 2026-11-13-01, one session on Fable; branch `review/changed-comparisons`, head
+`ed8a899`, 3 commits from `origin/main`, trailers `Co-Authored-By: Claude <noreply@anthropic.com>`; report
+`docs/reviews/2026-11-13-changed-comparisons.md` (274 lines). Its method and predictions were committed first
+(`e59275c`); 4 of 5 predictions held. Its runs were on this machine's JDK, not CI's. Checked by the planner: the head by
+`git ls-remote`, no model name, E1 over the branch 0. The findings are the reviewer's and are not re-run by the planner:
+- **Blocking: none.** "No change of the five turned a wrong port green that I could find, and three planted errors were
+  caught where the changed tests claim reach."
+- **One line each:** -107 justified in part; -116 justified by independent evidence; -119 justified in part (the limit
+  rests on the owner's ruling, "authority to narrow and not evidence"); -126 justified by independent evidence; -148
+  justified by independent evidence. Overall: justified in part.
+- **Should-fix, five:**
+  1. -107, `SearchBoundaryTest`: with `-XX:-OmitStackTraceInFastThrow` on the test JVM a test that compares the message
+     on every throw passes; the committed test passes a port with a wrong out-of-range table row, and the strict one
+     fails it. The cause of the lost message did not reproduce for the reviewer.
+  2. -116, `ReadBinaryTest`: that the error path is reached is printed, not asserted.
+  3. -116: the loosening is wider than its evidence: argued from the null-pointer text, applied to every caught
+     exception, 1,549 of 4,522 debug texts.
+  4. -127, FK9: add the guard the planner refused. "An assertion that is only added, predicted before it runs and seen
+     red under revert (b), loosens nothing; the discipline is against moving a comparison toward a result."
+  5. -126: the oracle-only run that justified the change was a scratch test, since deleted; it belongs in the tree.
+- **Where the record was inaccurate, three:** -107's "not the 168,000 compared results" (1,380 of them are throws
+  compared by class only); -116's silence on the breadth; -148's "The added calls are the ones `RoutingEngine.java`
+  makes", which overstates, with the departure from -147's decision 2 unmarked. **Each is corrected in place.**
+- **Where the planner was right,** in the reviewer's words: every Java line cited in -116, -119, -126 and -148 that it
+  read says what the record says; -127's account of its own ruling's cost is accurate.
+**Decisions (the planner's, technical):**
+1. **Should-fix 4 is taken: the planner was wrong in -127.** An added assertion, predicted first and seen red, is not a
+   comparison moved toward a result. FK9 gets its guard.
+2. **Should-fix 2 and 5 are taken** as additions: the error path's reach asserted; the oracle-only run committed as a
+   test.
+3. **Should-fix 3:** the loosening is narrowed on the JVM to the texts that differ for a named reason, if one session
+   can do it; if not, its breadth stays as now recorded in -116.
+4. **Should-fix 1 is the owner's,** as -107 said: it adds a flag to the test JVM. Asked below.
+5. **The number text, as ruled:** `FormatDigestsCommonTest` compares the floating numbers in the exports by value and
+   everything else by text; the change is stated before it is run, seen red first where it can be, and goes to Samphire.
+   The 12 places and the difference are named in the port's documentation of what it does not match.
+**Notes:** Written by the planner session by hand. Next free ID -164.

@@ -56,7 +56,7 @@ profile is written here when it is named. Every helper's prompt opens with its n
 | Linden Caliper | primary coder | Opus | `coder-profile.md` |
 | Plumb Ledger | secondary coder, when the primary is busy | Opus | `coder-profile.md` |
 | Madrone Gauge | researcher: read-only, licences quoted at source | Fable | `researcher-profile.md` |
-| (named on first run) | independent reviewer | Fable | to follow |
+| Samphire Witness | independent reviewer | Fable | `reviewer-profile.md` |
 | (named on first run) | UX auditor | Fable | to follow |
 | (named on first run) | designer: designs and proposes what a person sees; a coder builds | Fable | to follow |
 
