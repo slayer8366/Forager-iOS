@@ -71,3 +71,41 @@ try a second hypothesis; report what you saw."
 
 **Not checked:** (b), (c), the strict test change, the flag, the full `jvmTest` run. Which of the two ranges the
 reviewer's own plant hit is not known here; their runs were not reproduced beyond this one.
+
+## Session 62
+
+Base: `brouter-port-5b` at `ae4dfa2`, checked against `git ls-remote` and a clean `git status` before starting. Session 61's
+part above is unchanged; this section continues it with the plant corrected in RECORD -166.
+
+### The plant, P2 (RECORD -166)
+
+The row is one lower only when the row itself is below 0. In `CheapRuler.getLonLatToMeterScales` (commonMain), the one
+exact string
+
+- old: `libm.scales(ilat / SCALE_CACHE_INCREMENT)`
+- new: `libm.scales((ilat / SCALE_CACHE_INCREMENT).let { if (it < 0) it - 1 else it })`
+
+For `-100000 < ilat < 0` the row is 0 and stays 0. For `ilat <= -100000` the row is `-k` (k >= 1) in Java and `-(k+1)` in
+the planted port, and both throw `ArrayIndexOutOfBoundsException` (the port's through `OracleLibm`, which calls Java's
+`getLonLatToMeterScales(row * 100000)`). Rows at or above 1800 are not touched. So P2 changes only cases where both
+already throw, and only the index in the message.
+
+### Predictions (written and pushed before any run)
+
+Sampling, read not run: rows at or below -1 are reached. A centre in the lowest latitude band (`lat = 0` after
+`(c.ilat / step) * step`: the corner branch with latitude index 0, or the uniform branch below 5,000,000; about 1 in 36
+centres, so roughly 80 of 3000) gets probes on `lat - step` and `lat - 1_000_000` (each +-1), latitudes around -5,000,000
+and -1,000,000, rows around -50 and -10. With a positive radius `isInBoundary` takes the distance at the midpoint latitude
+(row around -25 or -5 for a centre near 0); `getBoundaryDistance` in directions 1 and 3 looks the row up at the probe's
+own latitude (session 61's reading, not re-derived here). Both are well inside the `ilat <= -100000` range, so P2's
+both-throw cases are in the sample. I agree with the planner's three expectations.
+
+- **(a) committed test + P2: predicted PASS.** Every case P2 changes throws the same class on both sides; the committed
+  test compares `isInBoundary` throws by class only and `getBoundaryDistance` messages only for
+  `IllegalArgumentException`. This is the gap the reviewer described.
+- **(b) strict test + P2 (flag on): predicted FAIL** on a message mismatch, first case unknown in advance, of the form
+  `case N probe K ... : ... expected:<Index -k out of bounds for length 1800> but was:<Index -(k+1) out of bounds for
+  length 1800>`, from either `isInBoundary` (radius mode) or `getBoundaryDistance` (direction 1 or 3). A class mismatch, a
+  `null` message, or an index differing by anything but one lower would not be this prediction.
+- **(c) strict test + unplanted port (flag on): predicted PASS.** If it fails on a `null` message, the flag has not
+  removed the fast throw, which is a stop.
