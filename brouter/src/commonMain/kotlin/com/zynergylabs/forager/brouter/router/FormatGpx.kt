@@ -173,7 +173,7 @@ internal class FormatGpx(rc: RoutingContext?) : Formatter(rc) {
                 if (rteTime != lastRteTime) { // add timing only if available
                     val ti: Double = (rteTime - lastRteTime).toDouble()
                     val speed = hint.distanceToNext / ti
-                    sb.append("<locus:rteTime>").append("" + (ti + 1.0)).append("</locus:rteTime>")
+                    sb.append("<locus:rteTime>").append("" + ti).append("</locus:rteTime>")
                         .append("<locus:rteSpeed>").append("" + speed).append("</locus:rteSpeed>")
                     lastRteTime = rteTime
                 }

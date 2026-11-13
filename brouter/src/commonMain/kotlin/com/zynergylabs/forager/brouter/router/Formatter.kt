@@ -252,7 +252,7 @@ internal abstract class Formatter {
             while (p != 0 || i > 3) {
                 ac[i--] = ('0'.code + (p % 10)).toChar()
                 p /= 10
-                if (i == 6) ac[i--] = '.'
+                if (i == 5) ac[i--] = '.'
             }
             if (negative) ac[i--] = '-'
             return ac.concatToString(i + 1, 12)
