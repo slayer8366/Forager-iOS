@@ -6506,3 +6506,59 @@ separate plants. `brouter-port-5b` is at `baed90c`. Checked by the planner unles
 **Left of part one, in order:** should-fix 5; plan item 4; plan item 6; one review of the test changes since -163.
 
 **Notes:** Written by the planner session by hand. Next free ID -172.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-172
+**Timestamp:** 2026-11-13T21:57:38Z
+**Continues:** 2026-10-28-158, 2026-10-28-111, 2026-10-28-74
+**Title:** The shape of the route-ways reader's public entry (plan item 4): one function in `Route.kt`'s style, raw
+values out, the engine's classes kept internal (the planner's; the owner may overrule)
+
+The plan filed in -158 makes this the planner's decision ("The route-ways entry's shape", section 3). It is written
+down before the dispatch so that the coder builds against a recorded shape, not a brief's wording.
+
+**What was read (by the planner, file and line):**
+- Forager's reader, `app/src/main/java/com/zynergylabs/forager/app/routing/BRouterRouteWays.kt` (137 lines), is
+  byte-identical at Forager `a0535ece`, at this session's checkout (`137b1427`) and at `origin/pre-main` as fetched at
+  this timestamp (`git diff --stat` empty for both). It imports nine engine classes (`DataBuffers`,
+  `BExpressionContextWay`, `BExpressionMetaData`, `GeometryDecoder`, `OsmFile`, `OsmLink`, `OsmNode`, `OsmNodesMap`,
+  `PhysicalFile`) and walks them in `read` (lines 59 to 123).
+- On `origin/pre-main` its callers are `AppContainer.kt:506` and `:541`, behind Forager's own interface
+  `domain/routing/RouteWays.kt:13`, which `domain/nextturn/` and `domain/wayto/` depend on.
+- In the port (`brouter-port-5b` at `baed90c`) all nine classes are `internal`. The port's public surface is
+  `brouter/src/commonMain/.../brouter/Route.kt`: `RouteRequest`, `RouteCancel`, `RouteOutcome`, `route()`,
+  `checkDataFile()`. Its header states the rule: "exactly what Forager's adapter calls today, and nothing more. The
+  engine's classes will be internal."
+- `brouter/src/jvmTest/.../mapaccess/RouteWaysTest.kt` (step 5d, -74) already makes the same walk on the port's
+  internals and on the Java engine and compares them, on Forager's 15 drop-off points and F0h's 16 ends.
+
+**Decision.** One public function beside `route()`, reading one square file:
+- In: the square file's path, the `lookups.dat` path, and the micro-cache cells to read (each a lon cell and a lat
+  cell index, as `BRouterRouteWays.read` computes them), in the caller's order.
+- Out, a sealed outcome in `RouteOutcome`'s style: either the square's divisor and, in walk order, one item per link
+  that has a description, holding the link's points as micro-degree `IntArray`s (the node, the decoded geometry, the
+  target) and the text of `getKeyValueDescription(reverse, bitmap)` unchanged. An I/O failure passes through as the
+  engine's own exception, as `route()`'s constructor exceptions do.
+- What stays Forager's, in the adapter or the shared domain, and is not in the port: which cells a circle covers, the
+  square file's name, the "no route square" and wrong-divisor messages, the end-pair dedupe, the split of the
+  description into a tag map, and the conversion of micro-degrees to positions. The entry returns the divisor so the
+  adapter can keep its check; whether the entry also refuses a divisor it was not asked for is left to the coder's
+  design, stated before it is built.
+- The coder may adjust names and the exact types in its design file, written first. It may not widen the surface.
+
+**Rejected:** making the nine engine classes public so Forager's `read` could be moved as it stands. It is the least
+code today, and it breaks the rule in `Route.kt`'s header, puts nine mutable engine classes in the iOS framework's
+interface, and ties Forager's code to the engine's internals on both platforms.
+
+**Tests first, against the Java engine** (the plan's words): the comparison is the entry's output against the Java
+walk `RouteWaysTest` already makes, on the same two point sets, seen red over a stub before the body is written, then
+one planted error seen red. A common sibling for the simulator, held to stored counts and a digest, is a separate
+session after it.
+
+**Not known:** the adapter is not designed (part two, phase C), so this shape is fitted to the Android reader as it
+stands today, not to a written adapter. If phase C's adapter wants a different cut, the entry changes then, with its
+tests.
+
+**Notes:** Written by the planner session by hand. Next free ID -173.
