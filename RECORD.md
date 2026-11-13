@@ -6221,3 +6221,31 @@ stopped-clock test's common sibling; item 6, the closing list; the review's shou
 1, which is the owner's and has no answer in the record; session 60's change to Samphire Witness (-163, decision 5);
 plant (b) alone.
 **Notes:** Written by a new planner session by hand. Next free ID -165.
+
+**Kind:** decision
+**ID:** 2026-10-28-165
+**Timestamp:** 2026-11-13T14:50:37Z
+**Continues:** 2026-10-28-58, 2026-10-28-107, 2026-10-28-163, 2026-10-28-164
+**Title:** Three rulings (owner): pushes to `brouter-port-5b` as -58 says; the test JVM's flag is added; PR #6 merged
+**Decision:** asked with AskUserQuestion, the owner chose, verbatim:
+1. **Pushes.** "Yes, as -58 says". The option read: "Coders keep pushing to brouter-port-5b, never by force, as before.
+   brouter-port itself is only touched by a merge on your word." Rejected: "No, hold code pushes".
+2. **The review's should-fix 1** (-163, decision 4; -107's flag). "Add the flag (Recommended)". The option read: "The test
+   gets strict again, seen red on a planted wrong row first. One short coder session. The reviewer could not reproduce why
+   the message was lost, so that cause stays unexplained." Rejected: "Leave the test as it is". The recommendation was the
+   planner's, on the reviewer's runs 1B and 1P (`docs/reviews/2026-11-13-changed-comparisons.md`, §1, on
+   `review/changed-comparisons`), which the planner has not re-run.
+3. **PR #6.** "Merge PR #6". Rejected: "Leave it open".
+**Done by the planner:**
+- PR #6 merged by a merge commit, its head held to `b869888`; `main` reads `0a398d8` by `git ls-remote`. `main`'s record
+  now ends at -163 and holds the plan. -164 onward is on `ccr-8ee6e614-32enzt`.
+- **-164's owed E1 scan, now run:** `scan.sh <c>^ <c>` reads 0 on each of session 60's five commits, against an ends list
+  rebuilt here by `make-forager-ends.sh` (63 values, the count the handoff of -102 gives).
+**What follows (the planner's, technical):** one item per brief (-131, -149), on `brouter-port-5b`, in this order: the
+flag and the strict `SearchBoundaryTest`; plant (b) alone (-164); the stopped-clock test's common sibling (-148, decision
+2); FK9's guard, `ReadBinaryTest`'s reach, and the oracle-only run as a test (-163, decisions 1 and 2); -116's breadth
+(-163, decision 3); the route-ways reader's public entry; then the closing list.
+- **The flag goes on `jvmTest` only,** not on the JVM block shared with `e3Strata` (`brouter/build.gradle.kts:125-143`), so
+  the JVM that wrote the stored expected values is not changed. If any other test's result changes under the flag, that
+  is reported and nothing else is touched.
+**Notes:** Written by the planner session by hand. Next free ID -166.
