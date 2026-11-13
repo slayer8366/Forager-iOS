@@ -6102,3 +6102,22 @@ the precedent of PRs #3 to #5 it is merged on the owner's word naming it, not on
   the five is a `Float` widened to a `Double`, and the simulator's text reads back to the same bits.
 - Not checked by the planner: Plumb's list of the eleven other places a format prints a floating number.
 **Notes:** Written by the planner session by hand. Next free ID -162.
+
+**Kind:** decision
+**ID:** 2026-10-28-162
+**Timestamp:** 2026-11-13T03:10:24Z
+**Continues:** 2026-10-28-3, 2026-10-28-161
+**Title:** The independent reviewer is Samphire Witness (owner); PR #6 is open
+**Decision:** asked "What are the name options?" (-161), the owner was given the three names the role proposed for itself
+on a first run made for that purpose (one session on Fable, which read Forager's reviewer profile and the team table
+and wrote no file): Juniper Assay, Hawthorn Touchstone, Samphire Witness, each with the role's own reason. The owner
+answered, verbatim: "Samphire Witness".
+- **Rejected:** Juniper Assay; Hawthorn Touchstone.
+- **Profile:** `docs/process/reviewer-profile.md`, which works from Forager's reviewer profile and lists what differs
+  here. The team table in `docs/process/planner-profile.md` now names the role.
+**Also done:** PR #6, this branch into `main`, "RECORD -103 to -161, and the plan for the rest of the port", opened on
+the owner's "Yes" (-161). It is not merged: PRs #3 to #5 were each merged on the owner's word naming them.
+**What follows (the planner's):** Samphire's first dispatch is the five tests whose comparison or setup changed after a
+result had been seen: -107, -116, -119, -126, -148. It reads the commits and the tests themselves, not the planner's
+account of them.
+**Notes:** Written by the planner session by hand. Next free ID -163.
