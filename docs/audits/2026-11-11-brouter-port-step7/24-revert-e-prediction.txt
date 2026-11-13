@@ -1,0 +1,7 @@
+Revert (e), predicted before it runs (session 24). Pushed with the FormatCsv port.
+Edit: MessageData.kt, in add(), "linkdist += d.linkdist" made "linkdist -= d.linkdist" (one line).
+Run: a scratch copy of docs/process/tools/revert.sh, filter '*FormatCsvTest'.
+Predicted: 0 compile errors; 1 fresh XML; tests 1, failures 1. The failing assertion is "track <N>: format" (format is
+asserted before aggregateMessages), digests differing: a merged message's distance column changes. N = 0 is
+predicted [I: walk tracks repeat a way over consecutive elements, so the first track should already merge]. Restore
+cmp-equal, with the forward line ("linkdist += d.linkdist") present after.

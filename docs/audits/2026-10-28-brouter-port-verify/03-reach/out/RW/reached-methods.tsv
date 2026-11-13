@@ -1,0 +1,142 @@
+class	method	descriptor	reason	source	first	last	mapped-by
+btools/codec/DataBuffers	<init>	()V	entry	btools/codec/DataBuffers.java	19	21	signature
+btools/codec/DataBuffers	<init>	([B)V	special	btools/codec/DataBuffers.java	27	29	signature
+btools/codec/LinkedListContainer	<init>	(I[I)V	special	btools/codec/LinkedListContainer.java	21	24	signature
+btools/codec/LinkedListContainer	addDataElement	(II)V	virtual	btools/codec/LinkedListContainer.java	32	39	signature
+btools/codec/LinkedListContainer	getDataElement	()I	virtual	btools/codec/LinkedListContainer.java	64	71	signature
+btools/codec/LinkedListContainer	initList	(I)I	virtual	btools/codec/LinkedListContainer.java	47	55	signature
+btools/codec/LinkedListContainer	resize	()V	virtual	btools/codec/LinkedListContainer.java	73	77	signature
+btools/codec/MicroCache	<clinit>	()V	class init				field-initializers
+btools/codec/MicroCache	<init>	([B)V	special	btools/codec/MicroCache.java	37	39	signature
+btools/codec/MicroCache	emptyCache	()Lbtools/codec/MicroCache;	static	btools/codec/MicroCache.java	47	49	signature
+btools/codec/MicroCache	expandId	(I)J	virtual	btools/codec/MicroCache.java	190	192	signature
+btools/codec/MicroCache	getAndClear	(J)Z	entry	btools/codec/MicroCache.java	92	122	signature
+btools/codec/MicroCache	getIdForIndex	(I)J	entry	btools/codec/MicroCache.java	180	183	signature
+btools/codec/MicroCache	getSize	()I	entry	btools/codec/MicroCache.java	70	72	signature
+btools/codec/MicroCache	init	(I)V	virtual	btools/codec/MicroCache.java	51	58	signature
+btools/codec/MicroCache	shrinkId	(J)I	virtual	btools/codec/MicroCache.java	199	201	signature
+btools/codec/MicroCache	startPos	(I)I	virtual	btools/codec/MicroCache.java	124	126	signature
+btools/codec/MicroCache2	<init>	(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V	special	btools/codec/MicroCache2.java	35	249	signature
+btools/codec/MicroCache2	expandId	(I)J	virtual	btools/codec/MicroCache2.java	251	266	signature
+btools/codec/MicroCache2	readUnified	(ILbtools/util/IByteArrayUnifier;)[B	virtual	btools/codec/MicroCache2.java	29	33	signature
+btools/codec/MicroCache2	shrinkId	(J)I	virtual	btools/codec/MicroCache2.java	268	282	signature
+btools/codec/NoisyDiffCoder	<init>	(Lbtools/codec/StatCoderContext;)V	special	btools/codec/NoisyDiffCoder.java	21	24	signature
+btools/codec/NoisyDiffCoder	decodeSignedValue	()I	virtual	btools/codec/NoisyDiffCoder.java	46	48	signature
+btools/codec/StatCoderContext	<clinit>	()V	class init				field-initializers
+btools/codec/StatCoderContext	<init>	([B)V	special	btools/codec/StatCoderContext.java	29	31	signature
+btools/codec/StatCoderContext	decodeNoisyDiff	(I)I	virtual	btools/codec/StatCoderContext.java	126	138	signature
+btools/codec/StatCoderContext	decodeNoisyNumber	(I)I	virtual	btools/codec/StatCoderContext.java	96	99	signature
+btools/codec/StatCoderContext	decodePredictedValue	(I)I	virtual	btools/codec/StatCoderContext.java	163	171	signature
+btools/codec/StatCoderContext	decodeSortedArray	([IIIII)V	virtual	btools/codec/StatCoderContext.java	228	252	signature
+btools/codec/TagValueCoder$TreeNode	<init>	()V	special				field-initializers
+btools/codec/TagValueCoder	<init>	(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)V	special	btools/codec/TagValueCoder.java	77	80	signature
+btools/codec/TagValueCoder	decodeTagValueSet	()Lbtools/codec/TagValueWrapper;	virtual	btools/codec/TagValueCoder.java	46	54	signature
+btools/codec/TagValueCoder	decodeTree	(Lbtools/util/BitCoderContext;Lbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;)Ljava/lang/Object;	virtual	btools/codec/TagValueCoder.java	86	143	signature
+btools/codec/TagValueWrapper	<init>	()V	special				field-initializers
+btools/expressions/BExpressionContext	<init>	(Ljava/lang/String;ILbtools/expressions/BExpressionMetaData;)V	special	btools/expressions/BExpressionContext.java	112	125	signature
+btools/expressions/BExpressionContext	<init>	(Ljava/lang/String;Lbtools/expressions/BExpressionMetaData;)V	special	btools/expressions/BExpressionContext.java	102	104	signature
+btools/expressions/BExpressionContext	addLookupValue	(Ljava/lang/String;Ljava/lang/String;[I)Lbtools/expressions/BExpressionLookupValue;	virtual	btools/expressions/BExpressionContext.java	540	722	signature
+btools/expressions/BExpressionContext	decode	([IZ[B)V	virtual	btools/expressions/BExpressionContext.java	194	217	signature
+btools/expressions/BExpressionContext	finishMetaParsing	()V	virtual	btools/expressions/BExpressionContext.java	310	319	signature
+btools/expressions/BExpressionContext	getKeyValueDescription	(Z[B)Ljava/lang/String;	entry	btools/expressions/BExpressionContext.java	219	232	signature
+btools/expressions/BExpressionContext	parseMetaLine	(Ljava/lang/String;)V	virtual	btools/expressions/BExpressionContext.java	289	308	signature
+btools/expressions/BExpressionContext	unify	([BII)[B	virtual	btools/expressions/BExpressionContext.java	344	367	signature
+btools/expressions/BExpressionContextWay	<clinit>	()V	class init				field-initializers
+btools/expressions/BExpressionContextWay	<init>	(Lbtools/expressions/BExpressionMetaData;)V	entry	btools/expressions/BExpressionContextWay.java	101	103	signature
+btools/expressions/BExpressionLookupValue	<init>	(Ljava/lang/String;)V	special	btools/expressions/BExpressionLookupValue.java	24	26	signature
+btools/expressions/BExpressionLookupValue	addAlias	(Ljava/lang/String;)V	virtual	btools/expressions/BExpressionLookupValue.java	28	31	signature
+btools/expressions/BExpressionLookupValue	equals	(Ljava/lang/Object;)Z	jdk-callback:java/lang/Object	btools/expressions/BExpressionLookupValue.java	33	45	signature
+btools/expressions/BExpressionLookupValue	matches	(Ljava/lang/String;)Z	virtual	btools/expressions/BExpressionLookupValue.java	47	55	signature
+btools/expressions/BExpressionLookupValue	toString	()Ljava/lang/String;	virtual	btools/expressions/BExpressionLookupValue.java	19	22	signature
+btools/expressions/BExpressionMetaData	<init>	()V	entry				field-initializers
+btools/expressions/BExpressionMetaData	readMetaData	(Ljava/io/File;)V	entry	btools/expressions/BExpressionMetaData.java	33	74	signature
+btools/expressions/BExpressionMetaData	registerListener	(Ljava/lang/String;Lbtools/expressions/BExpressionContext;)V	virtual	btools/expressions/BExpressionMetaData.java	29	31	signature
+btools/expressions/CacheNode	<init>	()V	special				field-initializers
+btools/expressions/CacheNode	equals	(Ljava/lang/Object;)Z	jdk-callback:java/lang/Object	btools/expressions/CacheNode.java	16	26	signature
+btools/expressions/CacheNode	hashCode	()I	jdk-callback:java/lang/Object	btools/expressions/CacheNode.java	11	14	signature
+btools/expressions/VarWrapper	<init>	()V	special				field-initializers
+btools/expressions/VarWrapper	equals	(Ljava/lang/Object;)Z	jdk-callback:java/lang/Object	btools/expressions/VarWrapper.java	15	22	signature
+btools/expressions/VarWrapper	hashCode	()I	jdk-callback:java/lang/Object	btools/expressions/VarWrapper.java	10	13	signature
+btools/mapaccess/GeometryDecoder	<init>	()V	entry	btools/mapaccess/GeometryDecoder.java	21	27	signature
+btools/mapaccess/GeometryDecoder	decodeGeometry	([BLbtools/mapaccess/OsmNode;Lbtools/mapaccess/OsmNode;Z)Lbtools/mapaccess/OsmTransferNode;	entry	btools/mapaccess/GeometryDecoder.java	29	68	signature
+btools/mapaccess/OsmFile	<init>	(Lbtools/mapaccess/PhysicalFile;IILbtools/codec/DataBuffers;)V	entry	btools/mapaccess/OsmFile.java	37	78	signature
+btools/mapaccess/OsmFile	createMicroCache	(IILbtools/codec/DataBuffers;Lbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;ZLbtools/mapaccess/OsmNodesMap;)Lbtools/codec/MicroCache;	entry	btools/mapaccess/OsmFile.java	118	157	signature
+btools/mapaccess/OsmFile	getDataInputForSubIdx	(I[B)I	virtual	btools/mapaccess/OsmFile.java	105	116	signature
+btools/mapaccess/OsmFile	getPosIdx	(I)I	virtual	btools/mapaccess/OsmFile.java	101	103	signature
+btools/mapaccess/OsmFile	hasData	()Z	entry	btools/mapaccess/OsmFile.java	80	82	signature
+btools/mapaccess/OsmLink	<init>	()V	special	btools/mapaccess/OsmLink.java	31	32	signature
+btools/mapaccess/OsmLink	getNext	(Lbtools/mapaccess/OsmNode;)Lbtools/mapaccess/OsmLink;	entry	btools/mapaccess/OsmLink.java	62	76	signature
+btools/mapaccess/OsmLink	getTarget	(Lbtools/mapaccess/OsmNode;)Lbtools/mapaccess/OsmNode;	entry	btools/mapaccess/OsmLink.java	42	57	signature
+btools/mapaccess/OsmLink	isReverse	(Lbtools/mapaccess/OsmNode;)Z	entry	btools/mapaccess/OsmLink.java	123	137	signature
+btools/mapaccess/OsmNode	<init>	()V	special	btools/mapaccess/OsmNode.java	49	50	signature
+btools/mapaccess/OsmNode	<init>	(II)V	special	btools/mapaccess/OsmNode.java	52	55	signature
+btools/mapaccess/OsmNode	<init>	(J)V	entry	btools/mapaccess/OsmNode.java	57	60	signature
+btools/mapaccess/OsmNode	addLink	(II[B[BLbtools/mapaccess/OsmNodesMap;Z)V	virtual	btools/mapaccess/OsmNode.java	155	190	signature
+btools/mapaccess/OsmNode	addLink	(Lbtools/mapaccess/OsmLink;ZLbtools/mapaccess/OsmNode;)V	virtual	btools/mapaccess/OsmNode.java	80	100	signature
+btools/mapaccess/OsmNode	addTurnRestriction	(Lbtools/mapaccess/TurnRestriction;)V	virtual	btools/mapaccess/OsmNode.java	39	42	signature
+btools/mapaccess/OsmNode	equals	(Ljava/lang/Object;)Z	jdk-callback:java/lang/Object	btools/mapaccess/OsmNode.java	253	256	signature
+btools/mapaccess/OsmNode	hashCode	()I	jdk-callback:java/lang/Object	btools/mapaccess/OsmNode.java	258	261	signature
+btools/mapaccess/OsmNode	parseNodeBody	(Lbtools/codec/MicroCache;Lbtools/mapaccess/OsmNodesMap;Lbtools/util/IByteArrayUnifier;)V	entry	btools/mapaccess/OsmNode.java	110	115	signature
+btools/mapaccess/OsmNode	parseNodeBody2	(Lbtools/codec/MicroCache2;Lbtools/mapaccess/OsmNodesMap;Lbtools/util/IByteArrayUnifier;)V	virtual	btools/mapaccess/OsmNode.java	117	153	signature
+btools/mapaccess/OsmNode	setHollow	()V	virtual	btools/mapaccess/OsmNode.java	197	199	signature
+btools/mapaccess/OsmNodesMap	<init>	()V	entry				field-initializers
+btools/mapaccess/OsmNodesMap	get	(II)Lbtools/mapaccess/OsmNode;	virtual	btools/mapaccess/OsmNodesMap.java	220	224	signature
+btools/mapaccess/OsmNodesMap	getByteArrayUnifier	()Lbtools/util/ByteArrayUnifier;	virtual	btools/mapaccess/OsmNodesMap.java	211	213	signature
+btools/mapaccess/OsmNodesMap	put	(Lbtools/mapaccess/OsmNode;)Lbtools/mapaccess/OsmNode;	virtual	btools/mapaccess/OsmNodesMap.java	238	240	signature
+btools/mapaccess/OsmNodesMap	remove	(Lbtools/mapaccess/OsmNode;)V	virtual	btools/mapaccess/OsmNodesMap.java	227	231	signature
+btools/mapaccess/OsmTransferNode	<init>	()V	special				field-initializers
+btools/mapaccess/PhysicalFile	<init>	(Ljava/io/File;Lbtools/codec/DataBuffers;II)V	entry	btools/mapaccess/PhysicalFile.java	92	145	signature
+btools/mapaccess/PhysicalFile	close	()V	entry	btools/mapaccess/PhysicalFile.java	147	154	signature
+btools/mapaccess/TurnRestriction	<init>	()V	special				field-initializers
+btools/util/BitCoderContext	<clinit>	()V	class init				field-initializers
+btools/util/BitCoderContext	<init>	([B)V	special	btools/util/BitCoderContext.java	63	66	signature
+btools/util/BitCoderContext	closeAndGetEncodedLength	()I	virtual	btools/util/BitCoderContext.java	270	276	signature
+btools/util/BitCoderContext	decodeBit	()Z	virtual	btools/util/BitCoderContext.java	171	180	signature
+btools/util/BitCoderContext	decodeBits	(I)I	virtual	btools/util/BitCoderContext.java	223	230	signature
+btools/util/BitCoderContext	decodeBitsReverse	(I)I	virtual	btools/util/BitCoderContext.java	232	246	signature
+btools/util/BitCoderContext	decodeBounded	(I)I	virtual	btools/util/BitCoderContext.java	206	221	signature
+btools/util/BitCoderContext	decodeVarBits	()I	virtual	btools/util/BitCoderContext.java	122	156	signature
+btools/util/BitCoderContext	decodeVarBits2	()I	virtual	btools/util/BitCoderContext.java	114	120	signature
+btools/util/BitCoderContext	encodeBit	(Z)V	virtual	btools/util/BitCoderContext.java	159	169	signature
+btools/util/BitCoderContext	encodeBounded	(II)V	virtual	btools/util/BitCoderContext.java	188	199	signature
+btools/util/BitCoderContext	encodeVarBits	(I)V	virtual	btools/util/BitCoderContext.java	101	109	signature
+btools/util/BitCoderContext	encodeVarBits2	(I)V	virtual	btools/util/BitCoderContext.java	90	99	signature
+btools/util/BitCoderContext	fillBuffer	()V	virtual	btools/util/BitCoderContext.java	248	255	signature
+btools/util/BitCoderContext	flushBuffer	()V	virtual	btools/util/BitCoderContext.java	257	263	signature
+btools/util/BitCoderContext	getReadingBitPosition	()I	virtual	btools/util/BitCoderContext.java	285	287	signature
+btools/util/BitCoderContext	getWritingBitPosition	()I	virtual	btools/util/BitCoderContext.java	281	283	signature
+btools/util/BitCoderContext	reset	()V	virtual	btools/util/BitCoderContext.java	74	78	signature
+btools/util/BitCoderContext	reset	([B)V	virtual	btools/util/BitCoderContext.java	68	72	signature
+btools/util/ByteArrayUnifier	<init>	(IZ)V	special	btools/util/ByteArrayUnifier.java	8	12	signature
+btools/util/ByteArrayUnifier	unify	([BII)[B	virtual	btools/util/ByteArrayUnifier.java	26	53	signature
+btools/util/ByteDataReader	<init>	([B)V	special	btools/util/ByteDataReader.java	14	17	signature
+btools/util/ByteDataReader	<init>	([BI)V	special	btools/util/ByteDataReader.java	19	23	signature
+btools/util/ByteDataReader	getEndPointer	()I	virtual	btools/util/ByteDataReader.java	73	76	signature
+btools/util/ByteDataReader	hasMoreData	()Z	virtual	btools/util/ByteDataReader.java	122	124	signature
+btools/util/ByteDataReader	readBoolean	()Z	virtual	btools/util/ByteDataReader.java	52	55	signature
+btools/util/ByteDataReader	readByte	()B	virtual	btools/util/ByteDataReader.java	57	60	signature
+btools/util/ByteDataReader	readDataUntil	(I)[B	virtual	btools/util/ByteDataReader.java	78	86	signature
+btools/util/ByteDataReader	readFully	([B)V	virtual	btools/util/ByteDataReader.java	117	120	signature
+btools/util/ByteDataReader	readInt	()I	virtual	btools/util/ByteDataReader.java	32	38	signature
+btools/util/ByteDataReader	readLong	()J	virtual	btools/util/ByteDataReader.java	40	50	signature
+btools/util/ByteDataReader	readShort	()S	virtual	btools/util/ByteDataReader.java	62	66	signature
+btools/util/ByteDataReader	readVarLengthSigned	()I	virtual	btools/util/ByteDataReader.java	98	101	signature
+btools/util/ByteDataReader	readVarLengthUnsigned	()I	virtual	btools/util/ByteDataReader.java	103	115	signature
+btools/util/ByteDataReader	reset	([B)V	virtual	btools/util/ByteDataReader.java	25	29	signature
+btools/util/ByteDataWriter	<init>	([B)V	special	btools/util/ByteDataWriter.java	10	12	signature
+btools/util/ByteDataWriter	injectSize	(I)V	virtual	btools/util/ByteDataWriter.java	93	108	signature
+btools/util/ByteDataWriter	write	([BII)V	virtual	btools/util/ByteDataWriter.java	50	53	signature
+btools/util/ByteDataWriter	writeBoolean	(Z)V	virtual	btools/util/ByteDataWriter.java	32	34	signature
+btools/util/ByteDataWriter	writeInt	(I)V	virtual	btools/util/ByteDataWriter.java	14	19	signature
+btools/util/ByteDataWriter	writeModeAndDesc	(Z[B)V	virtual	btools/util/ByteDataWriter.java	65	72	signature
+btools/util/ByteDataWriter	writeShort	(I)V	virtual	btools/util/ByteDataWriter.java	40	43	signature
+btools/util/ByteDataWriter	writeSizePlaceHolder	()I	virtual	btools/util/ByteDataWriter.java	89	91	signature
+btools/util/ByteDataWriter	writeVarBytes	([B)V	virtual	btools/util/ByteDataWriter.java	55	63	signature
+btools/util/ByteDataWriter	writeVarLengthSigned	(I)V	virtual	btools/util/ByteDataWriter.java	110	112	signature
+btools/util/ByteDataWriter	writeVarLengthUnsigned	(I)V	virtual	btools/util/ByteDataWriter.java	114	144	signature
+btools/util/Crc32	<clinit>	()V	class init				field-initializers
+btools/util/Crc32	crc	([BII)I	static	btools/util/Crc32.java	9	16	signature
+btools/util/IByteArrayUnifier	unify	([BII)[B	declaration	btools/util/IByteArrayUnifier.java	4	4	signature
+btools/util/LruMap	<init>	(II)V	special	btools/util/LruMap.java	18	22	signature
+btools/util/LruMap	get	(Lbtools/util/LruMapNode;)Lbtools/util/LruMapNode;	virtual	btools/util/LruMap.java	24	35	signature
+btools/util/LruMapNode	<init>	()V	special				field-initializers

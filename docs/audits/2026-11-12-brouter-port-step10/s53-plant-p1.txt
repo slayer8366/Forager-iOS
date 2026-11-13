@@ -1,0 +1,30 @@
+# Session 53, plant p1, on f33828c. Scratch revert.sh (copy of docs/process/tools/revert.sh), timeout 1500 s, restore from a saved copy, cmp.
+## The plant (diff against f33828c's OsmNodesMap.kt)
+-                if (minIdSub < f.minId) f.minId = minIdSub
++                // PLANT p1: return-step minimum write dropped
+## RoutingEngineMemoryTest
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 3, failures 3, errors 0, skipped 0 in 1 files
+BUILD FAILED in 5m 46s
+## RoutingEngineRTest
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+BUILD FAILED in 8m 41s
+## Group lines (system-out)
+8b MP64: 59 cases within 86 draws; 59 mismatches
+8b MP64 depth: deepest recursion 5250; 59 of 59 cases entered the walk; 0 overflows caught; the port's runs 3346 ms
+8b PM5: 55 cases within 1180 draws; 55 mismatches
+8b PM5 depth: deepest recursion 4050; 55 of 55 cases entered the walk; 0 overflows caught; the port's runs 2030 ms
+8b ML5: 59 cases within 246 draws; 59 mismatches
+8b ML5 depth: deepest recursion 5675; 59 of 59 cases entered the walk; 0 overflows caught; the port's runs 2476 ms
+8a R: 1534 cases; {route=968, refused=354, error=212}; 775 mismatches
+## First mismatching ids as the assertion messages list them (up to 5 per test)
+8b MP64: 59 mismatches; first [MP64-0002
+8b PM5: 55 mismatches; first [M5-0010
+8b ML5: 59 mismatches; first [M5-0001
+MP64-0002 M5-0010 M5-0001 
+R-hiking-mountain-001 

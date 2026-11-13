@@ -1,0 +1,11 @@
+Session 14: StdPathTest and StartPathTest over the stubs (RECORD -101: every test seen failing over stubs before its port).
+Test files are session 13's drafts unchanged; OsmPath's stub gains interpolateEle as a TODO. Compile errors (^e: ) in the build log: 0. Fresh XML: 2.
+TOTAL: tests 4, failures 4, errors 0, skipped 0 in 2 files
+testcase name="startPathsMatchTheOracleFromForagersEnds[jvm]"
+message="kotlin.NotImplementedError: An operation is not implemented: step 6: OsmPath
+testcase name="interpolateEleMatchesTheOracle[jvm]"
+message="kotlin.NotImplementedError: An operation is not implemented: step 6: OsmPath
+testcase name="startDirectionIsUnsupported[jvm]"
+message="kotlin.NotImplementedError: An operation is not implemented: step 6: OsmPath
+testcase name="pathsMatchTheOracleOnEveryStdProfile[jvm]"
+message="kotlin.NotImplementedError: An operation is not implemented: step 6: OsmPath

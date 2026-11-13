@@ -1,0 +1,11 @@
+--- plantE.saved (the scratch copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/PhysicalFile.kt
+@@ -66,7 +66,7 @@
+             } else if ((crcData xor 2) == fileIndexCrc) {
+                 32 // new format
+             } else {
+-                throw IOException("top index checksum error")
++                32
+             }
+             val crcs = IntArray(25)
+             fileHeaderCrcs = crcs

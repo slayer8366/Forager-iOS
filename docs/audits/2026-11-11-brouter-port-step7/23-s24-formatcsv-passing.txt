@@ -1,0 +1,13 @@
+Session 24. First, the full fresh run before the push of 12af1e9 and b1c735b (readBinary passing, FormatCsv red):
+:brouter:jvmTest --rerun-tasks, 71 XML, 152 tests, 3 failures, 0 errors, 0 " e: ", no Maven 429 (the log's two "429"
+hits are test counts). Failures: CollectOutreachersTest 2 (-61, -106), FormatCsvTest 1 (red on purpose).
+ReadBinaryTest passed in it.
+
+FormatCsv ported whole (format, writeMessages, dumpLine), with OsmTrack.aggregateMessages, MessageData.toMessage and
+add. Java's (int) casts of floats are Kotlin's toInt() (both truncate, NaN to 0, saturate); `ele / 4` is Short / Int
+in both. Formatter.write is now compared (UTF-8 bytes, every fifth track).
+Run: :brouter:jvmTest --rerun-tasks --tests '*FormatCsvTest', test-results deleted first.
+Observed: BUILD SUCCESSFUL; 0 " e: "; 1 fresh XML; tests 1, failures 0, errors 0.
+Printed: "7 FormatCsv: 61 tracks, 11266 lines, 15598 messages seeded".
+[?] Native: Int/Float to string in toMessage is integer-only text, so no float formatting is involved; dumpLine's
+println branch (no writer) is not reached by format and not tested.

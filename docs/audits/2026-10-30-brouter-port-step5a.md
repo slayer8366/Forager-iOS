@@ -3,9 +3,10 @@
 Dispatch 2026-10-28-01, Amendment 3 Part B; RECORD -48. Secondary coder (unnamed), branch `brouter-port-5a`, cut from
 `origin/brouter-port` at `2ada78c`. Evidence in `2026-10-30-brouter-port-step5a/`.
 
-**Status (2026-10-30, first session): partial, handed off at the planner's request.** Item I's three parts are done
-locally: tests seen failing first, the port, the revert. **CI on this branch was not read.** The branch is not
-yet declared ready to merge.
+**Status (2026-10-30, second session): done.** Item I's three parts were done in the first session: tests seen failing
+first, the port, the revert. The second session read CI on `9f41799`, the planner's merge of this branch into
+`brouter-port` (RECORD -49); its counts are below. The first session handed off partial at the planner's request, before
+reading CI.
 
 Tags: [R] read, [C] computed (log in the evidence folder), [I] inferred, [?] could not determine.
 
@@ -52,14 +53,28 @@ Tags: [R] read, [C] computed (log in the evidence folder), [I] inferred, [?] cou
 - **-34:** `fillBuffer` is called only from the decode methods (`BitCoderContext.kt:72, 97, 174, 184, 191` [R]), and
   5a calls none of them. Its end-of-array branch cannot run in 5a [I]. Left to 5b.
 
+## CI, read by the second session
+Run 41010445171 on `9f41799` (workflow `brouter.yml`, branch `brouter-port`), both jobs `success`. Read from the two job
+logs through `gh api .../actions/jobs/<id>/logs`; the lines are copied with their numbers into
+`2026-10-30-brouter-port-step5a/5-ci-9f41799.txt` [C].
+- **`jvm`** (job 123914875566, `ubuntu-24.04`): **91 tests, 0 failures, 0 errors, 0 skipped, in 41 files** (log line 701).
+  That is the 81 before 5a plus 5a's 10, as RECORD -49 reads it on `2a8ba5e`.
+- **Both iOS klibs:** `compileKotlinIosArm64` (line 642) and `compileKotlinIosSimulatorArm64` (line 646) ran, and the step
+  ended `BUILD SUCCESSFUL in 40s` (line 648). **0 lines with ` e: `** in the whole log. Each klib printed one `w:`, the
+  existing parameter-name warning at `BExpressionContextWay.kt:16`.
+- **Simulator** (job 123914875841, `macos-26`): `iosSimulatorArm64Test` ran (line 353); **23 tests, 0 failures, in 9
+  files** (line 377). **Simulator-checked.** None of the 23 is a 5a test (all ten are `jvmTest`), so the file layer itself
+  has still not run on iOS.
+- **The arm64 JVM step:** outcome `success` (line 578); **7 tests, 0 failures, in 2 files** (line 620); the gate line,
+  **"OK: all 2 classes ran"** (line 623), after `CheapLogicRunTest` 5 of 5 and `CheapProductionRecordTest` 2 of 2.
+- These are my own readings; they equal the planner's on `2a8ba5e` (91, 0 errors, 23, 7). `9f41799`'s tree is
+  identical to `2a8ba5e`'s (both `fce6203`, `git rev-parse <commit>^{tree}` [C]), so CI on `26d0224`, `6770b86` and `fe0546c` was not read separately.
+
 ## Unverified
-- CI for `26d0224`, `6770b86`, `fe0546c` and this commit: `jvm` counts, iOS klibs, `ios-smoke` [?].
 - **iOS messages:** okio's FileNotFound text on Native, and `EOFException`'s `simpleName` [?].
 - **iOS file descriptors:** a failed `PhysicalFile` constructor leaves its handle open, as Java does. The JVM's
   `RandomAccessFile` cleaner may reclaim it; nothing on iOS will [I].
 
-## Handoff: what remains, in order
-1. Read CI on this branch's head: `jvm` 91 tests; both iOS klibs with no `e:` lines; `ios-smoke`, the simulator count
-   and the arm64 JVM step.
-2. Report the counts here, then set Status to done.
-3. Say the branch is ready. The planner merges it into `brouter-port` by a merge commit.
+## Handoff
+Nothing remains for 5a. Its file layer runs on iOS first at step 10 (RECORD -49). Step 5b continues on
+`brouter-port-5b`, with its own report, `2026-10-30-brouter-port-step5b.md`.

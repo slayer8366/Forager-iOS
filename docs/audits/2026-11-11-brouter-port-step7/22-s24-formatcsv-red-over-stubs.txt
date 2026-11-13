@@ -1,0 +1,8 @@
+Session 24: FormatCsv whole, with OsmTrack.aggregateMessages, MessageData.toMessage and add, stubbed; FormatCsvTest
+written (walks from Forager's own ends, half the tracks seeded alike in both engines: way tags cleared or set to one
+value, node tags set or cleared; an empty track; format and aggregateMessages compared by digest and length, and
+Formatter.write's file bytes every fifth track).
+Run: :brouter:jvmTest --rerun-tasks --tests '*FormatCsvTest', test-results deleted first.
+Observed: BUILD FAILED; 0 " e: "; 1 fresh XML; tests 1, failures 1, errors 0.
+Message: "track 0: format expected:<[<digest>/4637]> but was:<[throws kotlin.NotImplementedError: An operation is not
+implemented: step 7, session 24 stub: FormatCsv.format]>". Red on purpose.

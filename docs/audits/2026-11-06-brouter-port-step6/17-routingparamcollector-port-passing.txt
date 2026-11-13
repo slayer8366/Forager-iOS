@@ -1,0 +1,31 @@
+Session 16: RoutingParamCollector ported for Forager's calls; RoutingParamCollectorTest passing.
+
+Full fresh run on the red stub commit 30293c8 (before its push):
+  head 30293c8 rc=1 wall 679 s
+  e: lines 0; 429 lines 0
+  138 tests completed, 5 failed
+  BUILD FAILED in 11m 19s
+  XML 61, fresh 61, empty 0
+  TOTAL: tests 138, failures 5, errors 0, skipped 0 in 61 files
+  RoutingParamCollectorTest[jvm] > keysForagerNeverPassesAreRefusedAsUnsupported[jvm] FAILED
+  RoutingParamCollectorTest[jvm] > setParamsMatchesTheOracleOnForagersKeys[jvm] FAILED
+  RoutingParamCollectorTest[jvm] > wayPointListMatchesTheOracle[jvm] FAILED
+  CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+  CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+
+Ported: the constructor, getWayPointList and both readPositions whole; setParams for profile, alternativeidx and
+profile: keys, every key Java ignores ignored. Refused as "unsupported" before the context is touched: the 18 other
+keys Java acts on, nogoLats when not empty, and more than one profile: key. Not ported (nothing in Forager calls
+them): readPositions, getUrlParams, setProfileParams, parseNogoPolygons, readPoisList, readNogoList, readNogos, the two
+readNogo. The port passed on its first run (no fix between the stub run and this one).
+
+Passing run (filter *RoutingParamCollectorTest): 0 ' e: ', 1 fresh XML, TOTAL tests 3, failures 0. Its lines:
+- wayPointListMatchesTheOracle: 8 Forager-form cases (F0h's 16 ends), 4008 other cases: list 2520, name=stop 916,
+  wpttype=2 1970, wpttype=3 925; throws ArrayIndexOutOfBoundsException 370, IllegalArgumentException 296,
+  NumberFormatException 814 (each compared by class and message).
+- setParamsMatchesTheOracleOnForagersKeys: 26 profiles x 2 use_dynamic_range values on Forager's keys, 76 context
+  fields and keyValues compared; 13 other params (null, empty, alternativeidx values, ignored keys, an existing
+  keyValues).
+- keysForagerNeverPassesAreRefusedAsUnsupported: 19 refused keys, each shown to change the oracle's context, each
+  refused by the port with its own message; two profile: keys refused; a refused call leaves the port's context as it
+  was.

@@ -20,11 +20,20 @@ object TestTiles {
 
     /**
      * The folder holding F0h's fixture alone, Forager's heighted `segments-heighted/W75_N40.rd5` at d6e2a0415, as the
-     * build's fetchF0h task leaves it (`brouter.tiles.f0h.dir`; RECORD -58). Its pins are in `tools/fetch-f0h.sh`.
+     * build's fetchF0h task leaves it (`brouter.tiles.f0h.dir`; RECORD -58, -74). Its pins are in `tools/fetch-f0h.sh`.
      */
     val f0h: File get() = File(
         System.getProperty("brouter.tiles.f0h.dir") ?: error("brouter.tiles.f0h.dir is not set; run through Gradle's jvmTest"),
         "f0h",
+    )
+
+    /**
+     * Forager's drop-off fixture at a0535ece as the build's fetchDropoff task leaves it (`brouter.tiles.dropoff.dir`;
+     * RECORD -74): `segments/W75_N40.rd5` alone in its folder, and `points.json`. Its pins are in `tools/fetch-dropoff.sh`.
+     */
+    val dropoff: File get() = File(
+        System.getProperty("brouter.tiles.dropoff.dir") ?: error("brouter.tiles.dropoff.dir is not set; run through Gradle's jvmTest"),
+        "dropoff",
     )
 
     /** The pin file the fetch read (`brouter.tiles.pins`). */

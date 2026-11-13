@@ -78,6 +78,43 @@ internal open class ByteDataReader {
         return v
     }
 
+    // Step 5d (RECORD -70): the five methods `MicroCache2` and `OsmNode.parseNodeBody2` reach (`ByteDataReader.java:52-120`).
+    fun readBoolean(): Boolean {
+        val i0 = ab!![aboffset++].toInt() and 0xff
+        return i0 != 0
+    }
+
+    fun readShort(): Short {
+        val ab = ab!!
+        val i1 = ab[aboffset++].toInt() and 0xff
+        val i0 = ab[aboffset++].toInt() and 0xff
+        return ((i1 shl 8) or i0).toShort()
+    }
+
+    /** Reads a size and returns a pointer to the first byte after a section of that size. */
+    fun getEndPointer(): Int {
+        val size = readVarLengthUnsigned()
+        return aboffset + size
+    }
+
+    fun readDataUntil(endPointer: Int): ByteArray? {
+        val size = endPointer - aboffset
+        if (size == 0) {
+            return null
+        }
+        val data = ByteArray(size)
+        readFully(data)
+        return data
+    }
+
+    /** Java's `System.arraycopy(ab, aboffset, ta, 0, ta.length)`: it throws, copying nothing, when [ab] is short. */
+    fun readFully(ta: ByteArray) {
+        val ab = ab!!
+        if (aboffset < 0 || aboffset + ta.size > ab.size) throw IndexOutOfBoundsException("arraycopy: last source index ${aboffset + ta.size} out of bounds for byte[${ab.size}]")
+        ab.copyInto(ta, 0, aboffset, aboffset + ta.size)
+        aboffset += ta.size
+    }
+
     fun hasMoreData(): Boolean {
         return aboffset < aboffsetEnd
     }

@@ -1,0 +1,16 @@
+Session 26, FormatJson port (patch 29's JSON half, getVoiceHint/getVoiceHintTime kept stubbed), FormatJsonTest alone,
+results directory deleted before each run. Counts from the fresh JUnit XML and the build log.
+
+Run 1 (patch 29's JSON half as written, with -118): 2 tests, 2 failed, 0 ' e: ', XML fresh.
+  formatJsonMatchesTheOracle: every comparison equal; failed at the reach check "not reached: speedprofile"
+    (the oracle never wrote a speed profile: step 6's paths keep MessageData's default speeds).
+  formatDecimal3MatchesJavasDecimalFormat: bits 1552235021 (binary exponent 58), Java one digit longer than the port.
+
+Fix 1, symptom (a), test input only (comparison and reach list unchanged): speeds seeded alike on the nodes' messages.
+Fix 1, symptom (b), port: FloatingDecimal's integer fast path (binary exponent 54 to 62), checked against JDK 21's source.
+
+Run 2: 2 tests, 1 failed, 0 ' e: ', XML fresh.
+  formatJsonMatchesTheOracle: passed; reached speedprofile=20.
+  formatDecimal3MatchesJavasDecimalFormat: bits 1690321024 (binary exponent 74, above 2^63), Java writes 17 significant
+    digits where Double.toString writes 16. First mismatch only; how many floats differ is not counted.
+Stopped: the remaining fix is a port of the JDK's FloatingDecimal general dtoa (GPLv2 source), held for a ruling.

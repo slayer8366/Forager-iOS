@@ -1,0 +1,17 @@
+# java Eclipse Adoptium 21.0.13+9-LTS amd64
+# classpath out/main:out/probe:out/shadow:/home/user/forager-ios-5a/brouter/build/oracle/brouter-1.7.10-ro.jar
+# W75_N40 19671 caches, 407041 ms
+# W75_N35 683 caches, 11926 ms
+# W70_N40 3904 caches, 19494 ms
+# E170_S50 767 caches, 3689 ms
+# F0 47 caches, 678 ms
+## counters (zero unless the shadowed classes are first on the classpath)
+endOfArray 40772: in the cache stream's StatCoderContext 0 (first at -); in other contexts 40772 (btools.util.BitCoderContext, arrays up to 10 bytes); the first of those at W75_N40 (105,130) sub 0 (17047 bytes) known (array length 1)
+noisy: decodeNoisyNumber max 10 at W75_N40 (105,130) sub 0 (17047 bytes) known
+noisy: decodeNoisyDiff (not from decodePredictedValue) max 14 at W75_N40 (105,130) sub 51 (1198 bytes) known
+noisy: decodeNoisyDiff from decodePredictedValue max 19 at W70_N40 (113,133) sub 794 (46 bytes) known; calls over 24: 0
+cleanupPeninsulas: StackOverflowError caught 0; max recursion depth 5679 at W75_N40 (106,130) sub 801 (108012 bytes) fresh mode 1
+OsmNode.parseNodeBody 0, parseNodeBody2 0, readUnified at :134 0
+hmap fresh: puts 1704771, max size 422, longest bin 3 at W75_N40 (105,130) sub 161 (13872 bytes) fresh mode 0 bin 3469 of 4096, tree bins seen 0, puts into a tree bin holding equal hashes 0
+hmap known: puts 9256624, max size 15582, longest bin 9 at W75_N40 (106,130) sub 740 (105494 bytes) known bin 1747 of 16384, tree bins seen 1, puts into a tree bin holding equal hashes 1
+hmap whole: puts 283796, max size 3615, longest bin 6 at W75_N40 (105,132) sub 644 (1140 bytes) whole tile bin 42 of 4096, tree bins seen 0, puts into a tree bin holding equal hashes 0

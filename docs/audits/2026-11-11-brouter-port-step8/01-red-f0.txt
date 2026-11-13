@@ -1,0 +1,5 @@
+Session 29, red over stubs (RECORD -90, 8a).
+Filtered run *RoutingEngineF0Test --rerun-tasks: fresh XML, 1 test, 1 failure, 0 " e: ";
+kotlin.NotImplementedError: An operation is not implemented: RoutingEngine.doRun: step 8a, RECORD -90 (at RoutingEngineF0Test.kt:33, the port call;
+the oracle-against-expected-1b assertion before it passed for the first case).
+Full fresh :brouter:jvmTest --rerun-tasks: 77 XML, 160 tests, 3 failures (CollectOutreachersTest 2, RoutingEngineF0Test 1 on purpose), 0 errors, 0 " e: ", no Maven 429.

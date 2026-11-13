@@ -1,0 +1,25 @@
+Session 14, revert G (report section 8 item 4 and section 10 step 5): StdPath's `(int)` cast moved inside the sum.
+Prediction, written and pushed before the run.
+
+Edit (StdPath.kt processWaySection):
+  `var turncost = ((1.0 - cosangle) * turncostbase + 0.2).toInt()`
+  -> `var turncost = ((1.0 - cosangle) * turncostbase).toInt() + 0.2.toInt()`
+  Java (StdPath.java): `int turncost = (int) ((1. - cosangle) * turncostbase + 0.2);`
+  The revert truncates without the 0.2, so it differs only where turncostbase > 0 and the fraction of
+  (1 - cos) * base is at least 0.8; then the port's turncost, and so its cost, is one lower than the oracle's.
+
+The 20 StdModel profiles' `turncost`, read from brouter/build/oracle/profiles2/*.brf (not from any test output):
+  turncost 0 on every way (cannot bite): hiking-mountain, rail, river, shortest.
+  turncost > 0 on some ways (can bite): fastbike-asia-pacific, fastbike-lowtraffic, fastbike-verylowtraffic,
+  fastbike (90 off roundabouts); gravel (65, 15 on roundabouts); moped (90); mtb (90/60/30); safety, trekking,
+  trekking-ignore-cr, trekking-noferries, trekking-nosteps, trekking-steep (90 off ldcr and roundabouts);
+  skating (turncost_base, 30 or more); vm-forum-liegerad-schnell, vm-forum-velomobil-schnell (150).
+
+Filter *StdPathTest and *StartPathTest. Predict:
+  - pathsMatchTheOracleOnEveryStdProfile fails, and its message names one of the 16 turncost > 0 profiles,
+    expected the first of them in name order, fastbike-asia-pacific.brf, with a path line whose cost differs
+    (port lower). It does not name hiking-mountain, rail, river or shortest.
+  - startPathsMatchTheOracleFromForagersEnds fails the same way, on one of the 16 [less sure: its start path has
+    no turn (angle 0 at the start point); it bites only on the one extension link].
+  - interpolateEleMatchesTheOracle and startDirectionIsUnsupported pass (they do not reach the turn cost).
+  So 2 of 4 fail.

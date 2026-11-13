@@ -1,0 +1,22 @@
+Session 16, revert K: does RoutingParamCollectorTest bite on Forager's own waypoint rounding? Prediction, pushed
+before the run.
+
+Edit (RoutingParamCollector.kt, readPosition(Double, Double, String), RoutingParamCollector.java:97):
+  `n.ilat = ((lat + 90.0) * 1000000.0 + 0.5).toInt()` -> `n.ilat = ((lat + 90.0) * 1000000.0).toInt()`
+The latitude truncates instead of rounding; ilon is unchanged.
+
+Predict: 1 of 3 fails (0 ' e: ', 1 fresh XML): wayPointListMatchesTheOracle, on its first assertion, "Forager's form,
+an F0h case", the first of F0h's ends in order. The port's ilat is one lower than the oracle's on the from or to
+node (whichever has a fractional part >= 0.5 in micro-degrees; with 2 ends, both equal has p ~ 1/4 per case, so a
+later F0h case is possible but the first is most likely); every other field equal, ilon included.
+The two setParams tests pass: their port waypoints are copied from the oracle's, not made by getWayPointList.
+
+Full fresh :brouter:jvmTest --rerun-tasks on 6cd2ab9 (the port), before its push:
+  head 6cd2ab9 rc=1 wall 663 s
+  e: lines 0; 429 lines 0
+  138 tests completed, 2 failed
+  BUILD FAILED in 11m 2s
+  XML 61, fresh 61, empty 0
+  TOTAL: tests 138, failures 2, errors 0, skipped 0 in 61 files
+  CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+  CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED

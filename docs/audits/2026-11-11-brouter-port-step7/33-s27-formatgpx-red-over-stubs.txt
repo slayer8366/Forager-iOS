@@ -1,0 +1,11 @@
+Session 27, FormatGpx stubbed (format, formatAsGpx, formatAsWaypoint, formatGpxHeader, formatGpxFooter, both
+formatWaypointGpx, read(filename, fileSystem), getWaypoint; read(filename) delegates) with FormatGpxTest from patch 29
+unchanged. OsmTrack.getVoiceHint and getVoiceHintTime still stubbed (from session 25).
+
+FormatGpxTest alone, fresh XML, 0 compile errors: 1 test, 1 failed:
+  track 0: format expected:<[de047c1d2784bf68/63735]> but was:<[throws kotlin.NotImplementedError: An operation is not
+  implemented: FormatGpx.format: step 7, session 27]>
+  (A first attempt did not compile: the test was extracted from patch 29 without its package line; re-extracted whole.)
+
+Full fresh :brouter:jvmTest --rerun-tasks: 75 XML, 157 tests, 3 failures (CollectOutreachersTest 2, FormatGpxTest 1 on
+purpose over the stubs, naming FormatGpx.format), 0 errors, 0 compile errors, no Maven 429.

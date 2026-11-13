@@ -1,0 +1,72 @@
+package com.zynergylabs.forager.brouter.tiles
+
+/**
+ * Step 10, session 49 (RECORD -140, decision 1): stratum MP64's 59 rows of brouter/src/jvmTest/resources/e3/expected-1b.tsv
+ * (memory class 64; every row a route), as [NtExpected] holds NT's: id, then kind, nodes, cost, distance, nodeDigest, heightsDigest (as
+ * [EngineRun.Outcome]), then the stored tupleDigest (every MP64 row is `exact`). No row holds a position: the file stores
+ * none and [NtExpected.Row]'s fields are an id, a kind, Ints and digests (E1); `Step10CommonDigestTest` holds this constant
+ * equal to the file's rows on the JVM.
+ */
+internal object Mp64Expected {
+    val ROWS: List<NtExpected.Row> = listOf(
+        NtExpected.Row("MP64-0002", EngineRun.Outcome("route", 2393, 92453, 66706, "77f2be0b34c2ba69", "fb762894e40834d4"), "e64b44082b4be9de"),
+        NtExpected.Row("MP64-0004", EngineRun.Outcome("route", 1691, 81988, 53454, "f5475453b1cda41f", "d845687a97e09fe5"), "385f26c3ed7c506e"),
+        NtExpected.Row("MP64-0005", EngineRun.Outcome("route", 1892, 63668, 45579, "1171ed56719ede6a", "5431878540af44c9"), "d3c745ee800dbb03"),
+        NtExpected.Row("MP64-0007", EngineRun.Outcome("route", 2806, 121840, 80573, "7389e0384e0b205b", "3e1ea36c75658a82"), "629b3c0d2e8d0981"),
+        NtExpected.Row("MP64-0009", EngineRun.Outcome("route", 1896, 89138, 62656, "c59194e08fa64c07", "a618877ea48f6efc"), "623f91e27e47496f"),
+        NtExpected.Row("MP64-0010", EngineRun.Outcome("route", 881, 102019, 45619, "9024965fdc8b5ba0", "5495bc5202a165d1"), "b5474b5d9eb3ddc4"),
+        NtExpected.Row("MP64-0011", EngineRun.Outcome("route", 1182, 62333, 50803, "623353a19648339b", "acb5760de706fc0f"), "d5adf92f22f48aa"),
+        NtExpected.Row("MP64-0013", EngineRun.Outcome("route", 2293, 101998, 62464, "fcb4b6248286c7ba", "7098e8935ddd9ed8"), "4161a2f5cb0e1166"),
+        NtExpected.Row("MP64-0016", EngineRun.Outcome("route", 5358, 212911, 142307, "48f314725b959c22", "ae8d7ba6bdc8693c"), "5c24f0181a331966"),
+        NtExpected.Row("MP64-0017", EngineRun.Outcome("route", 1243, 75959, 39801, "43a70c3373cd714c", "f5e088e4f26e0c02"), "73ab3a3fa1ae8893"),
+        NtExpected.Row("MP64-0018", EngineRun.Outcome("route", 2667, 117978, 79531, "d7c38ca68fe1579d", "6d867df375808c68"), "132ce8e5410fb55e"),
+        NtExpected.Row("MP64-0019", EngineRun.Outcome("route", 3118, 252889, 119210, "3197673f876d308a", "2bf99894241dfa95"), "3dff85eb49d32f95"),
+        NtExpected.Row("MP64-0020", EngineRun.Outcome("route", 2663, 115492, 81060, "b8e8a4fafd5ad1fb", "9334f8e4fc99213c"), "e48a44ff30c354f6"),
+        NtExpected.Row("MP64-0021", EngineRun.Outcome("route", 2606, 114077, 79572, "e24e3000aaa22f7c", "15519ba256839094"), "27fa6721bf154c34"),
+        NtExpected.Row("MP64-0023", EngineRun.Outcome("route", 3356, 122834, 84652, "c0c691eb84510954", "bd68d3c8156059ec"), "f728cbd94a58c0ff"),
+        NtExpected.Row("MP64-0024", EngineRun.Outcome("route", 1100, 56593, 38391, "1b80996373cfbd10", "f8d5880708603ec3"), "889d7afed59b430e"),
+        NtExpected.Row("MP64-0025", EngineRun.Outcome("route", 1838, 120940, 68755, "436e64f9d61a032", "9ee6e1cb2a714a36"), "a90ebd76fe7464d6"),
+        NtExpected.Row("MP64-0026", EngineRun.Outcome("route", 2447, 163057, 108289, "c5e01c2b1515569e", "d0ab4647de0823df"), "cbd6d78fb2307117"),
+        NtExpected.Row("MP64-0027", EngineRun.Outcome("route", 4745, 208200, 143913, "488709c1c9c1c4cc", "a7dfcb4327676ae2"), "e271a831fa4c6410"),
+        NtExpected.Row("MP64-0028", EngineRun.Outcome("route", 1673, 110767, 60599, "e2b77ce50f581614", "2def756fd42c5643"), "bec252482cd0c1e5"),
+        NtExpected.Row("MP64-0029", EngineRun.Outcome("route", 2814, 125589, 83549, "14c478712c693ac9", "5c8b32f0739c9729"), "a9d3a69f43e1f26d"),
+        NtExpected.Row("MP64-0030", EngineRun.Outcome("route", 3492, 184509, 128646, "2540da0d5bb084fb", "c48a862308d3a4e2"), "e1ee00ebfce1bb65"),
+        NtExpected.Row("MP64-0031", EngineRun.Outcome("route", 2652, 93691, 75065, "d1bfd5144eca97cb", "a7088036d26769cc"), "322e7a01b44cf7ce"),
+        NtExpected.Row("MP64-0032", EngineRun.Outcome("route", 2975, 100900, 74103, "eb40a4980c0b3ae7", "44602a9bb4c4a6cd"), "ca02ed6b649419b5"),
+        NtExpected.Row("MP64-0034", EngineRun.Outcome("route", 1721, 52180, 38767, "3f9856b2c6c7e3cb", "b52357a6503a4f96"), "803a90d3d8bf79c0"),
+        NtExpected.Row("MP64-0038", EngineRun.Outcome("route", 1668, 67916, 48565, "eff758c76671c9ed", "4126bf55c1be3a2a"), "3da77ac0c6671397"),
+        NtExpected.Row("MP64-0040", EngineRun.Outcome("route", 1526, 44555, 32691, "e02b87142aff0854", "8403213aea375ebc"), "7bbf9734f387f96c"),
+        NtExpected.Row("MP64-0044", EngineRun.Outcome("route", 2110, 94519, 67154, "bbee4ef15a076799", "24e9ad6ab75585dc"), "793d4b984745087e"),
+        NtExpected.Row("MP64-0046", EngineRun.Outcome("route", 1708, 109343, 68264, "2a18796abcc8f9be", "b294bc053a05c86b"), "5ca9baa8e50fe38a"),
+        NtExpected.Row("MP64-0047", EngineRun.Outcome("route", 662, 48721, 36605, "d34611cb58c79171", "dfed530d36f1217a"), "5fe4dbea76e3773"),
+        NtExpected.Row("MP64-0048", EngineRun.Outcome("route", 2158, 77692, 52688, "c806df6e0ebc1074", "b940f832754dc5c6"), "6431a97ef4dbfb19"),
+        NtExpected.Row("MP64-0052", EngineRun.Outcome("route", 3207, 98555, 71950, "862e1e8cc97eb035", "b03d9b04eb11b483"), "7778305492e3b324"),
+        NtExpected.Row("MP64-0053", EngineRun.Outcome("route", 2835, 189170, 127752, "2537ac707cd933bb", "8c9f8990761112dd"), "b3b888b1df6ab38f"),
+        NtExpected.Row("MP64-0054", EngineRun.Outcome("route", 2246, 132016, 82189, "d00f10755c291ba", "d8f37bd928db3df4"), "d6fd3292ed7e9029"),
+        NtExpected.Row("MP64-0055", EngineRun.Outcome("route", 2080, 109669, 69509, "32f8c90c7cb18632", "1a713d022dd43f70"), "78cc2377acdb258d"),
+        NtExpected.Row("MP64-0056", EngineRun.Outcome("route", 957, 58933, 33797, "1952df8fe4b74805", "8630c29915698ea4"), "abfed135bbff5a67"),
+        NtExpected.Row("MP64-0057", EngineRun.Outcome("route", 3128, 122986, 84393, "e2f2098930194776", "bd2238b17ac11b4b"), "d2c8e10abc6c2b2a"),
+        NtExpected.Row("MP64-0058", EngineRun.Outcome("route", 3605, 143627, 110028, "bda095ad686cae3e", "5f33063ec04426b9"), "da64491cdc68f21"),
+        NtExpected.Row("MP64-0062", EngineRun.Outcome("route", 3493, 111078, 82086, "971a54d06ba49c70", "af5d6d251c140609"), "903dd8448019b315"),
+        NtExpected.Row("MP64-0063", EngineRun.Outcome("route", 3437, 177753, 123005, "fac4381b96124a37", "7780c4ddbd6e958b"), "3fb0681ff158f3a5"),
+        NtExpected.Row("MP64-0064", EngineRun.Outcome("route", 3415, 692797, 306097, "34d6c89665cb1089", "4c76fe9861e74a5a"), "1f6d8f41ad244435"),
+        NtExpected.Row("MP64-0065", EngineRun.Outcome("route", 1465, 97747, 65029, "a9c606240a1f8fe4", "50a685611e83939f"), "72c40984730c9d94"),
+        NtExpected.Row("MP64-0066", EngineRun.Outcome("route", 3213, 100112, 74403, "e170b1857509704c", "1203e359bdb11ab2"), "967ccd0e94d599af"),
+        NtExpected.Row("MP64-0067", EngineRun.Outcome("route", 6767, 188247, 153409, "89f6c1b7ab8727bb", "c8b088b162b07c3"), "28e37463379c7616"),
+        NtExpected.Row("MP64-0068", EngineRun.Outcome("route", 6311, 123687, 112218, "808f2a62b89807c2", "8689c06a7d4c157b"), "ab947f9dc346d9f3"),
+        NtExpected.Row("MP64-0070", EngineRun.Outcome("route", 1133, 44298, 33335, "8e17721fd1aa48bc", "8638996937e3b311"), "4f01d42683787dc2"),
+        NtExpected.Row("MP64-0071", EngineRun.Outcome("route", 1503, 104839, 63888, "eeeb8bfd6f77e281", "81ce0b4e47d16733"), "acf863cdb9f0dabb"),
+        NtExpected.Row("MP64-0072", EngineRun.Outcome("route", 1250, 125381, 61968, "bd4d55f6ed067330", "875d92aa85e93324"), "c663e7682797dc24"),
+        NtExpected.Row("MP64-0073", EngineRun.Outcome("route", 2790, 125998, 89793, "2ab2d6fc11a0ef2b", "1549dd0055fc67ae"), "2d8a61259f926ce9"),
+        NtExpected.Row("MP64-0074", EngineRun.Outcome("route", 3652, 165459, 118986, "6ef7cb3f73c75349", "28786e52fd447c53"), "332cd44ed4752d13"),
+        NtExpected.Row("MP64-0075", EngineRun.Outcome("route", 3216, 190373, 112934, "f3eb3167e983c399", "bf8113b8d4a453d"), "66bf1e849b07c63d"),
+        NtExpected.Row("MP64-0076", EngineRun.Outcome("route", 993, 38873, 28119, "4bb58aebfda09dad", "b217956e5a464929"), "e083fedeb902b308"),
+        NtExpected.Row("MP64-0077", EngineRun.Outcome("route", 2572, 106134, 77702, "249373c55ef5349e", "b8c35d002c4331"), "f9e8709f0d0b1165"),
+        NtExpected.Row("MP64-0078", EngineRun.Outcome("route", 3532, 162681, 99240, "423fdb9e81cb8876", "55ccbbd04e17f2b3"), "6fe0d013799ec73d"),
+        NtExpected.Row("MP64-0079", EngineRun.Outcome("route", 2612, 98454, 72847, "211ad9bb1dbeb4a2", "8169dbb216959718"), "1ed8e8998fabc8a6"),
+        NtExpected.Row("MP64-0080", EngineRun.Outcome("route", 1457, 89216, 53223, "d87b395fba6b60d2", "40784de3c94a7347"), "972925f2fa83c330"),
+        NtExpected.Row("MP64-0081", EngineRun.Outcome("route", 1840, 199496, 86468, "a5f68e062f473b84", "f50403396220f4af"), "37adced425cc4be3"),
+        NtExpected.Row("MP64-0085", EngineRun.Outcome("route", 4146, 101931, 78194, "1c7e7128b796341a", "b201233e80a5d4bf"), "af569415d7f14bca"),
+        NtExpected.Row("MP64-0086", EngineRun.Outcome("route", 2173, 65475, 50676, "6cec9923b87ef4aa", "9fd9e5464916e801"), "a235070edd72d3dc"),
+    )
+}

@@ -1,0 +1,27 @@
+     intx ThreadStackSize                          = 1024                                   {pd product} {default}
+# java Eclipse Adoptium 21.0.13+9-LTS amd64
+region segments/W75_N40 (105,130) region around sub 735 (154239 bytes), 6 caches mode 0 loaded; C 42036 1000 1000; oracle catch so far 0
+region segments/W75_N40 (105,130) region around sub 735 (154239 bytes), 6 caches mode 1 loaded; C 37435 41098 32946; oracle catch so far 0
+region segments/W75_N40 (105,130) region around sub 735 (154239 bytes), 6 caches mode 2 loaded; C 38357 41098 32946; oracle catch so far 0
+region segments/W70_N40 (110,131) region around sub 800 (20807 bytes), 6 caches mode 0 loaded; C 4122 1000 1000; oracle catch so far 0
+region segments/W70_N40 (110,131) region around sub 800 (20807 bytes), 6 caches mode 1 loaded; C 2614 4759 4540; oracle catch so far 0
+region segments/W70_N40 (110,131) region around sub 800 (20807 bytes), 6 caches mode 2 loaded; C 3021 4759 4540; oracle catch so far 0
+region segments/E170_S50 (350,43) region around sub 995 (2266 bytes), 6 caches mode 0 loaded; C 167 1000 1000; oracle catch so far 0
+region segments/E170_S50 (350,43) region around sub 995 (2266 bytes), 6 caches mode 1 loaded; C 129 1123 1119; oracle catch so far 0
+region segments/E170_S50 (350,43) region around sub 995 (2266 bytes), 6 caches mode 2 loaded; C 130 1123 1119; oracle catch so far 0
+region f0/W75_N40 (105,131) region around sub 255 (11487 bytes), 6 caches mode 0 loaded; C 1420 1000 1000; oracle catch so far 0
+region f0/W75_N40 (105,131) region around sub 255 (11487 bytes), 6 caches mode 1 loaded; C 753 2271 2153; oracle catch so far 0
+region f0/W75_N40 (105,131) region around sub 255 (11487 bytes), 6 caches mode 2 loaded; C 855 2271 2153; oracle catch so far 0
+## tieBreakOrder totals by scenario (OsmNode keys: treeify, putTreeVal; other keys: treeify, putTreeVal)
+# total region mode 0 [0, 0, 0, 0]
+# total region mode 1 [0, 0, 0, 0]
+# total region mode 2 [0, 0, 0, 0]
+# grand total [0, 0, 0, 0]
+## counters (zero unless the shadowed classes are first on the classpath)
+endOfArray 0: in the cache stream's StatCoderContext 0 (first at -); in other contexts 0 (-, arrays up to 0 bytes); the first of those at -
+noisy: decodeNoisyNumber max -1 at -
+noisy: decodeNoisyDiff (not from decodePredictedValue) max -1 at -
+noisy: decodeNoisyDiff from decodePredictedValue max -1 at -; calls over 24: 0
+cleanupPeninsulas: StackOverflowError caught 0; max recursion depth 0 at -
+OsmNode.parseNodeBody 0, parseNodeBody2 0, readUnified at :134 0
+## stderr: 0 catch lines; exit 0

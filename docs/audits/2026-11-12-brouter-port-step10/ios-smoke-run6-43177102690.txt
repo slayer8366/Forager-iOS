@@ -1,0 +1,48 @@
+5 tiles ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles
+oracle ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/oracle
+BUILD SUCCESSFUL in 45s
+the drop-off fixture ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles-dropoff/dropoff
+F0h's fixture ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles-f0h/f0h
+> Task :brouter:compileKotlinJvm
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:compileTestKotlinJvm
+> Task :brouter:compileJvmTestJava NO-SOURCE
+NtCasesWriteTest[jvm] > ntCasesAreWrittenForTheSimulator[jvm] STANDARD_OUT
+    step10 NT cases: 59 of 59 stored ids drawn within 89 draws; written to /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/step10/nt-cases.tsv; missing []
+NtCasesWriteTest[jvm] > ntCasesAreWrittenForTheSimulator[jvm] PASSED
+BUILD SUCCESSFUL in 1m 17s
+> Task :brouter:compileKotlinIosSimulatorArm64
+> Task :brouter:compileTestKotlinIosSimulatorArm64
+BUILD SUCCESSFUL in 3m 47s
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.NodeHashMapTieBreakTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.mapaccess.NodeHashMapTieBreakTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+com.zynergylabs.forager.brouter.tiles.F0EngineCommonTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.F0EngineCommonTest.xml)
+com.zynergylabs.forager.brouter.tiles.F0RouteCommonTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.F0RouteCommonTest.xml)
+com.zynergylabs.forager.brouter.tiles.NtEngineCommonTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.NtEngineCommonTest.xml)
+com.zynergylabs.forager.brouter.tiles.PinnedTileReadTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.PinnedTileReadTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaTextCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.JavaTextCommonTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml)
+TOTAL: tests 28, failures 0, errors 0, skipped 0 in 14 files
+  <system-out><![CDATA[step10 F0 engine F0-inside-across-the-degree-line: port route|226|5302|5047|9ca48d05a90f4dcd|afc27854ee968af5 tuple e5aadbeff215a44e; expected route|226|5302|5047|9ca48d05a90f4dcd|afc27854ee968af5 tuple e5aadbeff215a44e
+step10 F0 engine F0-inside-long: port route|306|7405|6713|7d242f8dd2c428b4|4f6849ea59b5f775 tuple 177bcede53dc1beb; expected route|306|7405|6713|7d242f8dd2c428b4|4f6849ea59b5f775 tuple 177bcede53dc1beb
+  <system-out><![CDATA[step10 F0 F0-inside-across-the-degree-line: kind|nodes|distance|nodeDigest|heightsDigest port route|226|5047|9ca48d05a90f4dcd|afc27854ee968af5; expected route|226|5047|9ca48d05a90f4dcd|afc27854ee968af5 (cost 5302, not readable through route())
+step10 F0 F0-inside-long: kind|nodes|distance|nodeDigest|heightsDigest port route|306|6713|7d242f8dd2c428b4|4f6849ea59b5f775; expected route|306|6713|7d242f8dd2c428b4|4f6849ea59b5f775 (cost 7405, not readable through route())
+  <system-out><![CDATA[step10 NT engine: 59 cases in the file; 59 of 59 stored ids; 0 not stored []; equal on all six fields and the tuple digest 59; mismatches 0; missing 0; 111 s
+  <system-out><![CDATA[step10 tile: tiles folder from environment variable BROUTER_TILES_DIR in the simulator's process (the ios-smoke job exports SIMCTL_CHILD_BROUTER_TILES_DIR) = /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles; opening /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles/f0/W75_N40.rd5
+step10 tile: /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles/f0/W75_N40.rd5 size=152665 read=152665 sha256=ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+step10 tile: pin file not given on this platform; the copied row is held to it on the JVM
+> Task :brouter:compileKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmMainJava NO-SOURCE
+> Task :brouter:compileTestKotlinJvm UP-TO-DATE
+> Task :brouter:compileJvmTestJava NO-SOURCE
+BUILD SUCCESSFUL in 8s
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionRecordTest.xml)
+TOTAL: tests 7, failures 0, errors 0, skipped 0 in 2 files
+OK: all 2 classes ran

@@ -1,0 +1,48 @@
+Step 8b, session 31: RECORD -90's revert (RECORD -123, decision 3), on 31aa7b1.
+
+Edit (one line, graph half): mapaccess/OsmNodesMap.kt:122, isInMemoryBounds (Java OsmNodesMap.isInMemoryBounds),
+  "return total <= currentmaxmem"  ->  "return total > currentmaxmem"
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh; filter *RoutingEngine*Test (F0, R, DL-lat, DL-lon,
+MP64, ML5, PM5: 7 tests in 4 classes). CollectOutreachersTest is not in the filter (it is red already, -61).
+
+WHAT THE FLIP DOES: with memory well inside its bound, the first check (extend false) now answers "out of bounds" at
+every pop of a path whose target has hollow link targets, so the port collects there; the second check (extend true)
+raises currentmaxmem above the total and so also answers "out of bounds". In a pass with maxTotalCost 1000000000 and no
+panic round yet, that enables panic mode; when the open set then empties, the border list comes back with
+needNonPanicProcessing set, and the next hollow-target pop throws "memory limit reached". With a guide or a cost-cutting
+match (maxTotalCost lowered) it throws at once. So a search that ever pops a hollow-target path ends in the limit.
+
+PREDICTION (pushed before the run):
+- The build compiles (0 "e: " lines) and 7 tests write fresh XML (4 files).
+- The oracle-against-expected-1b assertions all pass (the edit is in the port only).
+- MP64 FAILS: every one of its 59 cases collected at least once in the oracle (that is how 1b selected it), so each
+  search pops a hollow-target path; all 59 rows are routes, so the port's kind ("memory limit reached") differs. Predicted
+  mismatches: 59, kind among the fields of each.
+- PM5 FAILS the same way: 55 rows, all routes, all of them panic in the oracle. Predicted mismatches: 55, on kind.
+- ML5 DOES NOT FAIL [I]: its 59 rows are all "memory limit reached", and the flipped port reaches the same message; the
+  found track of an error is empty in both. Predicted mismatches: 0. So -90's revert is the one ML5 does not catch.
+- R FAILS: at least its 151 StdModel cases that reach the memory path in the oracle (session 30's diagnostic) differ, on
+  kind where the oracle routes; its 354 Kinematic cases stay refused by name, and its errors thrown before the search
+  stay equal. [I: the count is not predicted beyond "at least 151 minus those whose oracle kind is the limit".]
+- DL-lat and DL-lon FAIL: at least 36 and 15 cases (those reaching the memory path), on kind.
+- F0 [?]: not predicted. Whether either of its two short routes ever pops a hollow-target path is not known; the 8b
+  stub was inside the bounds check, so F0 passing over it says nothing about hollow pops.
+- After restore: cmp equal to the saved copy, and git diff of src against 31aa7b1 empty.
+
+OBSERVED (scratch copy of revert.sh, run rv4; the copy's timeout raised from 1500 to 5000 s for R, nothing else
+changed):
+- The edit applied once (one - and one + line; it is at OsmNodesMap.kt:123, not :122 as written above, the same
+  string); 0 "e: " lines; 4 fresh XML files, 7 tests, 6 failures, 0 errors. Every oracle-against-expected-1b assertion
+  passed (each failure is the port comparison).
+- MP64: 59 cases, 59 mismatches, each on all six fields, the port "memory limit reached" with an empty track. HELD.
+- PM5: 55 cases, 55 mismatches, the same shape. HELD.
+- ML5: 59 cases, 0 mismatches; the test passed. HELD: -90's revert is the one ML5 does not catch.
+- R: 1534 cases (oracle route 968, refused 354, error 212), 805 mismatches; the 20 printed all on all six fields with
+  the port "memory limit reached". HELD (at least 151).
+- DL-lat: 59 of 59 mismatches; DL-lon: 59 of 59; the same shape. HELD (at least 36 and 15), and more than predicted:
+  every DL case pops a hollow-target path.
+- F0 (not predicted): fails, "F0-inside-across-the-degree-line: kind expected:<[route]> but was:<[memory limit
+  reached]>". So F0's routes also pop a hollow-target path.
+- Restored: cmp equal to the saved copy; git diff of src against e501548 empty.
+- Each failure is one this edit produces: the port's kind becomes the limit wherever the oracle routes; where the oracle
+  already reached the limit (ML5) nothing differs.

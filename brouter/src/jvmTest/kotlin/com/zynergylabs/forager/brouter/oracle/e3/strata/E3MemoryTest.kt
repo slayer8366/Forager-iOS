@@ -59,7 +59,7 @@ class E3MemoryTest {
         }
     }
 
-    private companion object {
+    internal companion object {
         const val TILE = "W75_N40.rd5"
         const val LIMIT = "memory limit reached"
         const val SEED_MP64 = 20261203L

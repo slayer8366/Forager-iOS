@@ -1,0 +1,22 @@
+Session 15, revert I: does StartPathTest's widened end-cut sample bite? Prediction, pushed before the run.
+
+The widening (this commit): each run also extends every start path over each of its target's links with an end
+waypoint at that link's node midpoint. Passing run (filtered, StartPathTest only): 0 ' e: ', 1 fresh XML, 1 of 1
+pass; 20 profiles, 600 runs, 1,024 start paths, 6 final links, 4 same-segment runs, 500 cut starts in detail mode,
+668 of 1,868 synthetic end cuts hit.
+
+Edit (OsmPath.kt, the end cut, OsmPath.java:242-244; the first of the three interpolateEle calls, unique with its
+indentation and the line above it):
+  `stopAtEndpoint = true` / `ele2 = interpolateEle(ele1, ele2, rc.wayfraction)`
+  -> `stopAtEndpoint = true` / `ele2 = ele2`
+  The cut end then keeps the link end's full height, so deltaH over the cut section is the whole rise.
+
+Predict: StartPathTest fails on a "cut" path line (a synthetic end cut), not a start line, in either detail mode,
+on a case with heights (F0h or R, never F0), the first profile in order (fastbike-asia-pacific) most likely. Fields
+that differ: among ehbd/ehbu, time, energy, totalTime, totalEnergy, possibly cost; the path's position fields equal.
+[less sure: if no hit cut on heighted tiles comes before a final link, a "final" line could come first.]
+
+Full fresh :brouter:jvmTest --rerun-tasks with the widening, before the push: 0 ' e: ', 0 HTTP 429; Gradle "134
+tests completed, 2 failed", both CollectOutreachersTest (-61), collectOutreachersWithoutADestination red again this
+time (it passed in 10-full-run-7282c67.txt: run-to-run variation, as RECORD's Question A records); XML 59 files,
+0 empty, TOTAL tests 134, failures 2. StartPathTest's line in this run: 668 of 1868 synthetic end cuts hit.

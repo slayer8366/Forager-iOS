@@ -1,0 +1,4 @@
+194c194
+<             if (refused) return null // the filter (RECORD -59, B): this draw is discarded and the seed drawn again
+---
+>             if (false) return null // the filter (RECORD -59, B): this draw is discarded and the seed drawn again

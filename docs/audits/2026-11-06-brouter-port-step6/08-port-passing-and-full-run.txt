@@ -1,0 +1,17 @@
+Session 14: StdPathTest, StartPathTest, GraphHalfTest, PathElementTest on the OsmPath/StdPath port (filtered run):
+compile errors 0, fresh XML 4
+(filtered run's own tally, read before the full run: TOTAL: tests 7, failures 0, errors 0, skipped 0 in 4 files)
+
+Test output (system-out) of the filtered run, read from its XML before the full run overwrote it (first line cut at 250 chars when read):
+6 std path: 20 profiles, 10 cases, 105401 paths, 104 refused (cost -1), 1358473 origin links, turn costs seen on [fastbike-asia-pacific.brf, fastbike-lowtraffic.brf, fastbike-verylowtraffic.brf, fastbike.brf, gravel.brf, moped. ...
+6 start paths: 20 profiles, 600 runs, 1024 start paths, 6 final links, 4 same-segment runs, 500 cut starts in detail mode, digest d7a9e0cf276c44e6a53545fc8af6642cb39d170a6185ae36ce15b101e9bfc87a
+
+Full fresh run, ./gradlew :brouter:jvmTest --rerun-tasks:
+compile errors (^e: ) in the build log: 0; 429 lines: 0
+134 tests completed, 2 failed
+Gradle log per-test lines: PASSED 132, FAILED 2
+CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+XML: 59 fresh files, of which 10 are EMPTY (0 bytes) [?, cause not found]: util.ByteArrayUnifierTest util.PlatformInvariantsExpectedTest tiles.TilePinsTest router.StartPathTest util.CheapLogicRunTest util.BitCoderContextTest util.CheapProductionRecordTest router.StdPathTest oracle.e3.E3ControlTest oracle.OraclePinTest 
+The 49 non-empty files: TOTAL: tests 110, failures 2, errors 0, skipped 0 in 49 files
+The 10 empty files' classes have 24 PASSED lines in the Gradle log; 110 + 24 = 134.

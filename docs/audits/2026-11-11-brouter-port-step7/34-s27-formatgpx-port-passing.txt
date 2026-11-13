@@ -1,0 +1,15 @@
+Session 27, FormatGpx port (patch 29's FormatGpx.kt unchanged; OsmTrack.getVoiceHint and getVoiceHintTime from
+patch 29's OsmTrack hunk). Fresh XML on every run.
+
+Port run 1, FormatGpxTest alone, 0 compile errors: 1 test, 1 failed:
+  track 0: format expected:<[de047c1d2784bf68/63735]> but was:<[16cc1ccd0169df64/63733]>
+  A temporary diagnostic (dump both texts on mismatch; never committed, the test restored from a saved copy) showed
+  the one differing line: Java ' creator="BRouter-1.7.10"', the port ' creator="BRouter-null"'.
+Symptom 1, fix 1, test input under RECORD -118: patch 29's FormatGpxTest predates -118 and never set
+  OsmTrack.version. Added the same @BeforeTest as FormatJsonTest (OsmTrack.version = the oracle's). The comparison and
+  the reach list are unchanged; -118 was ruled before any port result for it.
+Port run 2, FormatGpxTest alone, 0 compile errors: 1 test, 0 failures.
+  7 FormatGpx: 161 tracks, 152 texts, 9 thrown, 4249 hints, 159 reads, reached {brouter beeline=7, brouter:params=8, brouter:speed=5, exportCorrectedWaypoints=62, exportWaypoints=63, locus beeline=6, locus:rteTime=13, messageList null=6, mode 0=22, mode 0 with hints=15, mode 1 with hints=14, mode 2 with hints=12, mode 3 with hints=13, mode 4 with hints=12, mode 5 with hints=13, mode 6 with hints=13, mode 7 with hints=13, mode 8 with hints=11, mode 9 with hints=14, no pois or waypoints=32, params=58, poi=181, rte time=24, thrown mode 0=1, thrown mode 1=1, thrown mode 2=2, thrown mode 3=1, thrown mode 4=1, thrown mode 8=3, wpt desc=78}
+
+Full fresh :brouter:jvmTest --rerun-tasks: 75 XML, 157 tests, 2 failures (CollectOutreachersTest 2), 0 errors,
+0 compile errors, no Maven 429.

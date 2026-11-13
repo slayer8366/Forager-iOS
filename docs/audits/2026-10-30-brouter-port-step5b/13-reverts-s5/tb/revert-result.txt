@@ -1,0 +1,5 @@
+compile errors in the revert's build log: 0
+TOTAL: tests 101, failures 3, errors 0, skipped 0 in 46 files
+FAILED CollectOutreachersTest.collectOutreachersWithoutADestination[jvm]: java.lang.AssertionError: java.lang.AssertionError: segments/W75_N40.rd5 around degree (105, 130) sub 735 (lonIdx 3391, latIdx 4182, 154239 bytes, 15406 nodes), 6 caches, mode 1: line 1 of 172529/174955: oracle [C 38715 41099 41099] port [C 39396 37387 37387]
+FAILED CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes[jvm]: java.lang.AssertionError: java.lang.AssertionError: canEscape did not answer both ways: false/true 0/3587
+FAILED NodeHashMapTieBreakTest.equalHashTreeBinsIterateInOneOrderAcrossFreshMaps[jvm]: java.lang.AssertionError: java.lang.AssertionError: map 1's order after the tie group differs from map 0's expected:<[81604379605, 68719477720, 42949673950, 158913790915, 352187319190, 171798692800, 55834575835, 249108104110, 442381632385, 94489281490, 261993005995, 184683594685, 365072221075, 390842024845, 287762809765, 313532613535, 416611828615, 107374183375, 223338300340, 210453398455, 343597388696, 365072225171, 21474

@@ -1,0 +1,13 @@
+Step 5d item 3: MicroCache2DecodeTest revert, run session 9 on 3888c07 (prediction pushed at ae97c7b).
+Runner: scratch one-revert.sh (saved copy, emptied results, build log checked, restored from copy).
+Edit: MicroCache2.kt:230  writeVarLengthSigned(alat[nodeIdx] - alat[n]) -> writeVarLengthSigned(alat[n] - alat[nodeIdx])
+Build log: 0 lines starting "e: "; gradle exit 1 (test failures).
+Predicted: 5 tests, 5 failures, each field [link dlat], expected at cache 0.
+Observed:  5 tests, 5 failures, each field [link dlat], each at cache 0:
+  f0/W75_N40.rd5        cache 0, line 8 of 54
+  segments/W70_N40.rd5  cache 0, line 36 of 1798
+  segments/W75_N35.rd5  cache 0, line 27 of 97
+  segments/W75_N40.rd5  cache 0, line 18 of 26052
+  segments/E170_S50.rd5 cache 0, line 27 of 45
+Match: yes.
+Restore: cmp with the saved copy identical; forward line present 1 time; git status clean for the file.

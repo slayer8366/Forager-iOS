@@ -1,0 +1,24 @@
+Session 14, revert G at bce3a3a (prediction 07-revert-G-turncost-int-prediction.txt, pushed in bce3a3a before the run). 9-digit numbers redacted as <int>.
+revert.sh takes one filter: *Std*PathTest matched StdPathTest only, so StartPathTest ran as G2 with the same edit.
+
+Edit:
+-        var turncost = ((1.0 - cosangle) * turncostbase + 0.2).toInt() // e.g. turncost=90 -> 90 degree = 90m penalty
++        var turncost = ((1.0 - cosangle) * turncostbase).toInt() + 0.2.toInt() // e.g. turncost=90 -> 90 degree = 90m penalty
+
+== G-turncost-int runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 3, failures 1, errors 0, skipped 0 in 1 files
+testcase name="pathsMatchTheOracleOnEveryStdProfile[jvm]"
+message="java.lang.AssertionError: fastbike-asia-pacific.brf F0-inside-across-the-degree-line detail false: line 2 of 342/342: oracle [path cost=26923 selev=-32768 airdistance=0 sourceNode=n<int>:<int>
+
+== G2-turncost-int-start runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files
+testcase name="startPathsMatchTheOracleFromForagersEnds[jvm]"
+message="java.lang.AssertionError: fastbike-asia-pacific F0-inside-across-the-degree-line detail false: line 2 of 9/9: oracle [start1 cost=2847 selev=-32768 airdistance=3494 sourceNode=n<int>:<int> tar
+
+Observed: StdPathTest 1 of 3 failed, pathsMatchTheOracleOnEveryStdProfile on fastbike-asia-pacific.brf, F0-inside-across-the-degree-line, detail false, path line 2 (oracle cost=26923); interpolateEle and startDirection passed. StartPathTest 1 of 1 failed on fastbike-asia-pacific, same case, detail false, line 2 (a start1 line, oracle cost=2847). Both as predicted: the first turncost > 0 profile in name order, none of the four turncost 0 profiles. The port's side of each line is cut off by the runner's 200-character message limit, so 'port lower' is not read [?].

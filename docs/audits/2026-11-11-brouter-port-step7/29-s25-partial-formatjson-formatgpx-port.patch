@@ -1,0 +1,1272 @@
+diff --git a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatGpx.kt b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatGpx.kt
+new file mode 100644
+index 0000000..1541352
+--- /dev/null
++++ b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatGpx.kt
+@@ -0,0 +1,599 @@
++package com.zynergylabs.forager.brouter.router
++
++import com.zynergylabs.forager.brouter.mapaccess.MatchedWaypoint
++import com.zynergylabs.forager.brouter.util.StringUtils
++import okio.FileSystem
++import okio.Path.Companion.toPath
++
++/**
++ * BRouter 1.7.10's `btools.router.FormatGpx`, whole (step 7, session 25; RECORD -111, "Port them"). Java's
++ * `BufferedWriter` over a `StringWriter` is a [StringBuilder] here. Where Java dereferences a null, `!!` throws Kotlin's
++ * `NullPointerException`; where it indexes past a list's end, Kotlin's list throws as Java's does. Java's
++ * `formatAsGpx` returns its writer's `toString()`, an object identity that `format` drops; this one returns nothing.
++ */
++internal class FormatGpx(rc: RoutingContext?) : Formatter(rc) {
++    /** `FormatGpx.java:19-31`. Java wraps whatever is thrown in a `RuntimeException`; so does this. */
++    override fun format(t: OsmTrack): String {
++        try {
++            val sw = StringBuilder(8192)
++            formatAsGpx(sw, t)
++            return sw.toString()
++        } catch (e: Exception) {
++            throw RuntimeException(e)
++        }
++    }
++
++    /** `FormatGpx.java:33-474`. */
++    fun formatAsGpx(sb: StringBuilder, t: OsmTrack) {
++        val turnInstructionMode = t.voiceHints?.turnInstructionMode ?: 0
++
++        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
++        if (turnInstructionMode != 9) {
++            val ml = t.messageList!!
++            for (i in ml.size - 1 downTo 0) {
++                var message: String? = ml[i]
++                if (i < ml.size - 1) {
++                    message = "(alt-index " + i + ": " + message + " )"
++                }
++                if (message != null) {
++                    sb.append("<!-- ").append(message).append(" -->\n")
++                }
++            }
++        }
++
++        if (turnInstructionMode == 4) { // comment style
++            sb.append("<!-- \$transport-mode\$").append(t.voiceHints!!.getTransportMode()).append("\$ -->\n")
++            sb.append("<!--          cmd    idx        lon        lat d2next  geometry -->\n")
++            sb.append("<!-- \$turn-instruction-start\$\n")
++            for (hint in t.voiceHints!!.list) {
++                // Java's String.format("     $turn$%6s;%6d;%10s;%10s;%6d;%s$\n", ...): right-justified fields, digits
++                // in the default locale's (ASCII on the oracle's JVM [I]).
++                sb.append("     \$turn\$")
++                    .append(getCommandString(hint.cmd, hint.roundaboutExit, turnInstructionMode).padStart(6)).append(';')
++                    .append(hint.indexInTrack.toString().padStart(6)).append(';')
++                    .append(formatILon(hint.ilon).padStart(10)).append(';')
++                    .append(formatILat(hint.ilat).padStart(10)).append(';')
++                    .append(hint.distanceToNext.toInt().toString().padStart(6)).append(';')
++                    .append(hint.formatGeometry()).append("\$\n")
++            }
++            sb.append("    \$turn-instruction-end\$ -->\n")
++        }
++        sb.append("<gpx \n")
++        sb.append(" xmlns=\"http://www.topografix.com/GPX/1/1\" \n")
++        sb.append(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n")
++        if (turnInstructionMode == 9) { // BRouter style
++            sb.append(" xmlns:brouter=\"Not yet documented\" \n")
++        }
++        if (turnInstructionMode == 7) { // old locus style
++            sb.append(" xmlns:locus=\"http://www.locusmap.eu\" \n")
++        }
++        sb.append(" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\" \n")
++
++        if (turnInstructionMode == 3) {
++            sb.append(" creator=\"OsmAndRouter\" version=\"1.1\">\n")
++        } else {
++            sb.append(" creator=\"BRouter-" + OsmTrack.version + "\" version=\"1.1\">\n")
++        }
++        if (turnInstructionMode == 9) {
++            sb.append(" <metadata>\n")
++            sb.append("  <name>").append(t.name).append("</name>\n")
++            sb.append("  <extensions>\n")
++            sb.append("   <brouter:info>").append(t.messageList!![0]).append("</brouter:info>\n")
++            val params = t.params
++            if (params != null && params.size > 0) {
++                sb.append("   <brouter:params><![CDATA[")
++                var i = 0
++                for (e in params.entries) {
++                    if (i++ != 0) sb.append("&")
++                    sb.append(e.key).append("=").append(e.value)
++                }
++                sb.append("]]></brouter:params>\n")
++            }
++            sb.append("  </extensions>\n")
++            sb.append(" </metadata>\n")
++        }
++        if (turnInstructionMode == 3 || turnInstructionMode == 8) { // osmand style, cruiser
++            val vh = t.voiceHints!!
++            var lastRteTime = 0f
++
++            sb.append(" <rte>\n")
++
++            var rteTime = t.getVoiceHintTime(0)
++            val first = StringBuilder()
++            // define start point
++            run {
++                first.append("  <rtept lat=\"").append(formatILat(t.nodes[0].getILat())).append("\" lon=\"")
++                    .append(formatILon(t.nodes[0].getILon())).append("\">\n")
++                    .append("   <desc>start</desc>\n   <extensions>\n")
++                if (rteTime != lastRteTime) { // add timing only if available
++                    val ti: Double = (rteTime - lastRteTime).toDouble()
++                    first.append("    <time>").append("" + (ti + 0.5).toInt()).append("</time>\n")
++                    lastRteTime = rteTime
++                }
++                first.append("    <offset>0</offset>\n  </extensions>\n </rtept>\n")
++            }
++            if (turnInstructionMode == 8) {
++                if (t.matchedWaypoints!![0].wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT && vh.list[0].indexInTrack == 0) {
++                    // has a voice hint do nothing, voice hint will do
++                } else {
++                    sb.append(first.toString())
++                }
++            } else {
++                sb.append(first.toString())
++            }
++
++            for (i in 0 until vh.list.size) {
++                val hint = vh.list[i]
++                sb.append("  <rtept lat=\"").append(formatILat(hint.ilat)).append("\" lon=\"")
++                    .append(formatILon(hint.ilon)).append("\">\n")
++                    .append("   <desc>")
++                    .append(if (turnInstructionMode == 3) getMessageString(hint.cmd, hint.roundaboutExit, turnInstructionMode) else getCruiserMessageString(hint.cmd, hint.roundaboutExit))
++                    .append("</desc>\n   <extensions>\n")
++
++                rteTime = t.getVoiceHintTime(i + 1)
++
++                if (rteTime != lastRteTime) { // add timing only if available
++                    val ti: Double = (rteTime - lastRteTime).toDouble()
++                    sb.append("    <time>").append("" + (ti + 0.5).toInt()).append("</time>\n")
++                    lastRteTime = rteTime
++                }
++                sb.append("    <turn>")
++                    .append(if (turnInstructionMode == 3) getCommandString(hint.cmd, hint.roundaboutExit, turnInstructionMode) else getCruiserCommandString(hint.cmd, hint.roundaboutExit))
++                    .append("</turn>\n    <turn-angle>").append("" + hint.angle.toInt())
++                    .append("</turn-angle>\n    <offset>").append("" + hint.indexInTrack).append("</offset>\n  </extensions>\n </rtept>\n")
++            }
++            sb.append("  <rtept lat=\"").append(formatILat(t.nodes[t.nodes.size - 1].getILat())).append("\" lon=\"")
++                .append(formatILon(t.nodes[t.nodes.size - 1].getILon())).append("\">\n")
++                .append("   <desc>destination</desc>\n   <extensions>\n")
++            sb.append("    <time>0</time>\n")
++            sb.append("    <offset>").append("" + (t.nodes.size - 1)).append("</offset>\n  </extensions>\n </rtept>\n")
++
++            sb.append("</rte>\n")
++        }
++
++        if (turnInstructionMode == 7) { // old locus style
++            val vh = t.voiceHints!!
++            var lastRteTime = t.getVoiceHintTime(0)
++
++            for (i in 0 until vh.list.size) {
++                val hint = vh.list[i]
++                sb.append(" <wpt lon=\"").append(formatILon(hint.ilon)).append("\" lat=\"")
++                    .append(formatILat(hint.ilat)).append("\">")
++                    .append(if (hint.selev == Short.MIN_VALUE) "" else "<ele>" + (hint.selev / 4.0) + "</ele>")
++                    .append("<name>")
++                    .append(getMessageString(hint.cmd, hint.roundaboutExit, turnInstructionMode))
++                    .append("</name>")
++                    .append("<extensions><locus:rteDistance>").append("" + hint.distanceToNext).append("</locus:rteDistance>")
++                val rteTime = t.getVoiceHintTime(i + 1)
++                if (rteTime != lastRteTime) { // add timing only if available
++                    val ti: Double = (rteTime - lastRteTime).toDouble()
++                    val speed = hint.distanceToNext / ti
++                    sb.append("<locus:rteTime>").append("" + ti).append("</locus:rteTime>")
++                        .append("<locus:rteSpeed>").append("" + speed).append("</locus:rteSpeed>")
++                    lastRteTime = rteTime
++                }
++                sb.append("<locus:rtePointAction>").append("" + getLocusAction(hint.cmd, hint.roundaboutExit)).append("</locus:rtePointAction></extensions>")
++                    .append("</wpt>\n")
++            }
++        }
++        if (turnInstructionMode == 5) { // gpsies style
++            for (hint in t.voiceHints!!.list) {
++                // Java's `toLowerCase()` takes the default locale; the symbol strings are ASCII [I].
++                sb.append(" <wpt lon=\"").append(formatILon(hint.ilon)).append("\" lat=\"")
++                    .append(formatILat(hint.ilat)).append("\">")
++                    .append("<name>").append(getMessageString(hint.cmd, hint.roundaboutExit, turnInstructionMode)).append("</name>")
++                    .append("<sym>").append(getSymbolString(hint.cmd, hint.roundaboutExit, turnInstructionMode).lowercase()).append("</sym>")
++                    .append("<type>").append(getSymbolString(hint.cmd, hint.roundaboutExit, turnInstructionMode)).append("</type>")
++                    .append("</wpt>\n")
++            }
++        }
++
++        if (turnInstructionMode == 6) { // orux style
++            for (hint in t.voiceHints!!.list) {
++                sb.append(" <wpt lat=\"").append(formatILat(hint.ilat)).append("\" lon=\"")
++                    .append(formatILon(hint.ilon)).append("\">")
++                    .append(if (hint.selev == Short.MIN_VALUE) "" else "<ele>" + (hint.selev / 4.0) + "</ele>")
++                    .append(
++                        "<extensions>\n" +
++                            "  <om:oruxmapsextensions xmlns:om=\"http://www.oruxmaps.com/oruxmapsextensions/1/0\">\n" +
++                            "   <om:ext type=\"ICON\" subtype=\"0\">",
++                    ).append("" + getOruxAction(hint.cmd, hint.roundaboutExit))
++                    .append(
++                        "</om:ext>\n" +
++                            "  </om:oruxmapsextensions>\n" +
++                            "  </extensions>\n" +
++                            " </wpt>\n",
++                    )
++            }
++        }
++
++        for (i in 0..t.pois.size - 1) {
++            val poi = t.pois[i]
++            formatWaypointGpx(sb, poi, "poi")
++        }
++
++        if (t.exportWaypoints) {
++            val wps = t.matchedWaypoints!!
++            for (i in 0..wps.size - 1) {
++                val wt = wps[i]
++                if (i == 0) {
++                    formatWaypointGpx(sb, wt, if (wt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) "beeline" else "via")
++                } else if (i == wps.size - 1) {
++                    formatWaypointGpx(sb, wt, "via")
++                } else {
++                    if (wt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
++                        formatWaypointGpx(sb, wt, "beeline")
++                    } else if (wt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_MEETING) {
++                        formatWaypointGpx(sb, wt, "via")
++                    } else {
++                        formatWaypointGpx(sb, wt, "shaping")
++                    }
++                }
++            }
++        }
++        if (t.exportCorrectedWaypoints) {
++            sb.append("\n")
++            val wps = t.matchedWaypoints!!
++            for (i in 0..wps.size - 1) {
++                val wt = wps[i]
++                val cp = wt.correctedpoint
++                if (cp != null) {
++                    val n = OsmNodeNamed(cp)
++                    n.name = wt.name + "_corr"
++                    formatWaypointGpx(sb, n, "shaping")
++                }
++            }
++            sb.append("\n")
++        }
++
++        sb.append(" <trk>\n")
++        if (turnInstructionMode == 9 ||
++            turnInstructionMode == 2 ||
++            turnInstructionMode == 8 ||
++            turnInstructionMode == 4
++        ) { // Locus, comment, cruise, brouter style
++            sb.append("  <src>").append(t.name).append("</src>\n")
++            sb.append("  <type>").append(t.voiceHints!!.getTransportMode()).append("</type>\n")
++        } else {
++            sb.append("  <name>").append(t.name).append("</name>\n")
++        }
++
++        if (turnInstructionMode == 7) {
++            sb.append("  <extensions>\n")
++            sb.append("   <locus:rteComputeType>").append("" + t.voiceHints!!.getLocusRouteType()).append("</locus:rteComputeType>\n")
++            sb.append("   <locus:rteSimpleRoundabouts>1</locus:rteSimpleRoundabouts>\n")
++            sb.append("  </extensions>\n")
++        }
++
++        // all points
++        sb.append("  <trkseg>\n")
++        var lastway = ""
++        var bNextDirect = false
++        var nn: OsmPathElement? = null
++
++        for (idx in 0 until t.nodes.size) {
++            val n = t.nodes[idx]
++            var sele = if (n.getSElev() == Short.MIN_VALUE) "" else "<ele>" + n.getElev() + "</ele>"
++            val hint = t.getVoiceHint(idx)
++            val mwpt = t.getMatchedWaypoint(idx)
++
++            if (t.showTime) {
++                sele += "<time>" + getFormattedTime3(n.getTime()) + "</time>"
++            }
++            if (turnInstructionMode == 8) {
++                if (mwpt != null &&
++                    !mwpt.name!!.startsWith("via") && !mwpt.name!!.startsWith("from") && !mwpt.name!!.startsWith("to")
++                ) {
++                    sele += "<name>" + mwpt.name + "</name>"
++                }
++            }
++            var bNeedHeader: Boolean
++            if (turnInstructionMode == 9) { // trkpt/sym style
++
++                if (hint != null) {
++
++                    if (mwpt != null &&
++                        !mwpt.name!!.startsWith("via") && !mwpt.name!!.startsWith("from") && !mwpt.name!!.startsWith("to")
++                    ) {
++                        sele += "<name>" + mwpt.name + "</name>"
++                    }
++                    sele += "<desc>" + getCruiserMessageString(hint.cmd, hint.roundaboutExit) + "</desc>"
++                    sele += "<sym>" + getCommandString(hint.cmd, hint.roundaboutExit, turnInstructionMode) + "</sym>"
++                    if (mwpt != null) {
++                        if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_MEETING) {
++                            sele += "<type>via</type>"
++                        } else {
++                            sele += "<type>shaping</type>"
++                        }
++                    }
++                    sele += "<extensions>"
++                    if (t.showspeed) {
++                        sele += "<brouter:speed>" + FormatJson.speedText(n, nn) + "</brouter:speed>"
++                    }
++
++                    sele += "<brouter:voicehint>" + getCommandString(hint.cmd, hint.roundaboutExit, turnInstructionMode) + ";" + hint.distanceToNext.toInt() + "," + hint.formatGeometry() + "</brouter:voicehint>"
++                    val msg = n.message
++                    if (msg != null && msg.wayKeyValues != null && msg.wayKeyValues != lastway) {
++                        sele += "<brouter:way>" + msg.wayKeyValues + "</brouter:way>"
++                        lastway = msg.wayKeyValues!!
++                    }
++                    if (msg != null && msg.nodeKeyValues != null) {
++                        sele += "<brouter:node>" + msg.nodeKeyValues + "</brouter:node>"
++                    }
++                    sele += "</extensions>"
++                }
++                if (idx == 0 && hint == null) {
++                    if (mwpt != null && mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
++                        sele += "<desc>beeline</desc>"
++                    } else {
++                        sele += "<desc>start</desc>"
++                    }
++                    sele += "<type>via</type>"
++                } else if (idx == t.nodes.size - 1 && hint == null) {
++                    sele += "<desc>end</desc>"
++                    sele += "<type>via</type>"
++                } else {
++                    if (mwpt != null && hint == null) {
++                        if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
++                            // bNextDirect = true;
++                            sele += "<desc>beeline</desc>"
++                        } else {
++                            sele += "<desc>" + mwpt.name + "</desc>"
++                        }
++                        if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_MEETING) {
++                            sele += "<type>via</type>"
++                        } else {
++                            sele += "<type>shaping</type>"
++                        }
++                        bNextDirect = false
++                    }
++                }
++
++                if (hint == null) {
++                    val msg = n.message
++                    bNeedHeader = (t.showspeed || (msg != null && msg.wayKeyValues != null && msg.wayKeyValues != lastway)) ||
++                        (msg != null && msg.nodeKeyValues != null)
++                    if (bNeedHeader) {
++                        sele += "<extensions>"
++                        if (t.showspeed) {
++                            sele += "<brouter:speed>" + FormatJson.speedText(n, nn) + "</brouter:speed>"
++                        }
++                        if (msg != null && msg.wayKeyValues != null && msg.wayKeyValues != lastway) {
++                            sele += "<brouter:way>" + msg.wayKeyValues + "</brouter:way>"
++                            lastway = msg.wayKeyValues!!
++                        }
++                        if (msg != null && msg.nodeKeyValues != null) {
++                            sele += "<brouter:node>" + msg.nodeKeyValues + "</brouter:node>"
++                        }
++                        sele += "</extensions>"
++                    }
++                }
++            }
++
++            if (turnInstructionMode == 2) { // locus style new
++                if (hint != null) {
++                    if (mwpt != null) {
++                        val name = mwpt.name!!
++                        if (!name.startsWith("via") && !name.startsWith("from") && !name.startsWith("to") && !name.startsWith("rt")) {
++                            sele += "<name>" + mwpt.name + "</name>"
++                        }
++                        if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT && bNextDirect) {
++                            sele += "<src>" + getLocusSymbolString(hint.cmd, hint.roundaboutExit) + "</src><sym>pass_place</sym><type>Shaping</type>"
++                            // bNextDirect = false;
++                        } else if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
++                            if (idx == 0) {
++                                sele += "<sym>pass_place</sym><type>Via</type>"
++                            } else {
++                                sele += "<sym>pass_place</sym><type>Shaping</type>"
++                            }
++                            bNextDirect = true
++                        } else if (bNextDirect) {
++                            sele += "<src>beeline</src><sym>" + getLocusSymbolString(hint.cmd, hint.roundaboutExit) + "</sym><type>Shaping</type>"
++                            bNextDirect = false
++                        } else {
++                            sele += "<sym>" + getLocusSymbolString(hint.cmd, hint.roundaboutExit) + "</sym><type>Via</type>"
++                        }
++                    } else {
++                        sele += "<sym>" + getLocusSymbolString(hint.cmd, hint.roundaboutExit) + "</sym>"
++                    }
++                } else {
++                    if (idx == 0) {
++                        val pos = sele.indexOf("<sym")
++                        if (pos != -1) {
++                            sele = sele.substring(0, pos)
++                        }
++                        if (mwpt != null && !mwpt.name!!.startsWith("from")) {
++                            sele += "<name>" + mwpt.name + "</name>"
++                        }
++                        if (mwpt != null && mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
++                            bNextDirect = true
++                        }
++                        sele += "<sym>pass_place</sym>"
++                        sele += "<type>Via</type>"
++                    } else if (idx == t.nodes.size - 1) {
++                        val pos = sele.indexOf("<sym")
++                        if (pos != -1) {
++                            sele = sele.substring(0, pos)
++                        }
++                        if (mwpt != null && mwpt.name != null && !mwpt.name!!.startsWith("to")) {
++                            sele += "<name>" + mwpt.name + "</name>"
++                        }
++                        if (bNextDirect) {
++                            sele += "<src>beeline</src>"
++                        }
++                        sele += "<sym>pass_place</sym>"
++                        sele += "<type>Via</type>"
++                    } else {
++                        if (mwpt != null) {
++                            val name = mwpt.name!!
++                            if (!name.startsWith("via") && !name.startsWith("from") && !name.startsWith("to") && !name.startsWith("rt")) {
++                                sele += "<name>" + mwpt.name + "</name>"
++                            }
++                            if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT && bNextDirect) {
++                                sele += "<src>beeline</src><sym>pass_place</sym><type>Shaping</type>"
++                            } else if (mwpt.wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) {
++                                if (idx == 0) {
++                                    sele += "<sym>pass_place</sym><type>Via</type>"
++                                } else {
++                                    sele += "<sym>pass_place</sym><type>Shaping</type>"
++                                }
++                                bNextDirect = true
++                            } else if (bNextDirect) {
++                                sele += "<src>beeline</src><sym>pass_place</sym><type>Shaping</type>"
++                                bNextDirect = false
++                            } else if (name.startsWith("via") ||
++                                name.startsWith("from") ||
++                                name.startsWith("to") ||
++                                name.startsWith("rt")
++                            ) {
++                                if (bNextDirect) {
++                                    sele += "<src>beeline</src><sym>pass_place</sym><type>Shaping</type>"
++                                } else {
++                                    sele += "<sym>pass_place</sym><type>Shaping</type>"
++                                }
++                                bNextDirect = false
++                            } else {
++                                sele += "<name>" + mwpt.name + "</name>"
++                                sele += "<sym>pass_place</sym><type>Via</type>"
++                            }
++                        }
++                    }
++                }
++            }
++            sb.append("   <trkpt lon=\"").append(formatILon(n.getILon())).append("\" lat=\"")
++                .append(formatILat(n.getILat())).append("\">").append(sele).append("</trkpt>\n")
++
++            nn = n
++        }
++
++        sb.append("  </trkseg>\n")
++        sb.append(" </trk>\n")
++        sb.append("</gpx>\n")
++    }
++
++    /** `FormatGpx.java:476-489`. Java wraps whatever is thrown in a `RuntimeException`; so does this. */
++    fun formatAsWaypoint(n: OsmNodeNamed): String {
++        try {
++            val sw = StringBuilder(8192)
++            formatGpxHeader(sw)
++            formatWaypointGpx(sw, n, null)
++            formatGpxFooter(sw)
++            return sw.toString()
++        } catch (e: Exception) {
++            throw RuntimeException(e)
++        }
++    }
++
++    /** `FormatGpx.java:491-498`. */
++    fun formatGpxHeader(sb: StringBuilder) {
++        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
++        sb.append("<gpx \n")
++        sb.append(" xmlns=\"http://www.topografix.com/GPX/1/1\" \n")
++        sb.append(" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \n")
++        sb.append(" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\" \n")
++        sb.append(" creator=\"BRouter-" + OsmTrack.version + "\" version=\"1.1\">\n")
++    }
++
++    /** `FormatGpx.java:500-502`. */
++    fun formatGpxFooter(sb: StringBuilder) {
++        sb.append("</gpx>\n")
++    }
++
++    /** `FormatGpx.java:504-520`. */
++    fun formatWaypointGpx(sb: StringBuilder, n: OsmNodeNamed, type: String?) {
++        sb.append(" <wpt lon=\"").append(formatILon(n.ilon)).append("\" lat=\"")
++            .append(formatILat(n.ilat)).append("\">")
++        if (n.getSElev() != Short.MIN_VALUE) {
++            sb.append("<ele>").append("" + n.getElev()).append("</ele>")
++        }
++        if (n.name != null) {
++            sb.append("<name>").append(StringUtils.escapeXml10(n.name)).append("</name>")
++        }
++        val d = n.nodeDescription
++        val rc = rc
++        if (d != null && rc != null) {
++            sb.append("<desc>").append(rc.expctxWay!!.getKeyValueDescription(false, d)).append("</desc>")
++        }
++        if (type != null) {
++            sb.append("<type>").append(type).append("</type>")
++        }
++        sb.append("</wpt>\n")
++    }
++
++    /** `FormatGpx.java:522-535`. */
++    fun formatWaypointGpx(sb: StringBuilder, wp: MatchedWaypoint, type: String?) {
++        val w = wp.waypoint!!
++        sb.append(" <wpt lon=\"").append(formatILon(w.ilon)).append("\" lat=\"")
++            .append(formatILat(w.ilat)).append("\">")
++        if (w.getSElev() != Short.MIN_VALUE) {
++            sb.append("<ele>").append("" + w.getElev()).append("</ele>")
++        }
++        if (wp.name != null) {
++            sb.append("<name>").append(StringUtils.escapeXml10(wp.name)).append("</name>")
++        }
++        if (type != null) {
++            sb.append("<type>").append(type).append("</type>")
++        }
++        sb.append("</wpt>\n")
++    }
++
++    /**
++     * `FormatGpx.java:541-571`. Java reads with `InputStreamReader`'s default charset and `BufferedReader.readLine`,
++     * which ends a line at `\n`, `\r` or `\r\n`; this reads UTF-8 [I] and splits lines the same way. A coordinate is
++     * parsed with `String.toDouble`, Java's `Double.parseDouble` on the JVM [?, Kotlin/Native, step 10].
++     */
++    override fun read(filename: String): OsmTrack? = read(filename, FileSystem.SYSTEM)
++
++    fun read(filename: String, fileSystem: FileSystem): OsmTrack? {
++        val path = filename.toPath()
++        if (!fileSystem.exists(path)) {
++            return null
++        }
++        val track = OsmTrack()
++        val text = fileSystem.read(path) { readUtf8() }
++
++        for (line in readLines(text)) {
++            var idx0 = line.indexOf("<trkpt ")
++            if (idx0 >= 0) {
++                idx0 = line.indexOf(" lon=\"")
++                idx0 += 6
++                val idx1 = line.indexOf('"', idx0)
++                val ilon = ((line.substring(idx0, idx1).toDouble() + 180.0) * 1000000.0 + 0.5).toInt()
++                var idx2 = line.indexOf(" lat=\"")
++                if (idx2 < 0) {
++                    continue
++                }
++                idx2 += 6
++                val idx3 = line.indexOf('"', idx2)
++                val ilat = ((line.substring(idx2, idx3).toDouble() + 90.0) * 1000000.0 + 0.5).toInt()
++                track.nodes.add(OsmPathElement.create(ilon, ilat, 0.toShort(), null))
++            }
++        }
++        return track
++    }
++
++    companion object {
++        /** `FormatGpx.java:537-539`. */
++        fun getWaypoint(ilon: Int, ilat: Int, name: String?, desc: String?): String {
++            return "<wpt lon=\"" + formatILon(ilon) + "\" lat=\"" + formatILat(ilat) + "\"><name>" + name + "</name>" + (if (desc != null) "<desc>$desc</desc>" else "") + "</wpt>"
++        }
++
++        /** `BufferedReader.readLine`'s lines: ended by `\n`, `\r` or `\r\n`; a last line without an end counts. */
++        private fun readLines(text: String): List<String> {
++            val out = ArrayList<String>()
++            var start = 0
++            var i = 0
++            while (i < text.length) {
++                val c = text[i]
++                if (c == '\n' || c == '\r') {
++                    out += text.substring(start, i)
++                    if (c == '\r' && i + 1 < text.length && text[i + 1] == '\n') i++
++                    start = i + 1
++                }
++                i++
++            }
++            if (start < text.length) out += text.substring(start)
++            return out
++        }
++    }
++}
+diff --git a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatJson.kt b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatJson.kt
+index 6048afe..814f4d3 100644
+--- a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatJson.kt
++++ b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/FormatJson.kt
+@@ -1,21 +1,320 @@
+ package com.zynergylabs.forager.brouter.router
+ 
++import com.zynergylabs.forager.brouter.mapaccess.MatchedWaypoint
++import com.zynergylabs.forager.brouter.util.MsunLibm
++import com.zynergylabs.forager.brouter.util.StringUtils
++
+ /**
+- * BRouter 1.7.10's `btools.router.FormatJson` (step 7, session 25; RECORD -111, "Port them"). Stubs, seen failing
+- * first (RECORD -101).
++ * BRouter 1.7.10's `btools.router.FormatJson`, whole (step 7, session 25; RECORD -111, "Port them"). Java's
++ * `BufferedWriter` over a `StringWriter` is a [StringBuilder] here. Where Java dereferences a null, `!!` throws Kotlin's
++ * `NullPointerException`.
+  */
+ internal class FormatJson(rc: RoutingContext?) : Formatter(rc) {
+     /** `FormatJson.java:19-180`. */
+-    override fun format(t: OsmTrack): String = TODO("FormatJson.format: step 7, session 25")
++    override fun format(t: OsmTrack): String {
++        val turnInstructionMode = t.voiceHints?.turnInstructionMode ?: 0
++
++        val sb = StringBuilder(8192)
++
++        sb.append("{\n")
++        sb.append("  \"type\": \"FeatureCollection\",\n")
++        sb.append("  \"features\": [\n")
++        sb.append("    {\n")
++        sb.append("      \"type\": \"Feature\",\n")
++        sb.append("      \"properties\": {\n")
++        sb.append("        \"creator\": \"BRouter-" + OsmTrack.version + "\",\n")
++        sb.append("        \"name\": \"").append(t.name).append("\",\n")
++        sb.append("        \"track-length\": \"").append(t.distance).append("\",\n")
++        sb.append("        \"filtered ascend\": \"").append(t.ascend).append("\",\n")
++        sb.append("        \"plain-ascend\": \"").append(t.plainAscend).append("\",\n")
++        sb.append("        \"total-time\": \"").append(t.getTotalSeconds()).append("\",\n")
++        sb.append("        \"total-energy\": \"").append(t.energy).append("\",\n")
++        sb.append("        \"cost\": \"").append(t.cost).append("\",\n")
++        val vh = t.voiceHints
++        if (vh != null && vh.list.isNotEmpty()) {
++            sb.append("        \"voicehints\": [\n")
++            for (hint in vh.list) {
++                sb.append("          [")
++                sb.append(hint.indexInTrack)
++                sb.append(',').append(getJsonCommandIndex(hint.cmd, turnInstructionMode))
++                sb.append(',').append(hint.getExitNumber())
++                sb.append(',').append(hint.distanceToNext)
++                sb.append(',').append(hint.angle.toInt())
++
++                // not always include geometry because longer and only needed for comment style
++                if (turnInstructionMode == 4 || turnInstructionMode == 9) { // comment style
++                    sb.append(",\"").append(hint.formatGeometry()).append("\"")
++                }
++
++                sb.append("],\n")
++            }
++            sb.deleteAt(sb.lastIndexOf(","))
++            sb.append("        ],\n")
++        }
++        if (t.showSpeedProfile) { // set in profile
++            val sp = t.aggregateSpeedProfile()
++            if (sp.isNotEmpty()) {
++                sb.append("        \"speedprofile\": [\n")
++                for (i in sp.size - 1 downTo 0) {
++                    sb.append("          [").append(sp[i]).append(if (i > 0) "],\n" else "]\n")
++                }
++                sb.append("        ],\n")
++            }
++        }
++        //  ... traditional message list
++        run {
++            sb.append("        \"messages\": [\n")
++            // Java's `replaceAll("\t", ...)`: a regex of one tab and a replacement with no `$` or `\`, so a plain replace.
++            sb.append("          [\"").append(MESSAGES_HEADER.replace("\t", "\", \"")).append("\"],\n")
++            for (m in t.aggregateMessages()) {
++                sb.append("          [\"").append(m.replace("\t", "\", \"")).append("\"],\n")
++            }
++            sb.deleteAt(sb.lastIndexOf(","))
++            sb.append("        ],\n")
++        }
++
++        if (t.getTotalSeconds() > 0) {
++            sb.append("        \"times\": [")
++            for (n in t.nodes) {
++                sb.append(formatDecimal3(n.getTime())).append(",")
++            }
++            sb.deleteAt(sb.lastIndexOf(","))
++            sb.append("]\n")
++        } else {
++            sb.deleteAt(sb.lastIndexOf(","))
++        }
++
++        sb.append("      },\n")
++
++        val iternity = t.iternity
++        if (iternity != null) {
++            sb.append("      \"iternity\": [\n")
++            for (s in iternity) {
++                sb.append("        \"").append(s).append("\",\n")
++            }
++            sb.deleteAt(sb.lastIndexOf(","))
++            sb.append("        ],\n")
++        }
++        sb.append("      \"geometry\": {\n")
++        sb.append("        \"type\": \"LineString\",\n")
++        sb.append("        \"coordinates\": [\n")
++
++        var nn: OsmPathElement? = null
++        for (n in t.nodes) {
++            var sele = if (n.getSElev() == Short.MIN_VALUE) "" else ", " + n.getElev()
++            if (t.showspeed) { // hack: show speed instead of elevation
++                sele = ", " + speedText(n, nn)
++            }
++            sb.append("          [").append(formatILon(n.getILon())).append(", ").append(formatILat(n.getILat()))
++                .append(sele).append("],\n")
++            nn = n
++        }
++        sb.deleteAt(sb.lastIndexOf(","))
++
++        sb.append("        ]\n")
++        sb.append("      }\n")
++        if (t.exportWaypoints || t.exportCorrectedWaypoints || t.pois.isNotEmpty()) {
++            sb.append("    },\n")
++            for (i in 0..t.pois.size - 1) {
++                val poi = t.pois[i]
++                addFeature(sb, "poi", poi.name, poi.ilat, poi.ilon, poi.getSElev())
++                if (i < t.pois.size - 1) {
++                    sb.append(",")
++                }
++                sb.append("    \n")
++            }
++            if (t.exportWaypoints) {
++                if (t.pois.isNotEmpty()) sb.append("    ,\n")
++                val wps = t.matchedWaypoints!!
++                for (i in 0..wps.size - 1) {
++                    val wp = wps[i]
++                    val type = when (wp.wpttype) {
++                        MatchedWaypoint.WAYPOINT_TYPE_DIRECT -> "beeline"
++                        MatchedWaypoint.WAYPOINT_TYPE_MEETING -> "via"
++                        else -> "shaping"
++                    }
++                    val w = wp.waypoint!!
++                    addFeature(sb, type, wp.name, w.ilat, w.ilon, w.getSElev())
++                    if (i < wps.size - 1) {
++                        sb.append(",")
++                    }
++                    sb.append("    \n")
++                }
++            }
++            if (t.exportCorrectedWaypoints) {
++                if (t.exportWaypoints) sb.append("    ,\n")
++                var hasCorrPoints = false
++                val wps = t.matchedWaypoints!!
++                for (i in 0..wps.size - 1) {
++                    val type = "via_corr"
++
++                    val wp = wps[i]
++                    val cp = wp.correctedpoint
++                    if (cp != null) {
++                        if (hasCorrPoints) {
++                            sb.append(",")
++                        }
++                        addFeature(sb, type, wp.name + "_corr", cp.ilat, cp.ilon, cp.getSElev())
++                        sb.append("    \n")
++                        hasCorrPoints = true
++                    }
++                }
++            }
++        } else {
++            sb.append("    }\n")
++        }
++        sb.append("  ]\n")
++        sb.append("}\n")
++
++        return sb.toString()
++    }
++
++    /** `FormatJson.java:182-197`. */
++    private fun addFeature(sb: StringBuilder, type: String, name: String?, ilat: Int, ilon: Int, selev: Short) {
++        sb.append("    {\n")
++        sb.append("      \"type\": \"Feature\",\n")
++        sb.append("      \"properties\": {\n")
++        sb.append("        \"name\": \"" + StringUtils.escapeJson(name) + "\",\n")
++        sb.append("        \"type\": \"" + type + "\"\n")
++        sb.append("      },\n")
++        sb.append("      \"geometry\": {\n")
++        sb.append("        \"type\": \"Point\",\n")
++        sb.append("        \"coordinates\": [\n")
++        sb.append("          " + formatILon(ilon) + ",\n")
++        sb.append("          " + formatILat(ilat) + (if (selev != Short.MIN_VALUE) ",\n          " + selev / 4.0 else "") + "\n")
++        sb.append("        ]\n")
++        sb.append("      }\n")
++        sb.append("    }")
++    }
+ 
+-    /** `FormatJson.java:199-212`. */
+-    fun formatAsWaypoint(n: OsmNodeNamed): String = TODO("FormatJson.formatAsWaypoint: step 7, session 25")
++    /** `FormatJson.java:199-212`. Java wraps whatever is thrown in a `RuntimeException`; so does this. */
++    fun formatAsWaypoint(n: OsmNodeNamed): String {
++        try {
++            val sw = StringBuilder(8192)
++            addJsonHeader(sw)
++            val d = n.nodeDescription
++            addJsonFeature(sw, "info", "wpinfo", n.ilon, n.ilat, n.getElev(), if (d != null) rc!!.expctxWay!!.getKeyValueDescription(false, d) else null)
++            addJsonFooter(sw)
++            return sw.toString()
++        } catch (e: Exception) {
++            throw RuntimeException(e)
++        }
++    }
++
++    /** `FormatJson.java:214-240`. */
++    private fun addJsonFeature(sb: StringBuilder, type: String, name: String, ilon: Int, ilat: Int, elev: Double, desc: String?) {
++        sb.append("    {\n")
++        sb.append("      \"type\": \"Feature\",\n")
++        sb.append("      \"properties\": {\n")
++        sb.append("        \"creator\": \"BRouter-" + OsmTrack.version + "\",\n")
++        sb.append("        \"name\": \"" + StringUtils.escapeJson(name) + "\",\n")
++        sb.append("        \"type\": \"" + type + "\"")
++        if (desc != null) {
++            sb.append(",\n        \"message\": \"" + desc + "\"\n")
++        } else {
++            sb.append("\n")
++        }
++        sb.append("      },\n")
++        sb.append("      \"geometry\": {\n")
++        sb.append("        \"type\": \"Point\",\n")
++        sb.append("        \"coordinates\": [\n")
++        sb.append("          " + formatILon(ilon) + ",\n")
++        sb.append("          " + formatILat(ilat) + ",\n")
++        sb.append("          " + elev + "\n")
++        sb.append("        ]\n")
++        sb.append("      }\n")
++        sb.append("    }\n")
++    }
+ 
+     companion object {
++        /** `FormatJson.java:242-250`. */
++        private fun addJsonHeader(sb: StringBuilder) {
++            sb.append("{\n")
++            sb.append("  \"type\": \"FeatureCollection\",\n")
++            sb.append("  \"features\": [\n")
++        }
++
++        /** `FormatJson.java:252-259`. */
++        private fun addJsonFooter(sb: StringBuilder) {
++            sb.append("  ]\n")
++            sb.append("}\n")
++        }
++
+         /**
+          * Java's `DecimalFormat` from `NumberFormat.getInstance(Locale.ENGLISH)` with pattern `0.###`, as
+-         * `FormatJson.java:84-86` formats a node's time (a `float`, widened to `double`).
++         * `FormatJson.java:84-86` formats a node's time (a `float`, widened to `double`): at most three decimals,
++         * rounded half-even on the exact binary value, trailing zeros dropped, no grouping, `-` kept on a negative value
++         * that rounds to zero (and on -0.0), `NaN` and the infinity sign as Locale.ENGLISH's symbols. A float is
++         * `m * 2^e` with `m` under 2^24, so below 2^53 the rounding is exact in `Long` arithmetic. From 2^53 up (never
++         * a time), Java writes the double's shortest digits padded with zeros; that branch takes them from
++         * `Double.toString`, Java's own on the JVM [?, Kotlin/Native, step 10].
++         */
++        internal fun formatDecimal3(v: Float): String {
++            if (v.isNaN()) return "NaN"
++            val negative = v < 0f || (v == 0f && 1f / v < 0f)
++            val sign = if (negative) "-" else ""
++            if (v.isInfinite()) return sign + "∞"
++            val a = kotlin.math.abs(v)
++            if (a == 0f) return sign + "0"
++            val bits = a.toRawBits()
++            val exp = (bits ushr 23) and 0xff
++            var m = (bits and 0x7fffff).toLong()
++            val e: Int
++            if (exp == 0) {
++                e = -149
++            } else {
++                m = m or 0x800000L
++                e = exp - 150
++            }
++            if (e >= 0) {
++                if (e + 24 <= 53) return sign + (m shl e).toString()
++                return sign + bigDigits(a.toDouble())
++            }
++            // value * 1000 = m * 1000 / 2^k with k = -e, rounded half-even to an integer q; the text is q / 1000.
++            val k = -e
++            val num = m * 1000L // under 2^34
++            val q: Long = if (k >= 62) {
++                0L // num / 2^k is under 2^34 / 2^62, far below one half
++            } else {
++                val whole = num ushr k
++                val rem = num - (whole shl k)
++                val half = 1L shl (k - 1)
++                when {
++                    rem > half -> whole + 1
++                    rem < half -> whole
++                    else -> if (whole and 1L == 1L) whole + 1 else whole
++                }
++            }
++            val ip = q / 1000L
++            val fp = (q % 1000L).toString().padStart(3, '0').trimEnd('0')
++            return sign + ip.toString() + (if (fp.isEmpty()) "" else ".$fp")
++        }
++
++        /** An integer double from 2^53 up: `Double.toString`'s digits, padded with zeros to the decimal point. */
++        private fun bigDigits(d: Double): String {
++            val s = d.toString() // e.g. "1.2345E19"
++            val ei = s.indexOf('E')
++            val mant = s.substring(0, ei).replace(".", "")
++            val pow = s.substring(ei + 1).toInt()
++            val digits = mant.trimEnd('0').ifEmpty { "0" }
++            return digits.padEnd(pow + 1, '0')
++        }
++
++        /**
++         * `FormatJson.java:110-119` (and `FormatGpx.java:294-303`, `:353-362`): the speed into node [n] from [nn],
++         * `((int) (speed * 10)) / 10.f` as Java's `Float.toString` writes it. Java's `calcDistance(OsmPos)` needs no
++         * context; the port's takes the libm seam, here [MsunLibm], the default every `RoutingContext` is built with.
+          */
+-        internal fun formatDecimal3(v: Float): String = TODO("FormatJson.formatDecimal3: step 7, session 25")
++        internal fun speedText(n: OsmPathElement, nn: OsmPathElement?): String {
++            var speed = 0.0
++            if (nn != null) {
++                val dist = n.calcDistance(MsunLibm, nn)
++                val dt = n.getTime() - nn.getTime()
++                if (dt != 0f) {
++                    speed = ((3.6f * dist) / dt + 0.5)
++                }
++            }
++            return "" + ((speed * 10).toInt() / 10f)
++        }
+     }
+ }
+diff --git a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt
+index 60a4c70..fd909e9 100644
+--- a/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt
++++ b/brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/OsmTrack.kt
+@@ -266,13 +266,58 @@ internal class OsmTrack {
+     }
+ 
+     /** `OsmTrack.java:190-208`. */
+-    fun aggregateSpeedProfile(): List<String> = TODO("OsmTrack.aggregateSpeedProfile: step 7, session 25")
++    fun aggregateSpeedProfile(): List<String> {
++        val res = ArrayList<String>()
++        var vmax = -1
++        var vmaxe = -1
++        var vmin = -1
++        var extraTime = 0
++        for (i in nodes.size - 1 downTo 1) {
++            val n = nodes[i]
++            val m = n.message
++            val vnode = getVNode(i)
++            if (m != null && (vmax != m.vmax || vmin != m.vmin || vmaxe != m.vmaxExplicit || vnode < m.vmax || extraTime != m.extraTime)) {
++                vmax = m.vmax
++                vmin = m.vmin
++                vmaxe = m.vmaxExplicit
++                extraTime = m.extraTime
++                res.add("" + i + "," + vmaxe + "," + vmax + "," + vmin + "," + vnode + "," + extraTime)
++            }
++        }
++        return res
++    }
++
++    /** `OsmTrack.java:417-423`. */
++    private fun getVNode(i: Int): Int {
++        val m1 = if (i + 1 < nodes.size) nodes[i + 1].message else null
++        val m0 = if (i < nodes.size) nodes[i].message else null
++        val vnode0 = m1?.vnode0 ?: 999
++        val vnode1 = m0?.vnode1 ?: 999
++        return if (vnode0 < vnode1) vnode0 else vnode1
++    }
+ 
+     /** `OsmTrack.java:397-405`. */
+-    fun getVoiceHint(i: Int): VoiceHint? = TODO("OsmTrack.getVoiceHint: step 7, session 25")
++    fun getVoiceHint(i: Int): VoiceHint? {
++        val vh = voiceHints ?: return null
++        for (hint in vh.list) {
++            if (hint.indexInTrack == i) {
++                return hint
++            }
++        }
++        return null
++    }
+ 
+     /** `OsmTrack.java:551-559`. */
+-    fun getVoiceHintTime(i: Int): Float = TODO("OsmTrack.getVoiceHintTime: step 7, session 25")
++    fun getVoiceHintTime(i: Int): Float {
++        val list = voiceHints!!.list
++        if (list.isNotEmpty() && i < list.size) {
++            return list[i].getTime()
++        }
++        if (nodes.isEmpty()) {
++            return 0f
++        }
++        return nodes[nodes.size - 1].getTime()
++    }
+ 
+     fun getMatchedWaypoint(idx: Int): MatchedWaypoint? {
+         val wps = matchedWaypoints ?: return null
+diff --git a/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/FormatGpxTest.kt b/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/FormatGpxTest.kt
+new file mode 100644
+index 0000000..86ea2c6
+--- /dev/null
++++ b/brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/router/FormatGpxTest.kt
+@@ -0,0 +1,263 @@
++package com.zynergylabs.forager.brouter.router
++
++import com.zynergylabs.forager.brouter.mapaccess.MatchedWaypoint
++import com.zynergylabs.forager.brouter.mapaccess.OsmNode
++import kotlin.random.Random
++import kotlin.test.Test
++import kotlin.test.assertEquals
++import kotlin.test.assertTrue
++
++/**
++ * Step 7, session 25 (RECORD -111, "Port them"): `FormatGpx` whole against the oracle's, with `OsmTrack.getVoiceHint`
++ * and `getVoiceHintTime`. Tracks are `TrackEngines`' walks from Forager's own ends (E1's exception, RECORD -93), as in
++ * `FormatKmlTest`. Each is given alike in both engines a seeded setup that Forager's path never sets, switched on in
++ * test code: voice hints through `processVoiceHints` under every `turnInstructionMode` 0 to 9 (each of 2 to 9 has its
++ * own GPX branch), or none; the message list (with a null entry at times), params, `showTime`, `showspeed`, way and
++ * node tags set or cleared on the nodes' messages, POIs with and without descriptions, matched waypoints placed on the
++ * track's own indices with names that do and do not start with `via`, `from`, `to` and `rt`, corrected points, and the
++ * export flags. `formatAsWaypoint`, `getWaypoint` and `read` (on the oracle's own GPX texts and on crafted lines,
++ * written to a temporary directory) are compared too. A thrown result is compared by exception class only (RECORD
++ * -116); a stub's message is kept so that it names the stub. Texts are compared by digest and length only (E1).
++ */
++class FormatGpxTest {
++    private fun digest(s: String): String =
++        java.security.MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }
++            .take(16) + "/" + s.length
++
++    private fun res(f: () -> String): String = try {
++        f()
++    } catch (e: Throwable) {
++        "throws " + e.javaClass.name + (if (e is NotImplementedError) ": " + e.message else "") +
++            (e.cause?.let { c -> " / " + c.javaClass.name + (if (c is NotImplementedError) ": " + c.message else "") } ?: "")
++    }
++
++    private fun same(o: String, p: String, what: String) =
++        assertEquals(if (o.startsWith("throws")) o else digest(o), if (p.startsWith("throws")) p else digest(p), what)
++
++    private fun setField(o: Any, name: String, v: Any?) {
++        var c: Class<*>? = o.javaClass
++        while (c != null) {
++            val f = c.declaredFields.firstOrNull { it.name == name }
++            if (f != null) { f.isAccessible = true; f.set(o, v); return }
++            c = c.superclass
++        }
++        error("no field $name")
++    }
++
++    private fun setMsg(e: Any, name: String, v: Any?) {
++        val m = TrackEngines.field(e, "message") ?: return
++        setField(m, name, v)
++    }
++
++    /** Way and node description bytes from the oracle's graph around each case's ends (both engines get copies). */
++    private fun descriptions(fcx: PathEngines.Contexts): List<ByteArray> {
++        val out = ArrayList<ByteArray>()
++        for (c in TrackEngines.cases()) {
++            val og = PathEngines.OracleGraph(c.segments, fcx.o, PathEngines.waypoints(c), true)
++            try {
++                for (n in og.nodes) {
++                    n.nodeDescription?.let { out += it.copyOf() }
++                    var l = n.firstlink
++                    while (l != null) {
++                        l.descriptionBitmap?.let { out += it.copyOf() }
++                        l = l.getNext(n)
++                    }
++                }
++            } finally {
++                og.close()
++            }
++        }
++        return out
++    }
++
++    /** A read track as the fields `read` fills: each node's position and elevation. */
++    private fun readView(t: Any?): String {
++        if (t == null) return "null"
++        @Suppress("UNCHECKED_CAST")
++        val nodes = TrackEngines.field(t, "nodes") as List<Any>
++        return nodes.joinToString(";") { "${TrackEngines.field(it, "ilon")},${TrackEngines.field(it, "ilat")},${TrackEngines.field(it, "selev")}" }
++    }
++
++    @Test
++    fun formatGpxMatchesTheOracle() {
++        val dir = kotlin.io.path.createTempDirectory("formatgpx").toFile()
++        val fcx = PathEngines.contexts(TrackEngines.foragerProfile())!!
++        try {
++            val rnd = Random(20261153L)
++            val names = listOf("", "start", "a&b", "<via>", "via 1", "from here", "to there", "rt7", "it's \"x\"", "äöü€中")
++            val descs = descriptions(fcx)
++            assertTrue(descs.size > 5, "too few descriptions: ${descs.size}")
++            val walks = TrackEngines.cases().withIndex().flatMap { (ci, c) -> TrackEngines.walks(fcx, c, 7901L + ci, 16, 60) }
++            val pairs = walks.map { TrackEngines.tracks(it) } + listOf(btools.router.OsmTrack() to OsmTrack())
++            val reached = HashMap<String, Int>()
++            fun hit(k: String) { reached[k] = (reached[k] ?: 0) + 1 }
++            var hints = 0
++            var texts = 0
++            var thrown = 0
++            var reads = 0
++            for ((i, pr) in pairs.withIndex()) {
++                val (ot, pt) = pr
++                val last = pt.nodes.size - 1
++                val pos = pt.nodes.map { it.getILon() to it.getILat() }.ifEmpty { listOf(0 to 0) }
++                fun at() = pos[rnd.nextInt(pos.size)]
++                fun name(): String? = if (rnd.nextInt(40) == 0) null else names[rnd.nextInt(names.size)]
++                fun elev(): Short = if (rnd.nextInt(3) == 0) Short.MIN_VALUE else rnd.nextInt(-400, 36000).toShort()
++                if (i % 7 != 6) {
++                    val mode = (i / 7 + i) % 10
++                    val direct = rnd.nextBoolean()
++                    fcx.o.hasDirectRouting = direct; fcx.p.hasDirectRouting = direct
++                    fcx.o.turnInstructionMode = mode; fcx.p.turnInstructionMode = mode
++                    val round = rnd.nextBoolean()
++                    fcx.o.turnInstructionRoundabouts = round; fcx.p.turnInstructionRoundabouts = round
++                    fcx.o.turnInstructionCatchingRange = 40.0; fcx.p.turnInstructionCatchingRange = 40.0
++                    val car = rnd.nextInt(3) == 0
++                    val bike = !car && rnd.nextBoolean()
++                    fcx.o.carMode = car; fcx.p.carMode = car
++                    fcx.o.bikeMode = bike; fcx.p.bikeMode = bike
++                    if (!direct) {
++                        // A detour map instead of direct routing (as VoiceHintProcessTest's kind 1).
++                        val own = ot.nodes.map { it.idFromPos }
++                        repeat(if (own.isEmpty()) 0 else rnd.nextInt(1, 20)) {
++                            val k = own[rnd.nextInt(own.size)]
++                            val e = rnd.nextInt(ot.nodes.size)
++                            ot.registerDetourForId(k, ot.nodes[e]); pt.registerDetourForId(k, pt.nodes[e])
++                        }
++                    }
++                    val oh = res { ot.processVoiceHints(fcx.o); "" }
++                    val ph = res { pt.processVoiceHints(fcx.p); "" }
++                    assertEquals(oh, ph, "track $i: processVoiceHints")
++                }
++                // Tags on the nodes' messages, set or cleared alike.
++                for (k in ot.nodes.indices) {
++                    when (rnd.nextInt(8)) {
++                        0 -> { setMsg(ot.nodes[k], "wayKeyValues", null); setMsg(pt.nodes[k], "wayKeyValues", null) }
++                        1 -> { setMsg(ot.nodes[k], "nodeKeyValues", "seeded=$k"); setMsg(pt.nodes[k], "nodeKeyValues", "seeded=$k") }
++                        2 -> { setMsg(ot.nodes[k], "wayKeyValues", "highway=path"); setMsg(pt.nodes[k], "wayKeyValues", "highway=path") }
++                    }
++                }
++                val nm = if (rnd.nextInt(3) == 0) names[rnd.nextInt(names.size)] else "unset"
++                setField(ot, "name", nm); pt.name = nm
++                if (rnd.nextInt(25) != 0) {
++                    val ml = ArrayList(List(rnd.nextInt(1, 4)) { k -> if (k > 0 && rnd.nextInt(4) == 0) null else "msg $k ${names[rnd.nextInt(names.size)]}" })
++                    setField(ot, "messageList", ArrayList(ml)); pt.messageList = ArrayList(ml) as MutableList<String>
++                } else hit("messageList null")
++                when (rnd.nextInt(3)) {
++                    0 -> {}
++                    1 -> { setField(ot, "params", LinkedHashMap<String, String>()); pt.params = LinkedHashMap() }
++                    else -> {
++                        val m = LinkedHashMap<String, String>()
++                        repeat(rnd.nextInt(1, 4)) { m["k$it"] = "v${rnd.nextInt(100)}" }
++                        setField(ot, "params", LinkedHashMap(m)); pt.params = LinkedHashMap(m)
++                        hit("params")
++                    }
++                }
++                val st = rnd.nextBoolean(); val ss = rnd.nextBoolean()
++                setField(ot, "showTime", st); pt.showTime = st
++                setField(ot, "showspeed", ss); pt.showspeed = ss
++                if (i % 5 != 4) {
++                    repeat(rnd.nextInt(0, 4)) {
++                        val (x, y) = at(); val n = name(); val e = elev()
++                        val d = if (rnd.nextBoolean()) null else descs[rnd.nextInt(descs.size)]
++                        val op = btools.router.OsmNodeNamed(btools.mapaccess.OsmNode(x, y)).also { it.name = n; it.selev = e; it.nodeDescription = d?.copyOf() }
++                        val pp = OsmNodeNamed(OsmNode(x, y)).also { it.name = n; it.selev = e; it.nodeDescription = d?.copyOf() }
++                        @Suppress("UNCHECKED_CAST")
++                        (TrackEngines.field(ot, "pois") as MutableList<Any>).add(op); pt.pois.add(pp)
++                        hit("poi")
++                    }
++                    val ow = ArrayList<btools.mapaccess.MatchedWaypoint>()
++                    val pw = ArrayList<MatchedWaypoint>()
++                    val count = rnd.nextInt(2, 7)
++                    for (q in 0 until count) {
++                        val (x, y) = at(); val n = name(); val e = elev()
++                        val type = rnd.nextInt(1, 4).toByte()
++                        val idx = when {
++                            q == 0 -> 0
++                            q == count - 1 -> last
++                            rnd.nextInt(6) == 0 -> -1
++                            else -> rnd.nextInt(0, last + 1)
++                        }
++                        val o = btools.mapaccess.MatchedWaypoint(); val p = MatchedWaypoint()
++                        o.waypoint = btools.mapaccess.OsmNode(x, y).also { it.selev = e }; p.waypoint = OsmNode(x, y).also { it.selev = e }
++                        o.name = n; p.name = n; o.wpttype = type; p.wpttype = type; o.indexInTrack = idx; p.indexInTrack = idx
++                        if (rnd.nextBoolean()) {
++                            val (cx, cy) = at(); val ce = elev()
++                            o.correctedpoint = btools.mapaccess.OsmNode(cx, cy).also { it.selev = ce }
++                            p.correctedpoint = OsmNode(cx, cy).also { it.selev = ce }
++                        }
++                        ow += o; pw += p
++                    }
++                    setField(ot, "matchedWaypoints", ow); pt.matchedWaypoints = pw
++                    val ew = rnd.nextBoolean(); val ec = rnd.nextBoolean()
++                    setField(ot, "exportWaypoints", ew); pt.exportWaypoints = ew
++                    setField(ot, "exportCorrectedWaypoints", ec); pt.exportCorrectedWaypoints = ec
++                    if (ew) hit("exportWaypoints"); if (ec) hit("exportCorrectedWaypoints")
++                } else hit("no pois or waypoints")
++
++                val o = res { btools.router.FormatGpx(fcx.o).format(ot) }
++                val p = res { FormatGpx(fcx.p).format(pt) }
++                same(o, p, "track $i: format")
++                val mode = pt.voiceHints?.turnInstructionMode ?: 0
++                if (o.startsWith("throws")) {
++                    thrown++; hit("thrown mode $mode")
++                } else {
++                    texts++
++                    val n = pt.voiceHints?.list?.size ?: 0
++                    hints += n
++                    hit("mode $mode" + if (n > 0) " with hints" else "")
++                    if (o.contains("<brouter:speed>")) hit("brouter:speed")
++                    if (o.contains("<brouter:params>")) hit("brouter:params")
++                    if (o.contains("<locus:rteTime>")) hit("locus:rteTime")
++                    if (o.contains("<src>beeline</src>")) hit("locus beeline")
++                    if (o.contains("<desc>beeline</desc>")) hit("brouter beeline")
++                    if (o.contains("<time>") && o.contains("<rte>")) hit("rte time")
++                    if (o.contains("<desc>") && o.contains("<wpt")) hit("wpt desc")
++                    // read: the oracle's own text, written to a temporary file, read back by both engines.
++                    val f = java.io.File(dir, "t$i.gpx")
++                    f.writeText(o)
++                    same(res { readView(btools.router.FormatGpx(fcx.o).read(f.path)) }, res { readView(FormatGpx(fcx.p).read(f.path)) }, "track $i: read")
++                    reads++
++                }
++                // formatAsWaypoint and getWaypoint on POI-like nodes: no description, or way or node bytes.
++                for (k in 0 until 2) {
++                    val (x, y) = at(); val e = elev(); val n = name()
++                    val d = if (rnd.nextInt(3) == 0) null else descs[rnd.nextInt(descs.size)]
++                    val on = btools.router.OsmNodeNamed(btools.mapaccess.OsmNode(x, y)).also { it.name = n; it.selev = e; it.nodeDescription = d?.copyOf() }
++                    val pn = OsmNodeNamed(OsmNode(x, y)).also { it.name = n; it.selev = e; it.nodeDescription = d?.copyOf() }
++                    same(res { btools.router.FormatGpx(fcx.o).formatAsWaypoint(on) }, res { FormatGpx(fcx.p).formatAsWaypoint(pn) }, "track $i waypoint $k: formatAsWaypoint")
++                    same(res { btools.router.FormatGpx(null).formatAsWaypoint(on) }, res { FormatGpx(null).formatAsWaypoint(pn) }, "track $i waypoint $k: formatAsWaypoint, null rc")
++                    val ds = if (rnd.nextBoolean()) null else names[rnd.nextInt(names.size)]
++                    same(res { btools.router.FormatGpx.getWaypoint(x, y, n, ds) }, res { FormatGpx.getWaypoint(x, y, n, ds) }, "track $i waypoint $k: getWaypoint")
++                }
++            }
++            // read on crafted lines: line ends \n, \r and \r\n, a missing lat, a missing lon, bad numbers, no file.
++            val crafted = listOf(
++                "<trkpt lon=\"1.5\" lat=\"2.25\">\r<trkpt lon=\"-3\" lat=\"4\">\r\n<trkpt lon=\"5\" lat=\"6\">",
++                "<trkpt lon=\"7\">\n<trkpt  lat=\"8\" lon=\"9\">\n",
++                "<trkpt lon=\" 10 \" lat=\"1e1\">\n<trkpt lon=\"11d\" lat=\"12f\">",
++                "<trkpt lon=\"x\" lat=\"1\">",
++                "<trkpt lat=\"1\">",
++                "<trkpt lon=\"1",
++                "",
++            )
++            for ((k, s) in crafted.withIndex()) {
++                val f = java.io.File(dir, "c$k.gpx")
++                f.writeText(s)
++                same(res { readView(btools.router.FormatGpx(fcx.o).read(f.path)) }, res { readView(FormatGpx(fcx.p).read(f.path)) }, "crafted $k: read")
++                reads++
++            }
++            val missing = java.io.File(dir, "missing.gpx").path
++            same(res { readView(btools.router.FormatGpx(fcx.o).read(missing)) }, res { readView(FormatGpx(fcx.p).read(missing)) }, "missing: read")
++
++            println("7 FormatGpx: ${pairs.size} tracks, $texts texts, $thrown thrown, $hints hints, $reads reads, reached ${reached.toSortedMap()}")
++            assertTrue(hints > 50, "too few hints: $hints")
++            for (m in 2..9) assertTrue((reached["mode $m with hints"] ?: 0) > 0, "not reached: mode $m with hints")
++            for (k in listOf("brouter:speed", "brouter:params", "locus:rteTime", "locus beeline", "brouter beeline",
++                "rte time", "wpt desc", "exportWaypoints", "exportCorrectedWaypoints", "poi", "messageList null")) {
++                assertTrue((reached[k] ?: 0) > 0, "not reached: $k")
++            }
++        } finally {
++            fcx.release()
++            dir.deleteRecursively()
++        }
++    }
++}

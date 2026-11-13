@@ -1,0 +1,28 @@
+5 tiles ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles
+> Task :brouter:compileKotlinIosSimulatorArm64
+> Task :brouter:compileTestKotlinIosSimulatorArm64
+com.zynergylabs.forager.brouter.ToolchainSmokeTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.ToolchainSmokeTest.xml)
+com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest.xml)
+com.zynergylabs.forager.brouter.mapaccess.NodeHashMapTieBreakTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.mapaccess.NodeHashMapTieBreakTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunCosTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunCosTableTest.xml)
+com.zynergylabs.forager.brouter.msun.MsunEdgesTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.msun.MsunEdgesTest.xml)
+com.zynergylabs.forager.brouter.tiles.F0RouteCommonTest: tests 1, failures 1, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.F0RouteCommonTest.xml)
+com.zynergylabs.forager.brouter.tiles.PinnedTileReadTest: tests 1, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.PinnedTileReadTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionTableTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.CheapProductionTableTest.xml)
+com.zynergylabs.forager.brouter.util.JavaLangCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.JavaLangCommonTest.xml)
+com.zynergylabs.forager.brouter.util.JavaTextCommonTest: tests 3, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.JavaTextCommonTest.xml)
+com.zynergylabs.forager.brouter.util.PlatformInvariantsTest: tests 6, failures 0, errors 0, skipped 0 (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.util.PlatformInvariantsTest.xml)
+TOTAL: tests 26, failures 1, errors 0, skipped 0 in 12 files
+    <failure message="kotlin.AssertionError: environment variable BROUTER_ORACLE_DIR in the simulator's process (the ios-smoke job exports SIMCTL_CHILD_BROUTER_ORACLE_DIR) is not set" type="kotlin.AssertionError">kotlin.AssertionError: environment variable BROUTER_ORACLE_DIR in the simulator's process (the ios-smoke job exports SIMCTL_CHILD_BROUTER_ORACLE_DIR) is not set
+  <system-out><![CDATA[step10 tile: tiles folder from environment variable BROUTER_TILES_DIR in the simulator's process (the ios-smoke job exports SIMCTL_CHILD_BROUTER_TILES_DIR) = /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles; opening /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles/f0/W75_N40.rd5
+step10 tile: /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles/f0/W75_N40.rd5 size=152665 read=152665 sha256=ff6d9d8e439c3cdf914b1566619f64466d9af993c28070ea893425e7f5ec5990
+step10 tile: pin file not given on this platform; the copied row is held to it on the JVM
+oracle ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/oracle
+the drop-off fixture ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles-dropoff/dropoff
+F0h's fixture ready in /Users/runner/work/Forager-iOS/Forager-iOS/brouter/build/tiles-f0h/f0h
+arm64 JVM step outcome: success (a failure there is a recorded difference only if every class ran)
+com.zynergylabs.forager.brouter.util.CheapLogicRunTest: tests 5, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapLogicRunTest.xml)
+com.zynergylabs.forager.brouter.util.CheapProductionRecordTest: tests 2, failures 0, errors 0, skipped 0 (brouter/build/test-results/jvmTest/TEST-com.zynergylabs.forager.brouter.util.CheapProductionRecordTest.xml)
+TOTAL: tests 7, failures 0, errors 0, skipped 0 in 2 files
+OK: all 2 classes ran

@@ -1,0 +1,11 @@
+--- plantA.saved (the scratch copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/RoutingEngine.kt
+@@ -472,7 +472,7 @@
+     // RoutingEngine.java:1609-1689; the dynamic-range retry and the beeline points are left out (§1).
+     private fun matchWaypointsToNodes(unmatchedWaypoints: MutableList<MatchedWaypoint>) {
+         resetCache(false)
+-        val range = routingContext.waypointCatchingRange
++        val range = routingContext.waypointCatchingRange * 4
+         val ok = nodesCache!!.matchWaypointsToNodes(libm, unmatchedWaypoints, range, islandNodePairs)
+         if (!ok && routingContext.useDynamicDistance) unsupported("use_dynamic_range")
+         if (!ok) {

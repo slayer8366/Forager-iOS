@@ -1,0 +1,21 @@
+# Step 5b probe: the oracle (BRouter 1.7.10 -ro jar) on Temurin 21.0.13+9 amd64, flags -XX:+UnlockDiagnosticVMOptions
+# -XX:-UseLibmIntrinsic --add-opens=java.base/java.util=ALL-UNNAMED, default thread stack. Four JVMs, one after another:
+#   jarA, jarB: the plain jar; shadow: four classes first on the classpath, copies of Forager's third_party 1.7.10 source
+#   (0 of 101 files differ from upstream) with counters added by src/patch.py; routes: the shadowed classes, F0's two routes.
+# Each cache line is: tile lonDegree latDegree subIdx, then four SHA-256 prefixes (known mode 0; fresh modes 0, 1, 2).
+jarA: 25072 cache lines, SHA-256 of the lines 282555f996ddffe9ae6d8ba34ea563a6ea48d1435dd1239ed7e865c8ecd6685a
+jarB: 25072 cache lines, SHA-256 of the lines 282555f996ddffe9ae6d8ba34ea563a6ea48d1435dd1239ed7e865c8ecd6685a
+shadow: 25072 cache lines, SHA-256 of the lines 282555f996ddffe9ae6d8ba34ea563a6ea48d1435dd1239ed7e865c8ecd6685a
+jarA and jarB: identical (cmp), so no cache decoded differently between two runs
+jarA and shadow: identical (cmp), so the counters changed no decode
+# caches per tile (from jarA):
+    767 E170_S50
+     47 F0
+   3904 W70_N40
+    683 W75_N35
+  19671 W75_N40
+# wall times:
+jarA real	6m47.713s
+jarB real	6m46.712s
+shadow real	7m23.221s
+routes real	0m0.760s

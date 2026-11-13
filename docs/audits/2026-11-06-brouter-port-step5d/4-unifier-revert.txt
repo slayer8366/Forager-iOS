@@ -1,0 +1,8 @@
+Step 5d item 4: ByteArrayUnifierTest revert, run session 9 on 47ac4a9 (prediction pushed at 47ac4a9).
+Edit: ByteArrayUnifier.kt  if (i == len) {  ->  if (i == len + 1) {
+Build log: 0 lines starting "e: ".
+Predicted: 3 tests, 2 failures (both unify tests) at the oracle's first reused call, same index in both; constructs passes.
+Observed:  3 tests, 2 failures: validate=true and validate=false, each "line 2 differs (call 1)"; constructs passed.
+  (call 1 is the zero-length input at offset 7: the oracle returns call 0's empty array again.)
+Match: yes.
+Restore: cmp with the saved copy identical; forward line present 1 time; git status clean.

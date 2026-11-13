@@ -1,0 +1,16 @@
+Revert (f), session 27, on FormatGpx (the port), pushed before the revert runs. Planned in §12.
+
+Edit (one line, FormatGpx.kt, formatAsGpx's message-list loop):
+  if (i < ml.size - 1) {      ->      if (i < ml.size) {
+Effect: the last message list entry (i = ml.size - 1), which Java writes as a bare "<!-- message -->" comment, is
+also wrapped as "(alt-index i: message )".
+
+Run: a scratch copy of docs/process/tools/revert.sh, filter *FormatGpxTest, from the clone root.
+
+Predicted:
+- Compiles (0 "e: "), fresh XML; FormatGpxTest 1 test, 1 failure, in formatGpxMatchesTheOracle.
+- First failure message "track 0: format" (track 0 has a message list in a mode other than 9; the passing run shows
+  Java's text at de047c1d2784bf68/63735), digests differing, the port's length larger than 63735 by
+  16 + (decimal digits of the last index - 1) characters, or by a whole comment line if that entry is null.
+- Not a NotImplementedError, not a thrown text, not a reach-check ("not reached") failure, not a read failure.
+- Restore from the saved copy, cmp equal; the forward port still present afterwards (grep "if (i < ml.size - 1)").

@@ -62,7 +62,7 @@ class E3DLTest {
         return "${if (lon0 < 0) "W" else "E"}${kotlin.math.abs(lon0)}_${if (lat0 < 0) "S" else "N"}${kotlin.math.abs(lat0)}.rd5"
     }
 
-    private companion object {
+    internal companion object {
         const val SEED_LAT = 20261201L
         const val SEED_LON = 20261202L
     }

@@ -1,0 +1,11 @@
+--- plantC.saved (the scratch copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/mapaccess/NodesCache.kt
+@@ -366,7 +366,7 @@
+ 
+         if (first_file_access_name == null) {
+             first_file_access_name = currentFileName
+-            first_file_access_failed = osmf.filename == null
++            first_file_access_failed = false
+         }
+ 
+         return osmf

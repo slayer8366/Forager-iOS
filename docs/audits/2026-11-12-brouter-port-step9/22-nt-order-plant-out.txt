@@ -1,0 +1,29 @@
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 3, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 3, failures 1, errors 0, skipped 0 in 1 files
+EXIT 0
+9 LB: 59 cases within 99 draws; kinds {route=59}; 0 mismatches
+9 CR: 59 cases within 83 draws; kinds {route=59}; 0 mismatches
+9 NT: 59 cases within 89 draws; kinds {route=56, to-position not mapped in existing datafile=1, target island detected for section 0=2}; 23 mismatches
+9 NT mismatch NT-0001: [cost] (oracle route|15|557|421|21c1443a9c94705|4c01b121aeaf4d2a; port route|15|558|421|21c1443a9c94705|4c01b121aeaf4d2a)
+9 NT mismatch NT-0004: [cost] (oracle route|486|14346|10159|6a974907799842a|cae546bec8cc8b8d; port route|486|14345|10159|6a974907799842a|cae546bec8cc8b8d)
+9 NT mismatch NT-0008: [cost] (oracle route|1973|107485|78583|a59fafde022c40f0|e5253ad06626f829; port route|1973|107484|78583|a59fafde022c40f0|e5253ad06626f829)
+9 NT mismatch NT-0009: [cost] (oracle route|591|28195|19116|e71ba4ae66d494d1|9452968a824c472; port route|591|28196|19116|e71ba4ae66d494d1|9452968a824c472)
+9 NT mismatch NT-0021: [cost] (oracle route|142|2485|1956|bc861c203701bbe2|7b62fa69047f0d0f; port route|142|2484|1956|bc861c203701bbe2|7b62fa69047f0d0f)
+9 NT mismatch NT-0024: [cost] (oracle route|25|2302|729|b1aabea2f2b5be4e|c0999189e73133a2; port route|25|2290|729|b1aabea2f2b5be4e|c0999189e73133a2)
+9 NT mismatch NT-0033: [cost] (oracle route|29|635|526|b7e0c477c9a92f3a|1d68c944a855bde1; port route|29|636|526|b7e0c477c9a92f3a|1d68c944a855bde1)
+9 NT mismatch NT-0037: [cost] (oracle route|2146|54865|43152|f7c89beecb95e4d1|9eb46c3becbce011; port route|2146|54866|43152|f7c89beecb95e4d1|9eb46c3becbce011)
+9 NT mismatch NT-0042: [cost] (oracle route|497|15286|11906|400adcfc1584cf57|692b0dc2fe5a3a24; port route|497|15285|11906|400adcfc1584cf57|692b0dc2fe5a3a24)
+9 NT mismatch NT-0050: [cost] (oracle route|155|4590|3180|b81582795e8c96c3|7ef02b63ba33789a; port route|155|4591|3180|b81582795e8c96c3|7ef02b63ba33789a)
+9 NT mismatch NT-0052: [cost] (oracle route|463|15884|11539|d5cd96ab23fc90a6|faec585e31f5972e; port route|463|15883|11539|d5cd96ab23fc90a6|faec585e31f5972e)
+9 NT mismatch NT-0056: [cost] (oracle route|19|211|155|ba16f66866b56092|e95021477f4c47e4; port route|19|210|155|ba16f66866b56092|e95021477f4c47e4)
+9 NT mismatch NT-0057: [cost] (oracle route|153|5973|4318|f1e283f16b46d62b|54cd7491079dc471; port route|153|5974|4318|f1e283f16b46d62b|54cd7491079dc471)
+9 NT mismatch NT-0059: [cost] (oracle route|208|6378|4978|7f573716de492070|6f99653e5f1c4c80; port route|208|6379|4978|7f573716de492070|6f99653e5f1c4c80)
+9 NT mismatch NT-0061: [cost] (oracle route|22|1233|408|52d38db9f04271a9|e81c332ae1caac64; port route|22|1228|408|52d38db9f04271a9|e81c332ae1caac64)
+9 NT mismatch NT-0063: [cost] (oracle route|83|2641|1741|4ca9d88890363b61|3b28e7ffee8e1251; port route|83|2640|1741|4ca9d88890363b61|3b28e7ffee8e1251)
+9 NT mismatch NT-0071: [cost] (oracle route|106|2110|1655|bfdb69c8ddc02438|4a1916f68945464a; port route|106|2111|1655|bfdb69c8ddc02438|4a1916f68945464a)
+9 NT mismatch NT-0074: [cost] (oracle route|393|28073|12965|77e128672e6dca7a|be95a50d0afd1588; port route|393|28074|12965|77e128672e6dca7a|be95a50d0afd1588)
+9 NT mismatch NT-0076: [cost] (oracle route|317|10192|7103|efd7cee3dedc69c9|817caa407b51f2a0; port route|317|10191|7103|efd7cee3dedc69c9|817caa407b51f2a0)
+9 NT mismatch NT-0078: [cost] (oracle route|204|7600|5904|23937134f960d6ca|723b972f2089137f; port route|204|7601|5904|23937134f960d6ca|723b972f2089137f)

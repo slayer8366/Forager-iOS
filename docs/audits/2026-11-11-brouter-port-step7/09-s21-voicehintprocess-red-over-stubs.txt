@@ -1,0 +1,9 @@
+Session 21, step 6 (RECORD -113): VoiceHintProcessor with processVoiceHints' hint body and startSection, one unit.
+Stubs: VoiceHintProcessor.kt (every method TODO), OsmTrack.startSection (TODO), processVoiceHints' body (TODO).
+Test: VoiceHintProcessTest.processVoiceHintsMatchesTheOracle, through processVoiceHints, hints switched on in test code.
+Command: :brouter:jvmTest --rerun-tasks --tests '*.router.VoiceHintProcessTest'; results deleted first; 1 fresh XML; 0 " e: ".
+(The first attempt did not compile: a public VoiceHintProcessor exposed the internal VoiceHint; made internal. No XML.)
+Result: 1 test, 1 failed: "case 0: result expected:<[ok]> but was:<[throws NotImplementedError]>" (the body's stub).
+Oracle side (the coverage check, which passed before the comparison): 100 cases, 1512 detours registered,
+161 waypoints, 1934 hints, 1032 with bad ways, 0 thrown, commands {2=19, 3=446, 4=6, 5=22, 6=400, 7=32, 8=38,
+9=23, 11=98, 14=1, 15=827, 16=22}.

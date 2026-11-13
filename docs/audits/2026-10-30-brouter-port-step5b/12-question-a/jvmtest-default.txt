@@ -1,0 +1,15 @@
+A init: jvmTest classpath head [/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/plumb/soe/cls]; jvmArgs []
+    5b oracle catch: the catch-counting OsmNodesMap is loaded (scratch, not the oracle's own class file)
+    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] FAILED
+    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+    brouter: OsmNodesMap.cleanupPeninsulas caught a StackOverflowError; that subtree's cleanup is skipped, as in Java (OsmNodesMap.java:62-64)
+CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+> Task :brouter:jvmTest FAILED
+BUILD FAILED in 10s
+gradle exit 1
+## compile errors: 0
+## results (JUnit XML)
+CollectOutreachersTest collectOutreachersWithoutADestination[jvm] FAIL: java.lang.AssertionError: segments/W75_N40.rd5 around degree (105, 130) sub 735 (lonIdx 3391, latIdx 4182, 154239 bytes, 15406 nodes), 6 caches, mode 1: line 1 of 172529/174955: oracle [C 38715 41099 41099] port [C 39396 37387 37387]
+CollectOutreachersTest collectOutreachersWithADestinationVanishesFarNodes[jvm] FAIL: java.lang.AssertionError: segments/W75_N40.rd5 around degree (105, 130) sub 735 (lonIdx 3391, latIdx 4182, 154239 bytes, 15406 nodes), 6 caches, mode 2: line 1 of 191654/193326: oracle [C 21909 41099 41099] port [C 22157 37375 37375]

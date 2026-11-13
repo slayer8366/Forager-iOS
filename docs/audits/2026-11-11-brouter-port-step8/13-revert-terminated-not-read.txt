@@ -1,0 +1,55 @@
+Step 8c, session 34: revert (a), RECORD -90's: `terminated` written but not read (RECORD -126, decision 5).
+
+Edit (one line, port only): router/RoutingEngine.kt, findTrackInner's loop head (Java :1975-1977),
+  "if (terminated) {"  ->  "if (false) {"
+  The flag is still written (terminate(), cleanOnOOM()) and isTerminated() still returns it; the dirty-track guard
+  (`!terminated && mp != null`, Java :1752) still reads it. What is removed is the read that stops the search. Chosen
+  as the one read whose loss -90's revert names; the other two reads are untouched, and that is a choice, said here.
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh (several --tests filters; timeout 1200 s per part;
+saves a copy, edits one exact string, refuses on compile errors or no fresh XML, restores from the copy, cmp's). Two parts:
+  part 1: RoutingEngineStopTest, RoutingEngineDLTest, RoutingEngineF0Test, RoutingEngineMemoryTest (13 tests);
+  part 2: RoutingEngineRTest (1 test).
+
+WHAT IT DOES: terminate() before or during a run no longer ends it; the run goes on to whatever it would reach with no
+cancel (maxRunningTime 0 in every test that cancels).
+
+CAN IT HANG? No, by reading: every run that is no longer cancelled is a run that ends without a cancel (FK10's measured
+runs route, E3CaseRun's CANCEL_BEFORE plan; FK11's run uncancelled in fk11CountsLinks...). FK11's mid-run drive waits for
+the count to pass CANCEL_AFTER_LINKS or the thread to end, then join()s a thread that ends. Slower, not unbounded. Run
+under the 1200 s limit all the same.
+
+PREDICTION (pushed before the run):
+- 0 "e: " lines in both parts; fresh XML: part 1 4 files, 13 tests; part 2 1 file, 1 test.
+- RoutingEngineStopTest: 3 of 9 FAIL, 6 pass.
+  - fk10IsKilledBeforeTheRun...: FAILS, 10 of 10 mismatches, on kind (oracle the watchdog, port route) and track. 10 of
+    10 rests on E3CaseRun's CANCEL_BEFORE plan, which keeps only cases whose uncancelled run routes: not a guess.
+  - fk11IsKilledMidRun...: FAILS, 10 of 10 on kind (oracle the watchdog, port the uncancelled outcome). "10 of 10" is a
+    guess in one respect: a case whose uncancelled run ends in the watchdog's text cannot exist (nothing else writes
+    it), so every case must differ on kind; I expect the track to differ too on most, a guess.
+  - theWatchdogsSecondsReadTheInjectedClock: FAILS on the message (expected the watchdog after 7 seconds; the port's
+    message is the uncancelled outcome's, null for a route).
+  - Pass: fk9TimesOut... (no terminate), fk11CountsLinks... (no cancel), forager30sLimit..., theTimeLimitReads...,
+    anErrorDuringTheRun... (the clock's Error at the time-limit read; cleanOnOOM writes the flag, isTerminated reads it),
+    anExceptionDuringTheRun....
+- The 7 route groups (F0, R, DL-lat, DL-lon, MP64, ML5, PM5) PASS, 0 mismatches each: none calls terminate()
+  (RoutingEngineF0Test.port runs doRun(c.maxRunningTimeMillis), 0 for all their cases, with no cancel). Not a guess.
+- After each part's restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED:
+- Part 1, rv13a (StopTest, DL, F0, Memory): the edit applied once (one - and one + line, :717); 0 "e: " lines; 4 fresh
+  XML files, 15 tests (not 13 as predicted: an arithmetic slip, 9 + 2 + 1 + 3 = 15), 3 failures, 0 errors; gradle
+  ended in 680 s.
+  - RoutingEngineStopTest: 3 of 9 FAIL, exactly the three predicted. HELD.
+    - fk10IsKilledBeforeTheRun...: 10 of 10 mismatches, each [kind, port message's fixed part, track]: oracle the
+      watchdog with 0 links, port a route. HELD.
+    - fk11IsKilledMidRun...: 10 of 10, each [kind, port message's fixed part, track]: oracle the watchdog after about
+      10,500 links, port a route of 350,000 to 3,600,000 links. HELD (the guess on the track: all 5 printed differ).
+    - theWatchdogsSecondsReadTheInjectedClock: expected the watchdog after 7 seconds, was null. HELD.
+    - FK9 10 cases 0 mismatches (pass0 20 of 20); the other five pass. HELD.
+  - MP64 59, 0; ML5 59, 0; PM5 55, 0; DL-lat 59, 0; DL-lon 59, 0; F0 passed. HELD.
+- Part 2, rv13b (R): the same edit; 0 "e: "; 1 fresh XML, 1 test, 0 failures; gradle ended in 677 s; R 1534 cases
+  {route=968, refused=354, error=212}, 0 mismatches. HELD.
+- No hang: both parts ended inside 1200 s (680 s, 677 s).
+- Restored: cmp equal after each part, and cmp equal to a copy taken before either part; git status: src equal to HEAD.
+RESULT: the prediction held on every test and group; one count in it (13 tests) was my arithmetic, wrong; the run is 15.
+The loop head's read of `terminated` is what FK10, FK11 and the watchdog test cover; the route groups do not reach it.

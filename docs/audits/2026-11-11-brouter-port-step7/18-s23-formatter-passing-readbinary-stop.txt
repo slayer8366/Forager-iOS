@@ -1,0 +1,31 @@
+Session 23 (RECORD -111): Formatter ported whole over the stubs that 15's FormatterTest failed on; readBinary's file
+branch (with MatchedWaypoint/OsmPathElement readFromStream) ported, and failing on one input kind: a STOP.
+No test changed after the port was written.
+Run 1: :brouter:jvmTest --rerun-tasks --tests FormatterTest, ReadBinaryTest, TrackHeadTest, TrackTimeTest; results
+deleted first; 4 fresh XML; 0 "e: " lines (after a first attempt that did not compile: a closing brace of the
+companion lost by my own edit script, "Formatter.kt:326:2 Syntax error: Missing '}'", fixed, no test touched).
+  FormatterTest: 1 test, 0 failures, first run: 63,728 calls compared (10 command tables over 35 commands x 28
+    exits x 12 timodes; formatILon/formatILat over 4,018 seeded ints by digest and length; getFormattedTime3 over
+    3,332 times from 1582's cutover, BC years, NaN, the infinities and 300 random float bit patterns; read;
+    MESSAGES_HEADER; dateformat).
+  TrackHeadTest 1/1, TrackTimeTest 3/3 passed.
+  ReadBinaryTest: 1 test, 1 failure: "track 30, t30.bin, target 0/0, shift 0, profile true, debug true: debugInfo
+    expected:<[<digest>/145]> but was:<[<digest>/93]>". Tracks 0-29 (walks from Forager's ends) passed every variant
+    before it: target deltas 0, 19, 20, 21; checksum shifts 0, 20, 21; profile stamp equal or not; debugInfo on or
+    off; every cut length (EOF inside the header, nodes and checksums); the missing file. Track 30 is the first of
+    the two empty tracks (0 nodes).
+  Reading: with 0 nodes Java dereferences `last_pe.cost` (OsmTrack.java:258) and catches the NPE into debugInfo as
+    "Error reading rawTrack: " + e. The port's text is 93 chars, which is exactly "pre;target-delta = 0/0
+    targetMatch=trueError reading rawTrack: java.lang.NullPointerException" (no message, from `lastPe!!`). Java's is
+    52 chars longer: JDK 21's helpful NPE message, which by its length reads `: Cannot read field "cost" because
+    "last_pe" is null` [I: inferred from the length; the text was not printed, since the test shows debug texts by
+    digest only].
+  STOP (a test failing on the port): matching it means writing JDK 21's NPE wording into common code (and it would
+    still differ off the JVM), or deciding the empty-file input is out of scope. Either is a choice for the planner,
+    so the port is held in 16-s23-readbinary-port-not-passing.patch (applies to the head it is committed on) and the
+    source set keeps its stubs; ReadBinaryTest stays red over them, as pushed red on purpose at 08fdbba.
+Run 2: full fresh :brouter:jvmTest --rerun-tasks (Formatter ported, readBinary's three stubs back from the committed
+  source, the port in 16's patch), results deleted first: 70 XML, 151 tests, 3 failures, 0 errors, 0 skipped, 0 "e: ",
+  no Maven 429. CollectOutreachersTest's 2 (-61, -106): collectOutreachersWithoutADestination,
+  collectOutreachersWithADestinationVanishesFarNodes; and ReadBinaryTest over its stubs (red on purpose, the
+  NotImplementedError naming "OsmTrack.readBinary's file branch") [R].

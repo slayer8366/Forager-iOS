@@ -1,0 +1,73 @@
+Step 8d, session 36: the reverts of RouteTest (the step 8 report's §9.6), on the port of Route.kt (route(), RouteCancel).
+
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh, its timeout 1200 s (the original's 1500 s changed in
+the copy only); it saves a copy, edits one exact string (must occur once), refuses on compile errors or no fresh XML,
+restores from the copy, cmp's. Filter for every revert: com.zynergylabs.forager.brouter.RouteTest (4 tests, 1 XML file).
+Every edit is in brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/Route.kt. RouteTest's loops stop at the
+first failing case, so a failure names the first case, F0-inside-across-the-degree-line ("F0-across" below).
+
+PREDICTIONS (pushed before any run). For each: 0 "e: " lines, 1 fresh XML, tests 4; failures as given; restore cmp equal.
+
+rv16 heights from the wrong source: "nodes[it].getSElev()" -> "nodes[it].getElev().toInt().toShort()" (metres, rounded
+  toward zero, in place of quarter metres).
+  f0RoutesThroughRouteAsThroughTheOracle FAILS on "F0-across: heights digest"; nodes, distance and node digest pass first.
+  The production test passes (it asserts only 2 or more nodes) and prints "heights digest equal false" for both cases.
+  failures 1. It could pass only if every height on the route were 0 (the one h with h == h / 4 rounded); F0's
+  tile is hill country, so a guess only in that sense.
+
+rv17 heights shifted by one node: "nodes[it].getSElev()" -> "nodes[minOf(it + 1, nodes.size - 1)].getSElev()".
+  As rv16: test 1 FAILS on "F0-across: heights digest"; failures 1. It could pass only if every height on the route
+  equalled its successor's (a flat route); a guess only in that sense.
+
+rv18 the cancel not reaching the engine: "if (requested) e.terminate()" -> "if (false) e.terminate()".
+  aTerminateBeforeTheRunFailsAsTheOracle FAILS on "F0-across: Failed" (the port routes: Found). The other 3 pass.
+  failures 1. Not a guess: test 1 shows the same request routes with no cancel.
+
+rv19 isTerminated a constant: "get() = engine?.isTerminated() ?: requested" -> "get() = true".
+  theCancelReportsItsFlag FAILS on "before terminate()". Test 3 passes (it reads the flag only after terminate()).
+  failures 1.
+
+rv20 iLat from the wrong field: "IntArray(nodes.size) { nodes[it].getILat() }," -> "IntArray(nodes.size) { nodes[it].getILon() },".
+  Test 1 FAILS on "F0-across: node digest" (counts and distance pass first); the production test passes and prints
+  "node digest equal false". failures 1.
+
+rv21 distance from the cost: "engine.getFoundTrack().distance," -> "engine.getFoundTrack().cost,".
+  Test 1 FAILS on "F0-across: distance". failures 1. Guess: that the case's cost is not equal to its distance (5047).
+
+rv22 the track read when the message is set: "if (message != null) return" -> "if (message != null && false) return".
+  Test 3 FAILS on "F0-across: Failed" (a Found, of the empty track). failures 1.
+
+rv23 the public route not reaching the engine: "= route(request, cancel, MsunLibm)" -> "= RouteOutcome.Failed(\"\")".
+  f0ThroughThePublicRouteIsRecorded FAILS on "F0-across: Found". failures 1.
+
+rv24 the public route dropping the caller's cancel: "= route(request, cancel, MsunLibm)" -> "= route(request, RouteCancel(), MsunLibm)".
+  PASSES, failures 0: no test cancels through the public route (test 3 uses the internal overload). Predicted as a
+  gap, not a bite: the public route's cancel is not covered by RouteTest.
+
+OBSERVED:
+All nine on the port at 9bf13a8 (predictions pushed in 536d1e1, before the first run). Every run: the edit applied once
+(one - and one + line in its diff), 0 "e: " lines, compileKotlinJvm executed, 1 fresh XML, tests 4, errors 0; gradle
+4 s each; restored cmp equal to the runner's copy and to a copy taken before rv16.
+
+rv16 (heights in metres): failures 1, f0RoutesThroughRouteAsThroughTheOracle, "F0-inside-across-the-degree-line: heights
+  digest" (the two digests differ). HELD.
+rv17 (heights shifted by one node): failures 0. NOT HELD: the test passes on the shifted heights.
+  Why, by a scratch count (a test file written, run once and deleted, never committed; counts only): on both F0 routes
+  every node's sElev is Short.MIN_VALUE, BRouter's "no height": F0-inside-across-the-degree-line 226 of 226 nodes,
+  F0-inside-long 306 of 306; 1 distinct value; 0 changes between neighbours. A shift of a constant array is the same
+  array. rv16 bit only because MIN_VALUE / 4 rounded is not MIN_VALUE, not because any height was compared.
+  So F0's heights digest holds only "every node has no height": RouteTest does not cover a real height through route().
+  The plan's guess ("F0's tile is hill country") was wrong, and §9.6's "not covered: a missing height (no fixture tile
+  without heights in F0)" has it the wrong way round: F0 has no heights at all; what is not covered is a present height.
+rv18 (the cancel not forwarded): failures 1, aTerminateBeforeTheRunFailsAsTheOracle, "F0-inside-across-the-degree-line:
+  Failed" (a Found). HELD.
+rv19 (isTerminated constant true): failures 1, theCancelReportsItsFlag, "before terminate()". HELD.
+rv20 (iLat read from getILon): failures 1, test 1, "F0-inside-across-the-degree-line: node digest". HELD.
+rv21 (distance from the cost): failures 1, test 1, "F0-inside-across-the-degree-line: distance" (expected 5047, was
+  5302). HELD.
+rv22 (the track read with the message set): failures 1, test 3, "F0-inside-across-the-degree-line: Failed". HELD.
+rv23 (the public route not reaching the engine): failures 1, f0ThroughThePublicRouteIsRecorded,
+  "F0-inside-across-the-degree-line: Found". HELD.
+rv24 (the public route dropping the caller's cancel): failures 0, as predicted: a gap, not a bite. HELD as a gap.
+RESULT: 7 of 9 bite as predicted; rv24 passes as predicted (the public route's cancel is not covered); rv17 passes
+against the prediction, because F0's routes carry no height at all (a false premise in §9.6, for the planner).

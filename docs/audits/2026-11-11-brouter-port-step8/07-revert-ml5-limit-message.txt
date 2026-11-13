@@ -1,0 +1,27 @@
+Step 8b, session 31: a revert ML5 alone catches, on a3a246b. ML5 passed on first run and did not catch -90's revert
+(06), so it had not yet been seen red on a wrong port.
+
+Edit (one line, port only): router/RoutingEngine.kt:719, the limit's throw in findTrackInner (Java :2028),
+  "throw IllegalArgumentException("memory limit reached")"
+  ->  "throw IllegalArgumentException("memory limit")"
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh (timeout 5000 s); filter *RoutingEngine*Test.
+
+WHY ML5 ALONE: in expected-1b only ML5's 59 rows have the kind "memory limit reached"; no row of F0, R, DL-lat, DL-lon,
+MP64 or PM5 does (MP64 showed neither the limit nor panic in 1b; PM5 is selected by panic without the limit). The
+edit changes only the message of that throw, so it can move only a case whose oracle kind is the limit.
+
+PREDICTION (pushed before the run):
+- 0 "e: " lines; 7 tests, 4 fresh XML files; every oracle-against-expected-1b assertion passes.
+- ML5 FAILS: 59 of 59 mismatches, on kind only (E3Outcome.kindOf maps the new message to another kind; the empty track's
+  nodes, cost, distance and digests are equal).
+- F0, R, DL-lat, DL-lon, MP64 and PM5 PASS, 0 mismatches each.
+- After restore: cmp equal; git diff of src against a3a246b empty.
+[I] This shows ML5's comparison holds the limit; it does not show ML5 catches a wrong decision on when to throw.
+
+OBSERVED (scratch copy of revert.sh, run rv5):
+- The edit applied once (one - and one + line, RoutingEngine.kt:719); 0 "e: " lines; 4 fresh XML files, 7 tests, 1
+  failure, 0 errors; every oracle-against-expected-1b assertion passed.
+- ML5: 59 cases, 59 mismatches, each on [kind] only (oracle "memory limit reached", port "memory limit"; the empty
+  track's other five fields equal). HELD.
+- F0 passed; R 1534 cases, 0 mismatches; DL-lat 0; DL-lon 0; MP64 0; PM5 0. HELD: ML5 alone catches it.
+- Restored: cmp equal; git diff of src against 7e24058 empty.

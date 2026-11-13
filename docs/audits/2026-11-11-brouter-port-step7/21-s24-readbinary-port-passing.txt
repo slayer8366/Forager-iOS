@@ -1,0 +1,6 @@
+Session 24: patch 16 (session 23's readBinary file-branch port) applied unchanged to the source, plus one comment in
+OsmTrack.kt's catch naming the known difference (the port's own exception text after BRouter's prefix, RECORD -116).
+Run: :brouter:jvmTest --rerun-tasks --tests '*ReadBinaryTest', test-results deleted first.
+Observed: BUILD SUCCESSFUL; 0 " e: "; 1 fresh XML; tests 1, failures 0, errors 0.
+Printed: "7 readBinary: 32 tracks, 9029 reads compared, 2601 tracks returned, 4522 debug texts, 1549 on the error path".
+The error-path count includes the EOF cuts and the two empty tracks (30, 31), whose debug text after the prefix differs.

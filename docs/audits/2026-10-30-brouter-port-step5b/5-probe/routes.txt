@@ -1,0 +1,22 @@
+# java Eclipse Adoptium 21.0.13+9-LTS amd64
+# classpath out/main:out/probe:out/shadow:/home/user/forager-ios-5a/brouter/build/oracle/brouter-1.7.10-ro.jar
+route f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457]: nodes 226 distance 5047; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+route f0 route [41.2772811, -74.0422743, 41.292043, -73.996678]: nodes 306 distance 6713; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+route segments route [41.2742564, -73.9978932, 41.3036912, -74.0159457]: nodes 226 distance 5047; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+route segments route [41.2772811, -74.0422743, 41.292043, -73.996678]: nodes 306 distance 6713; parseNodeBody +0, parseNodeBody2 +0, readUnified134 +0
+## counters (zero unless the shadowed classes are first on the classpath)
+endOfArray 9402: in the cache stream's StatCoderContext 0 (first at -); in other contexts 9402 (btools.util.BitCoderContext, arrays up to 8 bytes); the first of those at f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457] (array length 1)
+    at btools.util.BitCoderContext.fillBuffer(BitCoderContext.java:253)
+    at btools.util.BitCoderContext.decodeVarBits(BitCoderContext.java:123)
+    at btools.expressions.BExpressionContext.decode(BExpressionContext.java:204)
+    at btools.expressions.BExpressionContext.evaluate(BExpressionContext.java:409)
+    at btools.expressions.BExpressionContextWay.accessType(BExpressionContextWay.java:116)
+    at btools.codec.TagValueCoder.decodeTree(TagValueCoder.java:135)
+    at btools.codec.TagValueCoder.decodeTree(TagValueCoder.java:90)
+    at btools.codec.TagValueCoder.decodeTree(TagValueCoder.java:90)
+noisy: decodeNoisyNumber max 10 at f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457]
+noisy: decodeNoisyDiff (not from decodePredictedValue) max 11 at f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457]
+noisy: decodeNoisyDiff from decodePredictedValue max 12 at segments route [41.2742564, -73.9978932, 41.3036912, -74.0159457]; calls over 24: 0
+cleanupPeninsulas: StackOverflowError caught 0; max recursion depth 128 at f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457]
+OsmNode.parseNodeBody 0, parseNodeBody2 0, readUnified at :134 0
+hmap -: puts 2234, max size 108, longest bin 3 at f0 route [41.2742564, -73.9978932, 41.3036912, -74.0159457] bin 1502 of 4096, tree bins seen 0, puts into a tree bin holding equal hashes 0

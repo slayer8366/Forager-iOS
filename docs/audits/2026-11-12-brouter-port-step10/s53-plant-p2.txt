@@ -1,0 +1,31 @@
+# Session 53, plant p2, on f33828c. Scratch revert.sh (copy of docs/process/tools/revert.sh), timeout 1500 s, restore from a saved copy, cmp.
+## The plant (diff against f33828c's OsmNodesMap.kt)
++        val revLinks = HashMap<OsmNode, ArrayList<OsmLink>>() // PLANT p2: children walked last to first
+-            var l = f.next
+-            while (l != null) {
+-                val link: OsmLink = l
+-                l = link.getNext(n) // Java's for-update, taken before the body so that `continue` keeps it
+-                f.next = l
++            val rev = revLinks.getOrPut(n) { val a = ArrayList<OsmLink>(); var q = n.firstlink; while (q != null) { a.add(q); q = q.getNext(n) }; a }
++            while (rev.isNotEmpty()) {
++                val link: OsmLink = rev.removeAt(rev.size - 1)
+## RoutingEngineMemoryTest
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 3, failures 0, errors 0, skipped 0 in 1 files
+BUILD SUCCESSFUL in 9m 7s
+## RoutingEngineRTest
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 1, failures 0, errors 0, skipped 0 in 1 files
+BUILD SUCCESSFUL in 12m 12s
+## Group lines (system-out)
+8b MP64: 59 cases within 86 draws; 0 mismatches
+8b MP64 depth: deepest recursion 7954; 59 of 59 cases entered the walk; 0 overflows caught; the port's runs 124794 ms
+8b PM5: 55 cases within 1180 draws; 0 mismatches
+8b PM5 depth: deepest recursion 7617; 55 of 55 cases entered the walk; 0 overflows caught; the port's runs 69560 ms
+8b ML5: 59 cases within 246 draws; 0 mismatches
+8b ML5 depth: deepest recursion 7954; 59 of 59 cases entered the walk; 0 overflows caught; the port's runs 74179 ms
+8a R: 1534 cases; {route=968, refused=354, error=212}; 0 mismatches

@@ -1,0 +1,44 @@
+Step 8b, session 32: a revert in the condition that throws "memory limit reached" (RECORD -124, decision 3), on 8deeb46
+plus the §5 correction (docs only). Session 31's ML5 revert (07) moved the message, not the decision.
+
+Edit (one character, port only): router/RoutingEngine.kt:718, findTrackInner (Java :2027),
+  "if (maxTotalCost < 1000000000 || needNonPanicProcessing || fastPartialRecalc) {"
+  ->  "if (maxTotalCost <= 1000000000 || needNonPanicProcessing || fastPartialRecalc) {"
+Runner: a scratch copy of Forager-iOS docs/process/tools/revert.sh (timeout 1200 s, the planner's 20 minutes); filter
+*RoutingEngine*Test (F0, R, DL, MP64, ML5, PM5: 7 tests in 4 classes).
+
+WHAT IT DOES: maxTotalCost starts at 1000000000 (or a guide's cost + 5000, smaller) and only ever decreases (:781-785), so
+"<= 1000000000" is always true. The edit therefore throws "memory limit reached" at every point where Java would set
+memoryPanicMode instead (:2031), and changes nothing where Java already throws.
+
+CAN IT LOOP FOR EVER? No. It only turns a panic into a throw; the throw ends the search (doRouting catches it, :318).
+It removes no exit and adds no path to the open set. Run under the time limit all the same.
+
+PREDICTION (pushed before the run):
+- 0 "e: " lines; 4 fresh XML files, 7 tests; every oracle-against-expected-1b assertion passes (the oracle is untouched).
+- PM5 FAILS: 55 of 55 mismatches, each with the port's kind "memory limit reached" and the oracle's not (PM5 is
+  selected for panic mode without the limit, E3MemoryTest:43); the port's other five fields those of the empty track.
+- ML5 PASSES, 0 mismatches: every ML5 case already throws the limit in Java; where Java panicked first (54 of 59 in
+  1b), the port now throws at the panic instead of later, and the outcome is the same tuple (the limit, empty track).
+- MP64 PASSES, 0: 1b's selection saw neither panic nor the limit at memory class 64.
+- F0, R, DL-lat, DL-lon PASS, 0 each, on the premise that no case of theirs reaches panic mode. That premise is shown
+  for MP64 only; for R and DL it is inferred from "only memory class 5 panics in 1b" and not measured. If R or DL fail,
+  each failure must be the port's kind "memory limit reached" against an oracle that is not the limit; any other
+  failure means a stale or wrong run.
+- After restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED (scratch copy of revert.sh, taking several --tests filters and RV_TIMEOUT=1200; two parts, each applying the
+edit, running, and restoring from its own saved copy, because the four classes take about 1,226 s together):
+- Part 1, rv8a (DL, F0, RoutingEngineMemoryTest): the edit applied once (one - and one + line, :718); 0 "e: " lines;
+  3 fresh XML files, 6 tests, 1 failure, 0 errors; BUILD FAILED in 7m 36s (the one failure). No oracle-against-
+  expected-1b assertion failed.
+  - PM5: 55 cases, 55 mismatches. The 20 printed are all "oracle route, port memory limit reached", on all six fields.
+    HELD (55 of 55; the other 35 are counted, not printed).
+  - ML5: 59 cases, 0 mismatches. HELD.
+  - MP64: 59 cases, 0. F0 passed. DL-lat 59, 0; DL-lon 59, 0. HELD.
+- Part 2, rv8b (R): the same edit; 0 "e: " lines; 1 fresh XML, 1 test, 0 failures; BUILD SUCCESSFUL in 11m 12s. R 1534
+  cases {route=968, refused=354, error=212}, 0 mismatches. HELD: no R case panics, so the premise holds for R and DL.
+- No hang: both parts ended well inside 1200 s.
+- Restored: cmp equal after each part, and cmp equal to a copy of the file taken before either part; git status clean.
+RESULT: the prediction held on all seven groups. PM5 catches a wrong decision on when the limit is thrown (a panic
+turned into the limit); ML5 does not catch this one, as predicted (it holds the limit itself, and the limit came anyway).

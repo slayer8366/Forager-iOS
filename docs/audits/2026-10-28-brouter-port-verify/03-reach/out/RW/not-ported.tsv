@@ -1,0 +1,30 @@
+status	method	java_lines
+not ported (no file)	codec/LinkedListContainer.<init>(I[I)V	4
+not ported (no file)	codec/LinkedListContainer.addDataElement(II)V	8
+not ported (no file)	codec/LinkedListContainer.getDataElement()I	8
+not ported (no file)	codec/LinkedListContainer.initList(I)I	9
+not ported (no file)	codec/LinkedListContainer.resize()V	5
+not ported	codec/MicroCache.expandId(I)J	3
+not ported	codec/MicroCache.getIdForIndex(I)J	4
+not ported (constructor)	codec/MicroCache2.<init>(Lbtools/codec/StatCoderContext;Lbtools/codec/DataBuffers;IIILbtools/codec/TagValueValidator;Lbtools/codec/WaypointMatcher;)V	215
+not ported	codec/MicroCache2.expandId(I)J	16
+not ported	codec/MicroCache2.readUnified(ILbtools/util/IByteArrayUnifier;)[B	5
+not ported	codec/MicroCache2.shrinkId(J)I	15
+not ported (constructor)	mapaccess/OsmNode.<init>(J)V	4
+not ported	mapaccess/OsmNode.parseNodeBody2(Lbtools/codec/MicroCache2;Lbtools/mapaccess/OsmNodesMap;Lbtools/util/IByteArrayUnifier;)V	37
+refuses (body throws "unsupported")	util/ByteArrayUnifier.unify([BII)[B	28
+not ported	util/ByteDataReader.getEndPointer()I	4
+not ported	util/ByteDataReader.readBoolean()Z	4
+not ported	util/ByteDataReader.readDataUntil(I)[B	9
+not ported	util/ByteDataReader.readFully([B)V	4
+not ported	util/ByteDataReader.readShort()S	5
+not ported	util/ByteDataWriter.injectSize(I)V	16
+not ported	util/ByteDataWriter.write([BII)V	4
+not ported	util/ByteDataWriter.writeBoolean(Z)V	3
+not ported	util/ByteDataWriter.writeInt(I)V	6
+not ported	util/ByteDataWriter.writeModeAndDesc(Z[B)V	8
+not ported	util/ByteDataWriter.writeShort(I)V	4
+not ported	util/ByteDataWriter.writeSizePlaceHolder()I	3
+not ported	util/ByteDataWriter.writeVarBytes([B)V	9
+partial	mapaccess/OsmFile.createMicroCache: the hollowNodes-null branch throws (OsmFile.kt:140-143)	0
+partial	mapaccess/OsmNode.parseNodeBody: the MicroCache2 branch throws (OsmNode.kt:96-100)	0

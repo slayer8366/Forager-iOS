@@ -1,0 +1,11 @@
+--- plantB.saved (the scratch copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/router/RoutingEngine.kt
+@@ -288,7 +288,7 @@
+                 nodeLimit = MAXNODES_ISLAND_CHECK
+                 if (mwps[i].wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT) continue
+                 val seg = findTrack("target-island-check", mwps[i + 1], mwps[i], null, null, false)
+-                if (seg == null && nodeLimit > 0) {
++                if (seg == null && nodeLimit < 0) {
+                     throw IllegalArgumentException("target island detected for section $i")
+                 }
+             }

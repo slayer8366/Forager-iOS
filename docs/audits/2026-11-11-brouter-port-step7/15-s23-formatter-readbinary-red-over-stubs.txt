@@ -1,0 +1,14 @@
+Session 23 (RECORD -111): Formatter whole and OsmTrack.readBinary's file branch (with MatchedWaypoint and
+OsmPathElement readFromStream), stubbed (TODO naming each stub); FormatterTest and ReadBinaryTest written over the
+stubs. Run: :brouter:jvmTest --rerun-tasks --tests FormatterTest --tests ReadBinaryTest, results deleted first;
+2 fresh XML; 0 " e: ". 2 tests, 2 failures, 0 errors [R]:
+  FormatterTest: "getJsonCommandIndex(-1, -1) expected:<throws [java.lang.IllegalArgumentException: unknown command:
+    -1]> but was:<throws [kotlin.NotImplementedError: An operation is not implemented: step 7, session 23 stub:
+    Formatter.getJsonCommandIndex]>"
+  ReadBinaryTest: "track 0, t0.bin, target 0/0, shift 0, profile true, debug true: result: oracle <digest>/10787,
+    port throws kotlin.NotImplementedError: An operation is not implemented: step 7, session 23 stub:
+    OsmTrack.readBinary's file branch"
+A slip before this run, caught and fixed before any port code existed: ReadBinaryTest's first display showed both
+sides in full when the port threw, which printed the oracle's track text (positions near Forager's ends) into the
+local XML and log. Those files were deleted, never staged; the display now shows a thrown text in full and the
+other side by digest only.

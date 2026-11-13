@@ -1,0 +1,47 @@
+Step 9, session 43: the production run, BROUTER_PRODUCTION_RECORD=1, at 2763f4c (test unchanged since; a014538 is docs only).
+Command: BROUTER_PRODUCTION_RECORD=1 timeout 5400 ./gradlew :brouter:jvmTest --rerun --tests '...RoutingEngineProductionRecordTest'
+(A first attempt without --rerun ran nothing: jvmTest was UP-TO-DATE, the variable is not a task input. Not a run.)
+Wall time: 1203 s by date; Gradle: BUILD SUCCESSFUL in 20m 2s.
+Lines of the run, verbatim (counts only):
+RoutingEngineProductionRecordTest[jvm] > productionRunIsRecordedAgainstTheOracle[jvm] STANDARD_OUT
+production record: F0 | 2 | 2 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: R | 1180 | 1180 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: DL-lat | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: DL-lon | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: MP64 | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: ML5 | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: PM5 | 55 | 55 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: NT | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: LB | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: CR | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK1 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK2 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK3 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK4 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK5 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK6 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK7 | 13 | 13 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | exactKindDiffers=0
+production record: FK8 | 11 | 11 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: F0h | 8 | 8 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: group | cases | equal | differing | kind nodes cost distance nodeDigest heightsDigest | costOnly sameNodesDistance differentRoute other | oracleOffRow | extra
+production record: F0 | 2 | 2 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: R | 1180 | 1180 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: DL-lat | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: DL-lon | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: MP64 | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: ML5 | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: PM5 | 55 | 55 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: NT | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: LB | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: CR | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK1 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK2 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK3 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK4 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK5 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK6 | 10 | 10 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: FK7 | 13 | 13 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | exactKindDiffers=0
+production record: FK8 | 11 | 11 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: F0h | 8 | 8 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+production record: 19 groups in 1201.0 s
+RoutingEngineProductionRecordTest[jvm] > productionRunIsRecordedAgainstTheOracle[jvm] PASSED

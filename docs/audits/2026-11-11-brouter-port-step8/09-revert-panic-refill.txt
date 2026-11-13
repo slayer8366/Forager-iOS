@@ -1,0 +1,46 @@
+Step 8b, session 32: a revert in a panic-mode line (RECORD -124, decision 3): the refill of the open set from the open
+border list when the open set empties (Java :1993-1998).
+
+Edit (one line removed, port only): router/RoutingEngine.kt:691, findTrackInner, the body of the refill's loop,
+  "openSet.add(p.cost + (p.airdistance * airDistanceCostFactor).toInt(), p)"   (the first of its two occurrences; the
+  second, after the canEscape sweep, :714, is untouched)
+  ->  removed: the loop runs with an empty body, then the list is cleared, memoryPanicMode = false and
+      needNonPanicProcessing = true as before.
+Runner: the scratch copy of revert.sh used for 08 (several filters; timeout 1200 s per part); two parts, as 08:
+DL, F0 and RoutingEngineMemoryTest; then R.
+
+WHAT IT DOES: when the open set empties with paths parked in panic mode, those paths are dropped instead of searched.
+The next pop finds the open set empty and the border list empty, so the search ends (:1991-1992) without them.
+
+CAN IT LOOP FOR EVER? No. It only removes paths from the search; the open set can only reach empty sooner, and the
+exit on an empty open set and empty border list is untouched. (Removing either flag's line instead could loop: with
+memoryPanicMode left true, or needNonPanicProcessing left false, parked paths can be parked again for ever. Not chosen.)
+Run under the time limit all the same.
+
+PREDICTION (pushed before the run; to be read after 08's result, which it does not depend on):
+- 0 "e: " lines; 4 fresh XML files over the two parts, 7 tests; every oracle-against-expected-1b assertion passes.
+- PM5 FAILS on at least 50 of 55, and I expect 55 of 55: every PM5 case panics (its selection), so each loses the paths
+  it parked; a case could only stay equal if every parked path was a dead end, which I do not expect. The port's kind
+  will mostly be "no track found at pass=0" or "...pass=1", or a route that differs; not the limit.
+- ML5 FAILS on the cases that panicked before the limit (54 of 59 in 1b), and only those: in Java the limit after panic
+  mode is thrown on the refilled set (needNonPanicProcessing true); with no refill there is no throw there. The 5 that
+  never panicked throw as before and pass. So ML5 54 of 59 mismatches, on kind (the oracle the limit, the port not).
+- MP64, F0, R, DL-lat, DL-lon PASS, 0 mismatches each: no refill runs without panic mode first, and on the premise of 08
+  none of their cases panics. If 08 shows R or DL panicking, this line is expected to fail for those same cases.
+- After restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED (the same scratch runner as 08; RV_TIMEOUT=1200; two parts):
+- Part 1, rv9a (DL, F0, RoutingEngineMemoryTest): the edit applied once (one - line, :691); 0 "e: " lines; 3 fresh XML,
+  6 tests, 2 failures, 0 errors; BUILD FAILED in 7m 54s. No oracle-against-expected-1b assertion failed.
+  - PM5: 55 cases, 48 mismatches. The 20 printed: all "oracle route, port no track found at pass=0", on all six fields.
+  - ML5: 59 cases, 53 mismatches. The 20 printed: all [kind] only, "oracle memory limit reached, port no track found
+    at pass=0".
+  - MP64 59, 0; F0 passed; DL-lat 59, 0; DL-lon 59, 0.
+- Part 2, rv9b (R): 0 "e: "; 1 fresh XML, 1 test, 0 failures; BUILD SUCCESSFUL in 11m 11s; R 1534 cases, 0 mismatches.
+- No hang. Restored: cmp equal after each part, and cmp equal to a copy taken before either part; git status clean.
+RESULT: THE PREDICTION FAILED on its numbers. Held: the groups that fail (PM5, ML5) and those that do not (MP64, F0, R,
+DL-lat, DL-lon), and the port's kind ("no track found at pass=0", not the limit). Failed: PM5 48 of 55, not "at least 50"
+(7 PM5 cases stay equal with their parked paths dropped); ML5 53 of 59, not 54 (one case that panicked in 1b's logged run
+still throws the limit, or one ML5 case's panic is not the one before its limit). Not explained: which 7 and which 6, and
+why; the run prints only the first 20 mismatches. Per the dispatch, one more try with a new pushed prediction is allowed;
+not started (the planner's handoff call came mid-run).

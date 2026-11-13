@@ -1,0 +1,4 @@
+165c165
+<                         node.addLink(link, isReverse, node2)
+---
+>                         node.addLink(link, !isReverse, node2)

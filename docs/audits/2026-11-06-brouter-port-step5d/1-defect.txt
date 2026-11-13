@@ -1,0 +1,7 @@
+Step 5d item 1: WaypointMatchEngines.differingFields (RECORD -69's defect), seen on a failing message before and after the fix.
+Both runs: scratch revert of WaypointMatcherImpl.kt:39 (javaDoubleCompare(mw1.directionDiff, mw2.directionDiff) -> 0), WaypointMatchTest only,
+file saved aside and restored from the copy (never git), build log read for '^e: ' first. Never committed. The raw messages stay in scratch (E1);
+this file carries only counts of 5+-digit 'NNNN)' coordinate fragments in each message and the field lists with those fragments removed.
+== before: compile errors: 0; restored-identical; numeric fragments in the message: 33; field lists:       5 end 0: n1,n2,diff,name;      1 end 1: n1,n2,diff;      4 end 1: n1,n2,diff,name;
+== after: compile errors: 0; restored-identical; numeric fragments in the message: 0; field lists:       5 end 0: n1,n2,diff,name;      1 end 1: n1,n2,diff;      4 end 1: n1,n2,diff,name;
+Both: 1 test, 1 failure, 'ends differing from the oracle: 2105' (same count as 5c's 4-revert.txt).

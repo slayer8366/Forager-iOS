@@ -1,0 +1,18 @@
+Session 25: FormatJson stubbed (format, formatAsWaypoint, and formatDecimal3, the port's stand-in for Java's
+DecimalFormat "0.###" in Locale.ENGLISH), with OsmTrack.aggregateSpeedProfile, getVoiceHint and getVoiceHintTime
+stubbed and OsmTrack.version added ("1.7.10", the oracle jar's Implementation-Version). FormatJsonTest written: walks
+from Forager's own ends (12 per case, up to 60 steps), hints switched on by processVoiceHints under turnInstructionMode
+0 to 9 on two tracks in three, track fields, showspeed, showSpeedProfile, itinerary, POIs, matched and corrected
+waypoints of types 0 to 3 and the export flags seeded alike; aggregateSpeedProfile, format and formatAsWaypoint
+compared by digest and length, thrown results by class; formatDecimal3 compared with Java's DecimalFormat on 250,023
+floats (fixed edge values, random bit patterns, times near rounding ties).
+Run: full :brouter:jvmTest --rerun-tasks, test-results deleted first (the run before this push).
+Observed: BUILD FAILED; 0 " e: "; 74 fresh XML; tests 156, failures 4, errors 0: CollectOutreachersTest 2 (known,
+RECORD -106) and FormatJsonTest 2, red on purpose.
+Messages: "track 0: aggregateSpeedProfile expected:<[<digest>/0]> but was:<[throws kotlin.NotImplementedError: An
+operation is not implemented: OsmTrack.aggregateSpeedProfile: step 7, session 25]>" and "bits 0 expected:<[0]> but
+was:<[throws kotlin.NotImplementedError: An operation is not implemented: FormatJson.formatDecimal3: step 7, session
+25]>". The first stops before format is called, so the format stub is not yet named.
+E1: the first staged scan read 1, a test constant (a float with seven decimals in mantissa form), not a position. It
+was rewritten as the same value without decimals; FormatJsonTest re-run alone: 0 " e: ", 1 fresh XML, the same 2
+failures. Scan then 0.

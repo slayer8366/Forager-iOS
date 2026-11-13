@@ -1,0 +1,17 @@
+Session 44, step 9 item 2: the counted run (scratch counter at CheapRuler.kt:53, never committed; tree cmp-equal after).
+Local, BROUTER_PRODUCTION_RECORD=1 ./gradlew :brouter:jvmTest --tests '*RoutingEngineProductionRecordTest' --rerun, on f0f0da6 plus the scratch patch.
+Groups DL-lat, DL-lon, NT, LB, CR only. Counts only. The test's own lines and the counter's, as printed:
+production record: DL-lat | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+s44 rows touched: DL-lat | 59 cases | 28 read a row | rows [1295, 1297]
+production record: DL-lon | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+s44 rows touched: DL-lon | 59 cases | 14 read a row | rows [1318]
+production record: NT | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+s44 rows touched: NT | 59 cases | 13 read a row | rows [1310, 1311, 1318]
+production record: LB | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+s44 rows touched: LB | 59 cases | 59 read a row | rows [1295, 1297, 1310, 1311, 1318]
+production record: CR | 59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 | -
+s44 rows touched: CR | 59 cases | 8 read a row | rows [1295, 1297, 1318]
+production record: 5 groups in 125.6 s
+BUILD SUCCESSFUL in 2m 10s
+exit 0
+Total: 122 of 295 cases read at least one of the 13 rows (28 + 14 + 13 + 59 + 8). Rows read: 1295, 1297, 1310, 1311, 1318. Never read: the other 8.

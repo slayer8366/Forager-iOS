@@ -1,0 +1,9 @@
+Session 11, revert C (wayfraction). Prediction, written before the run:
+[s11 C-wayfraction] RoutingContextNogo.kt calcDistance: `wayfraction = 1.0 - wayfraction` -> `wayfraction = wayfraction`.
+  Predict: only RoutingContextNogoTest.calcDistanceAndTheWaypointCycleMatchTheOracle fails, a state mismatch in its wf= field
+  (endpoint case, s2<0 or end fractions 0/1 swapped); the other 3 nogo tests pass.
+
+Runner: compile errors 0, fresh XML 1, restored cmp equal.
+TOTAL: tests 4, failures 1, errors 0, skipped 0 in 1 files
+testcase name="calcDistanceAndTheWaypointCycleMatchTheOracle[jvm]"
+message="org.junit.ComparisonFailure: case 0 step 0 expected:&lt;...0 shortest=true wf=4[594250040664782116] lon=<int> lat=<int>...&gt; but was:&lt;...0 shortest=true wf=4[605911913706455735] lon=1058

@@ -1,0 +1,12 @@
+5c revert, by docs/audits/2026-10-30-brouter-port-step5b/revert-runner.sh, full :brouter:jvmTest, local, on 51c43b3's source.
+Edit: WaypointMatcherImpl.kt:39 `javaDoubleCompare(mw1.directionDiff, mw2.directionDiff)` -> `0`.
+compile errors in the revert's build log: 0
+TOTAL: tests 102, failures 3, errors 0, skipped 0 in 47 files
+FAILED CollectOutreachersTest.collectOutreachersWithoutADestination (RECORD -61's known red; mode 1, sub 735)
+FAILED CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes (RECORD -61's known red; mode 2, sub 735)
+FAILED WaypointMatchTest.everyEndOfStratumRMatchesTheOraclesWaypoint: "ends differing from the oracle: 2105"; first entries name n1, n2, diff, name
+  (the message's field list also carries coordinate fragments, a defect in differingFields; not copied here, E1)
+Test line: 1534 cases, 3068 ends, unmatched 350, oracle threw 3, reverse chosen 1364, ties 2718, ends differing 2105; oracle SHA-256 unchanged f26818e8...6907
+restored: identical to the saved copy; forward line present at WaypointMatcherImpl.kt:39; git status clean afterwards
+Prediction (3-revert-prediction.md): 0 compile errors; 1364 <= N <= 2718; other failures only CollectOutreachersTest's 2. Held.
+The point estimate ("near the top") missed: 2105.

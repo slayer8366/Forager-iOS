@@ -1,0 +1,13 @@
+9 FK1: 10 cases; oracle kinds {from-position not mapped in existing datafile=10}; port kinds {from-position not mapped in existing datafile=10}; 0 mismatches
+9 FK2: 10 cases; oracle kinds {to-position not mapped in existing datafile=10}; port kinds {to-position not mapped in existing datafile=10}; 0 mismatches
+9 FK3: 10 cases; oracle kinds {no track found at pass=0=10}; port kinds {no track found at pass=0=10}; 0 mismatches
+9 FK4: 10 cases; oracle kinds {target island detected for section 0=10}; port kinds {target island detected for section 0=10}; 0 mismatches
+9 FK5: 10 cases; oracle kinds {to-position not mapped in existing datafile=10}; port kinds {route=6, no track found at pass=0=3, to-position not mapped in existing datafile=1}; 9 mismatches
+9 FK6: 10 cases; oracle kinds {datafile W80_N40.rd5 not found=10}; port kinds {datafile W80_N40.rd5 not found=10}; 0 mismatches
+9 FK7: 13 cases; oracle kinds {file of size * too short, should be *=10, to-position not mapped in existing datafile=1, route=2}; port kinds {route=2, file of size * too short, should be *=10, to-position not mapped in existing datafile=1}; 0 mismatches
+9 FK8: 11 cases; oracle kinds {top index checksum error=10, route=1}; port kinds {route=1, top index checksum error=10}; 0 mismatches
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 8, failures 1, errors 0, skipped 0 in 1 files
+TOTAL: tests 8, failures 1, errors 0, skipped 0 in 1 files

@@ -1,0 +1,12 @@
+Session 17: full fresh run on the boundary merge 7491f3a (brouter-port 611ba54 into brouter-port-5b 028783c, RECORD -96).
+Command: ./gradlew :brouter:jvmTest --rerun-tasks --continue (log kept in the session scratchpad, not committed)
+Gradle: "138 tests completed, 2 failed"; BUILD FAILED in 11m 37s (the 2 failures)
+Failed:
+  CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm]
+  CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm]
+" e: " lines: 0. 429 lines: 0.
+JUnit XML: 61 files, 61 non-empty; summed tests 138, failures 2, errors 0 (matches Gradle's 138).
+Against session 16 (6cd2ab9: 138 / 2): difference 0.
+Merge-changed test classes: E3ExpectedFileTest (in jvmTest: 6 tests, 0 failed; @Test count 6 before and after).
+  E3FKTest and E3ExpectedWriteTest are in the e3.strata package, which jvmTest excludes (build.gradle.kts:151-156); not run here.
+E1 scan (scan.sh 028783c HEAD, ENDS = Forager ends): 0. brouter-port's own diff (fcd35ff..611ba54) scans 0; the two diffs are byte-identical.

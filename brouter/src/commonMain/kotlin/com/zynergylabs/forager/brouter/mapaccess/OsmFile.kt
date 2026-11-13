@@ -2,6 +2,7 @@ package com.zynergylabs.forager.brouter.mapaccess
 
 import com.zynergylabs.forager.brouter.codec.DataBuffers
 import com.zynergylabs.forager.brouter.codec.MicroCache
+import com.zynergylabs.forager.brouter.codec.MicroCache2
 import com.zynergylabs.forager.brouter.codec.StatCoderContext
 import com.zynergylabs.forager.brouter.codec.TagValueValidator
 import com.zynergylabs.forager.brouter.codec.WaypointMatcher
@@ -138,11 +139,10 @@ internal class OsmFile(rafile: PhysicalFile?, var lonDegree: Int, var latDegree:
                 return null
             }
             if (hollowNodes == null) {
-                // Java: new MicroCache2(bc, ...). T2 reaches no MicroCache2 constructor: hollowNodes is null only under
-                // -DdisableDirectWeaving, which Forager never sets.
-                throw UnsupportedOperationException("unsupported: MicroCache2's decoder is not on T2's port list")
+                return MicroCache2(bc, dataBuffers, lonIdx, latIdx, divisor, wayValidator, waypointMatcher)
             }
-            TODO("DirectWeaver, item I step 5b")
+            DirectWeaver(bc, dataBuffers, lonIdx, latIdx, divisor, wayValidator, waypointMatcher, hollowNodes)
+            return MicroCache.emptyNonVirgin
         } finally {
             // crc check only if the buffer has not been fully read
             val readBytes = (bc.getReadingBitPosition() + 7) shr 3

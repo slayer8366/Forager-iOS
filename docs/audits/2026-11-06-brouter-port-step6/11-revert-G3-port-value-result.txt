@@ -1,0 +1,33 @@
+Session 15, revert G re-run at 7282c67 for the port's value (RECORD -105: "port lower" not confirmed, the runner cut
+messages at 200 characters). Same edit as 07-revert-G-turncost-int-result.txt, one filter *St*PathTest covering
+both classes. revert.sh unchanged (run from a copy in scratch); its refusal checks passed before anything was read.
+9-digit numbers redacted as <int>.
+
+Edit (StdPath.kt):
+-        var turncost = ((1.0 - cosangle) * turncostbase + 0.2).toInt()
++        var turncost = ((1.0 - cosangle) * turncostbase).toInt() + 0.2.toInt()
+
+== runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 2
+TOTAL: tests 4, failures 2, errors 0, skipped 0 in 2 files
+TOTAL: tests 4, failures 2, errors 0, skipped 0 in 2 files
+testcase name="startPathsMatchTheOracleFromForagersEnds[jvm]"
+message="java.lang.AssertionError: fastbike-asia-pacific F0-inside-across-the-degree-line detail false: line 2 of 9/9: oracle [start1 cost=2847 selev=-32768 airdistance=3494 sourceNode=n<int>:<int> tar
+--
+testcase name="pathsMatchTheOracleOnEveryStdProfile[jvm]"
+message="java.lang.AssertionError: fastbike-asia-pacific.brf F0-inside-across-the-degree-line detail false: line 2 of 342/342: oracle [path cost=26923 selev=-32768 airdistance=0 sourceNode=n<int>:<int>
+
+== full messages, read from the two fresh XML files (python ElementTree, the whole message attribute), the oracle's
+and the port's lists split on spaces and compared token by token:
+StdPathTest.pathsMatchTheOracleOnEveryStdProfile: message 1,103 characters; 25 tokens each side; 1 token differs:
+  oracle cost=26923, port cost=26914 (fastbike-asia-pacific.brf, F0-inside-across-the-degree-line, detail false,
+  path line 2 of 342).
+StartPathTest.startPathsMatchTheOracleFromForagersEnds: message 1,157 characters; 26 tokens each side; 1 differs:
+  oracle cost=2847, port cost=2842 (fastbike-asia-pacific, same case, detail false, start1, line 2 of 9).
+
+Observed: the port's cost is lower in both, and cost is the only field that differs. The prediction's "port lower"
+holds. By 9 and 5, not 1: the prediction's "one lower" was per turn, and a link's cost sums the turn cost of each
+section along it [I: the number of sections with a fraction of 0.8 or more was not counted]. Restored (cmp equal),
+and git status after the run showed no source change.

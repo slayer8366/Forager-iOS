@@ -1,0 +1,18 @@
+Session 16, revert K: result (prediction in 18-revert-K-ilat-prediction.txt, pushed in d42ff96 before the run).
+
+Run with revert.sh (copy in scratch, unchanged): edit 'n.ilat = ((lat + 90.0) * 1000000.0 + 0.5).toInt()' ->
+'n.ilat = ((lat + 90.0) * 1000000.0).toInt()'; filter *RoutingParamCollectorTest.
+- restored: cmp equal; compile errors: 0; fresh XML files: 1; TOTAL: tests 3, failures 1.
+- After the run, git status clean and the rounding line present once: the forward change is in place.
+- Per test: wayPointListMatchesTheOracle failed; setParamsMatchesTheOracleOnForagersKeys and
+  keysForagerNeverPassesAreRefusedAsUnsupported passed.
+- The whole message (179 characters, read from the fresh XML with ElementTree; positions cut here):
+  "Forager's form, an F0h case expected:<...ilat=...80 | name=to ...> but was:<...ilat=...79 | name=to ...>":
+  the from node's ilat one lower in the port, ilon and every other field equal.
+
+Against the prediction: the test, the assertion, the field and the direction (one lower) as predicted; the two
+setParams tests passed, as predicted. Which case: the prediction named the first F0h case most likely and allowed
+a later one. Read afterwards from E3F0hTest's ENDS (computed, not run): cases 0 to 2 have both latitudes' micro-degree
+fractions below 0.5, so truncation equals rounding there; case 3 (edge-north-a) is the first whose from end differs,
+and its rounded ilat ends in 80, the message's. So the failure was on case 3's from end: inside the prediction,
+but not its "most likely" pick.

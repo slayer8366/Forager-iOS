@@ -1,0 +1,13 @@
+A init: jvmTest classpath head [/tmp/claude-0/-home-user-Forager-iOS/3a3820fc-8d2c-5da2-aa77-f5956bee2927/scratchpad/plumb/soe/cls]; jvmArgs [-Xss1g]
+    5b oracle catch: the catch-counting OsmNodesMap is loaded (scratch, not the oracle's own class file)
+    5b collectOutreachers without destination: 12 regions, canEscape false/true 0/3587
+CollectOutreachersTest[jvm] > collectOutreachersWithoutADestination[jvm] PASSED
+    5b collectOutreachers with destination: 12 regions, nodes no longer reachable after it 60118, canEscape false/true 0/3587
+CollectOutreachersTest[jvm] > collectOutreachersWithADestinationVanishesFarNodes[jvm] FAILED
+> Task :brouter:jvmTest FAILED
+BUILD FAILED in 9s
+gradle exit 1
+## compile errors: 0
+## results (JUnit XML)
+CollectOutreachersTest collectOutreachersWithoutADestination[jvm] PASS
+CollectOutreachersTest collectOutreachersWithADestinationVanishesFarNodes[jvm] FAIL: java.lang.AssertionError: canEscape did not answer both ways: false/true 0/3587

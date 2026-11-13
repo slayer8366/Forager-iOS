@@ -1,0 +1,9 @@
+Session 16: SearchBoundaryTest seen failing over the stub (before the port).
+
+Stub: SearchBoundary.kt, every method TODO("SearchBoundary.<method> stub"); the constructor only takes its arguments.
+Run: ./gradlew --max-workers=2 :brouter:jvmTest --tests '*SearchBoundaryTest' --console=plain, from a stamp.
+- ' e: ' lines in the build log: 0; HTTP 429 lines: 0.
+- Fresh XML (newer than the stamp): 1, TEST-...router.SearchBoundaryTest.xml.
+- junit-counts on it: TOTAL: tests 1, failures 1, errors 0, skipped 0 in 1 files.
+- Its message: "kotlin.NotImplementedError: An operation is not implemented: SearchBoundary.getFileName stub"
+  (getFileName is the first call in each case, so the stub named there is the first one reached).

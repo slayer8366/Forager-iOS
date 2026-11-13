@@ -1,0 +1,21 @@
+Revert (a), first-node-dropped, run by docs/process/tools/revert.sh (a copy in scratch, so its files stay out of main's checkout) on cbd31d6, 2026-11-11.
+Edit (the runner's diff, paths cut):
+-            if (i > 0 || ourSize == 0) {
++            if (i > 0) {
+
+Runner output:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 4
+TOTAL: tests 6, failures 2, errors 0, skipped 0 in 4 files
+TOTAL: tests 6, failures 2, errors 0, skipped 0 in 4 files
+testcase name="appendTrackMatchesTheOracle[jvm]"
+message="java.lang.AssertionError: mode 0 F0-inside-across-the-degree-line walk 0: node count expected:<564> but was:<563>
+testcase name="totalSecondsOnBuiltTracksMatchTheOracle[jvm]"
+message="java.lang.AssertionError: F0-inside-across-the-degree-line walk 0: seconds, time, energy, formatted energy expected:<[15747, 4h 22m 27s, 204223, .1kwh]> but was:<[15739, 4h 22m 19s, 204223, .
+
+TrackTimeTest's full message, read from the XML (the runner cuts at 200 characters):
+message="java.lang.AssertionError: F0-inside-across-the-degree-line walk 0: seconds, time, energy, formatted energy expected:<[15747, 4h 22m 27s, 204223, .1kwh]> but was:<[15739, 4h 22m 19s, 204223, .1kwh]>"
+
+After: OsmTrack.kt holds 'ourSize == 0' once again (grep -c 1); git diff empty; the forward change is present.
+Observed as predicted (01-revert-predictions.txt): AppendTrackTest mode 0, first case, node count one short; TrackTimeTest's built tracks on seconds and time, energy equal, at walk 0; the other 4 tests passed.

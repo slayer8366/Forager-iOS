@@ -1,0 +1,55 @@
+Step 8c, session 34: revert (b): the time limit's comparison flipped (RECORD -126, decision 5).
+
+Edit (one line, port only): router/RoutingEngine.kt, findTrackInner's loop head (Java :1981),
+  "if (clock.nowMillis() - startTime > timeout) {"  ->  "if (clock.nowMillis() - startTime <= timeout) {"
+  (the exact complement: under a limit, every loop head that would not throw now throws, and the one that would, not).
+Runner: the same scratch copy of revert.sh as 13; the same two parts.
+
+WHAT IT DOES: with maxRunningTime > 0 the first loop head, in the target island check (Java :961), throws
+"target-island-check timeout after <limit / 1000> seconds" unless the limit has already passed, in which case it never
+throws. With maxRunningTime 0 (every route group, FK10, FK11) the branch is not entered: no change.
+
+CAN IT HANG? No: it can only remove a throw from a run that has passed its limit, and the run then ends as it would with
+no limit (theTimeLimitReadsTheInjectedClock's FK10 case routes uncancelled). Run under the 1200 s limit all the same.
+
+PREDICTION (pushed before the run):
+- 0 "e: " lines in both parts; fresh XML: part 1 4 files, 15 tests; part 2 1 file, 1 test.
+- RoutingEngineStopTest: 2 of 9 FAIL, 7 pass.
+  - forager30sLimitOnAStoppedClock...: FAILS: the stopped clock's elapsed 0 <= 30,000, so the port throws in the island
+    check; the oracle routes. Kind and track differ.
+  - theTimeLimitReadsTheInjectedClock: FAILS: 30,001 <= 30,000 is false at every read after the first, so the port never
+    throws and routes; the expected message is not given.
+  - fk9TimesOut...: PASSES, I expect, and that is a weakness to name: the port throws at its first loop head with
+    "target-island-check timeout after 0 seconds", which the pattern widened by RECORD -126 now admits; the kind is the
+    timeout's as the oracle's; the found track is empty on both sides (Java's dirty track on a timeout goes to
+    foundRawTrack, :1753, not to getFoundTrack). The track part is a guess from the Java, not from a run: if the oracle's
+    found track is not empty at its pass0 timeout, FK9 FAILS 10 of 10 on track. The first words should read
+    target-island-check 10 (port) and pass0 10 (oracle), the oracle's being wall time.
+  - Pass: fk10..., fk11..., fk11CountsLinks..., theWatchdogsSeconds... (all maxRunningTime 0), anErrorDuringTheRun...
+    and anExceptionDuringTheRun... (the clock throws at the comparison's own read, before its result is used).
+- The 7 route groups (F0, R, DL-lat, DL-lon, MP64, ML5, PM5) PASS, 0 mismatches each: all run with maxRunningTime 0.
+  Not a guess.
+- After each part's restore: cmp equal; no src difference from the commit carrying this prediction.
+
+OBSERVED:
+(The "15 tests" above was corrected from "13" after 13's run, before this run: an arithmetic slip, 9 + 2 + 1 + 3.)
+- Part 1, rv14a (StopTest, DL, F0, Memory): the edit applied once (one - and one + line, :724); 0 "e: " lines; 4 fresh
+  XML, 15 tests, 2 failures, 0 errors; gradle ended in 648 s.
+  - RoutingEngineStopTest: 2 of 9 FAIL, exactly the two predicted. HELD on which.
+    - forager30sLimitOnAStoppedClock...: oracle route, port family:timeout with the empty track. HELD.
+    - theTimeLimitReadsTheInjectedClock: FAILS, but NOT as predicted: the port does not route; it gives "re-tracking
+      timeout after 30 seconds". My mechanism missed the re-tracking reset (Java :1797, port :549, `startTime` read again
+      before findTrack("re-tracking", ...)): after the reset the elapsed time is 0, and 0 <= 30,000 throws. Island check,
+      pass0 and pass1 ran out unthrown (30,001 > 30,000); the run then threw at re-tracking's first loop head.
+    - fk9TimesOut...: PASSES, 10 cases, 0 mismatches; first words target-island-check 10, pass0 10 (the port and the
+      oracle). HELD, guess on the track included: both found tracks empty. THE WEAKNESS IS REAL: with the pattern RECORD
+      -126 widened, FK9 cannot tell a limit that strikes at once from one that strikes after 50 ms. Only the two clock
+      tests catch this revert.
+    - fk10, fk11, fk11CountsLinks, theWatchdogsSeconds, anError..., anException...: pass. HELD.
+  - MP64 59, 0; ML5 59, 0; PM5 55, 0; DL-lat 59, 0; DL-lon 59, 0; F0 passed. HELD.
+- Part 2, rv14b (R): 0 "e: "; 1 fresh XML, 1 test, 0 failures; gradle ended in 680 s; R 1534 cases
+  {route=968, refused=354, error=212}, 0 mismatches. HELD.
+- No hang: 648 s and 680 s, both inside 1200 s.
+- Restored: cmp equal after each part, cmp equal to a copy taken before revert (a)'s first part; src equal to HEAD.
+RESULT: held on which tests and groups fail; FAILED on one mechanism (theTimeLimit... ends in re-tracking's timeout, not
+in a route), which the re-tracking reset explains. A question for the planner follows from FK9 (step 8 report, §8).

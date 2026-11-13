@@ -1,0 +1,27 @@
+Session 15, revert H (RECORD -62's debt; section 11 "Next" item 2): interpolateEle's truncation changed.
+Prediction, written and pushed before the run.
+
+Edit (OsmPath.kt interpolateEle):
+  `return (e1 * (1.0 - fraction) + e2 * fraction).toInt().toShort()`
+  -> `return (e1 * (1.0 - fraction) + e2 * fraction + 0.5).toInt().toShort()`
+  Java (OsmPath.java:388-393): `return (short) (e1 * (1. - fraction) + e2 * fraction);`
+  The revert rounds half up instead of truncating toward zero. It changes the result only where both heights are
+  real (not Short.MIN_VALUE) and the raw value's fraction moves the truncation: for raw >= 0 a fraction of 0.5 or
+  more, for raw < 0 a fraction of 0.5 or less in magnitude (and not integral). Wherever it differs, the port's value
+  is exactly one higher than the oracle's (1/4 m), never lower.
+
+Where interpolateEle is reached (OsmPath.kt:232, 243, 254): only with rc.shortestmatch, i.e. at a cut start
+(detail mode only, recordTransferNodes; ele1 at 1 - wayfraction, which then also feeds deltaH), and at a cut end
+or pending endpoint (both modes; ele2 at wayfraction). F0's tiles have no heights (selev=-32768), so F0's cases
+cannot bite. F0h's can.
+
+Filter *St*PathTest (matches StdPathTest and StartPathTest only). Predict:
+  - interpolateEleMatchesTheOracle fails at an early case (within the first 10; case 0 has e1 = MIN_VALUE and
+    cannot), message `case N: interpolateEle(e1, e2, f)`, port = oracle + 1.
+  - startPathsMatchTheOracleFromForagersEnds fails on the first profile in order, fastbike-asia-pacific, on F0h's
+    first case F0h-inside-across-the-degree-line (or a later F0h case, never an F0 case), detail true, at a start
+    line whose originElement height (and possibly cost, through deltaH) differs, port one higher in height.
+    [less sure: detail true only; if a final link or same-segment run comes first it may be detail false.]
+  - pathsMatchTheOracleOnEveryStdProfile and startDirectionIsUnsupported pass: they set no waypoint, so
+    shortestmatch is never true and interpolateEle is not called.
+  So 2 of 4 fail.

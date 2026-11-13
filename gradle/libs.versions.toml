@@ -7,9 +7,13 @@ okio = "3.18.2"
 # JaCoCo's core reads R6's .exec files for named lines (step 1b, RECORD -77); the version is R6's agent's (tools/fetch-jacoco.sh),
 # so the reader and the writer share one execution-data format.
 jacoco = "0.8.16"
+# atomicfu's SynchronizedObject keeps ProfileCache's lock (Phase 1 report, item B row 8 (a); the owner, RECORD -91). commonMain only,
+# as a library, no plugin, as Phase 1's probe compiled it for jvm, iosArm64 and iosSimulatorArm64.
+atomicfu = "0.33.0"
 
 [libraries]
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "jacoco" }
 
 [plugins]

@@ -1,0 +1,906 @@
+# BRouter port, step 7: the track and hints (verify first)
+
+Plumb Ledger, session 18, dispatched by Cedar Datum under RECORD -109. Branch `brouter-port-5b`, from `7125739`.
+This session reads and reports. It builds nothing: no `commonMain` or test file is changed, and `router/OsmTrack.kt`
+stays the type with its one stub (-94).
+
+Tags: **[R]** read in the source at the file and line named; **[C]** counted or shown by a tool's output, named;
+**[I]** inferred, not shown. Java is BRouter 1.7.10 as vendored in Forager (`third_party/brouter/src/main/java/btools/`,
+tag `v1.7.10`, per its README), the same source Phase 1's T2 measured (the file line counts below equal T2's `file_lines`
+column for all nine files [C]). Forager is `slayer8366/Forager` `pre-main` at `947f1be2`.
+
+## 1. Step 7's files
+
+Phase 1's item I, step 7 (report at `20e1f92`, line 1702): "`OsmTrack`, `VoiceHint`, `VoiceHintList`,
+`VoiceHintProcessor` ... `Formatter` and `Format*` only as far as A found methods reached", 1,367 lines in 9 files.
+T2's port list (`2026-10-28-brouter-port-verify/03-reach/out/T2/port-list.tsv`) gives the same nine and the same sum [C]:
+
+| Java class (`btools/router/`) | Java lines [C, `wc -l`] | T2 kept lines | T2 kept methods |
+|---|---|---|---|
+| `OsmTrack` | 587 | 444 | 16 of 27: `addDetours`, `addNode`, `appendTrack`, `buildMap`, `copyDetours`, `getFromDetourMap`, `getLink`, `getMatchedWaypoint`, `getMinDistance`, `getTotalSeconds`, `prepareSpeedProfile`, `processVoiceHints`, `readBinary`, `registerDetourForId`, `removeVoiceHint`, `startSection` (plus `OsmPathElementHolder`) |
+| `VoiceHint` | 223 | 201 | 5 of 9: `addBadWay`, `calcCommand`, `hasGiveWay`, `is180DegAngle`, `isRoundabout` |
+| `VoiceHintList` | 61 | 33 | 2 of 5: `setTransportMode(boolean,boolean)`, `transportMode` |
+| `VoiceHintProcessor` | 529 | 529 | 6 of 6: the constructor, `process`, `postProcess`, `checkForNextNoneMotorway`, `checkStraightHold`, `sumNonConsumedWithinCatchingRange` |
+| `Formatter` | 569 | 84 | 3 of 22: `getFormattedTime2`, `getFormattedEnergy`, `format1` |
+| `FormatGpx` | 573 | 26 | 0 of 10 |
+| `FormatJson` | 261 | 22 | 0 of 7 |
+| `FormatKml` | 116 | 15 | 0 of 5 |
+| `FormatCsv` | 43 | 13 | 0 of 4 |
+| **9 files** | **2,962** | **1,367** | **32** |
+
+- **The four `Format*` rows keep no method.** Their 76 lines are fields, imports and braces, which `reach.py` keeps for
+  any class referenced as a type by reached code (`reach.py:579-616`) [R]. The references are `doRouting`'s `new
+  FormatGpx(...)` and the like (`RoutingEngine.java:249`, `:270-277`, `:299-302`, `:312`), on branches T2 itself cuts
+  (`summary.txt`, "UNUSED exclusion edge" for `FormatGpx.format`, `FormatJson.format`, `FormatKml.format`, `FormatGpx.read`,
+  `Formatter.write`) [C].
+- `OsmTrack.containsNode` is not in T2's list [C]: T2's tier F cuts it (alternative 0). Step 6 holds it as the stub -94
+  ruled, and `OsmPath.kt` calls it.
+- No other class belongs to step 7. T2's other unported `btools.router` files are `RoutingEngine` (step 8),
+  `RoutingHelper`, `AreaReader`, `SuspectInfo` and the five `Kinematic*` (0 kept lines each) [C].
+
+## 2. Reachability on Forager's path, traced to callers
+
+**Forager's call** [R, `app/src/main/java/com/zynergylabs/forager/app/routing/BRouterTrailRouter.kt`]: two waypoints
+from `getWayPointList("lon,lat|lon,lat")` (`:145`); params `profile` (`hiking-mountain.brf`), `alternativeidx=0`,
+`profile:use_dynamic_range=0` (`:147-155`); `RoutingEngine(null, null, routeData, waypoints, context, ROUTING)` (`:210`),
+so `outfileBase` and `logfileBase` are null; `quite = true` (`:157`); `doRun` (`:167`). **What Forager reads back:**
+`getErrorMessage()` (`:133`), and from `getFoundTrack()` only `nodes` and `distance` (`:107-114`, `:95`), and of each node
+`getILat`, `getILon` and **`getSElev`** (`:216-220`). The oracle harness makes the same call
+(`jvmTest/.../oracle/OracleCalls.kt:22-40`) [R].
+
+Three facts fix most of step 7's reach:
+
+- **`turnInstructionMode` is 0.** `RoutingContext.java:176-179` assigns the profile's value only when it is not 1;
+  `hiking-mountain.brf:57` says 1, so the field keeps its default 0 (`:252`) [R]. Forager passes none of the request keys
+  that set it (`RoutingParamCollector.java:223-231`) [R]. All 26 profiles in the oracle's zip say 1 or nothing
+  (`grep` of `brouter/build/oracle/profiles2/*.brf`: 24 assign 1, `rail` and `river` have no line) [C], so this holds on
+  every profile, not only Forager's.
+- **`hasDirectRouting` is false.** It is set at `RoutingEngine.java:985` from `tryFindTrack`'s local, which turns true only
+  for a `DIRECT` waypoint (a `d` suffix, `RoutingParamCollector.java:37-38`, or a beeline added by
+  `matchWaypointsToNodes` under `useDynamicDistance`, `RoutingEngine.java:1633-1667`), extra waypoints, or more sections
+  than `lastTracks` (the assignments at `:887`, `:903`, `:907`, `:939`, `:977`) [R]. Forager has none: no suffix, `use_dynamic_range=0`, one
+  section [I for `use_dynamic_range` reaching `useDynamicDistance`, `RoutingContext.java:200`; step 6's
+  `RoutingParamCollectorTest` compares that context with the oracle's].
+- **No detour is ever registered.** `registerDetourForId` has two callers: `RoutingEngine.java:2194`, inside
+  `if (routingContext.turnInstructionMode > 0)` (`:2191`), and `:1164` in `snapRoundaboutConnection`, called only from
+  `snapPathConnection` (`:1356`), which returns false unless the start waypoint's name begins `via` or `rt` (`:1266-1267`);
+  Forager's are `from` and `to` (`RoutingParamCollector.java:48-51`) [R]. So every `detourMap` stays null.
+
+Hence `processVoiceHints` returns at `OsmTrack.java:457-460`, after making an empty `VoiceHintList`. Phase 1 said the same
+(report line 178), and its JaCoCo run of Forager's calls agrees class by class (`03-reach/out/jacoco.csv`):
+`VoiceHint`, `VoiceHintProcessor` and all four `Format*` covered 0 instructions; `OsmTrack` 10 methods covered,
+`VoiceHintList` 2, `Formatter` 3 [C]. That sample is Forager's own cases, not E's strata.
+
+### Per method
+
+Callers are `RoutingEngine` (step 8) unless named. "Reached" means on Forager's call; "message only" means the result goes
+into `track.message`, which neither Forager nor the port's `RouteOutcome` reads.
+
+| Method | Caller(s) on Forager's path | Mark |
+|---|---|---|
+| `OsmTrack()`, fields, `OsmPathElementHolder` | `tryFindTrack:880`, `compileTrack:2280` | **reached** |
+| `buildMap` | `compileTrack:2312` | **reached** |
+| `getLink` | `_findTrack:1942`, `:1950`, `:2097` on `costCuttingTrack`, which is pass 0's track during pass 1 (`searchRoutedTrack:1749`; `pass1coefficient` 1.5, `pass2coefficient` 0, `RoutingContext.java:157-158`) | **reached** [I that `hiking-mountain` sets neither coefficient negative; it does not name them, `grep`] |
+| `appendTrack` | `tryFindTrack:1032`, once, with `ourSize == 0` | **reached**, but only its one-section branch: `:344-345` (height fill), `:337` and `addDetours` at `:376` are not |
+| `copyDetours` | `compileTrack:2316` (re-tracking, `guideTrack` set), source's map null | **reached** (null case only) |
+| `readBinary` | `tryFindTrack:914` with `rawTrackPath`, which nothing assigns | **reached, guard only**: returns null at `:235`; the file branch `:236-294` is not |
+| `prepareSpeedProfile` | `tryFindTrack:1043` | **reached** (empty body) |
+| `processVoiceHints` | `tryFindTrack:1042` | **reached, `:453-460` only** |
+| `getTotalSeconds` | `doRouting:238` when `track.energy != 0`; `getTime:2409` (Forager does not call it) | **reached, message only** [C: JaCoCo shows `Formatter` covered, which only `:238` calls] |
+| `addNode` | `mergeTrack:2328` (timeout or "sloppy merge", `searchRoutedTrack:1727`, `:1754`, `:1765`); `doGetInfo:383-384`; `getExtraSegment:1083-1084` | **unknown**: only on a timeout with a partial match, whose track is not returned (FK 9 to 11 may reach it; JaCoCo's 1 ms case did not) |
+| `containsNode` | `OsmPath.java:350` with `refTrack`; `tryFindTrack:1006` under `continueStraight` and a via | **not reached**: needs `alternativeidx > 0` (`tryFindTrack:988-991`) or a via point (-24) |
+| `addDetours` | `appendTrack:376` | **not reached**: needs a non-null `detourMap` (a detour, above) |
+| `registerDetourForId` | `:2194`, `:1164` | **not reached**: needs `turnInstructionMode > 0`, or a via |
+| `getFromDetourMap` | `snapRoundaboutConnection:1149-1214`, `snapPathConnection:1379` | **not reached**: needs a via |
+| `removeVoiceHint` | `snapPathConnection:1445` | **not reached**: needs a via |
+| `getMatchedWaypoint`, `getMinDistance`, `startSection` | `processVoiceHints:497`, `:528`, `:510-518` | **not reached**: after the return at `:457-460` |
+| `VoiceHintList()`, `setTransportMode(boolean,boolean)` | `processVoiceHints:453-454` | **reached** (state never read) |
+| `VoiceHintList.transportMode` | `processVoiceHints:526` | **not reached** |
+| `VoiceHint`, all | `processVoiceHints:476-516` and `VoiceHintProcessor` | **not reached** |
+| `VoiceHintProcessor`, all | `processVoiceHints:526-532` | **not reached** |
+| `Formatter.getFormattedEnergy`, `format1`, `getFormattedTime2` | `doRouting:238` | **reached, message only** |
+| `FormatGpx`, `FormatJson`, `FormatKml`, `FormatCsv` | `doRouting:247-312` behind `outfileBase != null`, `!quite`, the `reportFormat` system property or `logfileBase != null` | **not reached** |
+
+**Which `Format*` output does Forager take? None.** With `outfileBase` null and `quite` set, `doRouting` takes the `else`
+at `:295`, and with no `reportFormat` property (Forager sets none, `git grep`) [C] it prints nothing (`:297-303`);
+`logfileBase` is null (`:310`) [R]. Forager reads the `OsmTrack` object directly.
+
+**Step 7 on Forager's path, in lines:** of T2's 1,367, `VoiceHintProcessor` (529), `VoiceHint` (201) and the `Format*`
+bodies (76) are not reached; nor are about 140 of `OsmTrack`'s kept lines (the hint body of `processVoiceHints`, the
+detour methods, `readBinary`'s file branch, `removeVoiceHint`, `startSection`, `getMinDistance`, `getMatchedWaypoint`)
+[I: spans read from `reached-methods.tsv`, summed by hand]. `Formatter`'s 84 are reached but message only. **What is
+reached and read is `OsmTrack`'s node list, its `distance`, and the heights on its nodes.**
+
+## 3. Test plan (under -101: each test seen failing over the stubs first)
+
+All tests are JVM differential tests against the oracle in the same process, built on step 6's `PathEngines`
+(`jvmTest/.../router/PathEngines.kt`), which already makes paths on decoded links in both engines by reflection over
+Java's field names. Each test is written and run red over stubs (`NotImplementedError`) before the port it checks.
+
+**E1 discipline, for every test below:**
+- Tracks are built in memory from the pinned tiles; no position, node id (`getIdFromPos` packs the position) or
+  `OsmPathElement.toString` (`"${ilon}_$ilat"`) is written to a committed file, a test name or an assertion message.
+- Comparisons are by node index, count, boolean, field bits and a 64-bit digest. A failure message names the case number,
+  the field and the index, never the value of a position.
+- Committed evidence is counts and digests only, scanned with `scan.sh` before every commit.
+- Start points are Forager's own ends (F0's 2, F0h's 8), under E1's standing exception (-93); no other end is written.
+- No voice hint is produced on Forager's path (§2), so none is recorded or asserted. If the planner rules the hint code in
+  (stop 2), its tests use synthetic `VoiceHint` and `MessageData` inputs with zero positions, never hints off a route.
+
+**Can be compared with the oracle now, on its own (session 19):**
+
+| Test | What it drives | Asserts (oracle against port) | Red over stubs because |
+|---|---|---|---|
+| `TrackMapTest` | a track of `OsmPathElement`s made from step 6's path chains (seeded walks over decoded links from Forager's ends, some out and back so nodes repeat and `nextHolder` chains form), `addNode` then `buildMap` | `getLink(a, b)` for each consecutive pair, each reversed pair and seeded non-pairs: the index of the element returned, or null; `containsNode` for every visited node | `buildMap`, `getLink`, `containsNode` throw |
+| `AppendTrackTest` | one segment into an empty track (Forager's case, `ourSize == 0`); two segments, with and without the first's last height `Short.MIN_VALUE` | node count; per node the bits of time and energy, cost, height, and whether `message.lon/lat` equal the node's; `distance`, `ascend`, `plainAscend`, `cost`, `energy`; `voiceHints` and `detourMap` null or not | `appendTrack` throws |
+| `TrackHeadTest` | `processVoiceHints` on a built track under each of step 6's `StdPath` profiles (`PathEngines.stdProfiles`), Forager's params; `prepareSpeedProfile`; `readBinary(null, ...)`; `copyDetours` from a track with no detours | `voiceHints` non-null and empty; its transport mode and `turnInstructionMode` (by reflection); `readBinary` null; `detourMap` null | each throws |
+| `TrackTimeTest` | `getTotalSeconds` on built tracks and on synthetic time spans (zero, one node, exact halves, negative spans); `Formatter`'s three statics on seeded ints and doubles (`format1` is private: reflection) | equal ints and strings | each throws |
+
+These touch no coordinate in an assertion and no hint. `TrackTimeTest` asserts time and energy formatting on synthetic
+inputs, where Phase 1 records time and energy at route level rather than asserting them (report line 755); see stop 5.
+
+**Must wait for step 8's routes:** the track as `compileTrack` makes it (the end-node cut, `MessageData` on every
+element, `copyDetours` from the guide track); `postElevationCheck` and `recalcTrack`'s `ascend`, `plainAscend` and
+`distance`; `track.message`, `name` and `messageList`; `foundRawTrack`'s fields; `mergeTrack`'s `addNode` on a timeout
+(8c, FK 9 to 11); and the node count, distance and heights digest per case on F0, F0h and R (E3's stored form, -58's
+heights digest). Step 8's coverage reader also shows §2's "not reached" marks hold on R (as -94 asks for `:350`).
+
+## 4. The revert: -90's premise does not hold
+
+-90 (from item I, line 1702): "one distance rounding replaced by `roundToLong`". **No distance is rounded in step 7's
+nine files** [C: `grep -n "round\|0\.5\|(int)\|(long)\|Math\."` over them]. The roundings there are:
+- `OsmTrack.java:427`, `return (int) (s + 0.5);` in `getTotalSeconds`: a time, message only on Forager's path;
+- `Formatter.java:94` (time) and `:113` (energy): message only;
+- `VoiceHint.java:197`, `:209`: hint text, not reached.
+
+`OsmTrack.distance` is a sum of ints (`appendTrack:380`; `compileTrack:2306` in step 8). The one distance rounding on the
+track's path is `OsmPathElement.java:78`, `Math.round(CheapRuler.distance(...))`, which is **step 6's**, ported as
+`javaRound` at `router/OsmPathElement.kt:54`. Replacing that `javaRound` with `roundToLong` could not be caught by any
+test: Kotlin/JVM's `roundToLong` is `Math.round` [I: Kotlin's stdlib, not read here], so the JVM sees no change; on Native
+the two differ only just below one half and at 2^52 and above (`JavaLang.kt:6-8`), and `max(1.0, ...)` masks the first
+while no link reaches the second [I]. A revert there is a check that cannot fail (Forager's CLAUDE.md, Known pitfalls).
+
+**Candidates on reached code, for the planner to choose:**
+- **(a) `OsmTrack.java:346`, `if (i > 0 || ourSize == 0)` made `if (i > 0)`:** the first node is dropped in Forager's
+  one-section case. `AppendTrackTest` fails on node count, and step 8's F0 node count would too [I, predicted].
+- **(b) `OsmTrack.java:323`, `getLink`'s `e1.getIdFromPos() == n1` made `== n2`:** `TrackMapTest` fails on the first pair.
+- **(c) -90's words applied to the nearest rounding, `OsmTrack.java:427` made `roundToInt()`:** they agree for every
+  span of zero or more, so only `TrackTimeTest`'s negative spans catch it, and negative spans do not occur on Forager's
+  path [I]. Not recommended.
+
+## 5. Sessions
+
+Each about 120k of working context, Plumb on `brouter-port-5b`, tests red over stubs before the port.
+
+- **Session 19, `OsmTrack`'s reached core** (about 300 Java lines): the type with all its fields and
+  `OsmPathElementHolder`; `addNode`, `buildMap`, `containsNode` (replacing -94's stub), `getLink`, `appendTrack`,
+  `copyDetours`, `readBinary`'s null guard, `prepareSpeedProfile`, `processVoiceHints`' head with `VoiceHintList`'s
+  constructor, fields and `setTransportMode`, `getTotalSeconds`; `Formatter`'s three statics if kept (stop 3). Tests: the
+  four in §3, each committed red first. Revert: the planner's choice from §4, with its result file committed under
+  `step7/`, scanned.
+- **Session 20, only if the planner or owner rules the unreached code in (stop 2):** `VoiceHint` and `VoiceHintProcessor`
+  (730 lines) and `OsmTrack`'s hint body, detour methods, `removeVoiceHint`, `startSection`, `getMinDistance`,
+  `getMatchedWaypoint`, `readBinary`'s file branch. Tests on synthetic hint inputs and synthetic detour maps, compared with
+  the oracle; a revert such as `VoiceHintProcessor`'s catching-range comparison flipped. `VoiceHintProcessor.process` (270
+  lines) and `postProcess` (165) may need a session each, so this is one or two sessions. If ruled out, these become named
+  "unsupported" throws with a test that shows each (-74), inside session 19.
+- **Then step 8a,** which compares the track through the routes (§3, "must wait").
+
+## Unverified
+
+- That `profile:use_dynamic_range=0` reaches `useDynamicDistance` as false: inferred from step 6's context comparison,
+  not traced here line by line.
+- That no stratum of E (DL, MP64, ML5, NT, CR, LB, PM5, FK) passes a parameter that sets `turnInstructionMode` or a
+  `DIRECT` waypoint: `OracleCalls.kt` and `ExpressionsEngines.kt` pass Forager's three keys [R]; the strata's own
+  generators were not read.
+- `addNode`'s reach on a timeout (FK 9 to 11): not traced to a case.
+- That `track.energy` is non-zero on every Forager route: shown only for JaCoCo's sample (`Formatter` covered).
+- Kotlin/JVM's `roundToLong` being `Math.round`: from the stdlib's documented behaviour, not read in source.
+- The ~140 unreached `OsmTrack` lines: summed by hand from method spans, not by a tool.
+- Nothing was built or run: no test, no CI read. The branch's last CI is -108's on `7491f3a`.
+
+## Stops for the planner or owner
+
+1. **-90's revert has no target in step 7** (§4). Its one distance rounding is step 6's, and a revert there cannot fail
+   on either target. A replacement revert is the planner's call; (a) is offered.
+2. **Scope (for the owner, via the planner): `VoiceHint`, `VoiceHintProcessor` and `OsmTrack`'s hint and detour code are
+   not reached on Forager's path, nor on any profile in the oracle's zip without request keys** (§2; JaCoCo agrees). T2
+   keeps them because it keeps code the profile could reach (T3, which ties the port to the profile, cuts them; Phase 1
+   report lines 162-208). Options: port them under T2 as -90 says, tested on synthetic inputs (session 20); or make them
+   named "unsupported" throws (-74). About 870 Java lines turn on this.
+3. **Scope: no `Format*` method is reached** (§1, §2). -90's "`Format*` as far as reached" is therefore zero; T2's 76
+   kept lines are declarations only. `Formatter`'s three reached statics feed only `track.message`, which the port's
+   `RouteOutcome` does not carry. Whether `Formatter`, `Format*` and `track.message` are ported at all is a scope call.
+4. **A premise of Phase 1 found false since it was written: Forager now reads heights.** Phase 1 (report lines 755 and
+   2692) lists elevations among the values "Forager reads none of"; Forager's `trailRouteOf` reads `getSElev()` on every
+   node since `54c33b99` (2026-10-30, "Trail heights"), the day after Phase 1 (`20e1f92`, 2026-10-29) [R, `git log -S`].
+   The port's `RouteOutcome.Found` (`brouter/.../Route.kt:40`) carries `iLat`, `iLon` and `distance`, no heights. This is
+   step 8d's surface and E's assertions, not step 7's code, but step 7's `appendTrack` sets heights (`:344-345`). Whether
+   heights join the outcome and become asserted rather than recorded is for the planner, and the outcome's surface for
+   the owner.
+5. **-90's "the hints are recorded, not asserted (E1)" would record nothing:** the hint list is empty on every Forager
+   route (§2), so a recorded hint per case is a check that cannot fail. Separately, `TrackTimeTest` would assert time and
+   energy formatting on synthetic inputs, which no E1 rule forbids but Phase 1 records rather than asserts at route
+   level; the planner may prefer it recorded.
+6. **None of step 7 needs an assertion E1 forbids,** if the plan in §3 is kept. Nothing here is stopped on E1.
+
+## 6. Session 19: `OsmTrack`'s reached core
+
+Plumb Ledger, session 19, `brouter-port-5b` `916cb8f` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done** (§5's session 19, with -111's rulings):
+- **Stubs and tests, red first** (`bf48f79`): `OsmTrack`'s fields and the reached methods as stubs, `VoiceHintList`'s
+  constructor, fields and `setTransportMode`, `VoiceHint`'s type with `indexInTrack` only (`appendTrack` shifts it),
+  `Formatter`'s three statics. Tests: `TrackMapTest`, `AppendTrackTest`, `TrackHeadTest`, `TrackTimeTest` (3 tests), on
+  tracks built by `TrackEngines` (jvmTest): seeded walks from Forager's own ends that take the same link index in both
+  engines, back links included, each step a detail-mode `createPath`, the last element's `origin` chain added with
+  `addNode` as `compileTrack` does. Compared by identity index, bits, booleans and digests; no position, no hint.
+- **The port** (`cbd31d6`): `addNode`, `copyDetours`, `buildMap`, `containsNode` (replacing -94's stub), `getLink`,
+  `appendTrack`, `getTotalSeconds`, `prepareSpeedProfile`, `readBinary`'s null guard, `processVoiceHints`' head
+  (`OsmTrack.java:452-460`), `setTransportMode`, `getFormattedTime2`, `getFormattedEnergy`, `format1`. Left as
+  `TODO("step 7: hint code, a later session (RECORD -111)")`: the hint body after the early return, `addDetours`,
+  `readBinary`'s file branch. `Formatter`'s other members and the rest of `VoiceHintList` and `VoiceHint` are not stubbed
+  yet; they come with their sessions.
+
+**Runs** [R, read from fresh XML]:
+- Over the stubs: 6 tests, 6 failed, 0 ` e: `; every failure a `NotImplementedError` naming a stub (`OsmTrack.addNode`
+  for the four track tests, `Formatter.getFormattedTime2`, `OsmTrack.getTotalSeconds`). Run twice: after the first, a
+  literal in `TrackTimeTest`'s double list (0.0499 followed by one more 9) was cut to `0.0499` because the E1 scan's decimal pattern caught it;
+  it was re-run red the same way before the commit. Not a comparison change: no port existed yet.
+- On the port: 6 tests, 0 failed, 0 ` e: `. `TrackMapTest` 60 tracks, 51,230 nodes, 31,309 repeated nodes (so
+  `nextHolder` chains are walked), 95,020 links found. `AppendTrackTest` 40 one-section, 20 two-section, 20 with a missing
+  height, 79,562 nodes. `TrackHeadTest` 20 profiles, 100 runs, the three transport modes reached. `TrackTimeTest` 40 built
+  tracks, 513 synthetic spans, 3,014 ints and 3,010 doubles through `Formatter`.
+- Full fresh `:brouter:jvmTest --rerun-tasks` before the code push: 144 tests, 2 failures, both `CollectOutreachersTest`
+  (-106), 0 ` e: `; no XML older than the run.
+
+**Revert (a)** (`OsmTrack.java:346` in the port, `if (i > 0 || ourSize == 0)` made `if (i > 0)`; the planner's choice,
+-110). Prediction pushed first (`c898514`, `step7/01-revert-predictions.txt`), then `revert.sh` (a scratch copy, so its
+working files stay out of `main`'s checkout). Observed as predicted (`step7/02-revert-a-first-node-dropped-result.txt`,
+`b9602d8`): 0 compile errors, 4 fresh XML files, 6 tests, 2 failures. `AppendTrackTest` at mode 0, the first case, walk 0,
+"node count expected:<564> but was:<563>". `TrackTimeTest`'s built tracks at walk 0 on seconds and time (15,747 against
+15,739), energy equal. The other four passed. Restored by `cmp` from the saved copy; the forward line is present and the
+tree clean.
+
+**CI on `cbd31d6`** (run 43005311784, read by Plumb): `jvm` 144 tests, 2 failures, both `CollectOutreachersTest`;
+0 ` e: `; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran. `ios-smoke` passed: simulator 24 of 24
+(**simulator-checked**), arm64 JVM 7 of 7, and the gate step reports every class ran.
+
+**Unverified:**
+- [I] Whether a two-section track with hints, or with a detour map on both sides, behaves as Java's: not reached by these
+  tests (`addDetours` is a TODO; no hint is made). That is the hint session's.
+- [I] `getTotalSeconds` and `format1` on Native: tested on the JVM only. `(s + 0.5).toInt()` and `Double.toLong()` saturate
+  as Java's casts do on both platforms by Kotlin's spec [I, not read here]; no Native test covers them yet.
+- [?] `TrackHeadTest` asserts `copyDetours` from a track with no detours gives null, which a stub returning null would also
+  pass; it bit only because the stub threw. A detour map to copy needs `registerDetourForId`, the hint session's.
+
+**Next, for session 20** (the hint code, -111):
+1. `VoiceHint` whole and `VoiceHintList`'s rest, stubs first, tests on synthetic hint inputs with zero positions.
+2. `OsmTrack`'s detour methods (`registerDetourForId`, `addDetours`, `appendDetours`, `getFromDetourMap`) and the hint
+   body of `processVoiceHints`, with `getMinDistance`, `startSection`, `getMatchedWaypoint`, `removeVoiceHint`; then
+   strengthen `TrackHeadTest`'s `copyDetours` with a real detour map.
+3. `VoiceHintProcessor` (`process`, `postProcess`), likely its own session; a revert on its catching-range comparison.
+4. Then `readBinary`'s file branch and the formats (`Formatter` whole, `FormatGpx`, `FormatJson`, `FormatKml`,
+   `FormatCsv`), compared by digest.
+
+## 7. Session 20: the hint code's first half (partial; stopped on a test-comparison defect)
+
+Plumb Ledger, session 20, `brouter-port-5b` `737fdf2` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done:**
+- **Stubs and tests, red first** (`d2d8e34`, pushed red on purpose): `VoiceHint` whole (fields real, every method a
+  stub), `VoiceHintList`'s `setTransportMode(int)`, `getTransportMode`, `transportMode()`, `getLocusRouteType`;
+  `OsmTrack`'s `registerDetourForId`, `addDetours`, `appendDetours`, `getFromDetourMap`, `getMatchedWaypoint`,
+  `getMinDistance`, `removeVoiceHint`. Tests: `VoiceHintTest` (2 tests: 30,000 synthetic seeded hints, positions zero,
+  every Java field compared by name after set-up and after `calcCommand`, messages by index, floats by bits; Java's
+  constants by name; `VoiceHintList` on 48 int modes and the 4 flag pairs), `TrackDetourTest` (2 tests: detour maps
+  registered in test code on both engines over `TrackEngines`' walks, compared chain by chain as identity indices;
+  `addDetours`' five variants including the cast and the null `nodesMap`; `appendTrack`'s detour branch; `appendDetours`
+  twice, `lastorigin` and the origins it sets; the three hint helpers), and `TrackHeadTest`'s `copyDetours` on a real
+  detour map every other run.
+- **The port, written but NOT pushed** (the stop below): `03-s20-port-unpushed.patch` in `step7/` holds it, against
+  `d2d8e34`. `processVoiceHints`' hint body and `startSection` were not ported (see "A premise").
+
+**Runs** [R, read from fresh XML; result dir deleted before each run]:
+- Over the stubs: 5 tests, 5 failed, 0 ` e: `. Four on `NotImplementedError` naming a stub (`getFromDetourMap`,
+  `getMinDistance`, `registerDetourForId` in `TrackHeadTest`, `VoiceHintList.getTransportMode`); `voiceHintMatchesTheOracle`
+  as a comparison failure whose value is `throws NotImplementedError` from `getTime` (the test wraps calls so that
+  exceptions compare as values). No literal was changed for the E1 scan.
+- On the port, tests as committed: 5 tests, **2 failed**, 0 ` e: `. `TrackHeadTest`, `hintHelpersMatchTheOracle`,
+  `voiceHintListMatchesTheOracle` passed. The two failures are defects in my tests, not port mismatches:
+  1. `voiceHintMatchesTheOracle`, case 1: "calcCommand expected:<v[null]> but was:<v[kotlin.Unit]>". The test's `res`
+     renders a void reflective call as `null` and a Kotlin `Unit` call as `kotlin.Unit`. It was never reached over the
+     stubs (case 0 failed earlier, at `getTime`).
+  2. `detourMethodsMatchTheOracle`: an NPE in the **oracle's** `CompactLongMap.moveToFrozenArrays` under
+     `OsmTrack.copyDetours`, at the test's second copy from the same registered map: Java's `FrozenLongMap` empties the
+     map it is built from, and my set-up copied one source twice.
+- **Stopped there** (the dispatch's stop: changing a test's comparison after seeing the port's result, RECORD -107). The
+  committed tests are unchanged.
+- **A diagnostic only, not committed as tests:** with both defects fixed (`05-s20-diagnostic-test-changes-not-applied.patch`:
+  `Unit` rendered as null; a fresh registered map per copy; a probe of a second copy), the same three classes: 5 tests,
+  0 failed, 0 ` e: `. `VoiceHintTest` 30,000 cases, 50,552 bad ways, 4,031 give-ways, every command `calcCommand` makes
+  reached (15 of them, BL kept). `TrackDetourTest` 20 groups, 100 walks, 429 registered, 8,444 chains compared, the
+  `addDetours` cast (`ClassCastException`) and null `nodesMap` (NPE) thrown alike, `appendDetours`' out-of-range read
+  thrown alike 9 times; a second copy from a consumed map throws NPE on **both** engines (the port's `FrozenLongMap`
+  empties its source as Java's does). Helpers 400 cases, 247 hints removed, 603 waypoints matched. `TrackHeadTest` 100
+  runs, 50 detour maps copied.
+- **`copyDetours` over a null-returning stub** (`04-copydetours-null-stub-result.txt`, `revert.sh` from a scratch copy,
+  over the uncommitted port): 0 compile errors, 1 fresh XML, `TrackHeadTest` 1 of 1 failed: "fastbike-asia-pacific.brf
+  flags (false, false): detourMap expected:<FrozenLongMap> but was:<null>", the first run with a detour map. Restored by
+  `cmp`; the forward line present after. Session 19's [?] on that check is closed.
+- No full `:brouter:jvmTest --rerun-tasks` was run: no code was pushed.
+
+**A premise in §6 (item 2), for the planner:** `processVoiceHints`' hint body (`OsmTrack.java:462-534`) ends in
+`VoiceHintProcessor.process` and `postProcess`, and its inputs are a local list, so the body cannot be compared with the
+oracle until `VoiceHintProcessor` is ported. §6 lists the body with item 2 and `VoiceHintProcessor` as item 3; they are
+one unit for testing. `startSection` is private and reached only from the body, so it goes with it.
+
+**The revert:** not run. It is on this session's code, which is not pushed; it waits on the ruling below.
+
+**CI:** none read; the only code push was the red commit `d2d8e34`, which is red by design.
+
+**Unverified:**
+- [I] The port's `hasGiveWay` evaluates the give-way test before `wayKeyValues`' null check, the reverse of Java's order;
+  both throw the same NPE and nothing else has side effects, so the result is the same. Covered by the diagnostic only.
+- [I] Native: nothing here is tested off the JVM.
+- [?] Everything in the port is evidenced only by the diagnostic run, not by committed tests.
+
+**Next, for session 21** (after the planner's ruling on the two test defects):
+1. If the fixes in `05-...patch` are allowed: apply them to the tests and `03-...patch` to the sources, run the three
+   classes, then a full fresh `:brouter:jvmTest --rerun-tasks`, push, read CI.
+2. The one revert on that code, predicted in a committed file first (for instance `calcCommand`'s `cmdAngle < -5f`
+   boundary, or `addDetours`' `source.nodesMap!!.contains(id)` negated).
+3. `VoiceHintProcessor` together with `processVoiceHints`' hint body and `startSection`, stubs and red first.
+4. Then `readBinary`'s file branch and the formats.
+
+## 8. Session 21: the hint code's first half pushed; `VoiceHintProcessor`'s unit red
+
+Plumb Ledger, session 21, `brouter-port-5b` `46626f3` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done, in -113's order:**
+1. **The two accepted test fixes committed, red over the stubs on purpose** (`79f8d93`, -113's condition): `05`'s lines
+   applied, the "DIAGNOSTIC ONLY" comments replaced by the reasons (Java's void reads as null by reflection, Kotlin's
+   `Unit` is the same no-value; `FrozenLongMap` empties the map it is built from, so each copy gets a fresh one). Over
+   the stubs: 5 tests, 5 failed, 0 ` e: `, 3 fresh XML (`06-s21-fixed-tests-red-over-stubs.txt`): `NotImplementedError` at
+   `getFromDetourMap`, `getMinDistance`, `registerDetourForId`, `VoiceHintList.getTransportMode`, and "case 0: getTime
+   expected:<[f0]> but was:<[throws NotImplementedError]>" [R].
+2. **The port applied unchanged** (session 20's stash, identical to `03`; `7e3fb60`): the three classes 5 tests, 0 failed,
+   0 ` e: ` [R]. `VoiceHintTest` 30,000 cases, 50,552 bad ways, 4,031 give-ways, 16 commands; `TrackDetourTest` 20 groups,
+   100 walks, 429 registered, 8,444 chains, 49 thrown; the second copy from an emptied map throws NPE on both engines
+   (20 of 20); helpers 400 cases, 247 removed, 603 matched; `TrackHeadTest` 100 runs, 50 maps copied.
+3. **Full fresh `:brouter:jvmTest --rerun-tasks`** (results deleted first): 67 XML, 148 tests, 2 failures, both
+   `CollectOutreachersTest` (-61, -106), 0 errors, 0 ` e: `, no Maven 429 [R]. The stash was dropped only after the
+   pushed commit was diffed equal to it.
+4. **Revert (b)**, predicted in `07-revert-b-prediction.txt` (pushed at `c6da1d1` before it ran): `addDetours`'
+   `source.nodesMap!!.contains(id)` negated. Observed (`08-revert-b-nodesmap-negated-result.txt`): 0 compile errors,
+   5 fresh XML, 8 tests, 1 failure, "group 0 addDetours variant 0: getFromDetourMap, candidate 26 expected:<[835]> but
+   was:<null>" (an identity index), as predicted: group 0, variant 0, a map comparison, the port lacking a chain; the
+   other 7 passed. Restored by `cmp` from the saved copy; the forward line present after [R].
+5. **CI on `7e3fb60`** (run 43010170082, attempt 1, read from the job logs by me): `jvm` TOTAL 148 tests, 2 failures,
+   0 errors, 67 files, both failures `CollectOutreachersTest` (-61), 0 ` e: `; `compileKotlinIosArm64` and
+   `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL. The job reads "failure" on those 2 only. `ios-smoke`
+   passed: `iosSimulatorArm64Test` 24 of 24 (**simulator-checked**), arm64 JVM 7 of 7 with its gate "OK: all 2 classes
+   ran", 0 ` e: ` [R]. The later pushes (`c6da1d1` docs, `24603fb` red by design) were not read.
+6. **`VoiceHintProcessor` with `processVoiceHints`' hint body and `startSection`, stubs and test, red** (`24603fb`):
+   `VoiceHintProcessor.kt` (internal, as `VoiceHint` is; every method a `TODO`), `startSection` and the body as `TODO`s.
+   `VoiceHintProcessTest` (1 test) goes through `processVoiceHints` only (-113: one unit). 100 cases from `TrackEngines`'
+   walks from Forager's own ends; hints switched on in test code on both engines alike: `hasDirectRouting` (cases
+   0, 3 mod 4) or a detour map over the track's own node ids with group elements (1, 2, 3 mod 4; 2 frozen by
+   `copyDetours`); seeded `turnInstructionMode` 0-9, catching range, roundabouts, car/bike mode, and matched
+   waypoints of the three types. Every Java field of each hint compared by name, in order, by digest (E1); messages by
+   index in the group. Coverage is checked on the oracle's side before any comparison. Over the stubs: 1 of 1 failed,
+   "case 0: result expected:<[ok]> but was:<[throws NotImplementedError]>", 0 ` e: ` (first attempt did not compile: a
+   public class exposed the internal `VoiceHint`; no XML then). Oracle side: 1,934 hints, 1,032 with bad ways, 0
+   thrown, 12 commands (`09-...txt`) [R].
+
+**Found, for the planner:** -113 says `05`'s second fix "adds a check that a second copy from an emptied map throws on
+both engines alike". In the committed test it is recorded in the printed outcomes, not asserted; I kept the accepted
+lines as they are rather than add an assertion after seeing the port's result. Both engines threw NPE in all 20 [R].
+
+**Unverified:**
+- [I] `hasGiveWay`'s order of checks (session 20's note) still rests on its equal outcomes only.
+- [I] Native: nothing in step 7 runs off the JVM except through CI's compile.
+- [?] `VoiceHintProcessTest` reaches commands 2-9, 11, 14-16 on the oracle; 1, 10, 12, 13 (and roundabout exits) are
+  not reached by this sample. Whether they are reachable from Forager's ends at all is not traced.
+
+**Next, for session 22:**
+1. Port `VoiceHintProcessor` (529 Java lines), `processVoiceHints`' body (`OsmTrack.java:462-534`) and `startSection`
+   over `24603fb`'s test; run it, then the full fresh `:brouter:jvmTest --rerun-tasks`; push; read CI.
+2. One revert on that port, predicted in a committed file first.
+3. The planner's call on the probe above, and on whether the unreached commands need a seeded `process` test.
+4. Then `readBinary`'s file branch and the formats.
+
+## 9. Session 22: `VoiceHintProcessor`'s unit ported, its sample widened first
+
+Plumb Ledger, session 22, `brouter-port-5b` `7193465` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R].
+
+**Done, in -114's order:**
+1. **Sample widened, red over the stubs on purpose** (`5ba7488`, `10-s22-widened-sample-red-over-stubs.txt`), while only
+   the oracle's side had been seen. Test inputs only: `TrackEngines.walks(..., 40, 80)` (was 10, 25), so 400 cases (was
+   100); plus an oracle-side coverage assertion that commands 1-16 bar 12 are reached. The comparison is untouched. Tried
+   per end (walks, max steps): 40/25 gives 1, 10, 13 (10 once); 10/80 misses 10; 40/80 gives 1=5, 10=3, 13=6 (kept). Over
+   the stubs: 1 test, 1 failed, "case 0: result expected:<[ok]> but was:<[throws NotImplementedError]>", 1 fresh XML,
+   0 ` e: `. Oracle side: 17,279 hints, 4,997 with bad ways, 0 thrown, commands {1=5, 2=104, 3=2112, 4=43, 5=114,
+   6=2046, 7=269, 8=138, 9=100, 10=3, 11=878, 13=6, 14=35, 15=11336, 16=90} [R].
+   - **Not reachable on these inputs:** 12 (OFFR) is assigned by no Java line (declared in `VoiceHint`, read only by
+     `Formatter`) [R]. 100 (END) is made only as the first input and `postProcess` skips it as the last hint [R].
+   - **A premise short by two:** -114 lists 1, 10, 12 and 13 as missing; 17 (EL) and 18 (ER) were missing too. They need
+     a goodWay of prio 29 (motorway_link) beside a 30; Forager's `hiking-mountain` prices motorway|motorway_link at
+     costfactor 100000, so no walk takes one [I: not traced into the cost code].
+2. **The port** (`080885f`): `VoiceHintProcessor` whole (`process`, `postProcess`, `sumNonConsumedWithinCatchingRange`,
+   `checkForNextNoneMotorway`, `checkStraightHold`), `startSection` and `processVoiceHints`' body (`OsmTrack.java:462-534`).
+   `postProcess`' loop is a `while`, since Java bumps `hintIdx` in the body; float/double types kept as Java promotes
+   them. `VoiceHintProcessTest` and the step 7 track tests (`VoiceHintTest`, `TrackDetourTest`, `TrackHeadTest`): 4 fresh
+   XML, 6 tests, 0 failed, 0 ` e: `, first attempt; every field of all 17,279 hints equal (`11-...txt`) [R].
+3. **Full fresh `:brouter:jvmTest --rerun-tasks`** (results deleted first): 68 XML, 149 tests, 2 failures, 0 errors, 0
+   ` e: `, no Maven 429; both failures `CollectOutreachersTest` (-61, -106) [R].
+4. **Revert (c)**, -110's suggestion, predicted in `12-revert-c-prediction.txt` (pushed at `bf66b05` before it ran):
+   `postProcess`' `else if (input.distanceToNext < catchingRange)` flipped to `>`. Predicted: a "hint count" failure with
+   the port keeping more, in an early case not necessarily case 0; `VoiceHintTest` passing. Observed
+   (`13-revert-c-catching-range-flipped-result.txt`): 0 compile errors, 2 fresh XML, 3 tests, 1 failure, "case 26: hint
+   count expected:<62> but was:<66>" (full message from the XML), `VoiceHintTest` passed; restored `cmp`-equal from the
+   saved copy, the forward line present after, tree clean [R]. As predicted.
+5. **CI on `080885f`** (run 43014941206, attempt 1, read from the job logs by me): `jvm` TOTAL 149 tests, 2 failures,
+   0 errors, 68 files, both failures `CollectOutreachersTest` (-61), 0 ` e: `; `compileKotlinIosArm64` and
+   `compileKotlinIosSimulatorArm64` both ran, BUILD SUCCESSFUL. The job reads "failure" on those 2 only. `ios-smoke`
+   passed: `iosSimulatorArm64Test` 24 of 24 (**simulator-checked**), arm64 JVM 7 of 7 with its gate "OK: all 2 classes
+   ran", 0 ` e: ` [R]. The later pushes (`bf66b05`, `ea7d345`, docs only) were not read.
+
+**Stops hit:** none. No test was changed after the port was written; the port passed on its first run.
+
+**Unverified:**
+- [I] 17/18 unreachable because motorway ways cost 100000 on Forager's profile: read from the profile, not traced to
+  where the walk's cost turns negative.
+- [I] Commands 10 and 13 are reached 3 and 6 times; a defect on a path they alone take could still hide in so few.
+- [I] `hasGiveWay`'s order of checks (session 20) still rests on equal outcomes only.
+- [I] Native: nothing in step 7 runs off the JVM except through CI's compile.
+- [?] Roundabout exits are reached (13, 14), but how many distinct roundabouts the 400 cases cross is not counted.
+
+**Next, for session 23:**
+1. `readBinary`'s file branch and the formats (-111), each test seen failing over stubs first.
+2. The planner's call on whether 17/18 (motorway exits, unreachable on Forager's profile) need a seeded `process` test
+   on synthetic hints, and on the thin counts of 10 and 13.
+3. One revert per new unit, predicted in a committed file first.
+
+## 10. Session 23: EL/ER closed as not covered; `Formatter` ported; `readBinary`'s file branch stopped (partial)
+
+Plumb Ledger, session 23, `brouter-port-5b` `dd43676` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`; E1 scan 0 on every staged diff [R]. Ended on the planner's handoff
+call at about 182k; no format class was started.
+
+**Done:**
+1. **EL/ER (17, 18), time-boxed** (`d413679`, `14-s23-el-er-not-covered.txt`). A scratch probe swapped only the contexts:
+   car profiles cannot drive the walks (their model is not `StdModel`). `fastbike` with `allow_motorways=1`, on the same
+   400 cases, reached goodWay prio 29 142 times but the 29/30 pair 0 times, so no 17 or 18 [R]. The four lines
+   (`VoiceHintProcessor.java:385-387`, `:444-446`) are recorded as **not covered**. The committed test is unchanged; a fresh
+   run on the port gave 1/1 passed, 17,279 hints [R].
+2. **Red over the stubs, pushed on purpose** (`08fdbba`, `15-...txt`): `Formatter` whole plus `readBinary`'s file branch
+   and its two `readFromStream`s, stubbed. `FormatterTest` and `ReadBinaryTest` failed 2 of 2 with `NotImplementedError`
+   naming the stubs; 2 fresh XML, 0 compile errors [R]. One slip, caught before any port code existed: the first display
+   printed an oracle track text into the local XML. The files were deleted and never staged, and the display was fixed
+   (recorded in 15).
+3. **`Formatter` ported** (`3d64e31`, `18-...txt`): `FormatterTest` 1/1 passed on the first run, with 63,728 calls
+   compared. That covers all 10 command tables, `formatILon`/`formatILat` by digest, and `getFormattedTime3` (Julian
+   before 1582-10-15 and BC years, NaN, the infinities, random float bits); `read`; and both constants [R]. `write` is ported
+   (UTF-8) but not yet compared [I]; it is to be checked with `FormatCsv`.
+4. **Full fresh `:brouter:jvmTest --rerun-tasks`** before the code push: 70 XML, 151 tests, 3 failures, 0 errors, 0 `e: `,
+   no Maven 429. The failures are CollectOutreachersTest's 2 (-61, -106) and `ReadBinaryTest` over its stubs (red on purpose) [R].
+5. **Revert (d)**, predicted in `17-...txt` (pushed at `3d64e31` before it ran). The edit: `getOruxAction`'s
+   `1008 + roundaboutExit` made `-`. Observed (`19-...txt`): 0 compile errors, 1 fresh XML, 1 failure,
+   "getOruxAction(13, -12) expected:<ok:[996]> but was:<ok:[1020]>"; restored `cmp`-equal, with the forward line present.
+   **As predicted** [R].
+6. **CI**: run 43020174261 on `3d64e31` was still in progress at handoff and has **not been read**. Runs 43017095024
+   (`d413679`) and 43017985612 (`08fdbba`) conclude "failure", which is expected with CollectOutreachersTest's 2 and, on
+   `08fdbba`, ReadBinaryTest red on purpose. Their logs were not read either: no TOTAL, no ` e: ` count, no
+   compileKotlinIos* or gate checked. iOS results: none read, so nothing here is simulator-checked.
+
+**The stop: `readBinary`'s file branch fails on the port.** The port is held in `16-s23-readbinary-port-not-passing.patch`
+(it applies to `3d64e31`); the source set keeps the stubs. `ReadBinaryTest` passes every variant of tracks 0-29: target
+deltas, checksum shifts, profile stamp, debug on and off, every cut length (EOF texts matched), and the missing file. It
+fails at track 30, the first **empty** track (0 nodes): the result is equal, but `debugInfo` is 145 characters on the
+oracle and 93 on the port. With 0 nodes, Java's `t.cost = last_pe.cost` (`OsmTrack.java:258`) throws a NullPointerException.
+The catch appends `"Error reading rawTrack: " + e`. JDK 21 adds its helpful NPE message, which by length reads `: Cannot
+read field "cost" because "last_pe" is null` [I: inferred from the length; not printed]. The port's `lastPe!!` gives a bare
+`java.lang.NullPointerException`.
+**The question for the planner:** for an empty (0-node) raw-track file, should the port (a) write JDK 21's NPE wording
+literally into common code, (b) have the empty-file input ruled out of scope as unreachable from BRouter's writer (the
+test's inputs would then change, with a ruling), or (c) do something else? Under (a) the text is still the JVM's own, and
+Native would print `okio.EOFException`-style names for the EOF cases anyway (see [?] below).
+
+**Unverified:**
+- [I] Java's NPE text above, inferred from its length.
+- [?] Native: `"Error reading rawTrack: " + e` prints the exception's class name. On the JVM, okio's `EOFException` is
+  `java.io.EOFException`, and it matched; on Kotlin/Native it is `okio.EOFException`, so the debug text would differ.
+  This is for step 10, not tested here.
+- [?] `getFormattedTime3`'s calendar arithmetic is common code and matched on the JVM only. Native was not run.
+- [I] `MatchedWaypoint.name` decodes as UTF-8, as JDK 18+ `new String(bytes)` does (the oracle runs on JDK 21). Names
+  with non-ASCII characters, written by `writeBytes` as low bytes, matched on tracks 0-29.
+- [I] 17/18 are still not reached by any input (item 1); `OFFR` (12) is unreachable.
+
+**Next, for session 24:**
+1. Read CI run 43020174261 (`3d64e31`) and the later docs pushes: TOTAL, ` e: `, both compileKotlinIos*, the gate.
+2. Apply the planner's answer on `readBinary`'s empty-file case; then apply patch 16, see `ReadBinaryTest` pass, and push.
+3. `FormatCsv` (43 lines), which also compares `Formatter.write`; then `FormatKml` (116), `FormatJson` (261) and
+   `FormatGpx` (573). For each: stubs and a red push first, outputs by digest and length, hints switched on in test code.
+4. One revert per new unit, predicted in a pushed file.
+5. Step 7's close: the report's summary of what is covered and what is not (EL/ER, OFFR), and the planner's check.
+
+## 11. Session 24: `readBinary`'s file branch under -116; `FormatCsv` and `FormatKml` ported; revert (e) (partial)
+
+Plumb Ledger, session 24, `brouter-port-5b` `2f2eb38` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Ended at the planner's handoff budget with `FormatJson` and
+`FormatGpx` not started.
+
+**Done:**
+1. **`readBinary`'s file branch, under -116 exactly.** `ReadBinaryTest` changed first (`60bb212`, `20-...txt`): where
+   either engine's `debugInfo` holds `"Error reading rawTrack: "` (Java's catch, `OsmTrack.java:287-290`, which also
+   takes the EOF cuts), it asserts both took that path, compares `debugInfo` by digest and length up to and including
+   the prefix, and asserts each wrote text after it; the result, and every other path, keep the whole comparison.
+   Over the stubs: 1 fresh XML, 0 ` e: `, 1 failure, `NotImplementedError` naming the stub [R]. Then patch 16, unchanged,
+   with a comment in the catch naming the difference (`12af1e9`, `21-...txt`): 1/1 passed; 32 tracks, 9,029 reads,
+   2,601 tracks returned, 1,549 reads on the error path [R].
+2. **`FormatCsv` whole**, with `OsmTrack.aggregateMessages` and `MessageData.toMessage`/`add` (all three needed by it
+   and unported). Red over stubs (`b1c735b`, `22-...txt`): 1 failure naming `FormatCsv.format` [R]. Ported (`8334bcd`,
+   `23-...txt`): 1/1 passed, 61 tracks (walks from Forager's own ends, half seeded alike with way and node tags
+   cleared or set, plus an empty track), 11,266 lines; `Formatter.write`'s bytes compared too (session 23's open item) [R].
+3. **`FormatKml` whole, and `btools.util.StringUtils` whole** (48 Java lines, BRouter's own; outside §1's file list but
+   called by KML, JSON and GPX; not a new dependency). Red over stubs (`0709046`, `25-...txt`): 2 failures naming
+   `FormatKml.format` and `StringUtils.escapeXml10` [R]. Before any port existed, both tests' `res()` was changed to keep
+   a `NotImplementedError`'s message, since the first red run showed only the class (recorded in 25). Ported
+   (`6abe8f3`, `27-...txt`): `FormatKmlTest` 1/1, 61 tracks, 248 placemarks, 7 null-name throws matched by class;
+   `StringUtilsTest` 1/1, 20,006 strings [R]. POIs, matched and corrected waypoints and the export flags are switched
+   on in test code (Forager's path sets none).
+4. **Revert (e)**, predicted in `24-...txt` (pushed at `0709046` before it ran): `MessageData.add`'s `linkdist +=` made
+   `-=`. Observed (`26-...txt`): 0 compile errors, 1 fresh XML, 1 failure, "track 0: format", 4,637 characters on the
+   oracle against 4,607; restored `cmp`-equal, forward line present. **As predicted**, track index included [R].
+5. **Full fresh `:brouter:jvmTest --rerun-tasks`** before each code push [R]:
+   - before `60bb212`: 70 XML, 151 tests, 3 failures (CollectOutreachersTest 2, ReadBinaryTest red on purpose);
+   - before `b1c735b`: 71 XML, 152 tests, 3 failures (CollectOutreachersTest 2, FormatCsvTest red on purpose);
+   - before `0709046`: 73 XML, 154 tests, 4 failures (CollectOutreachersTest 2, FormatKmlTest and StringUtilsTest red
+     on purpose);
+   - before `6abe8f3`: 73 XML, 154 tests, 2 failures (CollectOutreachersTest's 2 only).
+   Every one: 0 errors, 0 ` e: `, no Maven 429 (the logs' "429" hits are test counts).
+6. **CI** (logs read to files, grepped) [R]:
+   - Session 23's handoff `2f2eb38` (run 43020447497): `jvm` 151, 3 failed (CollectOutreachersTest 2, ReadBinaryTest
+     red on purpose); simulator 24 of 24, arm64 7 of 7, gate "OK: all 2 classes ran".
+   - `60bb212` (43024368971): `jvm` 151, 3 failed (CollectOutreachersTest 2, ReadBinaryTest red on purpose).
+   - `b1c735b` (43028464428, carrying `12af1e9`): `jvm` 152, 3 failed (CollectOutreachersTest 2, FormatCsvTest red on
+     purpose); ReadBinaryTest passed.
+   - `0709046` (43030937894, carrying `8334bcd`): `jvm` 154, 4 failed (CollectOutreachersTest 2, FormatKmlTest and
+     StringUtilsTest red on purpose).
+   - `6abe8f3` (43033483479): `jvm` 154, 2 failed, CollectOutreachersTest's 2 only.
+   - Every run: 0 ` e: ` in both jobs; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both ran (`jvm` job);
+     `ios-smoke` passed with simulator 24 of 24, arm64 7 of 7 and the gate "OK: all 2 classes ran".
+   - Session 23's `3d64e31` run (43020174261) was read by the planner (-116), not again here.
+   iOS results are **simulator-checked** only.
+
+**Process slips, recorded:**
+- The first full run before `b1c735b` was killed by my own 10-minute background limit and re-run whole; only the
+  re-run is cited.
+- The KML port's first local commit had an E1 scan of 1: BRouter's fixed KML header `<distance>` constant, six
+  decimals, not a position. It was never pushed: undone with `git reset --soft`, the literal split in two with a comment
+  (output unchanged, `FormatKmlTest` re-run passing), then committed with the scan at 0. My commit command had not been
+  gated on the scan; it is now.
+
+**Unverified:**
+- [?] Native, all for step 10: the error-path text after the prefix (now by design, -116); `subList` and NPE classes
+  in `FormatKml`'s unreached throws; `println` in `FormatCsv.dumpLine`'s writer-less branch (unreached by `format`).
+- [I] Revert (e)'s "track 0" was a guess from walks repeating ways; it held.
+- [I] `aggregateMessages`' merge branch is reached (revert (e) shows it), but how often is not counted.
+
+**Step 7 against §1 and -111: not complete.** Done: `OsmTrack` (except `aggregateSpeedProfile`, `getVNode`,
+`getVoiceHint`, `getVoiceHintTime`, `writeBinary`, `equalsTrack`, `addNodes`), `VoiceHint`, `VoiceHintList`,
+`VoiceHintProcessor`, `Formatter`, `FormatCsv`, `FormatKml`. Not started: `FormatJson` (261), `FormatGpx` (573).
+Not covered: EL/ER (§10), `OFFR`.
+
+**Next, for session 25:**
+1. Read CI on this section's push (docs only).
+2. `FormatJson`: stubs plus `OsmTrack.getVoiceHint`, `getVoiceHintTime`, `aggregateSpeedProfile`, `getVNode` as
+   needed; hints switched on in test code via `processVoiceHints` (as `VoiceHintProcessTest` does); `DecimalFormat`
+   with `Locale.ENGLISH` is the first number-formatting risk (mark Native [?]). Red, then port.
+3. `FormatGpx` (573; read method by method): the same, including `read` (GPX parsing) and `formatAsWaypoint`.
+4. One revert on a new format, predicted in a pushed file.
+5. Step 7's close: the summary of what is covered and not (EL/ER, OFFR, `writeBinary`), for the planner's check.
+
+## 12. Session 25: `FormatJson` red over stubs; the JSON and GPX ports written but not run (partial)
+
+Plumb Ledger, session 25, `brouter-port-5b` `2f602b3` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Ended at the planner's handoff call (182,216 by the watcher) after the
+first push; marked **partial**.
+
+**Done:**
+1. **`FormatJson` stubbed, `FormatJsonTest` written, red on purpose** (`3108507`, `28-...txt`). Stubs: `format`,
+   `formatAsWaypoint`, `formatDecimal3` (the port's stand-in for Java's `DecimalFormat` `0.###`, `Locale.ENGLISH`),
+   `OsmTrack.aggregateSpeedProfile`, `getVoiceHint`, `getVoiceHintTime`. `OsmTrack.version` added as `"1.7.10"`, the
+   oracle jar's manifest `Implementation-Version` (Java reads it from the manifest). The test switches on, alike in both
+   engines: hints through `processVoiceHints` under modes 0 to 9, `showspeed`, `showSpeedProfile`, an itinerary, POIs,
+   waypoints of types 0 to 3, corrected points and both export flags, and `formatAsWaypoint` on way and node description
+   bytes from the oracle's graph and on a null context; `formatDecimal3` is compared with Java's `DecimalFormat` on
+   250,023 floats.
+2. **Full fresh `:brouter:jvmTest --rerun-tasks`** before `3108507` [R]: 74 XML, 156 tests, 4 failures
+   (CollectOutreachersTest 2; FormatJsonTest 2 on purpose, naming the `aggregateSpeedProfile` and `formatDecimal3`
+   stubs), 0 errors, 0 ` e: `, no Maven 429 (the log's one "429" is a test count).
+3. **E1:** the first staged scan read 1, a float test constant with seven decimals in mantissa form, not a position;
+   rewritten as the same value without decimals, `FormatJsonTest` re-run alone (same 2 failures, 0 ` e: `), scan 0.
+4. **Written, not compiled or run, in a committed patch** (`29-s25-partial-formatjson-formatgpx-port.patch`, against
+   `3108507`): the `FormatJson` port; `aggregateSpeedProfile`/`getVNode`, `getVoiceHint`, `getVoiceHintTime`; the whole
+   `FormatGpx` (all ten methods, `read` included); `FormatGpxTest` (modes 0 to 9, message list, params, `showTime`,
+   tags on messages, waypoints on the track's own indices with `via`/`from`/`to`/`rt` names, `read` on the oracle's
+   texts and on crafted lines). The patch mixes the JSON port with GPX's test and port; it is not split into stub and
+   port, so the GPX stub commit has to be made from it first (the stub file is the port's signatures with `TODO`).
+
+**Not done:** the JSON port's passing run; GPX red and port; the revert (planned, not yet pushed as a prediction:
+`FormatGpx`'s `if (i < ml.size - 1)` made `if (i < ml.size)`, expected first at "track 0: format", the port longer by
+16 characters, or by a whole comment line if the list's last entry is null); CI for `3108507` not read; step 7's close.
+
+**Unverified:**
+- [?] Native, step 10: `formatDecimal3`'s from-2^53 branch (`Double.toString`'s digits); `Double`/`Float` `toString` in
+  both formats; `String.toDouble` in `read`.
+- [I] `FormatGpx`'s mode-4 `String.format` and `toLowerCase` assume the oracle JVM's default locale writes ASCII; `read`
+  reads UTF-8 where Java takes the default charset (UTF-8 on JDK 21). `formatAsGpx` returns nothing (Java's return is a
+  writer's identity string that `format` drops).
+- [I] The patch's ports have not been compiled.
+
+**Step 7 against §1 and -111: not complete.** `FormatJson` and `FormatGpx` are not ported in the tree.
+
+**Next, for session 26:**
+1. Read CI for `3108507` (expect `jvm` 156, 4 failed: CollectOutreachersTest 2, FormatJsonTest 2 on purpose).
+2. Apply the JSON half of patch 29 (`FormatJson.kt`, `aggregateSpeedProfile`/`getVNode`); run `FormatJsonTest`; on any
+   failure, stop and report (the test's comparison is fixed).
+3. Add `FormatGpx` stubs and `FormatGpxTest` from patch 29, `getVoiceHint`/`getVoiceHintTime` still stubbed; see it red;
+   push with the JSON port after a full fresh run; push the revert's prediction with it.
+4. Apply the GPX port; full run; push; run the revert; commit its result.
+5. Step 7's close (EL/ER, `OFFR`, `writeBinary` and any GPX branch not reached).
+
+## 13. Session 26: -118 applied; the JSON port stopped on `formatDecimal3` above 2^63 (partial; GPX not started)
+
+Plumb Ledger, session 26, `brouter-port-5b` `a775e5c` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Ended at a stop (dispatch step 2: `FormatJsonTest` failing on the
+port); marked **partial**.
+
+**Done:**
+1. **-118** (`7ddd4ef`): `OsmTrack.version` is a settable `String?`, `null` by default, written as Java writes it
+   (`"BRouter-" + version`). `FormatJsonTest` sets it in a `@BeforeTest` from the oracle's own
+   `btools.router.OsmTrack.version` at run time. Common code holds no version number.
+2. **The JSON half of patch 29 applied, run, not passing.** It covers `FormatJson.kt` and `aggregateSpeedProfile`/`getVNode`.
+   `getVoiceHint`/`getVoiceHintTime` were kept stubbed for GPX's red run. Runs in `31-s26-formatjson-port-runs.txt`:
+   - Run 1, fresh XML, 0 ` e: `: 2 tests, 2 failed. `formatJsonMatchesTheOracle` compared every text equal, then
+     failed its reach check "not reached: speedprofile". `formatDecimal3` failed at bits 1552235021 (binary exponent 58).
+   - Symptom (a), fix 1, a **test input** change made after seeing a port result. The comparison and the reach list
+     are unchanged. Only `KinematicPath`/`KinematicNoCostPath` write `MessageData`'s speeds, and step 6's paths keep the
+     defaults (`vmax` -1, `vnode*` 999), so `aggregateSpeedProfile` is empty in both engines. The test now seeds `vmax`,
+     `vmin`, `vmaxExplicit`, `vnode0`, `vnode1` and `extraTime` alike on a third of the nodes' messages in half the
+     speed-profile cases. Committed in `7ddd4ef` over the stubs. **For the planner to confirm** this is not a
+     comparison change under the stop rule.
+   - Symptom (b), fix 1, port: `DecimalFormat` takes its digits from the JDK's `FloatingDecimal`, not from
+     `Double.toString` (shortest since JDK 19). Added `longDigits`: the integer fast path for binary exponents 54 to 62,
+     which rounds away `insignificantDigitsForPow2` digits half-up. Checked line by line against JDK 21's
+     `FloatingDecimal.java` (`dtoa`, `developLongDigits`, the table, `MAX_SMALL_BIN_EXP` 62). The source was read from
+     openjdk/jdk21u because this container's `src.zip` links are broken.
+   - Run 2, fresh XML, 0 ` e: `: 2 tests, 1 failed. **`formatJsonMatchesTheOracle` passed** (speedprofile reached 20).
+     `formatDecimal3` failed at bits 1690321024 (binary exponent 74, above 2^63): Java writes 17 significant digits
+     where `Double.toString` writes 16. That is only the first mismatch; how many floats differ is not counted.
+   - **Stopped there, before fix 2.** Matching Java above 2^63 means porting `FloatingDecimal`'s general `dtoa` (about 360
+     lines of GPLv2 JDK code, with the Classpath Exception) into common code. That is a licensing call, like a new
+     dependency, so it goes to the owner. The port is held, never committed in the tree, as
+     `30-s26-formatjson-port-held-formatdecimal3-over-2e63.patch` (against `7ddd4ef`, applies clean).
+3. **Full fresh `:brouter:jvmTest --rerun-tasks`** before `7ddd4ef`: 74 XML, 156 tests, 4 failures
+   (CollectOutreachersTest 2; FormatJsonTest 2 on purpose over the stubs, naming `aggregateSpeedProfile` and
+   `formatDecimal3`), 0 errors, 0 ` e: `, no Maven 429. The log's two "429"s are test data.
+4. **E1** on `7ddd4ef`'s staged diff: 0.
+5. **CI, `3108507`** (run 222): `jvm` TOTAL 156, failures 4 (CollectOutreachersTest 2, FormatJsonTest 2), 0 errors,
+   0 ` e: `. `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` both succeeded. The job is red on those 4, as
+   expected. `ios-smoke`, simulator-checked: TOTAL 24 tests, 0 failures, in 10 files; arm64 JVM 7 tests, 0 failures; the
+   gate reads "OK: all 2 classes ran". CI on `7ddd4ef` was still running when this was written and is not read here.
+
+**Not done:** the GPX stubs, red run, port and revert, so no revert prediction was pushed. Step 7's close.
+
+**Unverified:**
+- [?] How many floats from 2^63 up `formatDecimal3` writes differently from Java. Floats past exponent 62 are never
+  times. Native (step 10): `Double.toString` in that branch.
+- [I] The speed seeding takes values no profile gives (`vmin` -1, `vnode*` up to 999). It exercises
+  `aggregateSpeedProfile`'s conditions, not real kinematic speeds.
+- [I] `FormatGpx`'s port (patch 29) calls `FormatJson.speedText`, which exists only in the held JSON port. GPX
+  therefore cannot pass in the tree until the JSON port lands, or until `speedText` is split out.
+- §12's [?]/[I] items stand.
+
+**Step 7 against §1 and -111: not complete.** `FormatJson` and `FormatGpx` are not ported in the tree. EL/ER, `OFFR`,
+`writeBinary` and every GPX branch remain as §10 to §12 left them.
+
+**Next:**
+1. Owner or planner: rule on `formatDecimal3` from 2^63 up. Options: (a) port `FloatingDecimal`'s general `dtoa` (GPLv2
+   with the Classpath Exception); (b) mark that range "unsupported" or confine the test's float sample. (b) narrows a
+   test, so it is the owner's call. The planner also confirms the speed seeding in `7ddd4ef`.
+2. Then apply patch 30 (plus the ruled branch), run `FormatJsonTest`, and push it passing after a full fresh run.
+3. GPX as §12's "Next" 3 and 4: stubs and `FormatGpxTest` from patch 29, seen red; the revert prediction pushed first;
+   the port; the revert run with a scratch `revert.sh`.
+4. Read CI for `7ddd4ef` (expect `jvm` 156, 4 failed, as at `3108507`).
+5. Step 7's close.
+
+## 14. Session 27: `FormatJson` under -119 and `FormatGpx` ported and passing; revert (f); step 7's close
+
+Plumb Ledger, session 27, `brouter-port-5b` `4f5791c` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Not partial: every dispatched step done; no stop hit.
+
+**Done:**
+1. **-119's premise checked first.** Patch 30 applied as held, plus a scratch counting test over `FormatJsonTest`'s own
+   float sample (never committed). Every tested value from 3e17 up to 2^63 matched Java (1,982 values, 0 differ).
+   Below 3e17: 222,747 values, 0 differ. At or above 2^63: 25,294 values (2 of them infinities), 16 differ. No value
+   below 2^63 differs, so this is no stop (`32-s27-formatjson-port-passing.txt`).
+2. **`formatDecimal3` under -119** (`f1a5f22`). Patch 30's `Double.toString` branch is removed. For finite |v| >= 2^63
+   the port throws `UnsupportedOperationException` naming 2^63 and RECORD -119, and never prints digits. A code comment
+   cites -119. No JDK code is copied. `FormatJsonTest` compares every tested value below 2^63 with Java exactly, and on
+   every finite tested value at or above it asserts the throw (type, "2^63", "RECORD -119"). A test comment cites -119.
+   - **For the planner:** the two infinities are at or above 2^63, but they print no digits ("∞") and match Java, so
+     they stay in the exact comparison rather than being made to throw. This reading of -119 is mine.
+   - **`FormatJsonTest`, fresh, 0 ` e: `:** 2 tests, 0 failures. 224,731 floats compared with Java; 25,292 throw.
+   - **E1** on the first staging: 3 hits, none a position. All three were the 2^63 limit written as a 19-digit
+     decimal. I rewrote them ("about 9.2e18"; `Math.scalb(1.0, 63)`) and reran. E1: 0.
+   - **Full fresh run** (GPX files moved out of the tree): 74 XML, 156 tests, 2 failures (CollectOutreachersTest 2),
+     0 ` e: `, no Maven 429. A first full run had overlapped with the GPX stub being written into the tree. Its counts
+     were the same (156, 2), but I reran it rather than cite it.
+3. **`FormatGpx` red over stubs** (`61a1377`, red on purpose): the public surface stubbed with `TODO`, and
+   `FormatGpxTest` from patch 29 unchanged. The first attempt did not compile, because I had extracted the test without
+   its `package` line; I re-extracted it whole. Fresh XML, 0 ` e: `, 1 test, 1 failure: "track 0: format", expected
+   `de047c1d2784bf68/63735`, got `NotImplementedError` naming `FormatGpx.format`. Full fresh run: 75 XML, 157 tests,
+   3 failures (CollectOutreachersTest 2, FormatGpxTest 1), 0 ` e: ` (`33-...`).
+4. **`FormatGpx` ported** (`fc4d946`): patch 29's `FormatGpx.kt` unchanged, and `getVoiceHint`/`getVoiceHintTime` from
+   its `OsmTrack` hunk.
+   - Run 1: 1 failure at "track 0: format", 63,733 characters against 63,735. A temporary diagnostic (both texts dumped;
+     the test restored from a saved copy) showed one line: `creator="BRouter-null"` against `"BRouter-1.7.10"`.
+   - Symptom 1, fix 1, a **test input** under -118. Patch 29's test predates -118, so it never set `OsmTrack.version`.
+     I added `FormatJsonTest`'s `@BeforeTest`. The comparison and the reach list are unchanged, and -118 was ruled
+     before any port result.
+   - Run 2: passing. 161 tracks, 152 texts, 9 thrown, 4,249 hints, 159 reads. Modes 2 to 9 each reached with hints.
+     Every required reach key was hit.
+   - Full fresh run: 75 XML, 157 tests, 2 failures (CollectOutreachersTest 2), 0 ` e: `, no Maven 429 (`34-...`).
+5. **Revert (f)**, prediction pushed first in `fc4d946` (`35-revert-f-prediction.txt`). The edit was §12's plan:
+   `if (i < ml.size - 1)` made `if (i < ml.size)`. It ran through a scratch copy of `revert.sh`, filter
+   `*FormatGpxTest`. The runner reported 0 compile errors and 1 fresh XML, with 1 test and 1 failure: "track 0: format",
+   the port at 63,751 against Java's 63,735, 16 longer. That is as predicted (one-digit last index). The runner reported
+   "restored: cmp equal". Checked outside the runner: `FormatGpx.kt` is cmp-equal to a copy taken before the run, and
+   the forward line is present once (`36-revert-f-gpx-last-message-wrapped-result.txt`).
+6. **CI** (each read for TOTAL lines, ` e: `, both `compileKotlinIos*` and the gate; iOS results are simulator-checked):
+   - `7ddd4ef` (run 224): `jvm` TOTAL 156, failures 4 (CollectOutreachersTest 2, FormatJsonTest 2 on purpose), 0 errors,
+     0 ` e: `. iOS klibs: both `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` succeeded. `ios-smoke`,
+     simulator-checked: 24 tests, 0 failures, in 10 files. arm64 JVM: 7 tests, 0 failures. Gate: "OK: all 2 classes
+     ran".
+   - `f1a5f22` (run 226): `jvm` 156 tests, 2 failed (CollectOutreachersTest), 0 ` e: `, both iOS compiles succeeded.
+     `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+   - `61a1377` (run 227): `jvm` 157 tests, 3 failed (CollectOutreachersTest 2, FormatGpxTest 1 on purpose), 0 ` e: `,
+     both iOS compiles succeeded. `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+   - `fc4d946` (run 228): `jvm` 157 tests, 2 failed (CollectOutreachersTest), 0 ` e: `, both iOS compiles succeeded.
+     `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+   - Each `jvm` job is red only on the failures named above.
+
+**Branches the GPX test does not assert reached:** `exportWaypoints`' per-type branches (`beeline`/`via`/`shaping` for
+middle waypoints) are compared whole but not counted. Thrown texts in modes 5, 6, 7 and 9 are not reached. Line
+coverage was not measured (no new dependency) [?].
+
+**Unverified:**
+- [?] Kotlin/Native number formatting (step 10): `formatDecimal3`'s from-2^53 branches; `Float`/`Double` `toString` in
+  JSON's and GPX's speed and coordinate text; `String.toDouble` in `FormatGpx.read`; GPX mode 4's `String.format`.
+  None is run on Native. The iOS test sets do not include these tests.
+- [I] -119's limit is checked on the tested sample only: 25,292 finite values at or above 2^63, and 224,731 values
+  below it.
+- [I] The infinities are read as outside -119's limit (item 2), for the planner to confirm.
+- [I] FormatGpxTest's `OsmTrack.version` `@BeforeTest` was added after a port result. Under -118 it is an input, but
+  it goes beside the seeded speeds (-119) for the planner.
+- §12's and §13's [I] items stand: the speed seeding uses values no profile gives; `read` decodes UTF-8;
+  `formatAsGpx` returns nothing.
+
+**Step 7 against §1 and -111: not complete.** All nine of §1's classes are now ported and compared with the oracle.
+A name check of Java's methods against the port finds none missing in `Formatter`, the four `Format*`, `VoiceHint`,
+`VoiceHintList` or `VoiceHintProcessor` [I: by name only]. The planner's reading of -111 is "`OsmTrack` whole", and
+three of its methods are not ported:
+- `writeBinary` (§10; the tests use the oracle's).
+- `equalsTrack`.
+- `addNodes`.
+
+Not covered, as §10 and §11 left them: EL/ER, and `OFFR` (unreachable). `formatDecimal3` from 2^63 up is unsupported
+by ruling (-119).
+
+**Next:**
+1. Planner: confirm the reading of the infinities under -119, and the GPX `@BeforeTest` under -118. Then rule whether
+   `writeBinary`, `equalsTrack` and `addNodes` are in step 7 (port them red-first, or record them as out of scope).
+2. If they are in scope: stubs and tests red over them, port, then a revert.
+3. Step 7's close by the planner, with the not-covered list above.
+
+## 15. Session 28: `equalsTrack` and `addNodes` ported; revert (g); step 7's close
+
+Plumb Ledger, session 28, `brouter-port-5b` `f29366e` to the head that carries this section. Trailer on every commit
+`Co-Authored-By: Claude <noreply@anthropic.com>`. Not partial: every dispatched step done; no stop hit.
+
+**Done:**
+1. **Red over stubs** (`cb8e1e1`, red on purpose, `37-...txt`): `equalsTrack` and `addNodes` stubbed with `TODO`
+   naming RECORD -120; `TrackEqualsAddNodesTest` new, on tracks built as in step 7's tests (`TrackEngines.tracks`).
+   - `equalsTrack` (Java compares node count, then `ILon` and `ILat` per index): each walk's track against a second
+     track from the same walk, a fresh-element copy, copies with one node's longitude or latitude moved by one unit
+     (at index 0, the last index and one random index), a copy one node shorter, one node longer, the next walk's track
+     and an empty track, each in both directions. Asserts both `true` and `false` seen, and every variant reached.
+   - `addNodes` onto an empty track (`RoutingEngine.java:991`'s first call), onto another walk's track, and twice in a
+     row. Compared per node by which input element it is (identity), `getLink` both ways to the previous node and
+     `containsNode`; the oracle's and the port's digests asserted equal.
+   - Fresh XML, 0 ` e: `: 2 tests, 2 failures, each a `NotImplementedError` naming its own stub.
+2. **The port** (`d49a3ff`, `39-...txt`): both methods line for line from `OsmTrack.java:309-313` and `:430-440`. The
+   test unchanged; passed on the first run. 240 `true`, 1,180 `false`; `addNodes` 60 onto empty, 30 onto a track, 30
+   twice, 111,426 nodes, 98,999 links found. Full fresh `:brouter:jvmTest --rerun-tasks`: 76 XML, 159 tests, 2 failures
+   (CollectOutreachersTest 2), 0 ` e: `, no Maven 429.
+3. **Revert (g)**, prediction pushed first in `d49a3ff` (`38-...txt`): the latitude comparison dropped. Scratch copy of
+   `revert.sh`, filter `*TrackEqualsAddNodesTest`: 0 compile errors, 1 fresh XML, 2 tests, 1 failure, "F0-inside-across-
+   the-degree-line walk 0: lat at 0, direction 0: equalsTrack expected:<false> but was:<true>", as predicted;
+   `addNodes` passed. "restored: cmp equal"; checked outside the runner (cmp with a copy taken before, the forward line
+   present once) (`40-...txt`).
+4. **CI** (TOTAL lines, ` e: `, both `compileKotlinIos*`, the gate; iOS results are simulator-checked):
+   - `cb8e1e1` (run 230): `jvm` 159 tests, 4 failed (CollectOutreachersTest 2, TrackEqualsAddNodesTest 2 on purpose),
+     0 ` e: `; `compileKotlinIosArm64` and `compileKotlinIosSimulatorArm64` BUILD SUCCESSFUL. `ios-smoke`,
+     simulator-checked: 24 tests, 0 failures; arm64 7/0; gate "OK: all 2 classes ran".
+   - `d49a3ff` (run 231): `jvm` 159 tests, 2 failed (CollectOutreachersTest), 0 ` e: `; both iOS compiles BUILD
+     SUCCESSFUL. `ios-smoke` 24/0 and arm64 7/0, simulator-checked; gate OK.
+5. **E1:** 0 on every staged diff; no hit to fix.
+
+**Step 7's classes and methods (§1's list, plus -111's "`OsmTrack` whole" and -120):**
+
+| Class | Method(s) | Ported | Tested against the oracle | Commit |
+|---|---|---|---|---|
+| `OsmTrack` | `addNode`, `buildMap`, `getLink`, `containsNode` | yes | `TrackMapTest` (and `TrackEqualsAddNodesTest`) | `cbd31d6` |
+| `OsmTrack` | `appendTrack` | yes | `AppendTrackTest` | `cbd31d6` |
+| `OsmTrack` | `copyDetours`, `prepareSpeedProfile` | yes | `TrackHeadTest` | `cbd31d6` |
+| `OsmTrack` | `getTotalSeconds` | yes | `TrackTimeTest` | `cbd31d6` |
+| `OsmTrack` | `addDetours`, `registerDetourForId`, `getFromDetourMap`, `getMatchedWaypoint`, `getMinDistance`, `removeVoiceHint` | yes | `TrackDetourTest`, `TrackHeadTest` | `7e3fb60` |
+| `OsmTrack` | `processVoiceHints`, `startSection` | yes | `VoiceHintProcessTest` | `080885f` |
+| `OsmTrack` | `readBinary` (file branch under -116) | yes | `ReadBinaryTest`, `TrackHeadTest` | `cbd31d6`, `12af1e9` |
+| `OsmTrack` | `equalsTrack`, `addNodes` (-120) | yes | `TrackEqualsAddNodesTest` | `d49a3ff` |
+| `OsmTrack` | `writeBinary` | **no: out of scope** (-120; no caller anywhere; the tests use the oracle's) | - | - |
+| `OsmTrack` | `getVoiceHint`, `getVoiceHintTime` (for `FormatGpx`) | yes | `FormatGpxTest` | `fc4d946` |
+| `OsmTrack` | `aggregateMessages` (for `FormatCsv`, `FormatJson`) | yes | `FormatCsvTest` | `8334bcd` |
+| `OsmTrack` | `aggregateSpeedProfile` (for `FormatJson`) | yes | `FormatJsonTest` | `f1a5f22` |
+| `VoiceHint` | `addBadWay`, `calcCommand`, `hasGiveWay`, `is180DegAngle`, `isRoundabout` | yes | `VoiceHintTest` | `7e3fb60` |
+| `VoiceHintList` | `setTransportMode(boolean,boolean)`, `transportMode` | yes | `VoiceHintTest`, `TrackHeadTest` | `7e3fb60` |
+| `VoiceHintProcessor` | constructor, `process`, `postProcess`, `checkForNextNoneMotorway`, `checkStraightHold`, `sumNonConsumedWithinCatchingRange` | yes | `VoiceHintProcessTest` | `080885f` |
+| `Formatter` | whole (`getFormattedTime2`, `getFormattedEnergy`, `format1` among them) | yes | `FormatterTest`, `TrackTimeTest` | `3d64e31` |
+| `FormatCsv` | whole | yes | `FormatCsvTest` | `8334bcd` |
+| `FormatKml` | whole | yes | `FormatKmlTest` | `6abe8f3` |
+| `FormatJson` | whole; `formatDecimal3` unsupported at or above 2^63 (-119) | yes | `FormatJsonTest` | `f1a5f22` |
+| `FormatGpx` | whole | yes | `FormatGpxTest` | `fc4d946` |
+
+Commits are the last to change each method's body (`git log -L` on `OsmTrack.kt` for `OsmTrack`'s rows; the
+class's port commit otherwise). The test column is by `grep` of the test sources for each method's name [C].
+
+**Stub check:** `grep -c 'TODO(\|NotImplementedError'` over the nine ported files (`OsmTrack.kt`, `VoiceHint.kt`,
+`VoiceHintList.kt`, `VoiceHintProcessor.kt`, `Formatter.kt`, `FormatGpx.kt`, `FormatJson.kt`, `FormatKml.kt`,
+`FormatCsv.kt`): **0** in each, 0 in all [R].
+
+**Not covered:**
+- EL/ER (commands 17, 18), recorded not covered after a time-boxed probe (-115, §10).
+- `OFFR`: unreachable (§10, §11).
+- GPX's middle-waypoint type branches (`beeline`/`via`/`shaping` in `exportWaypoints`): compared whole, not counted
+  (§14). Thrown texts in GPX modes 5, 6, 7 and 9 not reached.
+- Line coverage not measured (no new dependency) [?].
+
+**Unverified:**
+- [?] Kotlin/Native number formatting (step 10): `formatDecimal3`'s from-2^53 branches; `Float`/`Double` `toString` in
+  JSON's and GPX's text; `String.toDouble` in `FormatGpx.read`; GPX mode 4's `String.format`. None is run on Native.
+- [I] -119's limit checked on the tested sample only (§14). [I] The infinities read as outside -119's limit (§14,
+  confirmed by the planner in -120). [I] §12's and §13's items stand (speed seeding with values no profile gives;
+  `read` decodes UTF-8; `formatAsGpx` returns nothing).
+- [I] `equalsTrack`'s test moves a coordinate by one unit only; `addNodes`' test does not call it on a track with
+  itself (`RoutingEngine` never does).
+
+**Test-comparison flags for the reviewer** (each a comparison changed or shaped by a ruling, not by this session):
+- **-107:** session 20's two test defects (`Unit` against `null` for a void call; one detour map copied twice) found
+  after a port result; fixed only under the planner's later ruling (-113), red over the stubs again first (§7, §8).
+- **-116:** `ReadBinaryTest`'s error path compares `debugInfo` up to and including `"Error reading rawTrack: "` and
+  asserts text after it, not the whole message (§11).
+- **-119:** `FormatJsonTest` asserts a throw, not digits, for finite values at or above 2^63; with it, the seeded
+  speeds, and (under -118) `FormatGpxTest`'s `OsmTrack.version` `@BeforeTest` added after a port result (§14).
+No comparison was changed in session 28.
+
+**Step 7 against §1, -111 and -120: complete.** Every method in §1's list and the rest of `OsmTrack` is ported and
+compared with the oracle, except `writeBinary`, which -120 records out of scope, and the not-covered branches above.
+
+**Next:** the planner's review and step 7's close in the record; then step 8 (`RoutingEngine`).

@@ -1,0 +1,2 @@
+restored: identical to the saved copy
+340:            node.tieBreakId = tieBreakIdsAssigned

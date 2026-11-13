@@ -1,0 +1,39 @@
+Step 9, session 43 (Plumb Ledger): the production run's expectation, written and pushed BEFORE the run.
+Test: RoutingEngineProductionRecordTest (commit 2763f4c), gated on BROUTER_PRODUCTION_RECORD. Counts only (E1).
+
+Premise (RECORD -24, -135): the port's cos and atan2 are bionic's FreeBSD msun (MsunLibm); the one oracle runs with
+HotSpot's libm intrinsic off (fdlibm). msun's cos differs from it at 13 rows of CheapRuler's 1,800-row table
+(CheapProductionRecordTest.kt:15: 474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297, 1310, 1311, 1318); atan2 is
+equal at every pair. So by -24 any difference in this run comes from a kx or ky read from one of those 13 rows.
+
+Row rule (CheapRuler: getLonLatToMeterScales reads row ilat / 100,000, ilat of a segment's midpoint): row r is a band of
+0.1 degree of latitude. The tiles the cases run on: segments/ holds E170_S50, W75_N35, W75_N40, W70_N40; f0/ and f0h/ hold
+Forager's W75_N40 alone. By the row rule:
+- rows 474 to 1079 (8 rows) lie in no captured tile: no case can read them.
+- rows 1295 and 1297 lie in the N35 tile band (W75_N35).
+- rows 1310, 1311 and 1318 lie in the N40 tile band (W75_N40 and W70_N40).
+- E170_S50 holds none.
+So the 13 rows reduce, for these tiles, to 5 (the same 5 LBGenerator's cRows finds inside the tiles).
+
+A difference also needs the 1-or-few-ulp change in kx or ky to move an integer: a segment's distance is an int from
+CheapRuler's double, and cost is built from those ints, so most reads of a differing row change nothing. Hence the guesses
+below are small. Every count is a GUESS [?].
+
+Per group (cases; guess of differing; why):
+- F0 (2): 0. Forager's two ends lie in no one of the 13 rows (checked from the case ends in a scratch count, nothing printed);
+  a route between them would have to leave the ends' bands to read one.
+- R (1,180, StdModel): a few, guess 0 to 10, cost or distance only. Node-weighted draws over all four tiles; the N35/N40
+  cases whose search runs through rows 1295, 1297, 1310, 1311 or 1318 can read them.
+- DL-lat (59): guess 0 to 3. Routes cross the N35/N40 line; rows 1295 and 1297 are the nearest of the 13, a few bands south of it.
+- DL-lon (59): guess 0 to 3. Routes cross between W75_N40 and W70_N40, where rows 1310, 1311, 1318 run east-west across both.
+- MP64 (59), ML5 (59), PM5 (55): guess 1 to 10 each. W75_N40 only, long routes (20 km x 5^u), so many searches span
+  the N40 tile's 0.1-degree bands, among them 1310, 1311, 1318. The likeliest groups to differ, after LB.
+- NT (59): guess 0 to 2. Built around junction angles (atan2, equal at every pair); short.
+- LB (59): guess 1 to 15. Both ends lie in one of the 5 in-tile rows by construction, so every case reads a differing row;
+  whether it moves an integer is the open part.
+- CR (59): guess 0 to 5. RGenerator on all tiles, as R.
+- FK1 to FK6 (60): guess 0. Mostly failure kinds before or without a long search; those that route are like R's.
+- FK7, FK8 (24): 0. Edited copies of E170_S50 alone, which holds none of the 13 rows.
+- F0h (8): 0. Forager's eight ends: none lies in one of the 13 rows, and no case's ends straddle one (scratch count).
+
+A difference in kind: expected nowhere (guess). If one appears it is reported first and alone (-135, decision 3).

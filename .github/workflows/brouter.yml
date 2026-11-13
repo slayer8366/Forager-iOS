@@ -5,6 +5,8 @@ name: brouter
 
 on:
   push:
+    paths-ignore:
+      - 'docs/**'
   pull_request:
 
 permissions:
@@ -15,7 +17,7 @@ jobs:
   # compiles, which catch a JVM-only API in commonMain the day it is written. No iOS link on Linux.
   jvm:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
@@ -70,7 +72,26 @@ jobs:
           xcodebuild -version
           xcrun simctl list runtimes
           xcrun simctl list devices available
+      # Step 10 (RECORD -137, decision 4): the pinned tiles for the simulator's tests, fetched by the build's own fetchTiles
+      # (tools/fetch-tiles.sh, the same pins and release as the JVM; each file refused unless its size and SHA-256 match),
+      # and the oracle's profiles2/ (with lookups.dat) by fetchOracle (tools/fetch-oracle.sh, pinned), for F0's routes.
+      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
+        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
+      # Step 10 (RECORD -138, decision 2): the generated groups' cases (NT, LB, CR, DL-lat, DL-lon) drawn at run time on this
+      # runner's JVM (NtCasesWriteTest, gated on the variable, which names NT's file; the others lie beside it) and written
+      # under brouter/build/step10/, outside test-results/ (the only folder uploaded). Never committed or printed: the test
+      # prints ids and counts only. -x msunReference as the arm64 JVM step below (RECORD -36).
+      - name: Step 10 - the generated groups' cases for the simulator, drawn on this runner's JVM
+        env:
+          BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+        run: ./gradlew --no-daemon :brouter:jvmTest -x msunReference --tests com.zynergylabs.forager.brouter.tiles.NtCasesWriteTest
       - name: commonTest on the iOS simulator
+        env:
+          # simctl hands SIMCTL_CHILD_X to the simulator's process as X (PinnedTileReadTest reads BROUTER_TILES_DIR;
+          # F0RouteCommonTest also BROUTER_ORACLE_DIR; NtEngineCommonTest BROUTER_STEP10_NT_CASES).
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
         run: ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
       - name: Counts from the JUnit XML, and the XML itself
         if: always()
@@ -105,4 +126,116 @@ jobs:
         if: always()
         with:
           name: ios-smoke-test-results
+          path: brouter/build/test-results/
+
+  # RECORD -141, decisions 1 and 2: the memory groups (MP64, ML5, PM5; 173 cases), the ones that reach
+  # OsmNodesMap.cleanupPeninsulas's recursion through routing (RECORD -61), on the simulator in a job of their own, so a
+  # process ended by that recursion ends this job alone. The three classes are gated on BROUTER_STEP10_MEMORY (unset in
+  # `jvm` and `ios-smoke`, where each prints one line and does nothing). Checkout, Java, Xcode and the fetch step are
+  # `ios-smoke`'s; the writer step is the whole writer (it cannot be told to write the memory groups only), under
+  # brouter/build/step10/, outside test-results/ (the only folder uploaded; E1). The tests print ids, counts, digests,
+  # depths and the test thread's stack size only. Every result here is "simulator-checked".
+  ios-memory:
+    runs-on: macos-26 # arm64; not macos-latest, which moves
+    timeout-minutes: 95 # 75 until session 51, which adds R's fallback (about 10 minutes) and the ladder
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: Select Xcode 26.0.1 (Kotlin 2.3.10's published Xcode is 26.0)
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app
+          xcodebuild -version
+          xcrun simctl list runtimes
+          xcrun simctl list devices available
+      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
+        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
+      - name: Step 10 - the generated groups' cases for the simulator, drawn on this runner's JVM
+        env:
+          BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+        run: ./gradlew --no-daemon :brouter:jvmTest -x msunReference --tests com.zynergylabs.forager.brouter.tiles.NtCasesWriteTest
+      - name: The memory groups on the iOS simulator (MP64, ML5, PM5)
+        env:
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+          SIMCTL_CHILD_BROUTER_STEP10_MEMORY: '1'
+        run: >-
+          ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
+          --tests com.zynergylabs.forager.brouter.tiles.Mp64EngineCommonTest
+          --tests com.zynergylabs.forager.brouter.tiles.Ml5EngineCommonTest
+          --tests com.zynergylabs.forager.brouter.tiles.Pm5EngineCommonTest
+      - name: Counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 51 (RECORD -142, decision 3): R's fallback, the first 12 cases of each StdModel profile, gated on its own
+      # variable. Its cases reach cleanupPeninsulas' recursion (201 of 240 on the JVM), so it runs here, not in ios-smoke
+      # (RECORD -141). Gradle empties the task's XML folder on each run, so the memory groups' XML is copied aside first.
+      - name: R's fallback on the iOS simulator (first 12 cases of each StdModel profile)
+        env:
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+          SIMCTL_CHILD_BROUTER_STEP10_R: '1'
+        run: |
+          cp -R brouter/build/test-results/iosSimulatorArm64Test brouter/build/test-results/ios-memory-groups
+          ./gradlew --no-daemon :brouter:iosSimulatorArm64Test --tests com.zynergylabs.forager.brouter.tiles.REngineCommonTest
+      - name: R's counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 51 (RECORD -142, decision 1): the stack ladder, last, so everything above is printed and counted before it
+      # can end the process. Each ladder line is also flushed to ladder.txt, which outlives a process that ends.
+      - name: The stack ladder on the iOS simulator (one MP64 case on threads of 8 MB down to 512 KB)
+        env:
+          SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
+          SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
+          SIMCTL_CHILD_BROUTER_STEP10_LADDER: '1'
+        run: |
+          cp -R brouter/build/test-results/iosSimulatorArm64Test brouter/build/test-results/ios-r-fallback
+          ./gradlew --no-daemon :brouter:iosSimulatorArm64Test --tests com.zynergylabs.forager.brouter.tiles.StackLadderIosTest
+      - name: The ladder's lines, its counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          if [ -f brouter/build/step10/ladder.txt ]; then grep '^ladder: ' brouter/build/step10/ladder.txt; else echo "no ladder.txt"; fi
+          python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test || true
+          for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: ios-memory-test-results
+          path: brouter/build/test-results/
+
+  # RECORD -136, decision 1: step 9's production run (RoutingEngineProductionRecordTest, gated on the variable; -135) as
+  # its own job beside `jvm`, running that one class. It records, it does not judge: it gates nothing but its own counts.
+  # The checkout and Java are `jvm`'s. A fresh runner has no earlier test output, so the task cannot be up to date here.
+  jvm-production:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      BROUTER_PRODUCTION_RECORD: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          # The oracle's JDK, pinned exactly (item E2: one HotSpot build, on x86_64).
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: The production run, recorded (step 9; the oracle is fetched and checked by the build, tools/fetch-oracle.sh)
+        run: ./gradlew --no-daemon :brouter:jvmTest --tests '*RoutingEngineProductionRecordTest'
+      - name: Counts from the JUnit XML, and the XML itself
+        if: always()
+        run: |
+          python3 tools/junit-counts.py brouter/build/test-results/jvmTest
+          for f in brouter/build/test-results/jvmTest/*.xml; do echo "== $f"; cat "$f"; done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: jvm-production-test-results
           path: brouter/build/test-results/

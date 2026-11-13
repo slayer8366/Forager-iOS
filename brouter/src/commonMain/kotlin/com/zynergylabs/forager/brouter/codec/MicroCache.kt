@@ -5,7 +5,7 @@ import kotlin.jvm.JvmField
 
 /**
  * Port of BRouter 1.7.10's `btools.codec.MicroCache`, its reached methods (`MicroCache.java:21-205`). Not ported, as
- * T2 reaches none of them: `finishNode`, `discardNode`, `getIdForIndex`, `expandId`, `isInternal`, `encodeMicroCache`,
+ * neither T2 nor the route-ways reach (RECORD -72) reaches them: `finishNode`, `discardNode`, `isInternal`, `encodeMicroCache`,
  * `compareWith`, `calcDelta`, `addDelta`.
  */
 internal open class MicroCache protected constructor(ab: ByteArray?) : ByteDataWriter(ab) {
@@ -123,6 +123,17 @@ internal open class MicroCache protected constructor(ab: ByteArray?) : ByteDataW
         for (i in 0 until size) {
             fapos!![i] = fapos!![i] and 0x7fffffff // clear deleted flags
         }
+    }
+
+    /** The 64-bit global id of cache position [i] (`MicroCache.java:180-183`). */
+    fun getIdForIndex(i: Int): Long {
+        val id32 = faid!![i]
+        return expandId(id32)
+    }
+
+    /** Expands a 32-bit cache-internal id into a 64-bit (lon|lat) id; an empty cache has none (`MicroCache.java:190-192`). */
+    open fun expandId(id32: Int): Long {
+        throw IllegalArgumentException("expandId for empty cache")
     }
 
     open fun shrinkId(id64: Long): Int {

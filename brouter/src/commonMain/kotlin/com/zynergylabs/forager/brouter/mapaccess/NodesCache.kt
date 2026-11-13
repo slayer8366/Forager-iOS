@@ -4,16 +4,17 @@ import com.zynergylabs.forager.brouter.codec.DataBuffers
 import com.zynergylabs.forager.brouter.codec.MicroCache
 import com.zynergylabs.forager.brouter.codec.WaypointMatcher
 import com.zynergylabs.forager.brouter.expressions.BExpressionContextWay
+import com.zynergylabs.forager.brouter.util.LibmSeam
 import okio.FileSystem
 import okio.IOException
 import okio.Path
 import okio.Path.Companion.toPath
 
 /**
- * Port of BRouter 1.7.10's `btools.mapaccess.NodesCache`, its file half (step 5a): the tile cache and the segment
- * reads. The graph half (`obtainNonHollowNode`, `expandHollowLinkTargets`, `hasHollowLinkTargets`, `getStartNode`,
- * `getGraphNode`, `matchWaypointsToNodes`, `preloadPosition`) needs `OsmNode`, `MatchedWaypoint` and the weaver, and
- * arrives with steps 5b and 5c. Java's `File segmentDir` is an okio [Path] read through [fileSystem] (item B, row 2).
+ * Port of BRouter 1.7.10's `btools.mapaccess.NodesCache`: its file half (step 5a: the tile cache and the segment
+ * reads), `matchWaypointsToNodes` and `preloadPosition` (step 5c), and its graph half (`obtainNonHollowNode`,
+ * `expandHollowLinkTargets`, `hasHollowLinkTargets`, `getStartNode`, `getGraphNode`), which 5b left out and step 6
+ * ported as 5b's debt (RECORD -99; checked against the oracle by `GraphHalfTest`). Java's `File segmentDir` is an okio [Path] read through [fileSystem] (item B, row 2).
  */
 internal class NodesCache(
     private val fileSystem: FileSystem,
@@ -57,6 +58,10 @@ internal class NodesCache(
 
     /** Java: `!Boolean.getBoolean("disableDirectWeaving")`. Forager never sets the property. */
     private val directWeaving = true
+
+    /** `NodesCache.java:21` and `:23`. */
+    private val RETRY_RANGE = 250
+    private val MAX_DYNAMIC_CATCHES = 20 // used with RoutingEngiine MAX_DYNAMIC_RANGE = 60000m
 
     init {
         nodesMap = OsmNodesMap()
@@ -186,6 +191,137 @@ internal class NodesCache(
             throw re
         } catch (e: Exception) {
             throw RuntimeException("error reading datafile $currentFileName: $e", e)
+        }
+    }
+
+    /**
+     * `NodesCache.java:213-237`: make sure [node] is non-hollow, which means it holds not just the id but the node's
+     * data. Returns true if it is, false if the node is still hollow. Java passes a null `expCtxWay` on to
+     * `parseNodeBody`; here the constructor has already refused a null one, so the `!!` cannot fire.
+     */
+    fun obtainNonHollowNode(node: OsmNode): Boolean {
+        if (!node.isHollow()) return true
+
+        val segment = getSegmentFor(node.ilon, node.ilat) ?: return false
+        if (!node.isHollow()) {
+            return true // direct weaving...
+        }
+
+        val id = node.getIdFromPos()
+        if (segment.getAndClear(id)) {
+            node.parseNodeBody(segment, nodesMap, expCtxWay!!)
+        }
+
+        if (garbageCollectionEnabled) { // garbage collection
+            cacheSum -= segment.collect(segment.getSize() shr 1) // threshold = 1/2 of size is deleted
+        }
+
+        return !node.isHollow()
+    }
+
+    /** `NodesCache.java:243-247`: make sure all link targets of [n] are non-hollow. */
+    fun expandHollowLinkTargets(n: OsmNode) {
+        var link = n.firstlink
+        while (link != null) {
+            obtainNonHollowNode(link.getTarget(n)!!)
+            link = link.getNext(n)
+        }
+    }
+
+    /** `NodesCache.java:252-259`: whether any link target of [n] is hollow. */
+    fun hasHollowLinkTargets(n: OsmNode): Boolean {
+        var link = n.firstlink
+        while (link != null) {
+            if (link.getTarget(n)!!.isHollow()) return true
+            link = link.getNext(n)
+        }
+        return false
+    }
+
+    /**
+     * `NodesCache.java:271-281`: the node for [id] with all its link targets non-hollow, or null if it was not found.
+     * No instance of the node may exist yet, not even a hollow one, so call it once, right after resetting the cache.
+     */
+    fun getStartNode(id: Long): OsmNode? {
+        val n = OsmNode(id)
+        n.setHollow()
+        nodesMap.put(n)
+        if (!obtainNonHollowNode(n)) return null
+        expandHollowLinkTargets(n)
+        return n
+    }
+
+    /** `NodesCache.java:283-292`: the map's node at [template]'s position, put there hollow if there was none. */
+    fun getGraphNode(template: OsmNode): OsmNode {
+        val graphNode = OsmNode(template.ilon, template.ilat)
+        graphNode.setHollow()
+        val existing = nodesMap.put(graphNode) ?: return graphNode
+        nodesMap.put(existing)
+        return existing
+    }
+
+    /** Java's `matchWaypointsToNodes` (`NodesCache.java:292-325`, step 5c), with the seam first (step 2b's rule). */
+    fun matchWaypointsToNodes(
+        libm: LibmSeam,
+        unmatchedWaypoints: MutableList<MatchedWaypoint>,
+        maxDistance: Double,
+        islandNodePairs: OsmNodePairSet,
+    ): Boolean {
+        waypointMatcher = WaypointMatcherImpl(libm, unmatchedWaypoints, maxDistance, islandNodePairs)
+        for (mwp in unmatchedWaypoints) {
+            var cellsize = 12500
+            preloadPosition(mwp.waypoint!!, cellsize, 1, false)
+            // get a second chance
+            if (mwp.crosspoint == null || mwp.radius > RETRY_RANGE) {
+                cellsize = 1000000 / 32
+                preloadPosition(mwp.waypoint!!, cellsize, if (maxDistance < 0) MAX_DYNAMIC_CATCHES else 2, maxDistance < 0)
+            }
+        }
+
+        if (first_file_access_failed) {
+            throw IllegalArgumentException("datafile $first_file_access_name not found")
+        }
+        val len = unmatchedWaypoints.size
+        for (i in 0 until len) {
+            val mwp = unmatchedWaypoints[i]
+            val lastAfterDirect = unmatchedWaypoints.size > 1 && i == unmatchedWaypoints.size - 1 &&
+                unmatchedWaypoints[i - 1].wpttype == MatchedWaypoint.WAYPOINT_TYPE_DIRECT
+            if (mwp.crosspoint == null) {
+                if (lastAfterDirect) {
+                    mwp.crosspoint = OsmNode(mwp.waypoint!!.ilon, mwp.waypoint!!.ilat)
+                    mwp.wpttype = MatchedWaypoint.WAYPOINT_TYPE_DIRECT
+                } else {
+                    // do not break here throw new IllegalArgumentException(mwp.name + "-position not mapped in existing datafile");
+                    return false
+                }
+            }
+            if (lastAfterDirect) {
+                mwp.crosspoint = OsmNode(mwp.waypoint!!.ilon, mwp.waypoint!!.ilat)
+                mwp.wpttype = MatchedWaypoint.WAYPOINT_TYPE_DIRECT
+            }
+        }
+        return true
+    }
+
+    /** Java's `preloadPosition` (`NodesCache.java:327-345`). */
+    private fun preloadPosition(n: OsmNode, d: Int, maxscale: Int, bUseDynamicRange: Boolean) {
+        first_file_access_failed = false
+        first_file_access_name = null
+        loadSegmentFor(n.ilon, n.ilat)
+        if (first_file_access_failed) {
+            throw IllegalArgumentException("datafile $first_file_access_name not found")
+        }
+        var scale = 1
+        while (scale < maxscale) {
+            for (idxLat in -scale..scale) {
+                for (idxLon in -scale..scale) {
+                    if (idxLon != 0 || idxLat != 0) {
+                        loadSegmentFor(n.ilon + d * idxLon, n.ilat + d * idxLat)
+                    }
+                }
+            }
+            if (bUseDynamicRange && waypointMatcher!!.hasMatch(n.ilon, n.ilat)) break
+            scale++
         }
     }
 

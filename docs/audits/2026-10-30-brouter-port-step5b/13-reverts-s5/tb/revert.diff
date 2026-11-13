@@ -1,0 +1,4 @@
+340c340
+<             node.tieBreakId = tieBreakIdsAssigned
+---
+>             node.tieBreakId = kotlin.random.Random.nextInt(1, Int.MAX_VALUE)

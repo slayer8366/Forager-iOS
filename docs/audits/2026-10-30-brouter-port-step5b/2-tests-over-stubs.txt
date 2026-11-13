@@ -1,0 +1,22 @@
+# Step 5b, tests over stubs: two local runs of :brouter:jvmTest (--max-workers=2 --offline), results folder emptied before each.
+# JDK: the container's (Gradle's own); the oracle flags as brouter/build.gradle.kts sets them.
+
+## Run 1: 100 tests, 9 failed. Seven failed on their stubs; CollectOutreachersTest's two failed on the harness's own bug:
+##   java.io.IOException: Stream Closed at CollectOutreachersTest.forEachRegion: GraphEngines.forEachCache closed the tile
+##   before the region was loaded. Not the stub's reason, so not counted; the harness was fixed (withTile, forEachCacheIn).
+# compile errors (lines starting 'e: ') in run 1's log: 0
+
+## Run 2 (the one counted)
+# compile errors (lines starting 'e: ') in the log: 0
+100 tests completed, 9 failed
+TOTAL: tests 100, failures 9, errors 0, skipped 0 in 45 files
+# Each failure, from the JUnit XML: type, message, first frame in com.zynergylabs:
+CollectOutreachersTest.collectOutreachersWithoutADestination[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: DirectWeaver, item I step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmFile.createMicroCache(OsmFile.kt:145)
+CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: DirectWeaver, item I step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmFile.createMicroCache(OsmFile.kt:145)
+GraphDecodeTest.f0Fixture[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNode.<init>(OsmNode.kt:20)
+GraphDecodeTest.w70n40[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNode.<init>(OsmNode.kt:20)
+GraphDecodeTest.w75n35[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNode.<init>(OsmNode.kt:20)
+GraphDecodeTest.w75n40[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNode.<init>(OsmNode.kt:20)
+GraphDecodeTest.e170s50[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNode.<init>(OsmNode.kt:20)
+NodeHashMapOrderTest.iterationOrderAndAnswersEqualJavaUtilHashMapsOnSeededOsmNodeKeys[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNode.<init>(OsmNode.kt:20)
+OsmNodePairSetTest.seededOperationsAnswerAsTheOracleDoes[jvm]: kotlin.NotImplementedError: kotlin.NotImplementedError: An operation is not implemented: step 5b | at com.zynergylabs.forager.brouter.mapaccess.OsmNodePairSet.freezeTempPairs(OsmNodePairSet.kt:7)

@@ -1,0 +1,10 @@
+Step 5d item 4: RouteWaysTest revert (drop one tag), run session 9 on 23a3eca (prediction pushed at 23a3eca).
+Runner: scratch one-revert.sh (saved copy, emptied results, build log checked, restored from copy).
+Edit: BExpressionContext.kt:131  if (value.isNotEmpty()) {  ->  if (value.isNotEmpty() && lookupNames[inum] != "highway") {
+Build log: 0 lines starting "e: "; gradle exit 1 (test failures).
+Predicted: 2 tests, 2 failures, each field [tags], at dropoff walker and F0h inside-across-the-degree-line/from.
+Observed:  2 tests, 2 failures:
+  dropoff walker                          line 4 of 42/42,     field [tags]
+  F0h inside-across-the-degree-line/from  line 4 of 2027/2027, field [tags]
+Match: yes.
+Restore: cmp with the saved copy identical; forward line present 1 time; git status clean for the file.

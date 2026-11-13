@@ -1,0 +1,20 @@
+Revert (g), session 28, prediction pushed first in d49a3ff (38-revert-g-prediction.txt).
+
+Edit, OsmTrack.kt, equalsTrack (the runner's diff):
+  -            if (e1.getILon() != e2.getILon() || e1.getILat() != e2.getILat()) return false
+  +            if (e1.getILon() != e2.getILon()) return false
+
+Runner: a scratch copy of docs/process/tools/revert.sh, filter *TrackEqualsAddNodesTest. It reported:
+  restored: cmp equal
+  compile errors: 0
+  fresh XML files: 1
+  TOTAL: tests 2, failures 1, errors 0, skipped 0 in 1 files
+  equalsTrackMatchesTheOracle: F0-inside-across-the-degree-line walk 0: lat at 0, direction 0: equalsTrack
+  expected:<false> but was:<true>
+addNodesMatchesTheOracle passed.
+
+As predicted: the first case's walk 0, variant "lat at 0, direction 0", Java false, the reverted port true. A failure
+this edit can produce (only a moved latitude separates the two answers).
+
+Checked outside the runner: OsmTrack.kt is cmp-equal to a copy taken before the run; the forward line is present once;
+git status clean apart from this file.

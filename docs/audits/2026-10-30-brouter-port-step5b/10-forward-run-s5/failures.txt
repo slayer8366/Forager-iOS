@@ -1,0 +1,4 @@
+FAILED CollectOutreachersTest.collectOutreachersWithoutADestination[jvm]: java.lang.AssertionError: segments/W75_N40.rd5 around degree (105, 130) sub 735 (lonIdx 3391, latIdx 4182, 154239 bytes, 15406 nodes), 6 caches, mode 1: line 1 of 172529/174955: oracle [C 38715 41099 41099] port [C 39396 37387 37387]
+  at ['at com.zynergylabs.forager.brouter.mapaccess.CollectOutreachersTest.compare(CollectOutreachersTest.kt:141)', 'at com.zynergylabs.forager.brouter.mapaccess.CollectOutreachersTest.collectOutreachersWithoutADestination$lambda$0(CollectOutreachersTest.kt:65)']
+FAILED CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes[jvm]: java.lang.AssertionError: canEscape did not answer both ways: false/true 0/3587
+  at ['at com.zynergylabs.forager.brouter.mapaccess.CollectOutreachersTest.collectOutreachersWithADestinationVanishesFarNodes(CollectOutreachersTest.kt:116)']

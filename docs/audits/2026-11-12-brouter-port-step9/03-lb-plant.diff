@@ -1,0 +1,11 @@
+--- (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/util/CheapRuler.kt
+@@ -50,7 +50,7 @@
+      * division does. Outside 0 until 180,000,000 Java throws ArrayIndexOutOfBoundsException; this throws Kotlin's
+      * IndexOutOfBoundsException for the same rows (a negative ilat above -100,000 is row 0 in both).
+      */
+-    fun getLonLatToMeterScales(libm: LibmSeam, ilat: Int): DoubleArray = libm.scales(ilat / SCALE_CACHE_INCREMENT)
++    fun getLonLatToMeterScales(libm: LibmSeam, ilat: Int): DoubleArray = libm.scales(ilat / SCALE_CACHE_INCREMENT + 1)
+ 
+     /** CheapRuler.java:74-79: the distance in meters between two integer points. */
+     fun distance(libm: LibmSeam, ilon1: Int, ilat1: Int, ilon2: Int, ilat2: Int): Double {

@@ -1,0 +1,11 @@
+Session 23, revert (d), predicted before it runs (pushed first).
+Edit (one line, Formatter.kt, getOruxAction): `VoiceHint.RNDB, VoiceHint.RNLB -> 1008 + roundaboutExit` made
+`1008 - roundaboutExit` (Formatter.java:465-467, the sum flipped).
+Run: :brouter:jvmTest --tests '*FormatterTest' (the runner takes one filter), with a scratch copy of docs/process/tools/revert.sh (it checks the build log for compile errors before reading results and
+restores from a saved copy).
+Predicted:
+- 0 compile errors; 1 fresh XML.
+- FormatterTest: 1 test, 1 failure. Its loops run cmd from -1 upwards, and for each cmd the exits from -12; no command
+  below 13 (RNDB) reaches the edited branch, and every other method at cmd 13 is unchanged. So the first and only
+  failure reported is "getOruxAction(13, -12) expected:<ok:[996]> but was:<ok:[1020]>".
+- After the restore: Formatter.kt cmp-equal to the saved copy, the forward line `1008 + roundaboutExit` present.

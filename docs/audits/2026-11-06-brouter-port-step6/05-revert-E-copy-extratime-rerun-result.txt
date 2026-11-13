@@ -1,0 +1,15 @@
+Session 14, revert E-copy-extratime, a re-run at 4815a6f (section 9's edit, revert.sh). Prediction: 05-revert-DEF-rerun-predictions.txt (pushed at 7928c2a before the run).
+9-digit numbers are redacted as <int>.
+
+Edit:
+-        d.extraTime = extraTime
+
+Runner:
+restored: cmp equal
+compile errors: 0
+fresh XML files: 1
+TOTAL: tests 2, failures 1, errors 0, skipped 0 in 1 files
+testcase name="messageDataMatchesTheOracle[jvm]"
+message="java.lang.AssertionError: case 1: copy's extraTime expected:&lt;<int>&gt; but was:&lt;0&gt;
+
+Observed: matches the prediction and section 9: 1 of 2 failed, messageDataMatchesTheOracle at case 1: copy's extraTime, port 0.

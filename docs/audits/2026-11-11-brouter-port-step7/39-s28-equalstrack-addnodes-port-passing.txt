@@ -1,0 +1,12 @@
+Session 28, OsmTrack.equalsTrack and OsmTrack.addNodes ported (OsmTrack.java:309-313 and :430-440, line for line).
+TrackEqualsAddNodesTest unchanged from the red commit.
+
+TrackEqualsAddNodesTest alone, fresh XML, 0 compile errors: 2 tests, 0 failures. Passed on the first run; no fix.
+  7 equals track: 240 true, 1180 false, by variant {copy=120, empty=120, lat=360, lon=360, longer=120,
+  next walk=100, same walk=120, shorter=120}, digest c75a418b9fdf01f07b9d006cd3cfd3795c9428fcba36ce1762c3d43f2605214b
+  7 add nodes: 60 onto empty, 30 onto a track, 30 twice, 111426 nodes, 98999 links found,
+  digest a1a0fa73741de1bfdd992e19cddbb800786daa8ebdf06c77f846d70fc4b8ad22 (the port's digest equal to it, asserted)
+
+Full fresh :brouter:jvmTest --rerun-tasks (test results directory removed first): 76 XML, 159 tests, 2 failures
+(CollectOutreachersTest 2), 0 errors, 0 compile errors. No Maven 429 (the one " 429" in the log is
+TrackDetourTest's "429 registered" count).

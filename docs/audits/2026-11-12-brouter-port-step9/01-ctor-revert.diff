@@ -1,0 +1,11 @@
+--- Route.kt (saved copy)
++++ brouter/src/commonMain/kotlin/com/zynergylabs/forager/brouter/Route.kt
+@@ -82,7 +82,7 @@
+     val waypoints = collector.getWayPointList("${request.startLon},${request.startLat}|${request.endLon},${request.endLat}")
+     val context = RoutingContext(libm)
+     collector.setParams(context, waypoints, request.params + ("profile" to request.profile.toString()))
+-    val engine = RoutingEngine(FileSystem.SYSTEM, request.routeData, waypoints, context, RoutingEngine.BROUTER_ENGINEMODE_ROUTING)
++    val engine = try { RoutingEngine(FileSystem.SYSTEM, request.routeData, waypoints, context, RoutingEngine.BROUTER_ENGINEMODE_ROUTING) } catch (e: Exception) { return RouteOutcome.Failed(e.message ?: "") }
+     engine.quite = true
+     cancel.attach(engine)
+     // runToEnd (:166-174): doRun with the limit. Then (:133-139) the message if set, else the found track.

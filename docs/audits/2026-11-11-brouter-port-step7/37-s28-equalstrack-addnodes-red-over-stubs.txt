@@ -1,0 +1,9 @@
+Session 28, OsmTrack.equalsTrack and OsmTrack.addNodes stubbed with TODO (RECORD -120), TrackEqualsAddNodesTest new.
+
+TrackEqualsAddNodesTest alone, `:brouter:jvmTest --tests '*TrackEqualsAddNodesTest' --rerun-tasks`, test results
+directory removed first: 1 fresh XML, 0 compile errors (`^e: ` count 0), no Maven 429. 2 tests, 2 failed:
+  equalsTrackMatchesTheOracle: kotlin.NotImplementedError: An operation is not implemented: OsmTrack.equalsTrack
+  (step 7, RECORD -120)
+  addNodesMatchesTheOracle: kotlin.NotImplementedError: An operation is not implemented: OsmTrack.addNodes
+  (step 7, RECORD -120)
+Pushed red on purpose.

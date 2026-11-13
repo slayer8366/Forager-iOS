@@ -1,0 +1,48 @@
+Step 8, session 36: the coverage read of OsmPath.java:282-283 and :350 (RECORD -94, -97; the step 8 report §9.5), on R6
+(the oracle under JaCoCo's pinned agent, E3's regime) over the cases the port is compared on: F0's two cases (RouteTest,
+RoutingEngineF0Test) and R's cases on its 20 StdModel profiles (RoutingEngineRTest compares the port's outcome there; on
+the six `---model:` profiles the port is held only to its refusal, so they are left out of this read).
+
+Runner (scratch, never committed): a test in the e3Strata package, run by `e3Strata` on the pinned Temurin 21.0.13+9
+(tools/fetch-temurin.sh into the session's scratch directory): one R6 JVM per case (E3Stability.launch, as E3Stability
+and E3CoverageTest do), E3Coverage.read on the two spans, per case; counted per line: cases where the line has at least
+one instruction executed (E3Coverage's rule for "covered"), and the instructions. The test file is deleted after.
+
+The lines (BRouter 1.7.10, third_party/brouter/src/main/java/btools/router/OsmPath.java, as the oracle jar is built):
+- :282-283, the start direction: inside `if (rc.startDirectionValid)` (:279), inside `if (isStartpoint)`.
+- :350, `if (refTrack != null && refTrack.containsNode(targetNode) && refTrack.containsNode(sourceNode))`, inside
+  `if (transferNode == null)`.
+
+EXPECTED (written before the run):
+- :282 and :283: not covered on any case. startDirectionValid is set only from a heading or direction parameter, and
+  Forager passes neither (the port's setParams refuses both); not a guess for R, whose cases are built with Forager's
+  calls.
+- :350: COVERED on every routed case, but partly: the `refTrack != null` test is on the line and runs for every link
+  reached with no transfer node, so JaCoCo counts some of the line's instructions; `refTrack.containsNode` is not reached
+  when refTrack is null, which I expect it to be with alternativeidx=0 (a guess: I have not read where refTrack is set
+  in RoutingEngine.java beyond this). So the line reads "covered" by E3Coverage's rule, with covered instructions fewer
+  than the line's total. If so, §9.5's "both should read not covered" is right about the branch and wrong about the
+  line as the reader reads lines; that is reported, not settled here.
+
+OBSERVED:
+Not run in session 36: stopped at the planner's handoff call (the getter run was started and killed before it wrote counts; the tree restored cmp-equal). The expectation above stands for the next session.
+Session 38: started (e3Strata on the pinned Temurin, 1182 cases: F0 2 and R's 20 StdModel profiles x 59; 354 model-profile cases left out) and killed at the planner's handoff call at about case 52, before any count. No observation. Scratch test deleted, tree clean. The expectation above stands.
+
+Session 39, BY A CHANGED METHOD: the port's own counters, not the oracle under JaCoCo (the planner's ruling: the oracle
+run costs two hours; the port's counters answer the same question for the comparison). A scratch patch, never committed:
+counters in the port's OsmPath.kt at the lines that correspond to the Java's, and one print in RoutingEngineRTest; one run
+of RoutingEngineRTest (single class, the shared JDK, 11 min 10 s; 0 compile errors; 1 test, 0 failures; its own line:
+1534 cases, route 968, refused 354, error 212, 0 mismatches). Counts are evaluations over the run, summed over all cases
+(the port's runs only; the refused 354 never reach OsmPath). F0's two cases are not in this run. Both files restored
+cmp-equal from saved copies after; git status showed neither.
+- Java :278 `if (isStartpoint)` (port OsmPath.kt:264): reached 403124419, true 11540.
+- Java :279 `if (rc.startDirectionValid)` (port :265): reached 11540, true 0. So :280-283 (port :266-267, the named
+  "unsupported" throw) NOT REACHED.
+- Java :350 (port :332): the line reached 189134014; `refTrack != null` true 0, so `refTrack.containsNode` NOT REACHED
+  and the penalty (:351-352) NOT REACHED.
+Against the expectation: :282-283 not reached, as expected. :350 runs on every link reached with no transfer node, with
+refTrack null on every evaluation, as the expectation guessed for alternativeidx=0; read here as the port's evaluations,
+not as JaCoCo's instruction counts, so the "partly covered" half of the expectation is not tested by this method.
+Line numbers: :278 is `if (isStartpoint)` and :279 is `if (rc.startDirectionValid)` [R: OsmPath.java at Forager
+947f1be2, sed -n 278,279p]. The "(:279)" above names startDirectionValid's line and is right as written, so it was NOT
+changed to :278; the planner's correction is put back to the planner (step 9 report, §1).
