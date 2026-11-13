@@ -6401,3 +6401,52 @@ a test), 3 (-116's breadth); plan item 4 (public entry for the route-ways reader
 session 60's change to the reviewer (-163 decision 5).
 
 **Notes:** Written by the planner session by hand. Next free ID -170.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-170
+**Timestamp:** 2026-11-13T20:39:28Z
+**Continues:** 2026-10-28-169, 2026-10-28-163, 2026-10-28-127
+**Title:** The review's should-fix 4 closed: FK9 holds the port's own clock past the limit at its timeout, seen red
+under -127's revert (b) (Plumb's session 65); -127's decision 1 reversed by the planner
+
+**Decision (planner, reversing its own -127 decision 1):** the guard is added. -127 refused it as "a second comparison
+change after a result". The reviewer's reading (-163, should-fix 4) is the better one: an assertion that is only added,
+predicted before it runs and seen red under a plant, moves no comparison toward a result. No owner's ruling is touched.
+
+**What landed (three commits on `ee1a001`; `brouter-port-5b` is at `4705321`; checked by the planner):**
+- `a85e7b8`: design and prediction before any run (`docs/audits/2026-11-13-brouter-port-closing/s65-fk9-guard.md`).
+- `890bc42`: `RoutingEngineStopTest.kt` only. A private `RecordingClock` wraps `EngineClock.MONOTONIC`, returns its
+  value unchanged and records the first read, the last read and the count. `againstOracle` gains
+  `clockGuard: Boolean = false`; FK9 alone passes `true`. When the port's kind is `family:timeout`, last read minus
+  first read must be greater than the limit (50 ms), and a port that never read its clock fails too. FK10 and FK11 run
+  as before on the plain clock. No port code changed (`git diff --stat ee1a001 4705321`: the test and the findings).
+- `4705321`: results. Each commit has the project trailer and scans 0 under E1. The tree is clean.
+
+**CI, run 43492461810 on `890bc42`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 245 tests, 0 failures. `RoutingEngineStopTest`: 9 tests, 0 failures. FK9: 10 cases, 0 mismatches, both sides
+  `{pass0=20}`; the port's clock per case 51 to 53 ms.
+- `ios-smoke`: 58 and 7, 0 failures, gate line present; `ios-memory`: 3, 1, 1; `jvm-production`: 2. Unmoved, as a
+  JVM-only change should leave them. Simulator-checked.
+
+**The plant (coder's report and findings file; the planner did not rerun it):** -127's revert (b),
+`RoutingEngine.kt:724`, `> timeout` made `<= timeout`. 0 ` e: ` lines, fresh XML. The class: 9 tests, 3 failures, as
+predicted (FK9, `theTimeLimitReadsTheInjectedClock`, the stopped-clock test). FK9 failed on all 10 cases for the
+guard's reason alone, e.g. `port's clock not past the limit at its timeout (13 ms over 2 reads)`. FK9's other
+comparisons passed the wrong port on all 10, which is what the review said the widened pattern lets through. Restored
+from a saved copy, `cmp` equal. Unplanted, five local runs of the class: 9 tests, 0 failures each; 50 of 50 FK9 cases
+at 51 to 56 ms.
+
+**Not shown:**
+- The guard is JVM-only. FK9 has no oracle on iOS and the guard does not run there.
+- A limit that strikes early in re-tracking, after passes that took over 50 ms, would pass the guard. Named, not planted.
+- That the guard cannot fail on a correct port rests on a code reading (four clock reads in `RoutingEngine.kt`, none
+  after the throw; coder's trace, not rechecked line by line by the planner), plus 60 passing cases on two machines.
+  The margin seen is 1 to 6 ms over the limit; it is a strict inequality the port itself enforces, not a tolerance.
+- The plant ran once.
+
+**Left of part one, in order:** should-fix 2, 5, 3; plan item 4; plan item 6; the review of the test changes since
+-163 (session 60's by -163 decision 5; the planner will send sessions 62, 64 and 65's with it as one review).
+
+**Notes:** Written by the planner session by hand. Next free ID -171.
