@@ -1,5 +1,16 @@
 package com.zynergylabs.forager.brouter
 
+import com.zynergylabs.forager.brouter.codec.DataBuffers
+import com.zynergylabs.forager.brouter.codec.MicroCache
+import com.zynergylabs.forager.brouter.expressions.BExpressionContextWay
+import com.zynergylabs.forager.brouter.expressions.BExpressionMetaData
+import com.zynergylabs.forager.brouter.mapaccess.GeometryDecoder
+import com.zynergylabs.forager.brouter.mapaccess.OsmFile
+import com.zynergylabs.forager.brouter.mapaccess.OsmLink
+import com.zynergylabs.forager.brouter.mapaccess.OsmNode
+import com.zynergylabs.forager.brouter.mapaccess.OsmNodesMap
+import com.zynergylabs.forager.brouter.mapaccess.PhysicalFile
+import okio.FileSystem
 import okio.Path
 
 // The route-ways reader's public entry (plan item 4; RECORD -172, the planner's decision on its shape): one function
@@ -43,5 +54,67 @@ sealed interface RouteWaysOutcome {
  * Reads one square's links, blocking; the caller picks the thread. A bad `lookups.dat` leaves as the engine's
  * `RuntimeException`, a missing or bad square as okio's `IOException`, both unchanged.
  */
-fun readRouteWays(request: RouteWaysRequest): RouteWaysOutcome =
-    throw NotImplementedError("readRouteWays: s68 stub, the body comes in the next commit")
+fun readRouteWays(request: RouteWaysRequest): RouteWaysOutcome {
+    require(request.lonCells.size == request.latCells.size) { "lonCells and latCells differ in size" }
+    // BRouterRouteWays.kt:60-62: the way context on lookups.dat alone, no profile. One per call, shared by its cells.
+    val meta = BExpressionMetaData()
+    val wayContext = BExpressionContextWay(meta)
+    meta.readMetaData(FileSystem.SYSTEM, request.lookups)
+    val geometry = GeometryDecoder() // :72
+    val buffers = DataBuffers() // :77, one per square
+    val square = PhysicalFile(FileSystem.SYSTEM, request.square, buffers, -1, -1) // :78, before the try, as there
+    try {
+        // :80, where Forager words its own message: cells of another size would read other cells (design file).
+        if (square.divisor != request.divisor) return RouteWaysOutcome.OtherDivisor(square.divisor)
+        val cell = 1_000_000L / square.divisor
+        val links = mutableListOf<RouteWaysLink>()
+        for (c in request.lonCells.indices) {
+            val lonCell = request.lonCells[c]
+            val latCell = request.latCells[c]
+            val degree = OsmFile(square, (lonCell * cell / 1_000_000).toInt(), (latCell * cell / 1_000_000).toInt(), buffers) // :82
+            if (!degree.hasData()) continue // :83, the cell's degree has no data in this square
+            // :84; with reallyDecode true the call never returns null (OsmFile.kt:137-139), kept as Forager's line.
+            val cache = degree.createMicroCache(lonCell, latCell, buffers, null, null, true, null) ?: continue
+            readCell(cache, OsmNodesMap(), wayContext, geometry, links) // :85, a nodes map per cell
+        }
+        return RouteWaysOutcome.Read(square.divisor, links)
+    } finally {
+        square.close() // :115
+    }
+}
+
+/** `BRouterRouteWays.kt:86-111`: each node the cache gives, each of its links with a description, its points and text. */
+private fun readCell(
+    cache: MicroCache,
+    nodes: OsmNodesMap,
+    wayContext: BExpressionContextWay,
+    geometry: GeometryDecoder,
+    links: MutableList<RouteWaysLink>,
+) {
+    for (i in 0 until cache.getSize()) {
+        val id = cache.getIdForIndex(i)
+        if (!cache.getAndClear(id)) continue
+        val node = OsmNode(id)
+        node.parseNodeBody(cache, nodes, wayContext)
+        var link: OsmLink? = node.firstlink
+        while (link != null) {
+            val bitmap = link.descriptionBitmap
+            if (bitmap != null) {
+                val target = link.getTarget(node)!!
+                val reverse = link.isReverse(node)
+                val lat = mutableListOf(node.ilat)
+                val lon = mutableListOf(node.ilon)
+                var t = link.geometry?.let { geometry.decodeGeometry(it, node, target, reverse) }
+                while (t != null) {
+                    lat += t.ilat
+                    lon += t.ilon
+                    t = t.next
+                }
+                lat += target.ilat
+                lon += target.ilon
+                links += RouteWaysLink(lat.toIntArray(), lon.toIntArray(), wayContext.getKeyValueDescription(reverse, bitmap))
+            }
+            link = link.getNext(node)
+        }
+    }
+}
