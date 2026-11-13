@@ -6562,3 +6562,63 @@ stands today, not to a written adapter. If phase C's adapter wants a different c
 tests.
 
 **Notes:** Written by the planner session by hand. Next free ID -173.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-173
+**Timestamp:** 2026-11-13T23:13:01Z
+**Continues:** 2026-10-28-171, 2026-10-28-163, 2026-10-28-126
+**Title:** The review's should-fix 5 closed: the oracle-only 1 ms run is a committed test, held so that its answer is
+not a timing (Plumb's session 67); all five should-fix items of -163 are now closed
+
+`brouter-port-5b` is at `fd717d1`. Checked by the planner unless marked.
+
+**What landed (three commits on `baed90c`, project trailer on each, each scans 0 under E1, tree clean):**
+- `151a650`: design and predictions before any run (`docs/audits/2026-11-13-brouter-port-closing/s67-oracle-only-1ms.md`).
+- `548a20b`: `RoutingEngineStopTest.fk9TheOracleAloneAt1msStrikesInTheIslandCheck`, a private helper `oracleHeld` and
+  `HOLD_MS = 5L`. 73 lines added, none removed; the file is 353 lines. No port code and no other test changed.
+- `fd717d1`: results.
+
+**A premise of the brief that was wrong, found by the coder.** The brief asked for "10 of 10 `target-island-check`" at
+a 1 ms limit and told the coder to check whether that is safe on any machine. It is not. By the Java (coder's reading
+of v1.7.10 and the jar's line table; the planner did not reread it): `startTime` is taken at `:201`, the limit is
+checked only at `_findTrack`'s loop head (`:1981`) and strictly, so at 1 ms it strikes only once the clock reads 2 ms
+or more later, and the island check is bounded to 500 nodes. A fast machine could finish it first and the oracle would
+rightly say `pass0`. Session 34's 10 of 10 (-126) was a timing that happened to hold.
+
+**What the test asserts instead (the coder's design; accepted by the planner):** a held run. The test takes the
+oracle's private `openSet` monitor by reflection, starts `doRun(1)` on a thread, waits until that thread is BLOCKED on
+that object (the first `synchronized (openSet)`, `:1965`, before the first limit check), waits 5 ms on the oracle's own
+clock, and releases. The first check then sees the limit passed and strikes in the island check. Asserted: every kind
+is `family:timeout` and every first word is `target-island-check`. A plain `doRun(1)` runs beside it and is printed,
+not asserted. A run that never blocks there fails; there is no fallback.
+- Accepted because it asserts what the Java says, not what one machine's speed gave. Its cost, named: it reads a
+  private field of the oracle and polls a thread's state, so it depends on this oracle jar's internals and on the JVM
+  reporting lock identity. Rejected: asserting the plain run (a timing), and printing only (no assertion, which is
+  what should-fix 5 was against).
+
+**CI, run 43516186631 on `548a20b`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 246 tests, 0 failures (was 245). The new test printed, plain and held alike, first words
+  `{target-island-check=10}`, kinds `{family:timeout=10}`.
+- `ios-smoke`: 58 and 7, 0 failures, gate line present; `ios-memory`: 3, 1, 1; `jvm-production`: 2. Simulator-checked.
+
+**The control and the runs (coder's report and findings file; not rerun by the planner):** five local runs, each
+plain and held `{target-island-check=10}`. Control: the expected word changed to `pass0`; 0 ` e: ` lines, fresh XML,
+failed with `expected:<{pass0=10}> but was:<{target-island-check=10}>`; restored, `cmp` equal. A scratch check, not
+committed: at a 50 ms limit with a 60 ms hold, plain gave `{pass0=10}` and held `{target-island-check=10}`, so the
+hold does change the answer.
+
+**Not shown:**
+- On both machines the plain and held runs agree at 1 ms, so the committed test alone does not show the hold doing
+  anything; that rests on the uncommitted scratch check.
+- That no FK9 input makes its first section a beeline (which would skip the island check) is inferred from 10 of 10.
+- A wall clock stepping back 4 ms or more during a run; JVMs other than the container's and CI's.
+- One deprecation warning on `Thread.getId` was left.
+
+**-163's five should-fix items:** 1 closed in -167, 4 in -170, 2 and 3 in -171, 5 here.
+
+**Left of part one:** plan item 4 (the route-ways entry, shape in -172), its simulator sibling, plan item 6 (the
+closing list), one review of the test changes since -163.
+
+**Notes:** Written by the planner session by hand. Next free ID -174.
