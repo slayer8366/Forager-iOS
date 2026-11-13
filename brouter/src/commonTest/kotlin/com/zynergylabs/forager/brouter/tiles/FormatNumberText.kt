@@ -30,7 +30,71 @@ internal object FormatNumberText {
         else -> text
     }
 
-    fun gpx(text: String): String = TODO("session 60 stub")
+    fun gpx(text: String): String {
+        var s = text
+        for (tag in GPX_DOUBLE) s = element(s, tag, false)
+        return element(s, GPX_FLOAT, true)
+    }
 
-    fun json(text: String, showspeed: Boolean): String = TODO("session 60 stub")
+    fun json(text: String, showspeed: Boolean): String {
+        val lines = text.split('\n')
+        val out = ArrayList<String>(lines.size)
+        var i = 0
+        while (i < lines.size) {
+            val line = lines[i]
+            out += line
+            i++
+            if (line.trim() != "\"coordinates\": [") continue
+            var flat = 0
+            while (i < lines.size && !lines[i].trim().startsWith("]")) {
+                val l = lines[i]
+                val t = l.trim()
+                out += if (t.startsWith("[")) {
+                    // A LineString's point: `[lon, lat]` or `[lon, lat, third]` and an optional trailing comma.
+                    val open = l.indexOf('[')
+                    val close = l.lastIndexOf(']')
+                    val parts = l.substring(open + 1, close).split(", ")
+                    if (parts.size == 3) l.substring(0, open + 1) + parts[0] + ", " + parts[1] + ", " + canonical(parts[2], showspeed) + l.substring(close) else l
+                } else {
+                    // A Point's flat array, one element per line: the third is the elevation.
+                    flat++
+                    if (flat == 3) {
+                        val comma = t.endsWith(",")
+                        val num = if (comma) t.dropLast(1) else t
+                        l.substring(0, l.indexOf(t)) + canonical(num, false) + (if (comma) "," else "")
+                    } else {
+                        l
+                    }
+                }
+                i++
+            }
+        }
+        return out.joinToString("\n")
+    }
+
+    /** Every `<tag>content</tag>` in [s] with its content made canonical. */
+    private fun element(s: String, tag: String, float: Boolean): String {
+        val open = "<$tag>"
+        val close = "</$tag>"
+        val sb = StringBuilder(s.length)
+        var from = 0
+        while (true) {
+            val a = s.indexOf(open, from)
+            if (a < 0) break
+            val b = s.indexOf(close, a + open.length)
+            if (b < 0) break
+            sb.append(s, from, a + open.length).append(canonical(s.substring(a + open.length, b), float)).append(close)
+            from = b + close.length
+        }
+        sb.append(s, from, s.length)
+        return sb.toString()
+    }
+
+    /** The value's bits in hex, or [text] itself when it does not parse. */
+    private fun canonical(text: String, float: Boolean): String =
+        if (float) {
+            text.toFloatOrNull()?.let { it.toRawBits().toUInt().toString(16).padStart(8, '0') } ?: text
+        } else {
+            text.toDoubleOrNull()?.let { it.toRawBits().toULong().toString(16).padStart(16, '0') } ?: text
+        }
 }

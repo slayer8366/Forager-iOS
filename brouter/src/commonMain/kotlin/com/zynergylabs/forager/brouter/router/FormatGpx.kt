@@ -10,6 +10,11 @@ import okio.Path.Companion.toPath
  * `BufferedWriter` over a `StringWriter` is a [StringBuilder] here. Where Java dereferences a null, `!!` throws Kotlin's
  * `NullPointerException`; where it indexes past a list's end, Kotlin's list throws as Java's does. Java's
  * `formatAsGpx` returns its writer's `toString()`, an object identity that `format` drops; this one returns nothing.
+ *
+ * A known platform difference (the owner's ruling, RECORD -163): a floating number appended here with string `+` (the
+ * `<ele>` of hints, track points and waypoints, `<locus:rteDistance>`, `<locus:rteTime>`, `<locus:rteSpeed>`, and
+ * `<brouter:speed>` through [FormatJson.speedText]) is printed with the platform's own text, which on iOS can differ
+ * from Java's in its last digit at a tie; the value it reads back to does not.
  */
 internal class FormatGpx(rc: RoutingContext?) : Formatter(rc) {
     /** `FormatGpx.java:19-31`. Java wraps whatever is thrown in a `RuntimeException`; so does this. */

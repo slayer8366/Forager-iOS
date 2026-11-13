@@ -13,6 +13,8 @@ import kotlin.test.assertEquals
  * stored row's id, mode, five lengths and five digests must equal the recomputed ones, and each group must have one row
  * per case. [FormatDigests.ORACLE_VERSION] is held to the oracle's `OsmTrack.version`, which the run sets (RECORD -118).
  * A row that differs or is missing prints its recomputed row (id, mode, lengths, digests: no text, no position, E1).
+ * Session 60 (RECORD -163): GPX's and JSON's length and digest are of [FormatNumberText]'s canonical text, as on the
+ * simulator; hints, KML and CSV of the text itself.
  */
 class FormatDigestsJvmTest {
     @Test
@@ -38,8 +40,9 @@ class FormatDigestsJvmTest {
                 for ((i, c) in g.cases.withIndex()) {
                     val mode = FormatOutputs.modeFor(i)
                     val p = HintsFormatsRun.port(c, g.base, mode, MsunLibm)
-                    val lens = p.texts.map { it.length }
-                    val digs = p.texts.map { EngineRun.fnv1aText(it) }
+                    val canon = p.texts.mapIndexed { k, s -> FormatNumberText.forDigest(k, s, p.showspeed) }
+                    val lens = canon.map { it.length }
+                    val digs = canon.map { EngineRun.fnv1aText(it) }
                     val row = byId[c.id]
                     var same = row != null && row.mode == mode
                     for (k in 0 until 5) {

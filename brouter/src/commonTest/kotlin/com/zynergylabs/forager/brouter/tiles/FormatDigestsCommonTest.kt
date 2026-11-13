@@ -18,6 +18,11 @@ import kotlin.test.fail
  *
  * Per group it prints cases, and equal per output; a difference prints the id, the output, both lengths and digests,
  * never text (E1). On the simulator a difference with no plant applied is RECORD -121's platform difference.
+ *
+ * Session 60 (the owner's ruling, RECORD -163): GPX's and JSON's length and digest are taken over [FormatNumberText]'s
+ * canonical text, in which the floating numbers the port prints with the platform's own text (twelve places) are
+ * replaced by their value's bits: at those places the text may differ from Java's in its last digit at a tie. Hints,
+ * KML and CSV are compared as text.
  */
 class FormatDigestsCommonTest {
     private class Case(val id: String, val ends: String, val profile: Path, val tiles: Path, val memoryclass: Int)
@@ -63,9 +68,10 @@ class FormatDigestsCommonTest {
             val rc = r.rc
             val texts = if (t != null && rc != null) FormatOutputs.texts(t, rc) else List(5) { "no track" }
             for (k in 0 until 5) {
-                val d = EngineRun.fnv1aText(texts[k])
-                if (texts[k].length == row.lengths[k] && d == row.digests[k]) equal[k]++
-                else problems += "$group ${c.id} mode ${row.mode} ${FormatOutputs.OUTPUTS[k]}: here ${texts[k].length}/$d stored ${row.lengths[k]}/${row.digests[k]}"
+                val s = FormatNumberText.forDigest(k, texts[k], t?.showspeed ?: false)
+                val d = EngineRun.fnv1aText(s)
+                if (s.length == row.lengths[k] && d == row.digests[k]) equal[k]++
+                else problems += "$group ${c.id} mode ${row.mode} ${FormatOutputs.OUTPUTS[k]}: here ${s.length}/$d stored ${row.lengths[k]}/${row.digests[k]}"
             }
         }
         val missing = stored.keys - seen
