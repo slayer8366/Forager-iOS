@@ -34,3 +34,29 @@ Predicted, per item:
 5. ` e: ` lines: 0 in every job.
 
 Could not derive: the number of `<locus:rteTime>` elements per route (it does not change any count above).
+
+## Result (written after the run), run 43466735338 on the planted commit `a531a9e`
+Commits: prediction `80df05c`, plant `a531a9e`, revert `337def4` (`git diff --stat 647741c 337def4 -- brouter/src`
+empty). E1 scan 0 on each. ` e: ` lines 0 in all four job logs, so the results count as evidence.
+**Deviation from the dispatch:** the prediction was committed before the plant, but it was not pushed on its own. My
+push was chained after `scan.sh`, which exits 1 while printing 0, so the push was skipped. `80df05c` reached the
+remote in the same push as `a531a9e` (remote went `647741c..a531a9e`). The text of the prediction is unchanged since
+`80df05c`.
+
+Scored item by item:
+1. Simulator `step10 hints-formats stored` (simulator-checked). **Held.** F0 2 of 2 run, gpx equal 2. F0h 8 of 8,
+   gpx equal 7. NT 59 of 59, gpx equal 52. hints, json, kml and csv were equal on all 2, 8 and 59 rows. There were 8
+   problem lines, all `gpx`, all `mode 7` (`F0h-detour-west`, `NT-0009`, `-0031`, `-0045`, `-0053`, `-0061`, `-0069`,
+   `-0079`), and each had the same length here as stored with a different digest. So the by-value comparison at
+   `<locus:rteTime>` catches a different value on every one of the 8 real routes that reach `:176`.
+2. `ios-smoke` failure. **Held.** `TOTAL: tests 57, failures 1`; the one failure is
+   `FormatDigestsCommonTest.hintsAndFormatsEqualTheStoredDigestsOfThePortsProductionRun`. Gate `OK: all 2 classes ran`
+   is present (that step: 7 tests, 0 failures).
+3. `jvm` failure. **Held.** `TOTAL: tests 244, failures 3`: `FormatGpxTest`, `FormatDigestsJvmTest`,
+   `HintsFormatsLogicTest`. `FormatterTest` passed. `FormatDigestsCommonTest` passed on the JVM.
+4. **Held.** `jvm-production` success (`TOTAL: tests 2, failures 0`). `ios-memory` success (each step 0 failures).
+5. **Held.** ` e: ` 0 in every job.
+
+I did not read the problem text of the 3 JVM failures (only their names), and I did not run CI on the revert (not
+waited for, as the dispatch allows). The inferred condition that every mode-7 route with hints reaches `:176` was not
+checked separately; the 8 of 8 result fits it. Stops: none hit.
