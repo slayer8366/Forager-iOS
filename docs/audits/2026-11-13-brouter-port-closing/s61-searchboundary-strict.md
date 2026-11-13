@@ -109,3 +109,26 @@ both-throw cases are in the sample. I agree with the planner's three expectation
   `null` message, or an index differing by anything but one lower would not be this prediction.
 - **(c) strict test + unplanted port (flag on): predicted PASS.** If it fails on a `null` message, the flag has not
   removed the fast throw, which is a stop.
+
+### Session 62 results
+
+**Status: complete.** All three results are as predicted in the section above (committed at `ac33403` before any run).
+
+- **(a) committed test + P2: PASSED.** Run with `revert.sh`, filter `*SearchBoundaryTest`; the runner's diff is the one
+  line in `CheapRuler.kt`. Build log 0 ` e: ` lines; 1 fresh XML; tests 1, failures 0. The test's own tally shows the
+  sample reached P2's cases: `radius throws=1380`, `distance throws=1368`. Afterwards `cmp` equal, `git status` clean.
+- **Strict test and flag, `5ca6310`:** `SearchBoundaryTest` compares class and message on every `isInBoundary` and
+  `getBoundaryDistance` throw; the `IllegalArgumentException`-only condition and its comment are gone; sampling, seeds
+  and reach assertions unchanged. `-XX:-OmitStackTraceInFastThrow` is in the `jvmTest` block only, citing RECORD -165.
+- **(b) strict test + P2: FAILED** on a P2-specific message. Build log 0 ` e: ` lines; 1 fresh XML; tests 1, failures 1:
+  `case 3 probe 0 direction 3: message expected:<Index -4[8] out of bounds for l...> but was:<Index -4[9] out of bounds for l...>`
+  (JUnit's brackets mark the differing digit: -48 against -49, exactly one lower). Afterwards the port matched HEAD, and
+  the test and build changes were byte-equal to copies saved before the run.
+- **(c) strict test + unplanted port: PASSED.** Tests 1, failures 0; 0 ` e: ` lines; 1 fresh XML; the same throw tallies.
+- **Full `:brouter:jvmTest`** (`cleanJvmTest` then `jvmTest`, 1 h 8 min): tests 244, failures 0, errors 0, skipped 0 in 107
+  fresh files, the same as the last CI. A first attempt with `--rerun-tasks` was stopped by the session's 30-minute
+  background limit at 128 passed, 0 failed, and is not counted.
+
+**Not checked:** that the flag reaches the test JVM's command line (inferred from the `jvmArgs` call, not observed;
+(c) would pass without it unless a fast throw happened to fire); CI on these commits; `e3Strata` (unchanged, not run).
+The E1 scan printed 0 on `ac33403`, `5ca6310` and this commit.
