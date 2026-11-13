@@ -73,6 +73,9 @@ class ReadBinaryTest {
             var nonNull = 0
             var debugs = 0
             var errorPaths = 0
+            var nullPointerPaths = 0
+            var otherErrorPaths = 0
+            val tails = HashSet<String>()
             val seen = HashSet<String>()
             for ((ti, ot) in tracks.withIndex()) {
                 val wp = btools.mapaccess.MatchedWaypoint()
@@ -143,6 +146,12 @@ class ReadBinaryTest {
                                     assertTrue(oText.length > oHead.length, "$id: debugInfo: oracle wrote nothing after the error prefix")
                                     assertTrue(pText.length > pHead.length, "$id: debugInfo: port wrote nothing after the error prefix")
                                     errorPaths++
+                                    // s66 (review should-fix 2): the null-pointer case (the empty tracks, Java's last_pe
+                                    // null) and every other error-path text (the end-of-file cuts), counted apart.
+                                    val oTail = oText.substring(oHead.length)
+                                    if (oTail.startsWith("java.lang.NullPointerException")) nullPointerPaths++ else otherErrorPaths++
+                                    tails += "oracle " + oTail.replace(Regex("[0-9]+"), "#")
+                                    tails += "port " + pText.substring(pHead.length).replace(Regex("[0-9]+"), "#")
                                 } else {
                                     assertEquals(digest(oText), digest(pText), "$id: debugInfo")
                                 }
@@ -155,7 +164,15 @@ class ReadBinaryTest {
                 }
             }
             println("7 readBinary: ${tracks.size} tracks, $reads reads compared, $nonNull tracks returned, $debugs debug texts, $errorPaths on the error path; kinds $seen")
+            println("7 readBinary: error path split, $nullPointerPaths null-pointer, $otherErrorPaths other; tails $tails")
             assertTrue(nonNull > 50 && reads > 1000, "too little reached: $nonNull of $reads")
+            // s66 (review should-fix 2): the error path is reached, both kinds. Floors from the setup's structure, not
+            // from a count seen (s66-readbinary-reach-and-breadth.md): per empty track, the whole file at the 3 matching
+            // targets x 5 shifts x 2 profiles, plus the 7 fixed tail cuts, all never skipped with debug on; per track,
+            // the 6 fixed head cuts.
+            assertTrue(nullPointerPaths >= 74, "null-pointer case (the empty tracks) reached $nullPointerPaths times, floor 74")
+            assertTrue(otherErrorPaths >= 6 * tracks.size,
+                "other error-path texts (end-of-file cuts) reached $otherErrorPaths times, floor ${6 * tracks.size}")
         } finally {
             fcx.release()
             dir.deleteRecursively()
