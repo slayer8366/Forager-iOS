@@ -6182,3 +6182,42 @@ this way."
    everything else by text; the change is stated before it is run, seen red first where it can be, and goes to Samphire.
    The 12 places and the difference are named in the port's documentation of what it does not match.
 **Notes:** Written by the planner session by hand. Next free ID -164.
+
+**Kind:** outcome
+**ID:** 2026-10-28-164
+**Timestamp:** 2026-11-13T14:48:22Z
+**Continues:** 2026-10-28-156, 2026-10-28-159, 2026-10-28-163
+**Title:** A new planner session picks up; session 60 checked: the number text compared by value, green on the simulator,
+and the formats' planted error seen there; one plant owed
+**The owner's word,** verbatim: "Hello, we are porting the Forager Android to iOS. We left off with the BRouter port nearly
+complete. Let's find out the progress and pick up from there."
+**The record's branch changes:** this session may push only to `ccr-8ee6e614-32enzt`, fast-forwarded from
+`ccr-7e682f25-4tqqon` at `b869888` (-163). PR #6 still reads from the old branch and ends at -163. `main`'s record ends at
+-102.
+**The heads, by `git ls-remote` at 14:40Z:** `main` `d22a302`; `brouter-port` `b769ebf`; `brouter-port-5b` `b0fbf62`;
+`brouter-port-5b-recursive-walk` `3d5bd11`; `review/changed-comparisons` `ed8a899`. Nothing is running.
+**Observed:** Plumb Ledger, session 60, `brouter-port-5b` `b359671` to `b0fbf62` (5 commits). Findings:
+`docs/audits/2026-11-12-brouter-port-step10/s60-number-text.md`. It carries out -163's decision 5.
+**Checked by the planner** (CI's job logs read with `gh api`, not Plumb's account):
+- 5 commits, each with the one trailer `Co-Authored-By: Claude <noreply@anthropic.com>`, no model name.
+  `git diff --stat 28e2a79 b0fbf62 -- brouter/src` is empty, so the plant is fully reverted. `b0fbf62` changes one docs file.
+- **Run 43364528773 on `28e2a79`, the change:** all four jobs `success`; `jvm` 244 tests, 0 failures; `ios-smoke` 57 tests,
+  0 failures, the gate "OK: all 2 classes ran"; arm64 7 of 7; 0 ` e: ` lines in any log. The simulator's own lines read
+  F0 2 of 2, F0h 8 of 8, NT 59 of 59, with hints, GPX, JSON, KML and CSV equal on every row. **Simulator-checked.**
+- **Run 43371249259 on `f026e5e`, the plant:** `jvm` 244 tests, 7 failures, in exactly the seven classes Plumb predicted;
+  `ios-smoke` 57 tests, 1 failure, `FormatDigestsCommonTest`. The simulator's lines read GPX, JSON and KML equal on F0 0 of
+  2, F0h 0 of 8, NT 3 of 59; hints and CSV equal on all. **Simulator-checked.** That is the plan's item 3.
+- **Run 43375760362 on `0497284`, the revert:** all four jobs `success`, the same counts as the change.
+- **Not checked by the planner:** `ios-memory`'s per-group counts (173, 240, 20 of 20), which are Plumb's; the E1 scan of
+  the five commits, since `scan.sh` and the ends list are not rebuilt in this container yet; `FormatNumberTextTest`'s 4 of
+  5 red over the stub, which was a local run.
+**What this does not show.** Plant (b), the time `ti` plus 1.0, sits at one of the twelve places now compared by value.
+In GPX it was masked by plant (a), and it was not run alone (Plumb says so). So no run shows the changed test catching
+a different *value* at a by-value place on real routes. That claim rests on `FormatNumberTextTest`, which uses made-up
+numbers. **Owed:** plant (b) alone, predicted first, on the simulator.
+**Where part one of the plan stands** (`docs/plans/2026-11-12-app-port-plan.md`): items 1, 2, 3, 7 and 8 are done, 7 only
+as far as `65737ec` (-161) and 8 as PR #6, open. **Left:** item 4, the public entry for the route-ways reader; item 5, the
+stopped-clock test's common sibling; item 6, the closing list; the review's should-fix 2, 3, 4 and 5 (-163); should-fix
+1, which is the owner's and has no answer in the record; session 60's change to Samphire Witness (-163, decision 5);
+plant (b) alone.
+**Notes:** Written by a new planner session by hand. Next free ID -165.
