@@ -6450,3 +6450,59 @@ at 51 to 56 ms.
 -163 (session 60's by -163 decision 5; the planner will send sessions 62, 64 and 65's with it as one review).
 
 **Notes:** Written by the planner session by hand. Next free ID -171.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-171
+**Timestamp:** 2026-11-13T21:55:38Z
+**Continues:** 2026-10-28-170, 2026-10-28-163, 2026-10-28-116
+**Title:** The review's should-fix 2 and 3 closed: `ReadBinaryTest` asserts the error path reached and compares the
+end-of-file texts whole again; each seen red under its plant (Plumb's session 66)
+
+Both items were put in one session because they change the same lines of one file; they are separate commits with
+separate plants. `brouter-port-5b` is at `baed90c`. Checked by the planner unless marked.
+
+**What landed (four commits on `4705321`, project trailer on each, each scans 0 under E1, tree clean):**
+- `be7d809`: design and predictions before any run
+  (`docs/audits/2026-11-13-brouter-port-closing/s66-readbinary-reach-and-breadth.md`).
+- `2fb0531`, should-fix 2: two counters beside `errorPaths`, `nullPointerPaths` (the oracle's text after the prefix
+  starts with `java.lang.NullPointerException`) and `otherErrorPaths`; two added assertions after the unchanged
+  `nonNull > 50 && reads > 1000`: `nullPointerPaths >= 74` and `otherErrorPaths >= 6 * tracks.size`.
+- `aceedc4`, should-fix 3: -116's prefix-only comparison now applies only when the oracle's text after the prefix is
+  exactly `java.lang.NullPointerException: Cannot read field "cost" because "last_pe" is null`. Every other error-path
+  text is compared whole again.
+- `baed90c`: results. `git diff --stat 4705321 baed90c` names `ReadBinaryTest.kt` and the findings file only. No port
+  code changed.
+
+**The review's premise for should-fix 3 holds on this JVM:** it inferred that the end-of-file texts were equal before
+-116. Compared whole, all 1,433 are equal (`java.io.EOFException` on both sides), locally and in CI.
+
+**CI, run 43504930148 on `aceedc4`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 245 tests, 0 failures. `ReadBinaryTest`: 32 tracks, 9,029 reads, 2,601 returned, 4,522 debug texts, 1,549 on
+  the error path, split 116 null-pointer and 1,433 other. Tails printed: oracle and port `java.io.EOFException`; oracle
+  the JDK 21 null-pointer text, port `java.lang.NullPointerException`.
+- `ios-smoke`: 58 and 7, 0 failures, gate line present; `ios-memory`: 3, 1, 1; `jvm-production`: 2. Unmoved.
+  Simulator-checked.
+
+**The plants (coder's report and findings file; the planner did not rerun them):**
+- Should-fix 2, in the test's setup: the two empty tracks removed. 0 ` e: ` lines, fresh XML. Failed with
+  `null-pointer case (the empty tracks) reached 0 times, floor 74`; the old reach assertion passed (30 tracks, 8,505
+  reads, 2,358 returned), which is the gap the review named.
+- Should-fix 3, in the port (`OsmTrack.kt:560`): the text written on an end-of-file cut changed in one word. Against
+  -116's comparison as committed before: pass. Against the narrowed one: 1 failure,
+  `debugInfo after the error prefix (whole text, RECORD -116 narrowed) expected:<java.io.E[OF]Exception> but
+  was:<java.io.E[of]Exception>`. Both restored from saved copies, `cmp` equal.
+
+**Not shown:**
+- The floors (74, and 6 per track) are the coder's reading of the setup's structure, checked against one count each
+  (116 and 1,433). The planner did not rederive them. They are floors, so they would miss one empty track dropping out
+  only if 37 or more of its reads remained; the coder's "about 53 with one empty track" is inferred and was not planted.
+- A null-pointer exception with no message (the JVM's fast throw) or another JDK's wording would now be compared whole.
+  Neither was seen. The test JVM runs with `-XX:-OmitStackTraceInFastThrow` (-165).
+- JVM only; nothing here runs on iOS. `readBinary` is not on Forager's path (-116).
+- Each plant ran once. The test stops at the first differing text, so "all 1,433 would fail" is inferred.
+
+**Left of part one, in order:** should-fix 5; plan item 4; plan item 6; one review of the test changes since -163.
+
+**Notes:** Written by the planner session by hand. Next free ID -172.
