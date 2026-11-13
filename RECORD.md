@@ -6348,3 +6348,56 @@ simulator. The five routes of -156 are among the eight.
 - Run 43478781323 on the revert was queued at this writing and is not read.
 **Cost:** session 63 ended at about 137k of context.
 **Notes:** Written by the planner session by hand. Next free ID -169.
+
+---
+
+**Kind:** Status
+**ID:** 2026-10-28-169
+**Timestamp:** 2026-11-13T19:13:15Z
+**Continues:** 2026-10-28-168, 2026-10-28-148
+**Title:** Session 64: the stopped-clock test has its common sibling, simulator-checked in CI; plan item 5 done
+
+Plan item 5 (-148 decision 2) is done. `brouter-port-5b` is at `ee1a001`. The planner checked each line below itself;
+nothing here is taken from the coder's report alone.
+
+**What landed (three commits on `070e29d`, each with the project trailer, each scanned 0 under E1):**
+- `a77cf01`: design and prediction, before any run (`docs/audits/2026-11-13-brouter-port-closing/s64-stopped-clock-sibling.md`).
+- `2477888`: `forager30sLimitOnAStoppedClockRoutesAsF0sStoredRow` added to
+  `brouter/src/commonTest/.../tiles/EngineStopCommonTest.kt`, and the header's "not mirrored" line corrected. F0's first
+  case through the port with a 30,000 ms limit on a clock that always reads 0, held to F0's stored row.
+- `ee1a001`: results appended to the findings file.
+- `git diff --stat 070e29d ee1a001` names those two files only. Nothing under `commonMain` changed, so no plant is left.
+  The work tree is clean.
+
+**CI, run 43479572984 on `2477888`, all four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 245 tests, 0 failures (was 244). `EngineStopCommonTest[jvm]`: 5 tests, the new one named and passed.
+- `ios-smoke`: 58 tests, 0 failures (was 57). `EngineStopCommonTest` on `iosSimulatorArm64`: 5 tests, 0 failures, the
+  new one named. arm64: 7 tests, 0 failures. Gate line `OK: all 2 classes ran` present. Simulator-checked.
+- `ios-memory`: 3, 1 and 1 tests, 0 failures. `jvm-production`: 2 tests, 0 failures.
+- No run was found for `ee1a001` (a findings file only) at this writing.
+
+**The plant (coder's report and findings file; the planner did not rerun it):** `RoutingEngine.kt:724`,
+`clock.nowMillis() - startTime > timeout` made `>= 0`. On the JVM: 0 ` e: ` lines, fresh XML, the class ran 5 tests with
+1 failure, the new test, with `expected:<[route|226|5302|5047|...]> but was:<[family:timeout|0|0|0|...]>`, as predicted.
+`theTimeLimitReadsTheInjectedClock` passed under the same plant, so the new test sees a wrong port the old one cannot.
+The port was restored from a saved copy and compared equal.
+
+**Decision (planner):** the brief said "held to F0's stored row as `F0RouteCommonTest` does". The coder took the row from
+`F0EngineCommonTest.CASES.first()` instead, because `F0RouteCommonTest`'s row is in a `private companion object`
+(`F0RouteCommonTest.kt:60`) and `F0EngineCommonTest`'s is `internal` (`F0EngineCommonTest.kt:48`). It compares six fields
+and the tuple digest, one field (cost) more than `F0RouteCommonTest`. Accepted: same stored row, stricter comparison, no
+number copied, and no file outside the test's own changed. Rejected: making `F0RouteCommonTest`'s companion `internal`,
+which edits a second test for no gain.
+
+**Not shown:**
+- The plant ran on the JVM only. That the new test catches it on iOS is inferred from the shared source, not observed.
+- Every iOS line above is the simulator on a debug build. Nothing here shows a real iPhone.
+- The coder did not trace which clock read (`:549` or `:724`) comes second in the Error and Exception tests; they passed
+  under the plant and nobody looked at why.
+- The coder's statement that the two classes' rows are the same was not rechecked by the planner field by field.
+
+**Left of part one, in order:** review should-fix 4 (FK9's guard), 2 (`ReadBinaryTest` reach), 5 (the oracle-only run as
+a test), 3 (-116's breadth); plan item 4 (public entry for the route-ways reader); plan item 6 (the closing list);
+session 60's change to the reviewer (-163 decision 5).
+
+**Notes:** Written by the planner session by hand. Next free ID -170.
