@@ -47,7 +47,7 @@ import kotlin.test.assertTrue
  */
 class RoutingEngineStopTest {
     @Test
-    fun fk9TimesOutThroughThePortAsThroughTheOracle() = againstOracle("FK9", 50L, Cancel.NONE, TIMEOUT_50)
+    fun fk9TimesOutThroughThePortAsThroughTheOracle() = againstOracle("FK9", 50L, Cancel.NONE, TIMEOUT_50, clockGuard = true)
 
     @Test
     fun fk10IsKilledBeforeTheRunThroughThePortAsThroughTheOracle() = againstOracle("FK10", 0L, Cancel.BEFORE, WATCHDOG)
@@ -122,6 +122,25 @@ class RoutingEngineStopTest {
 
     private class ClockError(message: String) : Error(message)
 
+    /** [real]'s time, unchanged; records the first and last values read and how many reads there were. */
+    private class RecordingClock(private val real: EngineClock) : EngineClock {
+        private var first: Long? = null
+        private var last: Long? = null
+        var reads = 0
+            private set
+
+        override fun nowMillis(): Long {
+            val t = real.nowMillis()
+            if (first == null) first = t
+            last = t
+            reads++
+            return t
+        }
+
+        /** Last read minus first read; null if the port never read the clock. */
+        fun elapsed(): Long? = first?.let { f -> last!! - f }
+    }
+
     private enum class Cancel { NONE, BEFORE, MID }
 
     /** One run's result: the engine's message, the found track's three numbers, the progress count, the flag. */
@@ -132,14 +151,23 @@ class RoutingEngineStopTest {
         fun digest() = "$kind (${message?.length ?: 0} chars)|$nodes|$cost|$distance|$links links|terminated $terminated"
     }
 
-    private fun againstOracle(label: String, maxRunningTime: Long, cancel: Cancel, fixed: Regex) {
+    /**
+     * [clockGuard] (FK9 only; RECORD -127 decision 1 reversed in session 65, the review's should-fix 4): the port runs on a
+     * [RecordingClock] over [EngineClock.MONOTONIC], and when it reports a timeout, its own clock must have passed
+     * [maxRunningTime] from its first read to its last. On a correct port the last read is the one that tripped the limit
+     * (nothing reads the clock after the throw), so the guard holds by construction; see `s65-fk9-guard.md`.
+     */
+    private fun againstOracle(label: String, maxRunningTime: Long, cancel: Cancel, fixed: Regex, clockGuard: Boolean = false) {
         val rows = rows(label)
         val mismatches = ArrayList<String>()
         val operations = HashMap<String, Int>()
+        val elapsed = ArrayList<String>()
         for (c in cases(label)) {
             val row = rows.getValue(c.id)
             val o = oracle(c, maxRunningTime, cancel)
-            val p = port(c, maxRunningTime, cancel, EngineClock.MONOTONIC)
+            val clock = if (clockGuard) RecordingClock(EngineClock.MONOTONIC) else null
+            val p = port(c, maxRunningTime, cancel, clock ?: EngineClock.MONOTONIC)
+            val portElapsed = clock?.elapsed()?.also { elapsed += "$it ms/${clock.reads} reads" }
             for (r in listOf(o, p)) r.message?.substringBefore(' ')?.let { operations.merge(it, 1, Int::plus) }
             val differ = listOfNotNull(
                 "oracle kind against expected-1b".takeIf { o.kind != row.outcome.kind },
@@ -150,10 +178,14 @@ class RoutingEngineStopTest {
                 "terminated".takeIf { o.terminated != p.terminated },
                 "oracle count at the cancel".takeIf { cancel == Cancel.MID && o.links <= E3CaseRun.CANCEL_AFTER_LINKS },
                 "port count at the cancel".takeIf { cancel == Cancel.MID && p.links <= E3CaseRun.CANCEL_AFTER_LINKS },
+                "port's clock not past the limit at its timeout ($portElapsed ms over ${clock?.reads} reads)".takeIf {
+                    clock != null && p.kind == "family:timeout" && !(portElapsed != null && portElapsed > maxRunningTime)
+                },
             )
             if (differ.isNotEmpty()) mismatches += "${c.id}: $differ (oracle ${o.digest()}; port ${p.digest()})"
         }
         println("8c $label: ${rows.size} cases; ${mismatches.size} mismatches; first words of the messages, both sides: $operations")
+        if (clockGuard) println("8c $label: the port's clock, from its first read to its last, per case: $elapsed")
         mismatches.take(20).forEach { println("8c $label mismatch $it") }
         assertTrue(mismatches.isEmpty(), "8c $label: ${mismatches.size} mismatches; first ${mismatches.take(5)}")
     }
