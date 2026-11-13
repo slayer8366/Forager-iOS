@@ -107,4 +107,71 @@ equal to its saved copy afterwards; the forward change still in the tree (`git d
 empty, the new assertions present).
 
 ## Results
-(Appended after the runs.)
+(Appended after the runs; the sections above are unchanged since `be7d809`.)
+
+All local runs: OpenJDK 21.0.12.1, `:brouter:jvmTest --tests '*ReadBinaryTest'`, `--max-workers=2`. Unplanted runs used
+`--rerun-tasks` with a stamp touched before each; planted runs went through `revert.sh`. A first unplanted attempt
+did not run the test: `--rerun-tasks` refetched the `msunReference` sources and `curl` got a 503 (`BUILD FAILED`, 0
+` e: `, no XML); it was rerun unchanged and is not counted below.
+
+**Part A, landed in `2fb0531`** as designed: `nullPointerPaths` (oracle tail starts with
+`java.lang.NullPointerException`) and `otherErrorPaths`, asserted `>= 74` and `>= 6 * tracks.size` after the old
+reach assertion, which is unchanged. The test also prints the split and the distinct tails of both sides, digits masked.
+
+**Unplanted, twice** (0 ` e: `, 1 fresh XML each, `20:44:43Z` and `20:45:36Z`): 1 test, 0 failures, both runs
+identical: `32 tracks, 9029 reads compared, 2601 tracks returned, 4522 debug texts, 1549 on the error path` (file 21's
+figures exactly); `116 null-pointer, 1433 other`; tails `oracle java.io.EOFException`, `port java.io.EOFException`,
+`oracle java.lang.NullPointerException: Cannot read field "cost" because "last_pe" is null`,
+`port java.lang.NullPointerException`. So the setup is deterministic on this machine (two runs, and file 21's session
+24 run); the floors stay floors, as the design says. 116 against the floor of 74; 1,433 against 192.
+
+**Plant A, `revert.sh` name `s66ap`**, the diff exactly as designed (line 69). 0 ` e: `; 1 fresh XML (stamp
+`20:45:53`, XML written `20:46:13`). 1 test, 1 failure:
+`java.lang.AssertionError: null-pointer case (the empty tracks) reached 0 times, floor 74`, as predicted. The print:
+`30 tracks, 8505 reads compared, 2358 tracks returned, 4258 debug texts, 1369 on the error path`, `0 null-pointer,
+1369 other`, tails EOF only. So the old `nonNull > 50 && reads > 1000` (2,358 and 8,505) ran first and passed; the
+second new assertion would have passed (1,369 >= 180). The test file `cmp` equal to its saved copy after; and `cmp`
+equal to a copy taken before the plant, so the forward change was in the tree throughout. 64 of the 1,433 end-of-file
+texts belonged to the empty tracks.
+
+**Plant B against the committed -116 comparison, `s66bp1`** (port `OsmTrack.kt:560`, the diff exactly as designed,
+run before Part B was written): 0 ` e: `; 1 fresh XML (`20:46:56Z`). 1 test, 0 failures, as predicted. The print shows
+the plant took: port tails `java.io.EofException` and `java.lang.NullPointerException`, oracle unchanged; `116
+null-pointer, 1433 other`. The port `cmp` equal to its saved copy after.
+
+**Part B, landed in `aceedc4`**: the condition is the oracle's tail equal to
+`java.lang.NullPointerException: Cannot read field "cost" because "last_pe" is null` (`JDK21_LAST_PE_NPE`), seen as the
+oracle's actual tail in both unplanted Part A runs. Otherwise `assertEquals(shown(oTail), shown(pTail), "$id: debugInfo
+after the error prefix (whole text, RECORD -116 narrowed)")`.
+
+**Unplanted** (0 ` e: `, 1 fresh XML `20:47:45Z`): 1 test, 0 failures; counts and tails as above. The premise holds on
+this JVM: all 1,433 end-of-file texts are equal whole, oracle and port. The pass also shows that every one of the 116
+null-pointer tails was exactly the constant: any other wording would have been compared whole against the port's
+`java.lang.NullPointerException` and failed.
+
+**Plant B against Part B, `s66bp2`**, the same diff: 0 ` e: `; 1 fresh XML (stamp `20:47:59`, XML `20:48:11Z`). 1 test,
+1 failure, as predicted to the character:
+`org.junit.ComparisonFailure: track 0, c0-0, target 0/0, shift 0, profile true, debug true: debugInfo after the error
+prefix (whole text, RECORD -116 narrowed) expected:<java.io.E[OF]Exception> but was:<java.io.E[of]Exception>`.
+The port `cmp` equal to its saved copy after; the test `cmp` equal to a copy taken before the plant; `git status` showed
+only the (then uncommitted) test. The same port edit passed `s66bp1`, so the narrowed comparison fails it where the -116
+one passes. It would fail 1,433 texts if each were checked [I: every end-of-file tail contains `EOFException`, and the
+plant rewrites each]; the test stops at the first.
+
+**CI, run 43504930148 on `aceedc4`.** All four jobs `success`, 0 ` e: ` lines in each log:
+- `jvm`: TOTAL 245 tests, 0 failures (245 before; assertions added, no test). `ReadBinaryTest` 1 test, 0 failures,
+  printing the same counts and tails as the local runs: `116 null-pointer, 1433 other`, the oracle's null-pointer tail
+  the JDK 21 text. So CI's JDK writes the same text and the narrowed rule applies there as here.
+- `ios-smoke`: TOTAL 58, 0 failures; arm64 TOTAL 7, 0 failures; gate `OK: all 2 classes ran`. Simulator-checked.
+- `ios-memory`: TOTALs 3, 1, 1, 0 failures. `jvm-production`: TOTAL 2, 0 failures.
+
+**Not shown.**
+- Both changes are JVM-only; `ReadBinaryTest` has no iOS counterpart in this change, and on Native the class names
+  differ (the port's comment at `OsmTrack.kt:557-559`). Nothing here says anything about iOS.
+- Each plant ran once. CI ran the unplanted test once; the two-run determinism is this machine's.
+- A JDK that words the null pointer differently, or a JIT fast throw with no message, would be compared whole; the
+  latter is argued to pass (both `java.lang.NullPointerException`), not seen, since every oracle tail here carried
+  the message.
+- The floor 74's structural argument is a reading of the setup, checked only against one count (116); the "about 53
+  with one empty track" figure is inferred and was not planted.
+- CI was read on `aceedc4` only, not on `2fb0531`.
