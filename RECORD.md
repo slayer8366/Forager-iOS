@@ -6249,3 +6249,27 @@ flag and the strict `SearchBoundaryTest`; plant (b) alone (-164); the stopped-cl
   the JVM that wrote the stored expected values is not changed. If any other test's result changes under the flag, that
   is reported and nothing else is touched.
 **Notes:** Written by the planner session by hand. Next free ID -166.
+
+**Kind:** outcome
+**ID:** 2026-10-28-166
+**Timestamp:** 2026-11-13T14:55:30Z
+**Continues:** 2026-10-28-163, 2026-10-28-165
+**Title:** Plumb's session 61 stopped after run (a), rightly: the planner's brief gave the wrong plant
+**Observed:** Plumb Ledger, session 61, `brouter-port-5b` `b0fbf62` to `ae4dfa2` (2 commits, one docs file,
+`docs/audits/2026-11-13-brouter-port-closing/s61-searchboundary-strict.md`). Checked by the planner: the head by
+`git ls-remote`; a clean tree, so the plant is restored; one trailer each, no model name. Not re-run by the planner.
+- The prediction was pushed alone first (`6b5ed93`). It said run (a) would fail, against the brief's expected pass.
+- **Run (a), the committed test with the plant: failed,** 1 test, 1 failure, 0 ` e: ` lines, a fresh XML [Plumb's]:
+  "case 9 probe 12 cost 0 radius 6652: isInBoundary, exception expected:<null> but was:<class
+  java.lang.ArrayIndexOutOfBoundsException>". Plumb stopped there, as the brief's stops said. Nothing else was done.
+**A wrong premise of the planner's own.** The review's plant reads "scale row one lower when negative
+(`CheapRuler.kt:53`)". The brief turned that into "make the row one lower when `ilat` is negative". Those differ: a
+latitude between -100,000 and 0 has row 0 in Java, so the brief's plant throws where Java returns a value, and the
+committed test catches that by class. The reviewer's gap is the other range, where the row itself is negative and both
+engines throw. The reviewer's exact edit is not in its branch, so "when the row is negative" is the planner's reading
+of the review's words [I].
+**Decision (the planner's, technical):** session 62 runs the same item with the plant on a negative row only (the row
+one lower when `ilat / SCALE_CACHE_INCREMENT` is below 0). Its prediction is committed first. Session 61's failed run
+stays in the findings file as it is.
+**Cost:** session 61 ended at about 117k of context.
+**Notes:** Written by the planner session by hand. Next free ID -167.
