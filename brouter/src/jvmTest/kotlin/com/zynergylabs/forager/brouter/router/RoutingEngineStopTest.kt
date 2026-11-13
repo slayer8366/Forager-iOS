@@ -12,6 +12,7 @@ import com.zynergylabs.forager.brouter.util.OracleLibm
 import okio.FileSystem
 import okio.Path.Companion.toOkioPath
 import java.io.File
+import java.lang.management.ManagementFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -118,6 +119,75 @@ class RoutingEngineStopTest {
         val p = port(c, 30_000L, Cancel.NONE) { if (reads++ == 0) 0L else throw IllegalStateException("the clock stopped") }
         assertEquals("the clock stopped", p.message, c.id)
         assertEquals(false, p.terminated, c.id)
+    }
+
+    /**
+     * RECORD -126's evidence, rerunnable (the review's should-fix 5; design in `s67-oracle-only-1ms.md`): the oracle
+     * alone, no port, `doRun(1)` on FK9's cases. The limit is checked only at `_findTrack`'s loop head, strictly
+     * (`:1981`, `>`), and a fast machine can finish the island check before the clock reads 2 ms past `startTime`, so a
+     * plain run's first word is a timing: printed, not asserted. The held run makes the clock already past the limit at
+     * the first check ([oracleHeld]); then the first `_findTrack`, the island check (`:961`), strikes, by the Java.
+     */
+    @Test
+    fun fk9TheOracleAloneAt1msStrikesInTheIslandCheck() {
+        val cs = cases("FK9")
+        val n = cs.size
+        val plainWords = HashMap<String, Int>()
+        val plainKinds = HashMap<String, Int>()
+        val firstWords = HashMap<String, Int>()
+        val kinds = HashMap<String, Int>()
+        for (c in cs) {
+            val plain = oracle(c, 1L, Cancel.NONE)
+            plainWords.merge(plain.message?.substringBefore(' ') ?: "null", 1, Int::plus)
+            plainKinds.merge(plain.kind, 1, Int::plus)
+            val held = oracleHeld(c, 1L)
+            firstWords.merge(held.message?.substringBefore(' ') ?: "null", 1, Int::plus)
+            kinds.merge(held.kind, 1, Int::plus)
+        }
+        println("8c FK9 oracle alone at 1 ms, plain (not asserted): $n cases; first words $plainWords; kinds $plainKinds")
+        println("8c FK9 oracle alone at 1 ms, held: $n cases; first words $firstWords; kinds $kinds")
+        assertEquals(mapOf("family:timeout" to n), kinds, "8c FK9, the oracle alone at 1 ms, held: kinds")
+        assertEquals(mapOf("target-island-check" to n), firstWords, "8c FK9, the oracle alone at 1 ms, held: first words of the messages")
+    }
+
+    /**
+     * [oracle], with the clock past the limit at the first check: the test holds the oracle's `openSet` monitor (`:41`)
+     * while `doRun` starts on its own thread. Its first `synchronized (openSet)` is `_findTrack`'s at `:1965`, before
+     * the first loop-head check; `startTime` (`:201`) was read before it. Once the thread is BLOCKED on that object, the
+     * test waits until `System.currentTimeMillis()`, the oracle's own clock, has moved [HOLD_MS] past a reading taken
+     * then, and releases. No fallback: a run that never blocks there fails.
+     */
+    private fun oracleHeld(c: E3Case, maxRunningTime: Long): Run {
+        val collector = btools.router.RoutingParamCollector()
+        val waypoints = collector.getWayPointList("${c.startLon},${c.startLat}|${c.endLon},${c.endLat}")
+        val rc = btools.router.RoutingContext()
+        collector.setParams(rc, waypoints, params(c))
+        rc.memoryclass = c.memoryclass
+        val engine = btools.router.RoutingEngine(null, null, c.segments, waypoints, rc, btools.router.RoutingEngine.BROUTER_ENGINEMODE_ROUTING)
+        engine.quite = true
+        val openSet = btools.router.RoutingEngine::class.java.getDeclaredField("openSet").apply { isAccessible = true }.get(engine)
+        val mx = ManagementFactory.getThreadMXBean()
+        var failure: Throwable? = null
+        val t = Thread { try { engine.doRun(maxRunningTime) } catch (e: Throwable) { failure = e } }
+        synchronized(openSet) {
+            t.start()
+            val deadline = System.nanoTime() + 120_000_000_000L
+            while (true) {
+                val info = mx.getThreadInfo(t.id)
+                val lock = info?.lockInfo
+                if (info?.threadState == Thread.State.BLOCKED && lock != null &&
+                    lock.identityHashCode == System.identityHashCode(openSet) && lock.className == openSet.javaClass.name
+                ) break
+                check(t.isAlive && System.nanoTime() < deadline) { "${c.id}: the oracle never blocked on openSet at :1965" }
+                Thread.sleep(1)
+            }
+            val blocked = System.currentTimeMillis()
+            while (System.currentTimeMillis() < blocked + HOLD_MS) Thread.sleep(1)
+        }
+        t.join()
+        failure?.let { throw it }
+        val tr = engine.getFoundTrack()
+        return Run(engine.getErrorMessage(), tr.nodes.size, tr.cost, tr.distance, engine.getLinksProcessed(), engine.isTerminated())
     }
 
     private class ClockError(message: String) : Error(message)
@@ -276,5 +346,8 @@ class RoutingEngineStopTest {
 
         /** Kinds 10 and 11 (`:1976`): the seconds are wall time. */
         val WATCHDOG = Regex("operation killed by thread-priority-watchdog after \\d+ seconds")
+
+        /** The held run's wait, on the oracle's clock: 2 is the least past a 1 ms limit (`>`); 5 leaves room for a small step back. */
+        const val HOLD_MS = 5L
     }
 }
