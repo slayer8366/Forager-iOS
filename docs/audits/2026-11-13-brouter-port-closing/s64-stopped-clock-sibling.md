@@ -48,3 +48,26 @@ timeout outcome above.
 assertions hold under the plant. The watchdog test (limit 0, the `maxRunningTime > 0` branch is not entered) and the
 Error and Exception tests (the clock throws on its second read, which is no later than the planted line's read, so
 the planted comparison is never evaluated; which read is second, `:549` or `:724`, was not traced) also pass. Predicted class result under the plant: 5 tests, 1 failure, the new test.
+
+## Results (appended after the runs; the sections above are unchanged since `a77cf01`)
+**Plant, JVM only, `revert.sh`, filter `*EngineStopCommonTest*`.** 0 `e: ` lines, 1 fresh XML, port restored (`cmp`
+equal), new test still in the tree (`cmp` against a copy taken before the run). Class: 5 tests, 1 failure, the new test,
+as predicted. Message: `org.junit.ComparisonFailure: F0-inside-across-the-degree-line: 30 s limit on a stopped clock
+against expected-1b.tsv expected:<[route|226|5302|5047|9ca48d05a90f4dcd|afc27854ee968af]5> but
+was:<[family:timeout|0|0|0|cbf29ce484222325|cbf29ce48422232]5>`, the predicted outcome to the character.
+`theTimeLimitReadsTheInjectedClock` passed under the plant, as predicted: it cannot see this wrong port; the new test can.
+
+**Unplanted port, JVM, same filter.** 0 `e: ` lines, 1 fresh XML, 5 tests, 0 failures; the new test prints
+`route|226|5302|5047|9ca48d05a90f4dcd|afc27854ee968af5 tuple e5aadbeff215a44e`.
+
+**CI, run 43479572984 on `2477888`.** All four jobs `success`: `jvm` TOTAL 245 tests, 0 failures (244 before, +1);
+`ios-smoke` TOTAL 58, 0 failures (57 before, +1), `EngineStopCommonTest` on `iosSimulatorArm64` 5 tests, 0 failures (4
+before), the new test listed by name; arm64 TOTAL 7, 0 failures; gate `OK: all 2 classes ran`; `ios-memory` TOTALs 3, 1,
+1 and `jvm-production` TOTAL 2, all 0 failures (no before figures were given for those two jobs, so they are reported, not
+compared). 0 ` e: ` lines in every job's log. No other test's result changed that the TOTALs could show (every TOTAL 0
+failures).
+
+**Not shown.** The plant ran on the JVM only; it was not run on the simulator, so that the new test bites on iOS is
+inferred from the same common source, not observed. Every iOS result above is simulator-checked, not checked on a device.
+Which clock read is second in the Error and Exception tests (`:549` or `:724`) was not traced; their passing under the
+plant was observed, not explained further.
