@@ -6312,3 +6312,39 @@ under the corrected plant; CI green on the change (Plumb's session 62)
 **Cost:** session 62 ended at about 114k of context. The full JVM run takes over an hour here, against CI's own run.
 From now, a coder pushes and the planner reads CI for the full suite, instead of a local full run.
 **Notes:** Written by the planner session by hand. Next free ID -168.
+
+**Kind:** outcome
+**ID:** 2026-10-28-168
+**Timestamp:** 2026-11-13T18:03:46Z
+**Continues:** 2026-10-28-163, 2026-10-28-164, 2026-10-28-167
+**Title:** Plant (b) alone: the by-value comparison catches a changed time on all 8 mode-7 rows, on the simulator and
+the JVM; the plant reverted (Plumb's session 63)
+**Observed:** Plumb Ledger, session 63, `brouter-port-5b` `647741c` to `070e29d` (4 commits). Findings:
+`docs/audits/2026-11-13-brouter-port-closing/s63-plant-b-alone.md`. The plant is one line, `FormatGpx.kt:176`, `"" + ti`
+to `"" + (ti + 1.0)`, in `a531a9e`; reverted by `337def4`.
+**Checked by the planner** (run 43466735338 on `a531a9e`, its four job logs read here, not Plumb's account):
+- `jvm`: 244 tests, **3 failures,** `FormatGpxTest`, `FormatDigestsJvmTest`, `HintsFormatsLogicTest`, the three predicted.
+  `jvm-production` and `ios-memory` `success`. 0 ` e: ` lines in any log, so every result is from the planted build.
+- `ios-smoke`: 57 tests, **1 failure, `FormatDigestsCommonTest`;** arm64 7 of 7. The simulator's lines: F0 GPX equal 2 of
+  2; F0h 7 of 8; NT 52 of 59; hints, JSON, KML and CSV equal on every row. **The 8 rows that differ are all GPX, all
+  mode 7:** `F0h-detour-west`, NT-0009, -0031, -0045, -0053, -0061, -0069, -0079. Each has the stored length and another
+  digest. **Simulator-checked.**
+- Each count is the one Plumb's prediction gave (F0h 7 of 8, NT 52 of 59, three JVM classes), and each failure is one
+  this plant can produce: mode 7 alone reaches the line.
+- The head by `git ls-remote`; a clean tree; `git diff --stat 647741c 070e29d -- brouter` is empty, so no plant is
+  left; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0 on each of the four.
+**So -164's gap is closed:** a changed *value* at a place now compared by value is caught on real routes, on the
+simulator. The five routes of -156 are among the eight.
+**What this does not show:**
+- **One of the twelve places,** the time. The other eleven (the heights, the distance, the speeds, JSON's third numbers)
+  have no plant of their own; for them the claim still rests on `FormatNumberTextTest`'s made-up numbers.
+- That every mode-7 route with hints reaches the line: 8 of 8 fits it, and Plumb marks it as inferred.
+**Two process notes:**
+- **The prediction was not pushed alone.** It was committed 5 seconds before the plant (`80df05c`, then `a531a9e`), and both
+  reached the remote in one push, because `scan.sh` exits 1 when it prints 0 and the chained push did not run. The text
+  is unchanged since (the later diff of the file only adds lines), and CI, the only run, came after both. Plumb reported
+  it. **From now, a brief says: never chain a push after `scan.sh` with `&&`.**
+- Plumb amended the revert's message before pushing it, to set the trailer. Nothing pushed was rewritten.
+- Run 43478781323 on the revert was queued at this writing and is not read.
+**Cost:** session 63 ended at about 137k of context.
+**Notes:** Written by the planner session by hand. Next free ID -169.
