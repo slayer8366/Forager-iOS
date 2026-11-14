@@ -6689,3 +6689,63 @@ digest drawn on the JVM. One review by Samphire Witness of the test changes sinc
 started beside it; session 69's test goes to the same review when it lands.
 
 **Notes:** Written by the planner session by hand. Next free ID -175.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-175
+**Timestamp:** 2026-11-14T01:32:52Z
+**Continues:** 2026-10-28-174
+**Title:** Session 69: `readRouteWays` runs on the simulator against stored rows; the session was cut off by a container restart before its results were written
+
+**What happened.** The container restarted while session 69 (coder) and the second review (Samphire Witness) were
+running; both stopped. Session 69 had pushed its design (`31215ee`) and its test (`2184691`) to `brouter-port-5b`
+and had run its plant; it had not appended results to its findings file, and never reported. The planner did not send a
+coder back in. What follows is read by the planner from the remote, from CI and from the plant's files left in the
+scratch folder. The findings file `docs/audits/2026-11-13-brouter-port-closing/s69-route-ways-common-sibling.md` holds
+design and predictions only; this entry stands in for its results section.
+
+**On `brouter-port-5b`, head `2184691` (`git ls-remote`; tree clean; two commits, project trailer on each, each
+scanned 0):** new `commonTest/.../tiles/RouteWaysCommonTest.kt` (125 lines, 2 tests) and `RouteWaysExpected.kt` (39);
+`RouteWaysCells.kt` moved from jvmTest to commonTest with `cells` on `kotlin.math` in place of `java.lang.Math`; the
+findings file. No engine class and no `RouteWays.kt` change.
+
+**The test, read by the planner:** on F0h's 16 ends, one `readRouteWays` call per square, each held to a stored row:
+divisor, count of cells asked and a digest of them, link count, total point count, and a digest over every link's
+description, `iLat` and `iLon`. The second test asks a 1/32 square at 1/80 and expects `OtherDivisor`, and expects
+`IllegalArgumentException` for unpaired cell arrays. The stored rows are the port's own JVM output; they are tied to
+the Java only through `RouteWaysEntryTest` (-174), which is green in the same run. The cells digest is the coder's
+addition beyond the brief, to tell a platform `cos` difference from a reader difference; accepted.
+
+**CI, run 43535294553 on `2184691`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 251 tests, 0 failures (was 249; predicted 251).
+- `ios-smoke`: 60 tests, 0 failures (was 58; predicted 60); the log's XML names both
+  `RouteWaysCommonTest` cases with `[iosSimulatorArm64]`. arm64 JVM step 7, gate line present. Simulator-checked.
+- `ios-memory`: 3, 1, 1; `jvm-production`: 2. Simulator-checked.
+- The run printed `16 points, 16 calls, links 4858, points 43006`, equal to -174's F0h totals.
+
+**The plant (run by the coder before the restart; its files read by the planner, not rerun):** the target point
+dropped in `RouteWays.kt` (`lat += target.ilat`, `lon += target.ilon`). Build log 0 ` e: ` lines; 2 tests, 1
+failure, `f0hEndsReadAsStored[jvm]`, its message naming `points <stored>/<got>` and `digest` for each row and no
+divisor, cells or links field, as predicted. The saved copy is `cmp` equal to the file now and the tree is clean.
+Whether the XML was fresh at the time is not something the planner can check after the fact.
+
+**A correction to the planner's earlier reports:** the line `OK: all 2 classes ran` gates the arm64 JVM step's two
+named classes (`tools/junit-ran.py`, per the design file reading `.github/workflows/brouter.yml`), not the
+simulator's classes. Entries that cite it as evidence about the simulator's classes read more into it than it shows.
+For the simulator, the evidence a class ran is its total and its XML, as above.
+
+**Not shown:**
+- The drop-off points are not in the sibling (F0h ends only), so the simulator reads 4,858 links, not the other 120.
+- Everything -174 lists: no described link with `reverse` true, no point across two squares, no real square of
+  another divisor, the exceptions' pass-through.
+- That `RouteWaysTest` prints the same digests after the move was the coder's to show and is not written down; the
+  planner read only that jvm is 251 of 251 with `RouteWaysEntryTest` in it.
+- A phone. A release build.
+
+**The review:** restarted from its pushed method (`b231a5b` on `review/changed-comparisons`), with session 69 added
+to its scope after its predictions were committed, and told to push after each section.
+
+**Left of part one:** the review. Then the owner's word on merging `brouter-port-5b` into `brouter-port`.
+
+**Notes:** Written by the planner session by hand. Next free ID -176.
