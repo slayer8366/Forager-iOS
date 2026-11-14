@@ -58,4 +58,40 @@ Mechanism prediction for my plants: a plant in a number's low digits will pass t
 
 ## Baseline
 
-To be filled in.
+The first run of this review was lost when the container restarted. Only the sections above had been pushed (`b231a5b`). They are kept as they were. Everything from here on was written after the restart.
+
+State found on resuming, each checked [C]:
+
+- My clone on `review/changed-comparisons` at `b231a5b`, equal to the remote head by `git ls-remote`, tree clean.
+- The code worktree at `/home/user/forager-ios-review-wt`, detached at `e9eeddb`: `git status` clean, `git diff` empty. No edit from a lost plant was left behind, so nothing had to be restored.
+- `origin/brouter-port-5b` had moved from `e9eeddb` to `2184691` (two commits, session 69).
+
+**Session 69 was added to this review after the predictions above were committed.** It has no row in the prediction table and I do not add one after the fact. What I expected of it is written under "Plants" below, before any plant ran.
+
+Baseline run at `e9eeddb`, no edit [C: `./gradlew :brouter:jvmTest --tests '*SearchBoundaryTest' --tests '*EngineStopCommonTest' --tests '*RoutingEngineStopTest' --tests '*ReadBinaryTest' --tests '*RouteWaysEntryTest'`]: `BUILD SUCCESSFUL`, 0 lines containing ` e: `, 5 XML files all newer than the start stamp, 20 tests, 0 failures, 0 errors. JDK: this container's OpenJDK 21.0.12.1, not CI's.
+
+- `ReadBinaryTest` printed `116 null-pointer, 1433 other`, 32 tracks.
+- `RoutingEngineStopTest` FK9 printed 10 cases, 0 mismatches, and the port's clock per case from 51 to 88 ms.
+- The oracle-only test printed `{target-island-check=10}` and `{family:timeout=10}` for both the plain and the held run.
+- `SearchBoundaryTest` printed `radius throws=1380`, `distance throws=1368`.
+
+## Plants: what I will run, and what I predict, written before any plant ran
+
+Each plant is one or two exact-string edits in my worktree, run through a script of my own (`plant.sh`, not committed): it refuses a dirty tree, saves a copy of the file, checks the string occurs once, edits, touches a stamp, runs Gradle on the JVM target, restores from the saved copy, and prints `cmp`, the count of ` e: ` lines and every XML newer than the stamp with its failure messages. I read the coders' plant lists first; none of these was run by them, except P69 which session 69 designed and could not run.
+
+| Plant | Session | Edit | Classes run | Prediction |
+|---|---|---|---|---|
+| P62 | s62 | `SearchBoundary.kt:40`: the `isInBoundary` distance call rethrows an index error with the same class and one space added to its message | `SearchBoundaryTest` | FAIL at the first `isInBoundary` throw, message `... isInBoundary, message`, the two texts differing by the trailing space. This is the line s62 added at test line 61; nobody has seen it red (the coder's P2 failed at `direction 3: message`, the line I had already run strict in review 1). |
+| P64 | s64 | `RoutingEngine.kt:724`: the limit strikes on elapsed time plus 30 per link processed (a limit that counts work, not time) | `EngineStopCommonTest` | 5 tests, 1 failure, the new sibling: expected F0's row, actual `family:timeout|0|0|0|...`. `theTimeLimitReadsTheInjectedClock` passes. If the sibling passes, fewer than 1,000 links are processed before the route ends, and I say so. |
+| P65 | s65 | `RoutingEngine.kt:724`: `> timeout` becomes `> timeout / 5` (a limit five times too short) | `RoutingEngineStopTest`, `EngineStopCommonTest` | FK9 fails with the guard's reason and no other, on all or nearly all of 10 cases, elapsed near 11 ms. Every other test in both classes passes: the driven-clock tests jump straight past the limit and the stopped-clock tests never move. So the guard would be the only thing between this wrong port and green. |
+| P66 | s66 | `ReadBinaryTest.kt`: one empty track in place of two | `ReadBinaryTest` | FAIL on `null-pointer case (the empty tracks) reached N times, floor 74` with N between 45 and 65. The coder inferred "about 53" and did not plant it. |
+| P67 | s67 | test file, two edits: the held run at 50 ms in place of 1 ms, and `HOLD_MS` 60 in place of 5 | the one method | PASS, with the plain line (still 1 ms) unchanged and the held line `{target-island-check=10}`. This repeats the coder's unrecorded scratch check in a form of my own; with FK9's first words at 50 ms being `pass0` in my baseline (`{pass0=20}`), a held run that answers island check shows the hold is what moves the strike. |
+| P68a | s68 | `RouteWays.kt`: `val reverse = false` | `RouteWaysEntryTest` | PASS, 3 of 3, the two digests unchanged (`069e566d...`, `45a3d729...`). By my reading of `OsmNode.addLink` no described link on this walk can be reverse, on any data. |
+| P68b | s68 | `RouteWays.kt`: `decodeGeometry(it, node, target, !reverse)` | `RouteWaysEntryTest` | FAIL, 2 of 3: `dropoffPoints` and `f0hEnds` on field `[iLat]` or `[iLon]`; the divisor test passes. The coder's plant was on the description only. |
+| P60 | s60 | `FormatGpx.kt:281`: a track point's `<ele>` text gets a `0` appended (same value, another text) | `FormatDigestsCommonTest`, `FormatDigestsJvmTest`, `FormatNumberTextTest`, `HintsFormatsLogicTest`, `FormatGpxTest` | The two digest tests PASS (this is the stated loosening, and it shows the stored length no longer pins the text at these places). `HintsFormatsLogicTest` FAILS on GPX. `FormatGpxTest` fails if it prints an elevation. |
+| P69 | s69 | at `2184691`, `RouteWays.kt`: the two lines that add the target point removed (session 69's own designed plant, never run) | `RouteWaysCommonTest`, `RouteWaysEntryTest` | `f0hEndsReadAsStored` FAILS listing, for each of 16 rows, `points stored/(stored minus links)` and `digest`; no `links`, `cells` or `divisor` entry. `RouteWaysEntryTest` fails on `[point count]`. |
+
+Two scratch tests, not plants (untracked files, deleted after):
+
+- S60: over the 69 rows, count how often each of the twelve by-value places occurs, how many rows have `showspeed`, and print the test JVM's `-XX` arguments. Prediction: `<brouter:speed>` occurs 0 times and no row has `showspeed`, so the `Float` form is never exercised on real rows; the flag `-XX:-OmitStackTraceInFastThrow` is on the command line.
+- S69: at `2184691`, run the Java walk (copied from `RouteWaysEntryTest.oracleRead`) on the F0h ends and compute session 69's row digest from the Java side directly. Prediction: all 16 equal the stored rows. If so, the stored rows are held to the Java by a run of mine, not only through the chain of two tests.
