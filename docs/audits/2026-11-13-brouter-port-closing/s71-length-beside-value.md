@@ -118,3 +118,9 @@ characters, giving one canonical text; the new check compares `texts[k].length` 
 which two texts of equal length share. That the new check is not stricter than length on the real outputs is shown by the
 forward runs: every one of the 69 rows equal on the JVM, through both tests. Whether the simulator's five differing
 texts are the same length as Java's is what CI answers below.
+
+**CI, run 43558149498 on `c401e25` (the test commit).**
+- `ios-smoke` (simulator-checked): success. "TOTAL: tests 60, failures 0, errors 0, skipped 0 in 29 files"; "OK on the
+  iOS simulator: all 24 classes ran"; 0 ` e: `. `FormatDigestsCommonTest` on the simulator: F0 2 of 2, F0h 8 of 8, NT 59
+  of 59 rows run, gpx and json equal on every row, so on all 69 rows the simulator's GPX and JSON texts have Java's
+  length as well as Java's values at the twelve places. Simulator green, as predicted. `FormatNumberTextTest` 5 of 5.
