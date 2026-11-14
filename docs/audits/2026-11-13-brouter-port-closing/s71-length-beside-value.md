@@ -71,3 +71,8 @@ places (a trailing zero, an exponent form, a widened `Float`) now fails, on the 
 ## Results
 
 (appended below as they come)
+
+**Plant P60 on the base (`0cadfe3`, test code as session 60 left it), filter `*FormatDigests*`, JVM:** both digest tests
+PASSED, as the reviewer saw. Evidence: `compileKotlinJvm` ran, 0 lines with ` e: ` (and 0 with `e: ` at line start), 2
+fresh JUnit XML files, "TOTAL: tests 2, failures 0"; `FormatDigestsCommonTest` F0 gpx equal 2 of 2, `FormatDigestsJvmTest`
+gpx equal on every group; `FormatGpx.kt` restored `cmp`-equal, `git status` clean after.
