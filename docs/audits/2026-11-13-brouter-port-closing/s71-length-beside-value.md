@@ -1,0 +1,73 @@
+# s71: the plain text's length beside the by-value digest (Plumb Ledger, session 71)
+
+Base `23e7c8c0e1ddddd0f6ec6c564e6612035a2ce224` on `brouter-port-5b`, checked against `git ls-remote` and a clean tree
+before any work. Item: the reviewer's should-fix 60-1 (review branch `review/changed-comparisons`,
+`docs/reviews/2026-11-14-test-changes-since-163.md:279`, plant P60 at `:91` and `:274`).
+
+## The owner's rulings, verbatim
+
+- Record -163: "Leave the port's printing as it is and record this as a known platform difference: on iOS a printed
+  number in these exports can differ from Java's in its last digit while meaning the same value. The simulator test that
+  is red now is changed to compare those numbers by value, and that change goes to the independent reviewer."
+- Record -177, on finding 60-1, the owner chose "Also compare length", whose text was: "The reviewer's proposal: store
+  and compare the text's length beside the value. A last-digit difference still passes; a longer or shorter number
+  (trailing zero, exponent form) fails on the simulator. About one short coder session, then a look by the reviewer. If
+  iOS does print a different length somewhere, the test goes red and comes back to you."
+
+## Where the plain length went in session 60 (read from the code)
+
+- `FormatDigestsCommonTest.kt:71-74` (at the base): for every output `k` the test takes
+  `s = FormatNumberText.forDigest(k, texts[k], ...)` and compares `s.length` and the digest of `s` with the row. For GPX
+  (`k == 1`) and JSON (`k == 2`), `s` is the canonical text (`FormatNumberText.kt:27-31`), so `s.length` is the canonical
+  length, in which every number at the twelve places is 16 (or 8) hex digits whatever its printed length
+  (`FormatNumberText.kt:94-99`). The plain text's length is not compared anywhere in this test.
+- `FormatDigestsJvmTest.kt:43-49` (at the base): the same, against the port's production run on the JVM.
+- The stored rows (`FormatDigests.kt:22-96` at the base) no longer hold the plain GPX and JSON lengths: session 60's
+  change `28e2a79` regenerated them, replacing the second and third numbers of every row's lengths with the canonical
+  lengths (for example `F0h-inside-across-the-degree-line`, `FormatDigests.kt:27`: 16218 and 13637 before, 18601 and
+  16020 after). Hints, KML and CSV lengths and digests and every mode were unchanged by `28e2a79` (checked by script: 0
+  of 69 rows differ outside GPX/JSON).
+- The plain lengths survive in git: `FormatDigests.kt` at `f33e8a1` (session 58, the last version before `28e2a79`).
+  64 of 69 rows have different GPX/JSON lengths there; the other 5 had none of the twelve places to change (no route, or
+  no number at a by-value place), so their canonical length equals their plain length.
+
+## Design: what is stored and compared
+
+- `FormatOutputs.Row` gains `textLengths: List<Int>`: the plain text's length of GPX and JSON, in that order (two
+  numbers). `FormatDigests.r(...)` takes them as a third string, for example `"16218 13637"`.
+- Source of the values: the GPX and JSON lengths of `FormatDigests.kt` at `f33e8a1`, copied by script by row id. Those
+  were made from the port's production run on the JVM, which `HintsFormatsLogicTest` holds equal to the oracle's text
+  exactly, character for character, so on the JVM they are Java's lengths. They are not drawn from the oracle anew.
+- `FormatDigestsJvmTest` holds each row's `textLengths` to the plain length of the port's production run on the JVM
+  (`p.texts[1].length`, `p.texts[2].length`), beside the existing fields, so the values cannot drift. It does not run the
+  oracle; the link to Java's length is `HintsFormatsLogicTest`'s exact text comparison, as before.
+- `FormatDigestsCommonTest` (JVM and simulator): for GPX and JSON an output counts as equal only when the canonical
+  length, the canonical digest AND the plain text's length all equal the row's. A difference in plain length is reported
+  as "text length here A stored B", beside the existing by-value fields.
+- Unchanged: the canonical form, the twelve places, the canonical length and digest, hints, KML and CSV, every other
+  test. No port, engine or printing change. No test added.
+
+So a last-digit difference at a tie (same value, same length) still passes; a longer or shorter text at the twelve
+places (a trailing zero, an exponent form, a widened `Float`) now fails, on the JVM and on the simulator.
+
+## Predictions
+
+- Totals unchanged, no test added: `jvm` 251 tests, simulator (`ios-smoke`) 60, both 0 failures.
+- Plant P60 (`FormatGpx.kt:281`: `"<ele>" + n.getElev() + "</ele>"` to `... + "0</ele>"`), filter `*FormatDigests*`:
+  - On the base: both digest tests PASS (the reviewer's result, to be seen here first).
+  - After the change: `FormatDigestsCommonTest` FAILS (on the JVM only F0's 2 rows run): "hints and formats against the
+    stored digests (2 differences; first: F0 F0-inside-across-the-degree-line mode 2 gpx: text length here A stored
+    12xxx ...)" with A longer than stored and the by-value fields equal. `FormatDigestsJvmTest` FAILS on about 66 rows
+    (every row with a route that has elevations; fewer if some route has none), named "stored row against the port's
+    production run".
+- Second control (a last-digit difference of the same value still passes): no new plant. `FormatNumberTextTest.kt:47`
+  and `:79` already show two tie texts of one value (the same 18 characters long) giving one canonical text; the new
+  check compares only `length`, which two equal-length texts share by construction. Cited, not added.
+- Simulator: I predict green. Session 59 reported the five texts that differ from Java's as the same length ("neither
+  longer nor shorter"), and session 60's run 43364528773 was green on the canonical comparison; the plain length is
+  the only new field. The risk is a place session 59 did not measure; if the simulator goes red on a length, that is a
+  real result for the owner and is left red and reported.
+
+## Results
+
+(appended below as they come)
