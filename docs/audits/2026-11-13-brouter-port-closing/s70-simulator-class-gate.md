@@ -192,3 +192,46 @@ The workflow's own commands were then run on the scratch folders: `ios-smoke`'s 
 name) exits 1 naming only `RedOnPurposeNoSuchCommonTest`; `ios-memory`'s gate script under `bash -e` exits 0 on the
 two copies and exits 1 naming `REngineCommonTest` when the `ios-r-fallback` copy is removed, after still printing the
 memory groups' OK line.
+
+### CI, the positive control (red on purpose): run 43542432482 on `583aa8c`
+
+- `ios-smoke` (job 132285823754): **failure**, at step 10 "Gating - every class in SIMULATOR_CLASSES ran on the iOS
+  simulator", as predicted. The simulator step and its counts step were green (`TOTAL: tests 60, failures 0, errors 0,
+  skipped 0 in 29 files`); the gate printed 24 per-class lines for the real classes, then
+  `com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest: did not run on the iOS simulator, no brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest.xml`
+  and `FAIL on the iOS simulator: 1 of 25 classes did not run: com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest`,
+  exit 1. The steps after it ran (`if: always()`): the arm64 step `TOTAL: tests 7 ... in 2 files` and `OK: all 2 classes ran`.
+- `ios-memory` (job 132285824044): success; `OK on the iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)`
+  and `OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)`.
+- `jvm` (132285824253) 251 in 109 files, `jvm-production` (132285824070) 2: success.
+
+The fixing commit `914ac7d` was pushed only after this run reported `completed`. Run 43542377970 on `aaceb46` (script
+only, no workflow change) was green on all four jobs, with the old gate line `OK: all 2 classes ran`.
+
+### CI, green: run 43548019228 on `914ac7d`, all four jobs success
+
+| Job | Job id | `TOTAL:` lines | Lines with ` e: ` |
+|---|---|---|---|
+| `jvm` | 132303759107 | tests 251, failures 0, errors 0, skipped 0 in 109 files | 0 |
+| `ios-smoke` | 132303759050 | tests 60 ... in 29 files; tests 7 ... in 2 files; all 0 failures, 0 errors, 0 skipped | 0 |
+| `ios-memory` | 132303759073 | tests 3 ... in 3 files; 1 in 1; 1 in 1; all 0 failures | 0 |
+| `jvm-production` | 132303758813 | tests 2, failures 0, errors 0, skipped 0 in 1 files | 0 |
+
+- The old gate line, unchanged, in its own step 12: `OK: all 2 classes ran`.
+- The new line, step 10: `OK on the iOS simulator: all 24 classes ran (brouter/build/test-results/iosSimulatorArm64Test)`,
+  after 24 per-class lines, each `0 skipped, 0 failed`, test cases summing to 55, as predicted.
+- `ios-memory`'s new last step: `OK on the iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)`
+  and `OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)`.
+
+All of the above is simulator-checked.
+
+### Not checked
+
+- The new `ios-memory` gate has not been seen red in CI; its red paths (an early return, a missing copy) were shown
+  locally only, on the base run's real XML.
+- The "returned early" check depends on the words `is unset; not run`. A test that returns early with other words, or
+  a future early return that prints nothing, passes it. Not guarded.
+- A new commonTest class is not gated until it is added to `SIMULATOR_CLASSES`; nothing checks the list against the
+  source tree.
+- `StackLadderIosTest` (iosTest) is not gated, as said above.
+- The tests=0 and skipped cases were shown on hand-edited XML, not on XML Kotlin/Native wrote in that state.
