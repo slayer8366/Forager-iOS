@@ -6749,3 +6749,66 @@ to its scope after its predictions were committed, and told to push after each s
 **Left of part one:** the review. Then the owner's word on merging `brouter-port-5b` into `brouter-port`.
 
 **Notes:** Written by the planner session by hand. Next free ID -176.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-176
+**Timestamp:** 2026-11-14T01:39:50Z
+**Continues:** 2026-10-28-163, 2026-10-28-175
+**Title:** The second independent review (Samphire Witness): nothing blocking, two should-fix, the five earlier items confirmed closed
+
+**The review.** Samphire Witness, resumed after the restart (-175); branch `review/changed-comparisons`, head `6a7cbfe`,
+four commits on `b231a5b`, one file, `docs/reviews/2026-11-14-test-changes-since-163.md` (384 lines). Checked by the
+planner: the head by `git ls-remote`, the trailers, no model name in the report, E1 over `ed8a899..6a7cbfe` 0, the
+review's worktree clean at `e9eeddb`, nothing pushed to `brouter-port-5b`. The findings are the reviewer's, on the
+container's JDK, and are not re-run by the planner. Session 69 was added to its scope after its predictions were
+committed, and the report says so.
+
+- **Blocking: none.** "No change turned a wrong port green that I could find."
+- **Verdicts:** s60 justified in part (one part rests on the owner's ruling); s62, s64, s65, s66, s67, s68, s69 each
+  justified by independent evidence. The reviewer predicted "in part" five times and was right once.
+- **-163's five should-fix items: all closed**, as -167, -170, -171, -173 claim, each with a plant of the reviewer's own:
+  the JVM flag seen on the running test JVM's command line and the `isInBoundary` message assertion seen red (1); a
+  limit five times too short fails FK9 for the guard's reason alone (4); one empty track in place of two fails the
+  floor at 69 against 74 (2); all 1,433 end-of-file texts compared whole (3); the Java lines read, and at 50 ms with a
+  60 ms hold the strike is in the island check where unheld it is `pass0` (5).
+- **s68:** `RouteWays.kt` matches `BRouterRouteWays.kt:59-123` line for line. A literal `false` for reverse passes 3 of
+  3, as -174 said, and the reviewer finds it cannot matter: by `OsmNode.addLink` and `OsmLink.isReverse` no described
+  link on this walk can be reverse on any data. That is the reviewer's reading of the code, not the planner's. Decoding
+  the geometry the other way fails 2 of 3 on `[iLat]`.
+- **s69:** a scratch test recomputed all 16 stored rows from the Java walk alone, 16 of 16 equal on every field, so
+  the rows have an anchor to the Java beyond s68's test, though not one kept in the tree. The reviewer ran the
+  designed plant and it failed as designed. Its report says the plant "had never been run"; the coder's leftover files
+  (-175) show it had been, which the reviewer could not see. Both runs agree.
+
+**Should-fix, two:**
+1. **60-1** (`FormatDigestsCommonTest.kt:71-74`, `FormatNumberText.kt`): at the by-value places the stored length no
+   longer holds the text. The reviewer's plant added a `0` to every track point's `<ele>` (37,947 places): both digest
+   tests stayed green and only the JVM's text comparison caught it. On the simulator, where Kotlin/Native's own
+   printing runs, nothing would. The reviewer's proposal: keep the plain text's length beside the value digest; a
+   last-digit difference still passes. **This touches the owner's ruling of -163**, which chose: "Leave the port's
+   printing as it is and record this as a known platform difference: on iOS a printed number in these exports can
+   differ from Java's in its last digit while meaning the same value. The simulator test that is red now is changed to
+   compare those numbers by value, and that change goes to the independent reviewer." The planner does not act on the
+   finding; it goes to the owner with the ruling quoted.
+2. **69-1** (`.github/workflows/brouter.yml`): nothing in CI fails if a commonTest class stops running on the
+   simulator; `OK: all 2 classes ran` gates two arm64 JVM classes (-175's correction). Proposal: point
+   `tools/junit-ran.py` at the simulator's results for the classes that carry a simulator claim. The planner's call:
+   dispatched as session 70. It tightens CI and changes no test.
+
+**Notes carried, none acted on:** the FK9 guard caught 8 of 10 cases in the reviewer's plant, its reach depending on
+set-up being faster than the limit (65-1); the floor's margin against losing one empty track is 5 reads (66-1); the
+committed 1 ms test cannot show its hold working on these machines (67-1, as -173 said); `<brouter:speed>` and the JSON
+Point elevations occur 0 times on the 69 rows, so at most 9 of the 12 by-value places are exercised by real data (60-3);
+on the simulator the value is read back by the platform that printed it (60-2).
+
+**Not checked by the reviewer (its list):** anything on the simulator by its own run; CI's JDK; the coders' own plants;
+a value plant at a by-value place other than the time; two squares in one read, a divisor-80 square, bad files; the
+full local `jvmTest`; E1 on the coders' commits (the planner scans those).
+
+**A correction to -175:** it says the unchanged `RouteWaysTest` digests after the helper move were not written down.
+The coder's scratch file `s69move-lines.txt` shows both digests (`b7fccbb3...`, `5a5c054d...`) as before the move. The
+file is in the scratch folder, not in the tree.
+
+**Notes:** Written by the planner session by hand. Next free ID -177.
