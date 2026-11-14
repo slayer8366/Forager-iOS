@@ -85,8 +85,15 @@ public class CosTileCheck {
     for (int r : rows) band.put(r, new ArrayList<>());
     DataBuffers db = new DataBuffers();
     PhysicalFile pf = new PhysicalFile(f, db, -1, -1);
+    // Unlike TileCheck, the degrees and cells are addressed absolutely (degree from the tile's name, + 180 and + 90),
+    // as TileNodes.kt does, so each id is ilon << 32 | ilat in the engine's own frame (MicroCache2.expandId). With
+    // TileCheck's relative 0-4 the counts are the same but the ids are not, and no row is found: seen in s73's first run.
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("([EW])(\\d+)_([NS])(\\d+)").matcher(tile);
+    if (!m.matches()) throw new IllegalArgumentException("not a tile name");
+    int lon0 = Integer.parseInt(m.group(2)) * (m.group(1).equals("W") ? -1 : 1) + 180;
+    int lat0 = Integer.parseInt(m.group(4)) * (m.group(3).equals("S") ? -1 : 1) + 90;
     int div = pf.divisor; long caches = 0, nonEmpty = 0, entries = 0; int degreesWithData = 0;
-    for (int lo = 0; lo < 5; lo++) for (int la = 0; la < 5; la++) {
+    for (int lo = lon0; lo < lon0 + 5; lo++) for (int la = lat0; la < lat0 + 5; la++) {
       OsmFile osmf = new OsmFile(pf, lo, la, db);
       if (!osmf.hasData()) continue;
       degreesWithData++;
