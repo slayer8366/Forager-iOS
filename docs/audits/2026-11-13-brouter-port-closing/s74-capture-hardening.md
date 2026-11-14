@@ -95,3 +95,42 @@ server itself: a server that sends a wrong `Content-Length` with a matching body
 - P7. The dry run against brouter.de: five PASS. If brouter.de has not rebuilt since `Sat, 14 Nov 2026 01:03:01 GMT`,
   the five SHA-256 and the five ends digests equal session 73's (s73 §5.2, §5.3).
 - P8. YAML parses, `bash -n` passes, every path the workflow runs exists at the new `TOOLS_SHA`.
+
+## 2. Before the change, at `37293d1` [C, run]
+
+Scratch: `/tmp/claude-0/-home-user/2bc41cf9-5db8-5578-a058-248445c292c6/scratchpad/s74/` (`tools/` holds the harness:
+`extract.py`, `tagcases.sh`, `server.py`, `sizecase.sh`).
+
+### 2.1 The tag: the three old lines
+
+`extract.py` took the step's `run` block from `git show 37293d1:.github/workflows/publish-cos-tiles.yml` with PyYAML
+and cut it before `refs=`; it gave exactly the three lines `:66-68`. `tagcases.sh` ran them with `bash -e` per case
+(log `s74/tag-old.log`):
+
+| case | file bytes | exit | env file |
+|---|---:|---:|---|
+| good | 29 | 0 | `TAG=brouter-cos-tiles-2026-11-14` |
+| two lines, second `BASH_ENV=out/evil.sh` | 50 | 0 | `TAG=...` and **`BASH_ENV=out/evil.sh`** |
+| wrong prefix `brouter-tiles-` | 25 | 1 | empty |
+| date shape `2026-1-14` | 28 | 0 | `TAG=brouter-cos-tiles-2026-1-14` |
+| empty | 0 | 1 | empty |
+| two trailing spaces | 31 | 0 | `TAG=brouter-cos-tiles-2026-11-14  ` |
+| trailing second line `x` | 31 | 0 | `TAG=...` and `x` |
+| trailing blank line | 30 | 0 | `TAG=...` |
+| no final newline | 28 | 0 | `TAG=...` |
+| NUL before the newline | 30 | 0 | `TAG=...`, with bash's warning `ignored null byte in input` |
+
+P1 held: the reviewer's demonstration reproduces; a second variable reaches the env file. P2 held. The old refusal
+echoes the file's content (`REFUSED: brouter-tiles-2026-11-14 is not a brouter-cos-tiles- tag`).
+
+### 2.2 The size: the old script against a local server
+
+`sizecase.sh` runs the whole script (`COS_ORACLE_ZIP` set to the local oracle zip, `TILE_UA=curl/8`) against
+`server.py`, which serves session 73's five tiles from `s74/served/`.
+
+- **One byte short** (`MODE_W20_N15=short`: chunked, `Content-Length: 2622004`, body 2622003 bytes): curl 8.5.0 exited 0
+  (so with chunked encoding curl does not hold the body to `Content-Length`; the fallback wrapper was not needed).
+  CosTileCheck printed `W20_N15 | PASS` with the same row counts and the same ends digest `0933c4d090f95d5f` as the
+  whole tile, and the run exited 0 with six assets. The pin row reads `W20_N15.rd5  2622003  5935762a...` while the
+  saved headers say `Content-Length: 2622004`. P4 held, and N3 holds for this tile: the short tile was pinned.
+- **No `Content-Length`** (`MODE_W20_N15=nocl`): exit 0, six assets, the tile pinned at 2622004 bytes. P5 held.
