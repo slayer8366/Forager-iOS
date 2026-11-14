@@ -13,7 +13,7 @@ permissions: {}
 env:
   # brouter-port-5b's commit holding tools/: capture-cos.sh, cos-tiles.tsv, CosTileCheck.java, the notes template and the
   # fetch scripts. Every file the run executes comes from it. The release targets the run's own commit on main.
-  TOOLS_SHA: 7e5c449f91659855e9df4765ae1c9050b224b71e
+  TOOLS_SHA: 4dc6c23efb0d38ad70d62802aba56a6ad946cd70
 
 jobs:
   capture:
@@ -63,9 +63,19 @@ jobs:
           path: out
       - name: Refuse if the tag, or a release with that tag, already exists
         run: |
-          tag=$(cat out/tag)
-          case "$tag" in brouter-cos-tiles-*) ;; *) echo "REFUSED: $tag is not a brouter-cos-tiles- tag"; exit 1 ;; esac
-          echo "TAG=$tag" >> "$GITHUB_ENV"
+          # out/tag comes from the artifact. It must be exactly one line, brouter-cos-tiles-YYYY-MM-DD and its newline, and
+          # nothing else (session 74, review S1). The file is read whole with its trailing newlines kept, matched end to end,
+          # then compared byte for byte (bash drops NUL bytes when reading). Its content is never echoed. TAG is rebuilt from
+          # the matched digits, so what is written to GITHUB_ENV cannot hold a newline.
+          export LC_ALL=C
+          raw=$(cat out/tag; printf x); raw=${raw%x}
+          d='[0123456789]'
+          re="^brouter-cos-tiles-($d{4}-$d{2}-$d{2})"$'\n''$'
+          bad="REFUSED: out/tag is not exactly one line of the form brouter-cos-tiles-YYYY-MM-DD"
+          if ! [[ $raw =~ $re ]]; then echo "$bad ($(wc -c < out/tag) bytes)"; exit 1; fi
+          tag="brouter-cos-tiles-${BASH_REMATCH[1]}"
+          if ! printf '%s\n' "$tag" | cmp -s - out/tag; then echo "$bad ($(wc -c < out/tag) bytes)"; exit 1; fi
+          printf 'TAG=%s\n' "$tag" >> "$GITHUB_ENV"
           refs=$(git ls-remote --tags origin "refs/tags/$tag")
           releases=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[].tag_name')
           if [ -n "$refs" ] || grep -qxF "$tag" <<< "$releases"; then echo "REFUSED: $tag already exists"; exit 1; fi
