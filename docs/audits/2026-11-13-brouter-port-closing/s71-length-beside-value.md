@@ -99,3 +99,22 @@ forward change is committed at `c401e25` and still in the tree).
   in what that test sees on the JVM. The test's new length check is therefore not exercised by a JVM run in CI; on the
   simulator it runs F0h and NT. Wrong premise in my design: the predicted common-test message. A local run with the case
   files follows.
+
+**`FormatDigestsCommonTest` on the JVM with F0h's and NT's case files (local only, beyond the brief's filter, to reach
+the path the simulator runs).** `NtCasesWriteTest` wrote the run-time files under `brouter/build/step10/` (never
+committed), then `BROUTER_STEP10_NT_CASES` set for the runs below.
+- Forward, `--rerun`: PASSED; F0 2 of 2, F0h 8 of 8, NT 59 of 59 rows run, every output equal on every row. 0 ` e: `.
+- Plant P60 (revert runner): FAILED, "hints and formats against the stored digests (64 differences; first: F0h
+  F0h-inside-across-the-degree-line mode 2 gpx text length here 16444 stored 16218; gpx: here 18601/6d2258ac8973934a
+  stored 18601/6d2258ac8973934a)". The by-value length and digest are equal; only the text length differs. Problems
+  printed (first 40): 8 F0h and 32 NT, every one "gpx text length"; per group gpx equal F0h 0 of 8, NT 3 of 59 (the 3
+  with no route), JSON, hints, KML, CSV equal on all. 0 ` e: `, `compileKotlinJvm` ran, 1 fresh XML, "tests 1,
+  failures 1", restored `cmp`-equal, `git diff HEAD` empty after (forward change committed in `c401e25`).
+
+**Second control (a last-digit difference of one value still passes).** Not planted in the port: none of the twelve
+places can be made to print another text of the same value and length by a one-line edit without inventing the tie
+itself. Cited instead: `FormatNumberTextTest.kt:47` (GPX) and `:79` (JSON) show two tie texts of one value, both 18
+characters, giving one canonical text; the new check compares `texts[k].length` only (`FormatDigestsCommonTest.kt:78-79`),
+which two texts of equal length share. That the new check is not stricter than length on the real outputs is shown by the
+forward runs: every one of the 69 rows equal on the JVM, through both tests. Whether the simulator's five differing
+texts are the same length as Java's is what CI answers below.
