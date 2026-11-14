@@ -124,3 +124,22 @@ texts are the same length as Java's is what CI answers below.
   iOS simulator: all 24 classes ran"; 0 ` e: `. `FormatDigestsCommonTest` on the simulator: F0 2 of 2, F0h 8 of 8, NT 59
   of 59 rows run, gpx and json equal on every row, so on all 69 rows the simulator's GPX and JSON texts have Java's
   length as well as Java's values at the twelve places. Simulator green, as predicted. `FormatNumberTextTest` 5 of 5.
+- `jvm`: success. "TOTAL: tests 251, failures 0, errors 0, skipped 0 in 109 files"; 0 ` e: `. `FormatDigestsCommonTest`,
+  `FormatDigestsJvmTest`, `HintsFormatsLogicTest` 1 of 1 each; `FormatDigestsJvmTest` equal on every output, F0 2, F0h
+  8, NT 59.
+- `jvm-production`: success. "TOTAL: tests 2, failures 0, errors 0, skipped 0 in 1 files"; 0 ` e: `.
+- `ios-memory` (simulator-checked): success. "TOTAL: tests 3, failures 0, errors 0, skipped 0 in 3 files", "OK on the
+  iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)"; "TOTAL: tests 1, failures 0, errors
+  0, skipped 0 in 1 files", "OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)";
+  0 ` e: `.
+
+Totals as predicted: `jvm` 251, simulator 60, no test added.
+
+**What in the brief was wrong.** Session 60's findings file is not under `docs/audits/2026-11-13-brouter-port-closing/`;
+it is `docs/audits/2026-11-12-brouter-port-step10/s60-number-text.md`. My own wrong prediction: that P60 would fail
+`FormatDigestsCommonTest` on the JVM; CI's JVM run of that class sees F0 only, which has no number at the twelve places.
+
+**Not checked.** The new check against a text of a different length on the simulator itself (no plant was run on the
+simulator; the plant ran on the JVM through the same common code with F0h and NT). A same-value, same-length,
+different-text case through the real port (none can be made by a one-line edit; cited from `FormatNumberTextTest`).
+The plain lengths were not drawn from the oracle anew; they equal it through `HintsFormatsLogicTest`'s exact comparison.
