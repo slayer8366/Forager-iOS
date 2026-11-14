@@ -7363,3 +7363,51 @@ the reviewer's other notes stand as -186 records them.
 **Next:** the owner's word on putting `publish-cos-tiles.yml` (as at `7776da9`) on `main`, then the release run.
 
 **Notes:** Written by the planner session by hand. Next free ID -188.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-188
+**Timestamp:** 2026-11-14T07:56:46Z
+**Continues:** 2026-10-28-184, 2026-10-28-187
+**Title:** Three rulings (owner): `publish-cos-tiles.yml` is on `main`; the town-point exception covers the copies in the logs; the old workflow is left as it is
+
+**The owner's rulings:**
+1. Asked: "Put the new release workflow on main? It is one file, .github/workflows/publish-cos-tiles.yml, copied
+   unchanged from brouter-port-5b at 7776da9. ..." The owner chose: "Yes, add that one file". The option read: "As in
+   -30: your word covers this one file, copied unchanged to main in one commit by a plain push. I then give you the
+   steps to run it. If the push to main is refused for this session, I open a PR with only that file instead and tell
+   you." Not chosen: "Open a PR for it instead"; "Not yet".
+2. Asked what should happen to the copies of the same 12 town-point numbers in committed logs under `docs/audits/`
+   and one audit document (-184). The owner chose: "Same exception covers them". The option read: "The exception is for
+   those three pairs of town points wherever they already stand in the tree. Nothing is removed. No new copies may be
+   added." Not chosen: "Remove them from the logs".
+3. Asked about the same weak tag check in `publish-tiles.yml` on `main` (-186). The owner chose: "Leave it, recorded
+   (Recommended)". The option read: "publish-tiles.yml on main stays as it is. The weakness is recorded, and the file
+   gets the same fix only if it is ever to be run again." Not chosen: "Fix it now".
+
+**E1 as it now stands:** "no coordinates are committed"; Forager's own route ends allowed as before; and one
+exception, in the owner's words: the three pairs of town points "wherever they already stand in the tree. Nothing is
+removed. No new copies may be added."
+
+**Done by the planner on ruling 1:** `main` moved from `0a398d8` to `e205d96` by a plain push, one commit adding one
+file. Checked: `git diff --stat` names only `.github/workflows/publish-cos-tiles.yml`; the file at `e205d96` is
+byte-equal (`cmp`) to the one at `7776da9` on `brouter-port-5b`; the scan over the commit 0; `git ls-remote` reads
+`e205d96`. The workflow checks out its tools from `brouter-port-5b` at `4dc6c23`.
+
+**Recorded on ruling 3:** `publish-tiles.yml` on `main` accepts a multi-line tag file (review 4, S1's twin). It is
+not to be run again without the fix session 74 made to its sibling.
+
+**PR #7** was opened against `main` at `0a398d8`; `main` has since gained this one file, which the PR does not touch.
+
+**Next, the owner's:** the release run. Steps, from session 73's report and the workflow file:
+1. On GitHub, open slayer8366/Forager-iOS and select the Actions tab.
+2. In the left list choose "publish-cos-tiles".
+3. Press "Run workflow", leave "Use workflow from" at "Branch: main", and press the green "Run workflow". No inputs.
+4. Both jobs, `capture` and `publish`, should end green; the release `brouter-cos-tiles-<UTC date>` then holds six
+   assets. If `publish` fails part way it may leave a draft release, which has to be deleted by hand before a rerun
+   on the same day (inferred, not seen).
+The planner then reads the run's log (each tile's PASS line and per-row counts, and that no position is printed) and
+dispatches the pinning session.
+
+**Notes:** Written by the planner session by hand. Next free ID -189.
