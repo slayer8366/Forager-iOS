@@ -7159,3 +7159,60 @@ which can be joined with (b). Committing ends would need the owner's exception: 
 this was written.
 
 **Notes:** Written by the planner session by hand. Next free ID -184.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-184
+**Timestamp:** 2026-11-14T06:56:22Z
+**Continues:** 2026-10-28-183
+**Title:** Two rulings (owner): the town points stay as an exception to E1; the new tiles are checked with run-time ends and row counts. The E1 scan is widened to 4 decimals
+
+**The owner's rulings:**
+1. Asked what should happen to the 12 numbers in `tools/tile-check/tiles.tsv` (-183), with -84's "Remove it only" as
+   the first option ("Remove them only") and neither option marked as recommended. The owner chose: "Keep them, as an
+   exception". The option read: "The three pairs of town points stay as a stated exception to E1, recorded in your
+   words. The scan is still widened, with this file listed as the known exception."
+2. Asked how the five new tiles should be checked at capture time, given E1. The owner chose: "Run-time ends + row
+   counts (Recommended)". The option read: "Nothing committed. The check picks route ends from the tile's own nodes by a
+   fixed rule each run, routes between them in the oracle, and also counts road nodes in each of the 8 rows. The ends
+   are no longer printed to the public Actions log. Keeps the proof that the oracle routes on the tile and proves the
+   rows are there. Most work of the three." Rejected: "Row counts only"; "Open and decode only"; "Commit the ends,
+   exception".
+
+**E1 as it now stands:** "no coordinates are committed", with Forager's own route ends allowed as before, and one
+exception in the owner's words above: the three pairs of town points in `tools/tile-check/tiles.tsv`.
+
+**The scan, widened by the planner.** `scan.sh` now counts numbers of 4 or more decimals (it was 5 or more). Shown to
+bite: on `aa144a0`, the commit that added the town points, the old scan prints 0 and the new one 8. Rerun with the new
+pattern: `brouter-port-5b` from `65737ec` to `2bc6e2c` (sessions 60 to 72) 0; the record branch against `main` 0.
+The scan reads added lines only, so the excepted file does not trip it unless someone adds to it.
+
+**A whole-tree search at `2bc6e2c` for numbers of exactly 4 decimals (the planner's, digits never printed):**
+- The same 12 town-point numbers, and no others, also stand in committed logs under `docs/audits/` (the step-2 check
+  logs and their superseded copies, the capture job's log, a local forward log, a harness log) and 4 of them in one
+  audit document. `tiles.tsv`'s header says it took the points from those logs.
+- **This is beyond what the owner was asked.** The question named `tiles.tsv` only. The planner's reading, labelled
+  as the planner's: the exception is for those three pairs of town points, and the logs repeat the same numbers. The
+  planner does not act on that reading; nothing is removed and nothing is added, and the logs are put to the owner
+  with the next question.
+- Every other 4-decimal number found is in source or figures files and none is a second set of places by the
+  planner's range check (one constant in `CheapAngleMeter.kt` is in a latitude-like range; it is upstream engine
+  source and was not read further).
+- History before `65737ec` was not rescanned commit by commit; the tree search stands in for it.
+
+**Decisions (the planner's, technical; the owner may overrule):**
+1. **A second workflow file for the new release,** not an edit to `publish-tiles.yml`. The working workflow and its
+   pinned tools commit stay untouched; the new file gets its own script and tag prefix, so it cannot recapture the four
+   old tiles. It reaches `main` only on the owner's word naming it. Rejected: the three-line edit in place, which
+   would leave one file serving two releases.
+2. **The new group is 59 cases per row, 472 in all,** drawn per row, LB's size as the yardstick. Cost by session 72's
+   estimate: under two minutes in each JVM job, 5 to 8 minutes on the simulator, inside the jobs' limits. Rejected: 8
+   per row, a seventh of the cost and a seventh of the reach, when at least 122 cases is the reach the covered rows had.
+3. **The order is session 72's:** capture script and check (session 73), the owner's word and release run, the pins,
+   the generator and expected rows, the tests and gate, then the record.
+
+**The merge's CI** (run 43565180651 on `a014100`): `jvm`, `jvm-production` and `ios-smoke` `success`;
+`ios-memory` still running when this was written.
+
+**Notes:** Written by the planner session by hand. Next free ID -185.
