@@ -134,3 +134,125 @@ echoes the file's content (`REFUSED: brouter-tiles-2026-11-14 is not a brouter-c
   whole tile, and the run exited 0 with six assets. The pin row reads `W20_N15.rd5  2622003  5935762a...` while the
   saved headers say `Content-Length: 2622004`. P4 held, and N3 holds for this tile: the short tile was pinned.
 - **No `Content-Length`** (`MODE_W20_N15=nocl`): exit 0, six assets, the tile pinned at 2622004 bytes. P5 held.
+
+## 3. The change
+
+Two commits, in this order:
+
+- **Tools commit `4dc6c23efb0d38ad70d62802aba56a6ad946cd70`**: `tools/tile-check/capture-cos.sh` only. A
+  `content_lengths` function (`:43-49`) reads the `Content-Length` lines after the last `HTTP/` status line of the
+  headers file; after each download (`:87-93`) the tile is refused unless there is exactly one, all digits, equal to
+  `wc -c`; this runs before CosTileCheck. The capture date is held to `D{4}-D{2}-D{2}` right after `date -u +%F`
+  (`:70-72`), before any download, and the tag is written with `printf 'brouter-cos-tiles-%s\n'` (`:127`).
+- **Workflow commit `7776da9ef7b0b5e55f30abceee8e54842963d9f0`**: `.github/workflows/publish-cos-tiles.yml` only.
+  `TOOLS_SHA` (`:16`) now names `4dc6c23`; the tag step's first lines (`:66-78`) are as in 1.2.
+
+The design in 1.2 to 1.4 was built as written.
+
+## 4. After the change [C, run]
+
+### 4.1 The tag: the new lines
+
+Extracted by the same `extract.py` from the new file (13 lines, all four comment lines included), run by `tagcases.sh`
+with `bash --noprofile --norc -eo pipefail`, which is the shell GitHub runs `run:` steps with [I, GitHub's documented
+default for `shell: bash`]. Log `s74/tag-new.log`. The old lines were run again under the same shell flags: the same
+results as 2.1.
+
+| case | exit | output |
+|---|---:|---|
+| good | 0 | env file is exactly `TAG=brouter-cos-tiles-2026-11-14` and a newline (`cmp` against a file written by hand: equal) |
+| two lines (`BASH_ENV=...`) | 1 | `REFUSED: out/tag is not exactly one line of the form brouter-cos-tiles-YYYY-MM-DD (50 bytes)`; env file empty |
+| wrong prefix | 1 | the same message, `(25 bytes)` |
+| date shape `2026-1-14` | 1 | the same, `(28 bytes)` |
+| empty | 1 | the same, `(0 bytes)` |
+| two trailing spaces | 1 | the same, `(31 bytes)` |
+| trailing second line | 1 | the same, `(31 bytes)` |
+| trailing blank line | 1 | the same, `(30 bytes)` |
+| no final newline | 1 | the same, `(28 bytes)` |
+| NUL before the newline | 1 | bash's NUL warning, then the same, `(30 bytes)` |
+
+Every refusing case left the env file empty. P3 held. That the NUL case is refused by the `cmp` line: a scratch copy
+with only that line removed (`s74/new-nocmp.sh`, `diff` shows the one line) passed the NUL file and wrote the tag, so
+the match alone does not catch it and the `cmp` line does.
+
+### 4.2 The tag, in the script
+
+A `date` wrapper first on `PATH` (`s74/datebin/date`) answered `+%F` with a chosen value and passed every other call to
+`/usr/bin/date`. `2026-11-14` and a second line, `26-11-14`, and `2026-11-14` with a trailing space each gave
+`REFUSED: date -u +%F gave an unexpected value`, exit 1, before any download. Control: `2026-11-14` passed the check and
+the run went on to the download (refused there, as aimed at a closed port). A trailing newline from `date` is dropped
+by the command substitution, as for the real `date`; the tag is then written by `printf` with one newline.
+
+### 4.3 The size
+
+Same server and tiles as 2.2, the new script:
+
+- **One byte short, W20_N15** (last tile): the four tiles before it printed `<n> bytes, equal to Content-Length` and
+  PASS; then `REFUSED: W20_N15: downloaded 2622003 bytes but Content-Length says 2622004`, exit 1, no CosTileCheck line
+  for W20_N15, `assets/` gone (only `headers/` left).
+- **One byte short, E145_S45** (first tile): `REFUSED: E145_S45: downloaded 6314147 bytes but Content-Length says
+  6314148`, exit 1, `assets/` gone.
+- **No `Content-Length`, W20_N15**: `REFUSED: W20_N15: no Content-Length in the server's response headers`, exit 1,
+  `assets/` gone.
+- **Honest**: exit 0, five `equal to Content-Length` lines, five PASS, `5 tiles ready`, six assets, tag file
+  `brouter-cos-tiles-2026-11-14` and one newline (`cat -A`).
+
+P6 held. Not run: the `Content-Length is not one whole number` refusal (two headers, or a non-digit value); it is read
+only (`capture-cos.sh:90`).
+
+### 4.4 The dry run against brouter.de
+
+`TILE_UA="curl/8" COS_ORACLE_ZIP=brouter/build/oracle/brouter-1.7.10.zip tools/tile-check/capture-cos.sh
+<scratch>/tiles74/run1 https://brouter.de/brouter/segments4` at `7776da9` (clean tree), on the container's OpenJDK, not
+CI's Temurin. Log `.../scratchpad/tiles74/run1.log`. Only the five tiles were fetched from the network; the oracle zip
+was the local copy.
+
+- Exit 0. Five `equal to Content-Length` lines and five PASS; `5 tiles ready`; six assets; tag
+  `brouter-cos-tiles-2026-11-14`.
+- Each headers file starts with the local proxy's `HTTP/1.1 200 Connection Established` block, then brouter.de's
+  (`grep -c '^HTTP/'` gives 2 per file). The proxy's block holds no `Content-Length`, so this run shows the check reads
+  the server's value through a proxy; it does not show that an earlier block's `Content-Length` would be ignored (that
+  is by reading `:45`).
+- Against session 73's run 2 pin file: asset, path, bytes, SHA-256, Last-Modified and ETag are equal for all five
+  (`diff`, empty), and every `# row` and `# ends` line is equal, so the five ends digests are session 73's:
+  E145_S45 `44b64002dce78592`, E170_S40 `a684106a538f465a`, E15_S25 `d0c15a34c2afea9d`, W95_N10 `7dfe526e0c69d9fc`,
+  W20_N15 `0933c4d090f95d5f`. brouter.de has not rebuilt since `Sat, 14 Nov 2026 01:03:01 GMT`. P7 held.
+- The scan's pattern over the log, the pin file, the notes, the tag and the five headers files: 0 in each. The size
+  lines print byte counts only.
+
+### 4.5 Static checks
+
+- `python3` `yaml.safe_load` of the new workflow: parses, `TOOLS_SHA` `4dc6c23...`, jobs `capture` and `publish`.
+- `bash -n tools/tile-check/capture-cos.sh`: ok. `actionlint` and `shellcheck` are not installed; not run.
+- Every path the workflow runs, at `4dc6c23` (`git ls-tree`): `tools/tile-check/capture-cos.sh` (100755),
+  `tools/fetch-tiles.sh` (100755), and what the script calls: `tools/fetch-oracle.sh` (100755), `tools/fetch-pinned.sh`
+  (100755, called by `fetch-oracle.sh:21`), `tools/tile-check/CosTileCheck.java`, `tools/tile-check/cos-tiles.tsv`,
+  `tools/tile-release-cos/release-notes.md`. `git diff 4dc6c23 7776da9 -- tools` is empty, so the tools I ran at the
+  head are the tools `TOOLS_SHA` names. `4dc6c23` is on `origin/brouter-port-5b` (`git branch -r --contains`).
+- `git diff --stat 37293d1 7776da9`: the workflow, `capture-cos.sh` and this file; nothing else.
+
+P8 held.
+
+## 5. Wrong in the brief, decided beyond it, could not determine
+
+**Premises checked:** base `37293d1`, clean: true. `publish-cos-tiles.yml:66-68` as the brief and S1 describe: true.
+`capture-cos.sh` writes the tag at `:109` (old numbering) from `date -u +%F` at `:61`: true; nothing else writes it.
+"the response headers it already keeps": true (`--dump-header`, `:72` old). The brief's file name says `2026-11-13`
+(the folder's date) though the work is on 2026-11-14; kept as given.
+
+**Decided beyond the brief (mine, reported):**
+- The `cmp` byte check after the match, for the NUL case, and extra cases: trailing blank line, no final newline, NUL.
+- The refusal no longer echoes the file's content (it prints the byte count), so artifact text does not reach the log.
+- `export LC_ALL=C` and the explicit digit class `[0123456789]`.
+- Only the last response's `Content-Length` counts (a proxy or redirect block comes first); more than one in it is a
+  refusal.
+- The size refusal comes before CosTileCheck, so a short tile is never run.
+- The form is a shape, not a calendar date (1.2).
+
+**Could not determine:**
+- The real run on GitHub: the shell, the runner's headers (no proxy there [I]), the env file's handling. All workflow
+  behaviour is from running the extracted lines locally.
+- That curl on the runner behaves as 8.5.0 here under chunked encoding [U].
+- The `not one whole number` path, by run (4.3).
+- The reviewer's other last-byte cases (bytes appended by the server with a matching `Content-Length`, a changed last
+  byte): left, as the brief says; a server that states the wrong length together with the wrong body still passes.
