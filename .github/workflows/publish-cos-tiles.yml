@@ -1,0 +1,86 @@
+# Publishes the five cosine-row test tiles as a release of their own (session 73; docs/audits/2026-11-13-brouter-port-closing/
+# s73-cos-tiles-capture.md), beside publish-tiles.yml, which it does not change. The owner runs it from main with
+# "Run workflow"; it has no push trigger. Every file it runs comes from brouter-port-5b at TOOLS_SHA, never from main's
+# tree, and that commit's tile list names only the five tiles, so this file cannot recapture or republish the four old ones.
+# Actions are pinned by commit SHA, the same pins as publish-tiles.yml.
+name: publish-cos-tiles
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+env:
+  # brouter-port-5b's commit holding tools/: capture-cos.sh, cos-tiles.tsv, CosTileCheck.java, the notes template and the
+  # fetch scripts. Every file the run executes comes from it. The release targets the run's own commit on main.
+  TOOLS_SHA: 7e5c449f91659855e9df4765ae1c9050b224b71e
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.TOOLS_SHA }}
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      # Prints counts, attempt numbers, metres and digests only: no route end or node position (CosTileCheck.java).
+      - name: Capture the five tiles, and check each in BRouter 1.7.10 (row counts and run-time ends)
+        run: tools/tile-check/capture-cos.sh out https://brouter.de/brouter/segments4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: cos-tile-release
+          path: out/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: capture
+    # The guard, as publish-tiles.yml's: a workflow_dispatch run from main only.
+    if: success() && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    concurrency: publish-cos-tiles
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.TOOLS_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: cos-tile-release
+          path: out
+      - name: Refuse if the tag, or a release with that tag, already exists
+        run: |
+          tag=$(cat out/tag)
+          case "$tag" in brouter-cos-tiles-*) ;; *) echo "REFUSED: $tag is not a brouter-cos-tiles- tag"; exit 1 ;; esac
+          echo "TAG=$tag" >> "$GITHUB_ENV"
+          refs=$(git ls-remote --tags origin "refs/tags/$tag")
+          releases=$(gh api "repos/$GH_REPO/releases" --paginate --jq '.[].tag_name')
+          if [ -n "$refs" ] || grep -qxF "$tag" <<< "$releases"; then echo "REFUSED: $tag already exists"; exit 1; fi
+      # The target is GITHUB_SHA, this run's own commit on main, for the reason publish-tiles.yml gives (RECORD -43).
+      - name: Create a draft release targeting this run's commit on main, with the six assets
+        run: |
+          gh release create "$TAG" --draft --target "$GITHUB_SHA" \
+            --title "BRouter cosine-row test tiles, ${TAG#brouter-cos-tiles-}" \
+            --notes-file out/release-notes.md out/assets/*
+      - name: Download every asset back and compare it with the pins
+        run: |
+          count=$(gh release view "$TAG" --json assets --jq '.assets | length')
+          if [ "$count" != 6 ]; then echo "REFUSED: the draft holds $count assets, not 6"; exit 1; fi
+          gh release download "$TAG" --dir readback
+          cmp out/assets/tile-pins.tsv readback/tile-pins.tsv
+          tools/fetch-tiles.sh checked "file://$PWD/readback" readback/tile-pins.tsv
+      - name: Publish the release
+        run: gh release edit "$TAG" --draft=false
