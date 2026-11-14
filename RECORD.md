@@ -6979,3 +6979,36 @@ the merge into `brouter-port`, the record's PR to `main`, and the 8 untested cos
 simulator-checked on a debug build; no phone has run any of it.
 
 **Notes:** Written by the planner session by hand. Next free ID -180.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-180
+**Timestamp:** 2026-11-14T06:12:30Z
+**Continues:** 2026-10-28-179
+**Title:** Two rulings (owner): `brouter-port-5b` merged into `brouter-port`; a pull request for the record is opened, not merged
+
+**The owner's rulings, each asked with the facts stated in the question:**
+1. Asked: "Merge brouter-port-5b (head 6e2d879, 53 commits ahead, clean merge, last CI run 43558149498 green on c401e25:
+   jvm 251, simulator 60 and 7, all simulator-checked on a debug build, reviewed three times with nothing blocking) into
+   brouter-port, as a merge commit like -161's?" The owner chose: "Yes, merge it".
+2. Asked: "Open a pull request for the record from ccr-8ee6e614-32enzt to main in Forager-iOS (16 commits: RECORD -164
+   to -179 and the closing list, docs only, 883 lines added, 2 files)? Opening it does not merge it; merging would need
+   your word again, naming the PR." The owner chose: "Yes, open the PR". The option "Open and merge it" was offered and
+   not chosen, so the PR is opened and left unmerged until the owner names it.
+
+**The merge, done by the planner:** `brouter-port` moved from `b769ebf` to `a014100`, a merge commit (`--no-ff`) of
+`brouter-port-5b` at `6e2d879`, message "Merge brouter-port-5b at 6e2d879 into brouter-port (owner's word: \"Yes,
+merge it\", RECORD -180)". No force, no rebase. Checked: `git diff HEAD origin/brouter-port-5b` empty, so the merged
+tree is `6e2d879`'s; E1 over `b769ebf..a014100` 0; `git ls-remote` reads `a014100`. Whether the push to
+`brouter-port` started a CI run was not read when this was written; the tree it would test is the one run 43558149498
+tested plus four docs-only commits.
+
+**The pull request** carries this entry too, so it is -164 to -180 and the closing list. Its number is in the next
+entry or the planner's report.
+
+**Still the owner's, not yet asked:** the 8 cosine rows in no captured tile (-136 decision 3, -137 decision 2). The
+record promises that question "with the cost of a tile for them", and the planner has not priced a tile yet, so it is
+not asked without the cost.
+
+**Notes:** Written by the planner session by hand. Next free ID -181.
