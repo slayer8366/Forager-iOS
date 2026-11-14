@@ -76,3 +76,26 @@ places (a trailing zero, an exponent form, a widened `Float`) now fails, on the 
 PASSED, as the reviewer saw. Evidence: `compileKotlinJvm` ran, 0 lines with ` e: ` (and 0 with `e: ` at line start), 2
 fresh JUnit XML files, "TOTAL: tests 2, failures 0"; `FormatDigestsCommonTest` F0 gpx equal 2 of 2, `FormatDigestsJvmTest`
 gpx equal on every group; `FormatGpx.kt` restored `cmp`-equal, `git status` clean after.
+
+**The change, `c401e25`.** `FormatOutputs.Row.textLengths` (`FormatOutputs.kt:58-63`), the 69 rows' third string
+(`FormatDigests.kt:28-102`, copied by id from `f33e8a1`), the comparison in `FormatDigestsCommonTest.kt:77-87` and the
+hold in `FormatDigestsJvmTest.kt:48-59`. Local JVM run of `*FormatDigests*` and `*FormatNumberText*`: all pass, every
+group equal on every output (F0 2, F0h 8, NT 59), so the copied plain lengths equal the port's production run today on
+all 69 rows. 0 ` e: `, `compileTestKotlinJvm` ran.
+
+**Plant P60 after the change, filter `*FormatDigests*`, JVM:** 0 ` e: ` (and 0 `e: ` at line start), `compileKotlinJvm`
+ran, 2 fresh XML, "TOTAL: tests 2, failures 1"; `FormatGpx.kt` restored `cmp`-equal; `git diff HEAD` empty after (the
+forward change is committed at `c401e25` and still in the tree).
+- `FormatDigestsJvmTest` FAILED: "stored digests against the port's production run (64 differences; first: F0h
+  F0h-inside-across-the-degree-line: stored row against the port's production run (gpx/json text length here
+  16444/13637 stored 16218/13637))". The 64 rows it printed (8 F0h, 56 NT) all have mode, canonical lengths and digests
+  equal to the stored row and JSON's plain length equal; only GPX's plain length is longer, on all 64. 64 is the number
+  of rows whose GPX/JSON lengths session 60 changed, that is the rows with a number at the twelve places; the other 5
+  (3 NT with no route, F0's 2) have none. Specific to this edit: only an added character makes the GPX text longer with
+  the value unchanged, and JSON (not touched by the plant) is equal.
+- `FormatDigestsCommonTest` PASSED, against my prediction. Cause, read from the stored rows: on the JVM it runs F0's 2
+  rows only (reviewer note 60-5), and F0's plain and canonical lengths are equal (`FormatDigests.kt:28-29`: "12491
+  11957" both ways), so F0's GPX and JSON have no number at any of the twelve places and nothing by-value can be planted
+  in what that test sees on the JVM. The test's new length check is therefore not exercised by a JVM run in CI; on the
+  simulator it runs F0h and NT. Wrong premise in my design: the predicted common-test message. A local run with the case
+  files follows.
