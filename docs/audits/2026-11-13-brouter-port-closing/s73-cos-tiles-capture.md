@@ -204,7 +204,34 @@ W20_N15.rd5	segments/W20_N15.rd5	2622004	4a75d41fa9df78bdc6fd4390acbee84cb1fd9ad
 The tag it wrote: `brouter-cos-tiles-2026-11-14`. Assets: the five `.rd5` files and `tile-pins.tsv`, six files (`ls -l` in
 the log). `fetch-tiles.sh` read all five back against it ("5 tiles ready").
 
-## 6. Each check seen failing (pending)
+## 6. Each check seen failing
+
+All at `7e5c449`'s `CosTileCheck.java` and `capture-cos.sh` (unchanged since). Logs in `.../scratchpad/tiles73/fail/`.
+The scripted cases used `file://` bases holding copies of run 2's tiles, so nothing more was downloaded. After every
+scripted failure `out/assets/` was gone ("assets left: 0"), so nothing was left that could be uploaded [C].
+
+| case | how | message (verbatim, path shortened) | prediction |
+|---|---|---|---|
+| a row the tile does not hold | list `E170_S40	474` | `E170_S40 \| row 474 \| nodes in band=0 \| floor=500 \| BELOW FLOOR`, `E170_S40 \| FAIL: row 474 holds 0 nodes, below the floor of 500`, `REFUSED: E170_S40: CosTileCheck failed (its FAIL line above gives the reason)` | P4 held |
+| a tile that cannot be opened | `E15_S25.rd5` cut to its first 2,400,000 bytes | `E15_S25 \| FAIL: engine open FAILED file of size ####### too short, should be #######; checkFileIntegrity FAILED IOException file of size ####### too short, should be #######`, then `REFUSED: E15_S25: CosTileCheck failed ...` | P5 held (both the open and the integrity check refuse) |
+| no route | `CosTileCheck` run directly on `E170_S40` row 502 with a scratch copy of `profiles2` whose `hiking-mountain.brf:370` reads `assign costfactor add 10000` | 16 lines `attempt k of 16 \| no route \| error=from-position not mapped in existing datafile` (attempt 15: `error=datafile E###_S##.rd# not found`), then `E170_S40 \| FAIL: row 502: no route in 16 attempts`, exit 1. Control, same class and tile with the real profile: `attempt 1 of 16 \| routed ...`, `PASS` | P7 held |
+| four tiles, not five | list without `W20_N15` | all four PASS, then `REFUSED: 4 tiles checked and 4 rows in .../out-four/assets/tile-pins.tsv, expected 5` | not predicted; added |
+| a tile that cannot be fetched | list naming `E99_S99`, absent from the base | `curl: (37) Couldn't open file .../E99_S99.rd5`, `REFUSED: E99_S99: download from file://.../E99_S99.rd5 failed` | not predicted; added |
+| wrong SHA-256 at readback | `fetch-tiles.sh` on run 2's assets with `W95_N10`'s pinned SHA-256 changed `dd17` to `ee17` | `REFUSED W95_N10.rd5 from file://.../W95_N10.rd5: W95_N10.rd5 has SHA-256 dd17b04a...e08464e, pinned ee17b04a...e08464e`, exit 1 | P6 held |
+| wrong size at readback | the same with `E170_S40`'s bytes 8510918 changed to 8510919 | `REFUSED E170_S40.rd5 from file://.../E170_S40.rd5: E170_S40.rd5 is 8510918 bytes, pinned 8510919`, exit 1 | held |
+
+Notes on these:
+- **The digit mask shows on real messages.** BRouter's "too short" message carries the file's sizes and the "not found"
+  message carries a tile name; both are printed with `#` for each digit. The cost is that a tile name in an error is
+  masked too; the tile is named at the start of every line, so the message still says which tile.
+- **Attempt 15's "not found"**: that start's match reached for a neighbouring tile, which is not in the tile's folder. A
+  start near a tile's edge can do that; the rule counts it as a failed attempt and goes on. It did not occur with the real
+  profile on any of the five tiles (§5.2).
+- **The readback path is `fetch-tiles.sh`'s, which I did not write.** Inside `capture-cos.sh` the pins are written from
+  the very files read back, so a mismatch there cannot arise unless a file changes between the two; the workflow's own
+  readback after upload (§7) is where the wrong-SHA and wrong-size refusals matter.
+- Not seen failing: the lookup-version check (no tile with another version was at hand) and the "nothing decoded" check
+  (no openable tile with no data was at hand). Both are copied from `TileCheck.java:43, 75` unchanged in logic.
 
 ## 7. The workflow, line by line against `publish-tiles.yml` (pending)
 
