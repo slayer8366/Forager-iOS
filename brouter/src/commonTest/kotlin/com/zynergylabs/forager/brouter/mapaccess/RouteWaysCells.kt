@@ -1,8 +1,14 @@
 package com.zynergylabs.forager.brouter.mapaccess
 
+import kotlin.math.PI
+import kotlin.math.cos
+
 /**
  * `RouteWaysTest`'s point and cell helpers, moved here unchanged (session 68, a pure move: only `private` dropped and the
- * companion's indentation) so that `RouteWaysEntryTest` reads the same points and cells.
+ * companion's indentation) so that `RouteWaysEntryTest` reads the same points and cells. Session 69 moved this file from
+ * jvmTest to commonTest for `RouteWaysCommonTest`, changing only `cells`' `java.lang.Math` calls: `kotlin.math.PI` and
+ * `cos` (the same on the JVM), and `Math.toRadians(lat)` as `lat * (PI / 180.0)`, bit-equal on JDK 21 (design file
+ * `docs/audits/2026-11-13-brouter-port-closing/s69-route-ways-common-sibling.md`).
  */
 internal object RouteWaysCells {
     const val DIVISOR = 32
@@ -14,8 +20,8 @@ internal object RouteWaysCells {
 
     /** `BRouterRouteWays.kt:63-70`: the cells 150 m around the point. */
     fun cells(lat: Double, lng: Double): List<Pair<Long, Long>> {
-        val perLat = Math.PI * EARTH_MEAN_RADIUS_METERS / 180.0
-        val perLng = perLat * Math.cos(Math.toRadians(lat))
+        val perLat = PI * EARTH_MEAN_RADIUS_METERS / 180.0
+        val perLng = perLat * cos(lat * (PI / 180.0))
         val dLat = micro(RADIUS / perLat)
         val dLng = micro(RADIUS / perLng)
         val lon0 = micro(lng + 180.0)
