@@ -124,7 +124,85 @@ Modelled on `publish-tiles.yml`; the line-by-line differences are in §7 once wr
 - P7. A route that cannot be found (a scratch profile copy that forbids every way) makes the row fail after 16 attempts.
 - P8. The scan prints 0 on every commit, and no output of any run holds a coordinate.
 
-## 5. Dry run against brouter.de (pending)
+## 5. Dry run against brouter.de
+
+Run as `TILE_UA="curl/8" COS_ORACLE_ZIP=brouter/build/oracle/brouter-1.7.10.zip tools/tile-check/capture-cos.sh
+<scratch>/tiles73/runN https://brouter.de/brouter/segments4`, on the container's OpenJDK 21.0.12 (not CI's Temurin
+21.0.13+9). Downloads went to `.../scratchpad/tiles73/` only; the oracle zip was the local copy, checked by
+`fetch-pinned.sh` against `fetch-oracle.sh`'s pins ("present, matches its pins"), so nothing but the five tiles was
+fetched. Logs: `.../scratchpad/tiles73/run0-relative-frame.log`, `run1.log`, `run2.log`, `run3.log`.
+
+### 5.1 The first run failed, on my own code [C]
+
+At `7e3b700`, run 0 refused `E145_S45`: `row 474 holds 0 nodes, below the floor of 500; row 488 holds 0 nodes`. The
+cause: I copied `TileCheck.java:62-66`'s loop, which addresses degrees 0 to 4 relative to the tile. That decodes the same
+nodes (231,750, equal to s72's) but their ids are not in the engine's frame, so no `ilat` fell in any row. `TileNodes.kt`
+(`brouter/src/jvmTest/.../oracle/e3/TileNodes.kt:28-33, 48-52`) addresses them absolutely (degree + 180, + 90); `7e5c449`
+does the same. The row check caught a wrong frame on its first run; that is the floor failing for a reason I did not plan,
+recorded here because it is a failure of the check's input, not of the tile. `TileCheck.java` is untouched (its count
+does not depend on the frame).
+
+### 5.2 Runs 2 and 3, at the committed `7e5c449` [C]
+
+Both exit 0. Every tile: lookup version 11 against `lookups.dat` 11.2, version-checked open ok, `checkFileIntegrity` ok
+(null). Bytes and SHA-256 equal session 72's for all five (Last-Modified Sat, 14 Nov 2026 01:03:01 GMT for all five).
+
+| tile | nodes | row | nodes in band | attempt that routed | track nodes (in band) | distance |
+|---|---:|---|---:|---|---|---:|
+| E145_S45 | 231,750 | 474 | 5,159 | 1 of 16 | 28 (28) | 1,828 m |
+| | | 488 | 16,239 | 1 of 16 | 13 (13) | 874 m |
+| E170_S40 | 554,299 | 502 | 1,124 | 1 of 16 | 19 (19) | 1,211 m |
+| E15_S25 | 127,474 | 663 | 2,523 | 1 of 16 | 36 (36) | 1,617 m |
+| | | 675 | 7,788 | 1 of 16 | 50 (50) | 1,510 m |
+| W95_N10 | 414,279 | 1046 | 96,104 | 1 of 16 | 62 (62) | 2,898 m |
+| W20_N15 | 174,360 | 1053 | 10,205 | 2 of 16 | 223 (223) | 8,385 m |
+| | | 1079 | 2,461 | 1 of 16 | 9 (9) | 1,804 m |
+
+- **P1 held:** all PASS; the 8 row counts equal s72 §2.3's exactly (same bytes), all above 500.
+- **P2 held:** 7 rows routed at attempt 1; row 1053's attempt 1 printed `no route | error=from-position not mapped in
+  existing datafile` (the start node is not on a way the hiking profile matches), attempt 2 routed. 9 attempts in all.
+- **P3 held:** the ends digests are equal in runs 1, 2 and 3 (run 1 ran the uncommitted fix, runs 2 and 3 `7e5c449`):
+  E145_S45 `44b64002dce78592`, E170_S40 `a684106a538f465a`, E15_S25 `d0c15a34c2afea9d`, W95_N10 `7dfe526e0c69d9fc`,
+  W20_N15 `0933c4d090f95d5f`. The pin rows (asset, path, bytes, sha256) and the `#` count lines are equal between runs 2
+  and 3 (`diff`). Each run downloaded afresh, and the bytes were the same each time, so this shows the same bytes give
+  the same ends; it does not show anything about other bytes.
+- Every track node lies in its row's band. That the oracle's distance computation reads that row is [I]: the scales are
+  taken per row of `ilat` (`CheapRuler.kt:53`, s72 §4.5), and the track never leaves the band, but no counter ran here.
+- **P8, the outputs:** the scan's own pattern over `run2.log`, `run3.log`, run 2's `tile-pins.tsv`, `release-notes.md`
+  and the five header files: 0 matches. A wider look for any run of 7 or more digits found only file sizes, the oracle
+  zip's size, and pieces of SHA-256 and commit hex. I read run 2's log and pin file whole: no id, `ilon`, `ilat` or
+  coordinate appears.
+
+### 5.3 The pin file it would publish (run 2, `7e5c449`)
+
+```
+# Tile pins written by tools/tile-check/capture-cos.sh at tools commit 7e5c449f91659855e9df4765ae1c9050b224b71e,
+# in run (none: not in Actions).
+# Each brouter.de tile was checked in BRouter 1.7.10 by CosTileCheck before its row was written. Columns as tools/tile-pins.tsv.
+asset	path	bytes	sha256	source	last_modified	etag	captured
+E145_S45.rd5	segments/E145_S45.rd5	6314148	36ed6746f38a4c8446c8204c34c8dda79b12067dfaab7e073a3fc47a0481713a	https://brouter.de/brouter/segments4/E145_S45.rd5	Sat, 14 Nov 2026 01:03:01 GMT	"6af7b345-6058a4"	2026-11-14T07:01:44Z
+E170_S40.rd5	segments/E170_S40.rd5	8510918	651632d7f3dcac284a12c5c82d8aa801a0bc87b65592c38f7208201ff1f0b344	https://brouter.de/brouter/segments4/E170_S40.rd5	Sat, 14 Nov 2026 01:03:01 GMT	"6af7b345-81ddc6"	2026-11-14T07:01:46Z
+E15_S25.rd5	segments/E15_S25.rd5	4854579	53122860d6c615ea8f2206251c8e09c32d67d500605c9342f0560e1963d1541a	https://brouter.de/brouter/segments4/E15_S25.rd5	Sat, 14 Nov 2026 01:03:01 GMT	"6af7b345-4a1333"	2026-11-14T07:01:48Z
+W95_N10.rd5	segments/W95_N10.rd5	7472321	dd17b04afaf86f3bc07afc1f3ba91b14e83882a2b6681f972f11b5229e08464e	https://brouter.de/brouter/segments4/W95_N10.rd5	Sat, 14 Nov 2026 01:03:01 GMT	"6af7b345-7204c1"	2026-11-14T07:01:50Z
+W20_N15.rd5	segments/W20_N15.rd5	2622004	4a75d41fa9df78bdc6fd4390acbee84cb1fd9ad8db45c277fd1296b6f247a387	https://brouter.de/brouter/segments4/W20_N15.rd5	Sat, 14 Nov 2026 01:03:01 GMT	"6af7b345-280234"	2026-11-14T07:01:53Z
+# The check's own counts on these bytes (CosTileCheck: floor 500 nodes per row; 16 attempts at most per row):
+# row	E145_S45	474	nodes=5159	attempt=1/16	track nodes=28	in band=28	distance=1828 m
+# row	E145_S45	488	nodes=16239	attempt=1/16	track nodes=13	in band=13	distance=874 m
+# ends	E145_S45	digest=44b64002dce78592
+# row	E170_S40	502	nodes=1124	attempt=1/16	track nodes=19	in band=19	distance=1211 m
+# ends	E170_S40	digest=a684106a538f465a
+# row	E15_S25	663	nodes=2523	attempt=1/16	track nodes=36	in band=36	distance=1617 m
+# row	E15_S25	675	nodes=7788	attempt=1/16	track nodes=50	in band=50	distance=1510 m
+# ends	E15_S25	digest=d0c15a34c2afea9d
+# row	W95_N10	1046	nodes=96104	attempt=1/16	track nodes=62	in band=62	distance=2898 m
+# ends	W95_N10	digest=7dfe526e0c69d9fc
+# row	W20_N15	1053	nodes=10205	attempt=2/16	track nodes=223	in band=223	distance=8385 m
+# row	W20_N15	1079	nodes=2461	attempt=1/16	track nodes=9	in band=9	distance=1804 m
+# ends	W20_N15	digest=0933c4d090f95d5f
+```
+
+The tag it wrote: `brouter-cos-tiles-2026-11-14`. Assets: the five `.rd5` files and `tile-pins.tsv`, six files (`ls -l` in
+the log). `fetch-tiles.sh` read all five back against it ("5 tiles ready").
 
 ## 6. Each check seen failing (pending)
 
