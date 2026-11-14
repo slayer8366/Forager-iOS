@@ -6865,3 +6865,60 @@ findings file itself beyond its size.
 **-176's two should-fix items:** 69-1 closed here; 60-1 ruled by the owner and in flight.
 
 **Notes:** Written by the planner session by hand. Next free ID -178.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-178
+**Timestamp:** 2026-11-14T05:46:28Z
+**Continues:** 2026-10-28-177
+**Title:** Session 71: the plain text's length is compared again beside the by-value digest, and the simulator is green on it (finding 60-1, on the owner's ruling "Also compare length")
+
+**On `brouter-port-5b`, head `6e2d879` (`git ls-remote`; tree clean; seven commits on `23e7c8c`, project trailer on
+each, each scanned 0; read by the planner):** `commonTest/.../tiles/FormatDigests.kt` (the 69 stored rows gain GPX's
+and JSON's plain lengths), `FormatOutputs.kt` (`Row.textLengths`), `FormatDigestsCommonTest.kt`,
+`jvmTest/.../FormatDigestsJvmTest.kt`, and `docs/audits/2026-11-13-brouter-port-closing/s71-length-beside-value.md`,
+which quotes both rulings. No port, engine or printing file changed, and no test was added.
+
+**The change, read by the planner in `FormatDigestsCommonTest.kt`:** GPX and JSON count as equal only if the by-value
+length, the by-value digest and the plain text's length all match; a mismatch prints "text length here A stored B". The
+by-value comparison is as it was.
+
+**Where the lengths came from (coder's account, not rechecked by the planner):** session 60's commit `28e2a79` had
+overwritten the stored GPX and JSON lengths with the by-value lengths in all 69 rows. The plain ones were copied back by
+row id from `FormatDigests.kt` at `f33e8a1` (session 58). They are the port's JVM production output, tied to Java's
+text by `HintsFormatsLogicTest`'s exact comparison, and held to the port's production run by `FormatDigestsJvmTest`.
+They were not drawn from the oracle anew.
+
+**CI, run 43558149498 on `c401e25`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+`jvm` 251; `ios-smoke` 60 and 7, `OK on the iOS simulator: all 24 classes ran`; `ios-memory` 3, 1, 1 with both its
+gate lines; `jvm-production` 2. Simulator-checked. So on the 69 rows the simulator prints numbers of Java's length at
+the by-value places that the rows exercise. The coder reports the class's own line as F0 2 of 2, F0h 8 of 8, NT 59 of
+59; the planner read the totals and gate lines, not that line.
+
+**The plant (coder's report and findings file; not rerun by the planner):** an extra `0` after every track point's
+`<ele>` (`FormatGpx.kt:281`), the reviewer's P60.
+- On the base: both digest tests passed, as the reviewer saw.
+- After the change: `FormatDigestsJvmTest` failed, "64 differences; first: ... (gpx/json text length here 16444/13637
+  stored 16218/13637)", every by-value field equal.
+- The coder's prediction failed on one point: `FormatDigestsCommonTest` on the JVM passed under the plant, because on
+  the JVM in CI it runs F0's 2 rows only, and those hold no number at a by-value place. With the F0h and NT case files
+  supplied by hand it ran all 69 rows and failed on "gpx text length here 16444 stored 16218".
+- Each run: 0 ` e: ` lines, fresh XML, file restored `cmp` equal, `git diff HEAD` empty.
+- The other way (a last-digit difference still passes) is cited from `FormatNumberTextTest.kt:47` and `:79`, not run
+  through the port.
+
+**Not shown:**
+- The length check failing on the simulator. Its failing side is seen on the JVM only, through the same common code.
+- In CI, the common digest test's length check is exercised on the simulator only; the JVM run covers F0's 2 rows.
+- The reviewer's note 60-3 still holds: `<brouter:speed>` and the JSON Point elevations occur 0 times on the 69 rows,
+  so the length is held at no more than 9 of the 12 places by real data.
+- A phone. A release build.
+
+**A wrong line in the brief:** session 60's findings file is at `docs/audits/2026-11-12-brouter-port-step10/s60-number-text.md`,
+not under the closing folder.
+
+**-176's two should-fix items:** both closed (69-1 in -177, 60-1 here). A short look by Samphire Witness at sessions 70
+and 71 is dispatched, as the owner's chosen option says.
+
+**Notes:** Written by the planner session by hand. Next free ID -179.
