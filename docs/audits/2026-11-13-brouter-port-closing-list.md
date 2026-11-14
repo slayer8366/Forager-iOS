@@ -73,6 +73,12 @@ simulator but run by no simulator test). Its gaps, for section B: no described l
 set, no point spanning two squares, no real square of another divisor, the exceptions' pass-through not run. The
 simulator sibling (session 69) and the review are still in flight.
 
+Added 2026-11-14, after -179: nothing in this section is in flight any more. The simulator sibling landed (-175), the
+second review found two should-fix items (-176), both closed (-177 the simulator class gate, -178 length beside value),
+and the third review confirmed them (-179). New gaps named along the way, for section B: `StackLadderIosTest` is held by
+no simulator gate; the text length is the whole text's, so opposite differences could cancel; at most 9 of the 12
+by-value places occur in the 69 rows.
+
 ## What this list is not
 
 It is built by searching the record for the words "not covered", "not shown", "not caught", "owed" and "inferred" and

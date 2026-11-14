@@ -6922,3 +6922,60 @@ not under the closing folder.
 and 71 is dispatched, as the owner's chosen option says.
 
 **Notes:** Written by the planner session by hand. Next free ID -179.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-179
+**Timestamp:** 2026-11-14T06:07:33Z
+**Continues:** 2026-10-28-176, 2026-10-28-177, 2026-10-28-178
+**Title:** The third review (Samphire Witness) of sessions 70 and 71: nothing blocking, no should-fix, findings 69-1 and 60-1 confirmed closed
+
+**The review.** Branch `review/changed-comparisons`, head `50d44fa`, three commits on `6a7cbfe` (predictions first),
+one file, `docs/reviews/2026-11-14-sessions-70-71.md` (166 lines). Checked by the planner: the head by
+`git ls-remote`, the trailers, no model name, E1 over `6a7cbfe..50d44fa` 0, the review's worktree clean. The code
+reviewed is `brouter-port-5b` at `6e2d879`. The findings are the reviewer's, on the container's JDK, and are not
+re-run by the planner.
+
+- **Blocking: none. Should-fix: none.** Both sessions "justified by independent evidence"; 69-1 and 60-1 closed.
+- **Session 70:** on 18 hand-made result folders and on the simulator's 29 real XML files cut from run 43558149498's
+  log, the gate fails for each reason it claims (missing XML, no tests, a skipped case, an early return) and passes the
+  24 named classes; the old arm64 mode gives the same output and exit code as before on every folder. Source tree
+  against the lists: 28 commonTest classes and 1 iosTest class; 24 in `SIMULATOR_CLASSES`, 4 in the memory job's gate,
+  1 in neither (`StackLadderIosTest`). That answers the count the planner left open in -177. No way found for a stale
+  copy to turn the `ios-memory` gate green on a fresh runner (inferred).
+- **Session 71:** the 69 stored plain lengths are Java's, 69 of 69 rows and 138 numbers, by a scratch test that ran the
+  oracle's own `FormatGpx` and `FormatJson` on each case. That closes -178's caveat that the lengths were copied from
+  an older commit and not drawn from the oracle. With all 69 rows running: an extra `0`, a shorter number of the same
+  value and a longer number in JSON each fail on the text length; same length with a different text of the same value
+  passes; same length with a different value fails by value.
+
+**Notes, none acted on:**
+- 70-1: `StackLadderIosTest` is the one simulator class no gate holds; it would pass green if its variable were lost.
+  The findings file says so; the workflow's comment does not.
+- 70-2: the early-return check goes by wording in `system-out`. 70-3: the gate goes by file name. 70-4: the named list
+  is not held to the source tree (-177 states this).
+- 71-1: the length is the whole text's, so a longer and a shorter number could cancel (inferred, not run).
+- 71-2: in CI the common test's length check works on the simulator only, and its red side has been seen on the JVM
+  only (-178 states both).
+- 71-3: the passing plant is not a literal last-digit tie; that case is held by `FormatNumberTextTest`.
+
+**A method point, the reviewer's, and what the planner found on it.** "0 lines containing ` e: `" cannot fail on a
+local Gradle log, where a compile error starts the line as `e: `; the reviewer's first scratch build failed to compile
+with that count at 0. Checked by the planner: `revert.sh` counts `^e: ` (its lines 17 to 19), so plants run through
+it were guarded by the right pattern. The planner's own counts were on CI job logs, where each line carries a
+timestamp first, so ` e: ` is the form that occurs there. The briefs' wording was wrong for local logs all the same,
+and a coder who counted by hand as worded would have had a check that could not fail. From here briefs say: both forms.
+
+**Not checked by the reviewer (its list):** anything on the simulator by its own run; the gate red in CI for a skipped
+case or an early return; the `ios-memory` gate red in CI at all; plants at `<brouter:speed>`, the locus elements or a
+JSON Point; cancelling lengths; the full local `jvmTest`.
+
+**Part one of the plan (`docs/plans/2026-11-12-app-port-plan.md`), as the planner reads it now:** plan items 4, 5
+and 6 done (-174 and -175; -169; the closing list); -163's five should-fix items closed (-167, -170, -171, -173) and
+confirmed by -176; -176's two closed (-177, -178) and confirmed here. Head of `brouter-port-5b`: `6e2d879`; its last
+commit with a CI run is `c401e25` (run 43558149498, green), and the four after it are docs only. Open and the owner's:
+the merge into `brouter-port`, the record's PR to `main`, and the 8 untested cosine rows (-137). Every iOS result is
+simulator-checked on a debug build; no phone has run any of it.
+
+**Notes:** Written by the planner session by hand. Next free ID -180.
