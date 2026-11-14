@@ -14,7 +14,8 @@ import kotlin.test.assertEquals
  * per case. [FormatDigests.ORACLE_VERSION] is held to the oracle's `OsmTrack.version`, which the run sets (RECORD -118).
  * A row that differs or is missing prints its recomputed row (id, mode, lengths, digests: no text, no position, E1).
  * Session 60 (RECORD -163): GPX's and JSON's length and digest are of [FormatNumberText]'s canonical text, as on the
- * simulator; hints, KML and CSV of the text itself.
+ * simulator; hints, KML and CSV of the text itself. Session 71 (RECORD -177): each row's GPX and JSON plain text length
+ * ([FormatOutputs.Row.textLengths]) is held to the production run's too.
  */
 class FormatDigestsJvmTest {
     @Test
@@ -44,13 +45,17 @@ class FormatDigestsJvmTest {
                     val lens = canon.map { it.length }
                     val digs = canon.map { EngineRun.fnv1aText(it) }
                     val row = byId[c.id]
-                    var same = row != null && row.mode == mode
+                    // Session 71 (RECORD -177): the plain text's length of GPX and JSON, held to the stored row too.
+                    val textLens = listOf(p.texts[1].length, p.texts[2].length)
+                    var same = row != null && row.mode == mode && row.textLengths == textLens
                     for (k in 0 until 5) {
-                        if (row != null && row.mode == mode && row.lengths[k] == lens[k] && row.digests[k] == digs[k]) equal[k]++ else same = false
+                        val textOk = k != 1 && k != 2 || row != null && row.textLengths[k - 1] == textLens[k - 1]
+                        if (row != null && row.mode == mode && row.lengths[k] == lens[k] && row.digests[k] == digs[k] && textOk) equal[k]++ else same = false
                     }
                     if (!same) {
-                        problems += "${g.name} ${c.id}: stored row against the port's production run"
-                        println("s57row r(\"${c.id}\", $mode, \"${lens.joinToString(" ")}\", \"${digs.joinToString(" ")}\"),")
+                        val textNote = if (row != null && row.textLengths != textLens) " (gpx/json text length here ${textLens.joinToString("/")} stored ${row.textLengths.joinToString("/")})" else ""
+                        problems += "${g.name} ${c.id}: stored row against the port's production run$textNote"
+                        println("s57row r(\"${c.id}\", $mode, \"${lens.joinToString(" ")}\", \"${digs.joinToString(" ")}\", \"${textLens.joinToString(" ")}\"),")
                     }
                 }
             } finally {

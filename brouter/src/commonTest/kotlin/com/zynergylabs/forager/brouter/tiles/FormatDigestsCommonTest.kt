@@ -23,6 +23,10 @@ import kotlin.test.fail
  * canonical text, in which the floating numbers the port prints with the platform's own text (twelve places) are
  * replaced by their value's bits: at those places the text may differ from Java's in its last digit at a tie. Hints,
  * KML and CSV are compared as text.
+ *
+ * Session 71 (RECORD -177, finding 60-1): GPX's and JSON's plain text length is compared too, beside the by-value length
+ * and digest ([FormatOutputs.Row.textLengths]): a last-digit difference of the same length still passes, a longer or
+ * shorter text fails.
  */
 class FormatDigestsCommonTest {
     private class Case(val id: String, val ends: String, val profile: Path, val tiles: Path, val memoryclass: Int)
@@ -70,8 +74,17 @@ class FormatDigestsCommonTest {
             for (k in 0 until 5) {
                 val s = FormatNumberText.forDigest(k, texts[k], t?.showspeed ?: false)
                 val d = EngineRun.fnv1aText(s)
-                if (s.length == row.lengths[k] && d == row.digests[k]) equal[k]++
-                else problems += "$group ${c.id} mode ${row.mode} ${FormatOutputs.OUTPUTS[k]}: here ${s.length}/$d stored ${row.lengths[k]}/${row.digests[k]}"
+                // Session 71 (RECORD -177): GPX's and JSON's plain text length too, beside the by-value length and digest.
+                val textLength = if (k == 1 || k == 2) texts[k].length else -1
+                val storedTextLength = if (k == 1 || k == 2) row.textLengths[k - 1] else -1
+                val byValue = s.length == row.lengths[k] && d == row.digests[k]
+                if (byValue && textLength == storedTextLength) {
+                    equal[k]++
+                } else {
+                    val what = "${FormatOutputs.OUTPUTS[k]}: here ${s.length}/$d stored ${row.lengths[k]}/${row.digests[k]}"
+                    problems += "$group ${c.id} mode ${row.mode} " +
+                        (if (textLength != storedTextLength) "${FormatOutputs.OUTPUTS[k]} text length here $textLength stored $storedTextLength; " else "") + what
+                }
             }
         }
         val missing = stored.keys - seen
