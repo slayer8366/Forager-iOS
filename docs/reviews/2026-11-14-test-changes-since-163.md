@@ -204,3 +204,11 @@ Findings:
 - **Note (68-3): the entry cannot check that a cell lies in the square it is given** [R, `RouteWays.kt:23-25`]. Stated in the request's doc and in the coder's file. A caller that passes a cell from another square gets plausible links from the wrong place. Forager groups by square first, so its adapter cannot do this; a new caller could.
 - The file-handle leak when `PhysicalFile`'s constructor throws is the coder's finding, the same in Forager and in Java; I did not check it [?].
 - Nothing loosened: a new entry and a new test [R].
+
+## Session 64: the stopped-clock sibling in `EngineStopCommonTest`, RECORD -169
+
+P64 ran and my prediction for it failed, so two follow-up plants are predicted here before they run.
+
+- P64, the limit strikes on elapsed time plus 30 per link processed (`RoutingEngine.kt:724`) [C: 0 ` e: `, `compileKotlinJvm` ran, fresh XML, restored, `cmp` equal]: `EngineStopCommonTest` 5 tests, **0 failures**. The new sibling passed this wrong port and printed F0's row. I predicted a failure and named the alternative: fewer than 1,000 links are processed before the route ends. That is what happened [I, from the pass: 30 per link against 30,000].
+- P64b, predicted now: the same edit at 300 per link, `EngineStopCommonTest`. The sibling FAILS with `family:timeout|0|0|0|...` against F0's row (the route needs more than 100 links); the other four pass.
+- P64c, predicted now: the P64 edit (30 per link) against the JVM's own stopped-clock test alone, `forager30sLimitOnAStoppedClockRoutesAsTheOracleWithNoLimit`, which runs FK10's first case against a live oracle. It FAILS (oracle a route, port a timeout), because FK10's routes are long ones. If it passes, the JVM test is as short-sighted as the sibling for this kind of wrong port.
