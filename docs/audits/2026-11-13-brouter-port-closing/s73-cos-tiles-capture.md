@@ -233,8 +233,90 @@ Notes on these:
 - Not seen failing: the lookup-version check (no tile with another version was at hand) and the "nothing decoded" check
   (no openable tile with no data was at hand). Both are copied from `TileCheck.java:43, 75` unchanged in logic.
 
-## 7. The workflow, line by line against `publish-tiles.yml` (pending)
+## 7. The workflow, line by line against `publish-tiles.yml`
 
-## 8. What only the real run will show (pending)
+`.github/workflows/publish-cos-tiles.yml` at `83c3a82`, compared with `git show origin/main:.github/workflows/publish-tiles.yml`
+by `diff` [C]. `publish-tiles.yml` itself is not changed on this branch (`git diff --stat 2bc6e2c HEAD -- ...` empty).
 
-## 9. Wrong in the brief, decided beyond scope, could not determine (pending)
+| `publish-tiles.yml` (main) | `publish-cos-tiles.yml` | why |
+|---|---|---|
+| `:1-4` header comment | its own header | names this file's purpose and that it cannot reach the four old tiles |
+| `:5` `name: publish-tiles` | `name: publish-cos-tiles` | a second entry in the Actions list |
+| `:9-11` `push:` trigger on `brouter-port` | removed | brief: `workflow_dispatch` only, no inputs |
+| `:16-17` TOOLS_SHA comment | rewritten for the new files | |
+| `:18` `TOOLS_SHA: 5d00761...` | `TOOLS_SHA: 7e5c449...` | the commit the dry runs 2 and 3 ran; `git diff 7e5c449 83c3a82 -- tools` is empty |
+| `:19-22` F0's URL, bytes, SHA-256 | removed | no F0 control and no F0 asset (§3.4 item 6) |
+| `:35-40` the push-only "refuse if the branch's tools differ" step | removed | it runs only on a push, and there is no push trigger |
+| `:45-46` capture step: `capture.sh out <base> "$F0_URL" ...` | `capture-cos.sh out https://brouter.de/brouter/segments4`, with a comment that it prints no positions | the new script |
+| `:49`, `:73` artifact `tile-release` | `cos-tile-release` | its own artifact name |
+| `:56` guard comment | reworded | the push case no longer exists |
+| `:57` the guard `if:` | unchanged | still `workflow_dispatch` from `refs/heads/main` only |
+| `:62` `concurrency: publish-tiles` | `publish-cos-tiles` | its own group |
+| `:75-81` tag refusal | unchanged, plus one line first refusing any tag not starting `brouter-cos-tiles-` | belt and braces: the tag comes from an artifact file |
+| `:82-85` target comment | shortened, points to `publish-tiles.yml`'s reason (RECORD -43) | |
+| `:86-89` create the draft "with the seven assets", title "BRouter test tiles" | "with the six assets", title "BRouter cosine-row test tiles, <date>" | five tiles and the pin file |
+| `:93` `!= 7` | `!= 6` | |
+| `:95` `cmp out/assets/README.md readback/README.md` | removed | no README asset |
+| everything else (runner, timeouts, permissions, action pins, Java version, `cmp` of the pin file, `fetch-tiles.sh` readback, publish) | unchanged | |
+
+**Lint, as far as it goes here [C]:** `yaml.safe_load` parses it (top level `name, on, permissions, env, jobs`; `on` holds
+`workflow_dispatch` only; jobs `capture`, `publish`). Every path it runs exists at `7e5c449`: `tools/tile-check/
+capture-cos.sh` (mode 100755), and through it `cos-tiles.tsv`, `CosTileCheck.java`, `tools/tile-release-cos/
+release-notes.md`, `tools/fetch-oracle.sh`, `tools/fetch-pinned.sh`, `tools/fetch-tiles.sh` (100755 each where run)
+[`git cat-file -e` and `git ls-tree` at `7e5c449`]. `actionlint` and `shellcheck` are not installed here, so neither ran.
+
+**It cannot run here.** A `workflow_dispatch` workflow is offered only from the default branch's copy of the file, and
+`main` does not have it; it reaches `main` only on the owner's word.
+
+## 8. What only the real run will show
+
+- That the release's bytes pass: brouter.de rewrites tiles in place, so the run checks whatever it serves that day; its
+  counts are the `#` lines of the published `tile-pins.tsv`, not §5.2's.
+- That the ends rule finds a route within 16 attempts on those bytes (here 9 attempts over 8 rows).
+- That the ends digests equal §5.2's: only if brouter.de has not rebuilt since 2026-11-14 01:03:01 GMT. Different bytes
+  will give different digests; that is not a failure.
+- Temurin 21.0.13+9 instead of this container's OpenJDK 21.0.12 [I: no difference expected].
+- The Actions log's content: read it after the run for any position (none is printed by design; §5.2 checked this
+  locally).
+- The checkout of `TOOLS_SHA` (`7e5c449`) by SHA from a run on `main`: it worked for `publish-tiles.yml` with a
+  `brouter-port` commit (RECORD -45); for a `brouter-port-5b` commit it is [I].
+- The release step's 403 risk (RECORD -43) is avoided the same way, by targeting `main`'s own commit [I].
+- The asset count of 6 and the readback `fetch-tiles.sh` on the uploaded copies.
+- The user agent sent to brouter.de is `capture.sh`'s project one in CI (`TILE_UA` unset), as for the first release.
+
+## 9. Wrong in the brief, decided beyond scope, could not determine
+
+**Premises in the brief, checked:**
+- Base `2bc6e2c`, clean tree: true.
+- "`tools/tile-check/` (all of it)": three files, as s72 read them; unchanged since `6e2d879`.
+- "The session 72 copies ... may be gone or stale": they were not used; today's downloads were byte-equal to s72's table.
+- "show it: same output on an old tile before and after, if you touch that file at all": I did not touch
+  `TileCheck.java`, so no before-and-after was run; `git diff --stat 2bc6e2c HEAD -- tools/tile-check/TileCheck.java` is
+  empty.
+- "routes ... as `TileCheck` does today": `TileCheck`'s decode loop addresses degrees relative to the tile, which is fine
+  for counting but gives ids outside the engine's frame. Copying it as it stands produced a check that saw no row (§5.1).
+  Not a fault in `TileCheck`'s own use; a trap for anyone reusing its loop to read positions.
+- "holding exactly the five tiles and their pin file": read literally, that drops the old release's `README.md` asset.
+  Its licence text and files table are in the release notes instead. If the planner meant "plus a README as before",
+  that is a template and two workflow lines (`!= 7`, one `cmp`).
+
+**Decided beyond the brief (mine, reported):**
+- One route per listed row, not one per tile, so each of the 8 rows is routed (8 routes over 5 tiles).
+- Floor 500 (§3.3); 16 attempts; the 0.01 degree step.
+- Error messages printed with digits masked.
+- The counts written as `#` lines at the end of the published `tile-pins.tsv` ("beside the pins"). `fetch-tiles.sh`
+  skips them. A later copy of the file into `tools/` carries them too.
+- `COS_ORACLE_ZIP` and `TILE_UA` overrides, for local runs only, and the optional tile-list argument, for the failing
+  runs. The workflow sets none of them.
+- On any failure the script removes `out/assets/`, which `capture.sh` does not do (in the workflow a failed step already
+  stops the upload).
+- The `brouter-cos-tiles-` prefix check in the publish job.
+
+**Could not determine:**
+- Whether the oracle's distance reads exactly the 8 rows on these routes: every track node is in its band, but no row
+  counter ran (§5.2) [I].
+- That every node a tile stores is a "road node" in the sense of a way the hiking profile may use: the counts are of
+  stored nodes, as s72's were; row 1053's attempt 1 started on a node the profile could not match.
+- The real run (§8).
+- Behaviour of a same-day rerun after a failed publish step: as with `publish-tiles.yml`, a leftover draft makes the
+  tag refusal fire on a rerun the same day [I, from reading `publish-cos-tiles.yml:64-71`; not run].
