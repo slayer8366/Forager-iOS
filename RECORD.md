@@ -7270,3 +7270,57 @@ other jobs were still running. The item adds no test.
 workflow on `main`, because that file runs with write access to releases and publishes to the public.
 
 **Notes:** Written by the planner session by hand. Next free ID -186.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-186
+**Timestamp:** 2026-11-14T07:48:08Z
+**Continues:** 2026-10-28-185
+**Title:** The fourth review (Samphire Witness), of session 73's capture tooling: ready with one should-fix first; the ends are unprinted but recomputable from public things
+
+**The review.** Branch `review/changed-comparisons`, head `3c600a8`, two commits on `50d44fa` (predictions first),
+one file, `docs/reviews/2026-11-14-session-73-capture.md`. Checked by the planner: the head by `git ls-remote`, the
+trailers, no model name, the widened scan over `50d44fa..3c600a8` 0, the review's worktree clean. The code reviewed is
+`brouter-port-5b` at `37293d1`. The findings are the reviewer's own runs and readings, not re-run by the planner.
+
+- **Verdict: "ready with one should-fix first". Blocking: none.** The old path (`TileCheck.java`, `capture.sh`,
+  `tiles.tsv`, `publish-tiles.yml`, the fetch scripts) is byte-identical to `2bc6e2c`.
+- **Should-fix S1:** `publish-cos-tiles.yml:66-68` accepts a multi-line `out/tag`, so a second line would reach
+  `GITHUB_ENV` in the job that holds `contents: write`. Shown in scratch on the same three lines. It needs the capture
+  job subverted first. `publish-tiles.yml` on `main` has the same shape; that file is not touched here and is noted
+  for the owner.
+- **What held when run by the reviewer:** the whole script on all five tiles, five PASS, counts and digests equal to
+  the coder's; a search of 65 logs and output files for the chosen ends and for all 128 candidate ends, 0 hits, with
+  controls that did hit; the same digests across locales, time zone, maths setting and a reversed tile walk; **each of
+  the 8 rows is read by its route** (scaling the oracle's table entry for the row's own band moved the distance for
+  all 8, scaling every other row did not), which closes the coder's "not determined"; the lookup-version check made to
+  fail both ways; `fetch-tiles.sh` reads the dry-run pin file and refuses a changed byte and a short file.
+
+**Notes, in plain words:**
+- **The ends are not printed and not committed, and they are not secret.** From the public tile and the public rule
+  the reviewer recomputed all five digests in seconds. The ruling's text is met ("Nothing committed", "no longer
+  printed"); the digest hides nothing, and nobody should read it as doing so. Anyone could always derive nodes from a
+  public tile; what E1 guards is what this repository commits.
+- **"Road nodes" in the ruling's text is, in the tool, every stored node in the band.** Of 64 sampled starts per row,
+  41 to 64 routed (row 474 the fewest; row 502, the smallest row, 49). The tool's output says "nodes".
+- **A tile's last byte is unchecked:** a tile cut by exactly one byte, with its last byte changed, or with bytes
+  appended passes the check; larger cuts and 27 of 28 byte changes were refused. The script does not hold the size to
+  the server's `Content-Length`.
+- A row dropped from the list would pass (the list is the specification, pinned by the tools commit). A failed publish
+  leaves a draft the owner deletes by hand (inferred). The published pin path is `segments/<tile>.rd5`, so the later
+  fetch needs a folder of its own. The uploaded artifact also holds brouter.de's response headers.
+
+**Not checked by the reviewer:** anything on GitHub itself (the real run, the pinned JDK, the release steps, checkout
+by SHA from `main`); `actionlint` and `shellcheck` (not installed).
+
+**Decisions (the planner's):**
+1. **S1 is fixed before the owner is asked** (session 74): the tag is held to one line of the exact form before it
+   goes anywhere. Fixing it later would need the owner's word a second time.
+2. **The size is held to `Content-Length` in the same session.** A capture pins whatever it downloaded, so a short
+   body would be pinned as if whole; the check costs a few lines. The byte-appended and last-byte cases beyond that are
+   left: the pin's SHA-256 holds the published bytes from then on, whatever they are.
+3. **The node count stays a count of stored nodes,** named as such. The route per row is what shows the row can be
+   routed on, and the later test group draws until it has 59 routable cases per row.
+
+**Notes:** Written by the planner session by hand. Next free ID -187.
