@@ -6182,3 +6182,1232 @@ this way."
    everything else by text; the change is stated before it is run, seen red first where it can be, and goes to Samphire.
    The 12 places and the difference are named in the port's documentation of what it does not match.
 **Notes:** Written by the planner session by hand. Next free ID -164.
+
+**Kind:** outcome
+**ID:** 2026-10-28-164
+**Timestamp:** 2026-11-13T14:48:22Z
+**Continues:** 2026-10-28-156, 2026-10-28-159, 2026-10-28-163
+**Title:** A new planner session picks up; session 60 checked: the number text compared by value, green on the simulator,
+and the formats' planted error seen there; one plant owed
+**The owner's word,** verbatim: "Hello, we are porting the Forager Android to iOS. We left off with the BRouter port nearly
+complete. Let's find out the progress and pick up from there."
+**The record's branch changes:** this session may push only to `ccr-8ee6e614-32enzt`, fast-forwarded from
+`ccr-7e682f25-4tqqon` at `b869888` (-163). PR #6 still reads from the old branch and ends at -163. `main`'s record ends at
+-102.
+**The heads, by `git ls-remote` at 14:40Z:** `main` `d22a302`; `brouter-port` `b769ebf`; `brouter-port-5b` `b0fbf62`;
+`brouter-port-5b-recursive-walk` `3d5bd11`; `review/changed-comparisons` `ed8a899`. Nothing is running.
+**Observed:** Plumb Ledger, session 60, `brouter-port-5b` `b359671` to `b0fbf62` (5 commits). Findings:
+`docs/audits/2026-11-12-brouter-port-step10/s60-number-text.md`. It carries out -163's decision 5.
+**Checked by the planner** (CI's job logs read with `gh api`, not Plumb's account):
+- 5 commits, each with the one trailer `Co-Authored-By: Claude <noreply@anthropic.com>`, no model name.
+  `git diff --stat 28e2a79 b0fbf62 -- brouter/src` is empty, so the plant is fully reverted. `b0fbf62` changes one docs file.
+- **Run 43364528773 on `28e2a79`, the change:** all four jobs `success`; `jvm` 244 tests, 0 failures; `ios-smoke` 57 tests,
+  0 failures, the gate "OK: all 2 classes ran"; arm64 7 of 7; 0 ` e: ` lines in any log. The simulator's own lines read
+  F0 2 of 2, F0h 8 of 8, NT 59 of 59, with hints, GPX, JSON, KML and CSV equal on every row. **Simulator-checked.**
+- **Run 43371249259 on `f026e5e`, the plant:** `jvm` 244 tests, 7 failures, in exactly the seven classes Plumb predicted;
+  `ios-smoke` 57 tests, 1 failure, `FormatDigestsCommonTest`. The simulator's lines read GPX, JSON and KML equal on F0 0 of
+  2, F0h 0 of 8, NT 3 of 59; hints and CSV equal on all. **Simulator-checked.** That is the plan's item 3.
+- **Run 43375760362 on `0497284`, the revert:** all four jobs `success`, the same counts as the change.
+- **Not checked by the planner:** `ios-memory`'s per-group counts (173, 240, 20 of 20), which are Plumb's; the E1 scan of
+  the five commits, since `scan.sh` and the ends list are not rebuilt in this container yet; `FormatNumberTextTest`'s 4 of
+  5 red over the stub, which was a local run.
+**What this does not show.** Plant (b), the time `ti` plus 1.0, sits at one of the twelve places now compared by value.
+In GPX it was masked by plant (a), and it was not run alone (Plumb says so). So no run shows the changed test catching
+a different *value* at a by-value place on real routes. That claim rests on `FormatNumberTextTest`, which uses made-up
+numbers. **Owed:** plant (b) alone, predicted first, on the simulator.
+**Where part one of the plan stands** (`docs/plans/2026-11-12-app-port-plan.md`): items 1, 2, 3, 7 and 8 are done, 7 only
+as far as `65737ec` (-161) and 8 as PR #6, open. **Left:** item 4, the public entry for the route-ways reader; item 5, the
+stopped-clock test's common sibling; item 6, the closing list; the review's should-fix 2, 3, 4 and 5 (-163); should-fix
+1, which is the owner's and has no answer in the record; session 60's change to Samphire Witness (-163, decision 5);
+plant (b) alone.
+**Notes:** Written by a new planner session by hand. Next free ID -165.
+
+**Kind:** decision
+**ID:** 2026-10-28-165
+**Timestamp:** 2026-11-13T14:50:37Z
+**Continues:** 2026-10-28-58, 2026-10-28-107, 2026-10-28-163, 2026-10-28-164
+**Title:** Three rulings (owner): pushes to `brouter-port-5b` as -58 says; the test JVM's flag is added; PR #6 merged
+**Decision:** asked with AskUserQuestion, the owner chose, verbatim:
+1. **Pushes.** "Yes, as -58 says". The option read: "Coders keep pushing to brouter-port-5b, never by force, as before.
+   brouter-port itself is only touched by a merge on your word." Rejected: "No, hold code pushes".
+2. **The review's should-fix 1** (-163, decision 4; -107's flag). "Add the flag (Recommended)". The option read: "The test
+   gets strict again, seen red on a planted wrong row first. One short coder session. The reviewer could not reproduce why
+   the message was lost, so that cause stays unexplained." Rejected: "Leave the test as it is". The recommendation was the
+   planner's, on the reviewer's runs 1B and 1P (`docs/reviews/2026-11-13-changed-comparisons.md`, §1, on
+   `review/changed-comparisons`), which the planner has not re-run.
+3. **PR #6.** "Merge PR #6". Rejected: "Leave it open".
+**Done by the planner:**
+- PR #6 merged by a merge commit, its head held to `b869888`; `main` reads `0a398d8` by `git ls-remote`. `main`'s record
+  now ends at -163 and holds the plan. -164 onward is on `ccr-8ee6e614-32enzt`.
+- **-164's owed E1 scan, now run:** `scan.sh <c>^ <c>` reads 0 on each of session 60's five commits, against an ends list
+  rebuilt here by `make-forager-ends.sh` (63 values, the count the handoff of -102 gives).
+**What follows (the planner's, technical):** one item per brief (-131, -149), on `brouter-port-5b`, in this order: the
+flag and the strict `SearchBoundaryTest`; plant (b) alone (-164); the stopped-clock test's common sibling (-148, decision
+2); FK9's guard, `ReadBinaryTest`'s reach, and the oracle-only run as a test (-163, decisions 1 and 2); -116's breadth
+(-163, decision 3); the route-ways reader's public entry; then the closing list.
+- **The flag goes on `jvmTest` only,** not on the JVM block shared with `e3Strata` (`brouter/build.gradle.kts:125-143`), so
+  the JVM that wrote the stored expected values is not changed. If any other test's result changes under the flag, that
+  is reported and nothing else is touched.
+**Notes:** Written by the planner session by hand. Next free ID -166.
+
+**Kind:** outcome
+**ID:** 2026-10-28-166
+**Timestamp:** 2026-11-13T14:55:30Z
+**Continues:** 2026-10-28-163, 2026-10-28-165
+**Title:** Plumb's session 61 stopped after run (a), rightly: the planner's brief gave the wrong plant
+**Observed:** Plumb Ledger, session 61, `brouter-port-5b` `b0fbf62` to `ae4dfa2` (2 commits, one docs file,
+`docs/audits/2026-11-13-brouter-port-closing/s61-searchboundary-strict.md`). Checked by the planner: the head by
+`git ls-remote`; a clean tree, so the plant is restored; one trailer each, no model name. Not re-run by the planner.
+- The prediction was pushed alone first (`6b5ed93`). It said run (a) would fail, against the brief's expected pass.
+- **Run (a), the committed test with the plant: failed,** 1 test, 1 failure, 0 ` e: ` lines, a fresh XML [Plumb's]:
+  "case 9 probe 12 cost 0 radius 6652: isInBoundary, exception expected:<null> but was:<class
+  java.lang.ArrayIndexOutOfBoundsException>". Plumb stopped there, as the brief's stops said. Nothing else was done.
+**A wrong premise of the planner's own.** The review's plant reads "scale row one lower when negative
+(`CheapRuler.kt:53`)". The brief turned that into "make the row one lower when `ilat` is negative". Those differ: a
+latitude between -100,000 and 0 has row 0 in Java, so the brief's plant throws where Java returns a value, and the
+committed test catches that by class. The reviewer's gap is the other range, where the row itself is negative and both
+engines throw. The reviewer's exact edit is not in its branch, so "when the row is negative" is the planner's reading
+of the review's words [I].
+**Decision (the planner's, technical):** session 62 runs the same item with the plant on a negative row only (the row
+one lower when `ilat / SCALE_CACHE_INCREMENT` is below 0). Its prediction is committed first. Session 61's failed run
+stays in the findings file as it is.
+**Cost:** session 61 ended at about 117k of context.
+**Notes:** Written by the planner session by hand. Next free ID -167.
+
+**Kind:** outcome
+**ID:** 2026-10-28-167
+**Timestamp:** 2026-11-13T16:47:19Z
+**Continues:** 2026-10-28-107, 2026-10-28-163, 2026-10-28-165, 2026-10-28-166
+**Title:** The review's should-fix 1 closed: `SearchBoundaryTest` compares every throw by class and message, seen red
+under the corrected plant; CI green on the change (Plumb's session 62)
+**Observed:** Plumb Ledger, session 62, `brouter-port-5b` `ae4dfa2` to `647741c` (3 commits; no stop). Findings appended to
+`docs/audits/2026-11-13-brouter-port-closing/s61-searchboundary-strict.md`.
+- **The prediction first** (`ac33403`): plant P2 (the row one lower only where the row is below 0), with (a) pass, (b)
+  fail on an index one lower, (c) pass.
+- **(a) The committed test with P2: passed,** 1 test, 0 failures, with 1,380 and 1,368 throwing calls reached. That is
+  the gap the review named, reproduced by a second hand.
+- **(b) The strict test with P2: failed,** 1 test, 1 failure: "case 3 probe 0 direction 3: message expected:<Index -4[8]
+  out of bounds for l...> but was:<Index -4[9] out of bounds for l...>". It is the same message the reviewer's run
+  1P-strict gave (-163), and one P2 alone can produce.
+- **(c) The strict test on the port as it is: passed.**
+- Full `:brouter:jvmTest`, local, 1 h 8 min: 244 tests, 0 failures. [All four are Plumb's runs.]
+**Checked by the planner:**
+- The head by `git ls-remote`; a clean tree; one trailer on each commit, no model name; E1 by `scan.sh <c>^ <c>`: 0 on
+  each of the three.
+- **The diff read:** `SearchBoundaryTest.kt` gains a message comparison on `isInBoundary` and loses the
+  `IllegalArgumentException` condition on `getBoundaryDistance`; the sampling and the reach assertions are untouched.
+  `brouter/build.gradle.kts` gains `jvmArgs("-XX:-OmitStackTraceInFastThrow")` in the `jvmTest` block only. No port file
+  changed.
+- **Run 43447798521 on `5ca6310`:** all four jobs `success`; `jvm` 244 tests, 0 failures; `jvm-production` 2 of 2;
+  `ios-smoke` 57 of 57 with the gate "OK: all 2 classes ran", arm64 7 of 7; 0 ` e: ` lines in any log.
+  **Simulator-checked.** `647741c`, the head, is a docs commit after it with no run of its own.
+**What this does not show:**
+- **That the flag is what keeps the messages.** The lost message of -107 has never reproduced: not for the reviewer, with
+  or without the flag, and not here. So the flag is a guard against a cause that is still inferred [I], and (c) would
+  pass without it on these runs.
+- That the flag reaches the test JVM's command line. It is read in the build file, not seen on a running JVM.
+- That no other test's result moved because of the flag in a way the totals hide: the counts are equal before and
+  after, and the tests were not compared one by one.
+**So:** -107's loosened comparison is gone, and -163's decision 4 is carried out. Next is plant (b) alone (-164).
+**Cost:** session 62 ended at about 114k of context. The full JVM run takes over an hour here, against CI's own run.
+From now, a coder pushes and the planner reads CI for the full suite, instead of a local full run.
+**Notes:** Written by the planner session by hand. Next free ID -168.
+
+**Kind:** outcome
+**ID:** 2026-10-28-168
+**Timestamp:** 2026-11-13T18:03:46Z
+**Continues:** 2026-10-28-163, 2026-10-28-164, 2026-10-28-167
+**Title:** Plant (b) alone: the by-value comparison catches a changed time on all 8 mode-7 rows, on the simulator and
+the JVM; the plant reverted (Plumb's session 63)
+**Observed:** Plumb Ledger, session 63, `brouter-port-5b` `647741c` to `070e29d` (4 commits). Findings:
+`docs/audits/2026-11-13-brouter-port-closing/s63-plant-b-alone.md`. The plant is one line, `FormatGpx.kt:176`, `"" + ti`
+to `"" + (ti + 1.0)`, in `a531a9e`; reverted by `337def4`.
+**Checked by the planner** (run 43466735338 on `a531a9e`, its four job logs read here, not Plumb's account):
+- `jvm`: 244 tests, **3 failures,** `FormatGpxTest`, `FormatDigestsJvmTest`, `HintsFormatsLogicTest`, the three predicted.
+  `jvm-production` and `ios-memory` `success`. 0 ` e: ` lines in any log, so every result is from the planted build.
+- `ios-smoke`: 57 tests, **1 failure, `FormatDigestsCommonTest`;** arm64 7 of 7. The simulator's lines: F0 GPX equal 2 of
+  2; F0h 7 of 8; NT 52 of 59; hints, JSON, KML and CSV equal on every row. **The 8 rows that differ are all GPX, all
+  mode 7:** `F0h-detour-west`, NT-0009, -0031, -0045, -0053, -0061, -0069, -0079. Each has the stored length and another
+  digest. **Simulator-checked.**
+- Each count is the one Plumb's prediction gave (F0h 7 of 8, NT 52 of 59, three JVM classes), and each failure is one
+  this plant can produce: mode 7 alone reaches the line.
+- The head by `git ls-remote`; a clean tree; `git diff --stat 647741c 070e29d -- brouter` is empty, so no plant is
+  left; one trailer each, no model name; E1 by `scan.sh <c>^ <c>`: 0 on each of the four.
+**So -164's gap is closed:** a changed *value* at a place now compared by value is caught on real routes, on the
+simulator. The five routes of -156 are among the eight.
+**What this does not show:**
+- **One of the twelve places,** the time. The other eleven (the heights, the distance, the speeds, JSON's third numbers)
+  have no plant of their own; for them the claim still rests on `FormatNumberTextTest`'s made-up numbers.
+- That every mode-7 route with hints reaches the line: 8 of 8 fits it, and Plumb marks it as inferred.
+**Two process notes:**
+- **The prediction was not pushed alone.** It was committed 5 seconds before the plant (`80df05c`, then `a531a9e`), and both
+  reached the remote in one push, because `scan.sh` exits 1 when it prints 0 and the chained push did not run. The text
+  is unchanged since (the later diff of the file only adds lines), and CI, the only run, came after both. Plumb reported
+  it. **From now, a brief says: never chain a push after `scan.sh` with `&&`.**
+- Plumb amended the revert's message before pushing it, to set the trailer. Nothing pushed was rewritten.
+- Run 43478781323 on the revert was queued at this writing and is not read.
+**Cost:** session 63 ended at about 137k of context.
+**Notes:** Written by the planner session by hand. Next free ID -169.
+
+---
+
+**Kind:** Status
+**ID:** 2026-10-28-169
+**Timestamp:** 2026-11-13T19:13:15Z
+**Continues:** 2026-10-28-168, 2026-10-28-148
+**Title:** Session 64: the stopped-clock test has its common sibling, simulator-checked in CI; plan item 5 done
+
+Plan item 5 (-148 decision 2) is done. `brouter-port-5b` is at `ee1a001`. The planner checked each line below itself;
+nothing here is taken from the coder's report alone.
+
+**What landed (three commits on `070e29d`, each with the project trailer, each scanned 0 under E1):**
+- `a77cf01`: design and prediction, before any run (`docs/audits/2026-11-13-brouter-port-closing/s64-stopped-clock-sibling.md`).
+- `2477888`: `forager30sLimitOnAStoppedClockRoutesAsF0sStoredRow` added to
+  `brouter/src/commonTest/.../tiles/EngineStopCommonTest.kt`, and the header's "not mirrored" line corrected. F0's first
+  case through the port with a 30,000 ms limit on a clock that always reads 0, held to F0's stored row.
+- `ee1a001`: results appended to the findings file.
+- `git diff --stat 070e29d ee1a001` names those two files only. Nothing under `commonMain` changed, so no plant is left.
+  The work tree is clean.
+
+**CI, run 43479572984 on `2477888`, all four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 245 tests, 0 failures (was 244). `EngineStopCommonTest[jvm]`: 5 tests, the new one named and passed.
+- `ios-smoke`: 58 tests, 0 failures (was 57). `EngineStopCommonTest` on `iosSimulatorArm64`: 5 tests, 0 failures, the
+  new one named. arm64: 7 tests, 0 failures. Gate line `OK: all 2 classes ran` present. Simulator-checked.
+- `ios-memory`: 3, 1 and 1 tests, 0 failures. `jvm-production`: 2 tests, 0 failures.
+- No run was found for `ee1a001` (a findings file only) at this writing.
+
+**The plant (coder's report and findings file; the planner did not rerun it):** `RoutingEngine.kt:724`,
+`clock.nowMillis() - startTime > timeout` made `>= 0`. On the JVM: 0 ` e: ` lines, fresh XML, the class ran 5 tests with
+1 failure, the new test, with `expected:<[route|226|5302|5047|...]> but was:<[family:timeout|0|0|0|...]>`, as predicted.
+`theTimeLimitReadsTheInjectedClock` passed under the same plant, so the new test sees a wrong port the old one cannot.
+The port was restored from a saved copy and compared equal.
+
+**Decision (planner):** the brief said "held to F0's stored row as `F0RouteCommonTest` does". The coder took the row from
+`F0EngineCommonTest.CASES.first()` instead, because `F0RouteCommonTest`'s row is in a `private companion object`
+(`F0RouteCommonTest.kt:60`) and `F0EngineCommonTest`'s is `internal` (`F0EngineCommonTest.kt:48`). It compares six fields
+and the tuple digest, one field (cost) more than `F0RouteCommonTest`. Accepted: same stored row, stricter comparison, no
+number copied, and no file outside the test's own changed. Rejected: making `F0RouteCommonTest`'s companion `internal`,
+which edits a second test for no gain.
+
+**Not shown:**
+- The plant ran on the JVM only. That the new test catches it on iOS is inferred from the shared source, not observed.
+- Every iOS line above is the simulator on a debug build. Nothing here shows a real iPhone.
+- The coder did not trace which clock read (`:549` or `:724`) comes second in the Error and Exception tests; they passed
+  under the plant and nobody looked at why.
+- The coder's statement that the two classes' rows are the same was not rechecked by the planner field by field.
+
+**Left of part one, in order:** review should-fix 4 (FK9's guard), 2 (`ReadBinaryTest` reach), 5 (the oracle-only run as
+a test), 3 (-116's breadth); plan item 4 (public entry for the route-ways reader); plan item 6 (the closing list);
+session 60's change to the reviewer (-163 decision 5).
+
+**Notes:** Written by the planner session by hand. Next free ID -170.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-170
+**Timestamp:** 2026-11-13T20:39:28Z
+**Continues:** 2026-10-28-169, 2026-10-28-163, 2026-10-28-127
+**Title:** The review's should-fix 4 closed: FK9 holds the port's own clock past the limit at its timeout, seen red
+under -127's revert (b) (Plumb's session 65); -127's decision 1 reversed by the planner
+
+**Decision (planner, reversing its own -127 decision 1):** the guard is added. -127 refused it as "a second comparison
+change after a result". The reviewer's reading (-163, should-fix 4) is the better one: an assertion that is only added,
+predicted before it runs and seen red under a plant, moves no comparison toward a result. No owner's ruling is touched.
+
+**What landed (three commits on `ee1a001`; `brouter-port-5b` is at `4705321`; checked by the planner):**
+- `a85e7b8`: design and prediction before any run (`docs/audits/2026-11-13-brouter-port-closing/s65-fk9-guard.md`).
+- `890bc42`: `RoutingEngineStopTest.kt` only. A private `RecordingClock` wraps `EngineClock.MONOTONIC`, returns its
+  value unchanged and records the first read, the last read and the count. `againstOracle` gains
+  `clockGuard: Boolean = false`; FK9 alone passes `true`. When the port's kind is `family:timeout`, last read minus
+  first read must be greater than the limit (50 ms), and a port that never read its clock fails too. FK10 and FK11 run
+  as before on the plain clock. No port code changed (`git diff --stat ee1a001 4705321`: the test and the findings).
+- `4705321`: results. Each commit has the project trailer and scans 0 under E1. The tree is clean.
+
+**CI, run 43492461810 on `890bc42`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 245 tests, 0 failures. `RoutingEngineStopTest`: 9 tests, 0 failures. FK9: 10 cases, 0 mismatches, both sides
+  `{pass0=20}`; the port's clock per case 51 to 53 ms.
+- `ios-smoke`: 58 and 7, 0 failures, gate line present; `ios-memory`: 3, 1, 1; `jvm-production`: 2. Unmoved, as a
+  JVM-only change should leave them. Simulator-checked.
+
+**The plant (coder's report and findings file; the planner did not rerun it):** -127's revert (b),
+`RoutingEngine.kt:724`, `> timeout` made `<= timeout`. 0 ` e: ` lines, fresh XML. The class: 9 tests, 3 failures, as
+predicted (FK9, `theTimeLimitReadsTheInjectedClock`, the stopped-clock test). FK9 failed on all 10 cases for the
+guard's reason alone, e.g. `port's clock not past the limit at its timeout (13 ms over 2 reads)`. FK9's other
+comparisons passed the wrong port on all 10, which is what the review said the widened pattern lets through. Restored
+from a saved copy, `cmp` equal. Unplanted, five local runs of the class: 9 tests, 0 failures each; 50 of 50 FK9 cases
+at 51 to 56 ms.
+
+**Not shown:**
+- The guard is JVM-only. FK9 has no oracle on iOS and the guard does not run there.
+- A limit that strikes early in re-tracking, after passes that took over 50 ms, would pass the guard. Named, not planted.
+- That the guard cannot fail on a correct port rests on a code reading (four clock reads in `RoutingEngine.kt`, none
+  after the throw; coder's trace, not rechecked line by line by the planner), plus 60 passing cases on two machines.
+  The margin seen is 1 to 6 ms over the limit; it is a strict inequality the port itself enforces, not a tolerance.
+- The plant ran once.
+
+**Left of part one, in order:** should-fix 2, 5, 3; plan item 4; plan item 6; the review of the test changes since
+-163 (session 60's by -163 decision 5; the planner will send sessions 62, 64 and 65's with it as one review).
+
+**Notes:** Written by the planner session by hand. Next free ID -171.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-171
+**Timestamp:** 2026-11-13T21:55:38Z
+**Continues:** 2026-10-28-170, 2026-10-28-163, 2026-10-28-116
+**Title:** The review's should-fix 2 and 3 closed: `ReadBinaryTest` asserts the error path reached and compares the
+end-of-file texts whole again; each seen red under its plant (Plumb's session 66)
+
+Both items were put in one session because they change the same lines of one file; they are separate commits with
+separate plants. `brouter-port-5b` is at `baed90c`. Checked by the planner unless marked.
+
+**What landed (four commits on `4705321`, project trailer on each, each scans 0 under E1, tree clean):**
+- `be7d809`: design and predictions before any run
+  (`docs/audits/2026-11-13-brouter-port-closing/s66-readbinary-reach-and-breadth.md`).
+- `2fb0531`, should-fix 2: two counters beside `errorPaths`, `nullPointerPaths` (the oracle's text after the prefix
+  starts with `java.lang.NullPointerException`) and `otherErrorPaths`; two added assertions after the unchanged
+  `nonNull > 50 && reads > 1000`: `nullPointerPaths >= 74` and `otherErrorPaths >= 6 * tracks.size`.
+- `aceedc4`, should-fix 3: -116's prefix-only comparison now applies only when the oracle's text after the prefix is
+  exactly `java.lang.NullPointerException: Cannot read field "cost" because "last_pe" is null`. Every other error-path
+  text is compared whole again.
+- `baed90c`: results. `git diff --stat 4705321 baed90c` names `ReadBinaryTest.kt` and the findings file only. No port
+  code changed.
+
+**The review's premise for should-fix 3 holds on this JVM:** it inferred that the end-of-file texts were equal before
+-116. Compared whole, all 1,433 are equal (`java.io.EOFException` on both sides), locally and in CI.
+
+**CI, run 43504930148 on `aceedc4`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 245 tests, 0 failures. `ReadBinaryTest`: 32 tracks, 9,029 reads, 2,601 returned, 4,522 debug texts, 1,549 on
+  the error path, split 116 null-pointer and 1,433 other. Tails printed: oracle and port `java.io.EOFException`; oracle
+  the JDK 21 null-pointer text, port `java.lang.NullPointerException`.
+- `ios-smoke`: 58 and 7, 0 failures, gate line present; `ios-memory`: 3, 1, 1; `jvm-production`: 2. Unmoved.
+  Simulator-checked.
+
+**The plants (coder's report and findings file; the planner did not rerun them):**
+- Should-fix 2, in the test's setup: the two empty tracks removed. 0 ` e: ` lines, fresh XML. Failed with
+  `null-pointer case (the empty tracks) reached 0 times, floor 74`; the old reach assertion passed (30 tracks, 8,505
+  reads, 2,358 returned), which is the gap the review named.
+- Should-fix 3, in the port (`OsmTrack.kt:560`): the text written on an end-of-file cut changed in one word. Against
+  -116's comparison as committed before: pass. Against the narrowed one: 1 failure,
+  `debugInfo after the error prefix (whole text, RECORD -116 narrowed) expected:<java.io.E[OF]Exception> but
+  was:<java.io.E[of]Exception>`. Both restored from saved copies, `cmp` equal.
+
+**Not shown:**
+- The floors (74, and 6 per track) are the coder's reading of the setup's structure, checked against one count each
+  (116 and 1,433). The planner did not rederive them. They are floors, so they would miss one empty track dropping out
+  only if 37 or more of its reads remained; the coder's "about 53 with one empty track" is inferred and was not planted.
+- A null-pointer exception with no message (the JVM's fast throw) or another JDK's wording would now be compared whole.
+  Neither was seen. The test JVM runs with `-XX:-OmitStackTraceInFastThrow` (-165).
+- JVM only; nothing here runs on iOS. `readBinary` is not on Forager's path (-116).
+- Each plant ran once. The test stops at the first differing text, so "all 1,433 would fail" is inferred.
+
+**Left of part one, in order:** should-fix 5; plan item 4; plan item 6; one review of the test changes since -163.
+
+**Notes:** Written by the planner session by hand. Next free ID -172.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-172
+**Timestamp:** 2026-11-13T21:57:38Z
+**Continues:** 2026-10-28-158, 2026-10-28-111, 2026-10-28-74
+**Title:** The shape of the route-ways reader's public entry (plan item 4): one function in `Route.kt`'s style, raw
+values out, the engine's classes kept internal (the planner's; the owner may overrule)
+
+The plan filed in -158 makes this the planner's decision ("The route-ways entry's shape", section 3). It is written
+down before the dispatch so that the coder builds against a recorded shape, not a brief's wording.
+
+**What was read (by the planner, file and line):**
+- Forager's reader, `app/src/main/java/com/zynergylabs/forager/app/routing/BRouterRouteWays.kt` (137 lines), is
+  byte-identical at Forager `a0535ece`, at this session's checkout (`137b1427`) and at `origin/pre-main` as fetched at
+  this timestamp (`git diff --stat` empty for both). It imports nine engine classes (`DataBuffers`,
+  `BExpressionContextWay`, `BExpressionMetaData`, `GeometryDecoder`, `OsmFile`, `OsmLink`, `OsmNode`, `OsmNodesMap`,
+  `PhysicalFile`) and walks them in `read` (lines 59 to 123).
+- On `origin/pre-main` its callers are `AppContainer.kt:506` and `:541`, behind Forager's own interface
+  `domain/routing/RouteWays.kt:13`, which `domain/nextturn/` and `domain/wayto/` depend on.
+- In the port (`brouter-port-5b` at `baed90c`) all nine classes are `internal`. The port's public surface is
+  `brouter/src/commonMain/.../brouter/Route.kt`: `RouteRequest`, `RouteCancel`, `RouteOutcome`, `route()`,
+  `checkDataFile()`. Its header states the rule: "exactly what Forager's adapter calls today, and nothing more. The
+  engine's classes will be internal."
+- `brouter/src/jvmTest/.../mapaccess/RouteWaysTest.kt` (step 5d, -74) already makes the same walk on the port's
+  internals and on the Java engine and compares them, on Forager's 15 drop-off points and F0h's 16 ends.
+
+**Decision.** One public function beside `route()`, reading one square file:
+- In: the square file's path, the `lookups.dat` path, and the micro-cache cells to read (each a lon cell and a lat
+  cell index, as `BRouterRouteWays.read` computes them), in the caller's order.
+- Out, a sealed outcome in `RouteOutcome`'s style: either the square's divisor and, in walk order, one item per link
+  that has a description, holding the link's points as micro-degree `IntArray`s (the node, the decoded geometry, the
+  target) and the text of `getKeyValueDescription(reverse, bitmap)` unchanged. An I/O failure passes through as the
+  engine's own exception, as `route()`'s constructor exceptions do.
+- What stays Forager's, in the adapter or the shared domain, and is not in the port: which cells a circle covers, the
+  square file's name, the "no route square" and wrong-divisor messages, the end-pair dedupe, the split of the
+  description into a tag map, and the conversion of micro-degrees to positions. The entry returns the divisor so the
+  adapter can keep its check; whether the entry also refuses a divisor it was not asked for is left to the coder's
+  design, stated before it is built.
+- The coder may adjust names and the exact types in its design file, written first. It may not widen the surface.
+
+**Rejected:** making the nine engine classes public so Forager's `read` could be moved as it stands. It is the least
+code today, and it breaks the rule in `Route.kt`'s header, puts nine mutable engine classes in the iOS framework's
+interface, and ties Forager's code to the engine's internals on both platforms.
+
+**Tests first, against the Java engine** (the plan's words): the comparison is the entry's output against the Java
+walk `RouteWaysTest` already makes, on the same two point sets, seen red over a stub before the body is written, then
+one planted error seen red. A common sibling for the simulator, held to stored counts and a digest, is a separate
+session after it.
+
+**Not known:** the adapter is not designed (part two, phase C), so this shape is fitted to the Android reader as it
+stands today, not to a written adapter. If phase C's adapter wants a different cut, the entry changes then, with its
+tests.
+
+**Notes:** Written by the planner session by hand. Next free ID -173.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-173
+**Timestamp:** 2026-11-13T23:13:01Z
+**Continues:** 2026-10-28-171, 2026-10-28-163, 2026-10-28-126
+**Title:** The review's should-fix 5 closed: the oracle-only 1 ms run is a committed test, held so that its answer is
+not a timing (Plumb's session 67); all five should-fix items of -163 are now closed
+
+`brouter-port-5b` is at `fd717d1`. Checked by the planner unless marked.
+
+**What landed (three commits on `baed90c`, project trailer on each, each scans 0 under E1, tree clean):**
+- `151a650`: design and predictions before any run (`docs/audits/2026-11-13-brouter-port-closing/s67-oracle-only-1ms.md`).
+- `548a20b`: `RoutingEngineStopTest.fk9TheOracleAloneAt1msStrikesInTheIslandCheck`, a private helper `oracleHeld` and
+  `HOLD_MS = 5L`. 73 lines added, none removed; the file is 353 lines. No port code and no other test changed.
+- `fd717d1`: results.
+
+**A premise of the brief that was wrong, found by the coder.** The brief asked for "10 of 10 `target-island-check`" at
+a 1 ms limit and told the coder to check whether that is safe on any machine. It is not. By the Java (coder's reading
+of v1.7.10 and the jar's line table; the planner did not reread it): `startTime` is taken at `:201`, the limit is
+checked only at `_findTrack`'s loop head (`:1981`) and strictly, so at 1 ms it strikes only once the clock reads 2 ms
+or more later, and the island check is bounded to 500 nodes. A fast machine could finish it first and the oracle would
+rightly say `pass0`. Session 34's 10 of 10 (-126) was a timing that happened to hold.
+
+**What the test asserts instead (the coder's design; accepted by the planner):** a held run. The test takes the
+oracle's private `openSet` monitor by reflection, starts `doRun(1)` on a thread, waits until that thread is BLOCKED on
+that object (the first `synchronized (openSet)`, `:1965`, before the first limit check), waits 5 ms on the oracle's own
+clock, and releases. The first check then sees the limit passed and strikes in the island check. Asserted: every kind
+is `family:timeout` and every first word is `target-island-check`. A plain `doRun(1)` runs beside it and is printed,
+not asserted. A run that never blocks there fails; there is no fallback.
+- Accepted because it asserts what the Java says, not what one machine's speed gave. Its cost, named: it reads a
+  private field of the oracle and polls a thread's state, so it depends on this oracle jar's internals and on the JVM
+  reporting lock identity. Rejected: asserting the plain run (a timing), and printing only (no assertion, which is
+  what should-fix 5 was against).
+
+**CI, run 43516186631 on `548a20b`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 246 tests, 0 failures (was 245). The new test printed, plain and held alike, first words
+  `{target-island-check=10}`, kinds `{family:timeout=10}`.
+- `ios-smoke`: 58 and 7, 0 failures, gate line present; `ios-memory`: 3, 1, 1; `jvm-production`: 2. Simulator-checked.
+
+**The control and the runs (coder's report and findings file; not rerun by the planner):** five local runs, each
+plain and held `{target-island-check=10}`. Control: the expected word changed to `pass0`; 0 ` e: ` lines, fresh XML,
+failed with `expected:<{pass0=10}> but was:<{target-island-check=10}>`; restored, `cmp` equal. A scratch check, not
+committed: at a 50 ms limit with a 60 ms hold, plain gave `{pass0=10}` and held `{target-island-check=10}`, so the
+hold does change the answer.
+
+**Not shown:**
+- On both machines the plain and held runs agree at 1 ms, so the committed test alone does not show the hold doing
+  anything; that rests on the uncommitted scratch check.
+- That no FK9 input makes its first section a beeline (which would skip the island check) is inferred from 10 of 10.
+- A wall clock stepping back 4 ms or more during a run; JVMs other than the container's and CI's.
+- One deprecation warning on `Thread.getId` was left.
+
+**-163's five should-fix items:** 1 closed in -167, 4 in -170, 2 and 3 in -171, 5 here.
+
+**Left of part one:** plan item 4 (the route-ways entry, shape in -172), its simulator sibling, plan item 6 (the
+closing list), one review of the test changes since -163.
+
+**Notes:** Written by the planner session by hand. Next free ID -174.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-174
+**Timestamp:** 2026-11-14T00:28:59Z
+**Continues:** 2026-10-28-172, 2026-10-28-173
+**Title:** Session 68: the route-ways reader has its public entry, equal to the Java walk on every link (plan item 4)
+
+**What landed on `brouter-port-5b`, head `e9eeddb` (from `fd717d1`; read by the planner with `git ls-remote`, tree
+clean, four commits, each with the project trailer, each scanned 0):**
+- `86c6df5`: design and predictions, `docs/audits/2026-11-13-brouter-port-closing/s68-route-ways-entry.md`.
+- `a38d55d`: a stub that throws `NotImplementedError`, the new test, and a move of the cell helpers (red).
+- `36604e4`: the body. `e9eeddb`: results.
+- `git diff --stat fd717d1 e9eeddb` names five files: the new `commonMain/.../brouter/RouteWays.kt` (120 lines), the new
+  `jvmTest/.../mapaccess/RouteWaysEntryTest.kt` (199) and `RouteWaysCells.kt` (48), `RouteWaysTest.kt` (46 lines moved
+  out, five imports in), and the findings file. No engine class changed.
+
+**The surface, read by the planner in `RouteWays.kt`:**
+- `fun readRouteWays(request: RouteWaysRequest): RouteWaysOutcome`.
+- `RouteWaysRequest(square: Path, lookups: Path, lonCells: IntArray, latCells: IntArray, divisor: Int)`.
+- `RouteWaysLink(iLat: IntArray, iLon: IntArray, description: String)`: node, decoded geometry, target, in
+  micro-degrees; the text is `getKeyValueDescription(reverse, bitmap)` unchanged.
+- `RouteWaysOutcome.Read(divisor, links)` and `RouteWaysOutcome.OtherDivisor(divisor)`.
+This is -172's shape with one addition: the request carries the divisor the caller computed its cells with.
+
+**The divisor (left to the coder by -172): the entry refuses.** If the square's divisor differs from the request's it
+returns `OtherDivisor` and reads no cell. Reason given: a cell index means something only at its divisor, so cells
+computed for 1/32 read against a 1/80 square would return plausible links from the wrong place. Forager checks the
+same before it walks (`BRouterRouteWays.kt:80`) and words its own message. Accepted by the planner.
+
+**The test (`RouteWaysEntryTest`, 3 tests):** each of Forager's 15 drop-off points and F0h's 16 ends, the entry's
+output against the Java walk link by link: outcome kind, divisor, link count, point counts, `iLat`, `iLon`,
+description text; then totals. Coder's counts, equal on both sides: drop-off 120 links and 270 geometry points over 18
+cells and 135 nodes; F0h 4,858 links and 43,006 geometry points over 21 cells and 3,983 nodes. Cells and nodes are the
+Java side's only, because the entry does not report them. The third test asks for a 1/32 square at 1/80 and expects
+`OtherDivisor` carrying the Java's divisor.
+
+**CI, run 43526466282 on `36604e4`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 249 tests, 0 failures (was 246).
+- `ios-smoke`: 58 and 7, 0 failures, gate line `OK: all 2 classes ran`, `compileKotlinIosSimulatorArm64` ran;
+  `ios-memory`: 3, 1, 1; `jvm-production`: 2. Simulator-checked. The entry is compiled for the simulator and run by
+  no simulator test yet.
+- Docs-only `e9eeddb` has no run of its own.
+
+**Red and the plant (coder's report and findings file; not rerun by the planner):** over the stub, 3 tests and 3
+failures, each naming the stub's `NotImplementedError`; the red commit's run 43526375495 has a red `jvm` job, as
+predicted. Plant: `getKeyValueDescription(reverse, bitmap)` to `(!reverse, bitmap)`; 0 compile errors, fresh XML, 2
+failures at `link 1 ... field [description]`, the divisor test passed; restored, `cmp` equal, `git diff HEAD` empty.
+
+**Not shown:**
+- No point in either set spans two squares, so one call per point; nothing is compared across squares.
+- No described link in either set has `reverse` true. The plant fails because `!reverse` flips every link, but a body
+  passing a literal `false` would pass this test. Stated by the coder; the planner agrees it follows from the counts.
+- No real square of another divisor was read; the refusal is tested by asking the wrong divisor of a 1/32 square.
+- A missing or bad `lookups.dat` or square: the pass-through of the engine's exceptions is read from code, not run.
+- That each cell lies in the square given is not checked by the entry (the square's position is only its name, which
+  -172 keeps Forager's).
+- A finding, not fixed: if `PhysicalFile`'s constructor throws after opening the file, the handle stays open. The
+  coder reports the same in Forager's reader, in `checkDataFile` and in the Java. Not verified by the planner.
+- Nothing on iOS runs the entry. Forager's adapter is not changed to call it; that is the app's work.
+
+**What follows (the planner's):** session 69, the entry's common sibling for the simulator, with stored counts and a
+digest drawn on the JVM. One review by Samphire Witness of the test changes since -163 (sessions 60, 62, 64 to 68),
+started beside it; session 69's test goes to the same review when it lands.
+
+**Notes:** Written by the planner session by hand. Next free ID -175.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-175
+**Timestamp:** 2026-11-14T01:32:52Z
+**Continues:** 2026-10-28-174
+**Title:** Session 69: `readRouteWays` runs on the simulator against stored rows; the session was cut off by a container restart before its results were written
+
+**What happened.** The container restarted while session 69 (coder) and the second review (Samphire Witness) were
+running; both stopped. Session 69 had pushed its design (`31215ee`) and its test (`2184691`) to `brouter-port-5b`
+and had run its plant; it had not appended results to its findings file, and never reported. The planner did not send a
+coder back in. What follows is read by the planner from the remote, from CI and from the plant's files left in the
+scratch folder. The findings file `docs/audits/2026-11-13-brouter-port-closing/s69-route-ways-common-sibling.md` holds
+design and predictions only; this entry stands in for its results section.
+
+**On `brouter-port-5b`, head `2184691` (`git ls-remote`; tree clean; two commits, project trailer on each, each
+scanned 0):** new `commonTest/.../tiles/RouteWaysCommonTest.kt` (125 lines, 2 tests) and `RouteWaysExpected.kt` (39);
+`RouteWaysCells.kt` moved from jvmTest to commonTest with `cells` on `kotlin.math` in place of `java.lang.Math`; the
+findings file. No engine class and no `RouteWays.kt` change.
+
+**The test, read by the planner:** on F0h's 16 ends, one `readRouteWays` call per square, each held to a stored row:
+divisor, count of cells asked and a digest of them, link count, total point count, and a digest over every link's
+description, `iLat` and `iLon`. The second test asks a 1/32 square at 1/80 and expects `OtherDivisor`, and expects
+`IllegalArgumentException` for unpaired cell arrays. The stored rows are the port's own JVM output; they are tied to
+the Java only through `RouteWaysEntryTest` (-174), which is green in the same run. The cells digest is the coder's
+addition beyond the brief, to tell a platform `cos` difference from a reader difference; accepted.
+
+**CI, run 43535294553 on `2184691`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 251 tests, 0 failures (was 249; predicted 251).
+- `ios-smoke`: 60 tests, 0 failures (was 58; predicted 60); the log's XML names both
+  `RouteWaysCommonTest` cases with `[iosSimulatorArm64]`. arm64 JVM step 7, gate line present. Simulator-checked.
+- `ios-memory`: 3, 1, 1; `jvm-production`: 2. Simulator-checked.
+- The run printed `16 points, 16 calls, links 4858, points 43006`, equal to -174's F0h totals.
+
+**The plant (run by the coder before the restart; its files read by the planner, not rerun):** the target point
+dropped in `RouteWays.kt` (`lat += target.ilat`, `lon += target.ilon`). Build log 0 ` e: ` lines; 2 tests, 1
+failure, `f0hEndsReadAsStored[jvm]`, its message naming `points <stored>/<got>` and `digest` for each row and no
+divisor, cells or links field, as predicted. The saved copy is `cmp` equal to the file now and the tree is clean.
+Whether the XML was fresh at the time is not something the planner can check after the fact.
+
+**A correction to the planner's earlier reports:** the line `OK: all 2 classes ran` gates the arm64 JVM step's two
+named classes (`tools/junit-ran.py`, per the design file reading `.github/workflows/brouter.yml`), not the
+simulator's classes. Entries that cite it as evidence about the simulator's classes read more into it than it shows.
+For the simulator, the evidence a class ran is its total and its XML, as above.
+
+**Not shown:**
+- The drop-off points are not in the sibling (F0h ends only), so the simulator reads 4,858 links, not the other 120.
+- Everything -174 lists: no described link with `reverse` true, no point across two squares, no real square of
+  another divisor, the exceptions' pass-through.
+- That `RouteWaysTest` prints the same digests after the move was the coder's to show and is not written down; the
+  planner read only that jvm is 251 of 251 with `RouteWaysEntryTest` in it.
+- A phone. A release build.
+
+**The review:** restarted from its pushed method (`b231a5b` on `review/changed-comparisons`), with session 69 added
+to its scope after its predictions were committed, and told to push after each section.
+
+**Left of part one:** the review. Then the owner's word on merging `brouter-port-5b` into `brouter-port`.
+
+**Notes:** Written by the planner session by hand. Next free ID -176.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-176
+**Timestamp:** 2026-11-14T01:39:50Z
+**Continues:** 2026-10-28-163, 2026-10-28-175
+**Title:** The second independent review (Samphire Witness): nothing blocking, two should-fix, the five earlier items confirmed closed
+
+**The review.** Samphire Witness, resumed after the restart (-175); branch `review/changed-comparisons`, head `6a7cbfe`,
+four commits on `b231a5b`, one file, `docs/reviews/2026-11-14-test-changes-since-163.md` (384 lines). Checked by the
+planner: the head by `git ls-remote`, the trailers, no model name in the report, E1 over `ed8a899..6a7cbfe` 0, the
+review's worktree clean at `e9eeddb`, nothing pushed to `brouter-port-5b`. The findings are the reviewer's, on the
+container's JDK, and are not re-run by the planner. Session 69 was added to its scope after its predictions were
+committed, and the report says so.
+
+- **Blocking: none.** "No change turned a wrong port green that I could find."
+- **Verdicts:** s60 justified in part (one part rests on the owner's ruling); s62, s64, s65, s66, s67, s68, s69 each
+  justified by independent evidence. The reviewer predicted "in part" five times and was right once.
+- **-163's five should-fix items: all closed**, as -167, -170, -171, -173 claim, each with a plant of the reviewer's own:
+  the JVM flag seen on the running test JVM's command line and the `isInBoundary` message assertion seen red (1); a
+  limit five times too short fails FK9 for the guard's reason alone (4); one empty track in place of two fails the
+  floor at 69 against 74 (2); all 1,433 end-of-file texts compared whole (3); the Java lines read, and at 50 ms with a
+  60 ms hold the strike is in the island check where unheld it is `pass0` (5).
+- **s68:** `RouteWays.kt` matches `BRouterRouteWays.kt:59-123` line for line. A literal `false` for reverse passes 3 of
+  3, as -174 said, and the reviewer finds it cannot matter: by `OsmNode.addLink` and `OsmLink.isReverse` no described
+  link on this walk can be reverse on any data. That is the reviewer's reading of the code, not the planner's. Decoding
+  the geometry the other way fails 2 of 3 on `[iLat]`.
+- **s69:** a scratch test recomputed all 16 stored rows from the Java walk alone, 16 of 16 equal on every field, so
+  the rows have an anchor to the Java beyond s68's test, though not one kept in the tree. The reviewer ran the
+  designed plant and it failed as designed. Its report says the plant "had never been run"; the coder's leftover files
+  (-175) show it had been, which the reviewer could not see. Both runs agree.
+
+**Should-fix, two:**
+1. **60-1** (`FormatDigestsCommonTest.kt:71-74`, `FormatNumberText.kt`): at the by-value places the stored length no
+   longer holds the text. The reviewer's plant added a `0` to every track point's `<ele>` (37,947 places): both digest
+   tests stayed green and only the JVM's text comparison caught it. On the simulator, where Kotlin/Native's own
+   printing runs, nothing would. The reviewer's proposal: keep the plain text's length beside the value digest; a
+   last-digit difference still passes. **This touches the owner's ruling of -163**, which chose: "Leave the port's
+   printing as it is and record this as a known platform difference: on iOS a printed number in these exports can
+   differ from Java's in its last digit while meaning the same value. The simulator test that is red now is changed to
+   compare those numbers by value, and that change goes to the independent reviewer." The planner does not act on the
+   finding; it goes to the owner with the ruling quoted.
+2. **69-1** (`.github/workflows/brouter.yml`): nothing in CI fails if a commonTest class stops running on the
+   simulator; `OK: all 2 classes ran` gates two arm64 JVM classes (-175's correction). Proposal: point
+   `tools/junit-ran.py` at the simulator's results for the classes that carry a simulator claim. The planner's call:
+   dispatched as session 70. It tightens CI and changes no test.
+
+**Notes carried, none acted on:** the FK9 guard caught 8 of 10 cases in the reviewer's plant, its reach depending on
+set-up being faster than the limit (65-1); the floor's margin against losing one empty track is 5 reads (66-1); the
+committed 1 ms test cannot show its hold working on these machines (67-1, as -173 said); `<brouter:speed>` and the JSON
+Point elevations occur 0 times on the 69 rows, so at most 9 of the 12 by-value places are exercised by real data (60-3);
+on the simulator the value is read back by the platform that printed it (60-2).
+
+**Not checked by the reviewer (its list):** anything on the simulator by its own run; CI's JDK; the coders' own plants;
+a value plant at a by-value place other than the time; two squares in one read, a divisor-80 square, bad files; the
+full local `jvmTest`; E1 on the coders' commits (the planner scans those).
+
+**A correction to -175:** it says the unchanged `RouteWaysTest` digests after the helper move were not written down.
+The coder's scratch file `s69move-lines.txt` shows both digests (`b7fccbb3...`, `5a5c054d...`) as before the move. The
+file is in the scratch folder, not in the tree.
+
+**Notes:** Written by the planner session by hand. Next free ID -177.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-177
+**Timestamp:** 2026-11-14T04:40:03Z
+**Continues:** 2026-10-28-176
+**Title:** Session 70: CI now fails if a named class does not run on the simulator (finding 69-1 closed); the owner's ruling on finding 60-1
+
+**The owner's ruling on 60-1.** Asked with -163's ruling quoted and "Keep it as ruled" as the first option, neither
+marked as recommended. The owner chose: "Also compare length". The option read: "The reviewer's proposal: store and
+compare the text's length beside the value. A last-digit difference still passes; a longer or shorter number (trailing
+zero, exponent form) fails on the simulator. About one short coder session, then a look by the reviewer. If iOS does
+print a different length somewhere, the test goes red and comes back to you." Dispatched as session 71. If the
+simulator goes red on a length, that is the owner's, and no test is loosened to reach green.
+
+**Session 70.** A second container restart came after the session finished and before its report was delivered; the
+report is lost. Everything below is read by the planner from the remote and from CI.
+
+**On `brouter-port-5b`, head `23e7c8c` (`git ls-remote`; tree clean; six commits on `2184691`, project trailer on
+each, each scanned 0):** `.github/workflows/brouter.yml` (+48), `tools/junit-ran.py` (+52, a new `--simulator` mode in
+its own function; the old mode's lines are untouched in the diff),
+`docs/audits/2026-11-13-brouter-port-closing/s70-simulator-class-gate.md` (237 lines). No test and no engine class
+changed.
+
+**What is gated, read by the planner in the diff:**
+- `ios-smoke`: a named list, `SIMULATOR_CLASSES`, of 24 commonTest classes, checked against
+  `brouter/build/test-results/iosSimulatorArm64Test`. A class "ran" only if its XML is present, it holds a test case
+  with the header's `tests` above 0, none is skipped, and its output does not hold the words a class prints when it
+  returns early because a job variable is unset.
+- `ios-memory`: `Mp64EngineCommonTest`, `Ml5EngineCommonTest`, `Pm5EngineCommonTest` and `REngineCommonTest`, the same
+  way, from copies of their results.
+- The list is named, not read from the source tree: a class moved, renamed or filtered out turns the job red; a new
+  commonTest class is not gated until someone adds it. That cost is stated in the workflow's comment. The simulator's
+  results hold 29 files and 24 are named; the workflow says the ones not named are the memory groups and R, which return
+  early in `ios-smoke` by design. The planner did not count the five against that sentence.
+
+**CI, read by the planner (0 ` e: ` lines in every job log of both runs):**
+- Red on purpose, run 43542432482 on `583aa8c`: `ios-smoke` `failure`, with `FAIL on the iOS simulator: 1 of 25
+  classes did not run: ...RedOnPurposeNoSuchCommonTest`; the tests themselves 60 and 7, 0 failures; the other three
+  jobs `success`. So the gate fails the job on real simulator results for the reason planted.
+- Green, run 43548019228 on `914ac7d`: four jobs `success`. `jvm` 251; `ios-smoke` 60 and 7, with `OK on the iOS
+  simulator: all 24 classes ran` and the old `OK: all 2 classes ran`; `ios-memory` 3, 1, 1 with `all 3 classes ran`
+  and `all 1 classes ran`; `jvm-production` 2. Simulator-checked.
+- `23e7c8c` is docs only and has no run.
+
+**Not shown / not read by the planner:** the session's local evidence (a missing XML, `tests="0"`), which is in its
+findings file and was not rerun; a CI run where a class is skipped or returns early, as opposed to missing; the
+findings file itself beyond its size.
+
+**-176's two should-fix items:** 69-1 closed here; 60-1 ruled by the owner and in flight.
+
+**Notes:** Written by the planner session by hand. Next free ID -178.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-178
+**Timestamp:** 2026-11-14T05:46:28Z
+**Continues:** 2026-10-28-177
+**Title:** Session 71: the plain text's length is compared again beside the by-value digest, and the simulator is green on it (finding 60-1, on the owner's ruling "Also compare length")
+
+**On `brouter-port-5b`, head `6e2d879` (`git ls-remote`; tree clean; seven commits on `23e7c8c`, project trailer on
+each, each scanned 0; read by the planner):** `commonTest/.../tiles/FormatDigests.kt` (the 69 stored rows gain GPX's
+and JSON's plain lengths), `FormatOutputs.kt` (`Row.textLengths`), `FormatDigestsCommonTest.kt`,
+`jvmTest/.../FormatDigestsJvmTest.kt`, and `docs/audits/2026-11-13-brouter-port-closing/s71-length-beside-value.md`,
+which quotes both rulings. No port, engine or printing file changed, and no test was added.
+
+**The change, read by the planner in `FormatDigestsCommonTest.kt`:** GPX and JSON count as equal only if the by-value
+length, the by-value digest and the plain text's length all match; a mismatch prints "text length here A stored B". The
+by-value comparison is as it was.
+
+**Where the lengths came from (coder's account, not rechecked by the planner):** session 60's commit `28e2a79` had
+overwritten the stored GPX and JSON lengths with the by-value lengths in all 69 rows. The plain ones were copied back by
+row id from `FormatDigests.kt` at `f33e8a1` (session 58). They are the port's JVM production output, tied to Java's
+text by `HintsFormatsLogicTest`'s exact comparison, and held to the port's production run by `FormatDigestsJvmTest`.
+They were not drawn from the oracle anew.
+
+**CI, run 43558149498 on `c401e25`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+`jvm` 251; `ios-smoke` 60 and 7, `OK on the iOS simulator: all 24 classes ran`; `ios-memory` 3, 1, 1 with both its
+gate lines; `jvm-production` 2. Simulator-checked. So on the 69 rows the simulator prints numbers of Java's length at
+the by-value places that the rows exercise. The coder reports the class's own line as F0 2 of 2, F0h 8 of 8, NT 59 of
+59; the planner read the totals and gate lines, not that line.
+
+**The plant (coder's report and findings file; not rerun by the planner):** an extra `0` after every track point's
+`<ele>` (`FormatGpx.kt:281`), the reviewer's P60.
+- On the base: both digest tests passed, as the reviewer saw.
+- After the change: `FormatDigestsJvmTest` failed, "64 differences; first: ... (gpx/json text length here 16444/13637
+  stored 16218/13637)", every by-value field equal.
+- The coder's prediction failed on one point: `FormatDigestsCommonTest` on the JVM passed under the plant, because on
+  the JVM in CI it runs F0's 2 rows only, and those hold no number at a by-value place. With the F0h and NT case files
+  supplied by hand it ran all 69 rows and failed on "gpx text length here 16444 stored 16218".
+- Each run: 0 ` e: ` lines, fresh XML, file restored `cmp` equal, `git diff HEAD` empty.
+- The other way (a last-digit difference still passes) is cited from `FormatNumberTextTest.kt:47` and `:79`, not run
+  through the port.
+
+**Not shown:**
+- The length check failing on the simulator. Its failing side is seen on the JVM only, through the same common code.
+- In CI, the common digest test's length check is exercised on the simulator only; the JVM run covers F0's 2 rows.
+- The reviewer's note 60-3 still holds: `<brouter:speed>` and the JSON Point elevations occur 0 times on the 69 rows,
+  so the length is held at no more than 9 of the 12 places by real data.
+- A phone. A release build.
+
+**A wrong line in the brief:** session 60's findings file is at `docs/audits/2026-11-12-brouter-port-step10/s60-number-text.md`,
+not under the closing folder.
+
+**-176's two should-fix items:** both closed (69-1 in -177, 60-1 here). A short look by Samphire Witness at sessions 70
+and 71 is dispatched, as the owner's chosen option says.
+
+**Notes:** Written by the planner session by hand. Next free ID -179.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-179
+**Timestamp:** 2026-11-14T06:07:33Z
+**Continues:** 2026-10-28-176, 2026-10-28-177, 2026-10-28-178
+**Title:** The third review (Samphire Witness) of sessions 70 and 71: nothing blocking, no should-fix, findings 69-1 and 60-1 confirmed closed
+
+**The review.** Branch `review/changed-comparisons`, head `50d44fa`, three commits on `6a7cbfe` (predictions first),
+one file, `docs/reviews/2026-11-14-sessions-70-71.md` (166 lines). Checked by the planner: the head by
+`git ls-remote`, the trailers, no model name, E1 over `6a7cbfe..50d44fa` 0, the review's worktree clean. The code
+reviewed is `brouter-port-5b` at `6e2d879`. The findings are the reviewer's, on the container's JDK, and are not
+re-run by the planner.
+
+- **Blocking: none. Should-fix: none.** Both sessions "justified by independent evidence"; 69-1 and 60-1 closed.
+- **Session 70:** on 18 hand-made result folders and on the simulator's 29 real XML files cut from run 43558149498's
+  log, the gate fails for each reason it claims (missing XML, no tests, a skipped case, an early return) and passes the
+  24 named classes; the old arm64 mode gives the same output and exit code as before on every folder. Source tree
+  against the lists: 28 commonTest classes and 1 iosTest class; 24 in `SIMULATOR_CLASSES`, 4 in the memory job's gate,
+  1 in neither (`StackLadderIosTest`). That answers the count the planner left open in -177. No way found for a stale
+  copy to turn the `ios-memory` gate green on a fresh runner (inferred).
+- **Session 71:** the 69 stored plain lengths are Java's, 69 of 69 rows and 138 numbers, by a scratch test that ran the
+  oracle's own `FormatGpx` and `FormatJson` on each case. That closes -178's caveat that the lengths were copied from
+  an older commit and not drawn from the oracle. With all 69 rows running: an extra `0`, a shorter number of the same
+  value and a longer number in JSON each fail on the text length; same length with a different text of the same value
+  passes; same length with a different value fails by value.
+
+**Notes, none acted on:**
+- 70-1: `StackLadderIosTest` is the one simulator class no gate holds; it would pass green if its variable were lost.
+  The findings file says so; the workflow's comment does not.
+- 70-2: the early-return check goes by wording in `system-out`. 70-3: the gate goes by file name. 70-4: the named list
+  is not held to the source tree (-177 states this).
+- 71-1: the length is the whole text's, so a longer and a shorter number could cancel (inferred, not run).
+- 71-2: in CI the common test's length check works on the simulator only, and its red side has been seen on the JVM
+  only (-178 states both).
+- 71-3: the passing plant is not a literal last-digit tie; that case is held by `FormatNumberTextTest`.
+
+**A method point, the reviewer's, and what the planner found on it.** "0 lines containing ` e: `" cannot fail on a
+local Gradle log, where a compile error starts the line as `e: `; the reviewer's first scratch build failed to compile
+with that count at 0. Checked by the planner: `revert.sh` counts `^e: ` (its lines 17 to 19), so plants run through
+it were guarded by the right pattern. The planner's own counts were on CI job logs, where each line carries a
+timestamp first, so ` e: ` is the form that occurs there. The briefs' wording was wrong for local logs all the same,
+and a coder who counted by hand as worded would have had a check that could not fail. From here briefs say: both forms.
+
+**Not checked by the reviewer (its list):** anything on the simulator by its own run; the gate red in CI for a skipped
+case or an early return; the `ios-memory` gate red in CI at all; plants at `<brouter:speed>`, the locus elements or a
+JSON Point; cancelling lengths; the full local `jvmTest`.
+
+**Part one of the plan (`docs/plans/2026-11-12-app-port-plan.md`), as the planner reads it now:** plan items 4, 5
+and 6 done (-174 and -175; -169; the closing list); -163's five should-fix items closed (-167, -170, -171, -173) and
+confirmed by -176; -176's two closed (-177, -178) and confirmed here. Head of `brouter-port-5b`: `6e2d879`; its last
+commit with a CI run is `c401e25` (run 43558149498, green), and the four after it are docs only. Open and the owner's:
+the merge into `brouter-port`, the record's PR to `main`, and the 8 untested cosine rows (-137). Every iOS result is
+simulator-checked on a debug build; no phone has run any of it.
+
+**Notes:** Written by the planner session by hand. Next free ID -180.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-180
+**Timestamp:** 2026-11-14T06:12:30Z
+**Continues:** 2026-10-28-179
+**Title:** Two rulings (owner): `brouter-port-5b` merged into `brouter-port`; a pull request for the record is opened, not merged
+
+**The owner's rulings, each asked with the facts stated in the question:**
+1. Asked: "Merge brouter-port-5b (head 6e2d879, 53 commits ahead, clean merge, last CI run 43558149498 green on c401e25:
+   jvm 251, simulator 60 and 7, all simulator-checked on a debug build, reviewed three times with nothing blocking) into
+   brouter-port, as a merge commit like -161's?" The owner chose: "Yes, merge it".
+2. Asked: "Open a pull request for the record from ccr-8ee6e614-32enzt to main in Forager-iOS (16 commits: RECORD -164
+   to -179 and the closing list, docs only, 883 lines added, 2 files)? Opening it does not merge it; merging would need
+   your word again, naming the PR." The owner chose: "Yes, open the PR". The option "Open and merge it" was offered and
+   not chosen, so the PR is opened and left unmerged until the owner names it.
+
+**The merge, done by the planner:** `brouter-port` moved from `b769ebf` to `a014100`, a merge commit (`--no-ff`) of
+`brouter-port-5b` at `6e2d879`, message "Merge brouter-port-5b at 6e2d879 into brouter-port (owner's word: \"Yes,
+merge it\", RECORD -180)". No force, no rebase. Checked: `git diff HEAD origin/brouter-port-5b` empty, so the merged
+tree is `6e2d879`'s; E1 over `b769ebf..a014100` 0; `git ls-remote` reads `a014100`. Whether the push to
+`brouter-port` started a CI run was not read when this was written; the tree it would test is the one run 43558149498
+tested plus four docs-only commits.
+
+**The pull request** carries this entry too, so it is -164 to -180 and the closing list. Its number is in the next
+entry or the planner's report.
+
+**Still the owner's, not yet asked:** the 8 cosine rows in no captured tile (-136 decision 3, -137 decision 2). The
+record promises that question "with the cost of a tile for them", and the planner has not priced a tile yet, so it is
+not asked without the cost.
+
+**Notes:** Written by the planner session by hand. Next free ID -181.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-181
+**Timestamp:** 2026-11-14T06:17:56Z
+**Continues:** 2026-10-28-137, 2026-10-28-180
+**Title:** The record's PR is #7; a read-only pulse prices tiles for the 8 cosine rows no test can reach: at least 5 new tiles and a new release
+
+**PR #7** (`ccr-8ee6e614-32enzt` to `main`, Forager-iOS) is open on the owner's word of -180 and unmerged. -180 said 16
+commits in the question put to the owner; with -179 and -180 it is 18, and with this entry 19.
+
+**The merge's CI:** run 43565180651 on `a014100` was in progress on all four jobs when this was written. Not read.
+
+**The pulse** (read-only, one session; nothing committed; a scratch check in the scratch folder only). Its findings,
+with the planner's spot checks marked:
+- **A row is a 0.1 degree band of latitude, all the way round the globe** (`CheapRuler.kt`, row i from
+  `i * 100000 + 50000`; read by the planner). The 13 rows are 474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297,
+  1310, 1311, 1318 (`CheapProductionRecordTest.kt:15`; read by the planner).
+- **"8 of the 13 lie in no captured tile" is right.** The pinned tiles (`tools/tile-pins.tsv`; names read by the
+  planner) cover 35 to 45 north and 50 to 45 south. The 5 covered rows lie in 39 to 42 north. The 8 lie in 43 to 39
+  south (474, 488, 502), 24 to 22 south (663, 675) and 14 to 18 north (1046, 1053, 1079). The planner rechecked the
+  bands for 474 and 1046 by the row rule.
+- **New, the pulse's computation, not rechecked:** all 13 rows differ in `kx`, the east-west scale, and none in `ky`,
+  each by 1 ulp of the cosine. -23 had this as undetermined. Computed against the container's JDK, not the pinned one.
+- **The bands hold roads** (general geography, inferred): Tasmania and New Zealand, Chile and Argentina; south-east
+  Brazil, southern Africa, Queensland; southern Mexico, Central America, the Sahel, central India, mainland South-East
+  Asia. Where Forager's users are is in neither repository.
+- **Cost, at least 5 new tiles,** one per 5 degree band that holds a row: 45 to 40 south, 40 to 35 south, 25 to 20
+  south, 10 to 15 north, 15 to 20 north. Sizes unknown (today's are 1 MB to 120 MB). Needed besides:
+  - a new tile release, which only the owner can run (`publish-tiles`, -30, -58), after edits to that workflow on
+    `main` and to `tools/tile-check/capture.sh`;
+  - the new tiles kept in a release and folder of their own: recapturing the old tiles would change their bytes
+    (brouter.de rewrites in place) and a new file in the shared folder would reshuffle R's, CR's and LB's draws;
+  - a new test group over the new tiles with its expected rows and stability runs, about the size of LB's 59 cases;
+  - a ruling on E1: the tile check commits a route's ends per tile, and new tiles would mean new coordinates in
+    `tools/tile-check/tiles.tsv`.
+  - CI: seconds to a few minutes more per job for the download, about half a minute for a 59-case group.
+- **Risk if nothing is done** (inferred): the only difference is 1 ulp in the east-west scale, so a route can change
+  only where a rounding or a near-tie flips. In those bands the port would then match Android's table and could differ
+  from desktop BRouter, which is the trade -24 chose. At least 122 cases that read one of the 5 covered rows changed no
+  route; that does not bound the other 8.
+- **Not determined:** the candidate tiles' sizes and whether each holds roads inside its row's band; where users are.
+
+**Next:** the question to the owner, with this cost.
+
+**Notes:** Written by the planner session by hand. Next free ID -182.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-182
+**Timestamp:** 2026-11-14T06:25:23Z
+**Continues:** 2026-10-28-181
+**Title:** The owner's ruling on the 8 cosine rows: "Cover them now"; candidate tiles sized from brouter.de's headers, about 30 MB for five
+
+**The ruling.** Asked with -181's cost in the question. Options, in order: "Leave uncovered, recorded (Recommended)",
+"Cover them now", "Cover them later". The planner had recommended the first. The owner chose: "Cover them now". The
+option read: "Before the app phase: I price the tiles properly first (sizes, which hold roads in each band), then
+dispatch the workflow edits, you run the release, and a coder builds the new group. Several sessions plus your release
+run and an E1 ruling." The planner's recommendation is overruled and the work is done as the option says, before the
+app phase.
+
+**Sizes, read by the planner** (HTTP headers only from brouter.de `segments4`, nothing downloaded; every file's
+`Last-Modified` was 2026-11-14 01:03 GMT, which fits -181's point that the server rewrites tiles in place):
+
+| Band | Rows | Candidates (bytes) |
+|---|---|---|
+| 45 to 40 south | 474, 488 | `E145_S45` 6,314,148; `W75_S45` 9,300,596; `E170_S45` 10,160,153 |
+| 40 to 35 south | 502 | `E170_S40` 8,510,918; `E175_S40` 9,046,079 |
+| 25 to 20 south | 663, 675 | `E15_S25` 4,854,579; `E25_S25` 12,763,588; `W50_S25` 52,424,766 |
+| 10 to 15 north | 1046 | `W95_N10` 7,472,321; `W20_N10` 10,486,978; `E120_N10` 25,772,169 |
+| 15 to 20 north | 1053, 1079 | `W20_N15` 2,622,004; `W95_N15` 16,224,869; `E100_N15` 38,241,428 |
+
+The smallest of each band sum to about 30 MB, against about 130 MB pinned today. So -181's "unknown, 5 to 600 MB"
+is now: about 30 MB if the smallest ones hold roads inside each row's 0.1 degree band. That last part is not known;
+the planner's guess that they do is from general geography only.
+
+**What follows (the planner's):** session 72, a pre-build report and no build: download the candidates to scratch
+only, count road nodes inside each of the 8 rows' bands with the port's own reader, pick the five, and trace every
+step of the capture (the release workflow on `main`, `capture.sh`, a release, pin file and folder of their own, the
+fetch task, the new group, CI) to its file and line, with what needs the owner: the release run, the word for edits
+on `main`, and E1 for `tools/tile-check/tiles.tsv`.
+
+**Notes:** Written by the planner session by hand. Next free ID -183.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-183
+**Timestamp:** 2026-11-14T06:40:02Z
+**Continues:** 2026-10-28-182
+**Title:** Session 72's pre-build report: five tiles, about 30 MB, hold road nodes in all 8 rows; a committed file with 12 town points found against E1
+
+**On `brouter-port-5b`, head `2bc6e2c` (`git ls-remote`; tree clean; one docs-only commit on `6e2d879`, project
+trailer, scanned 0; read by the planner):**
+`docs/audits/2026-11-13-brouter-port-closing/s72-cosine-rows-tiles-prebuild.md` (504 lines). Nothing built.
+
+**The measurement (coder's, on today's bytes downloaded to scratch, the container's JDK; not rerun by the planner).**
+The smallest candidate of each band holds road nodes in every row it must cover, opens in the port's `checkDataFile`
+and passes the oracle's `TileCheck`:
+
+| Tile | Bytes | Nodes per row |
+|---|---|---|
+| `E145_S45` | 6,314,148 | 474: 5,159; 488: 16,239 |
+| `E170_S40` | 8,510,918 | 502: 1,124 |
+| `E15_S25` | 4,854,579 | 663: 2,523; 675: 7,788 |
+| `W95_N10` | 7,472,321 | 1046: 96,104 |
+| `W20_N15` | 2,622,004 | 1053: 10,205; 1079: 2,461 |
+
+Total 29,773,970 bytes. These are today's bytes; the release will hold its own, and the counts are measured again on
+them. The sizes equal the ones the planner read in -182.
+
+**Findings that shape the work:**
+- **`LBGenerator` as it stands should not drive the new group:** it draws by node count, so row 1046 takes 68% of the
+  draws; in 150 cases row 1079 was never drawn and row 663 once. A per-row draw reached 59 cases inside each row.
+- **The group can assert that it read the rows** without a `commonMain` change: `RoutingContext` takes the maths seam
+  (`RoutingContext.kt:19`), so a test-only counting seam can hold each case to its own row and the group to all 8.
+- **A folder of their own is needed:** only `RGenerator.kt:36` and `LBGenerator.kt:26` list a tiles folder, and a new
+  file in `segments/` would reshuffle R, CR and LB and break `E3RSequenceTest`'s pin.
+- **The release workflow:** `publish-tiles.yml` on `main` hard-codes the tools commit, the capture command and 7
+  assets; `capture.sh` insists on exactly 5 pin rows and a `W75_N40` row. Its tag carries the date, so a run on
+  another day would recapture the four old tiles under a new tag. The new tiles need a script and a tag prefix of
+  their own, and either a three-line edit to the workflow or a second workflow file.
+- **A scratch run, not evidence** (the coder's own words): the port on Android's maths against the oracle on 472
+  per-row cases plus 150, all equal. One local run on unpinned bytes, no stability check, no planted error.
+- **CI cost (estimates):** download seconds; at 8 x 59 cases, about 40 to 85 s in each JVM job and 5 to 8 minutes on
+  the simulator; at 8 x 8, about a seventh.
+
+**Against E1, found by the coder and confirmed by the planner:** `tools/tile-check/tiles.tsv` commits, besides
+Forager's own ends for `W75_N40`, 12 numbers that are not Forager's: one pair of town points each for `W75_N35`,
+`W70_N40` and `E170_S50`, at 4 decimals, committed in `aa144a0` on 2026-10-29, before -84. The file's own header
+names the towns. `scan.sh` looks for 5 or more decimals, so every E1 scan in this record, the planner's included,
+could not see them: a scan of 0 has meant "no coordinate of 5 or more decimals", not "no coordinate". The planner
+masked the digits to check the file's shape and writes none here. The file is in the tree of `brouter-port-5b`,
+`brouter-port` and (by the workflow's pinned tools commit) is what the published release was checked with. It goes to
+the owner. Nothing is touched until they rule.
+
+**E1 for the new tiles, the coder's alternatives that commit no coordinate (not chosen by the coder):** (a) no route
+in the capture check, only open, integrity and decode; (b) ends picked at run time from the tile's own nodes by a fixed
+rule, with `TileCheck` no longer printing ends to the public log; (c) a per-row node count in place of the route,
+which can be joined with (b). Committing ends would need the owner's exception: 20 new numbers.
+
+**The merge's CI** (run 43565180651 on `a014100`): `ios-smoke` `success`; the other three jobs still running when
+this was written.
+
+**Notes:** Written by the planner session by hand. Next free ID -184.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-184
+**Timestamp:** 2026-11-14T06:56:22Z
+**Continues:** 2026-10-28-183
+**Title:** Two rulings (owner): the town points stay as an exception to E1; the new tiles are checked with run-time ends and row counts. The E1 scan is widened to 4 decimals
+
+**The owner's rulings:**
+1. Asked what should happen to the 12 numbers in `tools/tile-check/tiles.tsv` (-183), with -84's "Remove it only" as
+   the first option ("Remove them only") and neither option marked as recommended. The owner chose: "Keep them, as an
+   exception". The option read: "The three pairs of town points stay as a stated exception to E1, recorded in your
+   words. The scan is still widened, with this file listed as the known exception."
+2. Asked how the five new tiles should be checked at capture time, given E1. The owner chose: "Run-time ends + row
+   counts (Recommended)". The option read: "Nothing committed. The check picks route ends from the tile's own nodes by a
+   fixed rule each run, routes between them in the oracle, and also counts road nodes in each of the 8 rows. The ends
+   are no longer printed to the public Actions log. Keeps the proof that the oracle routes on the tile and proves the
+   rows are there. Most work of the three." Rejected: "Row counts only"; "Open and decode only"; "Commit the ends,
+   exception".
+
+**E1 as it now stands:** "no coordinates are committed", with Forager's own route ends allowed as before, and one
+exception in the owner's words above: the three pairs of town points in `tools/tile-check/tiles.tsv`.
+
+**The scan, widened by the planner.** `scan.sh` now counts numbers of 4 or more decimals (it was 5 or more). Shown to
+bite: on `aa144a0`, the commit that added the town points, the old scan prints 0 and the new one 8. Rerun with the new
+pattern: `brouter-port-5b` from `65737ec` to `2bc6e2c` (sessions 60 to 72) 0; the record branch against `main` 0.
+The scan reads added lines only, so the excepted file does not trip it unless someone adds to it.
+
+**A whole-tree search at `2bc6e2c` for numbers of exactly 4 decimals (the planner's, digits never printed):**
+- The same 12 town-point numbers, and no others, also stand in committed logs under `docs/audits/` (the step-2 check
+  logs and their superseded copies, the capture job's log, a local forward log, a harness log) and 4 of them in one
+  audit document. `tiles.tsv`'s header says it took the points from those logs.
+- **This is beyond what the owner was asked.** The question named `tiles.tsv` only. The planner's reading, labelled
+  as the planner's: the exception is for those three pairs of town points, and the logs repeat the same numbers. The
+  planner does not act on that reading; nothing is removed and nothing is added, and the logs are put to the owner
+  with the next question.
+- Every other 4-decimal number found is in source or figures files and none is a second set of places by the
+  planner's range check (one constant in `CheapAngleMeter.kt` is in a latitude-like range; it is upstream engine
+  source and was not read further).
+- History before `65737ec` was not rescanned commit by commit; the tree search stands in for it.
+
+**Decisions (the planner's, technical; the owner may overrule):**
+1. **A second workflow file for the new release,** not an edit to `publish-tiles.yml`. The working workflow and its
+   pinned tools commit stay untouched; the new file gets its own script and tag prefix, so it cannot recapture the four
+   old tiles. It reaches `main` only on the owner's word naming it. Rejected: the three-line edit in place, which
+   would leave one file serving two releases.
+2. **The new group is 59 cases per row, 472 in all,** drawn per row, LB's size as the yardstick. Cost by session 72's
+   estimate: under two minutes in each JVM job, 5 to 8 minutes on the simulator, inside the jobs' limits. Rejected: 8
+   per row, a seventh of the cost and a seventh of the reach, when at least 122 cases is the reach the covered rows had.
+3. **The order is session 72's:** capture script and check (session 73), the owner's word and release run, the pins,
+   the generator and expected rows, the tests and gate, then the record.
+
+**The merge's CI** (run 43565180651 on `a014100`): `jvm`, `jvm-production` and `ios-smoke` `success`;
+`ios-memory` still running when this was written.
+
+**Notes:** Written by the planner session by hand. Next free ID -185.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-185
+**Timestamp:** 2026-11-14T07:37:43Z
+**Continues:** 2026-10-28-184
+**Title:** Session 73: the capture tooling for the five cosine-row tiles is built and dry-run; its workflow has not run and cannot from the branch
+
+**On `brouter-port-5b`, head `37293d1` (`git ls-remote`; tree clean; eight commits on `2bc6e2c`, project trailer on
+each, each 0 on the widened scan; read by the planner).** Six files added, none changed:
+`tools/tile-check/cos-tiles.tsv` (tile names and rows, no coordinates; read), `tools/tile-check/CosTileCheck.java`
+(185 lines), `tools/tile-check/capture-cos.sh` (113), `tools/tile-release-cos/release-notes.md`,
+`.github/workflows/publish-cos-tiles.yml` (86; read whole by the planner), and the findings
+`docs/audits/2026-11-13-brouter-port-closing/s73-cos-tiles-capture.md` (334), which quotes the rulings.
+
+**The workflow, as the planner read it:** `workflow_dispatch` only, no inputs; `permissions: {}` at the top, the
+capture job `contents: read`, the publish job `contents: write` and guarded to a dispatch from `main`; every file it
+runs is checked out from `brouter-port-5b` at the pinned `7e5c449`; actions pinned by commit; refuses a tag that does
+not start `brouter-cos-tiles-` or that exists; draft release, six assets counted, each downloaded back and held to its
+pin, then published. It names no old tile.
+
+**The check (coder's design, not yet reviewed):** per listed row, a count of nodes in the row's band with a floor of
+500 (the lowest measured is 1,124), and one route in the oracle between two of the row's own nodes picked by a fixed
+rule from the sorted node ids, up to 16 attempts. Output holds counts, attempts, metres and a digest of the chosen
+ids; error text has its digits masked.
+
+**The dry run (coder's, on today's bytes, the container's JDK; not rerun by the planner):** five PASS; counts per row
+equal to session 72's; seven rows routed on the first attempt and row 1053 on its second; every track node in its
+row's band; the ends' digests equal across three runs. Seen failing, each stopping the script with the tile and the
+reason named: a row with no nodes, a truncated tile, no route in 16 attempts (by a scratch profile), four tiles for
+five, a missing tile, a wrong SHA-256 and a wrong size at readback. Never seen failing: the lookup-version check and
+the nothing-decoded check, both copied from `TileCheck.java`.
+
+**The coder's own first run failed:** `TileCheck.java`'s decode loop addresses degrees relative to the tile, which
+counts the same nodes but gives positions outside the engine's frame; `7e5c449` addresses them absolutely. Stated as a
+trap for reuse, not a fault in `TileCheck`.
+
+**Unproven until the real run:** the bytes served that day; the pinned Temurin; that a run on `main` can check out a
+branch commit by SHA; the release step, the count of six, the readback; that the public log holds no positions.
+
+**Decided by the coder beyond the brief, accepted by the planner pending the review:** one route per row, not per
+tile; the floor, the 16 attempts, the 0.01 degree step; counts written as comment lines in the published pin file; no
+README asset (the licence and file table are in the release notes); no F0 control.
+
+**CI on its pushes (coder's reading, partial):** `7e3b700` `jvm` 251 and `ios-smoke` 60 and 7 (simulator-checked);
+other jobs were still running. The item adds no test.
+
+**The merge's CI:** not reread for `ios-memory` since -184.
+
+**Next (the planner's):** a look by Samphire Witness at session 73 before the owner is asked for the word to put the
+workflow on `main`, because that file runs with write access to releases and publishes to the public.
+
+**Notes:** Written by the planner session by hand. Next free ID -186.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-186
+**Timestamp:** 2026-11-14T07:48:08Z
+**Continues:** 2026-10-28-185
+**Title:** The fourth review (Samphire Witness), of session 73's capture tooling: ready with one should-fix first; the ends are unprinted but recomputable from public things
+
+**The review.** Branch `review/changed-comparisons`, head `3c600a8`, two commits on `50d44fa` (predictions first),
+one file, `docs/reviews/2026-11-14-session-73-capture.md`. Checked by the planner: the head by `git ls-remote`, the
+trailers, no model name, the widened scan over `50d44fa..3c600a8` 0, the review's worktree clean. The code reviewed is
+`brouter-port-5b` at `37293d1`. The findings are the reviewer's own runs and readings, not re-run by the planner.
+
+- **Verdict: "ready with one should-fix first". Blocking: none.** The old path (`TileCheck.java`, `capture.sh`,
+  `tiles.tsv`, `publish-tiles.yml`, the fetch scripts) is byte-identical to `2bc6e2c`.
+- **Should-fix S1:** `publish-cos-tiles.yml:66-68` accepts a multi-line `out/tag`, so a second line would reach
+  `GITHUB_ENV` in the job that holds `contents: write`. Shown in scratch on the same three lines. It needs the capture
+  job subverted first. `publish-tiles.yml` on `main` has the same shape; that file is not touched here and is noted
+  for the owner.
+- **What held when run by the reviewer:** the whole script on all five tiles, five PASS, counts and digests equal to
+  the coder's; a search of 65 logs and output files for the chosen ends and for all 128 candidate ends, 0 hits, with
+  controls that did hit; the same digests across locales, time zone, maths setting and a reversed tile walk; **each of
+  the 8 rows is read by its route** (scaling the oracle's table entry for the row's own band moved the distance for
+  all 8, scaling every other row did not), which closes the coder's "not determined"; the lookup-version check made to
+  fail both ways; `fetch-tiles.sh` reads the dry-run pin file and refuses a changed byte and a short file.
+
+**Notes, in plain words:**
+- **The ends are not printed and not committed, and they are not secret.** From the public tile and the public rule
+  the reviewer recomputed all five digests in seconds. The ruling's text is met ("Nothing committed", "no longer
+  printed"); the digest hides nothing, and nobody should read it as doing so. Anyone could always derive nodes from a
+  public tile; what E1 guards is what this repository commits.
+- **"Road nodes" in the ruling's text is, in the tool, every stored node in the band.** Of 64 sampled starts per row,
+  41 to 64 routed (row 474 the fewest; row 502, the smallest row, 49). The tool's output says "nodes".
+- **A tile's last byte is unchecked:** a tile cut by exactly one byte, with its last byte changed, or with bytes
+  appended passes the check; larger cuts and 27 of 28 byte changes were refused. The script does not hold the size to
+  the server's `Content-Length`.
+- A row dropped from the list would pass (the list is the specification, pinned by the tools commit). A failed publish
+  leaves a draft the owner deletes by hand (inferred). The published pin path is `segments/<tile>.rd5`, so the later
+  fetch needs a folder of its own. The uploaded artifact also holds brouter.de's response headers.
+
+**Not checked by the reviewer:** anything on GitHub itself (the real run, the pinned JDK, the release steps, checkout
+by SHA from `main`); `actionlint` and `shellcheck` (not installed).
+
+**Decisions (the planner's):**
+1. **S1 is fixed before the owner is asked** (session 74): the tag is held to one line of the exact form before it
+   goes anywhere. Fixing it later would need the owner's word a second time.
+2. **The size is held to `Content-Length` in the same session.** A capture pins whatever it downloaded, so a short
+   body would be pinned as if whole; the check costs a few lines. The byte-appended and last-byte cases beyond that are
+   left: the pin's SHA-256 holds the published bytes from then on, whatever they are.
+3. **The node count stays a count of stored nodes,** named as such. The route per row is what shows the row can be
+   routed on, and the later test group draws until it has 59 routable cases per row.
+
+**Notes:** Written by the planner session by hand. Next free ID -187.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-187
+**Timestamp:** 2026-11-14T07:54:51Z
+**Continues:** 2026-10-28-186
+**Title:** Session 74: the tag is held to one exact line and each tile to the server's stated size (review S1 closed)
+
+**On `brouter-port-5b`, head `27cb05a` (`git ls-remote`; tree clean; five commits on `37293d1`, project trailer on
+each, each 0 on the widened scan; read by the planner).** Changed: `tools/tile-check/capture-cos.sh` (in `4dc6c23`),
+`.github/workflows/publish-cos-tiles.yml` (in `7776da9`; `TOOLS_SHA` now `4dc6c23`), and the findings
+`docs/audits/2026-11-13-brouter-port-closing/s74-capture-hardening.md`. `git diff 4dc6c23 27cb05a -- tools` is empty,
+so the pinned tools commit holds the head's tools.
+
+**The tag (S1).** The workflow now reads `out/tag` whole, matches it end to end against
+`brouter-cos-tiles-YYYY-MM-DD` and a newline, compares it byte for byte, rebuilds the tag from the matched digits and
+only then writes it to the job's environment; the file's content is never echoed. **Run by the planner** on the step's
+own lines, taken from the YAML by a parser: the good tag exits 0 and writes exactly `TAG=brouter-cos-tiles-2026-11-14`;
+a two-line file, no final newline, a wrong prefix and an empty file each exit 1 and write nothing. The coder reports
+nine bad cases refused, the reviewer's two-line demonstration reproduced on the old lines, and the byte comparison
+catching a NUL byte that the match alone lets through (coder's runs).
+
+**The size.** `capture-cos.sh` refuses a tile whose size differs from the `Content-Length` of the server's last
+response, or with that header missing, before the check runs. Coder's runs, not rerun by the planner: a body one byte
+short was accepted by curl and, on the old script, passed the check and was pinned; on the new script it is refused by
+tile name. Left as -186 decided: a server that appends bytes or changes the last byte while stating a matching length.
+
+**The dry run (coder's):** five PASS against brouter.de; bytes, SHA-256 and ends digests equal to session 73's, so the
+server had not rebuilt; nothing written holds a position by the scan.
+
+**Unproven until the real run, unchanged from -185:** everything on GitHub itself.
+
+**Review S1:** closed. The change is small and the planner ran its central case, so no fifth review is asked for it;
+the reviewer's other notes stand as -186 records them.
+
+**Next:** the owner's word on putting `publish-cos-tiles.yml` (as at `7776da9`) on `main`, then the release run.
+
+**Notes:** Written by the planner session by hand. Next free ID -188.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-188
+**Timestamp:** 2026-11-14T07:56:46Z
+**Continues:** 2026-10-28-184, 2026-10-28-187
+**Title:** Three rulings (owner): `publish-cos-tiles.yml` is on `main`; the town-point exception covers the copies in the logs; the old workflow is left as it is
+
+**The owner's rulings:**
+1. Asked: "Put the new release workflow on main? It is one file, .github/workflows/publish-cos-tiles.yml, copied
+   unchanged from brouter-port-5b at 7776da9. ..." The owner chose: "Yes, add that one file". The option read: "As in
+   -30: your word covers this one file, copied unchanged to main in one commit by a plain push. I then give you the
+   steps to run it. If the push to main is refused for this session, I open a PR with only that file instead and tell
+   you." Not chosen: "Open a PR for it instead"; "Not yet".
+2. Asked what should happen to the copies of the same 12 town-point numbers in committed logs under `docs/audits/`
+   and one audit document (-184). The owner chose: "Same exception covers them". The option read: "The exception is for
+   those three pairs of town points wherever they already stand in the tree. Nothing is removed. No new copies may be
+   added." Not chosen: "Remove them from the logs".
+3. Asked about the same weak tag check in `publish-tiles.yml` on `main` (-186). The owner chose: "Leave it, recorded
+   (Recommended)". The option read: "publish-tiles.yml on main stays as it is. The weakness is recorded, and the file
+   gets the same fix only if it is ever to be run again." Not chosen: "Fix it now".
+
+**E1 as it now stands:** "no coordinates are committed"; Forager's own route ends allowed as before; and one
+exception, in the owner's words: the three pairs of town points "wherever they already stand in the tree. Nothing is
+removed. No new copies may be added."
+
+**Done by the planner on ruling 1:** `main` moved from `0a398d8` to `e205d96` by a plain push, one commit adding one
+file. Checked: `git diff --stat` names only `.github/workflows/publish-cos-tiles.yml`; the file at `e205d96` is
+byte-equal (`cmp`) to the one at `7776da9` on `brouter-port-5b`; the scan over the commit 0; `git ls-remote` reads
+`e205d96`. The workflow checks out its tools from `brouter-port-5b` at `4dc6c23`.
+
+**Recorded on ruling 3:** `publish-tiles.yml` on `main` accepts a multi-line tag file (review 4, S1's twin). It is
+not to be run again without the fix session 74 made to its sibling.
+
+**PR #7** was opened against `main` at `0a398d8`; `main` has since gained this one file, which the PR does not touch.
+
+**Next, the owner's:** the release run. Steps, from session 73's report and the workflow file:
+1. On GitHub, open slayer8366/Forager-iOS and select the Actions tab.
+2. In the left list choose "publish-cos-tiles".
+3. Press "Run workflow", leave "Use workflow from" at "Branch: main", and press the green "Run workflow". No inputs.
+4. Both jobs, `capture` and `publish`, should end green; the release `brouter-cos-tiles-<UTC date>` then holds six
+   assets. If `publish` fails part way it may leave a draft release, which has to be deleted by hand before a rerun
+   on the same day (inferred, not seen).
+The planner then reads the run's log (each tile's PASS line and per-row counts, and that no position is printed) and
+dispatches the pinning session.
+
+**Notes:** Written by the planner session by hand. Next free ID -189.
