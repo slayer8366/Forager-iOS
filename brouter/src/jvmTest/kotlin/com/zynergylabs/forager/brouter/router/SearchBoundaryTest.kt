@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
  * through behaviour: `isInBoundary` on points placed at and around each bound and around the radius, and
  * `getBoundaryDistance` in all four directions, with an undefined direction's exception compared by class and
  * message. `getFileName` on the same positions, both hemispheres. Probes can fall outside BRouter's latitude range
- * (below 0 or above 180,000,000), where `CheapRuler`'s table lookup throws in both; a throw is compared by class. Forager never reaches this class (only a field at
+ * (below 0 or above 180,000,000), where `CheapRuler`'s table lookup throws in both; every throw is compared by class and message (RECORD -165). Forager never reaches this class (only a field at
  * `RoutingEngine.java:88`); it is on T2's port list. The port's distance runs on [OracleLibm] (step 2b).
  */
 class SearchBoundaryTest {
@@ -58,6 +58,7 @@ class SearchBoundaryTest {
                     val pv = runCatching { p.isInBoundary(q, cost) }
                     val where = "case $i probe $k cost $cost radius $radius: isInBoundary"
                     assertEquals(ov.exceptionOrNull()?.javaClass, pv.exceptionOrNull()?.javaClass, "$where, exception")
+                    assertEquals(ov.exceptionOrNull()?.message, pv.exceptionOrNull()?.message, "$where, message")
                     assertEquals(ov.getOrNull(), pv.getOrNull(), where)
                     val mode = if (radius > 0) "radius" else if (cost == 0) "outer" else "inner"
                     seen.merge("$mode ${ov.getOrElse { "throws" }}", 1, Int::plus)
@@ -66,10 +67,7 @@ class SearchBoundaryTest {
                 val od = runCatching { o.getBoundaryDistance(jn(q)) }
                 val pd = runCatching { p.getBoundaryDistance(q) }
                 assertEquals(od.exceptionOrNull()?.javaClass, pd.exceptionOrNull()?.javaClass, "case $i probe $k direction $direction: exception")
-                // The message is compared for Java's own throw only: a JIT-compiled array index error can lose its message.
-                if (od.exceptionOrNull() is IllegalArgumentException) {
-                    assertEquals(od.exceptionOrNull()?.message, pd.exceptionOrNull()?.message, "case $i probe $k direction $direction: message")
-                }
+                assertEquals(od.exceptionOrNull()?.message, pd.exceptionOrNull()?.message, "case $i probe $k direction $direction: message")
                 assertEquals(od.getOrNull(), pd.getOrNull(), "case $i probe $k direction $direction: getBoundaryDistance")
                 seen.merge(if (od.isSuccess) "direction $direction" else if (od.exceptionOrNull() is IllegalArgumentException) "undefined direction" else "distance throws", 1, Int::plus)
             }

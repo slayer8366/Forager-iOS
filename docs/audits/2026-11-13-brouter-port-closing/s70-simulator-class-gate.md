@@ -1,0 +1,237 @@
+# s70: a gate that fails the simulator jobs when a named class did not run there (Plumb Ledger, session 70)
+
+Review finding 69-1 (`docs/reviews/2026-11-14-test-changes-since-163.md:307` and `:360` on
+`origin/review/changed-comparisons`): nothing in CI fails if a commonTest class stops running on the iOS simulator. The
+line `OK: all 2 classes ran` is about the arm64 JVM step only.
+
+Base `2184691` on `brouter-port-5b`, verified against `git ls-remote origin brouter-port-5b` before any work; tree clean.
+This file is written, committed and pushed before any run of the gate, local or in CI.
+
+## What was read (file and line, at `2184691`)
+
+- `.github/workflows/brouter.yml`, all 242 lines.
+  - `ios-smoke` (`:49`): `ARM64_JVM_CLASSES` (`:54-56`); the simulator step (`:88-95`) runs
+    `:brouter:iosSimulatorArm64Test` with no `--tests` filter, results in `brouter/build/test-results/iosSimulatorArm64Test`;
+    its counts step (`:96-100`); the existing gate (`:115-124`) runs `tools/junit-ran.py` over
+    `brouter/build/test-results/jvmTest` with `$ARM64_JVM_CLASSES` only.
+  - `ios-memory` (`:138`): the memory groups step (`:159-169`) filters to `Mp64EngineCommonTest`, `Ml5EngineCommonTest`,
+    `Pm5EngineCommonTest`; its XML is copied to `brouter/build/test-results/ios-memory-groups` as the first line of R's
+    step (`:185`), because Gradle empties `iosSimulatorArm64Test` on each run. R's step (`:178-186`) runs
+    `REngineCommonTest`; its XML is copied to `brouter/build/test-results/ios-r-fallback` as the first line of the
+    ladder's step (`:201`). The ladder's own XML stays in `iosSimulatorArm64Test`.
+- `tools/junit-ran.py` (38 lines): for each named class it needs `TEST-<class>.xml` in the folder (`:24-28`) and at least
+  one `testcase` without a `skipped` child (`:30-35`); prints one line per class, then `OK: all N classes ran` (`:38`) or
+  `FAIL: ...` and exit 1 (`:36-37`); fewer than two arguments is a usage error, exit 2 (`:16-18`). It does not look at
+  skipped cases when another case ran, nor at what a test printed.
+- `tools/junit-counts.py`: prints the `TOTAL:` lines; unchanged here.
+- The commonTest source tree: 28 test classes (`MemoryEngineCommonTest.kt` holds three). Five test classes return early
+  and pass when a job variable is unset, printing `<...> is unset; not run`:
+  `MemoryEngineCommonTest.kt:26-28` (MP64, ML5, PM5), `REngineCommonTest.kt:23-25`, and iosTest's
+  `StackLadderIosTest.kt:132-134`. `Step10Cases.ntFile` (`Step10Cases.kt:32-42`) prints the same words on the JVM only
+  and fails on iOS. In `ios-smoke` those five each report `tests 1, skipped 0` with `system-out` holding the "not run"
+  line (base run 43535294553, job 132262700481, read from its log).
+- Base run 43535294553 on `2184691`: `ios-smoke` `TOTAL: tests 60, failures 0, errors 0, skipped 0 in 29 files` and
+  `TOTAL: tests 7 ... in 2 files`, `OK: all 2 classes ran`; `ios-memory` 3 in 3 files, 1, 1; `jvm` 251 in 109 files;
+  `jvm-production` 2.
+
+## Design
+
+### What "ran on the simulator" means
+
+`junit-ran.py`'s present check would pass a class that returned early: `Mp64EngineCommonTest` in `ios-smoke` is
+`tests 1, skipped 0` and did nothing. A gate built on that alone would pass the memory groups even if `ios-memory` lost
+`SIMCTL_CHILD_BROUTER_STEP10_MEMORY`. So the script gets one new option, `--simulator`, and with it a class ran only if:
+
+1. `TEST-<class>.xml` exists in the folder;
+2. it holds at least one `testcase`, and its header's `tests` is above 0;
+3. no `testcase` is skipped;
+4. its `system-out` does not hold `is unset; not run`, the words every early return above prints.
+
+Without `--simulator` the script behaves exactly as now, byte for byte, so the arm64 gate line and its output are
+unchanged. The new behaviour is a separate function in the same file; the old path is not edited.
+
+Every line the new mode prints names the simulator, so it cannot be read as the arm64 JVM gate.
+
+### Which classes, and why a named list
+
+A named list, in the job's `env` beside `ARM64_JVM_CLASSES`, as that list is read by both the step and the gate there.
+
+- Against a list derived from the source tree at CI time: the finding names three ways a class stops running there,
+  "moved, renamed, filtered". A derived list follows a moved or renamed class, so it would stay green on two of the
+  three; a named list goes red on all three. The cost is that a new commonTest class is not gated until someone adds
+  it; that is written in the workflow comment.
+- The rule for the list: every commonTest class that does its work in that job. That is a superset of the classes the
+  record or a findings file cites as simulator evidence (the brief's list is all inside it), and naming the rest costs
+  nothing. Classes that return early in a job by design are not named in that job, since naming them would be a claim
+  the gate cannot honour; they are named in the job where they run.
+- An empty list fails: the script exits 2 on fewer than two arguments (`junit-ran.py:16-18`), and the step does not
+  catch that.
+
+`ios-smoke`, `SIMULATOR_CLASSES`, 24 classes (28 commonTest classes less the three memory groups and R, which return
+early there):
+
+    com.zynergylabs.forager.brouter.ToolchainSmokeTest
+    com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest
+    com.zynergylabs.forager.brouter.mapaccess.NodeHashMapTieBreakTest
+    com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest
+    com.zynergylabs.forager.brouter.msun.MsunCosTableTest
+    com.zynergylabs.forager.brouter.msun.MsunEdgesTest
+    com.zynergylabs.forager.brouter.tiles.CrEngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.DlEngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.EngineStopCommonTest
+    com.zynergylabs.forager.brouter.tiles.F0EngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.F0RouteCommonTest
+    com.zynergylabs.forager.brouter.tiles.F0hEngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.FkEngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.FormatDigestsCommonTest
+    com.zynergylabs.forager.brouter.tiles.FormatNumberTextTest
+    com.zynergylabs.forager.brouter.tiles.GpxNumbersCommonTest
+    com.zynergylabs.forager.brouter.tiles.LbEngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.NtEngineCommonTest
+    com.zynergylabs.forager.brouter.tiles.PinnedTileReadTest
+    com.zynergylabs.forager.brouter.tiles.RouteWaysCommonTest
+    com.zynergylabs.forager.brouter.util.CheapProductionTableTest
+    com.zynergylabs.forager.brouter.util.JavaLangCommonTest
+    com.zynergylabs.forager.brouter.util.JavaTextCommonTest
+    com.zynergylabs.forager.brouter.util.PlatformInvariantsTest
+
+`ios-memory`: the three memory groups from `ios-memory-groups`, and `REngineCommonTest` from `ios-r-fallback`. R is
+included because it is commonTest and RECORD -143 cites its 240 of 240 as simulator evidence; the brief's rule covers it.
+
+### Where the steps go
+
+- `ios-smoke`: a new step right after the simulator's counts step, `if: always()`, so a red simulator step still says
+  which classes ran. The arm64 steps after it already run on `always()`, so a red gate skips nothing.
+- `ios-memory`: one new step at the end, after the ladder's step and before the upload, `if: always()`, reading the two
+  copied folders. Placed earlier, a red gate would skip R and the ladder, whose steps run only on success; at the end
+  it changes no existing step. If the memory step itself fails, R's step (and its copy) is skipped, and the gate then
+  names the missing copy's path; the job is red from the test step in that case anyway.
+
+### Predicted lines
+
+`ios-smoke`, one line per class such as
+
+    com.zynergylabs.forager.brouter.tiles.RouteWaysCommonTest: on the iOS simulator, 2 test cases, 2 ran, 0 skipped, 0 failed (brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.RouteWaysCommonTest.xml)
+
+then
+
+    OK on the iOS simulator: all 24 classes ran (brouter/build/test-results/iosSimulatorArm64Test)
+
+The test cases over the 24 lines sum to 55 (60 less the five early-return classes, one each). The old line
+`OK: all 2 classes ran` stays, unchanged, in its own step.
+
+`ios-memory`: `OK on the iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)` and
+`OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)`.
+
+A class that did not run prints `<class>: did not run on the iOS simulator, <reason>` and the last line is
+`FAIL on the iOS simulator: k of N classes did not run: <classes>`, exit 1.
+
+### How the gate is shown able to fail
+
+Locally (scratch only, never committed), on simulator XML cut out of the base run's own logs (`ios-smoke` job
+132262700481, `ios-memory` job 132262700110):
+
+1. the 24-class folder complete: exit 0;
+2. the same folder with `RouteWaysCommonTest`'s XML removed: exit 1, naming it;
+3. with `FormatNumberTextTest`'s XML edited to `tests="0"` and no `testcase`: exit 1, naming it;
+4. with one `testcase` of `EngineStopCommonTest` marked skipped: exit 1, naming it;
+5. the memory list run against `ios-smoke`'s own XML, where the groups returned early: exit 1, naming all three (real
+   data, not hand-made);
+6. an empty list: exit 2;
+7. the old mode on the same folders before and after the edit: identical output and exit code.
+
+In CI, a positive control: one commit whose `ios-smoke` list also names a class that does not exist, subject marked
+"red on purpose"; predicted `ios-smoke` red at the new step with that class named and the 24 real classes printed as
+ran, the other three jobs green. Then the commit that removes it, pushed only after the red run has finished; predicted
+all four jobs green with the totals of the base run.
+
+## Not in this change
+
+No test, no engine class, no `RouteWays.kt`, no `junit-counts.py`. `StackLadderIosTest` is not gated: it is iosTest, not
+commonTest, and the brief's rule is commonTest classes.
+
+## Results
+
+### A correction to this file's own premise
+
+"all 242 lines" under What was read is wrong: `wc -l` gives 241 at `2184691`. Left as written above, corrected here.
+
+### Commits
+
+- `6c23543` this file, before any run.
+- `aaceb46` `tools/junit-ran.py --simulator`: 52 lines added, none removed (`git diff -U0` shows no `-` line in the
+  file). The old mode is a separate path below the new function.
+- `583aa8c` the workflow, red on purpose (below).
+
+### Local, before CI (scratch only)
+
+The simulator XML was cut out of base run 43535294553's own logs: 29 files from `ios-smoke` (job 132262700481), 3 from
+`ios-memory`'s memory groups and 1 from its R step (job 132262700110). `junit-counts.py` on the cut folders gives
+`TOTAL: tests 60, failures 0, errors 0, skipped 0 in 29 files` and 4 in 4 files, which matches the logs' own `TOTAL:`
+lines (60 in 29; 3, 1), so no file was lost in the cut.
+
+Old mode, before and after the edit, on three inputs (the smoke folder with RouteWays, MP64 and a missing class; the
+memory folder with MP64; no class): output and exit codes byte-identical (`cmp`). The old mode passes MP64 on
+`ios-smoke`'s XML, where it returned early, which is the case the new mode exists to refuse.
+
+`--simulator`, exit codes and the lines that matter:
+
+| Case | Exit | Line |
+|---|---|---|
+| 1. the 24 classes, complete | 0 | `OK on the iOS simulator: all 24 classes ran (smoke)`; 24 per-class lines, test cases summing to 55 as predicted |
+| 2. `RouteWaysCommonTest`'s XML removed | 1 | `...RouteWaysCommonTest: did not run on the iOS simulator, no c2/TEST-...RouteWaysCommonTest.xml` then `FAIL on the iOS simulator: 1 of 24 classes did not run: ...RouteWaysCommonTest` |
+| 3. `FormatNumberTextTest` edited to `tests="0"`, no test case | 1 | `...FormatNumberTextTest: did not run on the iOS simulator, tests="0" with 0 test cases`; `FAIL ... 1 of 24 ...` |
+| 4. one `EngineStopCommonTest` case marked skipped | 1 | `...EngineStopCommonTest: did not run on the iOS simulator, 1 skipped: theTimeLimitReadsTheInjectedClock[iosSimulatorArm64]` |
+| 5. the memory list on `ios-smoke`'s real XML | 1 | each of MP64, ML5, PM5: `it returned early: step10 <G> memory: BROUTER_STEP10_MEMORY is unset; not run (RECORD -141)`; `FAIL ... 3 of 3 ...` |
+| 5b. the memory list on `ios-memory`'s real XML | 0 | `OK on the iOS simulator: all 3 classes ran` |
+| 5c. R on `ios-memory`'s real XML | 0 | `OK on the iOS simulator: all 1 classes ran` |
+| 5d. R on `ios-smoke`'s real XML | 1 | `it returned early: step10 R engine: BROUTER_STEP10_R is unset; not run (RECORD -142)` |
+| 6. no class | 2 | `usage: junit-ran.py --simulator <results-dir> <class>...` |
+
+The workflow's own commands were then run on the scratch folders: `ios-smoke`'s 25-name list (with the red-on-purpose
+name) exits 1 naming only `RedOnPurposeNoSuchCommonTest`; `ios-memory`'s gate script under `bash -e` exits 0 on the
+two copies and exits 1 naming `REngineCommonTest` when the `ios-r-fallback` copy is removed, after still printing the
+memory groups' OK line.
+
+### CI, the positive control (red on purpose): run 43542432482 on `583aa8c`
+
+- `ios-smoke` (job 132285823754): **failure**, at step 10 "Gating - every class in SIMULATOR_CLASSES ran on the iOS
+  simulator", as predicted. The simulator step and its counts step were green (`TOTAL: tests 60, failures 0, errors 0,
+  skipped 0 in 29 files`); the gate printed 24 per-class lines for the real classes, then
+  `com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest: did not run on the iOS simulator, no brouter/build/test-results/iosSimulatorArm64Test/TEST-com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest.xml`
+  and `FAIL on the iOS simulator: 1 of 25 classes did not run: com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest`,
+  exit 1. The steps after it ran (`if: always()`): the arm64 step `TOTAL: tests 7 ... in 2 files` and `OK: all 2 classes ran`.
+- `ios-memory` (job 132285824044): success; `OK on the iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)`
+  and `OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)`.
+- `jvm` (132285824253) 251 in 109 files, `jvm-production` (132285824070) 2: success.
+
+The fixing commit `914ac7d` was pushed only after this run reported `completed`. Run 43542377970 on `aaceb46` (script
+only, no workflow change) was green on all four jobs, with the old gate line `OK: all 2 classes ran`.
+
+### CI, green: run 43548019228 on `914ac7d`, all four jobs success
+
+| Job | Job id | `TOTAL:` lines | Lines with ` e: ` |
+|---|---|---|---|
+| `jvm` | 132303759107 | tests 251, failures 0, errors 0, skipped 0 in 109 files | 0 |
+| `ios-smoke` | 132303759050 | tests 60 ... in 29 files; tests 7 ... in 2 files; all 0 failures, 0 errors, 0 skipped | 0 |
+| `ios-memory` | 132303759073 | tests 3 ... in 3 files; 1 in 1; 1 in 1; all 0 failures | 0 |
+| `jvm-production` | 132303758813 | tests 2, failures 0, errors 0, skipped 0 in 1 files | 0 |
+
+- The old gate line, unchanged, in its own step 12: `OK: all 2 classes ran`.
+- The new line, step 10: `OK on the iOS simulator: all 24 classes ran (brouter/build/test-results/iosSimulatorArm64Test)`,
+  after 24 per-class lines, each `0 skipped, 0 failed`, test cases summing to 55, as predicted.
+- `ios-memory`'s new last step: `OK on the iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)`
+  and `OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)`.
+
+All of the above is simulator-checked.
+
+### Not checked
+
+- The new `ios-memory` gate has not been seen red in CI; its red paths (an early return, a missing copy) were shown
+  locally only, on the base run's real XML.
+- The "returned early" check depends on the words `is unset; not run`. A test that returns early with other words, or
+  a future early return that prints nothing, passes it. Not guarded.
+- A new commonTest class is not gated until it is added to `SIMULATOR_CLASSES`; nothing checks the list against the
+  source tree.
+- `StackLadderIosTest` (iosTest) is not gated, as said above.
+- The tests=0 and skipped cases were shown on hand-edited XML, not on XML Kotlin/Native wrote in that state.

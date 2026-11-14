@@ -16,10 +16,17 @@ import kotlin.test.assertTrue
  * checksums moved by 0, 20 or 21, the profile stamp equal or not, with and without `debugInfo`; and again cut short at
  * seeded lengths, and as a missing file. Results are compared field by field by digest and length, the debug text
  * by digest and length, so no position appears in a failure (E1). On Java's catch path the debug text is compared
- * only up to and including "Error reading rawTrack: ", and each side must write text after it (RECORD -116).
+ * only up to and including "Error reading rawTrack: ", and each side must write text after it (RECORD -116), only where
+ * the oracle's text after it is JDK 21's null-pointer text; every other error-path text is compared whole (session 66).
  */
 class ReadBinaryTest {
     private val ERROR_PREFIX = "Error reading rawTrack: "
+
+    /** The oracle's text after [ERROR_PREFIX] for an empty track on JDK 21, the one text RECORD -116 was argued from. */
+    private val JDK21_LAST_PE_NPE = "java.lang.NullPointerException: Cannot read field \"cost\" because \"last_pe\" is null"
+
+    /** An exception's text in full, or by digest if it holds a run of 5 or more digits (E1). */
+    private fun shown(s: String): String = if (Regex("[0-9]{5,}").containsMatchIn(s)) digest(s) else s
 
     private fun digest(s: String): String =
         java.security.MessageDigest.getInstance("SHA-256").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }
@@ -73,6 +80,9 @@ class ReadBinaryTest {
             var nonNull = 0
             var debugs = 0
             var errorPaths = 0
+            var nullPointerPaths = 0
+            var otherErrorPaths = 0
+            val tails = HashSet<String>()
             val seen = HashSet<String>()
             for ((ti, ot) in tracks.withIndex()) {
                 val wp = btools.mapaccess.MatchedWaypoint()
@@ -143,6 +153,20 @@ class ReadBinaryTest {
                                     assertTrue(oText.length > oHead.length, "$id: debugInfo: oracle wrote nothing after the error prefix")
                                     assertTrue(pText.length > pHead.length, "$id: debugInfo: port wrote nothing after the error prefix")
                                     errorPaths++
+                                    // s66 (review should-fix 2): the null-pointer case (the empty tracks, Java's last_pe
+                                    // null) and every other error-path text (the end-of-file cuts), counted apart.
+                                    val oTail = oText.substring(oHead.length)
+                                    if (oTail.startsWith("java.lang.NullPointerException")) nullPointerPaths++ else otherErrorPaths++
+                                    tails += "oracle " + oTail.replace(Regex("[0-9]+"), "#")
+                                    val pTail = pText.substring(pHead.length)
+                                    tails += "port " + pTail.replace(Regex("[0-9]+"), "#")
+                                    // s66 (review should-fix 3): -116's looser comparison was argued from JDK 21's
+                                    // null-pointer text alone, so it applies only when the oracle's tail is exactly that
+                                    // text. Every other error-path text is compared whole again, as before -116: the head
+                                    // by digest above, the tail here.
+                                    if (oTail != JDK21_LAST_PE_NPE) {
+                                        assertEquals(shown(oTail), shown(pTail), "$id: debugInfo after the error prefix (whole text, RECORD -116 narrowed)")
+                                    }
                                 } else {
                                     assertEquals(digest(oText), digest(pText), "$id: debugInfo")
                                 }
@@ -155,7 +179,15 @@ class ReadBinaryTest {
                 }
             }
             println("7 readBinary: ${tracks.size} tracks, $reads reads compared, $nonNull tracks returned, $debugs debug texts, $errorPaths on the error path; kinds $seen")
+            println("7 readBinary: error path split, $nullPointerPaths null-pointer, $otherErrorPaths other; tails $tails")
             assertTrue(nonNull > 50 && reads > 1000, "too little reached: $nonNull of $reads")
+            // s66 (review should-fix 2): the error path is reached, both kinds. Floors from the setup's structure, not
+            // from a count seen (s66-readbinary-reach-and-breadth.md): per empty track, the whole file at the 3 matching
+            // targets x 5 shifts x 2 profiles, plus the 7 fixed tail cuts, all never skipped with debug on; per track,
+            // the 6 fixed head cuts.
+            assertTrue(nullPointerPaths >= 74, "null-pointer case (the empty tracks) reached $nullPointerPaths times, floor 74")
+            assertTrue(otherErrorPaths >= 6 * tracks.size,
+                "other error-path texts (end-of-file cuts) reached $otherErrorPaths times, floor ${6 * tracks.size}")
         } finally {
             fcx.release()
             dir.deleteRecursively()

@@ -55,8 +55,12 @@ internal object FormatOutputs {
         res { FormatCsv(rc).format(t) },
     )
 
-    /** One route's stored values: its id, the mode it ran with, and per output its length and digest. */
-    class Row(val id: String, val mode: Int, val lengths: List<Int>, val digests: List<String>)
+    /**
+     * One route's stored values: its id, the mode it ran with, and per output its length and digest. Session 71
+     * (RECORD -177): [textLengths], the plain text's length of GPX and JSON (outputs 1 and 2), beside their by-value
+     * length and digest.
+     */
+    class Row(val id: String, val mode: Int, val lengths: List<Int>, val digests: List<String>, val textLengths: List<Int>)
 
     /** The turn-instruction mode for the [index]th case of a group: 2 to 9 in turn (the survey, item 5). */
     fun modeFor(index: Int): Int = 2 + index % 8

@@ -157,6 +157,9 @@ val jvmTestTask = tasks.named<Test>("jvmTest") {
     // Step 5b: NodeHashMapOrderTest reads java.util.HashMap's table to see its tree bins and to refuse equal-hash ones.
     // Reflection only; nothing in the oracle changes.
     jvmArgs("--add-opens=java.base/java.util=ALL-UNNAMED")
+    // RECORD -165 ("Add the flag (Recommended)"): SearchBoundaryTest compares every throw's message, and a JIT-compiled
+    // implicit exception can be thrown preallocated with no message. jvmTest only; not oracleJvm(), which e3Strata shares.
+    jvmArgs("-XX:-OmitStackTraceInFastThrow")
 }
 // RECORD -47: e3Strata runs on the oracle's JDK, Temurin 21.0.13+9 amd64 (CI's, RECORD -46), never on whatever JDK runs
 // Gradle: identity-hash order, which E3 tests, is the running JVM's. tools/fetch-temurin.sh fetches it pinned and prints

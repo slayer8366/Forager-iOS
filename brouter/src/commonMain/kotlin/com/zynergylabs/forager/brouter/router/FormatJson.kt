@@ -8,6 +8,10 @@ import com.zynergylabs.forager.brouter.util.StringUtils
  * BRouter 1.7.10's `btools.router.FormatJson`, whole (step 7, session 25; RECORD -111, "Port them"). Java's
  * `BufferedWriter` over a `StringWriter` is a [StringBuilder] here. Where Java dereferences a null, `!!` throws Kotlin's
  * `NullPointerException`.
+ *
+ * A known platform difference (the owner's ruling, RECORD -163): the third number of a `"coordinates"` entry (an
+ * elevation, or [speedText]'s `Float` when `showspeed`) is printed with the platform's own text, which on iOS can
+ * differ from Java's in its last digit at a tie; the value it reads back to does not.
  */
 internal class FormatJson(rc: RoutingContext?) : Formatter(rc) {
     /** `FormatJson.java:19-180`. */
