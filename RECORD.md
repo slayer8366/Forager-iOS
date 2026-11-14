@@ -7216,3 +7216,57 @@ The scan reads added lines only, so the excepted file does not trip it unless so
 `ios-memory` still running when this was written.
 
 **Notes:** Written by the planner session by hand. Next free ID -185.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-185
+**Timestamp:** 2026-11-14T07:37:43Z
+**Continues:** 2026-10-28-184
+**Title:** Session 73: the capture tooling for the five cosine-row tiles is built and dry-run; its workflow has not run and cannot from the branch
+
+**On `brouter-port-5b`, head `37293d1` (`git ls-remote`; tree clean; eight commits on `2bc6e2c`, project trailer on
+each, each 0 on the widened scan; read by the planner).** Six files added, none changed:
+`tools/tile-check/cos-tiles.tsv` (tile names and rows, no coordinates; read), `tools/tile-check/CosTileCheck.java`
+(185 lines), `tools/tile-check/capture-cos.sh` (113), `tools/tile-release-cos/release-notes.md`,
+`.github/workflows/publish-cos-tiles.yml` (86; read whole by the planner), and the findings
+`docs/audits/2026-11-13-brouter-port-closing/s73-cos-tiles-capture.md` (334), which quotes the rulings.
+
+**The workflow, as the planner read it:** `workflow_dispatch` only, no inputs; `permissions: {}` at the top, the
+capture job `contents: read`, the publish job `contents: write` and guarded to a dispatch from `main`; every file it
+runs is checked out from `brouter-port-5b` at the pinned `7e5c449`; actions pinned by commit; refuses a tag that does
+not start `brouter-cos-tiles-` or that exists; draft release, six assets counted, each downloaded back and held to its
+pin, then published. It names no old tile.
+
+**The check (coder's design, not yet reviewed):** per listed row, a count of nodes in the row's band with a floor of
+500 (the lowest measured is 1,124), and one route in the oracle between two of the row's own nodes picked by a fixed
+rule from the sorted node ids, up to 16 attempts. Output holds counts, attempts, metres and a digest of the chosen
+ids; error text has its digits masked.
+
+**The dry run (coder's, on today's bytes, the container's JDK; not rerun by the planner):** five PASS; counts per row
+equal to session 72's; seven rows routed on the first attempt and row 1053 on its second; every track node in its
+row's band; the ends' digests equal across three runs. Seen failing, each stopping the script with the tile and the
+reason named: a row with no nodes, a truncated tile, no route in 16 attempts (by a scratch profile), four tiles for
+five, a missing tile, a wrong SHA-256 and a wrong size at readback. Never seen failing: the lookup-version check and
+the nothing-decoded check, both copied from `TileCheck.java`.
+
+**The coder's own first run failed:** `TileCheck.java`'s decode loop addresses degrees relative to the tile, which
+counts the same nodes but gives positions outside the engine's frame; `7e5c449` addresses them absolutely. Stated as a
+trap for reuse, not a fault in `TileCheck`.
+
+**Unproven until the real run:** the bytes served that day; the pinned Temurin; that a run on `main` can check out a
+branch commit by SHA; the release step, the count of six, the readback; that the public log holds no positions.
+
+**Decided by the coder beyond the brief, accepted by the planner pending the review:** one route per row, not per
+tile; the floor, the 16 attempts, the 0.01 degree step; counts written as comment lines in the published pin file; no
+README asset (the licence and file table are in the release notes); no F0 control.
+
+**CI on its pushes (coder's reading, partial):** `7e3b700` `jvm` 251 and `ios-smoke` 60 and 7 (simulator-checked);
+other jobs were still running. The item adds no test.
+
+**The merge's CI:** not reread for `ios-memory` since -184.
+
+**Next (the planner's):** a look by Samphire Witness at session 73 before the owner is asked for the word to put the
+workflow on `main`, because that file runs with write access to releases and publishes to the public.
+
+**Notes:** Written by the planner session by hand. Next free ID -186.
