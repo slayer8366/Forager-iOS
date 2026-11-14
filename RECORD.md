@@ -6812,3 +6812,56 @@ The coder's scratch file `s69move-lines.txt` shows both digests (`b7fccbb3...`, 
 file is in the scratch folder, not in the tree.
 
 **Notes:** Written by the planner session by hand. Next free ID -177.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-177
+**Timestamp:** 2026-11-14T04:40:03Z
+**Continues:** 2026-10-28-176
+**Title:** Session 70: CI now fails if a named class does not run on the simulator (finding 69-1 closed); the owner's ruling on finding 60-1
+
+**The owner's ruling on 60-1.** Asked with -163's ruling quoted and "Keep it as ruled" as the first option, neither
+marked as recommended. The owner chose: "Also compare length". The option read: "The reviewer's proposal: store and
+compare the text's length beside the value. A last-digit difference still passes; a longer or shorter number (trailing
+zero, exponent form) fails on the simulator. About one short coder session, then a look by the reviewer. If iOS does
+print a different length somewhere, the test goes red and comes back to you." Dispatched as session 71. If the
+simulator goes red on a length, that is the owner's, and no test is loosened to reach green.
+
+**Session 70.** A second container restart came after the session finished and before its report was delivered; the
+report is lost. Everything below is read by the planner from the remote and from CI.
+
+**On `brouter-port-5b`, head `23e7c8c` (`git ls-remote`; tree clean; six commits on `2184691`, project trailer on
+each, each scanned 0):** `.github/workflows/brouter.yml` (+48), `tools/junit-ran.py` (+52, a new `--simulator` mode in
+its own function; the old mode's lines are untouched in the diff),
+`docs/audits/2026-11-13-brouter-port-closing/s70-simulator-class-gate.md` (237 lines). No test and no engine class
+changed.
+
+**What is gated, read by the planner in the diff:**
+- `ios-smoke`: a named list, `SIMULATOR_CLASSES`, of 24 commonTest classes, checked against
+  `brouter/build/test-results/iosSimulatorArm64Test`. A class "ran" only if its XML is present, it holds a test case
+  with the header's `tests` above 0, none is skipped, and its output does not hold the words a class prints when it
+  returns early because a job variable is unset.
+- `ios-memory`: `Mp64EngineCommonTest`, `Ml5EngineCommonTest`, `Pm5EngineCommonTest` and `REngineCommonTest`, the same
+  way, from copies of their results.
+- The list is named, not read from the source tree: a class moved, renamed or filtered out turns the job red; a new
+  commonTest class is not gated until someone adds it. That cost is stated in the workflow's comment. The simulator's
+  results hold 29 files and 24 are named; the workflow says the ones not named are the memory groups and R, which return
+  early in `ios-smoke` by design. The planner did not count the five against that sentence.
+
+**CI, read by the planner (0 ` e: ` lines in every job log of both runs):**
+- Red on purpose, run 43542432482 on `583aa8c`: `ios-smoke` `failure`, with `FAIL on the iOS simulator: 1 of 25
+  classes did not run: ...RedOnPurposeNoSuchCommonTest`; the tests themselves 60 and 7, 0 failures; the other three
+  jobs `success`. So the gate fails the job on real simulator results for the reason planted.
+- Green, run 43548019228 on `914ac7d`: four jobs `success`. `jvm` 251; `ios-smoke` 60 and 7, with `OK on the iOS
+  simulator: all 24 classes ran` and the old `OK: all 2 classes ran`; `ios-memory` 3, 1, 1 with `all 3 classes ran`
+  and `all 1 classes ran`; `jvm-production` 2. Simulator-checked.
+- `23e7c8c` is docs only and has no run.
+
+**Not shown / not read by the planner:** the session's local evidence (a missing XML, `tests="0"`), which is in its
+findings file and was not rerun; a CI run where a class is skipped or returns early, as opposed to missing; the
+findings file itself beyond its size.
+
+**-176's two should-fix items:** 69-1 closed here; 60-1 ruled by the owner and in flight.
+
+**Notes:** Written by the planner session by hand. Next free ID -178.
