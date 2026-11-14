@@ -320,3 +320,15 @@ release-notes.md`, `tools/fetch-oracle.sh`, `tools/fetch-pinned.sh`, `tools/fetc
 - The real run (§8).
 - Behaviour of a same-day rerun after a failed publish step: as with `publish-tiles.yml`, a leftover draft makes the
   tag refusal fire on a rerun the same day [I, from reading `publish-cos-tiles.yml:64-71`; not run].
+
+## 10. CI on these pushes (read with `gh api`, as of about 08:05 UTC)
+
+`brouter.yml` runs on any push touching a path outside `docs/**` (`brouter.yml:6-9`), so the tools and workflow commits
+started runs; this item changes no test, engine class or existing workflow, so the counts should not move.
+
+- Run 43569055262 (`7e3b700`): `jvm` success, `TOTAL: tests 251, failures 0`; `ios-smoke` success, simulator-checked,
+  `TOTAL: tests 60, failures 0` and `TOTAL: tests 7, failures 0` [C, job logs saved at `.../scratchpad/ci73/`].
+  `jvm-production` and `ios-memory` still in progress when read.
+- Run 43569132334 (`7e5c449`): `jvm-production`, `ios-smoke` success; `jvm`, `ios-memory` in progress.
+- Run 43569368768 (`83c3a82`): `ios-smoke`, `jvm-production` success; `jvm`, `ios-memory` in progress.
+- The jobs not yet finished are not read; their results are not claimed here.
