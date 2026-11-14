@@ -224,3 +224,72 @@ direction only as far as the data does.
 `OK: all 2 classes ran` (no iOS test is added; the new code compiles for iOS there); `jvm-production` 2; `ios-memory`
 3, 1, 1; 0 ` e: ` lines in every job log. The red commit's CI run will show a red `jvm` job with these 3 failures,
 expected.
+
+## Results (after the runs; the sections above are unchanged since `86c6df5`)
+
+Commits on `brouter-port-5b`, each with the project trailer, each scanning 0 under E1:
+- `86c6df5`: this file, design and predictions, pushed before any run.
+- `a38d55d`: the stub (`RouteWays.kt`, the four public types and a body that throws `NotImplementedError`), the pure
+  move (`RouteWaysCells.kt`; `RouteWaysTest.kt` loses the moved lines and gains five imports, nothing else), and
+  `RouteWaysEntryTest.kt`. Red, as predicted.
+- `36604e4`: the body. `RouteWays.kt` is 120 lines; `Route.kt` and every engine class are untouched (no engine class
+  needed a change). The body is the design's, with the walk over one cell's nodes in a private `readCell`.
+
+**Red over the stub** (local, both classes in one run): 0 `^e: `, 2 fresh XML. `RouteWaysEntryTest` 3 tests,
+3 failures, the messages exactly as predicted:
+- `dropoffPoints`: `java.lang.AssertionError: dropoff walker: the entry threw NotImplementedError: readRouteWays: s68 stub, the body comes in the next commit`
+- `f0hEnds`: `java.lang.AssertionError: F0h inside-across-the-degree-line/from: the entry threw NotImplementedError: readRouteWays: s68 stub, the body comes in the next commit`
+- `aSquareOfAnotherDivisorIsNotRead`: `kotlin.NotImplementedError: readRouteWays: s68 stub, the body comes in the next commit`
+
+`RouteWaysTest` in the same run, after the move: 2 tests, 0 failures, its two print lines byte for byte the earlier
+runs' (digests `b7fccbb3...` dropoff and `5a5c054d...` F0h, counts unchanged).
+
+**The body** (local, both classes in one run): 0 `^e: `, 2 fresh XML, 5 tests, 0 failures. Every link equal to the
+Java walk in points, order and description, and every square's divisor equal. Printed:
+- dropoff: 15 points, 15 entry calls; Java walk cells 18, nodes 135, links 120, geometry points 270; entry links 120,
+  geometry points 270; digest `069e566d...`.
+- F0h: 16 points, 16 entry calls; Java walk cells 21, nodes 3983, links 4858, geometry points 43006; entry links 4858,
+  geometry points 43006; digest `45a3d729...`.
+
+Each equals `RouteWaysTest`'s own counts in the same run (cells 18 and 21, nodes 135 and 3983, links 120 and 4858,
+geometry points 270 and 43006). **16 entry calls for 16 F0h points and 15 for 15:** no point's circle touches two
+squares, so a per-square entry building its own way context and decoder, where Forager shares one across squares,
+is not exercised by this data across squares; it is exercised across cells within a square, where the entry shares
+them as Forager does. Across squares the claim that it changes no output rests on the code reading in item 1 above.
+
+**The plant** (`revert.sh s68p`, `RouteWays.kt`, `wayContext.getKeyValueDescription(reverse, bitmap)` to
+`wayContext.getKeyValueDescription(!reverse, bitmap)`, the new class alone; a first attempt with the shorter string
+was refused by the runner before any edit because the string also occurs in a doc comment, and the file was `cmp`
+equal to a copy taken before it): compile errors 0, fresh XML 1, `tests 3, failures 2`. From the XML:
+- `java.lang.AssertionError: dropoff walker: square 1 of 1, link 1 of 8: field [description]`
+- `java.lang.AssertionError: F0h inside-across-the-degree-line/from: square 1 of 1, link 1 of 405: field [description]`
+- the divisor test passed.
+
+As predicted (the counts 8 and 405 were left open in the prediction). Restored from the saved copy, `cmp` equal; also
+`cmp` equal to a copy taken before the plant; `git status` clean and `git diff HEAD` empty, so the body is still the
+committed one.
+
+**CI, run 43526466282 on `36604e4`** (logs read with `gh api .../actions/jobs/<id>/logs`):
+- `jvm` (job 132233342101): `success`, 0 ` e: `, `TOTAL: tests 249, failures 0, errors 0, skipped 0 in 108 files`
+  (246 plus 3). Both classes printed the local lines exactly, digests included.
+- `ios-smoke` (132233341964): `success`, 0 ` e: `, TOTAL 58 and 7, 0 failures, `OK: all 2 classes ran`;
+  `compileKotlinIosSimulatorArm64` ran, so the new code compiles for the simulator. Simulator-checked.
+- `jvm-production` (132233341853): `success`, 0 ` e: `, TOTAL 2.
+- `ios-memory` (132233342208): `success`, 0 ` e: `, TOTAL 3, 1, 1, 0 failures. Simulator-checked.
+
+The run's conclusion `success`; all four jobs as predicted.
+
+**CI on the red commit `a38d55d`** (run 43526375495): `jvm` (job 132233043135) `failure`, as expected for a
+tests-over-stub commit: 0 ` e: `, `TOTAL: tests 249, failures 3`, the three failures the new class's, with the stub's
+messages above. Not a failure of the session.
+
+**Not checked:**
+- A point whose circle spans two squares (none in either set), so the per-square context and decoder are not compared
+  across squares on data.
+- A described link with `reverse` true (none in either set: `RouteWaysTest` prints reverse 0), so a body passing a
+  literal `false` would pass; the plant shows only that the direction passed through reaches the text.
+- A square of divisor 80: none is pinned; the refusal is tested by asking a 1/32 square at 1/80.
+- A missing or bad `lookups.dat` or square (the exceptions are the engine's, by reading; no test makes them).
+- The file handle `PhysicalFile`'s constructor leaves open when it throws (finding in item 4 above; unchanged, as in
+  Forager and `checkDataFile`).
+- iOS: compiled for the simulator in CI; no iOS test runs the entry (a common sibling is a later session, -172).
