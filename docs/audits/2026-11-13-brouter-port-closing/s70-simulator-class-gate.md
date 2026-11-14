@@ -149,3 +149,46 @@ all four jobs green with the totals of the base run.
 
 No test, no engine class, no `RouteWays.kt`, no `junit-counts.py`. `StackLadderIosTest` is not gated: it is iosTest, not
 commonTest, and the brief's rule is commonTest classes.
+
+## Results
+
+### A correction to this file's own premise
+
+"all 242 lines" under What was read is wrong: `wc -l` gives 241 at `2184691`. Left as written above, corrected here.
+
+### Commits
+
+- `6c23543` this file, before any run.
+- `aaceb46` `tools/junit-ran.py --simulator`: 52 lines added, none removed (`git diff -U0` shows no `-` line in the
+  file). The old mode is a separate path below the new function.
+- `583aa8c` the workflow, red on purpose (below).
+
+### Local, before CI (scratch only)
+
+The simulator XML was cut out of base run 43535294553's own logs: 29 files from `ios-smoke` (job 132262700481), 3 from
+`ios-memory`'s memory groups and 1 from its R step (job 132262700110). `junit-counts.py` on the cut folders gives
+`TOTAL: tests 60, failures 0, errors 0, skipped 0 in 29 files` and 4 in 4 files, which matches the logs' own `TOTAL:`
+lines (60 in 29; 3, 1), so no file was lost in the cut.
+
+Old mode, before and after the edit, on three inputs (the smoke folder with RouteWays, MP64 and a missing class; the
+memory folder with MP64; no class): output and exit codes byte-identical (`cmp`). The old mode passes MP64 on
+`ios-smoke`'s XML, where it returned early, which is the case the new mode exists to refuse.
+
+`--simulator`, exit codes and the lines that matter:
+
+| Case | Exit | Line |
+|---|---|---|
+| 1. the 24 classes, complete | 0 | `OK on the iOS simulator: all 24 classes ran (smoke)`; 24 per-class lines, test cases summing to 55 as predicted |
+| 2. `RouteWaysCommonTest`'s XML removed | 1 | `...RouteWaysCommonTest: did not run on the iOS simulator, no c2/TEST-...RouteWaysCommonTest.xml` then `FAIL on the iOS simulator: 1 of 24 classes did not run: ...RouteWaysCommonTest` |
+| 3. `FormatNumberTextTest` edited to `tests="0"`, no test case | 1 | `...FormatNumberTextTest: did not run on the iOS simulator, tests="0" with 0 test cases`; `FAIL ... 1 of 24 ...` |
+| 4. one `EngineStopCommonTest` case marked skipped | 1 | `...EngineStopCommonTest: did not run on the iOS simulator, 1 skipped: theTimeLimitReadsTheInjectedClock[iosSimulatorArm64]` |
+| 5. the memory list on `ios-smoke`'s real XML | 1 | each of MP64, ML5, PM5: `it returned early: step10 <G> memory: BROUTER_STEP10_MEMORY is unset; not run (RECORD -141)`; `FAIL ... 3 of 3 ...` |
+| 5b. the memory list on `ios-memory`'s real XML | 0 | `OK on the iOS simulator: all 3 classes ran` |
+| 5c. R on `ios-memory`'s real XML | 0 | `OK on the iOS simulator: all 1 classes ran` |
+| 5d. R on `ios-smoke`'s real XML | 1 | `it returned early: step10 R engine: BROUTER_STEP10_R is unset; not run (RECORD -142)` |
+| 6. no class | 2 | `usage: junit-ran.py --simulator <results-dir> <class>...` |
+
+The workflow's own commands were then run on the scratch folders: `ios-smoke`'s 25-name list (with the red-on-purpose
+name) exits 1 naming only `RedOnPurposeNoSuchCommonTest`; `ios-memory`'s gate script under `bash -e` exits 0 on the
+two copies and exits 1 naming `REngineCommonTest` when the `ios-r-fallback` copy is removed, after still printing the
+memory groups' OK line.
