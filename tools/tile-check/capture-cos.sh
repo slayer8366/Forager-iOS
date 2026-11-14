@@ -16,7 +16,8 @@
 #    tools/fetch-tiles.sh skips), reads the five tiles back through tools/fetch-tiles.sh against it, and writes the notes.
 # Any failure exits non-zero with "REFUSED: <tile>: <reason>" or "REFUSED: <reason>", and nothing is left to publish.
 # On success <out> holds assets/ (the five .rd5 files and tile-pins.tsv: exactly six), release-notes.md, headers/ (each
-# tile's response headers), and tag (brouter-cos-tiles-<capture date, UTC>).
+# tile's response headers), and tag (exactly one line, brouter-cos-tiles-<capture date, UTC as YYYY-MM-DD>).
+# Each tile's size must equal the Content-Length of the server's last response (session 74; review S1 and N3).
 set -euo pipefail
 
 usage="usage: capture-cos.sh <out dir> <tile base url> [tile list]"
@@ -39,6 +40,13 @@ sha256_of() {
   if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | cut -d' ' -f1; else shasum -a 256 "$1" | cut -d' ' -f1; fi
 }
 header() { { grep -i "^$1:" "$2" || true; } | tail -1 | cut -d' ' -f2- | tr -d '\r'; }
+# The Content-Length values of the last response in a curl --dump-header file, one per line: a proxy's CONNECT reply
+# or a redirect comes first in the file, so only the lines after the last status line count.
+content_lengths() {
+  tr -d '\r' < "$1" | awk '/^HTTP\// { n = 0; next }
+    tolower($0) ~ /^content-length:/ { v = $0; sub(/^[^:]*:[ \t]*/, "", v); sub(/[ \t]+$/, "", v); n++; cl[n] = v }
+    END { for (i = 1; i <= n; i++) print cl[i] }'
+}
 
 # 1. The oracle and the check.
 mkdir -p "$work/oracle"
@@ -59,6 +67,9 @@ notes="$work/notes.tsv"
   printf 'asset\tpath\tbytes\tsha256\tsource\tlast_modified\tetag\tcaptured\n'
 } > "$pins"
 date=$(date -u +%F)
+# The tag is built from this; hold it to YYYY-MM-DD so the tag file can only hold the one form.
+d='[0123456789]'
+if ! [[ $date =~ ^$d{4}-$d{2}-$d{2}$ ]]; then echo "REFUSED: date -u +%F gave an unexpected value" >&2; exit 1; fi
 first=""; captured=""; tiles=0
 while IFS=$'\t' read -r tile rows _rest <&3; do
   case "$tile" in '#'* | '' | tile) continue ;; esac
@@ -73,6 +84,13 @@ while IFS=$'\t' read -r tile rows _rest <&3; do
     echo "REFUSED: $tile: download from $url failed" >&2; exit 1
   fi
   echo "$tile.rd5: downloaded from $url at $captured"
+  # The size the server stated, or no tile: a body cut short, e.g. under chunked encoding, is otherwise pinned as it is.
+  cl=$(content_lengths "$out/headers/$tile.txt")
+  if [ -z "$cl" ]; then echo "REFUSED: $tile: no Content-Length in the server's response headers" >&2; exit 1; fi
+  case "$cl" in *[!0123456789]*) echo "REFUSED: $tile: Content-Length is not one whole number" >&2; exit 1 ;; esac
+  size=$(wc -c < "$file" | tr -d ' ')
+  if [ "$size" != "$cl" ]; then echo "REFUSED: $tile: downloaded $size bytes but Content-Length says $cl" >&2; exit 1; fi
+  echo "$tile.rd5: $size bytes, equal to Content-Length"
   if ! java -XX:+UnlockDiagnosticVMOptions -XX:-UseLibmIntrinsic -cp "$work/oracle/brouter-1.7.10-ro.jar:$work/classes" \
       CosTileCheck "$work/oracle/profiles2" "$work/segs/$tile" "$tile" "$rows" "$notes"; then
     echo "REFUSED: $tile: CosTileCheck failed (its FAIL line above gives the reason)" >&2; exit 1
@@ -106,7 +124,7 @@ awk -v d="$date" -v f="$first" -v l="$last" -v table="$work/table.md" '
   { gsub(/@CAPTURE_DATE@/, d); gsub(/@CAPTURE_FIRST@/, f); gsub(/@CAPTURE_LAST@/, l); print }' \
   "$tools/tile-release-cos/release-notes.md" > "$out/release-notes.md"
 if grep -n '@[A-Z_]*@' "$out/release-notes.md"; then echo "REFUSED: a placeholder is left in the release notes" >&2; exit 1; fi
-echo "brouter-cos-tiles-$date" > "$out/tag"
+printf 'brouter-cos-tiles-%s\n' "$date" > "$out/tag"
 
 echo "== tag $(cat "$out/tag")"
 cat "$pins"
