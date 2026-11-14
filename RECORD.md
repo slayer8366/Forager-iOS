@@ -7059,3 +7059,41 @@ with the planner's spot checks marked:
 **Next:** the question to the owner, with this cost.
 
 **Notes:** Written by the planner session by hand. Next free ID -182.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-182
+**Timestamp:** 2026-11-14T06:25:23Z
+**Continues:** 2026-10-28-181
+**Title:** The owner's ruling on the 8 cosine rows: "Cover them now"; candidate tiles sized from brouter.de's headers, about 30 MB for five
+
+**The ruling.** Asked with -181's cost in the question. Options, in order: "Leave uncovered, recorded (Recommended)",
+"Cover them now", "Cover them later". The planner had recommended the first. The owner chose: "Cover them now". The
+option read: "Before the app phase: I price the tiles properly first (sizes, which hold roads in each band), then
+dispatch the workflow edits, you run the release, and a coder builds the new group. Several sessions plus your release
+run and an E1 ruling." The planner's recommendation is overruled and the work is done as the option says, before the
+app phase.
+
+**Sizes, read by the planner** (HTTP headers only from brouter.de `segments4`, nothing downloaded; every file's
+`Last-Modified` was 2026-11-14 01:03 GMT, which fits -181's point that the server rewrites tiles in place):
+
+| Band | Rows | Candidates (bytes) |
+|---|---|---|
+| 45 to 40 south | 474, 488 | `E145_S45` 6,314,148; `W75_S45` 9,300,596; `E170_S45` 10,160,153 |
+| 40 to 35 south | 502 | `E170_S40` 8,510,918; `E175_S40` 9,046,079 |
+| 25 to 20 south | 663, 675 | `E15_S25` 4,854,579; `E25_S25` 12,763,588; `W50_S25` 52,424,766 |
+| 10 to 15 north | 1046 | `W95_N10` 7,472,321; `W20_N10` 10,486,978; `E120_N10` 25,772,169 |
+| 15 to 20 north | 1053, 1079 | `W20_N15` 2,622,004; `W95_N15` 16,224,869; `E100_N15` 38,241,428 |
+
+The smallest of each band sum to about 30 MB, against about 130 MB pinned today. So -181's "unknown, 5 to 600 MB"
+is now: about 30 MB if the smallest ones hold roads inside each row's 0.1 degree band. That last part is not known;
+the planner's guess that they do is from general geography only.
+
+**What follows (the planner's):** session 72, a pre-build report and no build: download the candidates to scratch
+only, count road nodes inside each of the 8 rows' bands with the port's own reader, pick the five, and trace every
+step of the capture (the release workflow on `main`, `capture.sh`, a release, pin file and folder of their own, the
+fetch task, the new group, CI) to its file and line, with what needs the owner: the release run, the word for edits
+on `main`, and E1 for `tools/tile-check/tiles.tsv`.
+
+**Notes:** Written by the planner session by hand. Next free ID -183.
