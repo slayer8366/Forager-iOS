@@ -54,6 +54,36 @@ jobs:
       ARM64_JVM_CLASSES: >-
         com.zynergylabs.forager.brouter.util.CheapLogicRunTest
         com.zynergylabs.forager.brouter.util.CheapProductionRecordTest
+      # Session 70 (review finding 69-1): every commonTest class that does its work in this job, gated on the simulator's
+      # results by the step after the simulator's counts. A named list, not one read from the source tree, so a class that
+      # is moved, renamed or filtered out turns the job red; a new commonTest class is not gated until it is added here.
+      # Not named: the memory groups and R, which return early here by design and are gated in ios-memory.
+      SIMULATOR_CLASSES: >-
+        com.zynergylabs.forager.brouter.ToolchainSmokeTest
+        com.zynergylabs.forager.brouter.expressions.FloatTextCommonTest
+        com.zynergylabs.forager.brouter.mapaccess.NodeHashMapTieBreakTest
+        com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest
+        com.zynergylabs.forager.brouter.msun.MsunCosTableTest
+        com.zynergylabs.forager.brouter.msun.MsunEdgesTest
+        com.zynergylabs.forager.brouter.tiles.CrEngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.DlEngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.EngineStopCommonTest
+        com.zynergylabs.forager.brouter.tiles.F0EngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.F0RouteCommonTest
+        com.zynergylabs.forager.brouter.tiles.F0hEngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.FkEngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.FormatDigestsCommonTest
+        com.zynergylabs.forager.brouter.tiles.FormatNumberTextTest
+        com.zynergylabs.forager.brouter.tiles.GpxNumbersCommonTest
+        com.zynergylabs.forager.brouter.tiles.LbEngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.NtEngineCommonTest
+        com.zynergylabs.forager.brouter.tiles.PinnedTileReadTest
+        com.zynergylabs.forager.brouter.tiles.RouteWaysCommonTest
+        com.zynergylabs.forager.brouter.util.CheapProductionTableTest
+        com.zynergylabs.forager.brouter.util.JavaLangCommonTest
+        com.zynergylabs.forager.brouter.util.JavaTextCommonTest
+        com.zynergylabs.forager.brouter.util.PlatformInvariantsTest
+        com.zynergylabs.forager.brouter.tiles.RedOnPurposeNoSuchCommonTest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
@@ -98,6 +128,11 @@ jobs:
         run: |
           python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test
           for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 70 (finding 69-1): fails the job if a class in SIMULATOR_CLASSES left no XML on the simulator, ran no test,
+      # had a test skipped, or returned early (tools/junit-ran.py --simulator). Runs after a red simulator step too.
+      - name: Gating - every class in SIMULATOR_CLASSES ran on the iOS simulator
+        if: always()
+        run: python3 tools/junit-ran.py --simulator brouter/build/test-results/iosSimulatorArm64Test $SIMULATOR_CLASSES
       # H step 4: the JVM half on HotSpot for arm64. It answers whether arm64 HotSpot with libm's cos intrinsic off
       # (-XX:DisableIntrinsic=_dcos, aarch64's switch; RECORD -37) builds the same table and angles as the oracle's x86_64
       # JVM (-XX:-UseLibmIntrinsic). A test that fails here is a difference, recorded and not gating.
@@ -206,6 +241,20 @@ jobs:
           if [ -f brouter/build/step10/ladder.txt ]; then grep '^ladder: ' brouter/build/step10/ladder.txt; else echo "no ladder.txt"; fi
           python3 tools/junit-counts.py brouter/build/test-results/iosSimulatorArm64Test || true
           for f in brouter/build/test-results/iosSimulatorArm64Test/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 70 (finding 69-1): the memory groups and R ran on the simulator, read from the copies made at the start of
+      # R's and the ladder's steps, so this step sits last and no earlier step is skipped by it. If a test step fails, the
+      # later copy is not made and this names the missing path; the job is red from that test step already.
+      - name: Gating - the memory groups and R ran on the iOS simulator
+        if: always()
+        run: |
+          status=0
+          python3 tools/junit-ran.py --simulator brouter/build/test-results/ios-memory-groups \
+            com.zynergylabs.forager.brouter.tiles.Mp64EngineCommonTest \
+            com.zynergylabs.forager.brouter.tiles.Ml5EngineCommonTest \
+            com.zynergylabs.forager.brouter.tiles.Pm5EngineCommonTest || status=1
+          python3 tools/junit-ran.py --simulator brouter/build/test-results/ios-r-fallback \
+            com.zynergylabs.forager.brouter.tiles.REngineCommonTest || status=1
+          exit $status
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
