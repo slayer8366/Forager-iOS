@@ -7324,3 +7324,42 @@ by SHA from `main`); `actionlint` and `shellcheck` (not installed).
    routed on, and the later test group draws until it has 59 routable cases per row.
 
 **Notes:** Written by the planner session by hand. Next free ID -187.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-187
+**Timestamp:** 2026-11-14T07:54:51Z
+**Continues:** 2026-10-28-186
+**Title:** Session 74: the tag is held to one exact line and each tile to the server's stated size (review S1 closed)
+
+**On `brouter-port-5b`, head `27cb05a` (`git ls-remote`; tree clean; five commits on `37293d1`, project trailer on
+each, each 0 on the widened scan; read by the planner).** Changed: `tools/tile-check/capture-cos.sh` (in `4dc6c23`),
+`.github/workflows/publish-cos-tiles.yml` (in `7776da9`; `TOOLS_SHA` now `4dc6c23`), and the findings
+`docs/audits/2026-11-13-brouter-port-closing/s74-capture-hardening.md`. `git diff 4dc6c23 27cb05a -- tools` is empty,
+so the pinned tools commit holds the head's tools.
+
+**The tag (S1).** The workflow now reads `out/tag` whole, matches it end to end against
+`brouter-cos-tiles-YYYY-MM-DD` and a newline, compares it byte for byte, rebuilds the tag from the matched digits and
+only then writes it to the job's environment; the file's content is never echoed. **Run by the planner** on the step's
+own lines, taken from the YAML by a parser: the good tag exits 0 and writes exactly `TAG=brouter-cos-tiles-2026-11-14`;
+a two-line file, no final newline, a wrong prefix and an empty file each exit 1 and write nothing. The coder reports
+nine bad cases refused, the reviewer's two-line demonstration reproduced on the old lines, and the byte comparison
+catching a NUL byte that the match alone lets through (coder's runs).
+
+**The size.** `capture-cos.sh` refuses a tile whose size differs from the `Content-Length` of the server's last
+response, or with that header missing, before the check runs. Coder's runs, not rerun by the planner: a body one byte
+short was accepted by curl and, on the old script, passed the check and was pinned; on the new script it is refused by
+tile name. Left as -186 decided: a server that appends bytes or changes the last byte while stating a matching length.
+
+**The dry run (coder's):** five PASS against brouter.de; bytes, SHA-256 and ends digests equal to session 73's, so the
+server had not rebuilt; nothing written holds a position by the scan.
+
+**Unproven until the real run, unchanged from -185:** everything on GitHub itself.
+
+**Review S1:** closed. The change is small and the planner ran its central case, so no fifth review is asked for it;
+the reviewer's other notes stand as -186 records them.
+
+**Next:** the owner's word on putting `publish-cos-tiles.yml` (as at `7776da9`) on `main`, then the release run.
+
+**Notes:** Written by the planner session by hand. Next free ID -188.
