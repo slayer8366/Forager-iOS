@@ -7097,3 +7097,65 @@ fetch task, the new group, CI) to its file and line, with what needs the owner: 
 on `main`, and E1 for `tools/tile-check/tiles.tsv`.
 
 **Notes:** Written by the planner session by hand. Next free ID -183.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-183
+**Timestamp:** 2026-11-14T06:40:02Z
+**Continues:** 2026-10-28-182
+**Title:** Session 72's pre-build report: five tiles, about 30 MB, hold road nodes in all 8 rows; a committed file with 12 town points found against E1
+
+**On `brouter-port-5b`, head `2bc6e2c` (`git ls-remote`; tree clean; one docs-only commit on `6e2d879`, project
+trailer, scanned 0; read by the planner):**
+`docs/audits/2026-11-13-brouter-port-closing/s72-cosine-rows-tiles-prebuild.md` (504 lines). Nothing built.
+
+**The measurement (coder's, on today's bytes downloaded to scratch, the container's JDK; not rerun by the planner).**
+The smallest candidate of each band holds road nodes in every row it must cover, opens in the port's `checkDataFile`
+and passes the oracle's `TileCheck`:
+
+| Tile | Bytes | Nodes per row |
+|---|---|---|
+| `E145_S45` | 6,314,148 | 474: 5,159; 488: 16,239 |
+| `E170_S40` | 8,510,918 | 502: 1,124 |
+| `E15_S25` | 4,854,579 | 663: 2,523; 675: 7,788 |
+| `W95_N10` | 7,472,321 | 1046: 96,104 |
+| `W20_N15` | 2,622,004 | 1053: 10,205; 1079: 2,461 |
+
+Total 29,773,970 bytes. These are today's bytes; the release will hold its own, and the counts are measured again on
+them. The sizes equal the ones the planner read in -182.
+
+**Findings that shape the work:**
+- **`LBGenerator` as it stands should not drive the new group:** it draws by node count, so row 1046 takes 68% of the
+  draws; in 150 cases row 1079 was never drawn and row 663 once. A per-row draw reached 59 cases inside each row.
+- **The group can assert that it read the rows** without a `commonMain` change: `RoutingContext` takes the maths seam
+  (`RoutingContext.kt:19`), so a test-only counting seam can hold each case to its own row and the group to all 8.
+- **A folder of their own is needed:** only `RGenerator.kt:36` and `LBGenerator.kt:26` list a tiles folder, and a new
+  file in `segments/` would reshuffle R, CR and LB and break `E3RSequenceTest`'s pin.
+- **The release workflow:** `publish-tiles.yml` on `main` hard-codes the tools commit, the capture command and 7
+  assets; `capture.sh` insists on exactly 5 pin rows and a `W75_N40` row. Its tag carries the date, so a run on
+  another day would recapture the four old tiles under a new tag. The new tiles need a script and a tag prefix of
+  their own, and either a three-line edit to the workflow or a second workflow file.
+- **A scratch run, not evidence** (the coder's own words): the port on Android's maths against the oracle on 472
+  per-row cases plus 150, all equal. One local run on unpinned bytes, no stability check, no planted error.
+- **CI cost (estimates):** download seconds; at 8 x 59 cases, about 40 to 85 s in each JVM job and 5 to 8 minutes on
+  the simulator; at 8 x 8, about a seventh.
+
+**Against E1, found by the coder and confirmed by the planner:** `tools/tile-check/tiles.tsv` commits, besides
+Forager's own ends for `W75_N40`, 12 numbers that are not Forager's: one pair of town points each for `W75_N35`,
+`W70_N40` and `E170_S50`, at 4 decimals, committed in `aa144a0` on 2026-10-29, before -84. The file's own header
+names the towns. `scan.sh` looks for 5 or more decimals, so every E1 scan in this record, the planner's included,
+could not see them: a scan of 0 has meant "no coordinate of 5 or more decimals", not "no coordinate". The planner
+masked the digits to check the file's shape and writes none here. The file is in the tree of `brouter-port-5b`,
+`brouter-port` and (by the workflow's pinned tools commit) is what the published release was checked with. It goes to
+the owner. Nothing is touched until they rule.
+
+**E1 for the new tiles, the coder's alternatives that commit no coordinate (not chosen by the coder):** (a) no route
+in the capture check, only open, integrity and decode; (b) ends picked at run time from the tile's own nodes by a fixed
+rule, with `TileCheck` no longer printing ends to the public log; (c) a per-row node count in place of the route,
+which can be joined with (b). Committing ends would need the owner's exception: 20 new numbers.
+
+**The merge's CI** (run 43565180651 on `a014100`): `ios-smoke` `success`; the other three jobs still running when
+this was written.
+
+**Notes:** Written by the planner session by hand. Next free ID -184.
