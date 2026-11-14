@@ -7012,3 +7012,50 @@ record promises that question "with the cost of a tile for them", and the planne
 not asked without the cost.
 
 **Notes:** Written by the planner session by hand. Next free ID -181.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-181
+**Timestamp:** 2026-11-14T06:17:56Z
+**Continues:** 2026-10-28-137, 2026-10-28-180
+**Title:** The record's PR is #7; a read-only pulse prices tiles for the 8 cosine rows no test can reach: at least 5 new tiles and a new release
+
+**PR #7** (`ccr-8ee6e614-32enzt` to `main`, Forager-iOS) is open on the owner's word of -180 and unmerged. -180 said 16
+commits in the question put to the owner; with -179 and -180 it is 18, and with this entry 19.
+
+**The merge's CI:** run 43565180651 on `a014100` was in progress on all four jobs when this was written. Not read.
+
+**The pulse** (read-only, one session; nothing committed; a scratch check in the scratch folder only). Its findings,
+with the planner's spot checks marked:
+- **A row is a 0.1 degree band of latitude, all the way round the globe** (`CheapRuler.kt`, row i from
+  `i * 100000 + 50000`; read by the planner). The 13 rows are 474, 488, 502, 663, 675, 1046, 1053, 1079, 1295, 1297,
+  1310, 1311, 1318 (`CheapProductionRecordTest.kt:15`; read by the planner).
+- **"8 of the 13 lie in no captured tile" is right.** The pinned tiles (`tools/tile-pins.tsv`; names read by the
+  planner) cover 35 to 45 north and 50 to 45 south. The 5 covered rows lie in 39 to 42 north. The 8 lie in 43 to 39
+  south (474, 488, 502), 24 to 22 south (663, 675) and 14 to 18 north (1046, 1053, 1079). The planner rechecked the
+  bands for 474 and 1046 by the row rule.
+- **New, the pulse's computation, not rechecked:** all 13 rows differ in `kx`, the east-west scale, and none in `ky`,
+  each by 1 ulp of the cosine. -23 had this as undetermined. Computed against the container's JDK, not the pinned one.
+- **The bands hold roads** (general geography, inferred): Tasmania and New Zealand, Chile and Argentina; south-east
+  Brazil, southern Africa, Queensland; southern Mexico, Central America, the Sahel, central India, mainland South-East
+  Asia. Where Forager's users are is in neither repository.
+- **Cost, at least 5 new tiles,** one per 5 degree band that holds a row: 45 to 40 south, 40 to 35 south, 25 to 20
+  south, 10 to 15 north, 15 to 20 north. Sizes unknown (today's are 1 MB to 120 MB). Needed besides:
+  - a new tile release, which only the owner can run (`publish-tiles`, -30, -58), after edits to that workflow on
+    `main` and to `tools/tile-check/capture.sh`;
+  - the new tiles kept in a release and folder of their own: recapturing the old tiles would change their bytes
+    (brouter.de rewrites in place) and a new file in the shared folder would reshuffle R's, CR's and LB's draws;
+  - a new test group over the new tiles with its expected rows and stability runs, about the size of LB's 59 cases;
+  - a ruling on E1: the tile check commits a route's ends per tile, and new tiles would mean new coordinates in
+    `tools/tile-check/tiles.tsv`.
+  - CI: seconds to a few minutes more per job for the download, about half a minute for a 59-case group.
+- **Risk if nothing is done** (inferred): the only difference is 1 ulp in the east-west scale, so a route can change
+  only where a rounding or a near-tie flips. In those bands the port would then match Android's table and could differ
+  from desktop BRouter, which is the trade -24 chose. At least 122 cases that read one of the 5 covered rows changed no
+  route; that does not bound the other 8.
+- **Not determined:** the candidate tiles' sizes and whether each holds roads inside its row's band; where users are.
+
+**Next:** the question to the owner, with this cost.
+
+**Notes:** Written by the planner session by hand. Next free ID -182.
