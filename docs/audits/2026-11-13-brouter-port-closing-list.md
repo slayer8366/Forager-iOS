@@ -68,6 +68,11 @@ the record is from the simulator on a debug build ("simulator-checked").
 - The public entry for the route-ways reader (plan item 4; shape in -172; session 68) and its simulator sibling.
 - One review of the test changes since -163 (sessions 60, 62, 64, 65, 66, 67).
 
+Added 2026-11-14, after -174: the public entry landed (session 68, `readRouteWays`, jvm 249 of 249, compiled for the
+simulator but run by no simulator test). Its gaps, for section B: no described link with `reverse` true in either point
+set, no point spanning two squares, no real square of another divisor, the exceptions' pass-through not run. The
+simulator sibling (session 69) and the review are still in flight.
+
 ## What this list is not
 
 It is built by searching the record for the words "not covered", "not shown", "not caught", "owed" and "inferred" and

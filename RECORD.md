@@ -6622,3 +6622,70 @@ hold does change the answer.
 closing list), one review of the test changes since -163.
 
 **Notes:** Written by the planner session by hand. Next free ID -174.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-174
+**Timestamp:** 2026-11-14T00:28:59Z
+**Continues:** 2026-10-28-172, 2026-10-28-173
+**Title:** Session 68: the route-ways reader has its public entry, equal to the Java walk on every link (plan item 4)
+
+**What landed on `brouter-port-5b`, head `e9eeddb` (from `fd717d1`; read by the planner with `git ls-remote`, tree
+clean, four commits, each with the project trailer, each scanned 0):**
+- `86c6df5`: design and predictions, `docs/audits/2026-11-13-brouter-port-closing/s68-route-ways-entry.md`.
+- `a38d55d`: a stub that throws `NotImplementedError`, the new test, and a move of the cell helpers (red).
+- `36604e4`: the body. `e9eeddb`: results.
+- `git diff --stat fd717d1 e9eeddb` names five files: the new `commonMain/.../brouter/RouteWays.kt` (120 lines), the new
+  `jvmTest/.../mapaccess/RouteWaysEntryTest.kt` (199) and `RouteWaysCells.kt` (48), `RouteWaysTest.kt` (46 lines moved
+  out, five imports in), and the findings file. No engine class changed.
+
+**The surface, read by the planner in `RouteWays.kt`:**
+- `fun readRouteWays(request: RouteWaysRequest): RouteWaysOutcome`.
+- `RouteWaysRequest(square: Path, lookups: Path, lonCells: IntArray, latCells: IntArray, divisor: Int)`.
+- `RouteWaysLink(iLat: IntArray, iLon: IntArray, description: String)`: node, decoded geometry, target, in
+  micro-degrees; the text is `getKeyValueDescription(reverse, bitmap)` unchanged.
+- `RouteWaysOutcome.Read(divisor, links)` and `RouteWaysOutcome.OtherDivisor(divisor)`.
+This is -172's shape with one addition: the request carries the divisor the caller computed its cells with.
+
+**The divisor (left to the coder by -172): the entry refuses.** If the square's divisor differs from the request's it
+returns `OtherDivisor` and reads no cell. Reason given: a cell index means something only at its divisor, so cells
+computed for 1/32 read against a 1/80 square would return plausible links from the wrong place. Forager checks the
+same before it walks (`BRouterRouteWays.kt:80`) and words its own message. Accepted by the planner.
+
+**The test (`RouteWaysEntryTest`, 3 tests):** each of Forager's 15 drop-off points and F0h's 16 ends, the entry's
+output against the Java walk link by link: outcome kind, divisor, link count, point counts, `iLat`, `iLon`,
+description text; then totals. Coder's counts, equal on both sides: drop-off 120 links and 270 geometry points over 18
+cells and 135 nodes; F0h 4,858 links and 43,006 geometry points over 21 cells and 3,983 nodes. Cells and nodes are the
+Java side's only, because the entry does not report them. The third test asks for a 1/32 square at 1/80 and expects
+`OtherDivisor` carrying the Java's divisor.
+
+**CI, run 43526466282 on `36604e4`, four jobs `success`, 0 ` e: ` lines in each log (read by the planner):**
+- `jvm`: 249 tests, 0 failures (was 246).
+- `ios-smoke`: 58 and 7, 0 failures, gate line `OK: all 2 classes ran`, `compileKotlinIosSimulatorArm64` ran;
+  `ios-memory`: 3, 1, 1; `jvm-production`: 2. Simulator-checked. The entry is compiled for the simulator and run by
+  no simulator test yet.
+- Docs-only `e9eeddb` has no run of its own.
+
+**Red and the plant (coder's report and findings file; not rerun by the planner):** over the stub, 3 tests and 3
+failures, each naming the stub's `NotImplementedError`; the red commit's run 43526375495 has a red `jvm` job, as
+predicted. Plant: `getKeyValueDescription(reverse, bitmap)` to `(!reverse, bitmap)`; 0 compile errors, fresh XML, 2
+failures at `link 1 ... field [description]`, the divisor test passed; restored, `cmp` equal, `git diff HEAD` empty.
+
+**Not shown:**
+- No point in either set spans two squares, so one call per point; nothing is compared across squares.
+- No described link in either set has `reverse` true. The plant fails because `!reverse` flips every link, but a body
+  passing a literal `false` would pass this test. Stated by the coder; the planner agrees it follows from the counts.
+- No real square of another divisor was read; the refusal is tested by asking the wrong divisor of a 1/32 square.
+- A missing or bad `lookups.dat` or square: the pass-through of the engine's exceptions is read from code, not run.
+- That each cell lies in the square given is not checked by the entry (the square's position is only its name, which
+  -172 keeps Forager's).
+- A finding, not fixed: if `PhysicalFile`'s constructor throws after opening the file, the handle stays open. The
+  coder reports the same in Forager's reader, in `checkDataFile` and in the Java. Not verified by the planner.
+- Nothing on iOS runs the entry. Forager's adapter is not changed to call it; that is the app's work.
+
+**What follows (the planner's):** session 69, the entry's common sibling for the simulator, with stored counts and a
+digest drawn on the JVM. One review by Samphire Witness of the test changes since -163 (sessions 60, 62, 64 to 68),
+started beside it; session 69's test goes to the same review when it lands.
+
+**Notes:** Written by the planner session by hand. Next free ID -175.
