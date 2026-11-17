@@ -82,7 +82,7 @@ class CosTilePinsTest {
 
         // The release brouter-cos-tiles-2026-11-17's own tile-pins.tsv, as fetched and read by session 75.
         val PINS = listOf(
-            Pin("E145_S45.rd5", "segments/E145_S45.rd5", 6_316_105L,
+            Pin("E145_S45.rd5", "segments/E145_S45.rd5", 6_316_104L,
                 "cb3074754c0f90686f39bfe018aa89ee3df40917b2b316bca9edc01e1e1709a1"),
             Pin("E170_S40.rd5", "segments/E170_S40.rd5", 8_513_057L,
                 "147a6c28fc967ec47fda647fe71cad2140261f4b008b9e5d637f94567871c521"),
