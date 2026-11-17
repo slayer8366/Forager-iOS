@@ -7552,3 +7552,36 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **Next (the planner's):** session 76, the per-row generator and its expected rows (session 72's dispatch 6).
 
 **Notes:** Written by the planner session by hand. Next free ID -192.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-192
+**Timestamp:** 2026-11-17T04:41:31Z
+**Continues:** -191, -184, -182
+**Title:** Session 76: the cosine rows' group is selected, 472 cases at 59 per row, stable on the pinned Java, with its expected rows in a file of their own
+
+**What landed.** `brouter-port-5b` moved from `cd9d1c5` to `cf83cf3`, eight commits (coder: Plumb Ledger, session 76). Code commits are `a974603` (generator, seeds, counting seam, stratum test, writer; pushed before any run) and `5f280f7` (the resource and its file test). The other six are findings only. Findings file: `docs/audits/2026-11-13-brouter-port-closing/s76-cos-rows-selection.md`, tables under `s76/`.
+
+**Verified by the planner, from the remote and CI, not from the hand-back:**
+- `git ls-remote` gives `cf83cf3` for `brouter-port-5b`; the tree is clean; every one of the eight commits ends with the project trailer only.
+- `git diff --stat cd9d1c5 cf83cf3` is 25 files, all added, 3,236 insertions. Over `brouter/src/commonMain`, `expected-1b.tsv`, `.github`, `brouter/build.gradle.kts` and `tools` it prints nothing.
+- `scan.sh` (4+ decimals) prints 0 on each of the eight commits.
+- `brouter/src/jvmTest/resources/e3/expected-cosrows.tsv`: 477 lines, 472 rows, 59 for each of COS474, COS488, COS502, COS663, COS675, COS1046, COS1053, COS1079; SHA-256 `405e15ad...1ea419`, equal to the hand-back's; its head names Eclipse Adoptium 21.0.13+9-LTS, amd64.
+- CI run 44010575381 on `5f280f7`, attempt 1, four jobs successful, 0 compile-error lines in each log under both patterns (`^e: ` and ` e: `). `jvm`: TOTAL 257, 0 failures (was 255), with `E3CosRowsExpectedFileTest` 2 of 2 passed. `jvm-production`: 2. Simulator-checked: 60 and 7, with `OK on the iOS simulator: all 24 classes ran`; memory 3, 1, 1 with its two gate lines.
+- Read in the source: `CountingLibm` wraps any `LibmSeam` and counts rows passed to `scales`; `E3CosRowsTest` keeps a case only if its route stays in the row's band and the counted run read its own row, then asserts 59 kept per row and that the group's (c) rows read are exactly the 8, before any stability run.
+
+**Reported by the coder, not rerun by the planner** (the run is in `e3Strata`, which no CI job runs; about 12 minutes locally on the pinned Java):
+- Draws to the 59th kept case: 178, 120, 120, 117, 132, 89, 106, 86 for rows 474, 488, 502, 663, 675, 1046, 1053, 1079.
+- Stable 59 of 59 in every row, 472 of 472, under the existing rule at `E3Stability.kt:32-34`; the writer's seventh R1 equal in 472 of 472.
+- Plant: with the counter never recording row 474, the test failed before stability with `row 474: 0 of 59 kept after 1180 draws (cap 1180)` and the group line naming 474 missing; 0 compile errors, fresh XML, file restored from a saved copy and `cmp`-equal. Two plants on the file test failed for their own reasons.
+
+**What this does not show.** No port outcome has been compared with the Java's on these 472 cases. That is session 77. The rows were counted in the port running on the oracle's table; the Java's own reads were not counted, and reads on the production (msun) table were not counted. `E3CosRowsTest` and its writer are held by no CI job, as with the other `e3Strata` classes.
+
+**Premises of the brief that were wrong.** `revert.sh` runs `jvmTest` only and cannot run a plant in `e3Strata`; the coder used a scratch copy that keeps the same guards. The per-case row check is the keep rule itself, so on kept cases it cannot fail alone; the plant is what shows it bites. The coder's draw-count prediction missed in 7 of 8 rows (by up to 13 draws against session 72's scratch counts) and the cause was not traced.
+
+**Decisions.** The planner's, from the brief: the expected rows go in a resource of their own so `expected-1b.tsv` and its digest do not move. The coder's, beyond scope and accepted: seeds live in `CosRowsGenerator.SEEDS` (20261207 plus the row), one stratum per row named `COS<row>`, the draw limit is the existing `E3Targeted.CAP` of 1,180, a separate writer class.
+
+**Next (the planner's):** session 77, the runs (session 72's dispatch 7): the logic comparison in `jvm`, the production group in `jvm-production`, the simulator class with its `SIMULATOR_CLASSES` entry, the counting assertions on both tables, and a planted table error seen to bite.
+
+**Notes:** Written by the planner session by hand. Next free ID -193.
