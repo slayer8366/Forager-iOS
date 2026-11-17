@@ -7692,3 +7692,21 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **Done on the second.** The PR is opened from `ccr-8ee6e614-32enzt` to `main` after this entry is pushed, so it carries -190 to -196. It is merged only when the owner names it. The "Yes, open the PR" above is a word to open it, not to merge it.
 
 **Notes:** Written by the planner session by hand. Next free ID -197.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-197
+**Timestamp:** 2026-11-17T12:24:01Z
+**Continues:** -196
+**Title:** CI on the `brouter-port` merge `7d4d721` is green; the old `publish-tiles` workflow refused at its guard on that push
+
+**CI, read by the planner.** Run 44071829607 on `7d4d721`, attempt 1, four jobs successful, 0 compile-error lines under both patterns (`^e: ` and ` e: `) in each log. `jvm`: TOTAL 262, 0 failures. `jvm-production`: 3, with `OK: all 2 classes ran`. Simulator-checked: 61 and 7, with `OK on the iOS simulator: all 25 classes ran` and `OK: all 2 classes ran`. Memory: 3, 1, 1 with its two gate lines. These equal the counts on `dee43df` (-195).
+
+**The red run on the same push.** `publish-tiles` run 44071829688 failed in its `capture` job at the step "On a push, refuse if the branch's tools differ from TOOLS_SHA's, which this run would test instead". Its `TOOLS_SHA` is `5d00761`, and the step printed four differing files: `tools/fetch-tiles.sh`, `tools/tile-check/CosTileCheck.java`, `tools/tile-check/capture-cos.sh`, `tools/tile-check/cos-tiles.tsv`. The `publish` job was skipped. The releases list still shows the same two releases, `brouter-tiles-2026-10-30` and `brouter-cos-tiles-2026-11-17`. So the guard did what it is for; nothing was published or changed.
+
+**What follows.** This workflow will refuse the same way on each push to `brouter-port` that carries those tool files, until its pin is moved. It lives on `main`. For that file the owner ruled "Leave it, recorded" (-188), which was about its weak tag check; whether to move its pin is put to the owner as a new question and nothing was changed.
+
+**Also open.** PR #8 (record entries -190 to -196; this entry joins it when pushed) waits for the owner to name it.
+
+**Notes:** Written by the planner session by hand. Next free ID -198.
