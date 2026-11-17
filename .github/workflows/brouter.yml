@@ -280,8 +280,12 @@ jobs:
           # The oracle's JDK, pinned exactly (item E2: one HotSpot build, on x86_64).
           distribution: temurin
           java-version: '21.0.13+9'
+      # Session 77: the cosine rows' production run, a class of its own beside the first (same gate), named here because
+      # the first filter does not match it.
       - name: The production run, recorded (step 9; the oracle is fetched and checked by the build, tools/fetch-oracle.sh)
-        run: ./gradlew --no-daemon :brouter:jvmTest --tests '*RoutingEngineProductionRecordTest'
+        run: >-
+          ./gradlew --no-daemon :brouter:jvmTest --tests '*RoutingEngineProductionRecordTest'
+          --tests '*RoutingEngineCosRowsProductionRecordTest'
       - name: Counts from the JUnit XML, and the XML itself
         if: always()
         run: |
