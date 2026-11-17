@@ -293,6 +293,15 @@ jobs:
         run: |
           python3 tools/junit-counts.py brouter/build/test-results/jvmTest
           for f in brouter/build/test-results/jvmTest/*.xml; do echo "== $f"; cat "$f"; done
+      # Session 78 (review 5, S2): Gradle fails only when no --tests filter matches, so a renamed or moved class among the
+      # two would leave this job green. This fails the job unless both left their XML with a test case that ran
+      # (tools/junit-ran.py, the arm64 JVM step's mode).
+      - name: Gating - both production classes ran
+        if: always()
+        run: >-
+          python3 tools/junit-ran.py brouter/build/test-results/jvmTest
+          com.zynergylabs.forager.brouter.router.RoutingEngineProductionRecordTest
+          com.zynergylabs.forager.brouter.router.RoutingEngineCosRowsProductionRecordTest
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
