@@ -279,3 +279,22 @@ no route on these cases. This is a sample of 59 per row, not every route through
 - The production-table plant on the simulator (only on the JVM); the simulator's counting seam was planted on the JVM only.
 - A full local `jvmTest`: only the classes named in §4 ran here; the full suite ran in CI (262).
 - Whether the engine ever reads the table off the calling thread (§6).
+
+## 11. Correction, 2026-11-17 (session 78, from review 5's S3)
+
+Added after the fact; the text above is left as it was written. Review 5 (S3) found that two sentences above present
+"every case read its own row" as a finding of its own. It is not independent: a case is kept only if the oracle's route
+lies inside its row's band with both ends in it (`E3CosRowsTest.kt:58, 61-64`), and every link distance reads the row of
+the link's mid latitude (`CheapRuler.kt:53, 57`), so any run that returns the selected route reads that row, on any table.
+What the row assertion does show is that the engine took the seam it was handed, so the table under test was the one read.
+The counting seam records that a row was fetched; it does not record how often (`CountingLibm.reads` has no caller) or
+that the fetched value moved any number.
+
+- §4.2, near lines 146-147: "Every case read its own (c) row on msun's table, so the differing value was read in every
+  case." **Corrected reading:** each case's route lies inside its row's band, and the port fetched that row from the
+  table under test (msun's). The counter does not show how often the row was read, nor that the differing value moved a
+  number; that each reader uses the row's `kx` is an inference from the readers, not something this run measured.
+- §5, near lines 221-222: "On the 472 cases, 59 in each of rows 474, 488, 502, 663, 675, 1046, 1053 and 1079, every one of
+  which read its own row of the table: ..." **Corrected reading:** on the 472 cases, 59 in each of the 8 rows, each
+  case's route lies inside its row's band, and the port fetched that row from the table under test. That follows from
+  how the cases were selected; it does not strengthen the 472 of 472, which remain a sample of 59 per row.
