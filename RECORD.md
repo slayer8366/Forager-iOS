@@ -7411,3 +7411,61 @@ The planner then reads the run's log (each tile's PASS line and per-row counts, 
 dispatches the pinning session.
 
 **Notes:** Written by the planner session by hand. Next free ID -189.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-189
+**Timestamp:** 2026-11-17T00:12:12Z
+**Continues:** 2026-10-28-188
+**Title:** The owner ran the release: `brouter-cos-tiles-2026-11-17` is published with the five tiles, all 8 rows counted and routed, no position in either log
+
+**The run.** The owner started `publish-cos-tiles` from `main` (`e205d96`): run 43985424626, `workflow_dispatch`,
+both jobs `success` (`capture` 133712234164, `publish` 133712468785). Before it, the owner had rerun the ordinary
+`brouter` test run on `7776da9` by mistake (its title is the commit's, which names the workflow file); that rerun
+publishes nothing and is not part of this.
+
+**Read by the planner in the `capture` job's log:**
+- Tools checked out at `4dc6c23` from a run on `main`, and Temurin 21.0.13+9 resolved. Both were "unproven until the
+  real run" in -185.
+- Each tile "equal to Content-Length", then per row:
+
+| Tile | Bytes | Row | Nodes in band | Routed on attempt | Track nodes, all in band | Metres |
+|---|---|---|---|---|---|---|
+| `E145_S45` | 6,316,104 | 474 | 5,159 | 1 | 28 | 1,828 |
+| | | 488 | 16,239 | 1 | 13 | 874 |
+| `E170_S40` | 8,513,057 | 502 | 1,124 | 1 | 19 | 1,211 |
+| `E15_S25` | 4,854,933 | 663 | 2,523 | 1 | 36 | 1,617 |
+| | | 675 | 7,788 | 1 | 50 | 1,510 |
+| `W95_N10` | 7,472,453 | 1046 | 96,104 | 1 | 62 | 2,898 |
+| `W20_N15` | 2,622,128 | 1053 | 10,205 | 2 | 223 | 8,385 |
+| | | 1079 | 2,461 | 1 | 9 | 1,804 |
+
+  Five PASS lines. Row 1053's first attempt was "no route | error=from-position not mapped in existing datafile", as
+  in the dry runs.
+- Tag `brouter-cos-tiles-2026-11-17`. The pin rows give each tile's SHA-256 and `Last-Modified` "Mon, 16 Nov 2026
+  01:03:01 GMT".
+
+**Read by the planner in the `publish` job's log and from the API:** the draft was created, each of the five tiles was
+downloaded back and "matches its pins", and the release was published. The API lists the release as not a draft,
+target `e205d96`, six assets: the five tiles at the sizes above and `tile-pins.tsv` (2,491 bytes). The old release
+`brouter-tiles-2026-10-30` is listed unchanged with its seven assets.
+
+**Positions in the public logs:** with each line's timestamp removed, the only number of 4 or more decimals in either
+log is in the first line's own timestamp; no line holds `ilon`, `ilat`, `lon=`, `lat=` or a pair of 8 to 10 digit
+numbers. The planner did not download or read the uploaded workflow artifact (kept 7 days), which review 4 says also
+holds brouter.de's response headers.
+
+**An observation the planner cannot explain from the log alone, flagged and not resolved:** the server rebuilt all
+five tiles between the dry runs (14 November) and this run (16 November): every size and SHA-256 differs, by 132 to
+2,139 bytes. Yet all eight node counts, all eight track-node counts, all eight distances and all five ends digests
+are identical to the dry run's. That is what unchanged map data in those bands inside rebuilt files would give, and
+the small size differences fit it; it is also what a check that did not read the new bytes would give. The log
+cannot tell the two apart. What can: the pinning session counts the rows again on the release's bytes with the port's
+own reader, a different reader from the check's, and compares the files with the 14 November copies if those survive
+in scratch.
+
+**Next (the planner's):** session 75, pin the release: a pin file and fetch task and folder of their own, a pin test
+seen failing first, and the per-row counts re-measured on the release's bytes.
+
+**Notes:** Written by the planner session by hand. Next free ID -190.
