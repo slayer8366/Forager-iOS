@@ -7585,3 +7585,42 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **Next (the planner's):** session 77, the runs (session 72's dispatch 7): the logic comparison in `jvm`, the production group in `jvm-production`, the simulator class with its `SIMULATOR_CLASSES` entry, the counting assertions on both tables, and a planted table error seen to bite.
 
 **Notes:** Written by the planner session by hand. Next free ID -193.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-193
+**Timestamp:** 2026-11-17T05:59:22Z
+**Continues:** -192, -182
+**Title:** Session 77: on 472 cases across the 8 cosine rows, the production table gives the Java's result every time, on the JVM and on the simulator
+
+**The ruling this answers.** Asked whether to cover the 8 cosine rows before the app's map-first phase, the owner chose "Cover them now" (-182).
+
+**The answer.** 472 cases, 59 in each of rows 474, 488, 502, 663, 675, 1046, 1053 and 1079. Every case read its own row of the scale table. The port on the production (msun) table equalled the Java oracle on all six fields in 472 of 472, in `jvm-production` and on the iOS simulator (simulator-checked, debug build). On these cases the 1-ulp `kx` difference changed no route. This is a sample of 59 routes per row on `hiking-mountain`. It is not a proof for every route through those rows.
+
+**What landed.** `brouter-port-5b` moved from `cf83cf3` to `e703277`, six commits (coder: Plumb Ledger, session 77). Code commits: `3c924cd` (logic run), `72a9826` (production run), `31939ed` (simulator). Findings: `docs/audits/2026-11-13-brouter-port-closing/s77-cos-rows-runs.md`.
+
+**Verified by the planner, from the remote and CI:**
+- `git ls-remote` gives `e703277`; clean tree; all six commits end with the project trailer only; `scan.sh` prints 0 on each.
+- `git diff --stat cf83cf3 e703277`: 13 files, 1,206 insertions, 3 deletions. Nothing under `commonMain`, `jvmTest/resources`, `tools`, `build.gradle.kts` or the two publish workflows. `brouter.yml` changed in three places, read in the diff: one `SIMULATOR_CLASSES` entry, a second `--tests` filter in `jvm-production`, one comment.
+- CI run 44020606098 on `31939ed`, attempt 1, four jobs successful, 0 compile-error lines under both patterns in each.
+  - `jvm`: TOTAL 262, 0 failures (was 257). Eight lines `cosrows logic COS<row>: 59 cases; equal to expected-cosrows on the whole tuple 59; differing 0`; eight lines with `own row read by 59` and each row reading only its own (c) row; group line listing exactly the 8.
+  - `jvm-production`: TOTAL 3 (was 2). Eight lines `cosrows production record: COS<row> | 59 | 59 | 0 | ...` with every difference column 0; the same row lines on msun's table.
+  - `ios-smoke`, simulator-checked: TOTAL 61 (was 60) and 7; `OK on the iOS simulator: all 25 classes ran` (was 24). The class's line: `472 cases in the file; 472 of 472 stored ids; ... equal on all six fields and the tuple digest 472; mismatches 0; missing 0; 159 s`, with the row lines as above.
+  - `ios-memory`: 3, 1, 1 with its two gate lines.
+
+**Reported by the coder, not rerun by the planner.** Plants, each restored from a saved copy with 0 compile errors and fresh XML: `kx` times 1.001 at row 474 in the oracle's table made the logic run fail with 52 mismatches, all COS474; the same change in the production table moved the COS474 record line to 7 equal, 52 differing while the test still passed; one changed digest in the simulator's constant failed its digest test naming COS474-0001; hiding row 474 from either counter failed by row. The plants used a 0.1% change, so they show the comparisons work and say nothing about what 1 ulp does.
+
+**Points to carry.**
+- The production record class only records a difference; it never fails one (`RoutingEngineProductionRecordTest.kt:264-266`, and the new class the same). The simulator class is stricter: it holds a production run to the oracle's tuples, so a real production difference would turn it red. That is consistent today because there is none.
+- `CosRowsEngineCommonTest` on the JVM prints `BROUTER_STEP10_NT_CASES is unset; not run` and passes without running, as the other step-10 common classes do there. Its evidence is the simulator run only.
+- `Step10Cases.check` gained one parameter (`libm`, defaulting to `MsunLibm`), a change to shared test code.
+- Not checked: the production-table plant on the simulator; routes beyond these 472; why 7 of COS474's cases survived the 0.1% plant; a full local `jvmTest`.
+
+**Premises that were wrong (the planner's brief, from session 72's pre-build).** The production group could not be "added to" the existing record class without threading through it, so it is a class of its own with its own job filter. `Step10Cases.check` passed no seam. Names in the pre-build (`tiles-cosrows` and others) are not the tree's (`tiles-cos`).
+
+**Closing list.** Section E of `docs/audits/2026-11-13-brouter-port-closing-list.md` updated in this commit.
+
+**Next (the planner's):** a reviewer look at sessions 72 to 77's test code since review 4. Then, on the owner's word only: merging `brouter-port-5b` into `brouter-port`, and a record PR for -190 onward.
+
+**Notes:** Written by the planner session by hand. Next free ID -194.

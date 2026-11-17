@@ -79,6 +79,13 @@ and the third review confirmed them (-179). New gaps named along the way, for se
 no simulator gate; the text length is the whole text's, so opposite differences could cancel; at most 9 of the 12
 by-value places occur in the 69 rows.
 
+Added 2026-11-17, after -193: the 8 cosine rows that no test covered (474, 488, 502, 663, 675, 1046, 1053, 1079) are now
+covered by a committed group of 472 cases, 59 per row (-182 to -193). On those cases the production table gave the
+oracle's result in 472 of 472, on the JVM and on the iOS simulator (simulator-checked). That is a sample of 59 routes
+per row, not every route through those rows. Gaps named along the way, for section B: the selection and stability run
+(`e3Strata`) is held by no CI job; the Java's own row reads were not counted, only the port's; the simulator class holds
+a production run to the oracle's tuples, so it would turn red on a real production difference instead of recording it.
+
 ## What this list is not
 
 It is built by searching the record for the words "not covered", "not shown", "not caught", "owed" and "inferred" and
