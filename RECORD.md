@@ -7469,3 +7469,27 @@ in scratch.
 seen failing first, and the per-row counts re-measured on the release's bytes.
 
 **Notes:** Written by the planner session by hand. Next free ID -190.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-190
+**Timestamp:** 2026-11-17T00:16:18Z
+**Continues:** 2026-10-28-180, 2026-10-28-189
+**Title:** PR #7 merged into `main` on the owner's word; the record on `main` now runs to -189
+
+**The owner's word, verbatim:** "Merge PR #7".
+
+**Done by the planner:** PR #7 (`ccr-8ee6e614-32enzt` at `4dff579` into `main` at `e205d96`) merged as a merge
+commit, `cf1ce0b`, with the head held to `4dff579` so nothing unseen could ride in. Checked before merging: 27
+commits, two files (`RECORD.md` and `docs/audits/2026-11-13-brouter-port-closing-list.md`), 1,373 lines added, a clean
+merge, the widened scan over the PR's range 0. -180 had said 16 commits and -181 19; the PR grew with each entry
+pushed to its branch, and what merged is -164 to -189.
+
+**The session branch** was fast-forwarded to `cf1ce0b` and carries on from `main`; this entry and later ones are on
+it and not yet on `main`.
+
+**In flight when this was written:** session 75 (pinning the release `brouter-cos-tiles-2026-11-17`), with
+uncommitted work of its own in its clone, left to it.
+
+**Notes:** Written by the planner session by hand. Next free ID -191.
