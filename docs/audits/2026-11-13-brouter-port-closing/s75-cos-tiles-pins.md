@@ -159,6 +159,22 @@ compile errors, 1 fresh XML file each time; `sha256sum` of each file after equal
 - **A missing line:** row 1079's `# row` renamed `# rox`: failed at the pair check, `the (tile, row) pairs of
   tile-pins-cos.tsv's # row lines against the 8 cosine rows expected:<[... (W20_N15, 1079)]> but was:<[...`.
 
+### 4.3 The R sequence pin, run locally on the pinned Temurin [C]
+
+`tools/fetch-temurin.sh` fetched Temurin 21.0.13+9 (matched its pins) into scratch. Then
+`./gradlew :brouter:e3Strata -Pbrouter.e3.jdk=<that home> --tests '*E3RSequenceTest'` on the red commit's tree (log
+`.../scratchpad/s75/rseq.log`, 0 compile errors): the JDK line printed `Eclipse Adoptium; 21.0.13+9-LTS; amd64`, then
+`E3 R-sequence: 1534 cases; SHA-256 ed378c85...e43d6c`, the pinned value, PASSED. `e3Strata` runs `oracleJvm()`, so
+`fetchCosTiles` ran before it.
+
+Its control, so that pass is not one that could not fail: a copy of the release's `W20_N15.rd5` put in
+`build/tiles/segments/`, the same run again (`rseq-control.log`): `R's sequence changed expected:<[ed378c85...]> but
+was:<[85a70a42...]>`, FAILED. With the same stray file, `CosTilePinsTest.existingSegmentsFolderIsUnchanged` failed too
+(`segctl.log`): `expected:<[E170_S50.rd5, W70_N40.rd5, W75_N35.rd5, W75_N40.rd5]> but was:<[E170_S50.rd5, W20_N15.rd5,
+...]>`. The stray copy was removed after each run; the folder lists its four again.
+
+No CI job runs `E3RSequenceTest` (§1). This is the only run of it here, on the container, not in CI.
+
 ## 5. The rebuilt bytes: did the bands change, or did the check not read the new bytes?
 
 The 14 November copies survive: `.../scratchpad/tiles72/<tile>/<tile>.rd5` (downloaded 06:27 UTC; sizes and SHA-256
