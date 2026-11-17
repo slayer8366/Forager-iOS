@@ -7649,3 +7649,30 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **Next (the planner's):** session 78, small: assert `offRow == 0` and correct the comment (S1), add the class-ran step to `jvm-production` (S2), correct the two sentences in the session 77 findings (S3), make the two messages name the right file (N4). Whether the JVM production class should also fail on a difference is a design question left as it is: it records by design, as the class it sits beside.
 
 **Notes:** Written by the planner session by hand. Next free ID -195.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-195
+**Timestamp:** 2026-11-17T07:52:44Z
+**Continues:** -194, -193
+**Title:** Session 78: review 5's three should-fix items and one note are closed; the cosine-row work is finished on `brouter-port-5b`
+
+**What landed.** `brouter-port-5b` moved from `e703277` to `8475832`, six commits (coder: Plumb Ledger, session 78): `1f5e5da` (S1), `ad66112` (S2), `66b053b` (S3), `dee43df` (N4), and two findings commits. Findings: `docs/audits/2026-11-13-brouter-port-closing/s78-review-5-fixes.md`.
+
+**Verified by the planner, from the remote and CI:**
+- `git ls-remote` gives `8475832`; clean tree; six commits, each with the project trailer only; `scan.sh` 0 on each; 9 files, 133 insertions, 12 deletions.
+- **S1:** `RoutingEngineCosRowsProductionRecordTest.kt:87` now asserts `offRow` is 0 per row. A production difference is still recorded, not failed.
+- **S2:** `brouter.yml`'s `jvm-production` job has a new step running `tools/junit-ran.py` on both production classes; `junit-ran.py` is unchanged.
+- **S3:** `s77-cos-rows-runs.md` has an appended dated correction (19 lines added, none removed).
+- CI run 44030325384 on `dee43df`, attempt 1, four jobs successful, 0 compile-error lines under both patterns in each. `jvm` 262; `jvm-production` 3 with the new line `OK: all 2 classes ran` and all 8 record lines `59 | 59 | 0` with last column 0; simulator-checked: 61 and 7, `OK on the iOS simulator: all 25 classes ran`, `step10 COS engine ... 472; mismatches 0 ... 168 s`; memory 3, 1, 1. Counts unchanged from -193, as the coder predicted before pushing.
+
+**Reported by the coder, not rerun by the planner.** The S1 plant failed on the planted row only with `expected:<0> but was:<59>`; the gate script failed by class name with either XML removed; the two corrected messages were seen on the JVM.
+
+**Left open, named by the coder.**
+- The new `jvm-production` gate counts a class that returned early at its gate variable as having run. It would matter only if the job's `BROUTER_PRODUCTION_RECORD` were removed. Not fixed.
+- One more line in `s77` section 6 carries the same reading as the two corrected sentences and was not corrected, because the brief named two. The correction section in that file and -194 give the right reading.
+
+**State.** The cosine-row work the owner chose with "Cover them now" (-182) is finished and reviewed on `brouter-port-5b`. `brouter-port` is still at `a014100` and `main` holds the record only to -189. Merging `brouter-port-5b` into `brouter-port`, and a record PR for -190 onward, each wait for the owner's word. After that, the app's map-first phase of `docs/plans/2026-11-12-app-port-plan.md`.
+
+**Notes:** Written by the planner session by hand. Next free ID -196.
