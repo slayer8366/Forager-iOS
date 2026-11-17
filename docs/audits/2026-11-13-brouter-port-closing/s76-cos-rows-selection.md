@@ -168,3 +168,30 @@ group's `missing [474]`; the other 7 rows select as in the real run. After: the 
 ## 4. Results
 
 (Written as they come.)
+
+### 4.1 The selection, on the pinned Temurin [C]
+
+`./gradlew --max-workers=2 :brouter:e3Strata -Pbrouter.e3.jdk=<scratch>/temurin/jdk-21.0.13+9 --tests '*E3CosRowsTest*'`
+at `a974603`, log `.../scratchpad/s76/sel.log`. JDK line: `java.vendor=Eclipse Adoptium; java.runtime.version=21.0.13+9-LTS;
+os.arch=amd64`. (c) rows: the 13; the 8 rows' node counts 5,159, 16,239, 1,124, 2,523, 7,788, 96,104, 10,205, 2,461,
+equal to `s75` §4.1's.
+
+| row | draws (to the 59th kept) | s72 §3.3 | routed | kept | own row read (of kept) | rejected: route leaves band | rejected: port did not read the row |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 474 | 178 | 189 | 162 | 59 | 59 | 20 | 0 |
+| 488 | 120 | 119 | 113 | 59 | 59 | 35 | 0 |
+| 502 | 120 | 122 | 92 | 59 | 59 | 13 | 0 |
+| 663 | 117 | 123 | 95 | 59 | 59 | 24 | 0 |
+| 675 | 132 | 119 | 120 | 59 | 59 | 28 | 0 |
+| 1046 | 89 | 92 | 82 | 59 | 59 | 17 | 0 |
+| 1053 | 106 | 106 | 90 | 59 | 59 | 28 | 0 |
+| 1079 | 86 | 95 | 67 | 59 | 59 | 8 | 0 |
+
+- Per row, the (c) rows its kept cases read are its own row only; the group read exactly
+  `[474, 488, 502, 663, 675, 1046, 1053, 1079]`. The row assertion passed. Selection of all 8 rows: 228 s.
+- **P1 partly wrong.** The counts are near s72's but not the same in 7 rows (only 1053 equal); I had predicted the same
+  within a few draws in 7 rows. 474 differs by 11 and 675 by 13. The rule here is not s72's: a candidate must also have R2
+  equal to R1, routed in a child JVM, and the "no route" counts differ from s72's "oracle routed" figures [I: the cause
+  of each difference was not traced]. P1's "no rejection by the row-read rule" held: 0 in every row.
+- **The row assertion's per-case check cannot fail here** independently of the keep rule (§2.4 item 4); the evidence
+  that it bites is the plant (§4.4).
