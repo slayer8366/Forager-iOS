@@ -106,3 +106,80 @@ planner's. So step 3 is built only if step 2 finds 0 differences; otherwise I st
 ## 4. Results
 
 (Written as they come.)
+
+### 4.1 Logic run, locally [C]
+
+`./gradlew --max-workers=2 :brouter:jvmTest --tests '*RoutingEngineCosRowsTest'` at the step 1 commit `3c924cd`, on the
+container's OpenJDK 21.0.12 (not CI's Temurin): PASSED, 0 lines matching `^e: ` or ` e: `, its XML fresh. 23.3 s.
+
+| row | cases | equal to `expected-cosrows.tsv` on the whole tuple | differing | (c) rows read (oracle's table) |
+|---|---:|---:|---:|---|
+| 474 | 59 | 59 | 0 | [474] |
+| 488 | 59 | 59 | 0 | [488] |
+| 502 | 59 | 59 | 0 | [502] |
+| 663 | 59 | 59 | 0 | [663] |
+| 675 | 59 | 59 | 0 | [675] |
+| 1046 | 59 | 59 | 0 | [1046] |
+| 1053 | 59 | 59 | 0 | [1053] |
+| 1079 | 59 | 59 | 0 | [1079] |
+
+The oracle in this JVM was off its stored row in 0 of 472. Each case read its own row (59 of 59 per row); the group's (c)
+rows read: exactly `[474, 488, 502, 663, 675, 1046, 1053, 1079]`. No port finding. P1 held (time: 23 s, under my 1.5 to 3
+minutes).
+
+### 4.2 Production run, locally [C]
+
+`BROUTER_PRODUCTION_RECORD=1 ./gradlew ... --tests '*RoutingEngineCosRowsProductionRecordTest'` at `72a9826`: PASSED, 0
+compile-error lines under both patterns, XML fresh, 24.1 s.
+
+| row | cases | equal to the oracle (six fields) | differing | fields differing | (c) rows read (msun's table) |
+|---|---:|---:|---:|---|---|
+| 474 | 59 | 59 | 0 | none | [474] |
+| 488 | 59 | 59 | 0 | none | [488] |
+| 502 | 59 | 59 | 0 | none | [502] |
+| 663 | 59 | 59 | 0 | none | [663] |
+| 675 | 59 | 59 | 0 | none | [675] |
+| 1046 | 59 | 59 | 0 | none | [1046] |
+| 1053 | 59 | 59 | 0 | none | [1053] |
+| 1079 | 59 | 59 | 0 | none | [1079] |
+
+Oracle off its row: 0 in every row. **On these 472 cases the 1-ulp `kx` difference changes no route, no cost, no distance,
+no digest.** Every case read its own (c) row on msun's table, so the differing value was read in every case. P2 held.
+The CI run of the same class on Temurin is in §4.6.
+
+**What the record gates** (`RoutingEngineProductionRecordTest.kt:264-266`, repeated in the new class per row): every case
+produced an outcome, the cases equal the rows (59), equal plus differing add up. It never fails a difference. The new class
+also asserts the two row assertions on msun's table, and that every id of the file ran.
+
+### 4.3 The simulator class, on the JVM [C]; on the simulator, §4.6
+
+Because §4.2 found no difference, step 3 was built as designed (the stop point of §2 did not arise).
+- `NtCasesWriteTest` with the variable set to a scratch path: `step10 COS cases: 472 of 472 stored ids built; 472 in a
+  folder of their own`; the file has 472 lines, all 8 fields.
+- `CosRowsEngineCommonTest` on the JVM with that file (the same code the simulator runs, on the JVM's msun port):
+  `step10 COS engine: 472 cases in the file; 472 of 472 stored ids; 0 not stored []; equal on all six fields and the tuple
+  digest 472; mismatches 0; missing 0; 11 s`; each row's (c) rows read its own; group exactly the 8.
+- `CosRowsCommonDigestTest`: 2 tests passed; `472 of 472 equal to expected-cosrows.tsv in file order`.
+- `LbEngineCommonTest` and `FkEngineCommonTest` (8 tests, trailing-lambda callers of `check`) passed after the
+  `Step10Cases.check` change.
+- `compileTestKotlinIosSimulatorArm64` here: the first attempt failed with 7 `^e: ` lines (`toSortedSet` is JVM-only, in
+  `CommonCountingLibm` and the common class); fixed before the commit, then 0 under both patterns. The first JVM compile had
+  also failed (6 `^e: ` lines): the new `libm` parameter placed after `onCase` stole the trailing lambdas of
+  `MemoryEngineCommonTest` and `REngineCommonTest`; moved before `onCase`.
+
+### 4.4 Plants [C]
+
+Each with `revert.sh` (copy saved, one exact edit, the class run, restored from the copy, `cmp` equal, `^e: ` count 0, fresh
+XML); I also counted ` e: ` (0 each) and checked `git status` afterwards (only my uncommitted files, or clean).
+
+| plant | file (scratch, never committed) | result |
+|---|---|---|
+| logic table: `kx` × 1.001 at row 474 | `OracleLibm.kt` | 1 test, 1 failure: `the port on the oracle's table against expected-cosrows: 52 mismatches: [COS474-0001: [cost, distance, tupleDigest] ...`. COS474 7 equal, 52 differing (35 cost+distance, 12 also heights digest, 4 also node digest, 1 all three); the other 7 rows 59 of 59; oracle off row 0. |
+| production table: `kx` × 1.001 at row 474 | `LibmSeam.kt` (`MsunLibm.scales`) | 1 test, 0 failures (it records): `COS474 \| 59 \| 7 \| 52 \| 0 0 52 52 5 13 \| 0 47 5 0 \| 0`; the other 7 rows unchanged at 59 equal. Restored file's SHA-256 checked equal to before. |
+| simulator constant: COS474-0001's tuple digest last digit 8 to 9 | `CosRowsExpectedA.kt` | 2 tests, 1 failure: `cosRowsConstantEqualsTheFilesRows`: `the cosine rows' constant against expected-cosrows.tsv, in file order expected:<[[COS474-0001, ...`; printed `471 of 472 ... differing [COS474-0001]`; the other test passed. |
+| logic row count: row 474 never recorded | `CountingLibm.kt` | 1 failure: `row 474: cases that did not read row 474 on the oracle's table: [COS474-0001, ...]` and `the group's (c) rows read on the oracle's table are [488, ...]: missing [474], extra []`; port mismatches 0. |
+| simulator row count: row 474 never recorded | `CommonCountingLibm.kt` | 1 failure: `cases that did not read their own row on msun's table expected:<[]> but was:<[COS474-0001, ...`; COS474 `own row read by 0`. |
+
+The 1.001 factor is a deliberate large plant (0.1%, about 2e12 ulps), chosen so it must move routes; it shows the comparison
+bites, not what 1 ulp does. The production plant ran with `BROUTER_PRODUCTION_RECORD=1` set in my shell, which `revert.sh`'s
+Gradle inherits; that it ran, not returned early, is shown by its per-row lines.
