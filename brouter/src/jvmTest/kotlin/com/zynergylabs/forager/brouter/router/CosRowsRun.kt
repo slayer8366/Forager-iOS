@@ -24,8 +24,10 @@ import kotlin.test.assertEquals
  * **Cases:** per row of [CosRowsGenerator.ROWS], [CosRowsGenerator.draws] with stratum `COS<row>` and
  * [E3Targeted.PROFILE], in draw order, taken where a draw's id is one of that stratum's rows in `expected-cosrows.tsv`,
  * within [E3Targeted.CAP] draws: as `RoutingEngineStep9Test.run` takes LB's from `expected-1b.tsv`. The logic and
- * production runs also run the oracle in their JVM and hold it to each row's tuple digest, which is what shows a rebuilt
- * case is the selected one.
+ * production runs also run the oracle in their JVM and compare it with each row's tuple digest, which is what shows a
+ * rebuilt case is the selected one: the logic run asserts that no case is off its row; the production run, from session 78
+ * (review 5, S1), asserts per row that the count off its row is 0 (until then it only printed that count). The simulator's
+ * writer runs no oracle.
  *
  * **[port]** is `RoutingEngineF0Test.port`'s calls with [libm] in the [RoutingContext], so a counting seam can be passed.
  * Nothing of a case but its id is printed (E1).

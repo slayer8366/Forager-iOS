@@ -19,7 +19,8 @@ import kotlin.test.assertTrue
  * **Gate:** [RoutingEngineProductionRecordTest.GATE], as there: unset, it prints one line and does nothing (the `jvm` job).
  *
  * **Recorded, not asserted**, as there: it asserts that every case produced an outcome on both sides, that each row's cases
- * are its 59 rows, and that equal and differing add up. A difference from the oracle is printed, never failed. Per row, in
+ * are its 59 rows, that equal and differing add up, and (session 78, review 5 S1) that no oracle run in this JVM is off its
+ * stored row's tuple digest, which judges the case list, not the port. A difference from the oracle is printed, never failed. Per row, in
  * the existing record's columns: cases, equal on all six fields, differing; per field how many differ (kind, nodes, cost,
  * distance, node digest, heights digest); the split (cost only, same nodes with another distance, a different route,
  * other); how many oracle runs in this JVM are off their stored row. Then each differing case by id with its fields.
@@ -82,6 +83,8 @@ class RoutingEngineCosRowsProductionRecordTest {
                 "${split.joinToString(" ")} | $offRow"
             println(line)
             lines += line
+            // Session 78 (review 5, S1): this judges the case list, not the port; a production difference is still only printed.
+            assertEquals(0, offRow, "$stratum: oracle runs in this JVM off the stored row's tuple digest; the rebuilt cases are not the selected ones")
         }
         val failures = CosRowsRun.rowAssertion("msun's table", read)
         println("cosrows production record: row | cases | equal | differing | kind nodes cost distance nodeDigest heightsDigest | " +
