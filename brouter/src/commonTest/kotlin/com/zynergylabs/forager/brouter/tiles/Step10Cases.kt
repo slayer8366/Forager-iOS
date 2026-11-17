@@ -1,5 +1,7 @@
 package com.zynergylabs.forager.brouter.tiles
 
+import com.zynergylabs.forager.brouter.util.LibmSeam
+import com.zynergylabs.forager.brouter.util.MsunLibm
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
@@ -24,6 +26,10 @@ import kotlin.time.TimeSource
  * folder of FK 7's or 8's edited copies, written by the JVM step); a seven-field line uses `<tiles dir>/segments`. [check]
  * also takes how kinds are read ([family]; FK 7's numbers as `*`), whether the tuple digest is held ([holdTuple]; not for
  * FK 7, whose kind is held by family), and [onCase], which sees each case's id and the port's outcome.
+ *
+ * Session 77: and the engine's seam ([libm], `MsunLibm` by default, so every earlier caller runs as before; placed before
+ * [onCase] so callers' trailing lambdas still bind to it), which the cosine rows' group passes as a counting seam to record
+ * the table rows each case reads.
  */
 internal object Step10Cases {
     const val VARIABLE = "BROUTER_STEP10_NT_CASES"
@@ -49,6 +55,7 @@ internal object Step10Cases {
         ownProfiles: Path? = null,
         family: (String) -> String = { it },
         holdTuple: Boolean = true,
+        libm: LibmSeam = MsunLibm,
         onCase: ((String, EngineRun.Outcome) -> Unit)? = null,
     ) {
         val segments = setting("brouter.tiles.dir", "BROUTER_TILES_DIR").toPath() / "segments"
@@ -77,7 +84,7 @@ internal object Step10Cases {
             if (!FileSystem.SYSTEM.exists(profile)) fail("$id: $profile does not exist")
             val tiles = if (f.size == 8) f[7].toPath() else segments
             if (!FileSystem.SYSTEM.exists(tiles)) fail("$id: its tiles folder does not exist or cannot be read in this process")
-            val got = EngineRun.run("${f[3]},${f[4]}|${f[5]},${f[6]}", profile, tiles, f[2].toInt())
+            val got = EngineRun.runTrack("${f[3]},${f[4]}|${f[5]},${f[6]}", profile, tiles, f[2].toInt(), libm = libm).outcome
             onCase?.invoke(id, got)
             val w = row.outcome
             val differ = listOfNotNull(

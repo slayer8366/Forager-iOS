@@ -65,6 +65,7 @@ jobs:
         com.zynergylabs.forager.brouter.msun.MsunAtan2PairsTest
         com.zynergylabs.forager.brouter.msun.MsunCosTableTest
         com.zynergylabs.forager.brouter.msun.MsunEdgesTest
+        com.zynergylabs.forager.brouter.tiles.CosRowsEngineCommonTest
         com.zynergylabs.forager.brouter.tiles.CrEngineCommonTest
         com.zynergylabs.forager.brouter.tiles.DlEngineCommonTest
         com.zynergylabs.forager.brouter.tiles.EngineStopCommonTest
@@ -118,7 +119,8 @@ jobs:
         env:
           # simctl hands SIMCTL_CHILD_X to the simulator's process as X (PinnedTileReadTest reads BROUTER_TILES_DIR;
           # F0RouteCommonTest also BROUTER_ORACLE_DIR; NtEngineCommonTest BROUTER_STEP10_NT_CASES). BROUTER_COS_TILES_DIR
-          # (session 75): the cosine rows' tiles, under its segments/, for a later session's simulator group; no test reads it yet.
+          # (session 75): the cosine rows' tiles, under its segments/. No test reads it: CosRowsEngineCommonTest (session 77)
+          # reaches them through each case line's eighth field, as F0h does.
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
           SIMCTL_CHILD_BROUTER_COS_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles-cos
           SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle

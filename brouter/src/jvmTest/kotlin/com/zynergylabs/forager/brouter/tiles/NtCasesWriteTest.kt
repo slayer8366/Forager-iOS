@@ -15,6 +15,7 @@ import com.zynergylabs.forager.brouter.oracle.e3.strata.E3MemoryTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3R
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RProfilesTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3RTest
+import com.zynergylabs.forager.brouter.router.CosRowsRun
 import com.zynergylabs.forager.brouter.router.RoutingEngineFKTest
 import com.zynergylabs.forager.brouter.oracle.e3.strata.E3Targeted
 import java.io.File
@@ -61,6 +62,9 @@ import kotlin.test.fail
  * [RGenerator] per profile on [TestTiles.segments] with its seed ([E3RTest.SEED], [E3RProfilesTest.SEEDS]), `generate`
  * within `20 * E3R.N` candidates. `generate` numbers its cases in order, so the first 12 are R-<profile>-001 to -012 whether
  * it is asked for 12 or 59. The six car profiles are not built (see [RExpected]).
+ *
+ * Session 77, the cosine rows' group ([COS_FILE]): its 472 cases as `CosRowsRun.cases` rebuilds them from
+ * `expected-cosrows.tsv`'s ids, on [TestTiles.cosRows], so each line carries that folder as its eighth field.
  */
 class NtCasesWriteTest {
     @Test
@@ -135,6 +139,7 @@ class NtCasesWriteTest {
             }
         }
         writeCases("R", rCases, RExpected.ROWS.map { it.id }.toSet(), File(dir, R_FILE))
+        writeCases("COS", CosRowsRun.cases().values.flatten(), CosRowsRun.rows.map { it.id }.toSet(), File(dir, COS_FILE))
     }
 
     private fun expected() = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
@@ -194,6 +199,7 @@ class NtCasesWriteTest {
         const val ML5_FILE = "ml5-cases.tsv"
         const val PM5_FILE = "pm5-cases.tsv"
         const val R_FILE = "r-cases.tsv"
+        const val COS_FILE = "cos-cases.tsv"
 
         fun fkFile(kind: Int) = "fk$kind-cases.tsv"
         const val PROFILES = "profiles2"
