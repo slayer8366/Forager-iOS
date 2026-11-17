@@ -244,3 +244,46 @@ the dry run's were the per-row ones only; its per-tile figures were not.
   byte-equal, so nothing in them did) and what changed in row 675's 4 cells beyond its node ids (way tags or links were
   not compared). It also says nothing about rows outside the 8. And a count check cannot see an equal-count change: an
   id-set digest per row would, if the capture ever needs it (not proposed here; the planner's call).
+
+## 6. Session 75b: the red run in CI, and the fix
+
+Session 75 was cut off by a container restart while it waited for run 43986425514. Session 75b (same coder name) picks
+up at head `d220d3f` (checked with `git ls-remote origin brouter-port-5b` and `git status`, clean). Logs were read with
+`gh api .../actions/jobs/<id>/logs` into `.../scratchpad/s75b/red-<job>.log`.
+
+### 6.1 Red run 43986425514 on `bd2801d`, all four jobs [C]
+
+Waited until the run's status was `completed` (the last job, `ios-memory`, ended 01:22:40 UTC) before pushing the fix.
+
+| job | conclusion | `TOTAL:` lines | gate lines | compile errors (`^e: ` / ` e: `) |
+|---|---|---|---|---|
+| `jvm` | failure | `tests 255, failures 2, errors 0, skipped 0 in 111 files` | (none in this job) | 0 / 0 |
+| `jvm-production` | success | `tests 2, failures 0, errors 0, skipped 0 in 1 files` | (none) | 0 / 0 |
+| `ios-smoke` | success | `tests 60, failures 0 ... in 29 files`; `tests 7, failures 0 ... in 2 files` | `OK on the iOS simulator: all 24 classes ran`; `OK: all 2 classes ran` | 0 / 0 |
+| `ios-memory` | success | `tests 3 ...`, `tests 1 ...`, `tests 1 ...`, each `failures 0` | `OK on the iOS simulator: all 3 classes ran (.../ios-memory-groups)`; `OK on the iOS simulator: all 1 classes ran (.../ios-r-fallback)` | 0 / 0 |
+
+iOS results are simulator-checked.
+
+- **P2 held in CI.** The two `jvm` failures are `CosTilePinsTest.pinFileIsTheReleasesOwn` (`CosTilePinsTest.kt:33`,
+  message `... expected:<.../E145_S45.rd5	631610[5]	cb30...> but was:<.../E145_S45.rd5	631610[4]	cb30...>`) and
+  `eachFetchedTileMatchesItsPin` (`CosTilePinsTest.kt:47`, `E145_S45.rd5: bytes expected:<6316105> but was:<6316104>`).
+  Both name the planted value; neither could come from another edit. `existingSegmentsFolderIsUnchanged` passed,
+  printing the four names. `CosRowCountsTest` passed with all 8 rows equal to the release (the same 8 figures as §4.1).
+- **`fetchCosTiles` ran in all four jobs** and each of the five files "matches its pins (... bytes, SHA-256 ...)", the
+  sizes and SHA-256 equal to `tools/tile-pins-cos.tsv`. In the two iOS jobs it ran in the explicit fetch step and then
+  showed `UP-TO-DATE` in the later Gradle calls; `SIMCTL_CHILD_BROUTER_COS_TILES_DIR` was set in their simulator steps.
+- **The fetch's time.** Gradle prints a task's output in one burst, so the log gives a window, not a measure: from the
+  last line printed before the task to its `5 tiles ready in .../build/tiles-cos` line: `jvm` 4.6 s, `jvm-production`
+  2.8 s, `ios-smoke` 3.5 s, `ios-memory` 2.0 s. P4's "a few seconds each" held.
+- No 429 and no failure from outside the change in any job.
+
+### 6.2 What the red commit planted, and the fix [C]
+
+`bd2801d` added `CosTilePinsTest.kt`; its `PINS` list held `E145_S45.rd5` as `6_316_105L` (line 85). The committed
+`tools/tile-pins-cos.tsv` row and every CI fetch say 6,316,104. A comparison of the test's five `Pin(...)` entries
+(asset, path, bytes, sha256) against the pin file's five rows: at `bd2801d` exactly one field differs (that one); at the
+fix, none. The fix `22092e7` changes that one number to `6_316_104L` and nothing else (`git show --stat`: 1 file, 1+ 1-).
+Scan printed 0.
+
+Before pushing, run locally (container OpenJDK, not CI's): `--tests '*CosTilePinsTest' --tests '*CosRowCountsTest'`,
+log `.../scratchpad/s75b/green-local.log`, 0 compile errors, both XML files written at 01:14 by that run, 4 tests passed.
