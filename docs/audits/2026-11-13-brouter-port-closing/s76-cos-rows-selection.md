@@ -195,3 +195,25 @@ equal to `s75` §4.1's.
   of each difference was not traced]. P1's "no rejection by the row-read rule" held: 0 in every row.
 - **The row assertion's per-case check cannot fail here** independently of the keep rule (§2.4 item 4); the evidence
   that it bites is the plant (§4.4).
+
+### 4.2 Stability, on the pinned Temurin [C]
+
+Same run (started 03:14:23 UTC; `E3CosRowsTest` PASSED, `BUILD SUCCESSFUL in 11m 41s`, exit 0; 0 lines matching `^e: ` or
+` e: ` in the log; its one XML file written 03:26, after the start). Committed beside this file in `s76/`: the 8 stability
+tables (`cos<row>-stability.tsv`, 59 rows each), the 8 selection tables (`cos<row>-select.tsv`, one row per counted
+draw) and the log's `E3` lines (`e3strata-cos-rows.log`). None holds an end: tuples, digests, counts, ids, tile names.
+
+| row | draws | kept | selection's R1 and R2 equal E3's | kinds (R1) | stable (six regimes) | over 5% |
+|---|---:|---:|---|---|---:|---|
+| 474 | 178 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 488 | 120 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 502 | 120 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 663 | 117 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 675 | 132 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 1046 | 89 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 1053 | 106 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+| 1079 | 86 | 59 | 59 of 59 | route 59 | 59 of 59 | false |
+
+- 472 of 472 stable by `E3Stability.kt:32-34` (one tuple over R1 to R6, one collection-line list over R2 to R5), each in
+  five JVMs (`:54-62`); every case's control moved between R1 and R4 (`E3Strata.kt:47-48` did not fail).
+- **Time:** 699 s in all (selection 228 s). P3 predicted 35 to 60 minutes; it took 11.7. P2 and P3 otherwise held.

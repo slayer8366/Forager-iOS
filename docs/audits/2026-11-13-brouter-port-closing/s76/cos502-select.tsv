@@ -1,0 +1,121 @@
+draw	id	R1-tuple	R2-tuple	R2-equals-R1	R2-collected-lines	R2-panic	R1-ms	memoryclass	R6-tuple	reach	result
+1	COS502-0001	route|36|5163|3010|f58034dcf0d0fd31|a182fc6a72eadffa	route|36|5163|3010|f58034dcf0d0fd31|a182fc6a72eadffa	true	0	false	234	64	-	route in row 502's band; row 502 read	taken COS502
+2	COS502-0002	route|61|53759|8581|900168f997664256|59197f450ce9307c	route|61|53759|8581|900168f997664256|59197f450ce9307c	true	0	false	242	64	-	route in row 502's band; row 502 read	taken COS502
+3	COS502-0003	route|370|60637|23813|7397dbf85709894c|338f7c37c551d04f	route|370|60637|23813|7397dbf85709894c|338f7c37c551d04f	true	0	false	268	64	-	route leaves the band	rejected
+4	COS502-0004	route|70|105425|5883|85014c62fca68a55|395199c09804d384	route|70|105425|5883|85014c62fca68a55|395199c09804d384	true	0	false	230	64	-	route in row 502's band; row 502 read	taken COS502
+5	COS502-0005	route|133|105524|8718|4e3823731598af93|e2d506469bd0c25d	route|133|105524|8718|4e3823731598af93|e2d506469bd0c25d	true	0	false	228	64	-	route in row 502's band; row 502 read	taken COS502
+6	COS502-0006	route|16|5846|3314|8678777344a4a592|ae30f4ecc3a8a63e	route|16|5846|3314|8678777344a4a592|ae30f4ecc3a8a63e	true	0	false	200	64	-	route in row 502's band; row 502 read	taken COS502
+7	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+8	COS502-0008	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	120	64	-	no route: from-position not mapped in existing datafile	rejected
+9	COS502-0009	route|73|17100|9486|e2389a2990447eda|7e0cd9d975e691b9	route|73|17100|9486|e2389a2990447eda|7e0cd9d975e691b9	true	0	false	206	64	-	route leaves the band	rejected
+10	COS502-0010	route|8|795|583|e85ea60307947142|1c02f23f1fce9a9e	route|8|795|583|e85ea60307947142|1c02f23f1fce9a9e	true	0	false	221	64	-	route in row 502's band; row 502 read	taken COS502
+11	COS502-0011	route|246|13795|8629|2e17f2907d53d301|fe19254ebc69f18	route|246|13795|8629|2e17f2907d53d301|fe19254ebc69f18	true	0	false	150	64	-	route in row 502's band; row 502 read	taken COS502
+12	COS502-0012	route|884|173718|63228|5e3cb3d4993bbf2e|77ead098b542f81d	route|884|173718|63228|5e3cb3d4993bbf2e|77ead098b542f81d	true	0	false	251	64	-	route leaves the band	rejected
+13	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+14	COS502-0014	route|59|9001|5185|7c83ee9c68e5eff|5396737fb1b3ed21	route|59|9001|5185|7c83ee9c68e5eff|5396737fb1b3ed21	true	0	false	217	64	-	route in row 502's band; row 502 read	taken COS502
+15	COS502-0015	route|59|4352|2499|dcb858dde726ae52|f6e48a74d28f92c0	route|59|4352|2499|dcb858dde726ae52|f6e48a74d28f92c0	true	0	false	162	64	-	route in row 502's band; row 502 read	taken COS502
+16	COS502-0016	route|127|26614|11639|cfa5152919dd377|932a12399909a141	route|127|26614|11639|cfa5152919dd377|932a12399909a141	true	0	false	229	64	-	route in row 502's band; row 502 read	taken COS502
+17	COS502-0017	route|300|53474|23583|46bbd0ab0bbf494f|9a3910b447ba6264	route|300|53474|23583|46bbd0ab0bbf494f|9a3910b447ba6264	true	0	false	278	64	-	route in row 502's band; row 502 read	taken COS502
+18	COS502-0018	route|168|22845|12673|1d46be84d0ba5849|8b6d5722cac77385	route|168|22845|12673|1d46be84d0ba5849|8b6d5722cac77385	true	0	false	207	64	-	route in row 502's band; row 502 read	taken COS502
+19	COS502-0019	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	143	64	-	no route: to-position not mapped in existing datafile	rejected
+20	COS502-0020	route|66|54915|3051|897faa04abba3c4e|5ea53cbf09352f90	route|66|54915|3051|897faa04abba3c4e|5ea53cbf09352f90	true	0	false	235	64	-	route in row 502's band; row 502 read	taken COS502
+21	COS502-0021	route|26|10817|5614|df680e6d28eca2d6|9394cbe63ff26f27	route|26|10817|5614|df680e6d28eca2d6|9394cbe63ff26f27	true	0	false	218	64	-	route in row 502's band; row 502 read	taken COS502
+22	COS502-0022	route|18|12989|1870|e8c26a562589b797|9c0609148adfd739	route|18|12989|1870|e8c26a562589b797|9c0609148adfd739	true	0	false	152	64	-	route in row 502's band; row 502 read	taken COS502
+23	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+24	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+25	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+26	COS502-0026	route|76|10216|5503|8c138542c0dbf267|4bc41722f01e6763	route|76|10216|5503|8c138542c0dbf267|4bc41722f01e6763	true	0	false	182	64	-	route in row 502's band; row 502 read	taken COS502
+27	COS502-0027	route|131|105159|8278|e1b70bff8e1d4781|4f2683ac5e87e9c0	route|131|105159|8278|e1b70bff8e1d4781|4f2683ac5e87e9c0	true	0	false	219	64	-	route in row 502's band; row 502 read	taken COS502
+28	COS502-0028	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	171	64	-	no route: to-position not mapped in existing datafile	rejected
+29	COS502-0029	route|83|14506|8033|e63ecad73f6774d5|c173e8bf4f3c8a43	route|83|14506|8033|e63ecad73f6774d5|c173e8bf4f3c8a43	true	0	false	113	64	-	route in row 502's band; row 502 read	taken COS502
+30	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+31	COS502-0031	route|30|4908|2680|f21d1e063343c9bc|eae0c37d777ec0f6	route|30|4908|2680|f21d1e063343c9bc|eae0c37d777ec0f6	true	0	false	147	64	-	route in row 502's band; row 502 read	taken COS502
+32	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+33	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+34	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+35	COS502-0035	route|168|107756|9939|9860b368d1cb0611|8f1b601a2c19ac65	route|168|107756|9939|9860b368d1cb0611|8f1b601a2c19ac65	true	0	false	220	64	-	route in row 502's band; row 502 read	taken COS502
+36	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+37	COS502-0037	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	140	64	-	no route: to-position not mapped in existing datafile	rejected
+38	COS502-0038	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	166	64	-	no route: to-position not mapped in existing datafile	rejected
+39	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+40	COS502-0040	route|412|83249|32447|8a9ab2bedb1a5b30|8bca94c5052a0d0d	route|412|83249|32447|8a9ab2bedb1a5b30|8bca94c5052a0d0d	true	0	false	265	64	-	route leaves the band	rejected
+41	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+42	COS502-0042	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	229	64	-	no route: from-position not mapped in existing datafile	rejected
+43	COS502-0043	route|109|94379|11795|6354b1609ba0b29e|f8504a502cfcf933	route|109|94379|11795|6354b1609ba0b29e|f8504a502cfcf933	true	0	false	276	64	-	route in row 502's band; row 502 read	taken COS502
+44	COS502-0044	route|159|107546|9788|9d3979aa961884ff|912ec15358508b47	route|159|107546|9788|9d3979aa961884ff|912ec15358508b47	true	0	false	220	64	-	route in row 502's band; row 502 read	taken COS502
+45	COS502-0045	route|110|13135|7247|67e5a8a529f6a5ce|4033b2e342c8965a	route|110|13135|7247|67e5a8a529f6a5ce|4033b2e342c8965a	true	0	false	204	64	-	route in row 502's band; row 502 read	taken COS502
+46	COS502-0046	route|346|73691|30890|54fb27297a4ceec9|520fabf0a826505	route|346|73691|30890|54fb27297a4ceec9|520fabf0a826505	true	0	false	265	64	-	route in row 502's band; row 502 read	taken COS502
+47	COS502-0047	route|14|12209|1351|3789a2387dfbfb64|4a8556354b70a676	route|14|12209|1351|3789a2387dfbfb64|4a8556354b70a676	true	0	false	194	64	-	route in row 502's band; row 502 read	taken COS502
+48	COS502-0048	route|29|2864|1586|5d98802b71df6098|ab8a5cf68f533877	route|29|2864|1586|5d98802b71df6098|ab8a5cf68f533877	true	0	false	206	64	-	route in row 502's band; row 502 read	taken COS502
+49	COS502-0049	route|108|16359|6739|ebd3ea1417af7ced|14cad99bc723c04f	route|108|16359|6739|ebd3ea1417af7ced|14cad99bc723c04f	true	0	false	249	64	-	route in row 502's band; row 502 read	taken COS502
+50	COS502-0050	route|209|45976|19061|7d9bdebfad7c274a|930cd3abe22827c4	route|209|45976|19061|7d9bdebfad7c274a|930cd3abe22827c4	true	0	false	253	64	-	route in row 502's band; row 502 read	taken COS502
+51	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+52	COS502-0052	route|316|68462|28339|7012feabb2d4c67f|949fc2a84d4f3c53	route|316|68462|28339|7012feabb2d4c67f|949fc2a84d4f3c53	true	0	false	320	64	-	route in row 502's band; row 502 read	taken COS502
+53	COS502-0053	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	165	64	-	no route: to-position not mapped in existing datafile	rejected
+54	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+55	COS502-0055	route|650|194365|51863|d622e618426c16ec|34bdd2ee672ff7dd	route|650|194365|51863|d622e618426c16ec|34bdd2ee672ff7dd	true	0	false	311	64	-	route leaves the band	rejected
+56	COS502-0056	route|176|107210|9564|5924dd847b0beea5|387a01edd6f3655	route|176|107210|9564|5924dd847b0beea5|387a01edd6f3655	true	0	false	307	64	-	route in row 502's band; row 502 read	taken COS502
+57	COS502-0057	route|203|10853|5910|6fc4fefb533af9ea|bd78082e69fe84de	route|203|10853|5910|6fc4fefb533af9ea|bd78082e69fe84de	true	0	false	247	64	-	route in row 502's band; row 502 read	taken COS502
+58	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+59	COS502-0059	route|455|94059|32428|984959d4e675e2af|acb1852003de82db	route|455|94059|32428|984959d4e675e2af|acb1852003de82db	true	0	false	291	64	-	route leaves the band	rejected
+60	COS502-0060	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	207	64	-	no route: to-position not mapped in existing datafile	rejected
+61	COS502-0061	route|904|116143|50018|d0a429e814715ebc|6d620a928263876e	route|904|116143|50018|d0a429e814715ebc|6d620a928263876e	true	0	false	310	64	-	route leaves the band	rejected
+62	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+63	COS502-0063	route|98|15162|4707|63c84139463adf3a|de9ddb9d6bc053f7	route|98|15162|4707|63c84139463adf3a|de9ddb9d6bc053f7	true	0	false	233	64	-	route in row 502's band; row 502 read	taken COS502
+64	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+65	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+66	COS502-0066	route|39|7140|4053|32b7d252b957b71|d018a4d8cb3e57e6	route|39|7140|4053|32b7d252b957b71|d018a4d8cb3e57e6	true	0	false	221	64	-	route in row 502's band; row 502 read	taken COS502
+67	COS502-0067	route|10|276|157|6f2e5c0fa2d9b56c|5c6f83dfa23fcc07	route|10|276|157|6f2e5c0fa2d9b56c|5c6f83dfa23fcc07	true	0	false	164	64	-	route in row 502's band; row 502 read	taken COS502
+68	COS502-0068	route|337|15907|11153|5ff4418a77876334|7cd89d59e6a5802e	route|337|15907|11153|5ff4418a77876334|7cd89d59e6a5802e	true	0	false	216	64	-	route in row 502's band; row 502 read	taken COS502
+69	COS502-0069	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	160	64	-	no route: to-position not mapped in existing datafile	rejected
+70	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+71	COS502-0071	route|45|6120|3398|ee0f5f723a38100e|3226dea0b6196b5c	route|45|6120|3398|ee0f5f723a38100e|3226dea0b6196b5c	true	0	false	202	64	-	route leaves the band	rejected
+72	COS502-0072	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	target island detected for section 0|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	176	64	-	no route: target island detected for section 0	rejected
+73	COS502-0073	route|8|2019|960|da3274810fde7950|940ff82806cae2b6	route|8|2019|960|da3274810fde7950|940ff82806cae2b6	true	0	false	196	64	-	route in row 502's band; row 502 read	taken COS502
+74	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+75	COS502-0075	route|206|54529|15330|5bd3707d033a95a|1313149ea03b7402	route|206|54529|15330|5bd3707d033a95a|1313149ea03b7402	true	0	false	229	64	-	route in row 502's band; row 502 read	taken COS502
+76	COS502-0076	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	163	64	-	no route: to-position not mapped in existing datafile	rejected
+77	COS502-0077	route|159|29959|12996|dc21534a987755fa|b9308bdba170ebbe	route|159|29959|12996|dc21534a987755fa|b9308bdba170ebbe	true	0	false	238	64	-	route in row 502's band; row 502 read	taken COS502
+78	COS502-0078	route|97|15061|4630|30707af67c922c25|9e22c1a2aa5eb7d5	route|97|15061|4630|30707af67c922c25|9e22c1a2aa5eb7d5	true	0	false	224	64	-	route in row 502's band; row 502 read	taken COS502
+79	COS502-0079	route|186|12081|6561|77fd24ca91d20efc|554ebaf4e1483506	route|186|12081|6561|77fd24ca91d20efc|554ebaf4e1483506	true	0	false	175	64	-	route in row 502's band; row 502 read	taken COS502
+80	COS502-0080	route|382|83011|32345|7c88fd8b1dc7335c|a78e46d94cd09fea	route|382|83011|32345|7c88fd8b1dc7335c|a78e46d94cd09fea	true	0	false	253	64	-	route leaves the band	rejected
+81	COS502-0081	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	160	64	-	no route: to-position not mapped in existing datafile	rejected
+82	COS502-0082	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	153	64	-	no route: from-position not mapped in existing datafile	rejected
+83	COS502-0083	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	132	64	-	no route: from-position not mapped in existing datafile	rejected
+84	COS502-0084	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	160	64	-	no route: to-position not mapped in existing datafile	rejected
+85	COS502-0085	route|155|25074|13966|ec3112c69269064c|a46531211e7942a	route|155|25074|13966|ec3112c69269064c|a46531211e7942a	true	0	false	182	64	-	route leaves the band	rejected
+86	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+87	COS502-0087	route|79|16490|9461|e7795619fd58ece3|7a31c231d1bb53aa	route|79|16490|9461|e7795619fd58ece3|7a31c231d1bb53aa	true	0	false	239	64	-	route in row 502's band; row 502 read	taken COS502
+88	COS502-0088	route|56|9297|2447|35b89b2c3f86ff3d|28ef4ed34a059740	route|56|9297|2447|35b89b2c3f86ff3d|28ef4ed34a059740	true	0	false	253	64	-	route in row 502's band; row 502 read	taken COS502
+89	COS502-0089	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	126	64	-	no route: to-position not mapped in existing datafile	rejected
+90	COS502-0090	route|10|11181|755|1ff6a09f3553f55c|6bcd4d099b43c305	route|10|11181|755|1ff6a09f3553f55c|6bcd4d099b43c305	true	0	false	215	64	-	route in row 502's band; row 502 read	taken COS502
+91	COS502-0091	route|236|113812|12762|e1c27f24785c7583|24e4b25dae6d2c98	route|236|113812|12762|e1c27f24785c7583|24e4b25dae6d2c98	true	0	false	235	64	-	route in row 502's band; row 502 read	taken COS502
+92	COS502-0092	route|102|17393|6412|2b5eb393bb06569f|c7469857f3bb9d4a	route|102|17393|6412|2b5eb393bb06569f|c7469857f3bb9d4a	true	0	false	222	64	-	route in row 502's band; row 502 read	taken COS502
+93	COS502-0093	route|118|6952|5516|1cf7b7a0806e761f|99c052920e9ea38e	route|118|6952|5516|1cf7b7a0806e761f|99c052920e9ea38e	true	0	false	184	64	-	route in row 502's band; row 502 read	taken COS502
+94	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+95	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+96	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+97	COS502-0097	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	181	64	-	no route: from-position not mapped in existing datafile	rejected
+98	COS502-0098	route|16|17285|4004|12250df1fd22d7d7|47321cde1a4ef46b	route|16|17285|4004|12250df1fd22d7d7|47321cde1a4ef46b	true	0	false	170	64	-	route in row 502's band; row 502 read	taken COS502
+99	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+100	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+101	COS502-0101	route|165|106511|9034|ace56955309a095c|f144e80ed4e40bb	route|165|106511|9034|ace56955309a095c|f144e80ed4e40bb	true	0	false	329	64	-	route in row 502's band; row 502 read	taken COS502
+102	COS502-0102	route|933|119213|52667|70c55d5e97709081|72cd6d796313daa1	route|933|119213|52667|70c55d5e97709081|72cd6d796313daa1	true	0	false	268	64	-	route leaves the band	rejected
+103	COS502-0103	route|40|2256|1635|4cf305144a7db3bb|55d1aeab2d8f388d	route|40|2256|1635|4cf305144a7db3bb|55d1aeab2d8f388d	true	0	false	221	64	-	route in row 502's band; row 502 read	taken COS502
+104	COS502-0104	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	184	64	-	no route: to-position not mapped in existing datafile	rejected
+105	COS502-0105	route|316|55277|24655|fa5fcb62a08a02ee|59bf71ec768f2b33	route|316|55277|24655|fa5fcb62a08a02ee|59bf71ec768f2b33	true	0	false	299	64	-	route in row 502's band; row 502 read	taken COS502
+106	COS502-0106	route|163|25099|7967|49149192ca422172|6055a112ccd70a84	route|163|25099|7967|49149192ca422172|6055a112ccd70a84	true	0	false	223	64	-	route in row 502's band; row 502 read	taken COS502
+107	COS502-0107	route|66|3790|2007|a61b771280b113d6|60742ffeae4c229c	route|66|3790|2007|a61b771280b113d6|60742ffeae4c229c	true	0	false	193	64	-	route in row 502's band; row 502 read	taken COS502
+108	COS502-0108	route|67|19640|7267|133cdb11702d0bbf|5ca7a6ff739c2d7f	route|67|19640|7267|133cdb11702d0bbf|5ca7a6ff739c2d7f	true	0	false	174	64	-	route in row 502's band; row 502 read	taken COS502
+109	COS502-0109	route|170|34465|15243|8e5eac9da8b6b756|1b0500d353a1e149	route|170|34465|15243|8e5eac9da8b6b756|1b0500d353a1e149	true	0	false	209	64	-	route leaves the band	rejected
+110	COS502-0110	route|70|6301|2569|4d46c18001582266|60572e2b5d2d5e99	route|70|6301|2569|4d46c18001582266|60572e2b5d2d5e99	true	0	false	183	64	-	route in row 502's band; row 502 read	taken COS502
+111	COS502-0111	route|1314|280332|82455|d553b0b9f875dfdd|f876a96d9822ad46	route|1314|280332|82455|d553b0b9f875dfdd|f876a96d9822ad46	true	0	false	490	64	-	route leaves the band	rejected
+112	COS502-0112	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	195	64	-	no route: to-position not mapped in existing datafile	rejected
+113	COS502-0113	route|54|5200|2211|b091ca5a9e800f89|1f1f439b38e06d2a	route|54|5200|2211|b091ca5a9e800f89|1f1f439b38e06d2a	true	0	false	273	64	-	route in row 502's band; row 502 read	taken COS502
+114	COS502-0114	route|21|5754|3196|2d0a46a2b974ac86|2bdc0c5ae28ce92e	route|21|5754|3196|2d0a46a2b974ac86|2bdc0c5ae28ce92e	true	0	false	220	64	-	route in row 502's band; row 502 read	taken COS502
+115	COS502-0115	route|19|19902|4442|132b7f1844f16ab6|12887b8ba406972	route|19|19902|4442|132b7f1844f16ab6|12887b8ba406972	true	0	false	186	64	-	route in row 502's band; row 502 read	taken COS502
+116	COS502-0116	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	162	64	-	no route: to-position not mapped in existing datafile	rejected
+117	COS502-0117	route|59|10767|2563|3e5a6f620bb208d6|c9b2400c4733e586	route|59|10767|2563|3e5a6f620bb208d6|c9b2400c4733e586	true	0	false	171	64	-	route in row 502's band; row 502 read	taken COS502
+118	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+119	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+120	COS502-0120	route|4|1567|871|98f8352e3f47446b|ba4465571e521f50	route|4|1567|871|98f8352e3f47446b|ba4465571e521f50	true	0	false	247	64	-	route in row 502's band; row 502 read	taken COS502

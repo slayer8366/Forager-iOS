@@ -1,0 +1,90 @@
+draw	id	R1-tuple	R2-tuple	R2-equals-R1	R2-collected-lines	R2-panic	R1-ms	memoryclass	R6-tuple	reach	result
+1	COS1046-0001	route|636|46879|20588|30a7a1aa2c94a2b4|af0eee87571b1f1b	route|636|46879|20588|30a7a1aa2c94a2b4|af0eee87571b1f1b	true	0	false	771	64	-	route in row 1046's band; row 1046 read	taken COS1046
+2	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+3	COS1046-0003	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	181	64	-	no route: from-position not mapped in existing datafile	rejected
+4	COS1046-0004	route|1017|125054|78780|2be38626e791f156|2f8d77fbe18af29a	route|1017|125054|78780|2be38626e791f156|2f8d77fbe18af29a	true	0	false	554	64	-	route leaves the band	rejected
+5	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+6	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+7	COS1046-0007	route|1051|65244|36778|ddda3eecc55e633c|dcb102c9571814ee	route|1051|65244|36778|ddda3eecc55e633c|dcb102c9571814ee	true	3	false	950	64	-	route in row 1046's band; row 1046 read	taken COS1046
+8	COS1046-0008	route|1082|49924|31105|dccb5e7f95c19c9b|97c27b1e8479cc0d	route|1082|49924|31105|dccb5e7f95c19c9b|97c27b1e8479cc0d	true	0	false	362	64	-	route leaves the band	rejected
+9	COS1046-0009	route|1031|70385|28583|6d7b264cdccf2dce|42882d175e572453	route|1031|70385|28583|6d7b264cdccf2dce|42882d175e572453	true	2	false	1171	64	-	route in row 1046's band; row 1046 read	taken COS1046
+10	COS1046-0010	route|4048|248965|135977|645ecc92fb790197|c1b469e6f985f881	route|4048|248965|135977|645ecc92fb790197|c1b469e6f985f881	true	8	false	2145	64	-	route in row 1046's band; row 1046 read	taken COS1046
+11	COS1046-0011	route|86|5693|3450|d986102a94245cfc|fed7cfbd530b8278	route|86|5693|3450|d986102a94245cfc|fed7cfbd530b8278	true	0	false	625	64	-	route in row 1046's band; row 1046 read	taken COS1046
+12	COS1046-0012	route|1297|73826|48941|ca16ce2ece010827|197100b424e3576b	route|1297|73826|48941|ca16ce2ece010827|197100b424e3576b	true	0	false	860	64	-	route leaves the band	rejected
+13	COS1046-0013	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	260	64	-	no route: to-position not mapped in existing datafile	rejected
+14	COS1046-0014	route|118|10022|5719|229e15e59d753fd8|33fbd3fb19af0007	route|118|10022|5719|229e15e59d753fd8|33fbd3fb19af0007	true	0	false	307	64	-	route in row 1046's band; row 1046 read	taken COS1046
+15	COS1046-0015	route|131|5659|2766|f7f15fd5a66c30a3|f95ee333a21e90b2	route|131|5659|2766|f7f15fd5a66c30a3|f95ee333a21e90b2	true	0	false	364	64	-	route in row 1046's band; row 1046 read	taken COS1046
+16	COS1046-0016	route|1766|111410|54180|7dd2a24768c63848|ec3c612c6b2c6b29	route|1766|111410|54180|7dd2a24768c63848|ec3c612c6b2c6b29	true	3	false	1297	64	-	route in row 1046's band; row 1046 read	taken COS1046
+17	COS1046-0017	route|3107|170660|91113|505e90f5b0ba6b82|5ec90d550ffeeb1a	route|3107|170660|91113|505e90f5b0ba6b82|5ec90d550ffeeb1a	true	5	false	1300	64	-	route in row 1046's band; row 1046 read	taken COS1046
+18	COS1046-0018	route|462|26027|11261|3080725f8fdf54d3|35e213e192c1efe7	route|462|26027|11261|3080725f8fdf54d3|35e213e192c1efe7	true	0	false	467	64	-	route in row 1046's band; row 1046 read	taken COS1046
+19	COS1046-0019	route|4483|362805|150135|1c5d87f53f96460|c5277d6d95e4540c	route|4483|362805|150135|1c5d87f53f96460|c5277d6d95e4540c	true	4	false	1605	64	-	route leaves the band	rejected
+20	COS1046-0020	route|320|30647|10451|d42734d6823e6fc5|17456ce1f3c6382c	route|320|30647|10451|d42734d6823e6fc5|17456ce1f3c6382c	true	0	false	698	64	-	route leaves the band	rejected
+21	COS1046-0021	route|2062|113914|64576|32f8c5b4b8be312a|84e017bd164fbb81	route|2062|113914|64576|32f8c5b4b8be312a|84e017bd164fbb81	true	3	false	1479	64	-	route in row 1046's band; row 1046 read	taken COS1046
+22	COS1046-0022	route|634|48126|21492|97f84aa1747e9f10|88a808753fc2884b	route|634|48126|21492|97f84aa1747e9f10|88a808753fc2884b	true	2	false	1103	64	-	route in row 1046's band; row 1046 read	taken COS1046
+23	COS1046-0023	route|2233|123839|67729|9ac58e53b8f06ddc|d6bd262762b2170c	route|2233|123839|67729|9ac58e53b8f06ddc|d6bd262762b2170c	true	3	false	1470	64	-	route in row 1046's band; row 1046 read	taken COS1046
+24	COS1046-0024	route|212|28372|16854|5a37af3927f4b4fb|837e4fb029a8c1d	route|212|28372|16854|5a37af3927f4b4fb|837e4fb029a8c1d	true	0	false	464	64	-	route in row 1046's band; row 1046 read	taken COS1046
+25	COS1046-0025	route|121|11031|4129|23bda515a46c5a3e|670cacb393209f7e	route|121|11031|4129|23bda515a46c5a3e|670cacb393209f7e	true	0	false	343	64	-	route in row 1046's band; row 1046 read	taken COS1046
+26	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+27	COS1046-0027	route|57|3131|2110|389549fceb6bb2c5|71618d26a6d0414d	route|57|3131|2110|389549fceb6bb2c5|71618d26a6d0414d	true	0	false	389	64	-	route in row 1046's band; row 1046 read	taken COS1046
+28	COS1046-0028	route|566|41072|16323|c78edc070414d03|a6b72a5165a7825d	route|566|41072|16323|c78edc070414d03|a6b72a5165a7825d	true	2	false	976	64	-	route in row 1046's band; row 1046 read	taken COS1046
+29	COS1046-0029	route|188|9193|4992|5492892195c747be|519fde87dde1d2e9	route|188|9193|4992|5492892195c747be|519fde87dde1d2e9	true	0	false	468	64	-	route in row 1046's band; row 1046 read	taken COS1046
+30	COS1046-0030	route|541|26563|15021|46b04129a37d1e41|a37a5b12c97f40f7	route|541|26563|15021|46b04129a37d1e41|a37a5b12c97f40f7	true	0	false	638	64	-	route in row 1046's band; row 1046 read	taken COS1046
+31	COS1046-0031	route|568|46138|14096|fc36ef36365d24a8|e2705263615fa88	route|568|46138|14096|fc36ef36365d24a8|e2705263615fa88	true	1	false	738	64	-	route in row 1046's band; row 1046 read	taken COS1046
+32	COS1046-0032	route|412|29948|11096|5edd1a6fe6db29eb|b85f6e04ee9e76c5	route|412|29948|11096|5edd1a6fe6db29eb|b85f6e04ee9e76c5	true	1	false	807	64	-	route in row 1046's band; row 1046 read	taken COS1046
+33	COS1046-0033	route|351|14890|10197|4ee094f88a6ffa34|15ca502dde647475	route|351|14890|10197|4ee094f88a6ffa34|15ca502dde647475	true	0	false	421	64	-	route in row 1046's band; row 1046 read	taken COS1046
+34	COS1046-0034	route|47|16314|3112|829ee5f9d6c961f2|44d46cd7bcf3b0bb	route|47|16314|3112|829ee5f9d6c961f2|44d46cd7bcf3b0bb	true	0	false	262	64	-	route in row 1046's band; row 1046 read	taken COS1046
+35	COS1046-0035	route|192|11863|4975|b622b6ee557635b4|b55427e33bb35c4d	route|192|11863|4975|b622b6ee557635b4|b55427e33bb35c4d	true	0	false	388	64	-	route in row 1046's band; row 1046 read	taken COS1046
+36	COS1046-0036	route|41|11338|2347|753d203e13d45ce6|c6cc304d084731a6	route|41|11338|2347|753d203e13d45ce6|c6cc304d084731a6	true	0	false	287	64	-	route in row 1046's band; row 1046 read	taken COS1046
+37	COS1046-0037	route|4030|255006|132007|24bc5493e89e956a|65e2f5bd6518a84c	route|4030|255006|132007|24bc5493e89e956a|65e2f5bd6518a84c	true	7	false	2239	64	-	route leaves the band	rejected
+38	COS1046-0038	route|481|30663|17394|ee45fe98f13af160|350eaabfa72ac6ad	route|481|30663|17394|ee45fe98f13af160|350eaabfa72ac6ad	true	0	false	526	64	-	route leaves the band	rejected
+39	COS1046-0039	route|782|92542|39374|b013fb11b99e2047|6fabcc32b0c86973	route|782|92542|39374|b013fb11b99e2047|6fabcc32b0c86973	true	0	false	584	64	-	route leaves the band	rejected
+40	COS1046-0040	route|315|16142|11781|8e19fb8335dfa3f7|4278da390f8ee3b6	route|315|16142|11781|8e19fb8335dfa3f7|4278da390f8ee3b6	true	0	false	379	64	-	route in row 1046's band; row 1046 read	taken COS1046
+41	COS1046-0041	route|577|42335|19597|d80e29bdfcd677ee|6fafb6eb4c031b77	route|577|42335|19597|d80e29bdfcd677ee|6fafb6eb4c031b77	true	1	false	742	64	-	route in row 1046's band; row 1046 read	taken COS1046
+42	COS1046-0042	route|1349|201889|114014|ddf301e38dba4e9d|d76e3aca7d0305db	route|1349|201889|114014|ddf301e38dba4e9d|d76e3aca7d0305db	true	1	false	647	64	-	route leaves the band	rejected
+43	COS1046-0043	route|1133|184219|103233|8c8cfb3b9d2f6be1|8387e5af5ded215c	route|1133|184219|103233|8c8cfb3b9d2f6be1|8387e5af5ded215c	true	1	false	678	64	-	route leaves the band	rejected
+44	COS1046-0044	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	257	64	-	no route: to-position not mapped in existing datafile	rejected
+45	COS1046-0045	route|228|12443|7823|88e54c32913202d5|2135345a0bacb15e	route|228|12443|7823|88e54c32913202d5|2135345a0bacb15e	true	0	false	341	64	-	route in row 1046's band; row 1046 read	taken COS1046
+46	COS1046-0046	route|32|2313|1800|a2a673c959b5e595|1eea9c6c107fc932	route|32|2313|1800|a2a673c959b5e595|1eea9c6c107fc932	true	0	false	317	64	-	route in row 1046's band; row 1046 read	taken COS1046
+47	COS1046-0047	route|30|691|516|581c94a2371f73e0|c3f6c9a3c45f3995	route|30|691|516|581c94a2371f73e0|c3f6c9a3c45f3995	true	0	false	322	64	-	route in row 1046's band; row 1046 read	taken COS1046
+48	COS1046-0048	route|705|39929|19050|c42dc1959b6c2ba7|2d47fb7c70346f4f	route|705|39929|19050|c42dc1959b6c2ba7|2d47fb7c70346f4f	true	1	false	976	64	-	route in row 1046's band; row 1046 read	taken COS1046
+49	COS1046-0049	route|405|26141|13548|4a94ea9c6b52eb1d|ade8f521d3166337	route|405|26141|13548|4a94ea9c6b52eb1d|ade8f521d3166337	true	1	false	641	64	-	route in row 1046's band; row 1046 read	taken COS1046
+50	COS1046-0050	route|411|32044|12716|93d0d01ae3693a48|52cac8c81dd3657	route|411|32044|12716|93d0d01ae3693a48|52cac8c81dd3657	true	1	false	659	64	-	route in row 1046's band; row 1046 read	taken COS1046
+51	COS1046-0051	route|490|47420|17245|2cf4dbae0e4ecd8f|1fa9bc29bcf427cc	route|490|47420|17245|2cf4dbae0e4ecd8f|1fa9bc29bcf427cc	true	1	false	990	64	-	route in row 1046's band; row 1046 read	taken COS1046
+52	COS1046-0052	route|23|4921|3345|6bfd9a8fb47ab18f|ba6f649f61c05e0c	route|23|4921|3345|6bfd9a8fb47ab18f|ba6f649f61c05e0c	true	0	false	291	64	-	route in row 1046's band; row 1046 read	taken COS1046
+53	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+54	COS1046-0054	route|159|10678|6137|6feec597566d5cc8|230c018994151f11	route|159|10678|6137|6feec597566d5cc8|230c018994151f11	true	0	false	384	64	-	route in row 1046's band; row 1046 read	taken COS1046
+55	COS1046-0055	route|484|39964|12234|4101953a333aa677|68a9634060db1cd8	route|484|39964|12234|4101953a333aa677|68a9634060db1cd8	true	0	false	759	64	-	route in row 1046's band; row 1046 read	taken COS1046
+56	COS1046-0056	route|195|6877|3902|a64e6dd7e9ed0fd|dca6725b68556a3	route|195|6877|3902|a64e6dd7e9ed0fd|dca6725b68556a3	true	0	false	433	64	-	route in row 1046's band; row 1046 read	taken COS1046
+57	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+58	COS1046-0058	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	236	64	-	no route: to-position not mapped in existing datafile	rejected
+59	COS1046-0059	route|74|8641|4002|870e5e4cb44b3cf2|1232bfe2c5b64fd2	route|74|8641|4002|870e5e4cb44b3cf2|1232bfe2c5b64fd2	true	0	false	304	64	-	route in row 1046's band; row 1046 read	taken COS1046
+60	COS1046-0060	route|40|3951|2662|3ed13f583685f3b8|44db43507aefd181	route|40|3951|2662|3ed13f583685f3b8|44db43507aefd181	true	0	false	391	64	-	route in row 1046's band; row 1046 read	taken COS1046
+61	COS1046-0061	route|66|4650|2497|43e56c560928b7c|b1f746d854170f48	route|66|4650|2497|43e56c560928b7c|b1f746d854170f48	true	0	false	297	64	-	route in row 1046's band; row 1046 read	taken COS1046
+62	COS1046-0062	route|1366|82101|47119|2161b868d0c88bca|be400b731943d8b7	route|1366|82101|47119|2161b868d0c88bca|be400b731943d8b7	true	1	false	605	64	-	route in row 1046's band; row 1046 read	taken COS1046
+63	COS1046-0063	route|411|31277|12576|42167755f611af0e|2766369125272182	route|411|31277|12576|42167755f611af0e|2766369125272182	true	1	false	850	64	-	route in row 1046's band; row 1046 read	taken COS1046
+64	COS1046-0064	route|2074|137180|64288|3705e473acd0cff4|a16c3894db4d7859	route|2074|137180|64288|3705e473acd0cff4|a16c3894db4d7859	true	3	false	1319	64	-	route leaves the band	rejected
+65	COS1046-0065	route|8|248|175|a22957cfd9896c3b|fe20e5988572c34e	route|8|248|175|a22957cfd9896c3b|fe20e5988572c34e	true	0	false	382	64	-	route in row 1046's band; row 1046 read	taken COS1046
+66	COS1046-0066	route|1981|102061|62383|c4d24cc1c392d64c|d5545b48e75a40e	route|1981|102061|62383|c4d24cc1c392d64c|d5545b48e75a40e	true	1	false	730	64	-	route leaves the band	rejected
+67	COS1046-0067	route|3634|182322|111635|a79da328d4f32e76|e3f59ca1b042295d	route|3634|182322|111635|a79da328d4f32e76|e3f59ca1b042295d	true	2	false	1053	64	-	route leaves the band	rejected
+68	COS1046-0068	route|1014|66793|28479|f366a5bad2fa98e6|b59a52a08c1b7d49	route|1014|66793|28479|f366a5bad2fa98e6|b59a52a08c1b7d49	true	1	false	914	64	-	route in row 1046's band; row 1046 read	taken COS1046
+69	COS1046-0069	route|246|23759|7742|b5c55194e9998af6|37537f00ae76033f	route|246|23759|7742|b5c55194e9998af6|37537f00ae76033f	true	0	false	798	64	-	route in row 1046's band; row 1046 read	taken COS1046
+70	COS1046-0070	route|5938|322152|184088|b78c481fff49d9ae|257adf0b33ed7c7b	route|5938|322152|184088|b78c481fff49d9ae|257adf0b33ed7c7b	true	8	false	2389	64	-	route leaves the band	rejected
+71	COS1046-0071	route|81|7764|4075|2449b0ae4421348f|794039e5dc5efe97	route|81|7764|4075|2449b0ae4421348f|794039e5dc5efe97	true	0	false	387	64	-	route in row 1046's band; row 1046 read	taken COS1046
+72	COS1046-0072	route|1738|100719|57084|e7ba4326059cf912|2d327bb914924290	route|1738|100719|57084|e7ba4326059cf912|2d327bb914924290	true	3	false	1238	64	-	route in row 1046's band; row 1046 read	taken COS1046
+73	COS1046-0073	route|654|41784|17517|c0bc9611c82a66f8|fbf6a4bca9ece3fb	route|654|41784|17517|c0bc9611c82a66f8|fbf6a4bca9ece3fb	true	1	false	889	64	-	route leaves the band	rejected
+74	COS1046-0074	route|202|28696|9291|8ed9a980ad77da01|bfebe3f407a8a251	route|202|28696|9291|8ed9a980ad77da01|bfebe3f407a8a251	true	0	false	366	64	-	route in row 1046's band; row 1046 read	taken COS1046
+75	COS1046-0075	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	211	64	-	no route: to-position not mapped in existing datafile	rejected
+76	COS1046-0076	route|869|127898|66363|f5dbc2fcb9e8e7ed|1cf59532954968ad	route|869|127898|66363|f5dbc2fcb9e8e7ed|1cf59532954968ad	true	0	false	662	64	-	route in row 1046's band; row 1046 read	taken COS1046
+77	COS1046-0077	route|1117|198672|111173|86e5ade290c11d9d|20ac0e3ab397284a	route|1117|198672|111173|86e5ade290c11d9d|20ac0e3ab397284a	true	1	false	735	64	-	route leaves the band	rejected
+78	COS1046-0078	route|574|29796|16825|c49a432d725a3a6|a0095a232ce0bc64	route|574|29796|16825|c49a432d725a3a6|a0095a232ce0bc64	true	1	false	806	64	-	route in row 1046's band; row 1046 read	taken COS1046
+79	COS1046-0079	route|1417|96870|44563|6cb775663b1a915f|beee763baf12b307	route|1417|96870|44563|6cb775663b1a915f|beee763baf12b307	true	3	false	964	64	-	route leaves the band	rejected
+80	COS1046-0080	route|118|8367|4067|2330a785a4b4c8e|f9df5f77524c5b3c	route|118|8367|4067|2330a785a4b4c8e|f9df5f77524c5b3c	true	0	false	307	64	-	route in row 1046's band; row 1046 read	taken COS1046
+81	COS1046-0081	route|755|48681|17263|f7ab5fe01625cb90|5984d1fd4c0c6720	route|755|48681|17263|f7ab5fe01625cb90|5984d1fd4c0c6720	true	1	false	823	64	-	route in row 1046's band; row 1046 read	taken COS1046
+82	COS1046-0082	route|490|32935|9245|a0e6dcd83de50a24|20a3293aa24c9c47	route|490|32935|9245|a0e6dcd83de50a24|20a3293aa24c9c47	true	1	false	762	64	-	route in row 1046's band; row 1046 read	taken COS1046
+83	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+84	COS1046-0084	route|472|36310|12957|2b120c345ca254f3|29a22e68b4746cd0	route|472|36310|12957|2b120c345ca254f3|29a22e68b4746cd0	true	1	false	844	64	-	route in row 1046's band; row 1046 read	taken COS1046
+85	COS1046-0085	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	209	64	-	no route: to-position not mapped in existing datafile	rejected
+86	COS1046-0086	route|540|38256|16953|824d271544bb14c5|828d1ffc88a02368	route|540|38256|16953|824d271544bb14c5|828d1ffc88a02368	true	0	false	582	64	-	route in row 1046's band; row 1046 read	taken COS1046
+87	COS1046-0087	route|958|78154|41671|ce5880ce631a0e44|1f532ad8203523f9	route|958|78154|41671|ce5880ce631a0e44|1f532ad8203523f9	true	3	false	892	64	-	route in row 1046's band; row 1046 read	taken COS1046
+88	COS1046-0088	route|328|21196|8607|7c1365289cbdc2b7|db5260e404e008eb	route|328|21196|8607|7c1365289cbdc2b7|db5260e404e008eb	true	0	false	322	64	-	route in row 1046's band; row 1046 read	taken COS1046
+89	COS1046-0089	route|209|30733|16779|cd29af4e8e51371d|c9a56319cf997066	route|209|30733|16779|cd29af4e8e51371d|c9a56319cf997066	true	0	false	359	64	-	route in row 1046's band; row 1046 read	taken COS1046

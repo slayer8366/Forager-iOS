@@ -1,0 +1,87 @@
+draw	id	R1-tuple	R2-tuple	R2-equals-R1	R2-collected-lines	R2-panic	R1-ms	memoryclass	R6-tuple	reach	result
+1	COS1079-0001	route|46|2544|1896|b34bf78b1e3cc6e3|5ffa1a044e4c8ff8	route|46|2544|1896|b34bf78b1e3cc6e3|5ffa1a044e4c8ff8	true	0	false	298	64	-	route leaves the band	rejected
+2	COS1079-0002	route|19|1873|1419|8a0e362ba20c9c43|63cbf1f03c676186	route|19|1873|1419|8a0e362ba20c9c43|63cbf1f03c676186	true	0	false	219	64	-	route in row 1079's band; row 1079 read	taken COS1079
+3	COS1079-0003	route|109|46768|6924|5bfa33dd237a92fa|b763eb8b749f4d55	route|109|46768|6924|5bfa33dd237a92fa|b763eb8b749f4d55	true	1	false	540	64	-	route in row 1079's band; row 1079 read	taken COS1079
+4	COS1079-0004	route|21|1517|1148|e29dfef1213dd523|67529b90ed9b16ae	route|21|1517|1148|e29dfef1213dd523|67529b90ed9b16ae	true	0	false	269	64	-	route in row 1079's band; row 1079 read	taken COS1079
+5	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+6	COS1079-0006	route|154|39417|14474|705f7248495d9233|e167b961b643879d	route|154|39417|14474|705f7248495d9233|e167b961b643879d	true	1	false	665	64	-	route in row 1079's band; row 1079 read	taken COS1079
+7	COS1079-0007	route|38|1689|1260|5c46df5d3622e4b4|74d3c0de4d9c32f9	route|38|1689|1260|5c46df5d3622e4b4|74d3c0de4d9c32f9	true	0	false	236	64	-	route in row 1079's band; row 1079 read	taken COS1079
+8	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+9	COS1079-0009	route|812|1084562|73018|e9540445c6cde857|b0e7f92734c8e4bd	route|812|1084562|73018|e9540445c6cde857|b0e7f92734c8e4bd	true	2	false	926	64	-	route leaves the band	rejected
+10	COS1079-0010	route|137|46060|12684|b5bdc2cef1c52b63|b6247dd660aa0f6e	route|137|46060|12684|b5bdc2cef1c52b63|b6247dd660aa0f6e	true	1	false	793	64	-	route in row 1079's band; row 1079 read	taken COS1079
+11	COS1079-0011	route|54|159211|7324|322d738ea5b72f74|610186bd48f5c950	route|54|159211|7324|322d738ea5b72f74|610186bd48f5c950	true	0	false	217	64	-	route in row 1079's band; row 1079 read	taken COS1079
+12	COS1079-0012	route|4|484|367|f967facc962c2a25|5234d02bfa452dae	route|4|484|367|f967facc962c2a25|5234d02bfa452dae	true	0	false	185	64	-	route in row 1079's band; row 1079 read	taken COS1079
+13	COS1079-0013	route|47|88980|6040|4900aa5e7c7b632|a2341b41caf9646a	route|47|88980|6040|4900aa5e7c7b632|a2341b41caf9646a	true	0	false	189	64	-	route in row 1079's band; row 1079 read	taken COS1079
+14	COS1079-0014	route|26|2446|1854|b511dab638484d77|1a63c1ac5428240a	route|26|2446|1854|b511dab638484d77|1a63c1ac5428240a	true	0	false	174	64	-	route in row 1079's band; row 1079 read	taken COS1079
+15	COS1079-0015	route|47|2381|1775|14b1b17489e62812|6dfe6ca5aad4cc24	route|47|2381|1775|14b1b17489e62812|6dfe6ca5aad4cc24	true	0	false	190	64	-	route in row 1079's band; row 1079 read	taken COS1079
+16	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+17	COS1079-0017	route|917|1270546|85066|8d88111f90d1c955|b22cbff0e5bc8d23	route|917|1270546|85066|8d88111f90d1c955|b22cbff0e5bc8d23	true	2	false	806	64	-	route leaves the band	rejected
+18	COS1079-0018	route|66|59494|5401|78fe26389cc3a05e|91020ea444ba82ff	route|66|59494|5401|78fe26389cc3a05e|91020ea444ba82ff	true	2	false	882	64	-	route in row 1079's band; row 1079 read	taken COS1079
+19	COS1079-0019	route|172|43468|17748|39735a35494bbcc5|77797127327d0a0c	route|172|43468|17748|39735a35494bbcc5|77797127327d0a0c	true	1	false	928	64	-	route in row 1079's band; row 1079 read	taken COS1079
+20	COS1079-0020	route|25|42641|2725|349b2a9e66a77c7a|26be670df6953568	route|25|42641|2725|349b2a9e66a77c7a|26be670df6953568	true	0	false	210	64	-	route in row 1079's band; row 1079 read	taken COS1079
+21	COS1079-0021	route|47|11940|6595|ec33544e12ac120|6e77f6cb670ef396	route|47|11940|6595|ec33544e12ac120|6e77f6cb670ef396	true	0	false	228	64	-	route in row 1079's band; row 1079 read	taken COS1079
+22	COS1079-0022	route|175|41307|15985|bde269d60a298af|61292661b58b2159	route|175|41307|15985|bde269d60a298af|61292661b58b2159	true	1	false	645	64	-	route in row 1079's band; row 1079 read	taken COS1079
+23	COS1079-0023	route|127|56914|16689|67c965bf8d5e16d7|e3e1831507daed1b	route|127|56914|16689|67c965bf8d5e16d7|e3e1831507daed1b	true	1	false	744	64	-	route in row 1079's band; row 1079 read	taken COS1079
+24	COS1079-0024	route|188|91583|17676|1fc092dfe55652da|23475c6f1b115c39	route|188|91583|17676|1fc092dfe55652da|23475c6f1b115c39	true	2	false	896	64	-	route in row 1079's band; row 1079 read	taken COS1079
+25	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+26	COS1079-0026	route|174|22939|13155|ac2a87163910d616|ab80ccada1d7335f	route|174|22939|13155|ac2a87163910d616|ab80ccada1d7335f	true	0	false	477	64	-	route in row 1079's band; row 1079 read	taken COS1079
+27	COS1079-0027	route|149|86325|14595|daa1deea65ff6a83|22a2c1ff24a5cfbf	route|149|86325|14595|daa1deea65ff6a83|22a2c1ff24a5cfbf	true	2	false	738	64	-	route in row 1079's band; row 1079 read	taken COS1079
+28	COS1079-0028	route|302|976906|55339|df8a656c6a338764|a70d7dc77e8ebc9b	route|302|976906|55339|df8a656c6a338764|a70d7dc77e8ebc9b	true	1	false	601	64	-	route leaves the band	rejected
+29	COS1079-0029	route|245|427827|29121|78fc23f9bc234540|5c2fc30fa9958efe	route|245|427827|29121|78fc23f9bc234540|5c2fc30fa9958efe	true	0	false	392	64	-	route in row 1079's band; row 1079 read	taken COS1079
+30	COS1079-0030	route|46|35382|5859|cdb9aacc54880263|8c66093090d7a9af	route|46|35382|5859|cdb9aacc54880263|8c66093090d7a9af	true	1	false	558	64	-	route in row 1079's band; row 1079 read	taken COS1079
+31	COS1079-0031	route|91|13395|9291|815c9ec411f1d6cb|fbca2fea083b98a9	route|91|13395|9291|815c9ec411f1d6cb|fbca2fea083b98a9	true	0	false	365	64	-	route in row 1079's band; row 1079 read	taken COS1079
+32	COS1079-0032	route|176|19960|13201|ddd3c4d9e9bfc000|64a889d500c629a3	route|176|19960|13201|ddd3c4d9e9bfc000|64a889d500c629a3	true	0	false	472	64	-	route in row 1079's band; row 1079 read	taken COS1079
+33	COS1079-0033	route|752|839490|61987|a539b4961bab6a5f|1f4ce987cf7c0ea6	route|752|839490|61987|a539b4961bab6a5f|1f4ce987cf7c0ea6	true	2	false	779	64	-	route leaves the band	rejected
+34	COS1079-0034	route|57|45079|8420|a727613566931204|b300df30428e7fce	route|57|45079|8420|a727613566931204|b300df30428e7fce	true	1	false	862	64	-	route in row 1079's band; row 1079 read	taken COS1079
+35	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+36	COS1079-0036	route|48|22275|3352|2843a7a6ae24386c|a48f19ab3102425e	route|48|22275|3352|2843a7a6ae24386c|a48f19ab3102425e	true	0	false	731	64	-	route in row 1079's band; row 1079 read	taken COS1079
+37	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+38	COS1079-0038	route|207|93039|19538|cd2bc1ca062530da|59553f2d228b525b	route|207|93039|19538|cd2bc1ca062530da|59553f2d228b525b	true	2	false	687	64	-	route in row 1079's band; row 1079 read	taken COS1079
+39	COS1079-0039	route|234|91266|18252|71b82256038e642c|38d3ba8c77131d9d	route|234|91266|18252|71b82256038e642c|38d3ba8c77131d9d	true	2	false	984	64	-	route in row 1079's band; row 1079 read	taken COS1079
+40	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+41	COS1079-0041	route|727|646420|52805|50fe4dc4ca39b848|a20b282f6f994bc5	route|727|646420|52805|50fe4dc4ca39b848|a20b282f6f994bc5	true	2	false	1254	64	-	route leaves the band	rejected
+42	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+43	COS1079-0043	route|141|43725|12579|70f7e3b247199a83|d32e578c0234b972	route|141|43725|12579|70f7e3b247199a83|d32e578c0234b972	true	1	false	640	64	-	route in row 1079's band; row 1079 read	taken COS1079
+44	COS1079-0044	route|57|3582|2714|78719084f3394a3d|ac26b434151137b3	route|57|3582|2714|78719084f3394a3d|ac26b434151137b3	true	0	false	255	64	-	route in row 1079's band; row 1079 read	taken COS1079
+45	COS1079-0045	route|61|22921|6161|748191fa3dee52e0|9c7cff38d94debc7	route|61|22921|6161|748191fa3dee52e0|9c7cff38d94debc7	true	0	false	318	64	-	route in row 1079's band; row 1079 read	taken COS1079
+46	COS1079-0046	route|63|3810|1997|2817943275163885|a13ec383204d2c5	route|63|3810|1997|2817943275163885|a13ec383204d2c5	true	0	false	246	64	-	route in row 1079's band; row 1079 read	taken COS1079
+47	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+48	COS1079-0048	route|28|23153|2244|e7c62d89e4ef311d|51d19e6b6710ec23	route|28|23153|2244|e7c62d89e4ef311d|51d19e6b6710ec23	true	0	false	169	64	-	route in row 1079's band; row 1079 read	taken COS1079
+49	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+50	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+51	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+52	COS1079-0052	route|167|45387|13807|a0cf4aa1ee8e292|2ae3d8de3f650e45	route|167|45387|13807|a0cf4aa1ee8e292|2ae3d8de3f650e45	true	1	false	726	64	-	route in row 1079's band; row 1079 read	taken COS1079
+53	COS1079-0053	route|189|44976|16332|dd8722290d82169a|2b52455e1ad65aa5	route|189|44976|16332|dd8722290d82169a|2b52455e1ad65aa5	true	1	false	698	64	-	route in row 1079's band; row 1079 read	taken COS1079
+54	COS1079-0054	route|27|1271|925|17e554197b679e97|c138b499cee8989e	route|27|1271|925|17e554197b679e97|c138b499cee8989e	true	0	false	304	64	-	route in row 1079's band; row 1079 read	taken COS1079
+55	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+56	COS1079-0056	route|766|939544|67811|f4f3dcd2151ac6cd|bed66c83897a7d69	route|766|939544|67811|f4f3dcd2151ac6cd|bed66c83897a7d69	true	2	false	852	64	-	route leaves the band	rejected
+57	COS1079-0057	route|159|17576|11977|77f568a02fc4a67d|c3e260f000bca7bd	route|159|17576|11977|77f568a02fc4a67d|c3e260f000bca7bd	true	0	false	471	64	-	route in row 1079's band; row 1079 read	taken COS1079
+58	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+59	COS1079-0059	route|601|473757|43873|84ab61460ed8bb82|3cce4130775a7e00	route|601|473757|43873|84ab61460ed8bb82|3cce4130775a7e00	true	2	false	660	64	-	route leaves the band	rejected
+60	COS1079-0060	route|79|49396|6477|60b64f18611217f3|2714bd2f626b4ff7	route|79|49396|6477|60b64f18611217f3|2714bd2f626b4ff7	true	0	false	221	64	-	route in row 1079's band; row 1079 read	taken COS1079
+61	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+62	COS1079-0062	route|206|42826|17148|b773b88e1a03fb31|88365235b83c141c	route|206|42826|17148|b773b88e1a03fb31|88365235b83c141c	true	1	false	532	64	-	route in row 1079's band; row 1079 read	taken COS1079
+63	COS1079-0063	route|75|5687|4162|852da520e95178b4|25129428fef92197	route|75|5687|4162|852da520e95178b4|25129428fef92197	true	0	false	389	64	-	route in row 1079's band; row 1079 read	taken COS1079
+64	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+65	COS1079-0065	route|50|57872|7292|bbfdfd723f5e2b70|191981fd6170cfef	route|50|57872|7292|bbfdfd723f5e2b70|191981fd6170cfef	true	0	false	282	64	-	route in row 1079's band; row 1079 read	taken COS1079
+66	COS1079-0066	route|18|1206|914|86172bda4ad91d7d|b53d38c26020c7d9	route|18|1206|914|86172bda4ad91d7d|b53d38c26020c7d9	true	0	false	243	64	-	route in row 1079's band; row 1079 read	taken COS1079
+67	COS1079-0067	route|71|30563|4413|d61a32de6bfbfa3c|a43b63c11c0f7c92	route|71|30563|4413|d61a32de6bfbfa3c|a43b63c11c0f7c92	true	1	false	599	64	-	route in row 1079's band; row 1079 read	taken COS1079
+68	COS1079-0068	route|113|36657|7480|47d22e7eaa116bcf|521e796ae9defe52	route|113|36657|7480|47d22e7eaa116bcf|521e796ae9defe52	true	1	false	467	64	-	route in row 1079's band; row 1079 read	taken COS1079
+69	COS1079-0069	route|81|34675|6166|748f9f3f75b69f03|7ebb60c93f29d7cd	route|81|34675|6166|748f9f3f75b69f03|7ebb60c93f29d7cd	true	1	false	703	64	-	route in row 1079's band; row 1079 read	taken COS1079
+70	COS1079-0070	route|91|62252|7489|4a772ccc5dcb4591|4f2efec5c4890bc1	route|91|62252|7489|4a772ccc5dcb4591|4f2efec5c4890bc1	true	2	false	688	64	-	route in row 1079's band; row 1079 read	taken COS1079
+71	COS1079-0071	route|83|7347|5300|f3342cd654e3b558|1922a1d8d80fe073	route|83|7347|5300|f3342cd654e3b558|1922a1d8d80fe073	true	0	false	320	64	-	route in row 1079's band; row 1079 read	taken COS1079
+72	COS1079-0072	route|84|74779|11080|ef53dbc023e7ae0a|30b732c5362cd8e	route|84|74779|11080|ef53dbc023e7ae0a|30b732c5362cd8e	true	0	false	215	64	-	route in row 1079's band; row 1079 read	taken COS1079
+73	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+74	COS1079-0074	route|116|39450|8193|bbd72dd6e046b0b6|ae038429265638a9	route|116|39450|8193|bbd72dd6e046b0b6|ae038429265638a9	true	1	false	640	64	-	route in row 1079's band; row 1079 read	taken COS1079
+75	COS1079-0075	route|121|46228|9057|1929ab418a656d0f|3e52a0cf0628b399	route|121|46228|9057|1929ab418a656d0f|3e52a0cf0628b399	true	1	false	758	64	-	route in row 1079's band; row 1079 read	taken COS1079
+76	COS1079-0076	route|89|52140|7982|f29bb934ed1488d9|4494868f4af806a1	route|89|52140|7982|f29bb934ed1488d9|4494868f4af806a1	true	2	false	863	64	-	route in row 1079's band; row 1079 read	taken COS1079
+77	COS1079-0077	route|75|9523|6710|18f1028385486aa3|7a78eccd30a9dda3	route|75|9523|6710|18f1028385486aa3|7a78eccd30a9dda3	true	0	false	292	64	-	route in row 1079's band; row 1079 read	taken COS1079
+78	COS1079-0078	route|145|38772|14016|32d2a53d4979d80c|ee2664fbef6c8937	route|145|38772|14016|32d2a53d4979d80c|ee2664fbef6c8937	true	1	false	710	64	-	route in row 1079's band; row 1079 read	taken COS1079
+79	COS1079-0079	route|42|3557|1054|1faeceedf12875b8|fcce889de8585bf	route|42|3557|1054|1faeceedf12875b8|fcce889de8585bf	true	0	false	316	64	-	route in row 1079's band; row 1079 read	taken COS1079
+80	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+81	COS1079-0081	route|75|42196|10626|8cd0a80ce1d4cf87|2098182785d52dc0	route|75|42196|10626|8cd0a80ce1d4cf87|2098182785d52dc0	true	1	false	439	64	-	route in row 1079's band; row 1079 read	taken COS1079
+82	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+83	COS1079-0083	route|131|47952|10426|5e698ae057a1bbe2|4873209623580def	route|131|47952|10426|5e698ae057a1bbe2|4873209623580def	true	1	false	786	64	-	route in row 1079's band; row 1079 read	taken COS1079
+84	COS1079-0084	route|48|3203|2426|76b993aea0dd27e7|2553aab8b6c3f400	route|48|3203|2426|76b993aea0dd27e7|2553aab8b6c3f400	true	0	false	376	64	-	route in row 1079's band; row 1079 read	taken COS1079
+85	COS1079-0085	route|126|15904|10334|1f5d82861788c2c0|985b55be18dd609	route|126|15904|10334|1f5d82861788c2c0|985b55be18dd609	true	0	false	480	64	-	route in row 1079's band; row 1079 read	taken COS1079
+86	COS1079-0086	route|121|37589|13122|cbade0f3586a9146|ca61fe868af0f40d	route|121|37589|13122|cbade0f3586a9146|ca61fe868af0f40d	true	1	false	511	64	-	route in row 1079's band; row 1079 read	taken COS1079
