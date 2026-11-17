@@ -7624,3 +7624,28 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **Next (the planner's):** a reviewer look at sessions 72 to 77's test code since review 4. Then, on the owner's word only: merging `brouter-port-5b` into `brouter-port`, and a record PR for -190 onward.
 
 **Notes:** Written by the planner session by hand. Next free ID -194.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-194
+**Timestamp:** 2026-11-17T06:08:46Z
+**Continues:** -193, -192
+**Title:** Review 5 (sessions 75 to 77): the claim holds, nothing blocking, three should-fix items; one sentence of -193 corrected
+
+**The review.** Samphire Witness, read-only, at `brouter-port-5b` `e703277`. Report: `docs/reviews/2026-11-17-review-5-cosine-rows.md` on `review/changed-comparisons`, remote head `d89108f` (checked by the planner with `git ls-remote`). The reviewer read every code file in the range and the four CI logs of run 44020606098, cross-checked `expected-cosrows.tsv` against the 16 committed tables by script, and ran no Gradle and no plant.
+
+**Verdict, the reviewer's:** the claim of -193 holds on the evidence; the oracle's and the port's values are computed independently and compared on six fields; the 472 stored tuples are all distinct, so equality is not by construction.
+
+**Should fix, each confirmed by the planner in the code at `e703277`:**
+- **S1.** `RoutingEngineCosRowsProductionRecordTest.kt:57` counts cases whose oracle result is off the stored row (`offRow`), `:82` prints it, and no assertion reads it (assertions at `:78-80`, `:93-94`). `CosRowsRun.kt:26-28` says both runs "hold" the oracle to the stored digest; only the logic run does. Today the column is 0 in all 8 rows.
+- **S2.** The `jvm-production` job (`brouter.yml:287-295`) runs two `--tests` filters and has no class-ran step, so a renamed class would leave it green with fewer tests. The class records a difference and never fails one, so the JVM half of the claim is a reading of one run's log lines. The simulator half is asserted and gated on every push.
+- **S3.** "Every case read its own row" follows from the selection (a case is kept only if its route lies inside its row's band), so it is not an independent finding. What the counter shows is that the engine fetched that row from the table it was handed. It does not show how often, or that the value moved a number.
+
+**Correction to -193 and to what the owner was told.** -193 says "Every case read its own row of the scale table" beside the result, as if it were a separate observation. Read it as: each case's route lies inside its row's band, and the port fetched that row from the table under test. The result itself (472 of 472 equal) is unchanged.
+
+**Notes worth carrying.** N1: the untraced direct use of `MsunLibm` at `FormatJson.kt:330` cannot reach these runs; no formatter is constructed by the engine or the test runs (the reviewer's read). N2: link distances are rounded to whole metres, so 1 ulp can move a result only at a rounding boundary (inferred; the cost path was not traced); the coder's 0.1% plant left 7 of 59 unchanged. N3: "1 ulp in `kx`" is a carried figure, not re-measured in this range. N4: two failure messages reached by this group name `expected-1b` (`Step10Cases.kt:109`, `NtCasesWriteTest.kt:149`), confirmed. N9: `jvm-production` ran 35 of its 45 minutes.
+
+**Next (the planner's):** session 78, small: assert `offRow == 0` and correct the comment (S1), add the class-ran step to `jvm-production` (S2), correct the two sentences in the session 77 findings (S3), make the two messages name the right file (N4). Whether the JVM production class should also fail on a difference is a design question left as it is: it records by design, as the class it sits beside.
+
+**Notes:** Written by the planner session by hand. Next free ID -195.
