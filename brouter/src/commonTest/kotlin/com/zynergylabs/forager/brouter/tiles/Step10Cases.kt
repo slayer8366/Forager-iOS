@@ -30,6 +30,9 @@ import kotlin.time.TimeSource
  * Session 77: and the engine's seam ([libm], `MsunLibm` by default, so every earlier caller runs as before; placed before
  * [onCase] so callers' trailing lambdas still bind to it), which the cosine rows' group passes as a counting seam to record
  * the table rows each case reads.
+ *
+ * Session 78 (review 5, N4): [rowsFile], the stored rows' file named in the mismatch message only (`expected-1b.tsv` by
+ * default, so every earlier caller's message is unchanged; the cosine rows' group passes `expected-cosrows.tsv`).
  */
 internal object Step10Cases {
     const val VARIABLE = "BROUTER_STEP10_NT_CASES"
@@ -56,6 +59,7 @@ internal object Step10Cases {
         family: (String) -> String = { it },
         holdTuple: Boolean = true,
         libm: LibmSeam = MsunLibm,
+        rowsFile: String = "expected-1b.tsv",
         onCase: ((String, EngineRun.Outcome) -> Unit)? = null,
     ) {
         val segments = setting("brouter.tiles.dir", "BROUTER_TILES_DIR").toPath() / "segments"
@@ -106,7 +110,7 @@ internal object Step10Cases {
                 "missing ${missing.size}; ${t0.elapsedNow().inWholeSeconds} s",
         )
         mismatches.forEach { println("step10 $stratum engine mismatch $it") }
-        assertEquals(emptyList(), mismatches, "$stratum through the engine against expected-1b.tsv (id, fields, tuple digests)")
+        assertEquals(emptyList(), mismatches, "$stratum through the engine against $rowsFile (id, fields, tuple digests)")
         assertEquals(emptySet(), missing, "$stratum's stored ids the run-time file does not name")
     }
 

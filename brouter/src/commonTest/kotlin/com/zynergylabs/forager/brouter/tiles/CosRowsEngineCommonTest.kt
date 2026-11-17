@@ -20,7 +20,7 @@ class CosRowsEngineCommonTest {
         val nt = Step10Cases.ntFile("COS") ?: return
         val counter = CommonCountingLibm(MsunLibm)
         val read = LinkedHashMap<String, Set<Int>>()
-        Step10Cases.check("COS", nt.parent!! / "cos-cases.tsv", CosRowsExpected.ROWS, libm = counter, onCase = { id, _ -> read[id] = counter.take() })
+        Step10Cases.check("COS", nt.parent!! / "cos-cases.tsv", CosRowsExpected.ROWS, libm = counter, rowsFile = "expected-cosrows.tsv", onCase = { id, _ -> read[id] = counter.take() })
         val notOwn = read.filter { (id, rows) -> CosRowsExpected.rowOf(id) !in rows }.keys.toList()
         val group = read.values.flatten().filter { it in CosRowsExpected.C_ROWS }.distinct().sorted()
         for (row in CosRowsExpected.TABLE_ROWS) {

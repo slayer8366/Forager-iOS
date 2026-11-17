@@ -139,14 +139,17 @@ class NtCasesWriteTest {
             }
         }
         writeCases("R", rCases, RExpected.ROWS.map { it.id }.toSet(), File(dir, R_FILE))
-        writeCases("COS", CosRowsRun.cases().values.flatten(), CosRowsRun.rows.map { it.id }.toSet(), File(dir, COS_FILE))
+        writeCases("COS", CosRowsRun.cases().values.flatten(), CosRowsRun.rows.map { it.id }.toSet(), File(dir, COS_FILE), "expected-cosrows")
     }
 
     private fun expected() = E3Expected.read(javaClass.getResource(E3Expected.RESOURCE)!!.readText()).rows
 
-    /** [cases] built in full (not drawn against a cap), each id one of [ids] and every id there; one line each. */
-    private fun writeCases(label: String, cases: List<E3Case>, ids: Set<String>, out: File) {
-        assertEquals(ids, cases.map { it.id }.toSet(), "$label's cases are expected-1b's rows")
+    /**
+     * [cases] built in full (not drawn against a cap), each id one of [ids] and every id there; one line each. [rowsFile]
+     * names the stored rows' file in the message only (session 78, review 5 N4; `expected-1b` unless the caller says).
+     */
+    private fun writeCases(label: String, cases: List<E3Case>, ids: Set<String>, out: File, rowsFile: String = "expected-1b") {
+        assertEquals(ids, cases.map { it.id }.toSet(), "$label's cases are $rowsFile's rows")
         val lines = cases.map { c ->
             if (c.maxRunningTimeMillis != 0L || c.plan != E3Case.Plan.NONE) fail("${c.id}: a time limit or a plan; the file cannot carry it")
             val fields = mutableListOf(
