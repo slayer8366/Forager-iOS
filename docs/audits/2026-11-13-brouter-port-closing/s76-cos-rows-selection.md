@@ -236,3 +236,21 @@ draw) and the log's `E3` lines (`e3strata-cos-rows.log`). None holds an end: tup
   - plant B, that row's id `COS474-0001` to `COS488-0001`: 2 tests, 2 failures; `rowsAreFiftyNinePerCosRow`:
     `rows per id prefix expected:<{COS474=59, COS488=59, ...}> but was:<{COS488=60, COS474=58, ...}>`, and the digest
     test. As P6.
+
+### 4.4 The row assertion seen failing [C]
+
+With a scratch copy of `revert.sh` for `e3Strata` (`.../scratchpad/s76/revert-e3.sh`: the same save, one exact edit,
+restore from the saved copy and `cmp`; its Gradle line `:brouter:e3Strata -Pbrouter.e3.jdk=<pinned Temurin>`, its XML
+folder `test-results/e3Strata`, its compile-error count over `^e: ` and ` e: `). The plant, `CountingLibm.kt:17`:
+`counts.computeIfAbsent(row) ...` to `if (row != 474) counts.computeIfAbsent(row) ...`, so row 474 is never recorded.
+Log `.../scratchpad/s76/s76rowplant-gradle.log`.
+
+- 0 compile-error lines; 1 fresh XML; `restored: cmp equal`; afterwards `git diff HEAD --stat` and `git status --short`
+  printed nothing.
+- 1 test, 1 failure, before any stability run (`BUILD FAILED in 6m 43s`):
+  `the cosine rows' row assertion: [row 474: 0 of 59 kept after 1180 draws (cap 1180), the group's (c) rows read are
+  [488, 502, 663, 675, 1046, 1053, 1079], not [474, ...]: missing [474], extra []]`.
+- Row 474 drew to its cap: 1,180 draws, 1,070 routed, 352 rejected as "the port on the oracle's table did not read row
+  474" (every in-band candidate with R2 equal to R1), 0 kept. Both failures name row 474 and could come from no other
+  edit: the other 7 rows kept 59 each with exactly §4.1's draw counts (120, 120, 117, 132, 89, 106, 86), so their
+  selection repeated draw for draw on a second run. P5 held.
