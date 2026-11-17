@@ -14,7 +14,7 @@ import java.io.File
  * **Listed and held, by analogy with [E3Expected.STRATA]:** [STRATA] lists each row's stratum (`COS474` ... `COS1079`, the
  * stratum name and id prefix [CosRowsGenerator.stratum]) with its case count and the committed stability table its R1 was
  * logged in, under [LOGS]. [E3Expected.STRATA] is not changed, so the existing strata assert what they did.
- * A jvmTest class, added once the file is written, holds it to its row count, [STRATA]'s counts per id prefix, and a digest.
+ * [E3CosRowsExpectedFileTest] (jvmTest) holds the file to [ROW_COUNT], [STRATA]'s counts per id prefix, and [SHA256].
  */
 object E3CosRowsExpected {
     const val RESOURCE = "/e3/expected-cosrows.tsv"
@@ -26,6 +26,12 @@ object E3CosRowsExpected {
     val STRATA: Map<String, Pair<Int, String>> = linkedMapOf<String, Pair<Int, String>>().also { m ->
         for (row in CosRowsGenerator.ROWS) m[CosRowsGenerator.stratum(row)] = 59 to "cos$row-stability.tsv"
     }
+
+    /** 8 rows × 59. */
+    const val ROW_COUNT = 472
+
+    /** SHA-256 of the resource's bytes, as `E3CosRowsExpectedWriteTest` printed it on the pinned Temurin (session 76). */
+    const val SHA256 = "405e15ad22fed772a3e362fcc2a3117eb4400bb9156348646fdbce68741ea419"
 
     /** [name]'s committed stability table under [LOGS]: id to (verdict, R1's tuple), as [E3Expected.logged] reads its own. */
     fun logged(name: String): Map<String, Pair<String, E3Outcome>> {

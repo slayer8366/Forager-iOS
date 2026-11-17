@@ -217,3 +217,22 @@ draw) and the log's `E3` lines (`e3strata-cos-rows.log`). None holds an end: tup
 - 472 of 472 stable by `E3Stability.kt:32-34` (one tuple over R1 to R6, one collection-line list over R2 to R5), each in
   five JVMs (`:54-62`); every case's control moved between R1 and R4 (`E3Strata.kt:47-48` did not fail).
 - **Time:** 699 s in all (selection 228 s). P3 predicted 35 to 60 minutes; it took 11.7. P2 and P3 otherwise held.
+
+### 4.3 The expected rows, and the file test [C]
+
+- **The writer** (`--tests '*E3CosRowsExpectedWriteTest*'` on the pinned Temurin, log `.../scratchpad/s76/writer.log`, 0
+  compile-error lines, PASSED, `BUILD SUCCESSFUL in 1m 59s`): 59 cases per row, R1 equal to the committed log in 472 of
+  472 (`r1-vs-log.tsv`: 472 `true`), 0 stops; `wrote 472 rows; SHA-256 405e15ad22fed772a3e362fcc2a3117eb4400bb9156348646fdbce68741ea419`.
+  P4 held.
+- **`brouter/src/jvmTest/resources/e3/expected-cosrows.tsv`**: copied from `<work>/expected-cos/` byte for byte (SHA-256
+  above). 477 lines: 4 head lines, the column line, 472 rows, all `exact`. No coordinate: the columns are
+  `E3Expected.COLUMNS`.
+- **`E3CosRowsExpectedFileTest`**, locally on the container's OpenJDK (not CI's Temurin), with `E3ExpectedFileTest`:
+  8 tests passed, 0 compile-error lines, both XML files fresh.
+- **Seen failing first, with `revert.sh`** (one exact edit to the resource, the class run, restored from the saved copy,
+  `cmp` equal, 0 lines matching `^e: ` or ` e: `, 1 fresh XML; the resource's SHA-256 checked equal to before after each):
+  - plant A, the last hex digit of row `COS474-0001`'s tuple digest `...78` to `...79`: 2 tests, 1 failure,
+    `fileIsItsPinnedDigest`: `expected:<4[05e15ad2...]> but was:<4[82f218d7...]>`; the count test passed. As P6.
+  - plant B, that row's id `COS474-0001` to `COS488-0001`: 2 tests, 2 failures; `rowsAreFiftyNinePerCosRow`:
+    `rows per id prefix expected:<{COS474=59, COS488=59, ...}> but was:<{COS488=60, COS474=58, ...}>`, and the digest
+    test. As P6.
