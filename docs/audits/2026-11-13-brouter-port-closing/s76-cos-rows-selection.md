@@ -286,7 +286,7 @@ E3LBTest.kt brouter/src/commonMain` (full paths) printed nothing. P8 held. `scan
 
 ## 7. Premises in the brief that were wrong
 
-- The brief predicted (from s72) a long local run; the selection and stability took 11.7 minutes, not 35 to 60.
+- None in the brief proper. s72 §5's estimate (35 to 60 minutes locally), which my P3 carried, was wrong: 11.7.
 - `revert.sh` runs `jvmTest` only, so it cannot run the row plant, which lives in `e3Strata`; a scratch copy was used
   (§4.4), with its differences shown there.
 
