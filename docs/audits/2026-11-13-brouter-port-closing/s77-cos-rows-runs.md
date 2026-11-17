@@ -183,3 +183,99 @@ XML); I also counted ` e: ` (0 each) and checked `git status` afterwards (only m
 The 1.001 factor is a deliberate large plant (0.1%, about 2e12 ulps), chosen so it must move routes; it shows the comparison
 bites, not what 1 ulp does. The production plant ran with `BROUTER_PRODUCTION_RECORD=1` set in my shell, which `revert.sh`'s
 Gradle inherits; that it ran, not returned early, is shown by its per-row lines.
+
+### 4.5 What did not move [C]
+
+`git diff --stat cf83cf3 -- brouter/src/commonMain brouter/src/jvmTest/resources tools .github/workflows/publish-*.yml`
+printed nothing: `expected-cosrows.tsv`, `expected-1b.tsv`, `tools/tile-pins*.tsv`, `publish-*.yml` and `commonMain` are as
+at `cf83cf3`. `scan.sh <commit>^ <commit>` printed 0 on every commit of this session. P5 held.
+
+### 4.6 CI on the last code commit, `31939ed` (run 44020606098) [C]
+
+Logs read with `gh api .../actions/jobs/<id>/logs` into the scratchpad (`s77/ci-<job>.log`). Compile errors counted under
+`^e: ` and ` e: ` (CI lines carry a timestamp, so ` e: ` is the pattern that can match there).
+
+| job | conclusion | `TOTAL:` lines | gate lines | compile errors (`^e: ` / ` e: `) |
+|---|---|---|---|---|
+| `jvm` (133828915912) | success | `tests 262, failures 0, errors 0, skipped 0 in 116 files` | (none in this job) | 0 / 0 |
+| `jvm-production` (133828916256) | success | `tests 3, failures 0, errors 0, skipped 0 in 2 files` | (none) | 0 / 0 |
+| `ios-smoke` (133828916149) | success | `tests 61 ... in 30 files`; `tests 7 ... in 2 files`; each `failures 0` | `OK on the iOS simulator: all 25 classes ran`; `OK: all 2 classes ran` | 0 / 0 |
+| `ios-memory` (133828916159) | success | `tests 3`, `tests 1`, `tests 1`, each `failures 0` | `OK on the iOS simulator: all 3 classes ran (.../ios-memory-groups)`; `OK on the iOS simulator: all 1 classes ran (.../ios-r-fallback)` | 0 / 0 |
+
+No 429 and no download failure in any job. P4 held exactly (262, 3, 61 with 25 classes, 3/1/1).
+
+- **`jvm`, on Temurin 21.0.13+9:** `cosrows logic: 472 cases; oracle in this JVM off its row 0 []; port mismatches 0; 23.4 s`;
+  group `[474, 488, 502, 663, 675, 1046, 1053, 1079]`; both production classes printed their "unset" line (2 lines).
+- **`jvm-production`, on Temurin:** every row `59 | 59 | 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0`; `472 cases, 0 differing, in 32.0 s`;
+  every row's own row read on msun's table, group exactly the 8. The existing record's 19 groups unchanged (all equal).
+- **`ios-smoke`, simulator-checked:** the writer printed `step10 COS cases: 472 of 472 stored ids built; 472 in a folder of
+  their own`; `CosRowsEngineCommonTest` on `iosSimulatorArm64`: `step10 COS engine: 472 cases in the file; 472 of 472 stored
+  ids; 0 not stored []; equal on all six fields and the tuple digest 472; mismatches 0; missing 0; 159 s`; each row read its
+  own row (59 of 59), group exactly the 8. The new tiles reached the simulator through the case lines' eighth field with no
+  build or workflow change for the tiles. Job wall clock 05:01:34 to 05:23:12, 21.6 of 45 minutes. P3 held (159 s, under
+  my 4 minutes).
+- **`ios-memory`:** its writer also wrote the 472 cases (it runs the whole writer); its gates unchanged.
+
+## 5. The answer for the owner
+
+On the 472 cases, 59 in each of rows 474, 488, 502, 663, 675, 1046, 1053 and 1079, every one of which read its own row of
+the table: the port on msun's table gives the oracle's kind, nodes, cost, distance, node digest and heights digest in 472 of
+472, on the JVM (`jvm-production`, Temurin) and on the iOS simulator (simulator-checked). The 1-ulp `kx` difference changed
+no route on these cases. This is a sample of 59 per row, not every route through those rows.
+
+## 6. Confirmed vs inferred
+
+- [C] Every count and message in §4, from the local logs and XML named there and the CI logs of run 44020606098.
+- [C] Each case read its own (c) row on both tables and on the simulator; the group read exactly the 8 (c) rows.
+- [C] The plants bite (§4.4), each failing or moving only on row 474.
+- [I] That the oracle reads the rows the port reads: the oracle's own reads are not counted (as s76 §2.3).
+- [I] `CommonCountingLibm` is not thread-safe; that the engine reads the table on the calling thread only is inferred from
+  `EngineRun.runTrack` calling `doRun` synchronously, not traced into the engine. The simulator's counts (59 of 59 per row)
+  are consistent with it.
+
+## 7. Could not determine
+
+- Why the 0.1% plant left 7 of COS474's 59 cases equal (both tables). Plausibly short routes whose integer cost and distance
+  do not move [I, not traced]; it does not bear on the result.
+
+## 8. Premises in this brief (and the pre-build) that were wrong or did not hold as written
+
+- s72 §4.4 names the folder `build/tiles-cosrows`, a property `brouter.tiles.cosrows.dir` and a task `fetchCosRowsTiles`; session
+  75 built `build/tiles-cos`, `brouter.tiles.cos.dir` and `fetchCosTiles` (`brouter/build.gradle.kts:65-67, 154`). Not a
+  problem; the names differ.
+- s72 §4.5 "a group added to `RoutingEngineProductionRecordTest`": its `portMsun` hard-codes `MsunLibm`
+  (`RoutingEngineProductionRecordTest.kt:281`) and its `record` prints no ids, so the counting and per-id fields asked for
+  could not be added without changing working code; and `jvm-production`'s filter `*RoutingEngineProductionRecordTest`
+  (`brouter.yml:284` at `cf83cf3`) does not match a new class. Built as a class of its own, with a second `--tests` in that job.
+- s72 §4.5 "`EngineRun.runTrack` takes a seam, so the common test can count the same way": true of `runTrack`, but
+  `Step10Cases.check` calls `EngineRun.run` and takes no seam (`Step10Cases.kt:96` at `cf83cf3`), so "through
+  `Step10Cases.check`" with counting needed one parameter on `check`.
+- Unstated in the brief, and worth the planner's eye: the simulator holds a **production** run to the **oracle's** tuples
+  (`Step10Cases.kt:98-108`). The new class could only be green because production equals the oracle on all 472; had it not,
+  step 3 as specified would have failed on exactly the owner's answer. §2 made that a stop point; it did not arise.
+- The brief's "see whether the tiles reach the simulator": `SIMCTL_CHILD_BROUTER_COS_TILES_DIR` already existed (session 75)
+  and is still read by no test; the eighth field made it unnecessary.
+- `revert.sh` counts only `^e: `; I counted ` e: ` beside it on every plant (0 each).
+
+## 9. Decided beyond scope
+
+- Names: `RoutingEngineCosRowsTest`, `RoutingEngineCosRowsProductionRecordTest`, `CosRowsRun`, `CosRowsEngineCommonTest`,
+  `CosRowsExpected` (+ `A`, `B`), `CommonCountingLibm`, `CosRowsCommonDigestTest`, `cos-cases.tsv`, stratum label `COS`.
+- One test for the whole group in the logic and production classes (one group assertion), rather than one per row.
+- The logic run also runs the oracle in its JVM against each row's digest (Step 9's practice), so a rebuilt case is shown to be
+  the selected one.
+- `Step10Cases.check`'s new `libm` parameter sits before `onCase` (after it, it broke trailing lambdas in
+  `MemoryEngineCommonTest` and `REngineCommonTest`; seen as 6 compile errors and fixed before any commit).
+- The constant split in two files of 249 lines (the 400-line rule); the 13 (c) rows as a common constant, held on the JVM
+  to the table by `CosRowsCommonDigestTest`.
+- `CosRowsCommonDigestTest` is a class of its own rather than lines in `Step10CommonDigestTest`, which reads only 1b's file.
+- The comment on `SIMCTL_CHILD_BROUTER_COS_TILES_DIR` in `brouter.yml` updated to say the group reaches its tiles by the
+  eighth field.
+- Plants of 0.1% rather than 1 ulp; two extra plants (row 474 never recorded, in each counting seam).
+
+## 10. Not checked
+
+- Routes beyond these 472 cases through the 8 rows; nor the other 5 (c) rows (1295, 1297, 1310, 1311, 1318), out of scope.
+- The production-table plant on the simulator (only on the JVM); the simulator's counting seam was planted on the JVM only.
+- A full local `jvmTest`: only the classes named in §4 ran here; the full suite ran in CI (262).
+- Whether the engine ever reads the table off the calling thread (§6).
