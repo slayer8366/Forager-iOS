@@ -7676,3 +7676,19 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **State.** The cosine-row work the owner chose with "Cover them now" (-182) is finished and reviewed on `brouter-port-5b`. `brouter-port` is still at `a014100` and `main` holds the record only to -189. Merging `brouter-port-5b` into `brouter-port`, and a record PR for -190 onward, each wait for the owner's word. After that, the app's map-first phase of `docs/plans/2026-11-12-app-port-plan.md`.
 
 **Notes:** Written by the planner session by hand. Next free ID -196.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-196
+**Timestamp:** 2026-11-17T11:12:09Z
+**Continues:** -195, -180
+**Title:** The owner's two rulings: merge `brouter-port-5b` into `brouter-port`, and open a record PR for -190 onward
+
+**The rulings, verbatim.** Asked "Merge brouter-port-5b into brouter-port?" (head `8475832`, CI green), the owner answered "Yes, merge it". Asked "Open a pull request to main for them, as you did with PR #7?" (entries -190 to -195), the owner answered "Yes, open the PR".
+
+**Done on the first.** `brouter-port` moved from `a014100` to `7d4d721`, a merge commit of `brouter-port-5b` at `8475832`, pushed plainly (no rebase, no force). The merged tree is identical to `8475832`'s (`git diff --stat` between them prints nothing). CI on `7d4d721` had not been read when this was written.
+
+**Done on the second.** The PR is opened from `ccr-8ee6e614-32enzt` to `main` after this entry is pushed, so it carries -190 to -196. It is merged only when the owner names it. The "Yes, open the PR" above is a word to open it, not to merge it.
+
+**Notes:** Written by the planner session by hand. Next free ID -197.
