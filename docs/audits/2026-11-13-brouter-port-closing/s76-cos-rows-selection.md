@@ -1,0 +1,170 @@
+# Session 76: the cosine rows' group, its selection
+
+Coder Plumb Ledger, session 76. Branch `brouter-port-5b`, base `cd9d1c540e605ff8deff23a00e00ea6348a5ca22` (checked:
+`git ls-remote origin brouter-port-5b` gave that head, `git status --short` printed nothing). This is dispatch 6 of
+session 72's order of work (`s72-cosine-rows-tiles-prebuild.md` §6, item 6). Marks: [C] confirmed by a run or a read
+named here, [I] inferred, [U] unverified. No coordinate and no node id is written here.
+
+The owner's ruling this serves, verbatim: "Cover them now". The planner's decisions, as dispatched: 59 cases per row,
+472 in all, drawn per row; the expected rows in a resource of their own beside `expected-1b.tsv`; a new generator class
+beside `LBGenerator`.
+
+## 1. What is there now [C, read at `cd9d1c5`]
+
+- **`LBGenerator`** (`brouter/src/jvmTest/.../oracle/e3/LBGenerator.kt`): node-weighted start over every (c) row in every
+  tile of the folder it lists (`:26, 36-44, 81-86`); the rest of a draw at `:87-97`. s72 §3.1 showed it is the wrong draw
+  for these rows (one row takes 68%).
+- **`E3LBTest`** (`.../oracle/e3/strata/E3LBTest.kt`): `E3Strata.jdk` (`:19`), seed `20261207L` fixed in the class
+  (`:52`), ends checked in one row before routing (`:27-34`), `E3Targeted.select` with reach "route in the band" read from
+  R1's extent (`:35-41`), then `E3Targeted.stability` and `report` (`:45`).
+- **`E3Targeted`** (`.../strata/E3Targeted.kt`): N 59, CAP 20 × 59 = 1,180 draws (`:15-16`); selection by R1 with R2
+  equal to it (`E3Select.kt:126`).
+- **The stability rule:** `E3Stability.kt:32-34`: a case is stable when R1 to R6 give one tuple and the logged runs R2,
+  R3, R4, R5 give one list of collection lines. Six regimes per case in five JVMs: R1+R2 in one fresh JVM, R3 one JVM
+  over the whole list, R4, R5, R6 a fresh JVM each (`:54-62`). E3's stop: more than 5% unstable (`:43`), applied by
+  `E3Strata.report` (`E3Strata.kt:34-50`), which also requires the control to move between R1 and R4 (`:47-48`).
+- **1b's expected file:** `E3Expected.RESOURCE` `/e3/expected-1b.tsv` (`E3Expected.kt:19`), its strata listed with
+  count and stability table in `E3Expected.STRATA` (`:29-42`), no coordinate stored (`:10`), written by
+  `E3ExpectedWriteTest` from a fresh R1 per case compared with the logged R1 (`E3ExpectedWriteTest.kt:43-73`).
+- **The seam:** `LibmSeam.scales(row)` (`LibmSeam.kt:16`), called only through `CheapRuler.getLonLatToMeterScales`
+  (`CheapRuler.kt:53`); the engine's seam is `RoutingContext(internal val libm: LibmSeam = MsunLibm)`
+  (`RoutingContext.kt:19`). `git grep MsunLibm` in `commonMain` finds two other uses that do not take the context's
+  seam: `SearchBoundary`'s default (`SearchBoundary.kt:14`; `git grep "SearchBoundary("` in `commonMain` finds no
+  constructor call) and `FormatJson.kt:330` (output formatting, which `doRun` does not reach [I, not traced]).
+- **The tiles:** `TestTiles.cosRows` (`TestTiles.kt:44-47`), five tiles, release `brouter-cos-tiles-2026-11-17`, fetched
+  by `fetchCosTiles` for every `oracleJvm()` task, `e3Strata` among them (`build.gradle.kts:150-151`).
+- **`e3Strata`** (`build.gradle.kts:195-211`): refuses to start without `-Pbrouter.e3.jdk`; `E3Strata.jdk` refuses any
+  JDK but Eclipse Adoptium 21.0.13+9-LTS amd64 (`E3Strata.kt:17, 23-31`). Session 75 ran it with
+  `tools/fetch-temurin.sh` into scratch and `-Pbrouter.e3.jdk=<home>` (`s75-cos-tiles-pins.md` §4.3). This session did
+  the same: `tools/fetch-temurin.sh` into scratch printed `Temurin 21.0.13+9 ready` (pins matched) [C].
+
+## 2. Design
+
+### 2.1 Files
+
+| file | what |
+|---|---|
+| `oracle/e3/CosRowsGenerator.kt` | the generator (§2.2), with `ROWS`, `SEEDS` and `stratum(row)` |
+| `util/CountingLibm.kt` | the counting seam (§2.3) |
+| `oracle/e3/strata/E3CosRowsTest.kt` | the stratum test in `e3Strata` (§2.4) |
+| `oracle/e3/E3CosRowsExpected.kt` | the new resource's name, listing and log reader (§2.5) |
+| `oracle/e3/strata/E3CosRowsExpectedWriteTest.kt` | the writer for the new resource (§2.5) |
+| `resources/e3/expected-cosrows.tsv` | the 472 rows, after the runs |
+| `oracle/e3/E3CosRowsExpectedFileTest.kt` | the ordinary `jvm` test that holds the file (§2.6), after the runs |
+| `docs/audits/2026-11-13-brouter-port-closing/s76/` | the 8 committed stability tables and 8 selection tables, and the log's key lines |
+
+All under `brouter/src/jvmTest/`. No `commonMain` change, no engine class, no change to `LBGenerator`, `E3LBTest`,
+`E3Expected`, `E3ExpectedWriteTest`, `E3ExpectedFileTest` or `expected-1b.tsv`.
+
+### 2.2 The generator, and the seeds
+
+`CosRowsGenerator(segments)`: `LBGenerator`'s band scan for each of the 8 rows (`ROWS` = 474, 488, 502, 663, 675, 1046,
+1053, 1079), and `draws(row, prefix, profile)`, one `java.util.Random` sequence per row. A draw: the start uniformly from
+the row's nodes (one `nextDouble`, the form `LBGenerator.kt:83` uses over its cumulative counts), then `LBGenerator`'s
+`:87-97` unchanged: distance, side, target latitude in the row's band, the nearest node, the three rejections.
+
+**Seeds, fixed in the generator class (`CosRowsGenerator.SEEDS`) and pushed before any run:** LB's 20261207 plus the row:
+
+| row | 474 | 488 | 502 | 663 | 675 | 1046 | 1053 | 1079 |
+|---|---|---|---|---|---|---|---|---|
+| seed | 20261681 | 20261695 | 20261709 | 20261870 | 20261882 | 20262253 | 20262260 | 20262286 |
+
+These are the seeds s72 §3.3's scratch run used, so its draw counts are a prediction for this run (§3). They are held in
+the generator rather than the test so the next dispatch's logic and production runs redraw the same cases from one
+place (as `RoutingEngineStep9Test` repeats LB's seed; here it would not need to).
+
+### 2.3 The counting seam
+
+`CountingLibm(inner: LibmSeam)`: counts every `row` passed to `scales` (a concurrent map of counters), passes each call
+to `inner` unchanged, passes `atan2` through. `rows` gives the set read. One instance per run. It wraps `OracleLibm`
+here (the oracle's own table, the logic run); it wraps `MsunLibm` for a production run the same way. It lives in
+`jvmTest`; the simulator will need its own in `commonTest` (the next dispatch's).
+
+**What it counts and what it does not.** The oracle runs in child JVMs (`E3Launcher`) and its `CheapRuler` is static Java,
+so its own row reads cannot be counted without changing the oracle. The rows are counted on the port's run of the same
+case on the oracle's table, whose logic is held equal to the oracle's elsewhere (steps 8 and 9) [I: that the port reads
+the rows the oracle reads; what is confirmed is the port's reads].
+
+### 2.4 The stratum test, `E3CosRowsTest`, in `e3Strata`
+
+1. `E3Strata.jdk("COS")`: refuses anything but the pinned Temurin.
+2. Asserts 13 (c) rows and that the 8 are among them; prints each row's node count.
+3. For each row in order, `E3Targeted.select` with label and stratum `COS<row>` (ids `COS<row>-0001` on), 59 cases, cap
+   1,180 draws (`E3Targeted.CAP`, the stated draw limit), its draws checked before routing to have both ends in the
+   row. **Mark:** no route, or the R1 route leaving the row's band (`E3LBTest.kt:35-41`'s rule): rejected. Otherwise the
+   case runs once through the port in this JVM with `RoutingContext(CountingLibm(OracleLibm))` (the calls of
+   `RoutingEngineF0Test.port`); **kept only if its own row is among the rows read**; else rejected as "the port on the
+   oracle's table did not read row r".
+4. After all 8 selections and before any stability run, the row assertion; each failure names its row:
+   - every row has 59 kept within its cap, else `row r: k of 59 kept after n draws (cap 1180)`;
+   - every kept case's own row is among its recorded rows (the keep rule, checked again on the recorded sets: it can
+     fail only if the keep logic and the record disagree, so it is not separate evidence);
+   - the union of rows read by all kept cases, intersected with the 13, equals the 8, else naming the missing and extra.
+5. `E3Targeted.stability` per row (work folder `<work>/COS<row>`), then `E3Strata.report` per row (E3's controls and
+   5% stop), all reported before the first failure is thrown. Prints per row: draws, kept, stable of 59; and the total
+   time.
+
+The port's outcome is not compared. That is the next dispatch's logic run.
+
+### 2.5 The new resource, and how it is listed and held
+
+- **`E3CosRowsExpected`**: `RESOURCE` `/e3/expected-cosrows.tsv`; `LOGS` `../docs/audits/2026-11-13-brouter-port-closing/s76`;
+  `STRATA`, by analogy with `E3Expected.STRATA`: each `COS<row>` to (59, `cos<row>-stability.tsv`); `logged(name)` reads a
+  committed table as `E3Expected.logged` does. The file's form is `E3Expected`'s (its `write`, `read`, `row`, `COLUMNS`),
+  unchanged. `E3Expected.STRATA` is not touched, so `E3ExpectedFileTest.everyStratumHasItsCount` and the rest assert what
+  they did.
+- **The writer, `E3CosRowsExpectedWriteTest`** (a class of its own; `E3ExpectedWriteTest` would re-run every 1b stratum
+  and needs their work folders): for each `COS<row>`, the case list the stability run left in `<work>/COS<row>/cases.tsv`,
+  each case's R1 once more in a fresh JVM (`E3Stability.launch("R1R2")`, as `E3ExpectedWriteTest.kt:50`), compared with
+  the R1 logged in the committed `cos<row>-stability.tsv`. Any difference, any case logged other than `stable`, or a
+  count other than 59 is a stop and no file is written. Every row is `exact`. Head: the `# jdk ` line and the tuple and
+  compare lines. Prints the row count and the file's SHA-256. Copied by hand into `src/jvmTest/resources/e3/`.
+- **So "stable" means:** stable by `E3Stability.kt:32-34` over the six regimes of §1, plus the same R1 a seventh time
+  in the writer.
+
+### 2.6 The ordinary `jvm` test, `E3CosRowsExpectedFileTest`
+
+Reads the resource; two tests:
+- `rowsAreFiftyNinePerCosRow`: 472 rows, ids distinct, and the count per id prefix (before the first `-`) equals
+  `STRATA`'s, each 59; each row's stratum column equals its id prefix.
+- `fileIsItsPinnedDigest`: SHA-256 of the resource's bytes equals a constant pinned in `E3CosRowsExpected`.
+
+**Seen failing first** with `revert.sh`: one row's tuple digest changed by one character in the resource (expected: the
+digest test fails, the count test passes); then one row's id prefix changed from `COS474` to `COS488` (expected: both
+fail, the count naming COS474 58 and COS488 60).
+
+### 2.7 The row assertion's plant
+
+`revert.sh` runs `jvmTest` only, and this test runs only in `e3Strata`. So a scratch copy of `revert.sh` with the one
+Gradle line changed to `:brouter:e3Strata -Pbrouter.e3.jdk=<home> --tests '*E3CosRowsTest*'` and the XML folder to
+`test-results/e3Strata` (same copy, edit, restore from the copy, `cmp`, compile-error refusal; this copy counts both
+`^e: ` and ` e: `). The plant, in `CountingLibm.scales`: `counts.computeIfAbsent(row) ...` guarded by `if (row != 474)`,
+so the run is unchanged except that row 474 is never recorded. Expected: no COS474 candidate is kept; COS474 draws to its
+cap of 1,180; the test fails before any stability run with `row 474: 0 of 59 kept after 1180 draws (cap 1180)` and the
+group's `missing [474]`; the other 7 rows select as in the real run. After: the file `cmp`-equal to its saved copy and
+`git diff HEAD` empty.
+
+## 3. Predictions (before any run)
+
+- **P1, draws per row** (draws counted until the 59th kept). s72 §3.3 on the 14 November bytes with these seeds: 474 189,
+  488 119, 502 122, 663 123, 675 119, 1046 92, 1053 106, 1079 95. Since then the release's bytes differ; 7 of the 8 rows'
+  node sets are equal and row 675's differs by 2 nodes in, 2 out (`s75` §5.2), so I predict the same counts within a few
+  draws in 7 rows, and possibly a different sequence from some draw on in row 675. The extra rule (R2 equal to R1) and the
+  row-read rule rejected none in s72 (59 of 59 read their row there, on msun's table), so I predict no rejection for
+  either here [I].
+- **P2, kept:** 59 of 59 in every row, within the cap; the group reads exactly the 8 (c) rows.
+- **P3, stability:** 59 of 59 stable in each row (LB was, `25-lb-e3Strata.log`); E3's stop passes. Time about 35 to 60
+  minutes in all (s72 §5), on 4 cores here (3 workers).
+- **P4, the writer:** 472 rows, R1 equal to its log in all 472, no stop.
+- **P5, the plant:** as §2.7, failing naming row 474 in two messages.
+- **P6, the file test plants:** as §2.6.
+- **P7, CI on the last code commit:** `jvm` `TOTAL:` 257 (255 + the 2 tests of §2.6), 0 failures; `jvm-production`
+  unchanged (2); `ios-smoke` 60 and 7, `OK on the iOS simulator: all 24 classes ran`; `ios-memory` 3, 1, 1, its gates OK;
+  0 compile errors in each. Simulator results are simulator-checked.
+- **P8:** `git diff --stat cd9d1c5 -- brouter/src/jvmTest/resources/e3/expected-1b.tsv
+  brouter/src/jvmTest/kotlin/com/zynergylabs/forager/brouter/oracle/e3/E3Expected.kt` prints nothing at the end.
+- **P9:** `scan.sh` prints 0 on every commit.
+
+## 4. Results
+
+(Written as they come.)
