@@ -7493,3 +7493,62 @@ it and not yet on `main`.
 uncommitted work of its own in its clone, left to it.
 
 **Notes:** Written by the planner session by hand. Next free ID -191.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-191
+**Timestamp:** 2026-11-17T03:06:29Z
+**Continues:** 2026-10-28-189, 2026-10-28-190
+**Title:** Sessions 75 and 75b: the release is pinned and its eight row counts hold by the port's own reader; the rebuilt-bytes question of -189 is answered; two outside CI failures
+
+**Two more container restarts.** Session 75 was cut off waiting on its red run; session 75b, sent to finish it, was
+cut off waiting on the green run. Both had pushed their work. The last step, reading the green run, was done by the
+planner. Neither session's final report was delivered.
+
+**On `brouter-port-5b`, head `cd9d1c5` (`git ls-remote`; tree clean; six commits on `27cb05a`, project trailer on
+each, each 0 on the widened scan; read by the planner).** Added: `tools/tile-pins-cos.tsv` (the release's pin file),
+`jvmTest/.../tiles/CosTilePinsTest.kt` (3 tests) and `CosRowCountsTest.kt` (1 test), the findings
+`docs/audits/2026-11-13-brouter-port-closing/s75-cos-tiles-pins.md`. Changed: `brouter/build.gradle.kts`
+(`fetchCosTiles`), `TestTiles.kt` (`cosRows`), `.github/workflows/brouter.yml` (15 lines, the simulator jobs told the
+new folder; no simulator test added). No engine class changed.
+
+**Red first, as predicted:** run 43986425514 on `bd2801d`, which pins `E145_S45.rd5` one byte too large in the test:
+`jvm` `failure`, 255 tests, 2 failures, both `CosTilePinsTest`, "E145_S45.rd5: bytes expected:<6316105> but
+was:<6316104>"; the other three jobs `success` (read by the planner). The fix, `22092e7`, changes that one number.
+
+**Green, run 43995165286 on `22092e7`, attempt 2 (read by the planner):** four jobs `success`, 0 compile-error lines
+in each log (both forms counted).
+- `jvm`: 255 tests, 0 failures (was 251). `CosTilePinsTest` 3 of 3, among them `existingSegmentsFolderIsUnchanged`;
+  `CosRowCountsTest` 1 of 1, printing for each row "port reader N | release N": 5,159; 16,239; 1,124; 2,523; 7,788;
+  96,104; 10,205; 2,461, each pair equal. `fetchCosTiles` ran.
+- `ios-smoke`: 60 and 7, "OK on the iOS simulator: all 24 classes ran"; `ios-memory`: 3, 1, 1 with both gate lines;
+  `jvm-production`: 2. Simulator-checked.
+- **Attempt 1's `jvm` job failed before any test:** the runner could not download Gradle ("gradle-9.0.0-bin.zip
+  failed: timeout"); no compile error, no test result. The planner reran the failed job on the same commit through
+  GitHub's rerun; no commit was pushed to kick it.
+
+**-189's open observation, answered by session 75 (its runs, in its findings section 5; read by the planner, not
+rerun):**
+- The check read the new bytes: the release log's per-tile node totals (231,962; 554,495; 127,490; 414,290; 174,367)
+  differ from the dry run's and equal the port reader's on the release's files. The planner sees the same five totals
+  in the green run's log.
+- Seven of the 8 rows did not change: every cell overlapping them is byte-equal between the 14 November copies and
+  the release, and their node-id sets have equal digests. The rebuild changed 6 to 27 cells per tile elsewhere.
+- **Row 675 changed and its count did not show it:** 2 ids left and 2 came in, 7,788 both times, in 4 changed cells.
+  A count cannot see an equal-count change; a digest of each row's id set would. Not added: the pins hold the
+  published bytes from now on, so the capture is not rerun on them. Named in case a later release wants it.
+
+**The plants and the R sequence pin (coder's, in the findings; not rerun by the planner):** plants on the row rule and
+on an expected count each named the row; `E3RSequenceTest` run on the pinned Temurin with its control.
+
+**Another outside failure, the same day:** the owner's rerun of the ordinary `brouter` run on `7776da9` (attempt 2 of
+run 43573090515) ended `failure` in `jvm` after 35 seconds, Maven Central answering "429 Too Many Requests" for the
+Kotlin plugin; attempt 1 had passed on all four jobs.
+
+**Not shown:** the tiles read on the simulator (no simulator test yet); anything about routes on the new tiles in a
+committed test; what changed in row 675's 4 cells beyond node ids.
+
+**Next (the planner's):** session 76, the per-row generator and its expected rows (session 72's dispatch 6).
+
+**Notes:** Written by the planner session by hand. Next free ID -192.
