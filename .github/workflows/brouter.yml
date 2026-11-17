@@ -104,8 +104,8 @@ jobs:
       # Step 10 (RECORD -137, decision 4): the pinned tiles for the simulator's tests, fetched by the build's own fetchTiles
       # (tools/fetch-tiles.sh, the same pins and release as the JVM; each file refused unless its size and SHA-256 match),
       # and the oracle's profiles2/ (with lookups.dat) by fetchOracle (tools/fetch-oracle.sh, pinned), for F0's routes.
-      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
-        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
+      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle; fetchCosTiles, session 75)
+        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle :brouter:fetchCosTiles
       # Step 10 (RECORD -138, decision 2): the generated groups' cases (NT, LB, CR, DL-lat, DL-lon) drawn at run time on this
       # runner's JVM (NtCasesWriteTest, gated on the variable, which names NT's file; the others lie beside it) and written
       # under brouter/build/step10/, outside test-results/ (the only folder uploaded). Never committed or printed: the test
@@ -117,8 +117,10 @@ jobs:
       - name: commonTest on the iOS simulator
         env:
           # simctl hands SIMCTL_CHILD_X to the simulator's process as X (PinnedTileReadTest reads BROUTER_TILES_DIR;
-          # F0RouteCommonTest also BROUTER_ORACLE_DIR; NtEngineCommonTest BROUTER_STEP10_NT_CASES).
+          # F0RouteCommonTest also BROUTER_ORACLE_DIR; NtEngineCommonTest BROUTER_STEP10_NT_CASES). BROUTER_COS_TILES_DIR
+          # (session 75): the cosine rows' tiles, under its segments/, for a later session's simulator group; no test reads it yet.
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_COS_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles-cos
           SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
           SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
         run: ./gradlew --no-daemon :brouter:iosSimulatorArm64Test
@@ -184,8 +186,8 @@ jobs:
           xcodebuild -version
           xcrun simctl list runtimes
           xcrun simctl list devices available
-      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle)
-        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle
+      - name: Step 10 - the pinned tiles and profiles for the simulator (fetchTiles, fetchOracle; fetchCosTiles, session 75)
+        run: ./gradlew --no-daemon :brouter:fetchTiles :brouter:fetchOracle :brouter:fetchCosTiles
       - name: Step 10 - the generated groups' cases for the simulator, drawn on this runner's JVM
         env:
           BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
@@ -193,6 +195,7 @@ jobs:
       - name: The memory groups on the iOS simulator (MP64, ML5, PM5)
         env:
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_COS_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles-cos
           SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
           SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
           SIMCTL_CHILD_BROUTER_STEP10_MEMORY: '1'
@@ -212,6 +215,7 @@ jobs:
       - name: R's fallback on the iOS simulator (first 12 cases of each StdModel profile)
         env:
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_COS_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles-cos
           SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
           SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
           SIMCTL_CHILD_BROUTER_STEP10_R: '1'
@@ -228,6 +232,7 @@ jobs:
       - name: The stack ladder on the iOS simulator (one MP64 case on threads of 8 MB down to 512 KB)
         env:
           SIMCTL_CHILD_BROUTER_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles
+          SIMCTL_CHILD_BROUTER_COS_TILES_DIR: ${{ github.workspace }}/brouter/build/tiles-cos
           SIMCTL_CHILD_BROUTER_ORACLE_DIR: ${{ github.workspace }}/brouter/build/oracle
           SIMCTL_CHILD_BROUTER_STEP10_NT_CASES: ${{ github.workspace }}/brouter/build/step10/nt-cases.tsv
           SIMCTL_CHILD_BROUTER_STEP10_LADDER: '1'

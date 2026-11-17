@@ -1,0 +1,23 @@
+# Tile pins written by tools/tile-check/capture-cos.sh at tools commit 4dc6c23efb0d38ad70d62802aba56a6ad946cd70,
+# in run https://github.com/slayer8366/Forager-iOS/actions/runs/43985424626.
+# Each brouter.de tile was checked in BRouter 1.7.10 by CosTileCheck before its row was written. Columns as tools/tile-pins.tsv.
+asset	path	bytes	sha256	source	last_modified	etag	captured
+E145_S45.rd5	segments/E145_S45.rd5	6316104	cb3074754c0f90686f39bfe018aa89ee3df40917b2b316bca9edc01e1e1709a1	https://brouter.de/brouter/segments4/E145_S45.rd5	Mon, 16 Nov 2026 01:03:01 GMT	"6afa5645-606048"	2026-11-17T00:10:27Z
+E170_S40.rd5	segments/E170_S40.rd5	8513057	147a6c28fc967ec47fda647fe71cad2140261f4b008b9e5d637f94567871c521	https://brouter.de/brouter/segments4/E170_S40.rd5	Mon, 16 Nov 2026 01:03:01 GMT	"6afa5645-81e621"	2026-11-17T00:10:29Z
+E15_S25.rd5	segments/E15_S25.rd5	4854933	9ba3ab2d7456668c78d83e72fe6f5f1a1b7c322a8cc683c833814f20330f57c6	https://brouter.de/brouter/segments4/E15_S25.rd5	Mon, 16 Nov 2026 01:03:01 GMT	"6afa5645-4a1495"	2026-11-17T00:10:32Z
+W95_N10.rd5	segments/W95_N10.rd5	7472453	420054ba06efb2e1396957807d0d9f2fddbf21cbf96e98c87bc87376e4fb6231	https://brouter.de/brouter/segments4/W95_N10.rd5	Mon, 16 Nov 2026 01:03:01 GMT	"6afa5645-720545"	2026-11-17T00:10:34Z
+W20_N15.rd5	segments/W20_N15.rd5	2622128	fe8514fdcc89cf39e7d74e29b0868da77b0169ea6330dde5fc368ad04b60f402	https://brouter.de/brouter/segments4/W20_N15.rd5	Mon, 16 Nov 2026 01:03:01 GMT	"6afa5645-2802b0"	2026-11-17T00:10:37Z
+# The check's own counts on these bytes (CosTileCheck: floor 500 nodes per row; 16 attempts at most per row):
+# row	E145_S45	474	nodes=5159	attempt=1/16	track nodes=28	in band=28	distance=1828 m
+# row	E145_S45	488	nodes=16239	attempt=1/16	track nodes=13	in band=13	distance=874 m
+# ends	E145_S45	digest=44b64002dce78592
+# row	E170_S40	502	nodes=1124	attempt=1/16	track nodes=19	in band=19	distance=1211 m
+# ends	E170_S40	digest=a684106a538f465a
+# row	E15_S25	663	nodes=2523	attempt=1/16	track nodes=36	in band=36	distance=1617 m
+# row	E15_S25	675	nodes=7788	attempt=1/16	track nodes=50	in band=50	distance=1510 m
+# ends	E15_S25	digest=d0c15a34c2afea9d
+# row	W95_N10	1046	nodes=96104	attempt=1/16	track nodes=62	in band=62	distance=2898 m
+# ends	W95_N10	digest=7dfe526e0c69d9fc
+# row	W20_N15	1053	nodes=10205	attempt=2/16	track nodes=223	in band=223	distance=8385 m
+# row	W20_N15	1079	nodes=2461	attempt=1/16	track nodes=9	in band=9	distance=1804 m
+# ends	W20_N15	digest=0933c4d090f95d5f

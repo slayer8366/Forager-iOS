@@ -113,3 +113,32 @@ fails, and its message names the rows whose counts moved [I: which rows move dep
 ## 4. Results
 
 (Written as they come.)
+
+### 4.1 The red commit, run locally first [C]
+
+`./gradlew --max-workers=2 :brouter:jvmTest --tests '*CosTilePinsTest' --tests '*CosRowCountsTest' --tests '*.TilePinsTest'`
+on the container's OpenJDK 21.0.12 (not CI's Temurin), log `.../scratchpad/s75/red-local.log`: 0 lines matching `^e: `
+or ` e: `, 6 tests, 2 failed, as P2 predicted for these classes.
+
+- **P1 held.** `fetchCosTiles` fetched the five from the release, each "matches its pins", "5 tiles ready in
+  .../build/tiles-cos". `build/tiles/segments/` still lists its four (`existingSegmentsFolderIsUnchanged` passed, printing
+  `E170_S50.rd5, W70_N40.rd5, W75_N35.rd5, W75_N40.rd5`).
+- **The two failures are the planted pin and nothing else:** `pinFileIsTheReleasesOwn`: `...E145_S45.rd5	631610[5]...
+  but was ...631610[4]...`; `eachFetchedTileMatchesItsPin`: `E145_S45.rd5: bytes expected:<6316105> but was:<6316104>`.
+  The file's own SHA-256 check passed before the row comparison, so the committed file is the release's.
+- **P5 held: the port's reader gives the release's count in all 8 rows** (`CosRowCountsTest` passed):
+
+| tile | row | port reader | release `# row` | tile's nodes, port reader (release) | tile's nodes, s72 on 14 Nov bytes |
+|---|---:|---:|---:|---:|---:|
+| E145_S45 | 474 | 5,159 | 5,159 | 231,962 | 231,750 |
+| E145_S45 | 488 | 16,239 | 16,239 | | |
+| E170_S40 | 502 | 1,124 | 1,124 | 554,495 | 554,299 |
+| E15_S25 | 663 | 2,523 | 2,523 | 127,490 | 127,474 |
+| E15_S25 | 675 | 7,788 | 7,788 | | |
+| W95_N10 | 1046 | 96,104 | 96,104 | 414,290 | 414,279 |
+| W20_N15 | 1053 | 10,205 | 10,205 | 174,367 | 174,360 |
+| W20_N15 | 1079 | 2,461 | 2,461 | | |
+
+  **The whole-tile totals moved** (by 7 to 212 nodes per tile) while the 8 rows did not. So the port's reader did read
+  different bytes from 14 November's: the files changed elsewhere, not in these rows' counts. The id-set comparison is in
+  §5.
