@@ -254,3 +254,56 @@ Log `.../scratchpad/s76/s76rowplant-gradle.log`.
   474" (every in-band candidate with R2 equal to R1), 0 kept. Both failures name row 474 and could come from no other
   edit: the other 7 rows kept 59 each with exactly §4.1's draw counts (120, 120, 117, 132, 89, 106, 86), so their
   selection repeated draw for draw on a second run. P5 held.
+
+### 4.5 CI on the last code commit, `5f280f7` (run 44010575381) [C]
+
+Logs read with `gh api .../actions/jobs/<id>/logs` into `.../scratchpad/s76/ci-<job>.log`.
+
+| job | conclusion | `TOTAL:` lines | gate lines | compile errors (`^e: ` / ` e: `) |
+|---|---|---|---|---|
+| `jvm` (133796343411) | success | `tests 257, failures 0, errors 0, skipped 0 in 112 files` | (none in this job) | 0 / 0 |
+| `jvm-production` (133796343031) | success | `tests 2, failures 0, errors 0, skipped 0 in 1 files` | (none) | 0 / 0 |
+| `ios-smoke` (133796343273) | success | `tests 60 ... in 29 files`; `tests 7 ... in 2 files`, each `failures 0` | `OK on the iOS simulator: all 24 classes ran`; `OK: all 2 classes ran` | 0 / 0 |
+| `ios-memory` (133796343434) | success | `tests 3`, `tests 1`, `tests 1`, each `failures 0` | `OK on the iOS simulator: all 3 classes ran (.../ios-memory-groups)`; `OK on the iOS simulator: all 1 classes ran (.../ios-r-fallback)` | 0 / 0 |
+
+iOS results are simulator-checked. P7 held: `jvm` 257 = 255 + `E3CosRowsExpectedFileTest`'s 2 (both PASSED in the log),
+and 112 files, one more than s75's 111. No 429 or download failure in any job.
+
+### 4.6 What did not move [C]
+
+`git diff --stat cd9d1c5 -- expected-1b.tsv E3Expected.kt E3ExpectedFileTest.kt E3ExpectedWriteTest.kt LBGenerator.kt
+E3LBTest.kt brouter/src/commonMain` (full paths) printed nothing. P8 held. `scan.sh` printed 0 on every commit. P9 held.
+
+## 5. Confirmed vs inferred
+
+- [C] Every count, digest and time in §4, from the logs named there.
+- [I] That the oracle reads the rows the port reads on the oracle's table (§2.3): the oracle's own reads are not counted.
+- [I] That `FormatJson.kt:330`'s direct `MsunLibm` is not reached by `doRun` (§1); not traced.
+
+## 6. Could not determine
+
+- Why 7 rows' draw counts differ from s72 §3.3's by 1 to 13 with the same seeds. Not traced.
+
+## 7. Premises in the brief that were wrong
+
+- The brief predicted (from s72) a long local run; the selection and stability took 11.7 minutes, not 35 to 60.
+- `revert.sh` runs `jvmTest` only, so it cannot run the row plant, which lives in `e3Strata`; a scratch copy was used
+  (§4.4), with its differences shown there.
+
+## 8. Decided beyond scope
+
+- **The seeds' home and values:** in `CosRowsGenerator.SEEDS`, 20261207 + row (s72's scratch seeds), so the next dispatch
+  redraws from one place.
+- **Stratum names `COS<row>`**, one per row, which are also the id prefixes and the resource's `stratum` column.
+- **The draw limit** is `E3Targeted.CAP` (1,180) per row, the existing cap, not a new number.
+- **A writer class of its own** (`E3CosRowsExpectedWriteTest`) rather than a change to `E3ExpectedWriteTest`, and its rule
+  that a case logged unstable is a stop (none was).
+- **Committed logs** in `s76/`: stability and selection tables per row, and the run's `E3` lines.
+- **The file test's** check that each row's stratum column equals its id prefix, beside the three asked for.
+
+## 9. Not checked
+
+- The port's outcomes against the oracle's on these 472 cases (the next dispatch's logic and production runs).
+- The rows read on msun's table (`CountingLibm(MsunLibm)`); only the oracle's table was counted.
+- `E3CosRowsTest` and the writer in CI: `e3Strata` runs in no CI job; both ran only here, on the pinned Temurin.
+- A second full stability run: the plant's run repeated 7 rows' selections draw for draw, but no stability.
