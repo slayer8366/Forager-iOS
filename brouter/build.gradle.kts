@@ -57,6 +57,30 @@ val fetchTiles by tasks.registering(Exec::class) {
     )
 }
 
+// The cosine rows' tiles (session 72's dispatch 5; session 75): the five brouter.de tiles of the release
+// brouter-cos-tiles-2026-11-17, fetched by tools/fetch-tiles.sh into build/tiles-cos, each refused unless its size and
+// SHA-256 match tools/tile-pins-cos.tsv (a byte-for-byte copy of that release's own pin file). A folder of their own:
+// RGenerator and LBGenerator list build/tiles/segments, so a tile there would reshuffle R, CR and LB (s72 §3.2).
+val cosTilesRelease = "https://github.com/slayer8366/Forager-iOS/releases/download/brouter-cos-tiles-2026-11-17"
+val cosTilesDir = layout.buildDirectory.dir("tiles-cos")
+val cosTilePins = rootProject.layout.projectDirectory.file("tools/tile-pins-cos.tsv")
+val fetchCosTiles by tasks.registering(Exec::class) {
+    description = "Fetches the cosine rows' tiles from the brouter-cos-tiles-2026-11-17 release, refusing any that differs from its pin."
+    val scripts = rootProject.layout.projectDirectory.dir("tools")
+    inputs.file(scripts.file("fetch-tiles.sh"))
+    inputs.file(scripts.file("fetch-pinned.sh"))
+    inputs.file(cosTilePins)
+    inputs.property("release", cosTilesRelease)
+    outputs.dir(cosTilesDir)
+    commandLine(
+        "bash",
+        scripts.file("fetch-tiles.sh").asFile.absolutePath,
+        cosTilesDir.get().asFile.absolutePath,
+        cosTilesRelease,
+        cosTilePins.asFile.absolutePath,
+    )
+}
+
 // Stratum F0h (RECORD -58): Forager's heighted Harriman square, fetched by tools/fetch-f0h.sh from Forager's raw file at
 // commit d6e2a0415 into build/tiles-f0h/f0h, refused unless its size and SHA-256 match the pins in that script. Not in
 // the tile release or tools/tile-pins.tsv. Wired here as on brouter-port (RECORD -74): a fetch the oracle's test JVM
@@ -124,9 +148,11 @@ val fetchJacoco by tasks.registering(Exec::class) {
 
 // The oracle's test JVM, shared by jvmTest and e3Strata.
 fun Test.oracleJvm() {
-    dependsOn(fetchOracle, msunReference, fetchTiles, fetchF0h, fetchDropoff)
+    dependsOn(fetchOracle, msunReference, fetchTiles, fetchF0h, fetchDropoff, fetchCosTiles)
     systemProperty("brouter.oracle.dir", oracleDir.get().asFile.absolutePath)
     systemProperty("brouter.tiles.dir", tilesDir.get().asFile.absolutePath)
+    systemProperty("brouter.tiles.cos.dir", cosTilesDir.get().asFile.absolutePath)
+    systemProperty("brouter.tiles.cos.pins", cosTilePins.asFile.absolutePath)
     systemProperty("brouter.tiles.f0h.dir", f0hDir.get().asFile.absolutePath)
     systemProperty("brouter.tiles.dropoff.dir", dropoffDir.get().asFile.absolutePath)
     systemProperty("brouter.tiles.pins", tilePins.asFile.absolutePath)

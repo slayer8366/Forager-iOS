@@ -36,6 +36,21 @@ object TestTiles {
         "dropoff",
     )
 
+    /**
+     * The folder holding the cosine rows' five tiles alone, from the release brouter-cos-tiles-2026-11-17, as the build's
+     * fetchCosTiles task leaves it (`brouter.tiles.cos.dir`; session 75). Never [segments]: RGenerator and LBGenerator
+     * list that folder, so a tile there would change R's, CR's and LB's draws (s72 §3.2).
+     */
+    val cosRows: File get() = File(
+        System.getProperty("brouter.tiles.cos.dir") ?: error("brouter.tiles.cos.dir is not set; run through Gradle's jvmTest"),
+        "segments",
+    )
+
+    /** The cosine rows' pin file the fetch read (`brouter.tiles.cos.pins`): tools/tile-pins-cos.tsv. */
+    val cosPinFile: File get() = File(
+        System.getProperty("brouter.tiles.cos.pins") ?: error("brouter.tiles.cos.pins is not set; run through Gradle's jvmTest"),
+    )
+
     /** The pin file the fetch read (`brouter.tiles.pins`). */
     val pinFile: File = File(
         System.getProperty("brouter.tiles.pins") ?: error("brouter.tiles.pins is not set; run through Gradle's jvmTest"),

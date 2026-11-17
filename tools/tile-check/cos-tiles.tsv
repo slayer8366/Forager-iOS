@@ -1,0 +1,9 @@
+# The cosine-row tiles (session 73; docs/audits/2026-11-13-brouter-port-closing/s73-cos-tiles-capture.md), read by
+# capture-cos.sh. Tile name, then the rows (ilat / 100000) each must hold nodes in, comma-separated. No coordinates.
+# The planner's choice of tiles, from session 72's measurement (s72-cosine-rows-tiles-prebuild.md, section 2).
+tile	rows
+E145_S45	474,488
+E170_S40	502
+E15_S25	663,675
+W95_N10	1046
+W20_N15	1053,1079

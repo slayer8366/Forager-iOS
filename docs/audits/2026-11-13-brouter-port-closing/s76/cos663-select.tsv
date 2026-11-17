@@ -1,0 +1,118 @@
+draw	id	R1-tuple	R2-tuple	R2-equals-R1	R2-collected-lines	R2-panic	R1-ms	memoryclass	R6-tuple	reach	result
+1	COS663-0001	route|18|36334|7668|a25f0d2ad577df60|85abf87cd3cefcb	route|18|36334|7668|a25f0d2ad577df60|85abf87cd3cefcb	true	0	false	198	64	-	route in row 663's band; row 663 read	taken COS663
+2	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+3	COS663-0003	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	163	64	-	no route: to-position not mapped in existing datafile	rejected
+4	COS663-0004	route|707|396808|126741|6ae4472b486ffb04|35f8c7e58e08f4b0	route|707|396808|126741|6ae4472b486ffb04|35f8c7e58e08f4b0	true	0	false	296	64	-	route leaves the band	rejected
+5	COS663-0005	route|176|17060|13401|84a7bda8c79e4e55|a06431e3e774b2fc	route|176|17060|13401|84a7bda8c79e4e55|a06431e3e774b2fc	true	0	false	338	64	-	route in row 663's band; row 663 read	taken COS663
+6	COS663-0006	route|2000|198982|102247|e09cefaabe847a3f|ffff2d438af1a78e	route|2000|198982|102247|e09cefaabe847a3f|ffff2d438af1a78e	true	0	false	344	64	-	route leaves the band	rejected
+7	COS663-0007	route|76|2861|2270|3657d268ad9e3638|c7d44f26e8752082	route|76|2861|2270|3657d268ad9e3638|c7d44f26e8752082	true	0	false	293	64	-	route in row 663's band; row 663 read	taken COS663
+8	COS663-0008	route|98|28323|10180|5aae83241c2d675b|b312d363e5ab2431	route|98|28323|10180|5aae83241c2d675b|b312d363e5ab2431	true	0	false	276	64	-	route in row 663's band; row 663 read	taken COS663
+9	COS663-0009	route|81|9340|7064|dc21c1e385d87adb|f59799bf4fe41f61	route|81|9340|7064|dc21c1e385d87adb|f59799bf4fe41f61	true	0	false	266	64	-	route in row 663's band; row 663 read	taken COS663
+10	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+11	COS663-0011	route|54|4148|3223|c8f1df98e1ca8d4d|3881fcb4bbc3c920	route|54|4148|3223|c8f1df98e1ca8d4d|3881fcb4bbc3c920	true	0	false	314	64	-	route in row 663's band; row 663 read	taken COS663
+12	COS663-0012	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	159	64	-	no route: from-position not mapped in existing datafile	rejected
+13	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+14	COS663-0014	route|331|16394|12051|8833ddac9dd9443c|708be46352ec3f64	route|331|16394|12051|8833ddac9dd9443c|708be46352ec3f64	true	0	false	216	64	-	route in row 663's band; row 663 read	taken COS663
+15	COS663-0015	route|21|990|787|58943dfe0e6bcebd|834e245d7cf65440	route|21|990|787|58943dfe0e6bcebd|834e245d7cf65440	true	0	false	193	64	-	route in row 663's band; row 663 read	taken COS663
+16	COS663-0016	route|57|62702|8160|d9b954616537fb8|f369c795eb7c74ff	route|57|62702|8160|d9b954616537fb8|f369c795eb7c74ff	true	0	false	161	64	-	route in row 663's band; row 663 read	taken COS663
+17	COS663-0017	route|399|177179|55077|93e013e6c27c38e9|d48c7ba5c97e806d	route|399|177179|55077|93e013e6c27c38e9|d48c7ba5c97e806d	true	0	false	238	64	-	route leaves the band	rejected
+18	COS663-0018	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	221	64	-	no route: from-position not mapped in existing datafile	rejected
+19	-	-	-	-	-	-	-	-	-	-	the end's node is the start	rejected
+20	COS663-0020	route|63|3429|2713|70c0217f101836e|ddc3fbf044193109	route|63|3429|2713|70c0217f101836e|ddc3fbf044193109	true	0	false	229	64	-	route in row 663's band; row 663 read	taken COS663
+21	COS663-0021	route|489|66050|20864|33428de8e76166e4|790e043880e507ec	route|489|66050|20864|33428de8e76166e4|790e043880e507ec	true	0	false	276	64	-	route in row 663's band; row 663 read	taken COS663
+22	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+23	COS663-0023	route|23|7754|2967|9a9930559b1ad246|f26fccf5a23db21a	route|23|7754|2967|9a9930559b1ad246|f26fccf5a23db21a	true	0	false	202	64	-	route in row 663's band; row 663 read	taken COS663
+24	COS663-0024	route|423|174896|52899|b61c21812b6838be|598e1b16f828ca80	route|423|174896|52899|b61c21812b6838be|598e1b16f828ca80	true	0	false	325	64	-	route leaves the band	rejected
+25	COS663-0025	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	154	64	-	no route: to-position not mapped in existing datafile	rejected
+26	COS663-0026	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	179	64	-	no route: to-position not mapped in existing datafile	rejected
+27	COS663-0027	route|190|71017|17253|a46506560672f71e|2cca0601220395f3	route|190|71017|17253|a46506560672f71e|2cca0601220395f3	true	0	false	225	64	-	route leaves the band	rejected
+28	COS663-0028	route|297|18942|15038|92c38101db9df337|6bcf4610231b5494	route|297|18942|15038|92c38101db9df337|6bcf4610231b5494	true	0	false	245	64	-	route in row 663's band; row 663 read	taken COS663
+29	COS663-0029	route|168|11314|8978|5e2a0d91f9e3f2c6|e1b44243dd6293e8	route|168|11314|8978|5e2a0d91f9e3f2c6|e1b44243dd6293e8	true	0	false	236	64	-	route in row 663's band; row 663 read	taken COS663
+30	COS663-0030	route|346|106129|51413|213fc5ff59b18ba6|ed467bd7d6c5f6e8	route|346|106129|51413|213fc5ff59b18ba6|ed467bd7d6c5f6e8	true	0	false	218	64	-	route leaves the band	rejected
+31	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+32	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+33	-	-	-	-	-	-	-	-	-	-	the end's node is the start	rejected
+34	COS663-0034	route|122|6452|4758|67fcfae9f5093334|c09cf62c0d524adf	route|122|6452|4758|67fcfae9f5093334|c09cf62c0d524adf	true	0	false	245	64	-	route in row 663's band; row 663 read	taken COS663
+35	COS663-0035	route|138|13852|10899|62d14cce7df0ecb9|e74f69237c647990	route|138|13852|10899|62d14cce7df0ecb9|e74f69237c647990	true	0	false	307	64	-	route in row 663's band; row 663 read	taken COS663
+36	COS663-0036	route|379|138687|41802|15c58b1f5fdc2222|836c60c330b6fcbe	route|379|138687|41802|15c58b1f5fdc2222|836c60c330b6fcbe	true	0	false	310	64	-	route leaves the band	rejected
+37	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+38	COS663-0038	route|201|79209|29963|139e1affd9e4c7cd|2a6757bc96798931	route|201|79209|29963|139e1affd9e4c7cd|2a6757bc96798931	true	0	false	254	64	-	route leaves the band	rejected
+39	COS663-0039	route|252|23838|18781|7f55ff959347be76|91ee12ee36b71e34	route|252|23838|18781|7f55ff959347be76|91ee12ee36b71e34	true	0	false	305	64	-	route in row 663's band; row 663 read	taken COS663
+40	COS663-0040	route|64|3201|2533|6d409365d1b5d7c4|35f59b14b3b63b55	route|64|3201|2533|6d409365d1b5d7c4|35f59b14b3b63b55	true	0	false	204	64	-	route in row 663's band; row 663 read	taken COS663
+41	COS663-0041	route|787|71138|42352|ba0a128a015ab705|bdbb9704dae8d4f0	route|787|71138|42352|ba0a128a015ab705|bdbb9704dae8d4f0	true	0	false	289	64	-	route in row 663's band; row 663 read	taken COS663
+42	COS663-0042	route|623|45493|28808|b6ed895ce1cd7751|cdf672b181e1d177	route|623|45493|28808|b6ed895ce1cd7751|cdf672b181e1d177	true	0	false	347	64	-	route in row 663's band; row 663 read	taken COS663
+43	COS663-0043	route|67|4434|3519|156ad71d44de0b4e|53889943597338c7	route|67|4434|3519|156ad71d44de0b4e|53889943597338c7	true	0	false	209	64	-	route in row 663's band; row 663 read	taken COS663
+44	COS663-0044	route|147|11742|9313|ec29b41cad2d1fe7|905a167447284059	route|147|11742|9313|ec29b41cad2d1fe7|905a167447284059	true	0	false	185	64	-	route in row 663's band; row 663 read	taken COS663
+45	COS663-0045	route|588|31982|22657|dd404493f953d6da|8905277c2b049ec4	route|588|31982|22657|dd404493f953d6da|8905277c2b049ec4	true	0	false	268	64	-	route in row 663's band; row 663 read	taken COS663
+46	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+47	COS663-0047	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	180	64	-	no route: from-position not mapped in existing datafile	rejected
+48	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+49	COS663-0049	route|772|85236|31609|8e96acad2b72209f|b05e1906f235ebb1	route|772|85236|31609|8e96acad2b72209f|b05e1906f235ebb1	true	0	false	287	64	-	route leaves the band	rejected
+50	COS663-0050	route|154|352917|38046|6c55f8c97c9e3871|4eef4459efae7099	route|154|352917|38046|6c55f8c97c9e3871|4eef4459efae7099	true	0	false	242	64	-	route leaves the band	rejected
+51	COS663-0051	route|1143|154389|62329|72634e73f5b51825|913b4e7a05b5f11a	route|1143|154389|62329|72634e73f5b51825|913b4e7a05b5f11a	true	0	false	248	64	-	route leaves the band	rejected
+52	COS663-0052	route|64|6956|5476|eddc0fb57e4a0c6|c6ad92a8df7d6d57	route|64|6956|5476|eddc0fb57e4a0c6|c6ad92a8df7d6d57	true	0	false	220	64	-	route in row 663's band; row 663 read	taken COS663
+53	COS663-0053	route|32|2359|1813|d2157e7aeed7cb13|e05d8492693b3605	route|32|2359|1813|d2157e7aeed7cb13|e05d8492693b3605	true	0	false	225	64	-	route in row 663's band; row 663 read	taken COS663
+54	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+55	COS663-0055	route|264|24738|12398|a36124f2de5f88bf|ba271d62e72f7b86	route|264|24738|12398|a36124f2de5f88bf|ba271d62e72f7b86	true	0	false	184	64	-	route in row 663's band; row 663 read	taken COS663
+56	COS663-0056	route|162|18154|13890|276ac4ebbda0765b|44fe3291ae3cd50c	route|162|18154|13890|276ac4ebbda0765b|44fe3291ae3cd50c	true	0	false	214	64	-	route in row 663's band; row 663 read	taken COS663
+57	COS663-0057	route|137|6775|5375|c291cb0eb882b653|53280e6557e49cbc	route|137|6775|5375|c291cb0eb882b653|53280e6557e49cbc	true	0	false	193	64	-	route in row 663's band; row 663 read	taken COS663
+58	COS663-0058	route|510|148457|49540|2c26689d9f8c42c9|11fdb06b518ed21a	route|510|148457|49540|2c26689d9f8c42c9|11fdb06b518ed21a	true	0	false	271	64	-	route leaves the band	rejected
+59	COS663-0059	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	158	64	-	no route: from-position not mapped in existing datafile	rejected
+60	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+61	COS663-0061	route|84|3585|2844|f807fdf11781fd7f|c2b68ce7b8188b76	route|84|3585|2844|f807fdf11781fd7f|c2b68ce7b8188b76	true	0	false	180	64	-	route leaves the band	rejected
+62	COS663-0062	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	135	64	-	no route: to-position not mapped in existing datafile	rejected
+63	COS663-0063	route|84|3799|2953|9978ea25e146f6b8|9db5b1258e642062	route|84|3799|2953|9978ea25e146f6b8|9db5b1258e642062	true	0	false	209	64	-	route in row 663's band; row 663 read	taken COS663
+64	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+65	COS663-0065	route|54|2617|2003|b1f309c1f8ae2372|339c3abb7cc82261	route|54|2617|2003|b1f309c1f8ae2372|339c3abb7cc82261	true	0	false	155	64	-	route in row 663's band; row 663 read	taken COS663
+66	COS663-0066	route|152|31293|15497|845ae887988ced70|6b867f1f85139a95	route|152|31293|15497|845ae887988ced70|6b867f1f85139a95	true	0	false	252	64	-	route in row 663's band; row 663 read	taken COS663
+67	COS663-0067	route|293|21521|17085|a8428b824765dd69|cf99e85bc2ceeb5a	route|293|21521|17085|a8428b824765dd69|cf99e85bc2ceeb5a	true	0	false	241	64	-	route in row 663's band; row 663 read	taken COS663
+68	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+69	COS663-0069	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	142	64	-	no route: to-position not mapped in existing datafile	rejected
+70	COS663-0070	route|112|6634|5266|6643de0b415a689a|461a791946fb1b8c	route|112|6634|5266|6643de0b415a689a|461a791946fb1b8c	true	0	false	214	64	-	route in row 663's band; row 663 read	taken COS663
+71	COS663-0071	route|87|8688|6771|7fc57f5722409a6d|1710e8959a9c5bdd	route|87|8688|6771|7fc57f5722409a6d|1710e8959a9c5bdd	true	0	false	230	64	-	route in row 663's band; row 663 read	taken COS663
+72	COS663-0072	route|435|20034|14927|c3713a1788e95b2e|faef84ba67d79711	route|435|20034|14927|c3713a1788e95b2e|faef84ba67d79711	true	0	false	218	64	-	route in row 663's band; row 663 read	taken COS663
+73	COS663-0073	route|344|106063|51234|b81a3080d0b854a|23f1737f0915d9c8	route|344|106063|51234|b81a3080d0b854a|23f1737f0915d9c8	true	0	false	262	64	-	route leaves the band	rejected
+74	COS663-0074	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	140	64	-	no route: to-position not mapped in existing datafile	rejected
+75	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+76	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+77	COS663-0077	route|77|9185|7263|ff4771dca8f66610|7c5686d1aacb3296	route|77|9185|7263|ff4771dca8f66610|7c5686d1aacb3296	true	0	false	212	64	-	route in row 663's band; row 663 read	taken COS663
+78	COS663-0078	route|375|33493|19582|cf7ee6e791f2172b|2e6992f1cc289a69	route|375|33493|19582|cf7ee6e791f2172b|2e6992f1cc289a69	true	0	false	239	64	-	route leaves the band	rejected
+79	COS663-0079	route|104|9618|7631|c0cf13ad76d82d43|5d92096d1692111b	route|104|9618|7631|c0cf13ad76d82d43|5d92096d1692111b	true	0	false	164	64	-	route in row 663's band; row 663 read	taken COS663
+80	COS663-0080	route|70|2227|1765|baf55bda7c214d95|ca051f6ffd8f89ca	route|70|2227|1765|baf55bda7c214d95|ca051f6ffd8f89ca	true	0	false	183	64	-	route in row 663's band; row 663 read	taken COS663
+81	COS663-0081	route|1303|167179|98933|aaa90af9a50e4c09|8540a403824db66f	route|1303|167179|98933|aaa90af9a50e4c09|8540a403824db66f	true	0	false	255	64	-	route leaves the band	rejected
+82	COS663-0082	route|394|110471|54766|3c7b97cc8756b826|e5ee2c99401bd3f3	route|394|110471|54766|3c7b97cc8756b826|e5ee2c99401bd3f3	true	0	false	277	64	-	route leaves the band	rejected
+83	COS663-0083	route|116|5552|4407|eea89c12bb2c43a7|9cd228f25df89e6c	route|116|5552|4407|eea89c12bb2c43a7|9cd228f25df89e6c	true	0	false	218	64	-	route in row 663's band; row 663 read	taken COS663
+84	COS663-0084	route|96|5649|4482|2971156c131a6e56|53d2b72ea6449e0	route|96|5649|4482|2971156c131a6e56|53d2b72ea6449e0	true	0	false	135	64	-	route in row 663's band; row 663 read	taken COS663
+85	COS663-0085	route|251|211379|62384|1116bbb654540a2f|6dfdc551ec16520c	route|251|211379|62384|1116bbb654540a2f|6dfdc551ec16520c	true	0	false	229	64	-	route leaves the band	rejected
+86	COS663-0086	route|5|11592|966|ccdba159aa8efb21|c404d68b05dd6e94	route|5|11592|966|ccdba159aa8efb21|c404d68b05dd6e94	true	0	false	171	64	-	route in row 663's band; row 663 read	taken COS663
+87	COS663-0087	route|152|29078|8446|b1bc412868a28d94|24b62fb25c5d587b	route|152|29078|8446|b1bc412868a28d94|24b62fb25c5d587b	true	0	false	177	64	-	route in row 663's band; row 663 read	taken COS663
+88	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+89	COS663-0089	route|71|5559|4315|9e70415a75448b15|9f7fa57190621adf	route|71|5559|4315|9e70415a75448b15|9f7fa57190621adf	true	0	false	197	64	-	route in row 663's band; row 663 read	taken COS663
+90	COS663-0090	route|28|1572|1244|5c4fadfd61e81e6c|30e7812b8fad57ae	route|28|1572|1244|5c4fadfd61e81e6c|30e7812b8fad57ae	true	0	false	214	64	-	route in row 663's band; row 663 read	taken COS663
+91	COS663-0091	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	from-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	170	64	-	no route: from-position not mapped in existing datafile	rejected
+92	COS663-0092	route|414|36127|25670|64afdf2154fe9092|924c2891d7eb25b3	route|414|36127|25670|64afdf2154fe9092|924c2891d7eb25b3	true	0	false	212	64	-	route leaves the band	rejected
+93	COS663-0093	route|58|3049|2418|c6e78ca12435b260|477f9ebe6bef6b51	route|58|3049|2418|c6e78ca12435b260|477f9ebe6bef6b51	true	0	false	163	64	-	route in row 663's band; row 663 read	taken COS663
+94	COS663-0094	route|1974|647030|196047|d2840f65ad18f0f|f2e1eca24f52e5d8	route|1974|647030|196047|d2840f65ad18f0f|f2e1eca24f52e5d8	true	0	false	777	64	-	route leaves the band	rejected
+95	COS663-0095	route|1205|138262|58576|53c4697b62756475|4991786e7c33bf6a	route|1205|138262|58576|53c4697b62756475|4991786e7c33bf6a	true	0	false	321	64	-	route leaves the band	rejected
+96	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+97	-	-	-	-	-	-	-	-	-	-	no node in the target's 3 x 3 cells, or the target is outside every tile	rejected
+98	COS663-0098	route|332|23961|12782|338439d9c0b02bf6|9994e2660a2bff1e	route|332|23961|12782|338439d9c0b02bf6|9994e2660a2bff1e	true	0	false	306	64	-	route in row 663's band; row 663 read	taken COS663
+99	COS663-0099	route|71|4506|3368|64101b49beab433d|d59bceb2910e33cc	route|71|4506|3368|64101b49beab433d|d59bceb2910e33cc	true	0	false	229	64	-	route in row 663's band; row 663 read	taken COS663
+100	COS663-0100	route|337|774669|114042|efd4ca56642cf813|27aa2260a3e71033	route|337|774669|114042|efd4ca56642cf813|27aa2260a3e71033	true	0	false	294	64	-	route leaves the band	rejected
+101	COS663-0101	route|138|18087|7204|9610f083cb5e03a6|c8c59288cd1d4a68	route|138|18087|7204|9610f083cb5e03a6|c8c59288cd1d4a68	true	0	false	182	64	-	route in row 663's band; row 663 read	taken COS663
+102	COS663-0102	route|173|9680|7618|d1fd0e01260f0de9|6ce899154b107e48	route|173|9680|7618|d1fd0e01260f0de9|6ce899154b107e48	true	0	false	237	64	-	route in row 663's band; row 663 read	taken COS663
+103	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+104	COS663-0104	route|39|2324|1842|433326c144cea225|e2f4d69b0d812037	route|39|2324|1842|433326c144cea225|e2f4d69b0d812037	true	0	false	120	64	-	route in row 663's band; row 663 read	taken COS663
+105	COS663-0105	route|17|29766|6200|8218faae7def009e|147ebca0c7dc799e	route|17|29766|6200|8218faae7def009e|147ebca0c7dc799e	true	0	false	168	64	-	route in row 663's band; row 663 read	taken COS663
+106	COS663-0106	route|14|20225|4461|91e50d6edf0651ec|81318dc89c3d388c	route|14|20225|4461|91e50d6edf0651ec|81318dc89c3d388c	true	0	false	161	64	-	route in row 663's band; row 663 read	taken COS663
+107	-	-	-	-	-	-	-	-	-	-	the end's node is outside the start's band	rejected
+108	COS663-0108	route|144|18470|7524|6e08a4169825692f|2319a1693efd3c9	route|144|18470|7524|6e08a4169825692f|2319a1693efd3c9	true	0	false	173	64	-	route in row 663's band; row 663 read	taken COS663
+109	COS663-0109	route|22|10274|8153|9c785cde814f3be2|9d5bbb59119c30af	route|22|10274|8153|9c785cde814f3be2|9d5bbb59119c30af	true	0	false	160	64	-	route leaves the band	rejected
+110	COS663-0110	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	to-position not mapped in existing datafile|0|0|0|cbf29ce484222325|cbf29ce484222325	true	0	false	158	64	-	no route: to-position not mapped in existing datafile	rejected
+111	COS663-0111	route|12|725|575|bd8327349ae25cef|75fdfaf7586756ad	route|12|725|575|bd8327349ae25cef|75fdfaf7586756ad	true	0	false	152	64	-	route in row 663's band; row 663 read	taken COS663
+112	COS663-0112	route|239|14131|11223|922fb508d41c9fb8|f60ebb321272c737	route|239|14131|11223|922fb508d41c9fb8|f60ebb321272c737	true	0	false	189	64	-	route in row 663's band; row 663 read	taken COS663
+113	COS663-0113	route|223|15999|11293|a424ace7517a937|1a59aadf5177b72c	route|223|15999|11293|a424ace7517a937|1a59aadf5177b72c	true	0	false	177	64	-	route in row 663's band; row 663 read	taken COS663
+114	COS663-0114	route|129|11401|9012|2aba854201237f09|ee2271403cea9e00	route|129|11401|9012|2aba854201237f09|ee2271403cea9e00	true	0	false	209	64	-	route leaves the band	rejected
+115	COS663-0115	route|115|8948|6447|da1251de60174ab6|c76da6441acb6dd3	route|115|8948|6447|da1251de60174ab6|c76da6441acb6dd3	true	0	false	197	64	-	route in row 663's band; row 663 read	taken COS663
+116	COS663-0116	route|25|4072|3231|f55a8651ee95b03c|13d44f83e1d2e8db	route|25|4072|3231|f55a8651ee95b03c|13d44f83e1d2e8db	true	0	false	164	64	-	route in row 663's band; row 663 read	taken COS663
+117	COS663-0117	route|173|19787|8568|161f19e1d1d78236|c04df0bce6d08c4f	route|173|19787|8568|161f19e1d1d78236|c04df0bce6d08c4f	true	0	false	183	64	-	route in row 663's band; row 663 read	taken COS663
