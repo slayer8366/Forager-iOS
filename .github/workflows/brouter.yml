@@ -5,8 +5,14 @@ name: brouter
 
 on:
   push:
+    # app/**, iosApp/** and app.yml added by RECORD -205 (the planner's decision): A1-1 showed the engine's counts
+    # unchanged with :app in the build (RECORD -204). The engine still runs on any change to the root build, the catalog,
+    # brouter/, tools/ or this file; a push runs this workflow unless every one of its changed files matches below.
     paths-ignore:
       - 'docs/**'
+      - 'app/**'
+      - 'iosApp/**'
+      - '.github/workflows/app.yml'
   pull_request:
 
 permissions:
