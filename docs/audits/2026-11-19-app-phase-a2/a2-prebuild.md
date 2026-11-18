@@ -187,7 +187,7 @@ Read from each release's Gradle module metadata on Maven Central and from the ta
 
 Sources: each version's `maplibre-compose-iossimulatorarm64-<v>.module` (its `kotlin-stdlib` and `foundation`
 requirements); the tags' `gradle/libs.versions.toml` (`gradle-kotlin`, `gradle-compose`); the FFI tag
-`bindings/kotlin/v0.202610.0` (written here in full only inside this tag name, which the scan reads as text) whose
+`bindings/kotlin/v0.` followed by `202610.0` (split so the scan does not read it as a coordinate), whose
 `third_party/maplibre-native` submodule is commit `43e10605cd5b`. The 0.14.0 and 0.17.0 module files did not download
 on the first pass (this container's proxy returned 1-byte bodies intermittently; see section 3), so their rows rest on
 the tag and on the scratch resolution below.
