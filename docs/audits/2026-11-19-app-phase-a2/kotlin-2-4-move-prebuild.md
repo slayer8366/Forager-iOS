@@ -299,3 +299,56 @@ runner can link a framework, run `iosSimulatorArm64Test` or build the app), and 
 **The JVM tests, base against `k24`:** both copies run `./gradlew --no-daemon :brouter:jvmTest`, as `brouter.yml`'s `jvm`
 job does, fetching and checking the oracle and tiles through the build's own tasks. Results are written below when both
 runs finish (this section is pushed now because the container restarts often).
+
+## 4. The order and the coupling
+
+### Does anything couple the two builds today?
+
+- **Forager consumes nothing of this repository.** `git grep -n "Forager-iOS\|forager-ios"` over Forager at `f29db48`
+  finds no reference in any non-Markdown file **[R]**. Its build is `:app` plus the vendored Java `:brouter`
+  (section 2), neither of which reads anything from here.
+- **This repository consumes Forager's data, not its build:** test tiles and points at pinned Forager commits, fetched by
+  URL and checked by size and SHA-256 (`tools/fetch-f0h.sh:15`, `d6e2a0415`; `tools/fetch-dropoff.sh:14`, `a0535ece`;
+  `tools/tile-pins.tsv:9` and `publish-tiles.yml:20`, `e2969abe4`) **[R]**. None of them is compiled, and none moves when
+  Forager's Kotlin moves.
+- **So nothing breaks, in either build, if one moves first [I, from the two reads].** Each compiles with its own pin.
+- **The coupling that exists is a planned one: Forager's switch to the port.** The owner: "Yes, add timing to Phase 2. But
+  let's do kotlin for Android also" (RECORD -4, `origin/main:RECORD.md:141`); "Forager's Android app will use the Kotlin
+  port instead of the Java engine once it is proven identical" (`:145-146`) **[R]**. The recommended intake is vendored
+  source compiled by Forager's own compiler (Phase 1, `2026-10-28-brouter-port-verify.md:501-511`; still "C's
+  recommendation, for Forager's planner at the switch", RECORD -24, `:955-956`) **[R]**. At that switch two things hold
+  [I, from Phase 1's probe]:
+  - the port's source must compile under Forager's compiler, so a port written against 2.4 language features would not
+    vendor into a Forager still on 2.3.10 (Phase 1 suggested `languageVersion`/`apiVersion` 2.3 as the guard,
+    `:569-570`, "not tested");
+  - the port is proven bit-for-bit under the compiler CI ran. If Android compiles the same source with a different
+    compiler, the Android build is not the build that was proven. **That is what "together" protects** (section 3a: the
+    pin was never about the engine's bits on one side alone, it was about both sides running the proven build).
+- **Neither condition is live yet:** the switch has not happened (Forager's `:brouter` is still the Java tree at
+  `f29db48`, section 2) **[R]**.
+
+### What "together" has meant so far
+
+- **Written first** as Phase 1's recommendation: "Kotlin | 2.3.10 exactly, Forager's pin, moved only together with
+  Forager" (`2026-10-28-brouter-port-verify.md:428`), and "compile the port with 2.3.10, exactly as Forager does. Neither
+  side has to move" (`:567`) **[R]**.
+- **Adopted** as a planner's call, "technical; the owner may overrule" (RECORD -24, `origin/main:RECORD.md:944-956`) **[R]**.
+- **Carried** into the catalog comment: "Kotlin 2.3.10 exactly, Forager's pin, moved only together with Forager (Phase 1
+  report, item C, Amendment 1)" (`gradle/libs.versions.toml:3` at `8e747fa`) **[R]**.
+- **Now in the owner's own choice:** the option they picked reads "Kotlin changes in Forager's Android app and here
+  together". That wording says the two change together; **it does not say whether "together" means the same moment, the
+  same owner's word, or one after the other within one piece of work.** That reading is the owner's, not this report's
+  (section 6, O1).
+
+### Options for the owner (the order)
+
+Each option keeps "Move Kotlin to 2.4.20" and both repositories moving. None is marked recommended here, because the
+choice is a reading of the owner's own word.
+
+| Option | What happens | Costs | Who does the Forager work, under which rules |
+|---|---|---|---|
+| **(iii) Both prepared on branches, merged on one word** | Forager: a branch from `pre-main` with the catalog change (Forager's rule for work not merged directly, `planner-profile.md:85`); here: a branch from `app` with the same pin. Each runs its CI to green. The owner gives one word that merges both. | The closest to "together" at one moment. Two CI cycles that must both be green at the same time; Forager's `pre-main` keeps moving while the branch waits, so its branch may need a merge (never a rebase, Forager's "Push before you tidy") before the word. Forager's review chain (Hazel, then Sorrel, then the owner's word, `planner-profile.md:96-97`) sets the pace. | Forager's coder and reviewer, dispatched by Forager's planner, recorded in Forager's record. Not an iOS session: "Nothing for the iOS app is written to Forager's record or to slayer8366/Forager" (this repository's `CLAUDE.md`). |
+| **(ii) Forager first on `pre-main`, then here** | Forager lands the move on `pre-main` through its normal chain; this repository moves after Forager's CI is green there. | The map spike waits for Forager's cycle. Forager's next promotion to main then carries a compiler change, so its UX auditor and the owner's approval for public use cover it (`planner-profile.md:76-79`); a phone check is the planner's to propose (`:82`), and section 8 gives a reason to. The pins differ, here behind Forager, until this repository follows. | As in (iii). |
+| **(i) This repository first on `app`, Forager after** | The pin moves here first; A2's map work can start; Forager follows on its own schedule. | Fastest for the map. For a while the two pins differ, which the catalog comment and the option's word "together" both describe as not wanted; if the port's source picked up a 2.4-only feature in that window, Forager's later intake would have to wait for Forager's move (no intake is scheduled, above). `app` is not `main`, so `main`'s record and catalog keep saying 2.3.10 until a merge on the owner's word. | Forager's work as in (iii), later. This repository's part: an iOS coder on `app`. |
+
+Each option ends with the same check (section 5) on this repository's side, and with Forager CI's own gates on its side.
