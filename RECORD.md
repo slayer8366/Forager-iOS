@@ -8119,3 +8119,34 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 - Not rerun by the planner: the three mutations against the new self-test (the coder's findings, `docs/audits/2026-11-18-app-phase-a/review-6-fixes.md`). Left stale on purpose: a wrong comment in `app-diagnose.yml`, because editing that file starts the engine's run.
 
 **Notes:** Written by the planner session by hand. Next free ID -213.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-213
+**Timestamp:** 2026-11-18T13:25Z
+**Continues:** 2026-10-28-212
+**Title:** Kotlin move pre-build (session 88) received and verified from the remote; nothing found against the ruling; four questions go to the owner
+
+**The ruling this serves, verbatim:** "Move Kotlin to 2.4.20".
+
+**What came back (coder: Plumb Ledger, session 88).** One file, `docs/audits/2026-11-19-app-phase-a2/kotlin-2-4-move-prebuild.md` on `app`, 620 lines, eleven docs-only commits from `8e747fa` to `820224b`. No build file or workflow changed in either repository, and nothing was written to slayer8366/Forager.
+
+**Verified by the planner.**
+- `git ls-remote origin app` gives `820224b`; the diff from `8e747fa` is that one file; all eleven commits end with the project trailer and name no model or session.
+- `scan.sh` prints 0 on ten commits and on the whole range. It prints 1 on `fa4c133`, a runner image tag and not a coordinate, rewritten by the next commit `4d17b08`. The coder pushed both and did not amend, which is the rule. The hit stays in history.
+- Maven Central's listing for `kotlin-stdlib`, read today: the stable 2.4 releases are 2.4.0, 2.4.10, the ruled version and one patch release after it; 2.5.0 is at RC. So the ruled version is stable and is not the newest in its line.
+- Maven Central's listing for KSP's `symbol-processing-api`: the newest is a 2.3 patch release; no 2.4 release exists.
+- Forager at `origin/pre-main` `f29db48`, read only: `gradle/libs.versions.toml` pins Kotlin and KSP to the same 2.3 version (lines 7 and 48) with a comment at line 46 that KSP tracks Kotlin; the Android Gradle plugin is at line 2 and the Gradle wrapper is 9.7.0. The report's reading of those lines matches.
+
+**Not verified by the planner, the coder's findings as reported.** That one changed line compiles the engine's JVM code, both engine iOS klibs and both `:app` iOS klibs with 0 error lines; that `:app` compiles against wrapper 0.20.0 for both iOS targets; that `:brouter:jvmTest` gives 262 tests, 0 failures and the same printed output apart from durations on both compilers; that of 147 engine classes 109 are byte-identical and the other 38 keep identical floating-point instruction sequences; that a Room-through-KSP probe on plain Kotlin/JVM produced byte-identical generated code across three compiler and KSP pairings. JetBrains' compatibility table and the release dates are the coder's reading of pages the planner did not fetch.
+
+**What no scratch run could show, stated by the report and agreed.** Any link, any simulator run, any Android build (no Android SDK in the container), the device binary `iosArm64` (never run by any test), and whether Kotlin/Native's newer LLVM changes floating-point results. Only the Mac runner answers the last three for this repository, and only Forager's own CI answers for Android.
+
+**Premises of the planner's brief that the report corrected.** The ruled version is not the newest 2.4 release. "KSP moves with Kotlin" cannot hold, since no KSP 2.4 exists. The Kotlin minimum the catalog cites for Compose Multiplatform comes from an earlier release's notes. Compose Multiplatform's next minor was at a release candidate today, not beta.
+
+**The report's proposed proof that the move changed nothing in the engine.** A baseline run on the exact parent commit, then the four jobs compared: the same counts, the production record's lines diffed, every test's standard output diffed, no new `e:` or `w:` lines, no SKIPPED compile task, and evidence that the new compiler built what ran. Any difference stops the work and is reported with the ruling quoted; no expected file is updated to absorb it.
+
+**For the owner.** O1 what "together" means in practice (one merge word for both repositories, Forager first, or this repository first). O2 the version: as said, or the later patch release. O3 who does Forager's part. O4 what happens if the comparison shows a difference. The first option of each is what the owner already said or what the standing rules already say.
+
+**Notes:** Written by the planner session by hand. Next free ID -214.
