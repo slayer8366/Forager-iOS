@@ -170,3 +170,20 @@ being job 134605728656 of run 44246226134 (its log 215, 204, 1207, read by me); 
 with file and line at `47e25f2`; (c) the control sentence true but not established, with run 44262884089's log 2184
 (`000000`, about 65 % of the band, read by me) and the review's viewing of `before.png` (not viewed by me); (d) the five
 cancelled engine runs, attributed to the planner and RECORD -205, -206, -208 as the brief states, not read by me.
+
+## 3. CI, read at 08:48 UTC (no wait)
+- `png-region`, the new case counts [R]: run 44269443203 (`77c7b0b`, step 1), job 134682065122, log 167
+  `png-region-test: 42 cases, 0 failed`; run 44269684940 (`65bed14`, step 2), job 134682874614, log 184 `png-region-test:
+  59 cases, 0 failed`; run 44269898886 (`5de22c2`, step 3), job 134683582569, log 184 `59 cases, 0 failed`. Python 3.12.3
+  on the runner (log 124 of each).
+- **`app-klibs` red in run 44269684940, job 134682874629, outside this change** [R]: `Could not resolve all artifacts for
+  configuration 'classpath'` (log 183), `Could not resolve org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.10` (184), the
+  cause `Could not GET 'https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugins-bom/2.3.10/...pom'.
+  Received status code 429 from server: Too Many Requests` (192). Maven Central rate-limited the runner while Gradle
+  resolved its plugins, before any project code compiled. Step 2 touched only `tools/png-region*.py` and this file,
+  which `:app` does not read. The same job was green on `77c7b0b` (job 134682064991) and `5de22c2` (job 134683582120).
+  Not rerun: no rerun was asked for.
+- `app-bundle` (the gate and the control) had not finished in any of the three runs when read (jobs 134682064602,
+  134682874237, 134683582373). Not read; the planner reads them.
+- `brouter` runs started by these pushes: 44269443205 (`77c7b0b`), 44269685199 (`65bed14`), 44269945505 (`47e25f2`,
+  the S4 edit). In progress or queued; not waited for. Step 3's `app.yml` edit and the docs commits start none.
