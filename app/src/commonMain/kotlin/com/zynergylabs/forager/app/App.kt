@@ -8,7 +8,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 
 /** A1's one colour: saturated and not a system colour, so neither a home screen nor a blank window can match it. */
-val A1_COLOUR = Color(0xFF1E6FD9)
+val A1_COLOUR = Color(0xFFE0218A)
 
 /** The line A1's checks wait for; printed once, from the draw phase. */
 const val FIRST_FRAME_LINE = "A1: first frame drawn"
