@@ -154,3 +154,92 @@ fixed fallback region (`A/ui/availability/CompactMapDisplayRegion.kt:17-23`); th
 
 This shows the Worker answers a client that is not the Android app. It does not show what a simulator on a GitHub
 runner gets (section 5).
+
+## 2. The Compose wrapper today
+
+### What exists
+
+- **MapLibre Compose**, `org.maplibre.compose:maplibre-compose`, repository `https://github.com/maplibre/maplibre-compose`,
+  maintained under the MapLibre organisation (POM developer "MapLibre", `gradle.properties` at tag `v0.13.1`; the repo
+  is `maplibre/maplibre-compose`). Licence BSD-3-Clause per its `LICENSE` badge (not re-read).
+- **Latest release: 0.20.0.** Maven Central's `maven-metadata.xml` for the artifact, fetched today: `<latest>` and
+  `<release>` 0.20.0, versions 0.11.0 to 0.20.0, `lastUpdated` 2026-10-10. Tag `v0.20.0` is commit `004a0f3`, dated
+  2026-10-09. The default branch had moved on (head `6c52a35`, 2026-11-14) with no newer release.
+- **Its iOS status:** "Beta" (the README's Stability table, head `6c52a35`, `README.md:60-66`: Android Beta, iOS Beta,
+  macOS native Experimental, Desktop and Web Alpha), with "The public API is still evolving, and minor releases can
+  contain breaking changes" (`README.md:56-58`). The survey's "marked beta" (survey line 202) still holds. Before the
+  Stability table existed (tags `v0.13.1`, `v0.14.0`), the README showed a progress bar, iOS "90%" (`README.md:45` at
+  `v0.14.0`).
+
+### How it ships MapLibre Native on iOS: two different designs, split at 0.15.0
+
+Read from each release's Gradle module metadata on Maven Central and from the tags:
+
+| Line | Kotlin it was built with | Compose MP | How MapLibre reaches iOS | MapLibre on iOS |
+|---|---|---|---|---|
+| 0.11.x | 2.2.0 | 1.8.2 | the app adds `MapLibre.framework` itself (CocoaPods or SPM) | iOS SDK (classic) |
+| 0.12.x | 2.2.21 | 1.9.2 | same | same |
+| 0.13.1 (2026-07-05) | **2.3.21** | 1.10.3 | same; the library's own build uses the third-party `spmForKmp` plugin (`buildSrc/src/main/kotlin/util.kt:12-22` at the tag) | iOS SDK 6.25.1 (`gradle.properties`, `maplibreIosVersion`) |
+| 0.14.0 (2026-08-07) | **2.3.21** | 1.11.1 | same | iOS SDK 6.25.1 |
+| 0.15.0 (2026-08-25) | 2.4.10 | 1.12.0 | **MapLibre Native FFI** klibs from Maven Central, no CocoaPods, no SPM | the C API over MapLibre Native core |
+| 0.18.0, 0.19.0 | 2.4.20 | 1.12.0, 1.12.1 | FFI | same |
+| 0.20.0 (2026-10-09) | **2.4.20** | 1.12.1 | FFI 202610.0 (written without its leading `0.`) | MapLibre Native core at commit `43e10605` (the FFI tag's submodule), not a tagged iOS release |
+
+Sources: each version's `maplibre-compose-iossimulatorarm64-<v>.module` (its `kotlin-stdlib` and `foundation`
+requirements); the tags' `gradle/libs.versions.toml` (`gradle-kotlin`, `gradle-compose`); the FFI tag
+`bindings/kotlin/v0.202610.0` (written here in full only inside this tag name, which the scan reads as text) whose
+`third_party/maplibre-native` submodule is commit `43e10605cd5b`. The 0.14.0 and 0.17.0 module files did not download
+on the first pass (this container's proxy returned 1-byte bodies intermittently; see section 3), so their rows rest on
+the tag and on the scratch resolution below.
+
+**0.20.0's iOS shape** (`docs/src/content/docs/getting-started.mdx` at the tag, section "iOS"): "Requires iOS 15.5 or
+later"; no CocoaPods or SPM step; the app target adds Other Linker Flags `-l"c++" -lz -framework CoreFoundation
+-framework CoreGraphics -framework CoreText -framework Foundation -framework ImageIO -framework Metal -framework
+QuartzCore`. The native engine arrives as a Kotlin cinterop klib: `maplibre-native-ffi-runtime-metal-iossimulatorarm64`
+202610.0 carries `metal-iosSimulatorArm64Cinterop-maplibreNativeRuntimeMain.klib`, **24,449,551 bytes**, SHA-256
+`bbde23ec...87a0` (its `.module` on Maven Central), which is large enough to hold the compiled engine (inferred from
+the size and the docs' "iOS needs no runtime artifact"; the klib was not unpacked). The FFI repository describes itself
+as "the MapLibre Native map engine as a C API" (`maplibre-native-ffi` `README.md`), with "Until the first part of the
+version reaches 1, any release can break the API, the ABI, or documented behavior." Its Apple deployment default is iOS
+15.0 (`cmake/platform/apple.cmake:4-10` at head). Note for later: at its head (2026-11-14) the FFI builds from
+`mln-rs`, "the Rust port of MapLibre Native" (`cmake/mln_ffi_mln_rs.cmake:1-2`), not from the C++ tree; the 202610.0
+tag that 0.20.0 uses still builds from the C++ `maplibre-native` submodule. So the wrapper's next release may carry a
+different engine (inferred; not tested).
+
+### Against our pins
+
+Our pins: Kotlin 2.3.10 (`gradle/libs.versions.toml:4`, "moved only together with Forager"), Compose Multiplatform
+1.12.2 (`:15`), Xcode 26.2 (`app.yml`), deployment target 16.0 provisional (`iosApp/project.yml:9`), a static framework
+(`app/build.gradle.kts:15`), XcodeGen 2.46.0, no CocoaPods. Forager is on Kotlin 2.3.10 too (Forager
+`gradle/libs.versions.toml:7` at `f29db48`).
+
+**Run in scratch today (Linux, compile only; the scratch copy's repositories pointed at a local retrying mirror of
+Maven Central, Gradle's plugin portal and Google's Maven, explained in section 3; no file of this repository changed).**
+`:app` with one extra `commonMain` dependency and a one-line probe, `@Composable fun ProbeMap() { MaplibreMap() }`:
+
+| Wrapper | Command | Result |
+|---|---|---|
+| 0.20.0 | `:app:compileKotlinIosSimulatorArm64` | **FAILED.** `w: KLIB resolver: Skipping '.../maplibre-compose-iosSimulatorArm64Main-0.20.0.klib' having incompatible ABI version '2.4.0'. The library was produced by '2.4.20' compiler.` then `e: KLIB resolver: Could not find ".../maplibre-compose-iosSimulatorArm64Main-0.20.0.klib"`. Resolution also lifted `kotlin-stdlib` to 2.4.20 and `foundation` 1.12.1 to our 1.12.2. |
+| 0.13.1 | `:app:compileKotlinIosSimulatorArm64 :app:compileKotlinIosArm64` | **BUILD SUCCESSFUL in 40s**, no `e:` and no `w:` line. `kotlin-stdlib` resolved to 2.3.21; `foundation` 1.10.3 lifted to 1.12.2. |
+| 0.14.0 | the same two tasks | **BUILD SUCCESSFUL in 19s**, no `e:` or `w:`. `kotlin-stdlib` 2.3.21. |
+
+What this shows and does not show: a Kotlin 2.3.10 compiler **refuses** every FFI-line release (0.15.0 onward; 0.20.0
+tried, the others inferred from their 2.4.x `kotlin-stdlib` requirement), and **accepts** 0.13.1 and 0.14.0 for
+compilation. It does not show that 0.13.1 or 0.14.0 links, runs, or renders: they need `MapLibre.framework` supplied to
+the link, and their published Compose (1.10.3, 1.11.1) is older than ours (1.12.2), a mismatch Gradle resolved upward
+without complaint at compile time. Whether a library compiled against Compose 1.10.3 or 1.11.1 runs correctly on 1.12.2
+is not shown by a compile (binary compatibility of Compose's klibs across minor lines: not verified).
+
+### What would have to move
+
+- **To use the current wrapper (0.15.0 to 0.20.0): Kotlin to 2.4.20 or later.** That pin moves "only together with
+  Forager" (`libs.versions.toml:3`), so this is not ours to move; it is an owner and planner decision that touches the
+  Android app (section 7, O2). Compose 1.12.2 already meets 0.20.0's 1.12.1. Deployment target 16.0 meets its iOS 15.5.
+  No CocoaPods or SPM is needed; the linker flags go into `project.yml`.
+- **To stay on Kotlin 2.3.10: wrapper 0.14.0 (or 0.13.1),** the last releases built with Kotlin 2.3.x, which are frozen
+  (no fixes reach them: every later release is on 2.4.x), on the classic MapLibre iOS SDK 6.25.1 (or newer, if their
+  binding tolerates it: not verified), which our build must supply itself (section 3). Their docs require the Kotlin
+  framework to be linked **before** `MapLibre.framework`, "The opposite order can cause broken Compose text rendering on
+  iOS because both Compose and MapLibre include HarfBuzz symbols" (`docs/docs/getting-started.md:68-81` at `v0.13.1`,
+  citing CMP-8882). Our `OTHER_LDFLAGS` already starts with `-framework ForagerApp` (`iosApp/project.yml`).
+- Either way, "beta on iOS" is unchanged.
