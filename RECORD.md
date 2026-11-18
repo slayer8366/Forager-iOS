@@ -7778,3 +7778,39 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **What Phase A will not show:** anything on a real iPhone; frame rate, memory or battery.
 
 **Notes:** Written by the planner session by hand. Next free ID -201.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-201
+**Timestamp:** 2026-11-18T04:18:36Z
+**Continues:** -200
+**Title:** Session 79b: the A1 pre-build report is in; the planner's technical decisions; two decisions put to the owner
+
+**What landed.** `docs/audits/2026-11-18-app-phase-a/a1-prebuild.md` on `brouter-port-5b`, 659 lines, head `4880b10` (coder: Plumb Ledger). Session 79 was killed by a container restart after a 16-line skeleton (`565faa2`); session 79b continued the same file and pushed after every section. Nothing was built in the product tree.
+
+**Verified by the planner.** `git ls-remote` gives `4880b10`; 11 commits after the skeleton, each with the project trailer only; one file changed in the whole range; `scan.sh` over `565faa2..4880b10` prints 0 (two intermediate commits printed 2 for a version string and two fractions, reworded in the next commit; neither a coordinate, by the coder's account). Read in the tree: Kotlin is pinned at 2.3.10 (`gradle/libs.versions.toml:4`, "moved only together with Forager"); `settings.gradle.kts` lists Maven Central only and includes `:brouter` only. Read from Maven Central's metadata today: the latest stable Compose Multiplatform Gradle plugin is 1.12.2, and 1.13.0 is at beta02.
+
+**The report's findings, the coder's, not rerun by the planner.**
+- Compose Multiplatform 1.12.2 needs "Kotlin 2.3" for iOS, so Kotlin does not move for A1; 1.13 will need Kotlin 2.4.0. In scratch on Linux a throwaway module compiled its iOS code for both iOS targets with 0 errors; the framework link needs macOS and was not run.
+- Google's Maven is required: with Maven Central alone, 13 androidx artifacts did not resolve.
+- In the app module's graph, skiko raises `kotlin-stdlib` to 2.3.20. `:brouter`'s five resolvable dependency graphs were byte-identical with and without an app module beside it; `:brouter`'s tests were not run with it present.
+- Today's `ios-smoke` builds no app and no framework; it runs the engine's tests through the Kotlin plugin. Runner `macos-26-arm64`, Xcode 26.0.1, simulator runtimes iOS 26.2, 26.4 and 26.5.
+- Neither XcodeGen nor Tuist is on the runner image. XcodeGen 2.46.0's zip was fetched and held to a size and SHA-256 by `tools/fetch-pinned.sh`, which refused a wrong pin.
+- A pixel check of a screenshot was prototyped in scratch and passed and failed correctly on synthetic images.
+
+**The planner's technical decisions** (the plan puts the module layout and its kin with the planner; the owner may overrule any), taking the report's T1 to T12:
+- T1: an `:app` module beside `:brouter`, the Xcode side in `iosApp/`. No `:domain` module until B1's proposal, and no dependency from `:app` on `:brouter` until Phase C. Rejected: creating `:domain` now (nothing to put in it before B1), putting the app inside `:brouter` (it would put Compose in the engine's build), an Android app module here (the Android app lives in Forager).
+- T2: Compose Multiplatform 1.12.2, the Compose compiler plugin at Kotlin's version, Kotlin 2.3.10 and Gradle unchanged; `runtime`, `foundation`, `ui` only, no Material3 alpha.
+- T3: Google's Maven filtered to `androidx.*`, so every other group still resolves from Maven Central.
+- T4: the Xcode project is generated on the runner by XcodeGen 2.46.0, pinned by size and SHA-256. Rejected: a hand-written `project.pbxproj` (nobody here can open Xcode to check it), Tuist (not evaluated to a stable pin), no project at all (leaves A2's native-view fallback with nothing to attach to).
+- T5: a new `.github/workflows/app.yml`; `brouter.yml` unchanged during A1, so the engine's four jobs show their counts unchanged on a root build that A1 edits.
+- T6 to T10, T12 as recommended: `macos-26`, Xcode 26.0.1, a created device on iOS 26.2; a static framework; no CI cache in A1; launch shown by a drawn-frame line, a pixel check, and the same check required to fail on a screenshot taken before install; a SwiftUI entry; Kotlin package `com.zynergylabs.forager.app`.
+- T11: deployment target 16.0, provisional, to be revisited when A2's map library names its own floor.
+- The order: A1-1 (the module and the framework link), A1-2 (the Xcode project and the app bundle), A1-3a (launch and observe the colour), A1-3b (gate on it, with a revert run that turns it red). Baseline for each: the engine's counts of -197.
+
+**The owner's, asked now.** O1: the bundle identifier and display name for simulator builds (a placeholder, or the public identity now). O2: the branch the app's code is built on. Flagged for later, not asked: whether A2 may upload a map screenshot as a CI artifact, given "no coordinates are committed"; and that Compose Multiplatform 1.13 would move Kotlin, which moves with Forager.
+
+**Not verified by anyone yet.** Everything that needs a Mac: the framework link, `xcodebuild`, every `simctl` step, the screenshot's colour, the job time. Whether Kotlin/Native uses the 2.3.20 standard library from Maven or its own bundled 2.3.10. A1-1's first CI run is where these start to be answered.
+
+**Notes:** Written by the planner session by hand. Next free ID -202.
