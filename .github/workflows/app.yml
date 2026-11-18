@@ -16,12 +16,26 @@ on:
       - 'gradlew'
       - 'iosApp/**'
       - 'tools/fetch-pinned.sh'
+      - 'tools/png-region.py'
+      - 'tools/png-region-test.py'
       - '.github/workflows/app.yml'
 
 permissions:
   contents: read
 
 jobs:
+  # A1-3a: the pixel check's self-test on synthetic PNGs (every row filter, the verdicts, the refusals). Standard library
+  # only, so no setup step; the runner's python3 is printed.
+  png-region:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: png-region.py self-test
+        run: |
+          python3 --version
+          python3 -I tools/png-region-test.py
+
   # Both iOS klibs of :app on Linux, as brouter.yml's jvm job checks the engine's: no link here.
   app-klibs:
     runs-on: ubuntu-24.04
