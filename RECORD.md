@@ -7992,3 +7992,34 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next (the planner's):** session 85: the Xcode change with one confirming run, then the rest of A1-3b (the revert run, the restore, A1's closing list).
 
 **Notes:** Written by the planner session by hand. Next free ID -209.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-209
+**Timestamp:** 2026-11-18T08:14:05Z
+**Continues:** -208, -200
+**Title:** A1 is closed: the empty app builds under Xcode 26.2, launches on the simulator, and its colour gate has been seen green, red for the right reason, and green again
+
+**What landed.** `app` moved from `f0cd466` to `df49ee5`, seven commits (coder: Plumb Ledger, session 85): `243f6ec` (both macOS jobs of `app.yml` select Xcode 26.2 and fail unless `xcodebuild -version` says so), `ab933c9` (the revert: the app's colour changed to 1E6FD9) and `c514813` (the restore), and findings. Both the revert and the restore stay in history. A1's closing list is section 19 of `docs/audits/2026-11-18-app-phase-a/a1-3-launch.md`.
+
+**Verified by the planner.**
+- `git ls-remote origin app` gives `df49ee5`; clean tree; seven commits with the project trailer only; `scan.sh` 0 on each. `git diff 243f6ec df49ee5` over `app`, `iosApp`, `.github` and `tools` prints nothing: the head's code is the green commit's.
+- Run 44259385803 on `243f6ec`, four jobs successful. `app-bundle`, simulator-checked on iPhone 17, iOS 26.2: `OK: the selected Xcode is Xcode 26.2`; `** BUILD SUCCEEDED **`; the bundle check's OK line; the control `FAIL: 98/2530188 ... within 24 of E0218A` on `before.png`; `A1: first frame drawn`; and the gate, executing for the first time, `PASS: 2530188/2530188 pixels (1.0000) within 8 of E0218A, threshold 0.9800`.
+- Run 44261245328 on `ab933c9`, the revert: `app-bundle` failed, the other three jobs passed. In that job: 0 compile-error lines under both patterns, `** BUILD SUCCEEDED **`, the control still failed on `before.png`, the drawn-frame line still appeared, then `common colour 1E6FD9: 2530188 pixels` and `FAIL: 0/2530188 pixels (0.0000) within 8 of E0218A`. A failure only that edit could produce, in a build that compiled and an app that ran.
+- Run 44262884089 on `c514813`, the restore: four jobs successful, the gate `PASS: 2530188/2530188` again.
+
+**Reported by the coder, not rerun.** No Kotlin warning naming Xcode in any macOS log under 26.2. The ICU linker warning against deployment target 16.0 is unchanged. Xcode 26.2 built on both runner image versions. Job times: `app-bundle` about 12 to 13 minutes, `app-framework` 4 to 5.
+
+**Open, named.**
+- `simctl launch` took about 86 s in one green run against the step's 120 s wait, so a slow runner could fail a healthy app (the coder's inference; it has not happened).
+- The Xcode version check has been seen red only with local stubs, never on a runner.
+- In run 44262884089 the control's `before.png` was mostly black (commonest colour 000000 at 65%) where the two earlier ones showed the home screen (commonest FFFFFF): read by the planner in the logs. The control failed correctly all three times, but the "before" picture is not always the home screen; it may be taken before the home screen is drawn.
+- Why Xcode 26.0.1 built green three times on 2026-11-18 before failing; why Kotlin's Xcode check prints nothing.
+- `brouter.yml` run 44257759907 on `bccce50` was still in progress when this was written. It is the first engine run since the runners began refusing Xcode 26.0.1's destinations and shows whether the engine's simulator jobs still pass.
+
+**What A1 has not shown.** A real iPhone; any other device or runtime; anything after the first frame; a release or signed build; that the generated project opens in Xcode; the engine inside the app.
+
+**Next (the planner's).** An independent review of A1 by the reviewer. A pre-build report for A2, the map through MapLibre. And one question to the owner before A2 builds: whether a screenshot of a map may be uploaded as a CI artifact, given "no coordinates are committed".
+
+**Notes:** Written by the planner session by hand. Next free ID -210.
