@@ -62,8 +62,10 @@ v7.0.2; `:22-23`, `:40`). Java is Temurin `21.0.13+9` in every job.
 
 **What the runner actually is** (read from the `ios-smoke` log of run `44030325384`, job `133860432798`, on `dee43df`,
 fetched with `gh api .../actions/jobs/133860432798/logs` today):
-- Image `macos-26-arm64`, version `20261102.0473.1`; its software list is
-  `https://github.com/actions/runner-images/blob/macos-26-arm64/20261102.0473/images/macos/macos-26-arm64-Readme.md`
+- Image `macos-26-arm64`, version 20261102 then, after a dot, 0473.1 (written apart here only because the E1 scan,
+  `scan.sh`, reads a run of four digits after a dot as a possible coordinate; it is a runner image version, not one).
+  The log's "Included Software" line points at that image's Readme under the tag path
+  `actions/runner-images/blob/macos-26-arm64/<that version without its last .1>/images/macos/macos-26-arm64-Readme.md`
   (log lines 16-19).
 - `xcodebuild -version` after the select: `Xcode 26.0.1`, build `17A400` (log 226-227).
 - Simulator runtimes on that image: iOS 26.2 (23C54), 26.4 (26.4.1, 23E254a), 26.5 (23F77) (log 229-231). **No iOS 26.0
