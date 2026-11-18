@@ -442,7 +442,60 @@ linking with Skia is the slow part; my estimate 2 to 5 min); the Xcode build of 
 minutes in all**, timeout proposed at 30. A cache of `~/.konan` and `~/.gradle` would cut the first two items; it is a
 decision (section 7), not a default.
 
-6. What needs the owner - pending
+## 6. What needs the owner
+
+Each with options. Where I mark one, the mark is mine, not a ruling; none of these has an owner's word yet.
+
+**O1. The app's bundle identifier and display name for simulator builds.** The plan lists "The app's public identity:
+its name, its bundle identifier, and whether it shares Android's tile server" as an owner decision "not yet asked"
+(plan `:160-168`, item 5).
+- *Is a placeholder technically enough for A1?* Yes, inferred: an unsigned simulator build involves no Apple account
+  and no registration, so any well-formed reverse-DNS identifier installs and launches (not verified until the A1 run).
+- *What changing it later costs.* Before any signed build: one build setting (`PRODUCT_BUNDLE_IDENTIFIER`) and one
+  Info.plist key (`CFBundleDisplayName`) in `iosApp/project.yml`, and the identifier in the CI launch line; simulator
+  data is thrown away every run, so nothing migrates. After the first signed upload, the identifier is the app's
+  permanent identity (inferred from Apple's model, not fetched today; it is the same shape as what Forager's own build
+  file says of Play: "It cannot be changed after the first upload — a different applicationId is a different app",
+  Forager `f29db48`, `app/build.gradle.kts:245-249`). The framework's `baseName` and the Kotlin package names are
+  internal and need not follow it.
+- Options:
+  1. The owner names the public identity now (bundle identifier and display name), and A1 uses it.
+  2. A placeholder for simulator builds, recorded as a placeholder, replaced when the public identity is asked: for
+     example identifier `com.zynergylabs.forager.ios.dev` and display name `Forager dev`. It uses the reverse-DNS root
+     Android already uses (`com.zynergylabs.forager.app`, Forager `app/build.gradle.kts:242,260`), so it claims no
+     new domain. **Mine.**
+  3. Android's identifier as it is (`com.zynergylabs.forager.app`) and the name "Forager". This is option 1 decided by
+     default, so it is not a technical choice.
+
+**O2. Which branch the app's code is built on.** This repository's `CLAUDE.md`: "Records and dispatches live on
+`main`; code is built on its own branch and merged into `main` only on the owner's word." This session may push only
+to `brouter-port-5b`.
+- `origin/main` holds no code: `git ls-tree --name-only origin/main` lists `.github`, `CLAUDE.md`, `README.md`,
+  `RECORD.md`, `docs`, `prompts` (read today). So the app cannot start from `main` without also bringing the build.
+- `origin/brouter-port` is at `382204f`, the merge of `brouter-port-5b` at `0f9e0fd` (read today); `brouter-port-5b` is
+  three commits ahead of it, all of them this report.
+- Options:
+  1. A new branch for the app (a name such as `app`), cut from `brouter-port` at `382204f`, so the app starts from the
+     merged engine and its build. **Mine.**
+  2. Build A1 on `brouter-port-5b`, the engine's working branch. Mixes app commits into the engine's history and
+     review, and every app push reruns the engine's jobs on that branch.
+  3. Cut from `main` and copy the build in: rejected above, since `main` has no build.
+- Whichever it is, a push there runs `brouter.yml` too (its `paths-ignore` is `docs/**` only, `brouter.yml:6-10`),
+  about two hours of runner time per push (section 1). Whether to narrow that is technical (section 7, T5), but it
+  changes what runs on every push, so it is listed here for the owner to see.
+
+**O3. Flagged now, needed before A2, not A1: map screenshots in public CI artifacts.** The owner's E1 is "no
+coordinates are committed". An A1 screenshot is one colour and shows nothing. A2's screenshot shows a map of a place,
+and an artifact on a public repository is not a commit but is downloadable (inferred, not checked today). Whether A2
+may upload a map screenshot, and of which area, is the owner's call; A1 does not need it.
+
+**O4. Flagged, not needed for A1: a Kotlin move.** Compose Multiplatform 1.13, once stable, needs Kotlin 2.4.0 for iOS
+(section 2). The catalog says Kotlin moves "only together with Forager" (`libs.versions.toml:3`), and Forager is the
+owner's other repository. A1 stays on 1.12.2 and 2.3.10, so nothing is asked now.
+
+**Not the owner's, though it costs money elsewhere:** runner minutes. The survey cites GitHub: "Use of the standard
+GitHub-hosted runners is free and unlimited on public repositories" (survey `:294`, on `origin/research/app-port-survey`, not re-fetched today).
+
 7. Which decisions are technical - pending
 8. The order of work for A1 - pending
 9. What A1 will not show - pending
