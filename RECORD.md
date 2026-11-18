@@ -8057,3 +8057,39 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next (the planner's).** A fix session for S1 to S4 and S6 once the A2 pre-build (session 86, same clone) has finished. `ios-memory` of 44257759907 to be read.
 
 **Notes:** Written by the planner session by hand. Next free ID -211.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-211
+**Timestamp:** 2026-11-18T08:40:54Z
+**Continues:** -210, -209
+**Title:** The A2 pre-build is in: the current map wrapper does not compile on our Kotlin; three decisions go to the owner; the engine run on `bccce50` is green
+
+**What landed.** `docs/audits/2026-11-19-app-phase-a2/a2-prebuild.md` on `app`, 751 lines, head `8bce937`, eleven docs-only commits (coder: Plumb Ledger, session 86). Nothing built. The range `df49ee5..8bce937` scans 0 and changes one file (the planner's check); one intermediate commit scanned 1 for a version tag and was fixed by the next, by the coder's account.
+
+**Verified by the planner.** Maven Central's metadata today lists `org.maplibre.compose:maplibre-compose` up to 0.20.0, with 0.14.0 and 0.15.0 present. The repository is public (GitHub's API). The rest below is the coder's reading, with its sources cited in the report.
+
+**The findings that shape A2.**
+- Android's default map loads a hosted vector style by URL from the project's own tile server; the map routes need no key (style, TileJSON, sprite and a zoom-0 tile each returned 200 without one). The style sets no centre and no zoom. Android's own fallback camera is a coordinate in Forager's code; it is cited in the report, not copied, and A2 must not carry it over.
+- The Compose wrapper, MapLibre Compose, is at 0.20.0 and calls its iOS support beta. Since 0.15.0 it no longer wraps MapLibre's iOS SDK; it ships a C interface as Kotlin libraries. 0.20.0 needs Kotlin 2.4.20, and in scratch Kotlin 2.3.10 refused it (`incompatible ABI version`). 0.13.1 and 0.14.0, built on Kotlin 2.3.21 and the classic iOS SDK 6.25.1, compiled with our pins in scratch. They are frozen releases and need MapLibre's framework supplied by our build. Nothing was linked or run; that needs macOS.
+- MapLibre's iOS framework can be fetched as a zip pinned by size and SHA-256, as XcodeGen is. Its minimum iOS is below our provisional 16.0.
+- A trap for later: adding a cinterop of our own makes the Linux iOS compile report SKIPPED with exit 0, so `app-klibs` would go green having compiled nothing.
+- With no camera set, wrapper 0.14.0 shows the whole world at zoom 1 from a default inside the library, so our files would hold no position.
+- A1's screenshots and logs are uploaded as artifacts today; GitHub lets signed-in users with read access download them, kept 90 days by default. Job logs are a second channel: tile addresses in a log would name places.
+
+**The planner's technical decisions for A2** (the owner may overrule), from the report's T1 to T8:
+- A2 sets no camera, so no position is committed and the question of whether a zero point or a whole-world box counts under "no coordinates are committed" does not arise. If a later step needs a camera, that question goes to the owner first.
+- The failure triggers for leaving the wrapper for the native view are fixed before any run: it cannot build with our pins; it does not launch; the map does not render while the network is healthy and the same style renders in the native view; Compose text breaks.
+- MapLibre's iOS framework comes in as a pinned zip through `tools/fetch-pinned.sh`. Rejected: Swift Package Manager and CocoaPods, which add a resolver to a build nobody can open in Xcode.
+- For the native fallback, Swift makes the map view and Kotlin hosts it, so no cinterop of ours.
+- Checks: first a local one-colour style with no network, with a revert run; then a network probe from the runner, the app's own loaded and idle lines, and pixel statistics, observed in one run and gated in the next. Logs carry counts, never tile addresses. A1's colour gate is not dropped silently: the first A2 dispatch says in words what replaces it.
+- Deployment target stays 16.0, provisional.
+
+**The owner's, asked now.** O1: whether the iOS app shares Android's tile server, and whether its address is committed in this public repository (the address carries the owner's Cloudflare account label, which the coder kept out of the report). O2: Kotlin, which decides the wrapper: keep 2.3.10 and try the frozen 0.14.0; move Kotlin with Forager and use the current wrapper; or go to the native view first. O3: what map pictures CI may upload.
+
+**The engine.** `brouter.yml` run 44257759907 on `bccce50` completed successfully; `ios-memory`, read by the planner: 3, 1, 1 with both gate lines, 0 compile-error lines. With -210's reading of the other three jobs, all four are green under Xcode 26.0.1.
+
+**Next.** Session 87 (running): the fixes for review 6. Then A2-1, once the owner has answered.
+
+**Notes:** Written by the planner session by hand. Next free ID -212.
