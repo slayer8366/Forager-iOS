@@ -7960,3 +7960,35 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next (the planner's):** data before any fix. Session 84 adds a diagnostic-only workflow that, on several machines at once and for every Xcode on the image, prints the SDKs, the destinations for the scheme and the runtimes. The choice that follows (which Xcode the app builds with, or how the destination is named) is the planner's and is made from that output. The build step is not changed until then.
 
 **Notes:** Written by the planner session by hand. Next free ID -208.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-208
+**Timestamp:** 2026-11-18T07:28:39Z
+**Continues:** -207
+**Title:** The destination error diagnosed: Xcode 26.0.1 and 26.1.1 have no simulator platform on the runners; the app's CI moves to Xcode 26.2
+
+**What landed.** `app` moved from `5487223` to `f0cd466`, five commits (coder: Plumb Ledger, session 84): a new diagnostic-only workflow `.github/workflows/app-diagnose.yml` and findings (sections 14 and 15 of `a1-3-launch.md`). No existing step changed. `scan.sh` prints 0 on four commits and 2 on `4e090cb` (two release URLs with a dotted tag, by the coder's account; rewritten in the next commit).
+
+**The data, run 44257759986, six machines, eight passes each.** The planner read two of the six job logs in full summary (replica 1 on image 20261102 build 0473.1, replica 5 on image 20261112 build 0504.1); the other four are the coder's reading.
+- Under Xcode 26.0.1: no available destination, `error:iOS 26.0 is not installed`, on every machine, first pass and last.
+- Under Xcode 26.1.1: the same, `error:iOS 26.1 is not installed`.
+- Under Xcode 26.2, 26.3, 26.4.1, 26.5 and 26.6: 34 available iOS Simulator destinations each, on every machine.
+- Machines of one image did not differ in anything measured, and both image versions behave the same. So -207's suggestion that the image version separated green from red is withdrawn.
+- From the runner-images repository, fetched by the coder: its toolset sets `"install_runtimes": "none"` for Xcode 26.0.1, and its README says only three major.minor versions of platform tools and simulator runtimes are kept.
+
+**Not explained.** The same build command was green under Xcode 26.0.1 at 05:38, 05:59 and 06:40 the same day, with the same three runtimes listed and no iOS 26.0. Nothing read says why. The coder's inference, which fits all seven Xcodes on all six machines and is documented nowhere read: Xcode counts its iOS platform as installed only when a runtime of its SDK's major.minor version is present.
+
+**Kotlin's side, the coder's reading of primary sources.** Kotlin's compatibility page lists Xcode 26.0 for Kotlin 2.3.10. A newer Xcode gets a suppressible warning, not an error. Neither of this project's link logs contains that warning's text. The coder also reports a line in Kotlin's source giving a lower tested maximum than the page; the planner has not read it and does not rely on it.
+
+**The planner's decision.** Both macOS jobs of `app.yml` (`app-framework` and `app-bundle`) select Xcode 26.2. Why 26.2: it is the lowest Xcode that offers destinations on every machine sampled, the nearest to what Kotlin documents, and its runtime is the iOS 26.2 the launch already boots. Why both jobs: the app's framework should not be linked by one Xcode in one job and another in the next. Rejected: downloading the iOS 26.0 platform in each job (about 10 GB per run with no cache, untimed); naming a concrete simulator under 26.0.1 (it has no simulator destination of any kind); a retry (12 of 12 diagnostic passes failed).
+- `brouter.yml` stays on Xcode 26.0.1. The engine's results are held to the Java oracle and its toolchain does not move for the app's sake. Its simulator jobs do not ask `xcodebuild` for a destination; the engine run now in progress on `bccce50` shows whether they still pass.
+- What this costs later: when the app depends on `:brouter` (Phase C), the engine will be compiled for the app under a newer Xcode than its own tests use. That is a question for Phase C's pre-build, noted here so it is not met by surprise.
+- The runner keeps only three platform versions, so 26.2 will be dropped in time and this pin will have to move again.
+
+**Cancelled by the planner.** `brouter.yml` run 44249712556 (`002174c`), superseded by 44257759907 on `bccce50`, which the diagnostic workflow's push started and which holds every change. Left to finish; not yet read.
+
+**Next (the planner's):** session 85: the Xcode change with one confirming run, then the rest of A1-3b (the revert run, the restore, A1's closing list).
+
+**Notes:** Written by the planner session by hand. Next free ID -209.
