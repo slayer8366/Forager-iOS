@@ -389,3 +389,100 @@ dispatched, when **any one** of these is seen in CI, each on a build shown to ha
 
 Not triggers: "beta" labels, API churn, or a slow job. Each trigger is a CI line, so the switch is a decision with a
 cause on record, not drift.
+
+## 5. A map check that can fail
+
+A1's gate asks one question of one PNG: is the middle band one known colour (`tools/png-region.py`, docstring lines
+2-14; gate `--colour E0218A --tolerance 8 --threshold 0.98`). A map is not one colour, and a map that failed can look
+like many things: the window behind it, the style's background with no tiles, a grey placeholder, or a crash. So the
+checks below are layered, each with what makes it fail. All are proposals (mine); nothing here was run on macOS.
+
+### R1. A local style with one known background, no network (first step)
+
+- The app loads a style written in the app itself: `{"version": 8, "sources": {}, "layers": [{"id": "bg", "type":
+  "background", "paint": {"background-color": "#XXXXXX"}}]}` with a colour chosen for A2, **different from A1's
+  E0218A**. The wrapper accepts style JSON directly (`BaseStyle.Json`, `style/BaseStyle.kt:28` at `v0.14.0`); the
+  native SDK can take a `file://` URL to a bundled JSON (inferred; `MLNMapView.h:200` says only that the URL "may be a
+  full HTTP" URL, and the rest of the sentence was not read).
+- **The Compose layer behind the map keeps A1's E0218A.** So a map view that never draws, or draws transparent, shows
+  E0218A, and the gate on A2's colour fails. A crash shows the home screen, which fails both.
+- Gate: `png-region.py after.png --colour <A2 colour> --tolerance 8 --threshold 0.98`, plus a second call that must
+  **fail** on E0218A (exit 1 exactly), plus A1's control on `before.png`. The app prints `A2: style loaded` from the
+  style-loaded callback (wrapper: `onMapLoadFinished`, `MaplibreMap.kt:116` at `v0.14.0`; native:
+  `mapView:didFinishLoadingStyle:`), and the step waits for it as A1's waits for its drawn-frame line.
+- **Can it fail?** Yes, three ways, and a revert run can show it: change the style's colour by one edit and the gate
+  must go red naming the new commonest colour, as A1-3b's revert did. **Needs no network.** What it proves: MapLibre
+  itself drew into our window. What it does not: tiles, glyphs, sprites, the Worker.
+
+### R2. The project's style, the map's own "done" signal
+
+- The app loads `TRAIL_STYLE_URL`'s path on the Worker (section 1) and prints one line per event: `A2: style loaded`,
+  `A2: map loaded`, `A2: map idle` (native `mapViewDidBecomeIdle:`, which by its header means every requested tile has
+  loaded), or `A2: map failed: <error>` (wrapper `onMapLoadFailed(reason)`, `MaplibreMap.kt:115` at `v0.14.0`; native
+  `mapViewDidFailLoadingMap:withError:`).
+- **The wrapper 0.14.0 does not expose idle.** Its iOS adapter overrides `mapViewDidFailLoadingMap`,
+  `mapViewDidFinishLoadingMap` and `didFinishLoadingStyle` (`IosMapAdapter.kt:150-164` at `v0.14.0`) and a per-frame
+  callback with a frame rate (`onFrame`, `MaplibreMap.kt:112`); `git grep -i idle` over its `lib/.../iosMain` found no
+  idle hook. "Map loaded" is weaker than idle (whether it waits for tiles is not stated in `MLNMapViewDelegate.h:196-206`
+  read today). So with the wrapper, R3's pixels carry the weight; with the fallback, idle does. 0.20.0's equivalents
+  were not read (its API was rewritten, section 2).
+- Gate: the `loaded` line (and, native, `idle`) within a wait of 120 s after launch; any `failed` line is red.
+
+### R3. The screenshot is a map: not flat, not the background, not the window
+
+On `after.png`'s middle band, three statistics, each a separate exit code (an extension of `png-region.py`, or a new
+script with its own self-test, as A1 did for the first):
+
+- **Not one flat colour:** the commonest colour holds less than a stated share of the band (for example under 0.90).
+  Fails on a blank map, a grey placeholder, the home screen's wallpaper only if it is flat, and A1's E0218A.
+- **Not the style's background:** the share within tolerance of `#cccccc` (the Trail style's `background` layer paint,
+  read today from `trail-v4.json`, layer 1) is below a stated share. This is the "style loaded, no tiles drew" case.
+- **Not the window behind:** the share of E0218A is about zero.
+- Thresholds are **not** guessed here: as in A1 (observe in A1-3a, gate in A1-3b), the first real run prints the
+  statistics without gating, and the gate is set from them. A revert run then makes it go red (for example, point the
+  style at a TileJSON path the Worker answers 404 for, so the background shows alone).
+- **Needs network** from the simulator to the Worker.
+
+### R4. A tile request count
+
+- Native fallback: `MLNNetworkConfigurationDelegate` `willSendRequest:` / `didReceiveResponse:`
+  (`MLNNetworkConfiguration.h:29-31`) can count requests by kind and status and print one summary line, e.g.
+  `A2: requests style=1/200 tilejson=1/200 tiles=N/200 glyphs=... sprite=...`. Gate: style and TileJSON 200, tiles 200
+  at least 1.
+- Wrapper 0.14.0: no request hook was found (not searched beyond the callbacks above); the head's docs have a
+  `requests.mdx` page (`docs/src/content/docs/requests.mdx`, not read). For the wrapper, R4 is **unsupported** until
+  shown otherwise, and is reported as such, not faked from the pixels.
+
+### N. Telling a network failure from a rendering failure
+
+- A step **before** the launch, on the runner itself: `curl` the style, the TileJSON and the zoom-0 tile (the whole
+  world) on the Worker, printing status and size, as section 1 did here. The simulator uses the host Mac's network
+  (inferred; not checked), so this is the best cheap stand-in for what the app will see.
+- Reading the outcome:
+
+  | N (host curl) | App lines | R3 pixels | Verdict |
+  |---|---|---|---|
+  | fails | any | any | **Network or Worker down**: the map checks are reported "not run (network)", not red for rendering. The job fails with that line. |
+  | ok | `failed: ...` | any | The app could not load what the host could: a request difference (user agent, TLS, ATS) or the SDK. Red, read the error. |
+  | ok | loaded, no idle (native) | flat or background | Tiles did not load or draw. Red, rendering or tiles; R4 says which (native). |
+  | ok | loaded (and idle) | flat / background / E0218A | Loaded but did not draw. Red, rendering. |
+  | ok | loaded (and idle) | passes | Green: a map rendered from the project's style, simulator-checked. |
+
+- R1 has no network and so separates "MapLibre cannot draw here" from everything above; that is why it comes first.
+
+### Which need network
+
+R1: none. R2, R3, R4 and N: the runner and the simulator must reach the Worker's host over HTTPS. A1's jobs already
+reach Maven Central and GitHub; whether GitHub's macOS runners reach `workers.dev` was not checked (no reason to doubt
+it, but unverified).
+
+### Job time (estimated, not measured)
+
+- A1's `app-bundle`: 11 min 49 s to 13 min 24 s across the four runs read (A1-3 section 18 table; section 3 "Time").
+  Of that, simulator create and boot about 4 min, the build about 4 to 5 min.
+- A2 adds, by estimate: the wrapper's klibs and the bigger framework link (about +1 to +3 min; the FFI line's 24 MB
+  engine klib would be the largest), the pinned xcframework fetch for the classic SDK (seconds; 10 MB), the host
+  `curl` step (seconds), and the wait for the map (up to the 120 s limit; expected well under it).
+- **Estimate: 14 to 19 minutes for `app-bundle`**, inside its 45-minute timeout. If R1 and R2 run in the same job as
+  two launches of one build (a launch argument choosing the local or the real style), add about 1 minute, not another
+  build and boot.
