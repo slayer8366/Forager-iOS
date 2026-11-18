@@ -7832,3 +7832,19 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next (the planner's):** A1-1, the `:app` module and the framework link, with a new `app.yml`, on `app`.
 
 **Notes:** Written by the planner session by hand. Next free ID -203.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-203
+**Timestamp:** 2026-11-18T04:57:00Z
+**Continues:** -199
+**Title:** CI on the pin commits: `brouter-port` `382204f` green; `brouter-port-5b` `0f9e0fd` green in three jobs, the fourth failed on a server 503 and was rerun
+
+**`brouter-port`, run 44231205259 on `382204f`, attempt 1, read by the planner.** Four jobs successful, 0 compile-error lines under both patterns in each. `jvm` 262, 0 failures; `jvm-production` 3 with `OK: all 2 classes ran`; simulator-checked 61 and 7 with `OK on the iOS simulator: all 25 classes ran` and `OK: all 2 classes ran`; memory 3, 1, 1 with its two gate lines. Equal to -197's counts.
+
+**`brouter-port-5b`, run 44231196963 on `0f9e0fd`, attempt 1.** `jvm` 262, simulator 61 and 7 with 25 classes, memory 3, 1, 1: all successful, 0 compile-error lines. `jvm-production` failed in the Gradle task `msunReference` with `curl: (22) The requested URL returned error: 503`, 42 seconds in, before any test ran. The two steps after it (the counts and the class-ran gate) failed in turn because no XML existed, which is the gate added in session 78 doing its work. An outside download failure; no test result.
+
+**Done.** The planner reran the failed job with GitHub's "rerun failed jobs" on the same commit and pushed nothing. Its result was not in when this was written. The two commits have identical trees (-199), and the same job passed on `382204f`.
+
+**Notes:** Written by the planner session by hand. Next free ID -204.
