@@ -63,7 +63,7 @@ read them as a coordinate.
   2.4.20, and a build whose compiler is older than its stdlib is what Phase 1 called shipping "a newer stdlib than its
   compiler, by nobody's choice" (`2026-10-28-brouter-port-verify.md:562-565`). **2.4.20 is the lowest compiler that
   meets both without a mismatch [I, from the two files; 2.4.0 and 2.4.10 were not tried].** 2.4.21 meets both too
-  **[I: same reasoning; tried below in section 3 only if time allowed, see there]**.
+  **[I: same reasoning; 2.4.21 was not tried in scratch]**.
 - **The error seen with our 2.3.10** (session 86, `:app:compileKotlinIosSimulatorArm64` with the wrapper added; log
   `s86/exp-020f.log:33-36` in scratch, re-read today) **[C, session 86]**:
   `w: KLIB resolver: Skipping '.../maplibre-compose-iosSimulatorArm64Main-0.20.0.klib' having incompatible ABI version
