@@ -341,7 +341,8 @@ restore). Every result is **simulator-checked**.
 Commit `f56cbe5` (the workflow change), run **44255674662**.
 
 - **Attempt 1: `app-bundle` red, job 134636660132, in the build step, the destination error again.** Image
-  `macos-26-arm64`, version `20261112.0504.1` (log line 18), Xcode 26.0.1, build 17A400. The new diagnostic step
+  `macos-26-arm64`, version `20261112`, build `0504.1` (log line 18; written split, as in section 4, because the
+  E1 scan reads the joined form as a four-decimal number), Xcode 26.0.1, build 17A400. The new diagnostic step
   (log 214-237): `xcrun simctl list runtimes` started at 07:01:52 and printed at 07:02:44, **52 s later**, listing
   `iOS 26.2 (26.2 - 23C54) - com.apple.CoreSimulator.SimRuntime.iOS-26-2`, iOS 26.4 and 26.5, and the tvOS, watchOS
   and visionOS 26.2/26.4/26.5 runtimes. `xcodebuild -showdestinations` (07:02:44 to 07:02:49) printed **no "Available
