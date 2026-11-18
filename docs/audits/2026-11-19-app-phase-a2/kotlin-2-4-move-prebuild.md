@@ -296,6 +296,20 @@ and the current wrapper compiles into `:app`. **What it does not show:** any lin
 runner can link a framework, run `iosSimulatorArm64Test` or build the app), and anything at Xcode 26.0.1 or 26.2 against a
 26.4 distribution (section 3d).
 
+**The engine's JVM bytecode, 2.3.10 against 2.4.20** (beyond the brief; `javap -c -p` of every class in
+`brouter/build/classes/kotlin/jvm/main` from both copies, the "Compiled from" line dropped) **[C: `s88/javap/`]**:
+- 147 classes in each, the same names; **109 byte-identical**, 38 differ.
+- **34 of the 38 differ only in one name:** `internal` members are mangled with the module name, which changed from
+  `$brouter` to `$forager_ios_brouter` (for example `RoutingContext.getLibm$brouter` against
+  `getLibm$forager_ios_brouter`). With that suffix normalised, they are identical.
+- **4 differ in code shape:** `RoutingEngine` (one block around offsets 681 to 961 laid out differently, `MapsKt.getValue`
+  and a float division by `3.6f` among the moved lines), `StorageConfigHelper` and `JavaTextKt` (string trimming code,
+  `Intrinsics.compare` loops), and `NodeHashMap$ValueIterator` (its constructor now takes the outer `NodeHashMap`).
+- **In all 38, the ordered sequence of floating-point instructions, numeric conversions, floating-point constants and
+  `java.lang.Math`/`StrictMath` calls is identical** (a script comparing the sequences per class: "38 classes checked;
+  fp sequences differing: 0"). The msun and `CheapRuler` classes are among the 109 identical ones. This is the JVM only;
+  it says nothing of Kotlin/Native's LLVM output.
+
 **The JVM tests, base against `k24`:** both copies run `./gradlew --no-daemon :brouter:jvmTest`, as `brouter.yml`'s `jvm`
 job does, fetching and checking the oracle and tiles through the build's own tasks. Results are written below when both
 runs finish (this section is pushed now because the container restarts often).
@@ -510,3 +524,72 @@ counts and lines.
   work.
 - **That Forager's Android app can take the port in.** The switch has not happened; this move only keeps the two
   compilers equal for when it does (section 4).
+
+## 9. Disclosure
+
+### Confirmed (a file at a cited line, a URL fetched today, or a command run today)
+
+- 2.4.20 is stable (2026-09-07); 2.4.21 is the newest 2.4 stable (2026-10-08); 2.5.0-RC exists (Maven Central metadata and
+  POM dates). JetBrains' row for 2.4.20–2.4.21: Gradle 7.6.3–9.7.0, AGP 8.5.2–9.3.1, Xcode 26.4.
+- Wrapper 0.20.0's `.module` requires `kotlin-stdlib` 2.4.20 and Compose 1.12.1; its klib is ABI and metadata 2.4.0,
+  compiler 2.4.20.
+- Forager at `f29db48`: the pins and comments in section 2's table; no Kotlin language or API version set; the vendored
+  BRouter is Java only; CI names no Kotlin version; nothing in Forager refers to this repository.
+- KSP has no 2.4.x; its newest is 2.3.14; JetBrains pairs Kotlin 2.4.21 with KSP 2.3.12. Room 2.8.4 and 2.8.5 carry
+  `kotlin-metadata-jvm` 2.2.0.
+- The Room probe on Kotlin/JVM: 2.3.10/KSP 2.3.10, 2.4.20/KSP 2.3.10 and 2.4.20/KSP 2.3.14 all built, with identical
+  generated code and schema.
+- This repository at 2.4.20: `:brouter` JVM and both iOS klibs and `:app`'s two iOS klibs compiled with 0 `e:` and no new
+  `w:`; `:app` with wrapper 0.20.0 compiled for both iOS targets.
+- Kotlin/Native 2.3.10 to 2.4.20: LLVM 19 to 21, toolchain Xcode 26.0.1 to 26.4, iOS minimum 14.0 to 15.0,
+  `minimalXcodeVersion` 12.5 in both; KGP 2.4.20's `maxTested` Xcode is 26.4.
+- JVM bytecode of `:brouter`'s 147 main classes, 2.3.10 against 2.4.20 (`javap -c -p`, section 3e).
+- Compose 1.12.2 is the newest stable; 1.13.0-rc01 is the newest published (today); 1.12.2's klibs were built by 2.3.20.
+- `macos-26` carries Xcode 26.4.1.
+
+### Inferred
+
+- That a 2.4.20 compiler alone (not 2.4.0 or 2.4.10) is the lowest that meets the wrapper without a compiler/stdlib
+  mismatch (from the two published files; lower versions not tried).
+- That the JVM's arithmetic cannot change with the compiler, and that the library maths the port calls on the JVM are
+  the JDK's.
+- That session 87's green `brouter.yml` runs were `47e25f2`'s (from timestamps).
+- That nothing breaks in either build if one moves first (no build coupling found).
+- That Forager's Room, serialization and coroutines need no move (the probe covers Room on plain JVM only).
+
+### Could not determine
+
+- What 2.4.21 changes over 2.4.20, and KSP's own release notes (GitHub's API and release pages answered 403 here).
+- Whether Room called `kotlin-metadata-jvm` 2.2.0 on 2.4.0 metadata in the probe.
+- Anything in Forager's Android build: no Android SDK in this container.
+- Whether 2.4.20 links and runs on the Mac runner under Xcode 26.0.1 or 26.2; whether LLVM 21 contracts floating point on
+  arm64; whether the simulator counts hold. Only the Mac runner can show these.
+
+### Premises in this brief that were wrong, or need a qualifier
+
+- "Kotlin 2.4.20, and our pin is 2.3.10": right, but **2.4.20 is not the newest 2.4**; 2.4.21 is (section 1, O2).
+- The brief lists "KSP or kapt" as a companion that moves with Kotlin. **Forager's own catalog comment says KSP "stays
+  equal to the `kotlin` version"; that cannot hold at 2.4.20, because no KSP 2.4.x exists** (section 2). This is a premise
+  in Forager's file, not in the brief, reported here because the move meets it first.
+- "1.12.2 states a minimum": the Kotlin minimum the catalog cites is in 1.11.0's notes ("Kotlin 2.3 is required for native
+  and web platforms"); 1.12.2's own notes state none (section 3b). "1.13 was in beta on 2026-11-18": by 10:09 UTC that day
+  it was `1.13.0-rc01` on Maven Central.
+- None found that makes the move impossible or dangerous. The ruling, "Move Kotlin to 2.4.20", stands as given.
+
+### Decided beyond scope
+
+- The Room/KSP probe on plain Kotlin/JVM, as the cheapest available stand-in for Forager's build without an Android SDK.
+- The `javap` comparison of the engine's JVM bytecode, which the brief did not ask for.
+- Keeping the session 86 mirror (port 18088) for every scratch build.
+- **One intermediate commit (`fa4c133`) contains a runner image version the E1 scan counts as a number** (`20261102.` then
+  `0473.1`, a date-based image tag, not a coordinate). The scan printed 1 on that commit; the next commit (`4d17b08`)
+  rewrote it as a date and the scan printed 0 on it and on the two together. Both were pushed together, because
+  amending or resetting the unpushed commit is ruled out by the brief and by Forager's "Push before you tidy". So the
+  pushed history holds one scan hit that is not a coordinate. Reported, not hidden.
+
+### Not checked
+
+- Forager's `ci.yml` jobs, lint, D8 output, Robolectric, any phone.
+- `brouter.yml` and `app.yml` on the Mac at 2.4.20; any link; any simulator run.
+- 2.4.21; KSP between 2.3.11 and 2.3.13; Room 2.8.5; Compose 1.13.
+- The production record (`BROUTER_PRODUCTION_RECORD` was not set in scratch, so its two classes print "not run").
