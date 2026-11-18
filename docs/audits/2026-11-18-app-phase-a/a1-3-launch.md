@@ -335,3 +335,25 @@ restore). Every result is **simulator-checked**.
   within 8 of `E0218A`, which a blue screen cannot be.
 - The restore (one commit editing the constant back) makes `git diff <step-2 commit> HEAD -- app iosApp .github tools`
   print nothing, and its run is green as in step 2.
+
+## 12. Step 2 runs (recorded as they arrive)
+
+Commit `f56cbe5` (the workflow change), run **44255674662**.
+
+- **Attempt 1: `app-bundle` red, job 134636660132, in the build step, the destination error again.** Image
+  `macos-26-arm64`, version `20261112.0504.1` (log line 18), Xcode 26.0.1, build 17A400. The new diagnostic step
+  (log 214-237): `xcrun simctl list runtimes` started at 07:01:52 and printed at 07:02:44, **52 s later**, listing
+  `iOS 26.2 (26.2 - 23C54) - com.apple.CoreSimulator.SimRuntime.iOS-26-2`, iOS 26.4 and 26.5, and the tvOS, watchOS
+  and visionOS 26.2/26.4/26.5 runtimes. `xcodebuild -showdestinations` (07:02:44 to 07:02:49) printed **no "Available
+  destinations" section at all**, only `Ineligible destinations for the "ForagerApp" scheme:` and
+  `{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device, error:iOS 26.0 is not
+  installed. ... }`; no exit line was printed, so it exited 0. One second later the build (log 262-267):
+  `xcodebuild: error: Unable to find a destination matching the provided destination specifier:`
+  `{ generic:1, platform:iOS Simulator }`, the same ineligible list, `SDKROOT = iphonesimulator26.0`, exit code 70.
+  The other three jobs green: `app-klibs` 134636660184, `app-framework` 134636659789, `png-region` 134636660164.
+- What this shows against A1-3a's inference (section 4: "CoreSimulator had not finished loading the simulator runtimes"):
+  **the runtimes were listed by `simctl` five seconds before `xcodebuild` reported no simulator destination**, so
+  "the runtimes were not yet loaded" in the plain sense does not explain it. That `simctl list runtimes` took 52 s
+  suggests CoreSimulator was slow to come up on this runner (inferred). Why `xcodebuild` then saw no iOS Simulator
+  destination at all is **not determined**.
+- Rerun of the failed job with `gh run rerun 44255674662 --failed` at 07:07:26, nothing changed (result below).
