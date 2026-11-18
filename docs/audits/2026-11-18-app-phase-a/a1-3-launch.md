@@ -833,3 +833,98 @@ check has not been seen red on a runner.
   `appintentsmetadataprocessor` "Metadata extraction skipped" line, git's `hint:` line), and the same in the two
   `app-framework` logs (git's `hint:` only). As predicted; no new linker warning.
 - Against section 16's predictions: all held. The `Build version` (17C52) was not predicted.
+
+## 18. Session 85, step 3 and results: the revert run, the restore, and the disclosure sections
+
+### The revert run
+
+Commit `ab933c9`: one line, `app/src/commonMain/kotlin/com/zynergylabs/forager/app/App.kt:11`, `Color(0xFFE0218A)` to
+`Color(0xFF1E6FD9)` (`git diff --stat`: 1 file, 1 insertion, 1 deletion). A copy of the file was saved before the edit.
+Run **44261245328**, **red, `app-bundle` only** (job 134654851453, 07:44:37 to 07:56:26; image version 20261102, build
+0473.1, log 18). Read in this order:
+
+1. **The build, before anything else:** the job checked out `ab933c9c5340dddc034213c13c5401e024ae026e` (log 109); 0
+   lines matching `^e: ` and 0 matching ` e: ` in the whole job log; `SDKROOT = iphonesimulator26.2` (log 304); `>
+   Task :app:linkDebugFrameworkIosSimulatorArm64` inside `xcodebuild` (log 1054); `** BUILD SUCCEEDED **` (log 1291);
+   the bundle check's `OK:` line (log 1380). So the reverted build compiled and ran; the result below is this build's.
+2. **The control still failed on `before.png`:** `png-region: FAIL: 98/2530188 pixels ... within 24 of E0218A` (log
+   2126), `OK: the control: the colour check failed on before.png (exit 1)` (log 2127).
+3. **The drawn-frame line still appeared:** app stdout `A1: first frame drawn` (log 2164), `OK: the app printed 'A1:
+   first frame drawn'` (log 2166), `waited 12 s` (log 2162).
+4. **The failure is the gate's own, naming the colour it saw:** `png-region: common colour 1E6FD9: 2530188 pixels` (log
+   2196), then **`png-region: FAIL: 0/2530188 pixels (0 to four places) within 8 of E0218A, threshold 0.98`** (log 2197;
+   four-place figures not written here, for the E1 scan), then `FAIL: the colour check on after.png exited 1 (E0218A,
+   tolerance 8, threshold 0.98)` (log 2198) and `##[error]Process completed with exit code 1.` (log 2199), the job's only
+   `##[error]` line. The printed step after it still ran (`===== after.png`, log 2246; `pid 14222 is alive`, log 2290).
+   Every line here is one this edit could produce: the colour named is the reverted constant's, exactly.
+- The other three jobs green: `app-klibs` 134654851703 (07:44:38 to 07:45:50), `app-framework` 134654851780 (07:44:39 to
+  07:49:18; image version 20261112, build 0504.1; `Xcode 26.2` log 176, `OK:` log 1414), `png-region` 134654851995.
+
+### The restore
+
+Commit `c514813`, the constant edited back (`sed` on the one line, not `git checkout`). `cmp` against the copy saved
+before the revert: identical. `git diff 243f6ec HEAD -- app iosApp .github tools` printed nothing (0 bytes), before and
+after the push. So the step-2 workflow change is intact and `app/` is as it was. Both commits stay in history.
+
+Run **44262884089**, **green, all four jobs**. `app-bundle` job 134660261407, 07:57:13 to 08:10:21 (image version
+20261112, build 0504.1): checked out `c5148130c91b0ba1c46d714f6337e55051819998` (log 109); `Xcode 26.2`, `Build version
+17C52`, `OK:` (log 177-179); `^e: ` 0, ` e: ` 0; ICU warning unchanged (log 1250); `** BUILD SUCCEEDED **` (log 1291);
+bundle check `OK:` (log 1380); control `OK:` (log 2188); `OK: the app printed 'A1: first frame drawn'` (log 2227);
+`png-region: common colour E0218A: 2530188 pixels` (log 2257), `png-region: PASS: 2530188/2530188 pixels ... within 8 of
+E0218A, threshold 0.98` (log 2258), `OK: the colour check passed on after.png ...` (log 2259). `app-framework`
+134660260591 (07:57:13 to 08:00:50; version 20261102, build 0473.1): `Xcode 26.2` (log 176), `OK:` (log 178), `Non-fat
+file: ... architecture: arm64` (log 1411), `OK: the framework was linked ...` (log 1413). `app-klibs` 134660260197
+(07:57:13 to 07:58:22), `png-region` 134660260831 (07:57:14 to 07:57:19).
+
+### Runs and job times, this session
+
+| Run | Head | Result | `png-region` | `app-klibs` | `app-framework` | `app-bundle` |
+|---|---|---|---|---|---|---|
+| 44259385803 | `243f6ec` (Xcode 26.2) | success | 134648760523, 5 s | 134648760395, 1 min 11 s | 134648760740, 4 min 54 s (0473.1) | 134648760070, 12 min 45 s (0504.1) |
+| 44261245328 | `ab933c9` (revert) | **failure, at the gate** | 134654851995, 12 s | 134654851703, 1 min 12 s | 134654851780, 4 min 39 s (0504.1) | 134654851453, 11 min 49 s (0473.1) |
+| 44262884089 | `c514813` (restore) | success | 134660260831, 5 s | 134660260197, 1 min 9 s | 134660260591, 3 min 37 s (0473.1) | 134660261407, 13 min 8 s (0504.1) |
+
+Image builds in brackets (all `macos-26-arm64`; 0473.1 is version 20261102, 0504.1 is version 20261112). Xcode 26.2
+built and linked on both image versions, in both jobs.
+
+No `brouter` run was started by this session's pushes (`app/**`, `app.yml` and `docs/**` are all in its
+`paths-ignore`); the run list shows only `app` runs for `243f6ec`, `ab933c9` and `c514813`.
+
+### Confirmed (CI logs cited above; every iOS fact simulator-checked)
+- Under Xcode 26.2 (build 17C52) both macOS jobs build: the framework links (`app-framework`, three runs), and the
+  unsigned app builds with Gradle linking the framework inside `xcodebuild` (`app-bundle`, three runs).
+- `-showdestinations` under 26.2 offers 34 iOS Simulator destinations including the generic one (run 44259385803).
+- The select step's version check passed in six jobs; its failure branch was shown only with local stubs.
+- The gate ran for the first time and passed (44259385803, 44262884089); it failed on the reverted colour with its own
+  line naming `1E6FD9` (44261245328), on a build shown to have compiled and run.
+- The restore left `app iosApp .github tools` identical to the step-2 commit.
+- No Kotlin warning naming Xcode under 26.2; the ICU linker warning unchanged; no new warning line.
+
+### Inferred
+- That 26.2 will keep working on these runners: true for the three runs read, across both image versions; not more.
+- The green run's `waited 85 s` (log 2223) is mostly `simctl launch` itself (launch at 08:07:56, `pid=` at 08:09:22, log
+  2220-2222), against the step's 120 s wait and its 5-minute timeout. A slower runner could reach the 120 s limit with
+  the app healthy (inferred; not seen red).
+
+### Could not determine
+- Why Kotlin's Xcode check prints nothing (section 15's `maxTested = 16.0` question stands; 26.2 changed nothing there).
+- Why Xcode 26.0.1 built green three times today before failing (section 15).
+
+### Premises in the brief that were wrong
+- None found. The brief's 26.2 reason ("the lowest Xcode offering destinations on all six machines sampled in run
+  44257759986") matches section 15's table.
+
+### Decided beyond scope
+- The version check's failure branch was exercised locally with stub commands before the push (described in section 17),
+  since it cannot be seen red on a runner without breaking the job on purpose.
+- The two 26.2 select steps write `build/xcodebuild-version.txt` (the file the check reads); `mkdir -p build` added
+  before it. Nothing reads the file afterwards and it is not uploaded.
+- For the revert I also compared the printed steps' and the other jobs' state, and the app-framework logs of all three
+  runs for the same warning search.
+
+### Not checked
+- The version check red on a runner.
+- The `brouter` run 44257759907 (`bccce50`, started in session 84), still in progress when read at the end; not waited for.
+- The uploaded artifacts (`a1-3-simulator`, `a1-2-xcode`) of this session's runs were not downloaded; the PNGs were
+  read only through `png-region.py`'s log lines.
+- Any device: every iOS statement here is simulator-checked.
