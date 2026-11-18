@@ -89,7 +89,113 @@ its `jvm-production` job had failed in 47 s: `curl: (22) The requested URL retur
 `:brouter:msunReference` (job `134556396929`'s log). That is a remote host refusing a pinned source fetch, not a code
 failure; reported, not touched.
 
-2. Version choices - pending
+## 2. Version choices
+
+**Sources, all fetched 2026-11-18.**
+- Compose Multiplatform's compatibility page,
+  `https://kotlinlang.org/docs/multiplatform/compose-compatibility-and-versioning.html`. It has **no per-version Kotlin
+  table**. It says: "The latest Compose Multiplatform is always compatible with the latest Kotlin"; since 1.8.0, use at
+  least Kotlin 2.1.0, and "upgrade to Kotlin 2.2.20 for projects targeting platforms with rapidly evolving support, such
+  as iOS and web"; and "Compose Multiplatform requires the Compose Compiler Gradle plugin at the same version as the
+  Kotlin Multiplatform plugin". Its Jetpack mapping lists 1.12.2 as the newest (Jetpack Compose 1.12.1). The brief's
+  "official compatibility table" for Kotlin does not exist on that page; the per-release Kotlin minimums are in the
+  changelog, below.
+- Compose Multiplatform's changelog, `https://raw.githubusercontent.com/JetBrains/compose-multiplatform/master/CHANGELOG.md`
+  (saved in scratch, 7,659 lines), and its releases page `https://github.com/JetBrains/compose-multiplatform/releases`.
+  `gh api` on that repository was refused ("GitHub access to this repository is not enabled for this session"), so the
+  releases were read through the web page.
+- Maven Central's `org/jetbrains/compose/compose-gradle-plugin/maven-metadata.xml`: newest versions `1.12.2`, then
+  `1.13.0-alpha01`, `-alpha02`, `-beta01`, `-beta02`; `lastUpdated 20261104123324`.
+- Kotlin's releases page, `https://kotlinlang.org/docs/releases.html`: 2.3.10 (5 Feb 2026, bug fix), 2.3.20, 2.3.21,
+  2.4.0 (3 Jun 2026), 2.4.10, 2.4.20, 2.4.21 (8 Oct 2026, latest stable); 2.5.0 planned for December 2026.
+- Kotlin Multiplatform's compatibility guide,
+  `https://kotlinlang.org/docs/multiplatform/multiplatform-compatibility-guide.html`: the row for KMP plugin `2.3.10`
+  reads Gradle `7.6.3–9.0.0`, AGP `8.2.2–9.0.0`, Xcode `26.0`. The `2.4.20–2.4.21` row reads Gradle `7.6.3–9.7.0`,
+  AGP `8.5.2–9.3.1`, Xcode `26.4`.
+
+**What each Compose Multiplatform line needs of Kotlin, for iOS** (changelog lines, as numbered in the saved copy):
+| Line | Status today | Kotlin for native (iOS) | Where |
+|---|---|---|---|
+| 1.10.x | stable, older | "Kotlin 2.2 is required for native and web platforms" | `:2067` |
+| 1.11.x | stable, older | "Kotlin 2.3 is required for native and web platforms" | `:1149` |
+| 1.12.0 to 1.12.2 | **1.12.2 is the latest stable** (15 Oct 2026, "Latest" on the releases page) | no new minimum stated in 1.12.0's or 1.12.2's notes (`:135-177`, `:529-675` read) so 1.11's "Kotlin 2.3" stands | `:135` |
+| 1.13.0 | beta (`beta02`, 4 Nov 2026) | "The minimal supported Kotlin version for k/native is 2.4.0" | `:193` |
+
+So **Compose Multiplatform 1.12.2 is the newest stable release whose stated Kotlin minimum for iOS (2.3) the repo's
+Kotlin 2.3.10 meets. The 1.13 line, when it is stable, needs Kotlin 2.4.0 or later for iOS.** 1.11.0 also dropped
+Apple x86_64 targets (`:1160`), which matches `:brouter`'s choice of no `iosX64` (`brouter/build.gradle.kts:2`).
+
+**Tried in scratch, and it held (a fact for compiling, not for linking or running).** A throwaway two-file project at
+`/tmp/claude-0/-home-user/2bc41cf9-5db8-5578-a058-248445c292c6/scratchpad/s79/cmp/` (never committed): Gradle 9.0.0
+(the repo's own wrapper copied), plugins `org.jetbrains.kotlin.multiplatform 2.3.10`, `org.jetbrains.kotlin.plugin.compose
+2.3.10`, `org.jetbrains.compose 1.12.2`; one module `:app` with `iosArm64()` and `iosSimulatorArm64()`, each with
+`binaries.framework { baseName = "ForagerApp"; isStatic = true }`; `commonMain` depends on Compose Multiplatform 1.12.2's
+`runtime`, `foundation` and `ui`; `App()` is a `Box` filling the screen with one solid colour, and `iosMain` has
+`MainViewController() = ComposeUIViewController { App() }`. Run on this Linux container:
+`./gradlew --no-daemon :app:compileKotlinIosSimulatorArm64 :app:compileKotlinIosArm64 :app:linkDebugFrameworkIosSimulatorArm64`
+gave `BUILD SUCCESSFUL in 1m 19s` (`run9.log`): both iOS klibs compiled, 0 lines starting `w: ` or `e: `, the plugin's
+own `checkIosSimulatorArm64MainComposeLibrariesCompatibility` and `checkIosArm64MainComposeLibrariesCompatibility` ran
+and passed, and `linkDebugFrameworkIosSimulatorArm64` was `SKIPPED`, because a framework links only on macOS. **So
+nothing here shows the framework links, or that the app runs; that needs the macOS runner (A1's first dispatch).**
+
+What else the scratch build showed:
+- **Google's Maven repository is required, `mavenCentral()` alone is not enough.** With only Maven Central for
+  dependencies (the repo's `settings.gradle.kts:9-13` as it stands), resolution failed with 15 "Could not find" lines,
+  13 distinct, all `androidx.*` artifacts pulled by Compose Multiplatform's iOS variants, for example
+  `androidx.compose.runtime:runtime-saveable:1.12.1`, `androidx.lifecycle:lifecycle-common:2.9.4`,
+  `androidx.annotation:annotation:1.9.1` (`run7-central-only.log`). Adding Google's Maven, restricted by content filter
+  to `androidx.*` groups, resolved everything. The changelog says the same since 1.6 (`:5873`: "`google()` maven
+  repository is now required"). The engine's `:brouter` resolves nothing from there (inferred: none of its four
+  catalog entries is an androidx artifact), but a new repository in `settings.gradle.kts` is visible to every module,
+  so it should carry a content filter that admits only `androidx` groups.
+- **Compose Multiplatform raises `kotlin-stdlib` in the app module to 2.3.20.** `dependencyInsight` on
+  `iosSimulatorArm64CompileKlibraries`: "org.jetbrains.kotlin:kotlin-stdlib:2.3.20 ... By conflict resolution: between
+  versions 2.3.20, 2.3.10, ...", requested by `org.jetbrains.skiko:skiko-iossimulatorarm64:0.150.2`. That is the app
+  module's own dependency graph; `:brouter`'s graphs are its own and do not change unless `:brouter` itself gains a
+  dependency (inferred from how Gradle resolves per project; not run against the real repo). Whether Kotlin/Native
+  links the Maven stdlib at all, or only the one bundled with the 2.3.10 compiler, was not determined. kotlinx-coroutines
+  resolves to 1.9.0 in the same graph.
+- **The root build's plugin classpath stays on Kotlin 2.3.10.** `buildEnvironment` shows `kotlin-gradle-plugin:2.3.10`
+  and `kotlin-gradle-plugin-api:2.3.10` with no upgrade arrow; the Compose Gradle plugin adds only
+  `hot-reload-gradle-plugin 1.2.0`.
+- **This container's network returns spurious 404s from Maven Central.** Twelve parallel `curl`s of one existing POM
+  gave 10 × 200 and 2 × 404. Gradle caches a 404 as "missing", so the first runs failed on random artifacts; the
+  scratch build went through a local retrying mirror (`scratchpad/s79/tools/mirror.py`). This is this container's
+  path only; GitHub's runners resolve from the real hosts. Recorded because a coder repeating the probe here will meet
+  it.
+
+**Does Kotlin have to move? No, for A1.** 1.12.2 works with 2.3.10 by its own changelog and by the scratch compile.
+Kotlin would have to move only to take Compose Multiplatform 1.13 or later (Kotlin 2.4.0 for iOS, `:193`).
+
+**What a Kotlin move would risk for the engine** (inferred, from the repo's own record of what the engine is held to):
+the catalog comment pins Kotlin "moved only together with Forager" (`libs.versions.toml:3`), and Forager is on 2.3.10
+(Forager `f29db48`, `gradle/libs.versions.toml:7`). A compiler change touches every compiled number path of the engine:
+Kotlin/JVM's bytecode for `jvmTest`'s differential runs against the BRouter 1.7.10 oracle, and Kotlin/Native's LLVM
+code for the simulator runs held to the same expected values (`msun` cos and atan2 tables, the cosine rows, the
+memory groups and the stack ladder). A move would need, at least, `jvm`, `jvm-production`, `ios-smoke` and
+`ios-memory` all green with unchanged counts, and `e3Strata` rerun on the oracle's JDK, before it could be called free.
+Kotlin 2.4's own Xcode row is 26.4 (the guide above), so it would also move the selected Xcode from 26.0.1, which the
+stack ladder's results depend on (inferred: stack sizes and the simulator runtime come with the Xcode). None of this is
+needed for A1.
+
+**Exact pins proposed for A1** (each line in `gradle/libs.versions.toml`, exact, no ranges):
+| Entry | Version | Why |
+|---|---|---|
+| `kotlin` | `2.3.10` (unchanged) | the engine's and Forager's pin |
+| plugin `org.jetbrains.kotlin.plugin.compose` | `version.ref = "kotlin"` | the compatibility page: same version as the KMP plugin |
+| plugin `org.jetbrains.compose` and `compose-multiplatform` libraries | `1.12.2` | latest stable; Kotlin 2.3 for native |
+| Gradle wrapper | `9.0.0` (unchanged) | 2.3.10's supported range ends at 9.0.0 |
+| Xcode | `26.0.1` (`/Applications/Xcode_26.0.1.app`, build 17A400), as `brouter.yml` | 2.3.10's Xcode is 26.0; it is on the runner image (`macos-26-arm64` Readme, Xcode table, row `26.0.1 17A400`) |
+| simulator runtime | iOS `26.2` (the oldest on the image) with device type `iPhone 17`, named explicitly | so the device does not move when the image's default does |
+| Material3 | **not used in A1** | 1.12.2 ships `material3:1.12.0-alpha03`, an alpha (changelog `:167`); A1 needs `foundation` only |
+
+The runner image's Readme
+(`https://raw.githubusercontent.com/actions/runner-images/main/images/macos/macos-26-arm64-Readme.md`, fetched today)
+is the same image version the CI log showed in section 1, and lists Xcode 26.6 as the default, 26.0.1 to 26.5 also
+installed, and simulator runtimes iOS 26.2, 26.4 and 26.5 only. Building against the iOS 26.0 simulator SDK and
+running on a 26.2 runtime is what `ios-smoke` already does for its test executable (section 1); for an app bundle it is
+inferred to work the same way and is shown only by A1's first run.
+
 3. The module layout - pending
 4. An Xcode project with no Mac - pending
 5. Launch and screenshot on the simulator in CI - pending
