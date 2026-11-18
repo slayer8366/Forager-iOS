@@ -77,3 +77,50 @@ No behaviour change. The `app` run on that push is green with the same gate and 
 - Decided: the catch-all covers the whole measurement, not only the read (the brief says "from reading"; the review says
   "catch every exception in `main`"). Anything that raises after the read is equally a file not measured, and A2 will add
   code after the read. Exit 1 now comes only from the `FAIL` verdict line.
+
+### Step 2, S2: the self-test holds the tolerance, the threshold and Paeth; the refusals; `--band`; alpha
+Fractions in the quoted lines are written `(...)` for the E1 scan; nothing else is changed in them.
+- New cases (`tools/png-region-test.py`, sections 5 to 8): three with one channel out by 9 at tolerance 8; 97, 98 and 99
+  of 100 pixels at threshold 0.98; Paeth from a hand-written 2x2 image whose raw bytes and expected pixels are literals
+  in the test (neither `png_region.paeth` nor the test's encoder is used), built on a `pa == pc` tie (R) and a
+  `pb == pc` tie (G); six refusals, each asserting exit 2 and its own message; `--band` 1.2, 0 and nan; and the
+  transparent image.
+- Red first [local]: against the step-1 script, `59 cases, 3 failed`, the three `--band` cases and nothing else. `--band
+  1.2` exited 0 with `PASS: 200/200 pixels`, as the review saw on a real screenshot. `--band 0` and `--band nan` already
+  exited 2 by way of step 1 (`the band holds no pixels (... band 0.0)`, `ValueError: cannot convert float NaN to
+  integer`) and failed only on the missing `band must be` message, which is the refusal at the argument this step adds.
+  The other 13 new cases passed on the unfixed script: they hold behaviour that was already right, which is what S2
+  asked for, and the mutations below are what show they can fail.
+- The fix: `parse_band` in `tools/png-region.py`, an argparse type that refuses anything not in (0, 1] (nan included),
+  so argparse exits 2 with `argument --band: band must be in (0, 1], got '1.2'`.
+- Green [local]: `png-region-test: 59 cases, 0 failed` (was 37 at `8bce937`, 42 after step 1).
+
+#### The reviewer's three mutations, run against the new self-test
+Each: the file copied to the scratchpad, one `sed` edit, the edit shown by `diff`, the self-test run, the file restored
+from the copy (not git) and `cmp` equal to the copy.
+- `:142` (`:141` at `df49ee5`), every ` and ` made ` or `: `test exit 1`, `59 cases, 3 failed`:
+  `FAIL only R out by 9 fails at tolerance 8: exit 0: png-region: PASS: 1600/1600 pixels (...) within 8 of E0218A`, and
+  the same for G and B.
+- `:195` (`:176` at `df49ee5`), `frac >= a.threshold` made `frac > 0.5`: `59 cases, 1 failed`:
+  `FAIL 97 of 100 the colour exits 1 at threshold 0.98: exit 0: png-region: PASS: 970/1000 pixels (...) within 0 of
+  E0218A`.
+- `:54` (`:53` at `df49ee5`), both `<=` made `<`: `59 cases, 1 failed`:
+  `FAIL Paeth against hand-written bytes, both ties: 14143c190a32 | 0a1964d2c9ca`. Byte `d2` is 210 where 200 is
+  written: the R channel took `c` (20) for `a` (10), as predicted.
+
+#### Narrower mutations, run the same way (beyond the brief)
+- One `and` alone made `or`, either one: 3 failed each. My prediction that each case catches only one of them was
+  wrong: Python reads `r or g and b` as `r or (g and b)`, so with any single channel out one side of the `or` holds, and
+  all three cases go red under either mutation.
+- `:56`, `pb <= pc` made `pb < pc`: 1 failed, `0a1964c8d3ca` (G reads 211 for 201: `c` taken for `b`).
+- `frac >= a.threshold` made `frac > a.threshold`: 1 failed, `FAIL 98 of 100 the colour exits 0 at threshold 0.98: exit
+  1`.
+- `pa <= pb` made `pa < pb` alone (the other comparison kept): **0 failed, survives**, as predicted in section 1: a tie
+  `pa == pb` with `pa <= pc` needs a = b = c, where every branch returns the same value. It is an equivalent mutation,
+  not a gap a case could close.
+
+#### Alpha (review 6 N8): recorded, not decided
+`alpha 0 everywhere: today it passes (alpha ignored)` asserts exit 0 and `PASS: 16/16` on a 4x4 RGBA image of the
+colour with alpha 0 in every pixel. Alpha is ignored by design (`png-region.py:8`). The case pins today's behaviour so
+that a change to it is seen; whether a transparent pixel should count is for the planner to rule. The four real
+screenshots are fully opaque per the review [not re-checked here].

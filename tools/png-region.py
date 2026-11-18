@@ -152,13 +152,21 @@ def parse_colour(s):
     return tuple(int(s[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def parse_band(s):
+    band = float(s)
+    if not 0.0 < band <= 1.0:  # also false for nan; review 6 S2: --band 1.2 read rows outside the middle and passed
+        raise argparse.ArgumentTypeError("band must be in (0, 1], got %r" % s)
+    return band
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("file")
     p.add_argument("--colour", required=True, type=parse_colour)
     p.add_argument("--tolerance", type=int, default=0, help="per channel, 0 to 255 (default 0)")
     p.add_argument("--threshold", type=float, default=0.98, help="fraction required to pass (default 0.98)")
-    p.add_argument("--band", type=float, default=0.8, help="middle fraction of the height read (default 0.8)")
+    p.add_argument("--band", type=parse_band, default=0.8,
+                   help="middle fraction of the height read, in (0, 1] (default 0.8)")
     a = p.parse_args(argv)
     try:
         return check(a)

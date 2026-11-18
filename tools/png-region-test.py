@@ -187,6 +187,77 @@ def main():
             case("%s is refused with exit 2" % name, code == 2 and "UNSUPPORTED" in out,
                  "exit %d: %s" % (code, lines[-1] if lines else "(no output)"))
 
+        # 5. Review 6 S2. (a) One channel out by tolerance + 1, the other two exact, one case per channel: a pixel
+        # matches only when every channel is within the tolerance. Two cases are needed to catch either `and` alone
+        # made `or`; the third is the remaining channel.
+        for i, name in enumerate(("R", "G", "B")):
+            px = list(APP)
+            px[i] = px[i] + 9 if px[i] + 9 <= 255 else px[i] - 9
+            path = write(tmp, "chan.png", encode(solid(tuple(px), 40, 50), 40, 50, False, (0,)))
+            code, out = run(path, "--colour", "E0218A", "--tolerance", "8")
+            case("only %s out by 9 fails at tolerance 8" % name, code == 1 and "FAIL: 0/1600" in out,
+                 "exit %d: %s" % (code, out.strip().splitlines()[-1]))
+        # (b) The threshold between whole and half: 97, 98 and 99 of every 100 pixels, threshold 0.98, band 1.
+        for k, want_code in ((97, 1), (98, 0), (99, 0)):
+            mixed = [[APP if x < k else WHITE for x in range(100)] for _ in range(10)]
+            path = write(tmp, "mix.png", encode(mixed, 100, 10, False, (1,)))
+            code, out = run(path, "--colour", "E0218A", "--threshold", "0.98", "--band", "1")
+            case("%d of 100 the colour exits %d at threshold 0.98" % (k, want_code),
+                 code == want_code and "%d/1000 pixels" % (k * 10) in out,
+                 "exit %d: %s" % (code, out.strip().splitlines()[-1]))
+        # (c) Paeth from hand-written bytes, not through png_region.paeth or this file's encoder. 2x2 RGB; row 0 filter 0,
+        # row 1 filter 4. Row 0 is (20,20,60) (25,10,50). Row 1, pixel 0: the predictor is the byte above (a = c = 0), so
+        # raw 246, 5, 40 decode to 10, 25, 100. Pixel 1, a = left, b = up, c = up-left, p = a + b - c:
+        #   R: a 10, b 25, c 20; pa |b-c| 5, pb |a-c| 10, pc |p-c| 5. Tie pa = pc: the rule takes a, 10. Raw 190 -> 200.
+        #   G: a 25, b 10, c 20; pa 10, pb 5, pc 5. Tie pb = pc: the rule takes b, 10. Raw 191 -> 201.
+        #   B: a 100, b 50, c 60; pa 10, pb 40, pc 30. No tie: a, 100. Raw 102 -> 202.
+        raw = bytes([0, 20, 20, 60, 25, 10, 50, 4, 246, 5, 40, 190, 191, 102])
+        data = (png_region.SIGNATURE + chunk(b"IHDR", struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0))
+                + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+        path = write(tmp, "paeth.png", data)
+        _, _, rows, _ = png_region.read_png(path)
+        want_rows = [bytearray([20, 20, 60, 25, 10, 50]), bytearray([10, 25, 100, 200, 201, 202])]
+        case("Paeth against hand-written bytes, both ties", rows == want_rows, " | ".join(r.hex() for r in rows))
+
+        # 6. The refusals review 6 S2 lists as untested, each with its own message.
+        ihdr4 = chunk(b"IHDR", struct.pack(">IIBBBBB", 4, 4, 8, 2, 0, 0, 0))
+        rows4 = b"\x00" + bytes(APP) * 4
+        idat4 = chunk(b"IDAT", zlib.compress(rows4 * 4))
+        iend = chunk(b"IEND", b"")
+        sig = png_region.SIGNATURE
+        for name, data, msg in (
+            ("a file cut in half", good[:len(good) // 2], "truncated"),
+            ("no IEND chunk", good[:-12], "no IEND chunk"),
+            ("no IDAT chunk", sig + ihdr4 + iend, "no IDAT chunk"),
+            ("image data that does not inflate", sig + ihdr4 + chunk(b"IDAT", b"not a zlib stream") + iend,
+             "does not inflate"),
+            ("image data one byte too long", sig + ihdr4 + chunk(b"IDAT", zlib.compress(rows4 * 4 + b"\x00")) + iend,
+             "image data is 53 bytes, expected 52"),
+            ("an unknown filter byte", sig + ihdr4 + chunk(b"IDAT", zlib.compress(rows4 * 3 + b"\x07" + bytes(APP) * 4))
+             + iend, "row 3 has filter type 7"),
+        ):
+            path = write(tmp, "r.png", data)
+            code, out = run(path, "--colour", "E0218A")
+            case("%s is refused with exit 2" % name, code == 2 and "UNSUPPORTED" in out and msg in out,
+                 "exit %d: %s" % (code, out.strip().splitlines()[-1]))
+
+        # 7. --band must lie in (0, 1]: 1.2 used to read rows outside the image's middle and pass.
+        path = write(tmp, "app.png", encode(solid(APP, 40, 50), 40, 50))
+        for band in ("1.2", "0", "nan"):
+            code, out = run(path, "--colour", "E0218A", "--band", band)
+            case("--band %s is refused with exit 2" % band, code == 2 and "band must be" in out,
+                 "exit %d: %s" % (code, out.strip().splitlines()[-1]))
+
+        # 8. Recorded, not a ruling (review 6 N8): alpha is ignored by design (png-region.py's docstring), so a fully
+        # transparent image of the colour passes. This case pins today's behaviour; the planner may rule otherwise.
+        clear = b"".join(b"\x00" + (bytes(APP) + b"\x00") * 4 for _ in range(4))
+        data = (sig + chunk(b"IHDR", struct.pack(">IIBBBBB", 4, 4, 8, 6, 0, 0, 0))
+                + chunk(b"IDAT", zlib.compress(clear)) + iend)
+        path = write(tmp, "clear.png", data)
+        code, out = run(path, "--colour", "E0218A", "--band", "1")
+        case("alpha 0 everywhere: today it passes (alpha ignored)", code == 0 and "PASS: 16/16" in out,
+             "exit %d: %s" % (code, out.strip().splitlines()[-1]))
+
     failed = results.count(False)
     print("png-region-test: %d cases, %d failed" % (len(results), failed))
     return 1 if failed else 0
