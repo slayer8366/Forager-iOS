@@ -38,7 +38,8 @@ results are "linked on a macOS runner", nothing more.
 - `app/src/iosMain/kotlin/com/zynergylabs/forager/app/MainViewController.kt`:
   `fun MainViewController(): UIViewController = ComposeUIViewController { App() }`.
 
-**The colour:** (filled in by step 2's commit).
+**The colour:** `Color(0xFFE0218A)`, ARGB `FF E0 21 8A`: opaque, red 224, green 33, blue 138 (a magenta), as
+`A1_COLOUR` in `app/src/commonMain/kotlin/com/zynergylabs/forager/app/App.kt:11`. The line is `FIRST_FRAME_LINE` at `:14`.
 
 **`.github/workflows/app.yml`.** Pushes to `app` touching `app/**`, `build.gradle.kts`, `settings.gradle.kts`, `gradle/**`,
 `gradle.properties`, `gradlew` or the workflow itself. `permissions: contents: read`. Actions pinned by the same SHAs as
@@ -79,7 +80,50 @@ results are "linked on a macOS runner", nothing more.
 
 ## 3. Results against predictions
 
-(Pending.)
+Code commit: `8c8d3234cee8503e6eb873919ba8cf64b487e328`. Scan (`scan.sh HEAD^ HEAD`) printed 0 for it and for the skeleton
+`3a3fcb2`.
+
+### Local, on this Linux container
+
+**How the network was handled.** Against the real hosts, the first `./gradlew` in the committed tree failed with 10
+"Could not find" jars of the plugin classpath (`scratchpad/s80/compile1.log`); eight retries with `--refresh-dependencies`
+failed with 2 to 6 each, and six without it failed identically on `kotlin-stdlib-2.3.10.jar` and
+`kotlin-script-runtime-2.3.10.jar` (Gradle had cached them as missing). So, as session 79 did, the checks ran in two
+scratch copies through the retrying mirror (`scratchpad/s79/tools/mirror.py`, port 18089):
+- `scratchpad/s80/before`: `git archive 382204f`.
+- `scratchpad/s80/after`: the working tree of this commit (`git ls-files -co --exclude-standard`).
+In both, only the repository URLs in `settings.gradle.kts` were changed (portal, central, google to the mirror; the
+androidx `content` filter kept); `diff` of the committed and the scratch `settings.gradle.kts` shows only those four
+lines. Nothing committed points at the mirror.
+
+- **P1, held.** In `after`: `./gradlew --no-daemon --console=plain :app:compileKotlinIosSimulatorArm64
+  :app:compileKotlinIosArm64` printed `> Task :app:compileKotlinIosSimulatorArm64` and `> Task :app:compileKotlinIosArm64`
+  with no suffix, also `checkIosSimulatorArm64MainComposeLibrariesCompatibility` and `checkIosArm64MainComposeLibrariesCompatibility`,
+  and `BUILD SUCCESSFUL in 20s`; lines matching `^e: ` 0, ` e: ` 0, `^w: ` 0 (`scratchpad/s80/after-compile.log`).
+- **P2, held.** In each copy: `./gradlew --no-daemon -q :brouter:dependencies` (no `--configuration`, so every
+  configuration of `:brouter`: 99 configuration headings in the report, 147 "No dependencies" sections among them, none
+  "FAILED" or "Could not"), `:brouter:dependencies --configuration iosSimulatorArm64TestCompileKlibraries` separately, and
+  the root `buildEnvironment`.
+  - `:brouter:dependencies`: `diff` prints nothing; both files 1,035 lines, SHA-256 `0c395a25...56e2` for both. The
+    report is a resolved one: for example `jvmTestRuntimeClasspath` lists okio 3.18.2, atomicfu 0.33.0, `kotlin-stdlib`
+    `2.1.21 -> 2.3.10`, kotlin-test 2.3.10 with kotlin-test-junit.
+  - `iosSimulatorArm64TestCompileKlibraries` alone: identical (okio 3.18.2, `kotlin-stdlib:2.3.10`, atomicfu 0.33.0,
+    kotlin-test 2.3.10).
+  - `buildEnvironment`: the after copy adds `org.jetbrains.kotlin.plugin.compose...gradle.plugin:2.3.10` with
+    `compose-compiler-gradle-plugin:2.3.10`, `org.jetbrains.compose...gradle.plugin:1.12.2` with `compose-gradle-plugin:1.12.2`
+    and `hot-reload-gradle-plugin` `{prefer 1.2.0} -> 1.2.0`, and one constraint line inside `kotlin-gradle-plugins-bom`
+    (`compose-compiler-gradle-plugin:2.3.10 (c)`). Nothing removed, no version changed; every `kotlin-gradle-plugin*`
+    entry is `2.3.10` with no arrow. (The rest of the diff is the tree's `\---` becoming `+---` because the multiplatform
+    plugin is no longer the last root entry.)
+  - What this does not show: the oracle jar and other file inputs (not in a dependency report; unchanged because
+    `brouter/` is not edited), and `:brouter`'s test results (CI, P7).
+- **P3, held.** The listing step's `run:` block was extracted from `app.yml` and run with `bash -e`:
+  (a) in `after`, after a real `./gradlew --console=plain --info :app:linkDebugFrameworkIosSimulatorArm64` on Linux
+  (`> Task :app:linkDebugFrameworkIosSimulatorArm64 SKIPPED`, `Skipping task ... as task onlyIf 'Task is enabled' is false`,
+  `BUILD SUCCESSFUL in 9s`): three FAIL lines, exit 1. Then three contrived trees, with `lipo` stubbed to print arm64:
+  (b) plain header and a binary present: `OK: ...`, exit 0; (c) `SKIPPED` header with a binary present: FAIL, exit 1;
+  (d) plain header, no binary: FAIL, exit 1. So a skipped link fails the step even if a binary were somehow present,
+  and a missing binary fails it even if the header looked right.
 
 ## 4. Confirmed vs inferred
 
