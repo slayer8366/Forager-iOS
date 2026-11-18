@@ -7733,3 +7733,48 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **On 3.** The map-first phase of `docs/plans/2026-11-12-app-port-plan.md` begins.
 
 **Notes:** Written by the planner session by hand. Next free ID -199.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-199
+**Timestamp:** 2026-11-18T03:34:23Z
+**Continues:** -198
+**Title:** PR #8 merged; the `publish-tiles` pin moved in every copy on the owner's word; the dry run on the push is green
+
+**PR #8.** Merged with a merge commit, `5db3adc` on `main`, on the owner's word "1 merge pr 8". It carried -190 to -198.
+
+**The ruling on the pin, verbatim.** Asked which copies should get the new pin, after the correction in -198, the owner answered "Update it, every copy".
+
+**Done.**
+- `brouter-port-5b`: `0f9e0fd`, one line changed in `.github/workflows/publish-tiles.yml`, `TOOLS_SHA` from `5d00761` to `4dc6c23` (full hashes in the file). `scan.sh` 0.
+- `brouter-port`: `382204f`, a merge commit of `brouter-port-5b` at `0f9e0fd`, pushed plainly; its tree is identical to `0f9e0fd`'s.
+- `main`: `d127d66`, the file copied unchanged from `brouter-port`, one line changed.
+- The three copies are byte-identical (same SHA-256, read from each branch on the remote).
+- `tools/tile-pins.tsv` line 1 still names `5d00761`. It is the published release's own pin file, a statement of what captured those tiles, and was left as it is.
+
+**Verified.** `publish-tiles` run 44231205436 on `382204f` (event push): the guard step passed, the capture of F0 and the four tiles passed, `publish` was skipped as it is on every push. No release was made. The `brouter` runs on `382204f` and `0f9e0fd` were still in progress when this was written; the change touches no file they build.
+
+**Not shown.** A real release run of `publish-tiles` from `main` at the new pin. None is wanted; its tag check is still the weak one the owner ruled on in -188 ("Leave it, recorded").
+
+**Notes:** Written by the planner session by hand. Next free ID -200.
+
+---
+
+**Kind:** intent
+**ID:** 2026-10-28-200
+**Timestamp:** 2026-11-18T03:34:23Z
+**Continues:** -198, -153
+**Title:** Phase A of the app begins: the shell and the map, starting with a pre-build report for A1
+
+**The ruling, verbatim.** "3 begin map-first work" (-198), on top of "Map first (Recommended)" (-153).
+
+**What Phase A is,** from `docs/plans/2026-11-12-app-port-plan.md` section 3: A1, the module layout and an Xcode project produced on a runner, with an empty Compose Multiplatform app that launches on the simulator and is screenshotted there; A2, the map through MapLibre, first by the Compose wrapper and, if that fails, by MapLibre's own iOS SDK in a native view; A3, the offline store and the tile archive format tried on the simulator.
+
+**First step (the planner's).** Session 79, a pre-build report for A1 only, building nothing: what the build is today, version choices looked up from primary sources, the module layout as options, how an Xcode project exists with no Mac, how a launch and a screenshot in CI can fail when the app did not draw, and which decisions are the owner's. The report goes to `docs/audits/2026-11-18-app-phase-a/a1-prebuild.md` on `brouter-port-5b`, the only code branch this session may push to.
+
+**Known to be the owner's before any app code is pushed:** the branch the app's code is built on, and the app's bundle identifier and name (the plan's open decision 5). These are asked when the pre-build has laid out the options.
+
+**What Phase A will not show:** anything on a real iPhone; frame rate, memory or battery.
+
+**Notes:** Written by the planner session by hand. Next free ID -201.
