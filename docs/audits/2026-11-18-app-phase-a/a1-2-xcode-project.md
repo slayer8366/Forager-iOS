@@ -112,7 +112,9 @@ are not waited for, as the dispatch directs, and are left to the planner.
 
 ## 3. Results against predictions
 
-(Pending.)
+(Interim, written straight after the first green run so it survives a container restart; completed in step 4.)
+Run `44245585616` on `4b01c3b`: `app-bundle` (job `134603625845`), `app-framework` (`134603625613`) and `app-klibs`
+(`134603625970`) all `success`, first run, no iteration needed. Log saved as `scratchpad/s81/ci-134603625845.log`.
 
 ## 4. Show the check can fail
 
