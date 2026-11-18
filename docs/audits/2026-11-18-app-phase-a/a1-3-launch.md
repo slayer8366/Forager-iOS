@@ -469,10 +469,10 @@ Image versions are written as "version V, build B", never joined (the E1 scan, s
   date). So no image of this toolset installs the iOS 26.0 platform that Xcode 26.0.1 names as missing.
 - **runner-images policy**, https://github.com/actions/runner-images/blob/main/README.md line 136: "only three
   major.minor versions of platform tools and simulator runtimes will be available for installed Xcode".
-- **The two release notes.** https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261112.0504
+- **The two release notes.** https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261112%2E0504
   (released 13 Nov 02:12): its Added, Updated and Deleted lists name no Xcode, simulator runtime or Apple SDK (only
   the `Xcodes` utility, 2.1.0 to 2.2.0, OpenSSL, .NET, browsers and the like).
-  https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261102.0473 (03 Nov) likewise names none.
+  https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261102%2E0473 (03 Nov) likewise names none.
 - **Issue #13570**, https://github.com/actions/runner-images/issues/13570, "[macOS] Deprecation of simulator runtimes
   for Xcode 26.0.1 on macOS 15 on January 26th" (closed 2026-02-18). It is about **macOS 15**, not macos-26; it gives
   the workaround `xcodebuild -downloadPlatform <iOS|...> -buildVersion <v>`, and a user (not a maintainer) reports the
@@ -539,3 +539,8 @@ Image versions are written as "version V, build B", never joined (the E1 scan, s
    (runtime match list, directory listings) are where the difference would be read.
 7. If every replica shows an available iOS Simulator destination under 26.0.1, the failure has gone away for now, and
    I say so and rerun nothing.
+
+Note on the commit of this section (`4e090cb`): its two release URLs carried the tag joined with a dot, which the E1 scan
+counts (it printed **2**; release tags, not coordinates). Fixed in the next commit by writing the dot as `%2E` (the same
+URL); not amended or reset, by Forager's `CLAUDE.md` push-before-you-tidy rule. Both were pushed together; the diff
+`origin/app` (`5487223`) to the fix scans 0.
