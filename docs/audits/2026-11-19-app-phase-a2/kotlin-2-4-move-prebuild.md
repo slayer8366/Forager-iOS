@@ -157,8 +157,9 @@ that works with it, and its comment corrected; Room only if the probe or Forager
   byte-identical across all three runs** (`diff -r`, no output) **[C]**. So in this probe the compiler change did not
   change what Room generates or stores.
 - **What it shows:** Room 2.8.4's processor, through KSP 2.3.10 or 2.3.14, accepts sources and a sibling module compiled by
-  Kotlin 2.4.20, with that module's metadata at 2.4.0, despite `kotlin-metadata-jvm 2.2.0` in its POM. Whether that
-  reader was on the processor path at all was not determined (a dependency listing of the KSP classpath did not finish
-  in time) **[?]**. **What it does not show:** AGP 9.3.1 with `kotlin-android` 2.4.20 and `builtInKotlin=false`/`newDsl=false`;
+  Kotlin 2.4.20, with that module's metadata at 2.4.0, with `kotlin-metadata-jvm` **2.2.0** on the processor path
+  (`:app:dependencies` of the 2.4.20/KSP 2.3.10 run lists `org.jetbrains.kotlin:kotlin-metadata-jvm:2.2.0` under
+  `kspKotlinProcessorClasspath`) **[C]**. Whether Room called that reader on this probe's types was not determined
+  (KSP hands Room its own model of the classpath) **[?]**, so a Forager type that reaches it could still differ. **What it does not show:** AGP 9.3.1 with `kotlin-android` 2.4.20 and `builtInKotlin=false`/`newDsl=false`;
   Forager's own entities, DAOs and `MigrationTestHelper` tests; the Compose compiler on Forager's screens; D8; Robolectric;
   lint. Those are Forager CI's to show (section 5).
