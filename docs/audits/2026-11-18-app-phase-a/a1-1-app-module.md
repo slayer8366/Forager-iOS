@@ -166,24 +166,71 @@ in those files.
 
 ### CI, `brouter.yml`, run `44237677010` on `8c8d323`
 
-(Pending: in progress when this was written.)
+**Written by session 81, not session 80.** Session 80 was killed while this run was in progress; everything from here
+to the end of the file was written by session 81 (Plumb Ledger, 2026-11-18) from the pushed work (`44d9f84`) and from
+the four job logs, read with `gh api -X GET repos/slayer8366/Forager-iOS/actions/runs/44237677010/jobs` and
+`.../actions/jobs/<id>/logs`, saved as `scratchpad/s81/ci-<id>.log`. Log line numbers below are in those files. The
+run: `completed`, `success`, `head_sha` `8c8d3234cee8503e6eb873919ba8cf64b487e328`, 04:29:29 to 05:31:51 UTC.
+
+Compile-error counts are taken over each whole job log; `^e: ` is counted after stripping the runner's timestamp
+prefix (otherwise it could never match), ` e: ` on the raw lines.
+
+- **P7, held.** Every count equals the baseline (pre-build section 8, RECORD -197).
+  - `jvm`, job `134577660161`, `success`: `TOTAL: tests 262, failures 0, errors 0, skipped 0 in 116 files` (log 1686).
+    `^e: ` 0, ` e: ` 0.
+  - `jvm-production`, job `134577660535`, `success`: `TOTAL: tests 3, failures 0, errors 0, skipped 0 in 2 files` (417),
+    `OK: all 2 classes ran` (535). `^e: ` 0, ` e: ` 0.
+  - `ios-smoke`, job `134577660708`, `success`: `TOTAL: tests 61, failures 0, errors 0, skipped 0 in 30 files` (546),
+    `OK on the iOS simulator: all 25 classes ran (brouter/build/test-results/iosSimulatorArm64Test)` (2212),
+    `TOTAL: tests 7, failures 0, errors 0, skipped 0 in 2 files` (2348), `OK: all 2 classes ran` (2351). `^e: ` 0, ` e: ` 0.
+  - `ios-memory`, job `134577660484`, `success`: `TOTAL: tests 3` (457), `TOTAL: tests 1` (530), `TOTAL: tests 1` (626),
+    each `failures 0, errors 0, skipped 0`; gate lines `OK on the iOS simulator: all 3 classes ran (brouter/build/test-results/ios-memory-groups)`
+    (698) and `OK on the iOS simulator: all 1 classes ran (brouter/build/test-results/ios-r-fallback)` (700). `^e: ` 0, ` e: ` 0.
+  - `BUILD FAILED` appears in none of the four logs.
 
 ## 4. Confirmed vs inferred
 
-(Pending.)
+Confirmed (each from a log line or a file cited above):
+- `:app` compiles for both iOS targets on Linux with no compile errors (P1 locally; P4 in CI, run `44237677080`).
+- `:brouter`'s resolved dependency reports are byte-identical with and without `:app` (P2, local scratch copies).
+- The listing step fails on a skipped link and on a missing binary (P3, local, contrived trees).
+- The simulator framework links on `macos-26` with Xcode 26.0.1 and is a static arm64 archive at
+  `app/build/bin/iosSimulatorArm64/debugFramework/ForagerApp.framework` (P5, job `134577660279`).
+- The four `brouter.yml` jobs print the baseline counts on `8c8d323` with no compile errors (P7, run `44237677010`).
+
+Inferred:
+- That the native stdlib the link used is the Kotlin/Native 2.3.10 bundle's own (P6): from what was and was not
+  downloaded, not from a command line.
+- That the `kotlin-stdlib-2.3.10.jar` download is the compiler's JVM tool classpath (from its neighbours in the log).
+- That the job's Gradle and Kotlin/Native state started cold (no cache is configured; the image's `~/.gradle` was not
+  listed).
 
 ## 5. Could not determine
 
-(Pending.)
+- The Kotlin/Native link's argument list: `--info` did not print it (P6). What would settle it: a link run with
+  Gradle `--debug` or the Kotlin/Native compiler's verbose option, not tried.
+- Whether the framework works inside an app: not in A1-1's scope (A1-2 builds the bundle, A1-3 launches it).
 
 ## 6. Premises in the brief or the pre-build that were wrong
 
-(Pending.)
+- Session 80's own design (section 1, `app.yml` comment above the link step) expected `--info` to make the Kotlin
+  Gradle plugin print the native link's arguments. It did not (P6). The comment in `.github/workflows/app.yml` still
+  says it does (`.github/workflows/app.yml:58`); session 81 leaves that comment and step unchanged, since A1-2 adds a
+  job rather than editing that one, and records the stale comment here instead.
+- No other premise was found wrong. Session 81 did not have session 80's transcript, so a premise session 80 noticed
+  but did not write down is not recoverable here.
 
 ## 7. Decided beyond scope
 
-(Pending.)
+Nothing that session 81 can find in the pushed work (`3a3fcb2`, `8c8d323`, `b80c016`, `44d9f84`) beyond the dispatch
+and the pre-build's sections 2, 3, 7 and 8. The one addition the design names, `--info` on the link step, is stated in
+section 1 with its reason (brief item 6).
 
 ## 8. Not checked
 
-(Pending.)
+- The link's argument list (section 5).
+- Anything at run time: no app bundle, no simulator, no launch (A1-2 and A1-3).
+- The oracle jar and other file inputs of `:brouter` against `382204f` beyond the dependency reports (unchanged
+  because `brouter/` was not edited; that is from `git diff --stat`, not a byte comparison of the inputs).
+- Whether session 80 meant to write anything else in these sections: they were written after it was killed, from
+  the pushed commits and the logs only.
