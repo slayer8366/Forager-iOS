@@ -1,7 +1,8 @@
 # The app's CI (A1-1; pre-build sections 7 and 8, RECORD -201 T5, T6, T8). brouter.yml is left as it is and still runs on
 # every push outside docs/**. Actions are pinned by the same commit SHAs as brouter.yml. No cache (T8): every run is cold.
 # The framework link and the app bundle are "built on a macOS runner"; from A1-3a, app-bundle also launches the app on
-# a simulator, and what that shows is "simulator-checked", never "checked" (the owner: "3 no iPhone").
+# a simulator, and what that shows is "simulator-checked", never "checked" (the owner: "3 no iPhone"). From A1-3b
+# (RECORD -206) the colour of after.png gates the job.
 name: app
 
 on:
@@ -133,6 +134,20 @@ jobs:
           build/xcodegen/xcodegen/bin/xcodegen --version
       - name: Generate the Xcode project
         run: build/xcodegen/xcodegen/bin/xcodegen generate --spec iosApp/project.yml
+      # A1-3b (RECORD -206): evidence for the intermittent "Unable to find a destination matching ... generic ... iOS
+      # Simulator" seen once in A1-3a. Printed only: it cannot fail the job, and the build step below is not changed.
+      - name: Recorded, not gating - simulator runtimes and the scheme's destinations, before the build
+        continue-on-error: true
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          mkdir -p build/a1-3
+          echo "diagnostics started $(date -u +%H:%M:%S)"
+          echo "===== xcrun simctl list runtimes"
+          xcrun simctl list runtimes 2>&1 | tee build/a1-3/pre-build-runtimes.txt || echo "(xcrun simctl list runtimes exit $?)"
+          echo "===== xcodebuild -showdestinations"
+          xcodebuild -project iosApp/ForagerApp.xcodeproj -scheme ForagerApp -showdestinations 2>&1 | tee build/a1-3/pre-build-destinations.txt || echo "(xcodebuild -showdestinations exit $?)"
+          echo "diagnostics ended $(date -u +%H:%M:%S)"
       # Unsigned, for the simulator. The project's Run Script phase runs ./gradlew :app:embedAndSignAppleFrameworkForXcode.
       - name: Build the app for the simulator
         run: |
@@ -174,8 +189,8 @@ jobs:
           [ "$fail" = 0 ] && echo "OK: ForagerApp.app built unsigned for the simulator, $WANT_ID, '$WANT_NAME', arm64, framework linked inside xcodebuild"
           exit "$fail"
       # A1-3a (pre-build sections 5 and 8): launch the bundle built above on a simulator of our own, in this job, so the
-      # app launched is the one this run built. Gating here: the control (before.png must fail the colour check) and the
-      # app's drawn-frame line. The colour of after.png is printed, not gated (A1-3b gates it).
+      # app launched is the one this run built. Gating here: the control (before.png must fail the colour check), the
+      # app's drawn-frame line, and from A1-3b the colour of after.png.
       - name: simctl help for every subcommand used below (written from memory in the pre-build)
         run: |
           mkdir -p build/a1-3
@@ -242,7 +257,16 @@ jobs:
       - name: after.png
         if: ${{ !cancelled() && env.UDID != '' }}
         run: xcrun simctl io "$UDID" screenshot --type=png build/a1-3/after.png
-      - name: Printed, not gating in A1-3a - the colour of after.png, the install, the process, crash reports
+      # A1-3b (RECORD -206): gating. Tolerance 8 per channel, threshold 0.98, the script's default middle band. Any exit
+      # but 0 fails: 1 is a mismatch, 2 an unreadable PNG.
+      - name: The colour check on after.png (gating)
+        run: |
+          rc=0
+          python3 -I tools/png-region.py build/a1-3/after.png --colour E0218A --tolerance 8 --threshold 0.98 || rc=$?
+          if [ "$rc" = 0 ]; then echo "OK: the colour check passed on after.png (E0218A, tolerance 8, threshold 0.98)"; exit 0; fi
+          echo "FAIL: the colour check on after.png exited $rc (E0218A, tolerance 8, threshold 0.98)"
+          exit 1
+      - name: Printed, not gating - the PNGs, the install, the process, crash reports
         if: ${{ !cancelled() && env.UDID != '' }}
         timeout-minutes: 5
         run: |
@@ -252,10 +276,6 @@ jobs:
             file "build/a1-3/$f.png" || true
             sips -g pixelWidth -g pixelHeight -g space -g profile -g hasAlpha -g bitsPerSample "build/a1-3/$f.png" || true
           done
-          echo "===== png-region.py on after.png, tolerance 24 (exit status printed, not gating)"
-          rc=0
-          python3 -I tools/png-region.py build/a1-3/after.png --colour E0218A --tolerance 24 --threshold 0.98 || rc=$?
-          echo "png-region.py exit $rc on after.png (not gating in A1-3a)"
           echo "===== listapps, the bundle's entry"
           xcrun simctl listapps "$UDID" > build/a1-3/listapps.txt 2>&1 || true
           grep -n -A12 "\"$ID\"" build/a1-3/listapps.txt || echo "$ID not in listapps"
