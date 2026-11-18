@@ -358,3 +358,87 @@ Commit `f56cbe5` (the workflow change), run **44255674662**.
   suggests CoreSimulator was slow to come up on this runner (inferred). Why `xcodebuild` then saw no iOS Simulator
   destination at all is **not determined**.
 - Rerun of the failed job with `gh run rerun 44255674662 --failed` at 07:07:26, nothing changed (result below).
+- **Attempt 2 (the one rerun): `app-bundle` red again, job 134639110582, the same error.** 07:07:32 to 07:08:04.
+  Image `macos-26-arm64`, version `20261112`, build `0504.1` (log 18). `simctl list runtimes` took **6 s** this time
+  (07:07:48 to 07:07:55, log 214-229) and listed the same twelve runtimes, iOS 26.2 first; `-showdestinations` again
+  printed no available destination, only the same ineligible `Any iOS Device` (log 235-236); the build failed one second
+  later with `xcodebuild: error: Unable to find a destination matching the provided destination specifier:`
+  `{ generic:1, platform:iOS Simulator }`, exit code 70 (log 262-267). So a slow CoreSimulator start is not needed for
+  the failure either.
+- **Run 44255674662 is red. Step 2 did not reach the launch steps in either attempt, so the gating colour check has not
+  run yet, green or red.** The brief allows one rerun; two attempts have failed on the same symptom, so per Forager's
+  `CLAUDE.md` (Bug fixing: "Two failed fix attempts on the same symptom means stop guessing") I stopped here. **Step 3,
+  the revert run, was not pushed**: with the build failing before the app exists, a red from it would be the build, not
+  the check, and the project's rule forbids citing that.
+
+### What the runner headers show (read after attempt 2, more data rather than a third attempt)
+
+Every `app-bundle` build on this branch, with the runner image each job's log names (log lines 16-20 of each):
+
+| Run, attempt | Head | Job | Image version, build | Build step |
+|---|---|---|---|---|
+| 44245585616 | `4b01c3b` | 134603625845 | `20261112`, `0504.1` | `** BUILD SUCCEEDED **` |
+| 44246226134 | `a393570` | 134605728656 | `20261102`, `0473.1` | `** BUILD SUCCEEDED **` (the run failed elsewhere) |
+| 44246914973 | `93f8d47` | 134607971756 | `20261112`, `0504.1` | `** BUILD SUCCEEDED **` (log 1207), 05:59 |
+| 44249852981, 1 | `8a1aafd` | 134617571020 | `20261112`, `0504.1` | destination error, 06:31 |
+| 44249852981, 2 | `8a1aafd` | 134628156762 | `20261102`, `0473.1` | green, 06:40 |
+| 44255674662, 1 | `f56cbe5` | 134636660132 | `20261112`, `0504.1` | destination error, 07:02 |
+| 44255674662, 2 | `f56cbe5` | 134639110582 | `20261112`, `0504.1` | destination error, 07:07 |
+
+So: every destination error so far is on image `0504.1`, and every one is after 06:30 today; `0504.1` built green twice
+before 06:05; the one green after 06:30 was on the older image `0473.1`. The runner's macOS is `26.7.2` (`25G332`) on all
+of them. Read from the log headers; **what changed is not determined**. Whether `0504.1` runners now fail every time,
+or whether the earlier `0504.1` greens and today's reds differ in something the log does not print, is not known, and
+the evidence does not license a fix. The diagnostic output now in every run is what the next look would start from.
+
+## 13. Results, and the disclosure sections for A1-3b
+
+Commits: `f45063c` (step 1, predictions), `f56cbe5` (step 2, the workflow change), `434e288` and `7ccd24d` (step 2's
+record; see "Decided beyond scope"), and this section's commit. No commit touches `app/`.
+
+### Confirmed (simulator-side facts from the CI logs cited above)
+- The diagnostic step runs before the build and prints both outputs (jobs 134636660132 and 134639110582, log 214-237).
+- The destination error recurred twice in a row on the same commit with nothing changed between attempts.
+- When it occurs, `simctl list runtimes` lists iOS 26.2 and `xcodebuild -showdestinations` for the scheme lists no
+  available destination at all, only the ineligible `Any iOS Device` (iOS 26.0 platform not installed).
+- **A premise in A1-3a's section 4 was wrong (my own record):** it says the rerun was "the same commit and image green
+  8 minutes later". The rerun's job 134628156762 ran on image `20261102`/`0473.1`, not `0504.1` (its log lines 16-20).
+  The earlier "same image as A1-2's green run" statement (attempt 1 against 134607971756) is correct. So A1-3a's
+  evidence that the error was intermittent on one image is weaker than written: the one recovery came with an image
+  change.
+
+### Inferred
+- That the failure is on the runner side and not in this branch: the build step and everything before it are unchanged
+  since `93f8d47`, which built green on the same image version. Not proven: the diagnostic step is new before the build.
+  It cannot by itself explain attempt 1 of `8a1aafd`, which failed without it.
+- That `simctl` taking 52 s in attempt 1 reflects a slow CoreSimulator start; attempt 2 took 6 s and failed the same way.
+
+### Could not determine
+- Why `xcodebuild` sees no iOS Simulator destination on these runners while `simctl` lists the runtimes.
+- Whether it is tied to image `0504.1`, to a later change on those runners, or to something not printed.
+- The gating check's behaviour on a real `after.png`, green or red: it has not run.
+
+### Premises in the brief that were wrong
+- The brief treats the destination error as intermittent ("seen once in A1-3a"). It has now failed three of the last
+  four build attempts, and the one green among them was on a different image. "Intermittent" is not established.
+- None other found.
+
+### Decided beyond scope
+- The diagnostic step is `continue-on-error: true` with a 5-minute timeout, so even a hang in it cannot gate; its two
+  outputs are also kept in the `a1-3-simulator` artifact (`pre-build-runtimes.txt`, `pre-build-destinations.txt`).
+- The printed tolerance-24 check on `after.png` was removed, replaced by the gating tolerance-8 one, which prints the
+  same header, chunks and commonest colours.
+- After the second red I read the runner image of every earlier `app-bundle` job (the table above) instead of a third
+  attempt.
+- `434e288` quoted the image version joined, which the E1 scan counts (scan printed **1**; a version string, not a
+  coordinate). I fixed it in `7ccd24d` (scan 0) rather than resetting the unpushed commit, because Forager's
+  `CLAUDE.md` forbids resetting or amending unpushed commits; both were pushed together, so **`434e288` is a pushed
+  commit whose own scan printed 1**, the thing the brief said not to repeat. Recorded, not hidden.
+- Stopped before step 3 (above).
+
+### Not checked
+- Steps 3 and 4 of the brief: the revert run, the restore, the green gating run.
+- `brouter.yml`: the docs-only and `app.yml`-only pushes of this dispatch started no `brouter` run (run list read after
+  `f56cbe5`); not read further.
+- The A1 closing list is not written: A1's last gate has not run, so what A1 shows is still A1-3a's section 6 plus
+  the two facts above.
