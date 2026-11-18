@@ -407,3 +407,106 @@ routes is the bar: the record's wording of the owner's Phase 2 ruling is "identi
 **Forager's side** has its own gates (section 2): `build`, `street-removable`, `lint`, `release-compile`, `route-cutter`
 green on the move commit, with unit-test counts read from the JUnit XML against the parent's. Those are Forager's
 planner's to set.
+
+**Which run is the baseline.** `brouter.yml` has no `workflow_dispatch`; it runs on a push that changes anything outside
+`docs/**`, `app/src/**`, `iosApp/**` and `app.yml`, and on pull requests (`brouter.yml:6-17`) **[R]**. Session 87's green
+runs checked out `app` at 08:47:03 UTC (`ci87/jvm.log`), 13 seconds after `47e25f2` was committed (08:46:50), so they
+are inferred to be `47e25f2`'s **[I]**; `git diff --stat 47e25f2 8e747fa -- . ':!docs'` prints nothing **[C]**, so the
+engine tree they ran is the parent's. The first dispatch (section 7) confirms the run's commit from its own log before
+citing it, or triggers a fresh baseline if the parent has moved.
+
+## 6. What needs the owner, and what is technical
+
+### The owner's
+
+**O1. What "together" means in practice** (section 4). The owner's words: "Move Kotlin to 2.4.20", choosing an option
+that read "Kotlin changes in Forager's Android app and here together".
+- (a) **As said: together, at one moment.** Both prepared on branches and merged on one word (section 4, option iii).
+- (b) Forager first on its `pre-main`, then here (option ii).
+- (c) This repository first on `app`, Forager after (option i).
+
+**O2. The exact version.** The owner said "Move Kotlin to 2.4.20".
+- (a) **As said: 2.4.20.** Meets the wrapper (section 1); compiled everything here in scratch (section 3e).
+- (b) 2.4.21, the newest 2.4 patch (2026-10-08), same compatibility row; what it fixes was not read (section 1).
+
+**O3. Who does Forager's part.** The owner has not ruled on this case. This repository's `CLAUDE.md` (the planner's call,
+RECORD -1): "Nothing for the iOS app is written to Forager's record or to slayer8366/Forager."
+- (a) Forager's planner dispatches it to Forager's coder, under Forager's record, review and merge rules (section 2).
+- (b) This repository's planner writes the request as a file for Forager's planner to carry, and nothing more.
+
+**O4. If the check in section 5 stops** (any count, line or diagnostic differs). The owner's words stand: "the routing
+engine's bit-for-bit tests must be rerun on the new compiler".
+- (a) **Stop and report,** with both runs' evidence and the ruling quoted; no pin moves further and no expected file is
+  updated until the owner rules.
+- (b) Investigate first (which method's code changed, section 5's bytecode diff), then report.
+
+### The technical ones (each recommendation is mine, labelled so)
+
+- **T1. Move only the Kotlin pin here.** Compose 1.12.2, okio 3.18.2, atomicfu 0.33.0, Gradle 9.0.0 and the JDK all stay;
+  none was forced to move (sections 3b, 3c, 3e). *My recommendation:* one line in the catalog, plus its comment.
+- **T2. The catalog comment.** "moved only together with Forager (Phase 1 report, item C, Amendment 1)" stays true and
+  gains the ruling's record ID. *Mine:* keep the clause, add the record ID of the owner's ruling.
+- **T3. Xcode.** 2.4.20's published Xcode is 26.4 (section 3d); the engine selects 26.0.1 and the app 26.2. *My
+  recommendation:* **do not move Xcode in the same commit as Kotlin.** A new Xcode brings a new simulator runtime and its
+  C library (which `exp` calls on Native, section 3a), so a difference after a combined move could not be attributed.
+  Move Kotlin first with today's Xcode selections; if the Mac jobs pass, the engine comparison is clean. Then move Xcode
+  to 26.4.1 (on `macos-26` today) as its own step with the same check. If 2.4.20 refuses to link under 26.0.1 or 26.2,
+  that is the moment to move Xcode, and it is reported as such.
+- **T4. Forager's KSP.** The probe built with KSP 2.3.10 and 2.3.14 under Kotlin 2.4.20 and produced identical Room code
+  (section 2). *Mine, for Forager's planner:* keep KSP 2.3.10 if Forager's CI is green with it (the smallest change),
+  correct the catalog comment that ties KSP's number to Kotlin's, and take the newest 2.3.x only if Forager's own build
+  needs it.
+- **T5. A language-version guard on `:brouter`.** Under O1 (c) only, `languageVersion`/`apiVersion` 2.3 on `:brouter`
+  would keep the port vendorable into a Forager still on 2.3.10 (Phase 1's suggestion, not tested). *Mine:* not needed
+  under (a) or (b); under (c), add it and remove it when Forager moves.
+- **T6. Section 5's equalities as gates, not as reading.** *Mine:* the move's dispatch writes the comparison as a script
+  run in the job (counts, the production lines, the `<system-out>` diff against the baseline's artifacts), so a
+  difference turns the job red rather than relying on a reader.
+
+## 7. The order of work, one dispatch each
+
+Written for O1 (a), "together"; under (b) or (c) the same steps run in the other order. Each ends in something CI shows.
+
+**K-0. Baseline confirmed (this repository, `app`).** Read the run IDs and commits of the last green `brouter.yml` and
+`app.yml` runs; confirm each run's commit from its own log; `git diff --stat <run commit> <parent> -- . ':!docs'` empty;
+download and keep their JUnit XML. If not empty, trigger a fresh baseline with a non-docs change that cannot affect a
+result. *Ends in:* the four `brouter.yml` jobs' artifacts named in the dispatch's report. *Prediction:* the parent's engine
+tree equals `47e25f2`'s, so session 87's runs serve.
+
+**K-1. Kotlin 2.4.20 on a branch from `app` (this repository).** The one-line pin and its comment (T1, T2); no Xcode or
+other change (T3); section 5's comparison added as a gating step (T6). *Ends in:* `brouter.yml` and `app.yml` green on the
+branch. *Predictions:* `jvm` 262/116 and the iOS klibs with 0 `e:` and the same three `w:` (section 3e showed both on
+Linux); `jvm-production` 3, lines identical; `app-klibs`, `app-framework`, `app-bundle` green. **Uncertain:** whether the
+Mac jobs link and run under Xcode 26.0.1 and 26.2 against a 26.4 distribution (section 3d), and whether the simulator's
+`ios-smoke` 61 and 7 and `ios-memory` 3, 1, 1 stay equal under LLVM 21 (section 3a). I predict both hold, with low
+confidence on the first.
+
+**K-F. Forager's move (Forager's dispatch, by Forager's planner; O3).** The catalog's `kotlin` to 2.4.20, KSP per T4, on a
+branch from `pre-main`. *Ends in:* Forager's `ci.yml` green with unit-test counts equal to the parent's. *Predictions
+(mine, for Forager's planner to replace):* AGP 9.3.1 and Gradle 9.7.0 accept it (both in the published range); Room
+compiles (section 2's probe). Not predicted: `newDsl=false`, lint, D8 output on a phone (section 8).
+
+**K-2. The word.** Both branches green, the owner gives the merge word for both (O1 a). *Ends in:* both default branches'
+CI green on the merge commits.
+
+**K-3. A2 on the current wrapper.** The A2 pre-build's order (A2-1 onward, with wrapper 0.20.0) resumes on `app`.
+*Ends in:* A2-1's gates.
+
+**K-4 (later, T3). Xcode 26.4.1 for the engine and the app,** its own step with section 5's check. *Ends in:* the same
+counts and lines.
+
+## 8. What this move will not show
+
+- **Anything on a phone.** "3 no iPhone": every iOS result is simulator-checked. The `iosArm64` binary is compiled and
+  never run (section 3a).
+- **Forager's app on a phone.** The last dexing defect here (RECORD -741 in Forager's record) passed CI and failed only on
+  the S22. A compiler change changes the bytecode D8 dexes, so Forager's CI being green does not show that the app starts.
+  Whether to ask for a phone check is Forager's planner's to propose and the owner's to confirm (`planner-profile.md:82`).
+- **That the routes are right,** only that they are the same as before and as the oracle's on the tested cases. Routes
+  outside the pinned tiles and generated cases are not checked by anything (section 3a).
+- **Speed and memory.** The gates compare results, not timings; a slower or larger build would pass.
+- **Kotlin 2.4.21 or any later version,** and Xcode 26.4.1, until each is its own step.
+- **The map.** This move only makes wrapper 0.20.0 compile (section 3e); whether it links, embeds, runs and draws is A2's
+  work.
+- **That Forager's Android app can take the port in.** The switch has not happened; this move only keeps the two
+  compilers equal for when it does (section 4).
