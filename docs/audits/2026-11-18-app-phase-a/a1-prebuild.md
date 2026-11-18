@@ -196,7 +196,99 @@ installed, and simulator runtimes iOS 26.2, 26.4 and 26.5 only. Building against
 running on a 26.2 runtime is what `ios-smoke` already does for its test executable (section 1); for an app bundle it is
 inferred to work the same way and is shown only by A1's first run.
 
-3. The module layout - pending
+## 3. The module layout
+
+**What constrains it.**
+- `:brouter` is held bit-for-bit to its oracle, and its build file carries that harness (section 1). A1 should not
+  edit `brouter/build.gradle.kts` at all.
+- The owner ruled "Share the domain now (Recommended)" (-153), and the planner read it narrowly in the same entry:
+  "before anything is written there the planner brings the owner a concrete proposal: which repository holds the
+  shared module, how the Android build consumes it". That proposal is B1. A1 therefore should not create the shared
+  module, nor decide where it lives: either would answer B1's question before the owner hears it.
+- The plan lists "the module layout and how Android uses a library with no Android target" among the planner's
+  decisions (plan `:170-175` on `origin/main`).
+- The Android app is in another repository (Forager, Gradle 9.7.0, AGP 9.3.1, Kotlin 2.3.10; section 1 and Forager
+  `f29db48` `gradle/libs.versions.toml:2,7`). `:brouter` has no Android target.
+
+**Option A: one app module beside `:brouter`, and an Xcode-side folder that is not a Gradle module.**
+```
+settings.gradle.kts      include(":brouter"), include(":app")
+brouter/                 unchanged
+app/                     KMP + Compose Multiplatform; targets iosArm64, iosSimulatorArm64; binaries.framework (static)
+  src/commonMain/        App() - the Compose UI
+  src/iosMain/           MainViewController() = ComposeUIViewController { App() }
+iosApp/                  the Xcode side: the spec or project (section 4), Info.plist, a Swift entry of a few lines
+```
+- The iOS framework is produced by `:app` (`binaries.framework`, static, one `baseName`). Static means the framework
+  links into the app executable and nothing is embedded or signed at run time (inferred from what a static framework
+  is; the A1 run shows it).
+- `:app` does not depend on `:brouter` in A1 (an empty app needs no routing). It gains `implementation(project(":brouter"))`
+  in Phase C. This keeps A1's link time and A1's failures free of the engine.
+- A future shared domain module (B1's answer) would sit as a third module beside these two, for example `:domain`,
+  with `:app` depending on it, **if** B1 puts it in this repository; if B1 puts it in Forager, this repository consumes
+  it as a published or included build. Option A leaves both open.
+- Cost: the root build gains two plugin declarations (`apply false`) and `settings.gradle.kts` gains Google's Maven
+  repository (section 2). Both are visible to `:brouter`'s configuration, which is what the before-and-after check below
+  is for.
+
+**Option B: create `:domain` (empty) and `:app` now.**
+- Pro: the shape Phase B wants exists from day one, and `:app`'s imports are right from the first commit.
+- Con: it decides B1's "which repository holds the shared module" by building it here, before the owner hears B1's
+  proposal. It is also a module with no code and no reader, which Forager's `CLAUDE.md` advises against ("Don't build
+  speculative ... logic"). Rejected for A1 for those two reasons.
+
+**Option C: put the app in `:brouter`, or in the root project.**
+- Rejected: it changes the engine's build file and plugin set, which every engine check depends on.
+
+**Option D: an app module per platform from the start (`:iosApp` as Gradle, later `:androidApp`).**
+- An Android app module here would duplicate Forager's Android app, which ships from Forager. Nothing for Android is
+  built in this repository until B1 is answered. Rejected for A1.
+
+**What an Android target would need later** (none of it in A1):
+- For a KMP library module, Google's page (`https://developer.android.com/kotlin/multiplatform/plugin`, fetched today)
+  says the supported way is the `com.android.kotlin.multiplatform.library` plugin; using `com.android.library` for KMP
+  "depends on Android Gradle Plugin APIs that are deprecated and require opt-in in Android Gradle plugin 9.0 and
+  higher", "expected to be removed ... in Android Gradle plugin 10.0"; and "There isn't a direct replacement for
+  configuring a Kotlin Multiplatform module using `com.android.application` plugin. To migrate, extract your Android
+  application to a separate Gradle module." So an Android target on `:app`, `:brouter` or a shared module would be an
+  `android { }` block from that plugin, and the Android application stays its own module (in Forager).
+- Kotlin 2.3.10's supported AGP range is `8.2.2–9.0.0` (compatibility guide, section 2) and Forager uses AGP 9.3.1.
+  Whether 9.3.1 with Kotlin 2.3.10 works is Forager's fact today (its build does), but it is outside the table.
+  Adding an Android target **in this repository** would bring AGP into this build: also outside A1.
+- Whether Forager's Android app could consume `:brouter`'s existing `jvm` variant without an Android target (Gradle's
+  variant matching between `androidJvm` consumers and `jvm` producers) was not tried and is B1's question; the survey
+  also left it "Not verified" (survey `:288`).
+
+**Recommendation (mine, Plumb Ledger's): Option A**, with the module named `:app` in `app/`, the Xcode side in
+`iosApp/`, the framework `baseName` a fixed technical name (for example `ForagerApp`, not the public display name;
+section 6), and no dependency from `:app` on `:brouter` until Phase C. The before-and-after check below is the evidence
+that A1 leaves the engine's build as it was.
+
+**The before-and-after check (run in scratch today, never committed).** Two copies of the tree at `565faa2`
+(`git archive HEAD`): `scratchpad/s79/repo` as it is, and `scratchpad/s79/repo2` with Option A applied as A1 would apply
+it: `include(":app")`; the probe's `app/` module from section 2; the root `build.gradle.kts` gaining
+`alias(libs.plugins.kotlin.compose) apply false` and `alias(libs.plugins.compose.multiplatform) apply false`; the
+catalog gaining `composeMultiplatform = "1.12.2"` and those two plugin entries; Google's Maven added to
+`dependencyResolutionManagement` with `content { includeGroupByRegex("androidx\\..*") }`. In both copies only the
+repository URLs were pointed at the local retrying mirror (section 2). `scratchpad/s79/tools/deps.sh` then printed
+`:brouter:dependencies` for six configurations and the root `buildEnvironment`, in each copy.
+- `:brouter`'s `iosSimulatorArm64CompileKlibraries`, `iosArm64CompileKlibraries`, `jvmCompileClasspath`,
+  `jvmRuntimeClasspath` and `jvmTestRuntimeClasspath`: **byte-identical before and after** (`diff` prints nothing).
+  Each is a real tree, not an empty report: for example the iOS one lists okio 3.18.2, atomicfu 0.33.0 and
+  `kotlin-stdlib:2.3.10`, and the jvmTest one also kotlin-test 2.3.10, junit 4.13.2 and jacoco 0.8.16 with asm 9.11.1.
+  The oracle jar is a file dependency and does not appear in this report in either copy, so this check says nothing
+  about it; it is unchanged by construction because `brouter/build.gradle.kts` is not edited.
+- The sixth, `commonMainMetadataElements`, is a consumable configuration and failed to resolve identically in both
+  copies; it carries no evidence either way.
+- Root `buildEnvironment`: the after copy adds five coordinates (the Compose Gradle plugin and its marker 1.12.2, its
+  `hot-reload-gradle-plugin` 1.2.0, the Compose compiler plugin and its marker 2.3.10) and changes or removes none;
+  every `kotlin-gradle-plugin*` entry stays 2.3.10.
+- In the after copy, `./gradlew --no-daemon :app:compileKotlinIosSimulatorArm64 :brouter:compileKotlinIosSimulatorArm64
+  :brouter:compileKotlinJvm` ended `BUILD SUCCESSFUL` (`scratchpad/s79/repo2-compile.log`).
+- Not run: any of `:brouter`'s tests in the after copy (they need the oracle, tiles and the msun build; they are CI's
+  job on A1's first push). So "A1 leaves the engine's resolved inputs as they were" is shown; "the engine's results are
+  unchanged" is predicted, and A1's first CI run on the four existing jobs is what shows it.
+
 4. An Xcode project with no Mac - pending
 5. Launch and screenshot on the simulator in CI - pending
 6. What needs the owner - pending
