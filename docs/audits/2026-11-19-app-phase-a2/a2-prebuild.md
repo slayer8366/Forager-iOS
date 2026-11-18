@@ -658,3 +658,94 @@ the wrapper reports it, a `failed` line), on a build shown compiled; then restor
   loaded` (from `didFinishLoadingStyle`), R1's gate and its revert, as A2-2.
 - **F-2.** The Trail style, N first, and the delegate's `A2: map idle`; R4's request summary line; R3 observed.
 - **F-3.** R3 gating, with its revert, as A2-4.
+
+## 9. What A2 will not show
+
+- **Frame rate, memory, battery, heat:** need a phone (plan, Phase A, "What it will not show"). The wrapper's `onFrame`
+  frame rate on a simulator measures the runner's Mac, not an iPhone, and is not proposed as evidence of anything.
+- **A phone at all:** every result is simulator-checked, on one iPhone 17 simulator with iOS 26.2 ("3 no iPhone").
+- **Offline:** the offline store, downloads and the tile archive format are A3 (plan line 94). A2 reads only online.
+- **Touch and gestures:** pan, pinch, rotate, and whether Compose and the map share touches (Forager's pitfalls on
+  touches through a `Surface` and on `performClick` versus real touches apply when the map gets chrome; A2 adds none).
+- **Night, the other map types, layers, the location puck, the always-visible credit caption,** and every one of
+  Android's map files beyond "a style draws".
+- **Any zoom but the world view** (by section 6's camera), so no detail-level tiles, no relief (zoom 5 and up) and no
+  official-trails band (zoom 10 and up) are requested or seen.
+- **Text rendering correctness** (the HarfBuzz order issue): glyphs may draw at the world view, but no check reads them.
+- **That the wrapper's Compose 1.11.1 build is safe on our 1.12.2** beyond the one screen and the checks above.
+- **Real network conditions:** the runner's network is a datacentre's.
+
+## 10. Disclosure
+
+### Confirmed (read from a file at a cited line, a URL fetched today, or a command run today)
+
+- Android's map: MapLibre Android 13.5.0; the default style is the Trail style loaded by URL from the project's Worker;
+  its sources, sprite, glyphs and layer counts; no key, header or referer gate on the map routes (section 1).
+- The Worker answered 200 to a non-Android client for the style, TileJSON, sprite and zoom-0 tile (section 1 table).
+- Wrapper releases, their Kotlin and Compose versions and how each ships MapLibre on iOS (section 2 table, from Maven
+  module files and tags); README status "Beta" for iOS.
+- Kotlin 2.3.10 refuses wrapper 0.20.0's klib (ABI 2.4.0, produced by 2.4.20) and compiles against 0.13.1 and 0.14.0
+  (scratch, section 2). A cinterop of ours makes the Linux iOS compile `SKIPPED` with exit 0 (scratch, section 3). A
+  `UIKitView` hosting a Swift-supplied `UIView` compiles with our pins (scratch, section 4).
+- XcodeGen 2.46.0's spec supports remote Swift packages with `exactVersion` and `revision`; MapLibre's distribution
+  package pins its binary by checksum; the 6.31.0 zip's size and SHA-256 equal that checksum; its frameworks'
+  `MinimumOSVersion` is 12.0 (section 3).
+- The MapLibre iOS delegate and network hooks named in sections 4 and 5, by header line.
+- The scan pattern's verdicts on the camera candidates in section 6.
+
+### Inferred
+
+- That the FFI runtime klib (24 MB) contains the compiled engine (size and docs, not unpacked).
+- That a static Kotlin framework leaves MapLibre's symbols to the app's final link; that the dynamic xcframework must be
+  embedded and works unsigned on the simulator; that `xcodebuild` would fetch an SPM package over the network.
+- That the simulator uses the host's network (so the host `curl` stands in for the app's view of the Worker).
+- That every FFI-line release (0.15.0 to 0.19.0) fails as 0.20.0 does, from their 2.4.x stdlib requirement; only 0.20.0
+  was compiled.
+- The native SDK's default camera; the job-time estimate; the request volume per run.
+
+### Could not determine
+
+- Whether wrapper 0.14.0 (built on Compose 1.11.1) links and runs correctly on Compose 1.12.2: compile-only on Linux.
+- Whether GitHub's macOS runners can reach the Worker's `workers.dev` host.
+- Whether wrapper 0.14.0 has any request hook (only its load and frame callbacks were searched).
+- The MapLibre engine version inside FFI 202610.0 (written without its leading `0.`) beyond its submodule commit
+  `43e10605`, which is no tagged iOS release (tag list read; no match).
+
+### Premises in this brief or the plan that were wrong
+
+- **"Which MapLibre native iOS version it wraps, how it ships that native dependency: CocoaPods, SPM, a bundled
+  framework, cinterop?"** assumes the wrapper wraps MapLibre's iOS SDK. That was true up to 0.14.0. Since 0.15.0 it
+  wraps no iOS SDK: it renders through MapLibre Native FFI, a C API over the engine, shipped as Maven klibs (section 2).
+- **The plan's A2 ("First through the Compose wrapper") reads as if the wrapper fits the current build.** The current
+  wrapper does not compile with our Kotlin pin at all (section 2). Under the standing Kotlin rule only an older, frozen
+  release can be tried. Not a wrong statement in the plan, but a premise its order rests on that no longer holds.
+- **The brief's "Library versions ... look each up" was right to insist:** the survey's description of the wrapper
+  (survey line 202, "On Android, iOS, and Desktop, the map renders with MapLibre Native") still matches in spirit, but
+  how it reaches iOS changed after the survey's sources (the survey did not name a version; not a contradiction, a gap).
+- None else found.
+
+### Decided beyond scope
+
+- **I pushed one commit with the E1 scan at 1, not 0** (`4dcd113`, section 2): the tag name `bindings/kotlin/v0.`
+  followed by `202610.0`, written whole. I had assumed the scan would read it as text; it does not. The next commit
+  (`3ac62fa`) splits it, scan 0. From that push on, every push was conditional on the scan printing 0. It is a version
+  string, not a coordinate, but the rule was "it must print 0", and it did not.
+- I did not write the Worker's full host (its account label) into this repository (section 1); the brief asked me to
+  name the host. Raised as O1.
+- In scratch: a local retrying Maven mirror, because this container's proxy returned intermittent 404s (section 3);
+  read-only shallow clones of `maplibre/maplibre-compose`, `maplibre/maplibre-native-ffi` and
+  `maplibre/maplibre-gl-native-distribution`; a download of MapLibre iOS 6.31.0's xcframework zip to measure it.
+- I compiled two older wrapper releases (0.13.1, 0.14.0), a cinterop probe and a `UIKitView` probe beyond the brief's
+  "whether the wrapper's artifacts resolve ... and whether `:app` compiles".
+- Proposed a launch-argument split so A1's gate stays literally unchanged (section 8): a design call for the planner.
+
+### Not checked
+
+- Anything on macOS: no link, no `xcodebuild`, no simulator. No CI was started (docs-only pushes).
+- That this repository is public (the brief's premise).
+- The Street map's host (`A/ui/map/street/`), and the third-party hosts' usage policies.
+- The wrapper's attribution behaviour; MapLibre's own log content.
+- The 6.25.1 zip's bytes (size from the server's header, hash from the package only).
+- Apple's documentation for SPM binary checksums; licences of the wrapper and FFI beyond their badges and POM.
+- Forager's `RECORD` and this repository's `RECORD.md` were not read for entries after the plan; the owner rulings used
+  are the ones the brief quotes.
