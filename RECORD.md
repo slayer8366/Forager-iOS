@@ -7905,3 +7905,32 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next (the planner's):** session 82: the `brouter.yml` path change, then A1-3a, launch on the simulator and observe.
 
 **Notes:** Written by the planner session by hand. Next free ID -206.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-206
+**Timestamp:** 2026-11-18T06:59:43Z
+**Continues:** -205
+**Title:** A1-3a: the empty app launches on the iOS simulator in CI, prints its drawn-frame line, and its screenshot is the app's colour exactly
+
+**What landed.** `app` moved from `294d81a` to `ed2fca8`, six commits (coder: Plumb Ledger, session 82): `5cbbf1b` (`brouter.yml`'s `paths-ignore`, the planner's decision of -205, six lines), `08c874c` and `002174c` (`tools/png-region.py`, its self-test, a Linux job), `8a1aafd` (the launch steps in `app-bundle`), two findings commits. Findings: `docs/audits/2026-11-18-app-phase-a/a1-3-launch.md`.
+
+**Verified by the planner.**
+- `git ls-remote origin app` gives `ed2fca8`; clean tree; six commits with the project trailer only; 5 files, 768 insertions, 2 deletions; nothing under `brouter/`, `app/` or the root build.
+- `scan.sh` prints 0 on five commits and 3 on `08c874c`. The planner read the three hits: expected output lines of the self-test carrying the fractions of a synthetic image, not coordinates. `002174c` rewrote them and scans 0. `08c874c` stays in history.
+- Run 44249852981 on `8a1aafd`, attempt 2, four jobs successful. In `app-bundle`, simulator-checked on iPhone 17, iOS 26.2: `OK: iPhone 17 and iOS 26.2 are both listed`; the control `FAIL: 98/2530188 pixels (0.0000) within 24 of E0218A` on `before.png` followed by `OK: the control: the colour check failed on before.png (exit 1)`; `waited 8 s`, `A1: first frame drawn`, `OK: the app printed 'A1: first frame drawn'`; on `after.png`, `PASS: 2530188/2530188 pixels (1.0000) within 24 of E0218A` (printed, not gating in this step).
+- The planner downloaded the artifact `a1-3-simulator` and ran `tools/png-region.py` on its files: `after.png` is E0218A in 2,530,188 of 2,530,188 band pixels, passing at tolerance 8 and at 24; `before.png` has 0 band pixels within 8 and 98 within 24. `app-stdout.txt` is the one line. The planner looked at `after.png`: the app's colour over the whole screen, under the status bar and the Dynamic Island. A copy was sent to the owner.
+- `brouter.yml` run 44245586042 on `4b01c3b` (A1-2's code): four jobs successful, 0 compile-error lines, `jvm` 262, `jvm-production` 3 with its gate line, simulator 61 and 7 with 25 classes, memory 3, 1, 1.
+
+**A failure to carry.** Attempt 1 of the same run went red in A1-2's unchanged build step, before any launch step: `xcodebuild: error: Unable to find a destination matching ... { generic:1, platform:iOS Simulator }`. The coder reran it once unchanged and it passed. Intermittent, 1 of 5 builds on this branch so far, cause not determined (the coder's guess, inferred: simulator runtimes not yet loaded). Not worked around. If it recurs it turns A1's gate red for a reason outside the app.
+
+**Reported by the coder, not rerun.** The self-test is 37 cases, 0 failed, locally and in CI; a planted error in the Average filter failed 10 cases, all filter-3 ones, run locally only. Boot of the simulator took about 4 minutes against a predicted 30 to 90 seconds; the job took 13 min 24 s. The process was alive 23 s after launch with no crash report.
+
+**The planner's decisions for A1-3b.** The colour check on `after.png` becomes gating at tolerance 8 per channel and threshold 0.98 on the middle band, from the observed exact match and 0 home-screen pixels within 8. The control on `before.png` stays at tolerance 24, the harder control. Before the build, the job prints the runtimes and `xcodebuild -showdestinations`, so a recurrence of the destination error arrives with evidence.
+
+**Cancelled by the planner.** `brouter.yml` runs 44249298838 (`5cbbf1b`) and 44249664086 (`08c874c`), superseded by 44249712556 on `002174c`, which holds both changes and is left to finish. Not yet read.
+
+**Not shown.** Any other device or runtime; anything beyond the first frame; a release build; a phone.
+
+**Notes:** Written by the planner session by hand. Next free ID -207.
