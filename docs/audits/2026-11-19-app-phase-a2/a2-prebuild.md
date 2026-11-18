@@ -50,7 +50,7 @@ Traced from the caller down:
    `mapStyleSourceFor(basemap, night, useOfflineTiles, offlineStyleUrl, ownTrail)` (`BasemapStyles.kt:315`).
 2. `mapStyleSourceFor` returns a `MapStyleSource` (`BasemapStyles.kt:242-262`): `Uri` (a style loaded by URL), `Json` (a
    raster style built in code) or `TrailWithTopoOver` (Trail Map by URL with a night raster added).
-3. `MapStyleReload.kt:126-129` turns it into `Style.Builder().fromUri(...)` / `.fromJson(...)` /
+3. `MapStyleReload.kt:126-130` turns it into `Style.Builder().fromUri(...)` / `.fromJson(...)` /
    `trailWithTopoOverBuilder(...)` and `:134` calls `map.setStyle(builder) { style -> ... }`.
 4. The default map type is Trail: `MapMode.DEFAULT = TRAIL` (`A/ui/map/MapMode.kt:64`), and `Basemap.DEFAULT` derives
    from it (`A/ui/map/Basemap.kt:188`). For Trail, by day, online, with the fallback not fired,
@@ -75,12 +75,12 @@ the night topo-over-trail composition are all Android behaviours a first map scr
   label into this repository: it is the owner's personal Cloudflare account name, no file in `Forager-iOS` names it today
   (`git grep workers.dev` on `app`, `origin/main` and `origin/research/app-port-survey` printed nothing), and the survey
   also cited files rather than the host. A2's code would have to commit it (section 7, O1).
-- **Source of the Worker:** `W/src/index.ts` (684 lines). It serves the styles (`index.ts:500-520` and on), fonts and
-  sprites from R2 (`assetKeyFor`, `index.ts:427-441`; patterns at `:424-425`), tiles from PMTiles archives on R2 through a
+- **Source of the Worker:** `W/src/index.ts` (684 lines). It serves the styles (`index.ts:505-530` and on; trail-v4 at `:523`), fonts and
+  sprites from R2 (`assetKeyFor`, `index.ts:429-441`; patterns at `:425-426`), tiles from PMTiles archives on R2 through a
   generic `/{name}/{z}/{x}/{y}.{ext}` path, and TileJSON at `/{name}.json` (`index.ts:317`). Routing data is under
-  `/routing/` with its own key check (`index.ts:497-499`, `W/src/routing/handler.ts`).
+  `/routing/` with its own key check (`index.ts:501-503`, `W/src/routing/handler.ts`).
 - **Key, header, referer:** none for the map. Read from `index.ts`: the only gate before the style, font, sprite and tile
-  routes is "POST is 405" (`:492`); `ALLOWED_ORIGINS` (`:36`, `resolveAllowedOrigin` `:118-126`) only decides the
+  routes is "POST is 405" (`:496`); `ALLOWED_ORIGINS` (`:36`, `resolveAllowedOrigin` `:118-126`) only decides the
   `Access-Control-Allow-Origin` response header, which matters to browsers, not to a native app. The routing key
   (`ROUTING_APP_KEY`, `:34`) applies to `/routing/` only. Confirmed by fetching today with no key, no referer and a
   generic user agent (section "What was fetched today" below): every map URL answered 200.
@@ -102,7 +102,7 @@ only, never values that could name a place:
   tiles.
 - **Format:** Mapbox Vector Tiles (`.mvt`, `application/x-protobuf`) served from PMTiles archives by the Worker; relief
   is PNG terrain tiles. The app never reads a PMTiles or MBTiles file itself online: the Worker unpacks the archive and
-  serves plain z/x/y tiles (`index.ts:145-146`, `:261-281`). Offline, Android uses MapLibre's own offline database, not a
+  serves plain z/x/y tiles (`index.ts:144-147`, `:261-281`). Offline, Android uses MapLibre's own offline database, not a
   PMTiles or MBTiles file (`OfflineStyle.kt:3-16`; `MapLibreStorage.kt:7-9`).
 - **Sprite:** `/sprites/v6/light` on the Worker (`light.json` and `light@2x.png` both 200 today).
 - **Glyphs:** `/fonts/{fontstack}/{range}.pbf` on the Worker; the style asks for Noto Sans Regular, Medium and Italic.
