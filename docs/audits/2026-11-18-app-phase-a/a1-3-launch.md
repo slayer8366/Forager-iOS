@@ -607,7 +607,7 @@ printed. The platform-UUID hash is the same on every VM of one image (`ce43e6401
    Xcode 26.0.1 (its log 199-220: the command, `SDKROOT = iphonesimulator26.0`; log 1207 `** BUILD SUCCEEDED **`), and
    its own `simctl list runtimes` (log 1652-1654) listed the same three iOS runtimes, no 26.0. At 07:18, four VMs of
    that same image version show no iOS Simulator destination at all under Xcode 26.0.1. Likewise 0504.1 was green at
-   05:59 (job 134607971756) and red from 06:31. Timeline of `app-bundle` under 26.0.1 today: green 05:5x and 05:59;
+   05:59 (job 134607971756) and red from 06:31. Timeline of `app-bundle` under 26.0.1 today: green 05:38 (job 134603625845, 0504.1) and 05:59;
    red 06:31; green 06:40; red 07:02, 07:07; and 12 of 12 diagnostic passes at 07:18 to 07:21 show no destination.
 7. Not the case: the failure has not gone away.
 
