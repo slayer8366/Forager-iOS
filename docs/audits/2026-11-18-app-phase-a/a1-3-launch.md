@@ -272,3 +272,66 @@ Inferred:
 - A1-3b's revert run, which belongs to A1-3b.
 - E1: no coordinates are committed by this dispatch (the scan, section 9). The artifact's `before.png` shows the
   simulator's stock Maps widget of North America with no location marked; it is in an artifact, not in the repository.
+
+# A1-3b: the colour check on `after.png` made gating, and a revert run that shows it going red
+
+Plumb Ledger, session 83, 2026-11-18. Branch `app`. Appended; sections 0 to 10 above are A1-3a's and are not edited.
+
+Base, confirmed at start: `git fetch origin`; `git status -sb` printed `## app...origin/app`; `git rev-parse --short HEAD`
+and `git rev-parse --short origin/app` both printed `ed2fca8`; `git status --porcelain` printed nothing.
+
+The planner's decisions (RECORD -206), as given: the colour check on `after.png` becomes gating with
+`tools/png-region.py`, colour `E0218A`, tolerance 8 per channel, threshold 0.98, the middle band as the script defines it
+(default `--band 0.8`, `tools/png-region.py:160`); the control on `before.png` stays at tolerance 24 and must still fail
+with exit 1 exactly; before the `xcodebuild` build step, `xcrun simctl list runtimes` and `xcodebuild -showdestinations`
+for the scheme are printed, not gating, with no retry or workaround. Governing rules: Forager's `CLAUDE.md`, Testing,
+re-read today from `/home/user/Forager/CLAUDE.md` (the revert-check rules: a red counts only if the reverted build
+compiled and ran, each failure must be one this revert could produce, and the forward state is confirmed after the
+restore). Every result is **simulator-checked**.
+
+## 11. Design and predictions (written before the workflow changed)
+
+### The workflow change (one commit)
+
+- A new step after "Generate the Xcode project" and before "Build the app for the simulator": prints
+  `xcrun simctl list runtimes` and `xcodebuild -project iosApp/ForagerApp.xcodeproj -scheme ForagerApp
+  -showdestinations`, each with its exit status, into the log and into `build/a1-3/`. `continue-on-error: true` and
+  every command `|| echo`, so it cannot gate. It adds no retry, wait or change to the build step.
+- The tolerance-24 printed check on `after.png` is replaced by a gating step of its own, right after `after.png`:
+  `png-region.py build/a1-3/after.png --colour E0218A --tolerance 8 --threshold 0.98`; exit 0 passes; any other exit
+  (1, a mismatch; 2, unreadable) fails the job with a line naming the exit status. The printed step keeps everything
+  else it printed (`file`, `sips`, listapps, container, process, crash reports, the sim log) and still runs after a
+  failure (`!cancelled()`), so a red colour check arrives with the same evidence as a green one.
+- The control step is not changed.
+
+### Predictions for the green run (step 2)
+
+- The diagnostic step lists iOS 26.2 (and 26.4, 26.5, as in A1-3a) under `== Runtimes ==`, and `-showdestinations`
+  lists at least `{ platform:iOS Simulator, ... name:Any iOS Simulator Device }` among available destinations. If the
+  destination error recurs in the build, the prediction is that the diagnostic output shows the runtimes listed but no
+  generic simulator destination available (inferred, the A1-3a race hypothesis; not seen).
+- The control: unchanged from A1-3a, `FAIL: 98/2530188 ...` at tolerance 24, then `OK: the control: the colour check
+  failed on before.png (exit 1)`.
+- The drawn-frame line: `OK: the app printed 'A1: first frame drawn'`.
+- The gate: `png-region: common colour E0218A: 2530188 pixels`, then `png-region: PASS: 2530188/2530188 pixels` (the
+  fraction printed as 1 to four places) `within 8 of E0218A` (threshold 0.98 printed to four places), then my step's
+  `OK:` line.
+
+### Predictions for the revert run (step 3)
+
+- The revert: `A1_COLOUR` at `app/src/commonMain/kotlin/com/zynergylabs/forager/app/App.kt:11` changes from
+  `Color(0xFFE0218A)` to `Color(0xFF1E6FD9)`, a mid blue. Its distance from `E0218A` per channel is R 194, G 78, B 79,
+  every channel far beyond 8. From the home screen's three commonest band colours in A1-3a (`FFFFFF`, `A1DF77`,
+  `98E0D7`) its largest per-channel distance is 225, 131 and 122 respectively, so it cannot be mistaken for the home
+  screen; it is also not black or white, the Dynamic Island and status-bar colours. Only that one constant changes.
+- The build compiles (a constant of the same type): no line matching `^e: ` or ` e: ` in the xcodebuild log, and
+  `** BUILD SUCCEEDED **` present.
+- The control fails on `before.png` exactly as in the green run (the home screen does not depend on the app).
+- The drawn-frame line appears (the line is printed by the same draw lambda, whatever the colour).
+- The gate goes red, and only the gate: `png-region: common colour 1E6FD9: 2530188 pixels`, then the exact failure line
+  expected, `png-region: FAIL: 0/2530188 pixels` (fraction 0 to four places) `within 8 of E0218A` (threshold 0.98 to
+  four places), then my step's `FAIL:` line naming exit 1. If the stored value is not exactly `1E6FD9` (no colour
+  management was seen in A1-3a, but this is a different colour), the count may differ from 0 only if some pixel is
+  within 8 of `E0218A`, which a blue screen cannot be.
+- The restore (one commit editing the constant back) makes `git diff <step-2 commit> HEAD -- app iosApp .github tools`
+  print nothing, and its run is green as in step 2.
