@@ -980,3 +980,61 @@ iPhone"). Run ids are `app.yml` runs on branch `app` unless named otherwise.
 - That the runner will keep 26.2: runner-images keeps "only three major.minor versions" of simulator runtimes, so the
   iOS 26.2 runtime, and with it 26.2's destinations, will in time be dropped. The diagnostic step before the build and
   the version check are what will show it.
+
+## 20. Correction, 2026-11-18, session 87 (review 6, S3 and S6)
+
+Added after the sections above, which are left as written. Source: review 6 (Samphire Witness,
+`docs/reviews/2026-11-18-review-6-a1-app-shell.md` in the review clone). Line numbers in `app.yml` are at `47e25f2`,
+after session 87's comment edit moved them down by up to four from the review's.
+
+### (a) Four builds green under 26.0.1, not three
+Sections 18 (`:911`) and 19 (`:976`) say Xcode 26.0.1 built green three times (05:38, 05:59, 06:40 UTC). It was four.
+The fourth is the build inside run 44246226134, job 134605728656 (`a393570`), which selected
+`/Applications/Xcode_26.0.1.app` (its log 215), built for `generic/platform=iOS Simulator` (204) and printed
+`** BUILD SUCCEEDED **` at 05:48:47 (1207); the job then failed in the bundle check, on purpose, which is why it was not
+counted. Section 12's table already lists it (`:381`). Read by session 87 from the job log.
+
+Also from the same reading: the red at 06:31 (job 134617571020) came before the green at 06:40 (job 134628156762, log
+171 `Xcode 26.0.1`, 1207 `** BUILD SUCCEEDED **`). "No destination under 26.0.1" holds for 06:31 and for every sample
+from 07:02 on, not for every sample from 06:31 on. Review 6 S3 and the brief for session 87 both wrote "from 06:31";
+`review-6-fixes.md` step 3 records that.
+
+### (b) What A1 has not shown, eight more items (review 6 S6)
+1. The drawn-frame wait has never been seen fail. Every run that reached it found the line; the branch that prints
+   `FAIL: no line 'A1: first frame drawn' ... within 120 s` and exits 1 (`app.yml:275-276`) has not run on a runner.
+2. Two more checks have only been seen pass: the control's failing branch, which exits 1 when the check on `before.png`
+   does not exit 1 (`app.yml:249-250`), and the device-type and runtime check (`app.yml:226-229`). The framework listing
+   check was seen red only on Linux with `lipo` stubbed (`a1-1-app-module.md:120-126`).
+3. The gate reads the middle 80 % of the screen's height (`png-region.py`'s default band; `app.yml:285` gives no
+   `--band`). Whether the colour reaches the top and bottom edges, which `.ignoresSafeArea()` at
+   `iosApp/ForagerApp/ForagerApp.swift:12` is there for, is not gated. The review read it true of one `after.png`.
+4. The gate's margins have not been exercised by any real screenshot: every `after.png` passed with every band pixel
+   exact, and the revert had no pixel of the colour, so tolerance 8 and threshold 0.98 have only met the extremes. The
+   self-test now holds both (`review-6-fixes.md` step 2), on synthetic images only.
+5. The line `A1: first frame drawn` shows the draw call ran in the process
+   (`app/src/commonMain/kotlin/com/zynergylabs/forager/app/App.kt:23-25`, review 6 N2); it does
+   not show the size drawn or that the frame reached the display. `after.png` is what shows the display.
+6. `app.yml` runs only on pushes to `app` that touch its paths (`app.yml:14-28`): no pull-request trigger, nothing on
+   `main`. A commit that touches only `docs/` gets no run, so `df49ee5` itself has none.
+7. The engine under the app's Xcode: the engine's simulator tests run under 26.0.1 (`brouter.yml`), the app links under
+   26.2 (`app.yml`). Once the app depends on the engine, the engine's code in the app will have been linked by a toolchain
+   its own tests did not use.
+8. The edited `brouter.yml` (the `paths-ignore` from `5cbbf1b`) had no finished run when section 19 was written; review
+   6 S5 lists the runs since then that were cancelled or still running.
+
+### (c) "The control ... held in all three" was true, but not established when written
+Section 19 (`:958-959`) says the control held in all three runs. Session 85 read the control's log lines, not the
+pictures. In run 44262884089 those lines differ from the other two: job 134660261407, log 2184, `common colour 000000:
+1639555 pixels`, about 65 % of the band, where the other runs' commonest colour is `FFFFFF` at about a tenth (read by
+session 87 in the job log; the screenshot itself not viewed by me). Review 6 N1 viewed that run's `before.png` (artifact
+14410105256): the home screen before its wallpaper and widgets had drawn, a black background with the status bar, the
+widgets as blank white squares, the icons and the dock, about a minute after `booted 08:05:58` (log 2162). So the
+sentence is true: it was the home screen, and the check exited 1 on it. Session 85 did not know that when it wrote the
+sentence, and did not remark on the difference.
+
+### (d) The five cancelled engine runs
+Section 9 (`:260`) says of session 82 that no `brouter` run was cancelled. Review 6 S5 lists five `brouter` runs on `app`
+with cancelled jobs (44246226126 and 44246914935, all four jobs; 44249298838, `ios-memory`; 44249664086, `jvm` and
+`ios-memory`; 44249712556, `ios-memory`). Per the brief for session 87, the planner cancelled them and recorded it in
+RECORD -205, -206 and -208. Those entries are not on `origin/main`'s `RECORD.md` as of this session and were not read
+by me; who cancelled each run is as the brief states it.

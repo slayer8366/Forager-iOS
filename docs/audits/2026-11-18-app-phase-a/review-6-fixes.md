@@ -163,3 +163,10 @@ screenshots are fully opaque per the review [not re-checked here].
 - RECORD -210 is cited because the brief says to; RECORD.md on `origin/main` has no entry past -199 that I could find,
   so -205 to -210 are not checked by me.
 - This push starts one full `brouter` run. Not waited for; the planner reads it.
+
+### Step 5, S6 and S3's count: `a1-3-launch.md` section 20
+Appended, no earlier line edited (`git diff` of the commit: additions only). (a) four greens under 26.0.1, the fourth
+being job 134605728656 of run 44246226134 (its log 215, 204, 1207, read by me); (b) the eight "not shown" items, each
+with file and line at `47e25f2`; (c) the control sentence true but not established, with run 44262884089's log 2184
+(`000000`, about 65 % of the band, read by me) and the review's viewing of `before.png` (not viewed by me); (d) the five
+cancelled engine runs, attributed to the planner and RECORD -205, -206, -208 as the brief states, not read by me.
