@@ -243,3 +243,91 @@ is not shown by a compile (binary compatibility of Compose's klibs across minor 
   iOS because both Compose and MapLibre include HarfBuzz symbols" (`docs/docs/getting-started.md:68-81` at `v0.13.1`,
   citing CMP-8882). Our `OTHER_LDFLAGS` already starts with `-framework ForagerApp` (`iosApp/project.yml`).
 - Either way, "beta on iOS" is unchanged.
+
+## 3. The native dependency with no Mac
+
+Which route applies depends on section 2's fork. With the FFI-line wrapper (Kotlin 2.4.x) there is no separate native
+dependency to fetch: it is a Maven klib. With wrapper 0.14.0 or 0.13.1, or with the fallback (section 4), MapLibre's
+classic iOS SDK, `MapLibre.framework`, must reach the app's link. Three ways, each read today:
+
+### a. Swift Package Manager, declared in `project.yml`
+
+- **XcodeGen 2.46.0 supports it.** `Docs/ProjectSpec.md` at tag `2.46.0` (fetched today from
+  `raw.githubusercontent.com/yonaskolb/XcodeGen/2.46.0/Docs/ProjectSpec.md`), section "Swift Package" (line 1245 on):
+  top-level `packages:` with `url` and a version form, including `exactVersion: 1.2.1` and `revision: xxxxxx`; a target
+  links it with a dependency `- package: <name>` and optional `product:` (lines 604-607, 700-720).
+- **The package:** `https://github.com/maplibre/maplibre-gl-native-distribution`, latest stable tag `6.31.0` (tag list
+  read today; newer tags are `7.0.0-pre2` and date-named `-globe` builds). Its `Package.swift` at that tag (commit
+  `13e41ab`, 2026-09-11) is one `binaryTarget` named `MapLibre`, url
+  `https://github.com/maplibre/maplibre-native/releases/download/ios-v6.31.0/MapLibre.dynamic.xcframework.zip`, checksum
+  `de3aaa435dd86768b06d90245e630d068dd7eef1491afae7217d1654c52c462a`.
+- **Pinned and checksummed?** The package version is pinned by `exactVersion` (a tag, which can be moved) or, stronger,
+  by `revision:` (a commit). The binary is checksummed by SPM against the `checksum` in `Package.swift`. I downloaded the
+  zip today: **10,312,052 bytes, SHA-256 `de3aaa43...c462a`**, equal to the package's checksum. SPM's checksum for a
+  binary target is the SHA-256 of the zip (that equality is the evidence; Apple's docs not re-read).
+- **Cost on the runner:** `xcodebuild` resolves packages over the network from github.com at build time (inferred: not
+  run). Our generated project is not committed, so no `Package.resolved` is kept; `revision:` stands in for it.
+
+### b. CocoaPods
+
+Not in our build today (A1). The wrapper's own docs warn "CocoaPods will stop receiving new versions of packages in late
+2026" (`docs/docs/getting-started.md:86-88` at `v0.13.1`). It would add a tool, a `Podfile`, a workspace and the Kotlin
+CocoaPods plugin for one dependency. **Not recommended** (mine).
+
+### c. The xcframework, fetched by `tools/fetch-pinned.sh` and linked by path
+
+- `tools/fetch-pinned.sh <dest> <url> <size> <sha256>` (its usage line, `tools/fetch-pinned.sh:6`) already refuses a
+  file unless size and SHA-256 match; A1 uses it for XcodeGen. The pins would be the two figures above (10,312,052 and
+  `de3aaa43...c462a`), the same SHA-256 that SPM itself pins, so the two routes check the same bytes.
+- Linked in `project.yml` with `- framework: <path>/MapLibre.xcframework` (`ProjectSpec.md:604`, "links to a framework
+  or XCFramework") and `embed: true` (`:612`; the default for an application target). It is a **dynamic** framework, so
+  it must be embedded in the `.app` (inferred from its name, `MapLibre.dynamic.xcframework`, and the presence of a
+  `MapLibre` binary per slice; `file` was not run on it). Unsigned embedding on the simulator: inferred to work, not run.
+- The zip unpacks to `MapLibre.xcframework` with slices `ios-arm64` and `ios-arm64_x86_64-simulator`, each a
+  `MapLibre.framework` with `Headers` (86 files), `Modules/module.modulemap`, `Assets.car` and `PrivacyInfo.xcprivacy`.
+- **This route needs no network beyond one pinned download, adds no package resolution to `xcodebuild`, and reuses a
+  tool and a pattern A1 already proved.** My recommendation between a and c: **c** (section 7, T3).
+
+### How Kotlin sees it
+
+- **Wrapper 0.13.1 / 0.14.0:** Kotlin needs no definitions of ours. The wrapper ships its own MapLibre bindings as a
+  prebuilt cinterop klib (`maplibre-compose-iosSimulatorArm64Cinterop-MapLibreMain-0.13.1.klib`, 113,666 bytes, listed
+  in its `.module`), which is why the compile in section 2 ran on Linux. The framework itself is needed only when the
+  executable is linked. Because our Kotlin framework is **static** (`isStatic = true`), the Kotlin link produces an
+  archive and does not resolve MapLibre's symbols; Xcode's final link of the app does, against the embedded
+  `MapLibre.framework` (inferred from how static archives link; it is the reason the wrapper's docs give linker-order
+  advice at the app level). The app's `OTHER_LDFLAGS` would become `-framework ForagerApp -framework MapLibre`, in that
+  order (the HarfBuzz note, section 2).
+- **The FFI line:** no framework; the app adds the system libraries and frameworks listed in section 2.
+- **A cinterop of our own breaks the Linux job, silently.** Tried in scratch: a one-function `probe.def` added to both
+  iOS targets of `:app`. The command `./gradlew :app:compileKotlinIosSimulatorArm64` **exited 0**, printed `w: ...
+  cross compilation to target 'iosSimulatorArm64' has been disabled because it contains cinterops: 'probe' which
+  cannot be processed on host 'linux_x64'`, and the task line read **`> Task :app:compileKotlinIosSimulatorArm64
+  SKIPPED`**. `app.yml`'s `app-klibs` job prints the task headers and the `e:` counts but does not fail on `SKIPPED`
+  (read from `app.yml`, job `app-klibs`), so it would go green having compiled nothing: a check that passes because it
+  never saw the data. Any design with our own cinterop must either move that compile to macOS or make `app-klibs` fail on
+  a suffixed header, as `app-framework` already does for its link (`app.yml`, "the link task did not run").
+
+### MapLibre iOS's minimum deployment target
+
+- Classic SDK 6.31.0: `MinimumOSVersion` **12.0** in both slices' `Info.plist` (read today from the unpacked zip).
+- Wrapper 0.20.0: "Requires iOS 15.5 or later" (section 2). FFI's Apple default: 15.0 (section 2).
+- **None raises our provisional 16.0.** The floor above 16.0, if any, comes from elsewhere: A1 recorded an object in
+  the Compose framework built for iOS 18.5 (A1-3, section 19, "What A1 has NOT shown").
+
+### What ran in scratch, exactly
+
+- A copy of `app` at `df49ee5` made by `git archive HEAD` into the session scratch folder, with `brouter/`, `iosApp/`
+  and `docs/` removed and `include(":brouter")` commented out, so only `:app` configured. One extra library line in the
+  version catalogue, one `implementation(...)` in `app/build.gradle.kts`, one probe file. Nothing was written to the
+  repository.
+- **The repositories in that copy pointed at a local mirror** (a 50-line Python server in scratch, `127.0.0.1:18080`)
+  that forwards to `repo.maven.apache.org/maven2`, `plugins.gradle.org/m2` and `dl.google.com/dl/android/maven2` and
+  retries a 404 or a 1-byte body up to six times. Why: through this container's proxy, `curl` on the same Maven URL
+  returned `404` with a 1-byte body and then `200` on the next try, and `--refresh-dependencies` failed three times in a
+  row on different artifacts each time. The mirror's log for the first wrapper run: 975 answers 200, 3 answers 404
+  after retries (artifacts that do not exist upstream, inferred from Gradle succeeding without them), 69 requests that
+  needed a second or later try. **This is a property of this container, not of GitHub's runners** (A1's jobs resolve
+  from Maven Central directly and have been green).
+- Kotlin/Native 2.3.10 for Linux came from the existing `~/.konan` cache. Compile only: no link, no `xcodebuild`, no
+  simulator.
