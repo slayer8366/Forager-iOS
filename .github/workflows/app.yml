@@ -1,0 +1,91 @@
+# The app's CI (A1-1; pre-build sections 7 and 8, RECORD -201 T5, T6, T8). brouter.yml is left as it is and still runs on
+# every push outside docs/**. Actions are pinned by the same commit SHAs as brouter.yml. No cache (T8): every run is cold.
+# Nothing here runs a simulator yet; the framework link is "linked on a macOS runner", not "simulator-checked".
+name: app
+
+on:
+  push:
+    branches: [app]
+    paths:
+      - 'app/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - 'gradlew'
+      - '.github/workflows/app.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  # Both iOS klibs of :app on Linux, as brouter.yml's jvm job checks the engine's: no link here.
+  app-klibs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: The app's iOS klibs (iosSimulatorArm64, iosArm64)
+        run: |
+          set -o pipefail
+          mkdir -p build
+          ./gradlew --no-daemon --console=plain :app:compileKotlinIosSimulatorArm64 :app:compileKotlinIosArm64 2>&1 | tee build/app-klibs.log
+      - name: Compile-error counts
+        if: always()
+        run: |
+          echo "lines matching '^e: ': $(grep -cE '^e: ' build/app-klibs.log || true)"
+          echo "lines matching ' e: ': $(grep -c ' e: ' build/app-klibs.log || true)"
+          grep -E '^> Task :app:compileKotlinIos' build/app-klibs.log || echo "no compile task header in the log"
+
+  # The framework link, which runs only on macOS. The listing step after it is the check.
+  app-framework:
+    runs-on: macos-26 # arm64; not macos-latest, which moves
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: Select Xcode 26.0.1 (Kotlin 2.3.10's published Xcode is 26.0)
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app
+          xcodebuild -version
+      # --info so the Kotlin Gradle plugin prints the native link's arguments: which stdlib the link used (A1-1, brief
+      # item 6). The timing lines bracket the Gradle run only.
+      - name: Link the debug framework for the simulator
+        run: |
+          set -o pipefail
+          mkdir -p build
+          echo "link step started $(date -u +%H:%M:%S)"
+          ./gradlew --no-daemon --console=plain --info :app:linkDebugFrameworkIosSimulatorArm64 2>&1 | tee build/app-framework.log
+          echo "link step ended $(date -u +%H:%M:%S)"
+      # Fails unless the link task ran in this job (no SKIPPED, UP-TO-DATE, NO-SOURCE or FROM-CACHE), the framework
+      # and its binary exist, and lipo names arm64.
+      - name: The framework, its binary and lipo -info
+        run: |
+          set -o pipefail
+          LOG=build/app-framework.log
+          FW=app/build/bin/iosSimulatorArm64/debugFramework/ForagerApp.framework
+          BIN="$FW/ForagerApp"
+          fail=0
+          grep -E '^> Task :app:linkDebugFrameworkIosSimulatorArm64' "$LOG" || { echo "FAIL: no link task header in the log"; fail=1; }
+          if grep -E '^> Task :app:linkDebugFrameworkIosSimulatorArm64 ' "$LOG"; then echo "FAIL: the link task did not run (outcome above)"; fail=1; fi
+          if [ -d "$FW" ]; then ls -laR "$FW"; else echo "FAIL: no directory $FW"; fail=1; fi
+          if [ -f "$BIN" ]; then
+            lipo -info "$BIN" | tee build/lipo.txt
+            file "$BIN"
+            grep -q 'arm64' build/lipo.txt || { echo "FAIL: lipo -info does not name arm64"; fail=1; }
+          else
+            echo "FAIL: no binary $BIN"; fail=1
+          fi
+          [ "$fail" = 0 ] && echo "OK: the framework was linked in this job and its binary is arm64"
+          exit "$fail"
+      - name: Recorded, not gating - the stdlib on the link's command line
+        if: always()
+        run: |
+          grep -nE 'konanc|stdlib|kotlin-native-prebuilt|konan/kotlin-native|-library|Arguments = ' build/app-framework.log | grep -v 'Resource missing' | head -80 || true

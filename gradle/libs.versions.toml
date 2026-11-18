@@ -10,11 +10,20 @@ jacoco = "0.8.16"
 # atomicfu's SynchronizedObject keeps ProfileCache's lock (Phase 1 report, item B row 8 (a); the owner, RECORD -91). commonMain only,
 # as a library, no plugin, as Phase 1's probe compiled it for jvm, iosArm64 and iosSimulatorArm64.
 atomicfu = "0.33.0"
+# Compose Multiplatform for :app (A1-1; pre-build section 2, RECORD -201 T2): the newest stable line whose stated Kotlin minimum for
+# iOS (2.3) Kotlin 2.3.10 meets. runtime, foundation and ui only; no Material3 (an alpha in 1.12.2).
+composeMultiplatform = "1.12.2"
 
 [libraries]
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "jacoco" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+# The Compose compiler plugin at Kotlin's own version, as Compose Multiplatform requires (RECORD -201 T2).
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
