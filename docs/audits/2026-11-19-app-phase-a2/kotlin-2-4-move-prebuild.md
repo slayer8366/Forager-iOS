@@ -270,7 +270,7 @@ platform **[I unless marked]**:
 - **So with 2.4.20, both are below the published 26.4 and below the toolchain the distribution was built with.** That is
   not a refusal (the minimum is 12.5) and not a "too high" warning (both are under 26.4) **[I, from the properties and the
   bytecode]**. Whether 2.4.20 links and runs the simulator tests with 26.0.1 or 26.2 is **only the Mac runner's to show**
-  **[?]**. `macos-26` (image `20261102.0473.1`) carries **26.4.1** (`17E202`) beside 26.0.1, 26.1.1, 26.2, 26.3, 26.5 and
+  **[?]**. `macos-26` (the image dated 2026-11-02 in that file) carries **26.4.1** (`17E202`) beside 26.0.1, 26.1.1, 26.2, 26.3, 26.5 and
   26.6 (default) (`actions/runner-images` `images/macos/macos-26-arm64-Readme.md:159-165`, fetched today) **[R]**, so moving
   to the published version is possible on the same label. Which Xcode each workflow selects is a technical choice
   (section 6, T3).
