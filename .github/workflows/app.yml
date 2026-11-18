@@ -3,6 +3,8 @@
 # The framework link and the app bundle are "built on a macOS runner"; from A1-3a, app-bundle also launches the app on
 # a simulator, and what that shows is "simulator-checked", never "checked" (the owner: "3 no iPhone"). From A1-3b
 # (RECORD -206) the colour of after.png gates the job.
+# Both macOS jobs select Xcode 26.2 (RECORD -208): Xcode 26.0.1 has no simulator platform on the runners ("iOS 26.0 is
+# not installed"); 26.2 is the lowest Xcode offering destinations on all six machines sampled in run 44257759986.
 name: app
 
 on:
@@ -69,10 +71,17 @@ jobs:
         with:
           distribution: temurin
           java-version: '21.0.13+9'
-      - name: Select Xcode 26.0.1 (Kotlin 2.3.10's published Xcode is 26.0)
+      # RECORD -208: 26.2, past the 26.0 Kotlin's page lists for 2.3.10. Fails unless -version names the Xcode wanted.
+      - name: Select Xcode 26.2 (RECORD -208), and fail unless it is the one selected
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.0.1.app
-          xcodebuild -version
+          set -o pipefail
+          WANT="Xcode 26.2"
+          mkdir -p build
+          sudo xcode-select -s /Applications/Xcode_26.2.app
+          xcodebuild -version | tee build/xcodebuild-version.txt
+          got=$(head -n 1 build/xcodebuild-version.txt)
+          if [ "$got" != "$WANT" ]; then echo "FAIL: the selected Xcode prints '$got', expected '$WANT'"; exit 1; fi
+          echo "OK: the selected Xcode is $WANT"
       # --info so the Kotlin Gradle plugin prints the native link's arguments: which stdlib the link used (A1-1, brief
       # item 6). The timing lines bracket the Gradle run only.
       - name: Link the debug framework for the simulator
@@ -120,10 +129,17 @@ jobs:
         with:
           distribution: temurin
           java-version: '21.0.13+9'
-      - name: Select Xcode 26.0.1
+      # RECORD -208, as in app-framework.
+      - name: Select Xcode 26.2 (RECORD -208), and fail unless it is the one selected
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.0.1.app
-          xcodebuild -version
+          set -o pipefail
+          WANT="Xcode 26.2"
+          mkdir -p build
+          sudo xcode-select -s /Applications/Xcode_26.2.app
+          xcodebuild -version | tee build/xcodebuild-version.txt
+          got=$(head -n 1 build/xcodebuild-version.txt)
+          if [ "$got" != "$WANT" ]; then echo "FAIL: the selected Xcode prints '$got', expected '$WANT'"; exit 1; fi
+          echo "OK: the selected Xcode is $WANT"
       # Refused unless the size and SHA-256 match (tools/fetch-pinned.sh). Not brew: brew cannot pin a version.
       - name: XcodeGen 2.46.0, pinned
         run: |
