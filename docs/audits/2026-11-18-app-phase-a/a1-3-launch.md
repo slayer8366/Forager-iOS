@@ -544,3 +544,185 @@ Note on the commit of this section (`4e090cb`): its two release URLs carried the
 counts (it printed **2**; release tags, not coordinates). Fixed in the next commit by writing the dot as `%2E` (the same
 URL); not amended or reset, by Forager's `CLAUDE.md` push-before-you-tidy rule. Both were pushed together; the diff
 `origin/app` (`5487223`) to the fix scans 0.
+
+## 15. Session 84 results: six replicas, the table, the answers, options for the planner
+
+Commit `bccce50` adds `.github/workflows/app-diagnose.yml` (step 2). Run **44257759986** (`app-diagnose`), all six jobs
+completed green (green means only that the jobs ran; no command in them can fail). Jobs: replica 1 134643447484,
+2 134643447431, 3 134643447539, 4 134643447096, 5 134643447399, 6 134643447611; started 07:17:52 to 07:20:53 UTC.
+Artifacts `app-diagnose-replica-1` to `-6` hold every output. Every result here is **simulator-checked**: nothing was
+built or launched.
+
+### The table (each cell read from that replica's `99-summary.txt`, the log line `SUMMARY replica=N pass=P ...`)
+
+"Sim" is the count of `platform:iOS Simulator` entries inside the "Available destinations" section; "none" means the
+section is absent and the only entry is the ineligible "Any iOS Device, error:iOS 26.x is not installed".
+
+| Replica | Job | Image version, build (log line 18) | Hostname hash | 26.0.1 (first) | 26.1.1 | 26.2 | 26.3 | 26.4.1 | 26.5 | 26.6 | 26.0.1 (last) |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 134643447484 | 20261102, 0473.1 | b44d1e73525c | none (26.0) | none (26.1) | 34 | 34 | 34 | 34 | 34 | none (26.0) |
+| 2 | 134643447431 | 20261102, 0473.1 | 584909cf0cc2 | none (26.0) | none (26.1) | 34 | 34 | 34 | 34 | 34 | none (26.0) |
+| 3 | 134643447539 | 20261102, 0473.1 | bd677c6411fd | none (26.0) | none (26.1) | 34 | 34 | 34 | 34 | 34 | none (26.0) |
+| 4 | 134643447096 | 20261112, 0504.1 | 626e015dacac | none (26.0) | none (26.1) | 34 | 34 | 34 | 34 | 34 | none (26.0) |
+| 5 | 134643447399 | 20261112, 0504.1 | 6f9126b87987 | none (26.0) | none (26.1) | 34 | 34 | 34 | 34 | 34 | none (26.0) |
+| 6 | 134643447611 | 20261102, 0473.1 | 7aba08b77eb6 | none (26.0) | none (26.1) | 34 | 34 | 34 | 34 | 34 | none (26.0) |
+
+Per Xcode (replica 1's files, identical in substance on all six): the iOS Simulator SDK from `-showsdks` and the OS
+versions the available iOS Simulator destinations offer.
+
+| Xcode (build) | iOS Simulator SDK | iOS SDK build, and the runtime `simctl runtime match list -v` chooses for it | Destination OS versions |
+|---|---|---|---|
+| 26.0.1 (17A400) | `iphonesimulator26.0` | 23A339, chosen "23A339" (no named runtime) | none |
+| 26.1.1 | `iphonesimulator26.1` | 23B77, chosen "23B77" (no named runtime) | none |
+| 26.2 | `iphonesimulator26.2` | 23C53, chosen "iOS 26.2 (26.2 - 23C54)" | 26.2, 26.4.1, 26.5 |
+| 26.3 | `iphonesimulator26.2` | 23C57, chosen "23C57" (no named runtime) | 26.2, 26.4.1, 26.5 |
+| 26.4.1 | `iphonesimulator26.4` | 23E252, chosen "23E252" (no named runtime) | 26.2, 26.4.1, 26.5 |
+| 26.5 | `iphonesimulator26.5` | chosen "iOS 26.5 (26.5 - 23F77)" | 26.2, 26.4.1, 26.5 |
+| 26.6 (17F113, default) | `iphonesimulator26.5` | 23F81a, chosen "23F81a" (no named runtime) | 26.2, 26.4.1, 26.5 |
+
+Other per-replica facts (`00-machine.txt`, `01-xcodes.txt`, `02`, `04`, `06`): macOS 26.7.2 (25G332), `VirtualMac2,1`,
+3 CPUs, CoreSimulator 1051.55 on all six; `xcode-select -p` is `/Applications/Xcode_26.6.app/Contents/Developer`;
+`Xcode_26.0.app`, `26.1.app`, `26.4.app` and the `.0` names are symlinks; `simctl list runtimes` prints the same twelve
+runtimes on all six (iOS 26.2 23C54, 26.4.1 23E254a, 26.5 23F77, and tvOS, watchOS, visionOS 26.2/26.4/26.5), every
+one `State: Ready`, each a "Patchable Cryptex Disk Image" under
+`/System/Library/AssetsV2/com_apple_MobileAsset_iOSSimulatorRuntime/<hash>.asset/AssetData/Restore/` mounted at
+`/Library/Developer/CoreSimulator/Volumes/iOS_<build>`; the iOS images are 9.7G to 9.9G each (`runtime list -v`). The
+runtime set, states and image paths hash identically on all six once the per-VM UUIDs and listing order are removed.
+`/Library/Developer/CoreSimulator/Images`, `.../Profiles/Runtimes` and `~/Library/Developer/Packages` are absent.
+`~/Library/Developer/Xcode/SDKToSimulatorIndexMapping.plist` is 13033 bytes dated Nov 2 05:31 on the 0473.1 VMs and
+13201 bytes dated Nov 12 16:15 on the 0504.1 VMs: image-build dates, not touched during the jobs; its contents were not
+printed. The platform-UUID hash is the same on every VM of one image (`ce43e64017f5` on 0473.1, `1ae894a6e5a6` on
+0504.1), so it identifies the image's VM template, not a machine; the hostname hash differs on all six.
+
+### Against the predictions (section 14)
+
+1. Image: **wrong.** I predicted all six on version 20261112, build 0504.1, with possibly an odd one on the older image;
+   four of six ran on version 20261102, build 0473.1. Both versions are in rotation now.
+2. Identifiers all different: right for the hostname hash; the platform-UUID hash is per image, not per VM.
+3. Xcodes and `xcode-select -p`: right.
+4. Runtimes: right, on all six.
+5. Per Xcode: right on every cell of the table, including 26.1.1.
+6. **What the data cannot explain, now sharper than predicted:** the image version is not the variable. Job
+   134628156762 (version 20261102, build 0473.1) built green at 06:40 today with the identical `xcodebuild` command under
+   Xcode 26.0.1 (its log 199-220: the command, `SDKROOT = iphonesimulator26.0`; log 1207 `** BUILD SUCCEEDED **`), and
+   its own `simctl list runtimes` (log 1652-1654) listed the same three iOS runtimes, no 26.0. At 07:18, four VMs of
+   that same image version show no iOS Simulator destination at all under Xcode 26.0.1. Likewise 0504.1 was green at
+   05:59 (job 134607971756) and red from 06:31. Timeline of `app-bundle` under 26.0.1 today: green 05:5x and 05:59;
+   red 06:31; green 06:40; red 07:02, 07:07; and 12 of 12 diagnostic passes at 07:18 to 07:21 show no destination.
+7. Not the case: the failure has not gone away.
+
+### The four answers
+
+- **(a) Do machines of the same image version differ?** Not in anything this diagnostic measured. Within each image
+  version, and across the two, the runtime set and states, the runtime match list, the SDKs and the 26.0.1 destination
+  output are identical (normalised hashes, all six). The only differences seen are listing order, per-VM UUIDs,
+  hostnames, and the per-image index plist above. Six VMs sampled, 4 of one version and 2 of the other.
+- **(b) Under Xcode 26.0.1, is the iOS 26.0 platform present anywhere?** No: on 0 of 6 replicas, in both the first
+  and the last pass. No iOS 26.0 runtime exists on disk on any VM, and `simctl runtime match list -v` under 26.0.1
+  maps its iOS SDK (23A339) to no named runtime.
+- **(c) Which Xcode versions show an available iOS Simulator destination on every replica?** 26.2, 26.3, 26.4.1, 26.5
+  and 26.6, each with 34 iOS Simulator entries on all six, offering runtimes 26.2, 26.4.1 and 26.5. 26.0.1 and 26.1.1
+  show none on any replica.
+- **(d) What runner-images says** (all fetched today):
+  - The toolset for this image, https://raw.githubusercontent.com/actions/runner-images/main/images/macos/toolsets/toolset-26.json:
+    `"install_runtimes": "none"` for 26.0.1 (and 26.1.1, 26.3, 26.6); iOS 26.2 explicitly for 26.2; the defaults for
+    26.4.1 and 26.5. So **no current macos-26 image is built to give Xcode 26.0.1 its iOS platform.**
+  - Policy, https://github.com/actions/runner-images/blob/main/README.md line 136: "only three major.minor versions
+    of platform tools and simulator runtimes will be available for installed Xcode".
+  - Release notes for both versions (URLs in section 14): no Xcode, runtime or Apple SDK change in either.
+  - The image README on `main`, https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md:
+    still the 20261102 version; simulators iOS 26.2, 26.4, 26.5 only.
+  - Issues: no macos-26 issue for "iOS 26.0 is not installed" was found (issue search via `gh api search/issues`,
+    queries listed in the session; `gh api` on the repository's own endpoints was refused, so pages were read on the
+    web). The nearest: https://github.com/actions/runner-images/issues/13570 (macOS 15, January 2026), the same
+    removal of Xcode 26.0.1's runtimes on macOS 15, workaround `xcodebuild -downloadPlatform <platform> -buildVersion
+    <v>`, a user's report of "10GB" and "14 minute delay" (not a maintainer's figure), and the maintainer restoring the
+    iOS runtime there on request. https://github.com/actions/runner-images/issues/13435 (December 2025) shows that
+    macos-26 images then **did** carry iOS 26.0 and 26.1 runtimes; they are gone now. When they went is not determined.
+
+### Kotlin's side (step 4; primary sources fetched today; no version changed)
+
+- Kotlin's compatibility page, https://kotlinlang.org/docs/multiplatform/multiplatform-compatibility-guide.html: the
+  row for Kotlin Multiplatform plugin 2.3.10 lists Xcode **26.0** (also 2.3.0 and 2.3.20-2.3.21; 2.4.0 onward lists
+  26.4). The page says nothing about a newer Xcode.
+- Kotlin's source at tag `v2.3.10`: `XcodeVersionService.kt` reports `XcodeVersionTooHighWarning` when the selected
+  Xcode is above `XcodeVersion.maxTested` and `kotlin.apple.xcodeCompatibility.nowarn` is not set; the diagnostic is
+  severity WARNING (`KotlinToolingDiagnostics.kt:1493`), text "The selected Xcode version (...) is higher than the
+  maximum known to the Kotlin Gradle Plugin. Stability in such configuration hasn't been tested". It is a warning, not
+  an error. But `native/utils/src/org/jetbrains/kotlin/konan/target/Xcode.kt:46` at that tag reads
+  `val maxTested = XcodeVersion(16, 0)`, which contradicts the page's "26.0": by the source, the Xcode 26.0.1 in use
+  today is already above `maxTested`. Yet neither `app-framework` job 134636659789 nor green `app-bundle` job
+  134607971756 contains the warning's text ("Too High", "maximum known", "Maximum tested": no match). Whether the
+  check runs in this build at all is **not determined**.
+- So, from these sources: moving to Xcode 26.2 or later goes past the Xcode the Kotlin page names for 2.3.10, and the
+  plugin's documented reaction is at most a suppressible warning, not a failure. Whether Kotlin/Native 2.3.10 links
+  correctly against a 26.2-to-26.5 SDK is not established by any source read; only a build would show it.
+
+### Options for the planner (options only; none applied)
+
+1. **Build `app-bundle` with Xcode 26.2** (SDK 26.2; the iOS 26.2 runtime the launch already boots).
+   For: an iOS Simulator destination on 6/6 VMs of both image versions; the toolset installs iOS 26.2 for 26.2 by
+   name, so it is the most deliberately provided pair. Against: past the Xcode 26.0 Kotlin's page names for 2.3.10;
+   `app-framework` links under 26.0.1, so the two jobs would differ unless both move; runner-images keeps "three"
+   runtime versions, so 26.2's runtime will in time be dropped too.
+2. **Build with Xcode 26.4.1, 26.5 or 26.6** (6/6 available, same evidence). Further from Kotlin's documented 26.0;
+   26.6 is the image default (no `xcode-select` needed) but has no runtimes installed for it in the toolset.
+3. **Name a concrete simulator destination (by id or name) under 26.0.1.** Against, from the data: under 26.0.1 there
+   is no available iOS Simulator destination of any kind on any VM, the platform itself is reported "not installed",
+   so a named destination would be expected to fail the same way (inferred; not run).
+4. **Download the iOS 26.0 platform in the job** (`xcodebuild -downloadPlatform iOS -buildVersion 26.0` under 26.0.1,
+   Apple's documented command). For: keeps Xcode at 26.0.1, Kotlin's documented line. Against: each installed iOS
+   runtime on these VMs is 9.7G to 9.9G; a user on #13570 reports about 10 GB and 14 minutes; no cache (T8), so every
+   run pays it; adds a dependency on Apple's download service. Not timed here.
+5. **Retry and hope.** Against: 12 of 12 passes on both image versions show no destination; the greens are unexplained.
+
+**My recommendation (mine, not a decision):** option 1, Xcode 26.2 for `app-bundle`, first as a single
+confirming run, read for `** BUILD SUCCEEDED **`, the in-xcodebuild framework link, and any Kotlin Xcode warning; with
+the planner deciding whether `app-framework` moves with it. Option 4 is the one that keeps Kotlin's documented Xcode,
+at a cost I have not measured.
+
+### Confirmed (CI logs and artifacts cited above)
+- 26.0.1 and 26.1.1 have no available iOS Simulator destination on 6/6 VMs, both images, both passes for 26.0.1;
+  26.2 to 26.6 have 34 on 6/6.
+- No iOS 26.0 runtime is on any sampled VM; the runtime set is identical on all six.
+- Both image versions are in rotation at 07:17 to 07:21 today, and both fail the same way under 26.0.1.
+- Image 20261102, build 0473.1 built green under 26.0.1 at 06:40 today with the same runtimes listed.
+- The toolset installs no runtimes for 26.0.1; neither release changed Xcode or runtimes.
+
+### Inferred
+- That Xcode 26.x counts its iOS platform as installed only when a runtime of its own SDK's major.minor is present
+  (consistent with all 7 Xcodes on all 6 VMs; not documented in anything read).
+- That the earlier greens depended on something outside the image's disk state (for example something fetched or
+  cached at run time). Nothing printed shows what.
+- That a concrete destination under 26.0.1 would fail too (option 3).
+
+### Could not determine
+- Why 26.0.1 resolved a generic iOS Simulator destination at 05:59 and 06:40 today and not since, on the same images.
+- The contents of `SDKToSimulatorIndexMapping.plist` (not printed) and whether Xcode refreshes it or any similar index
+  over the network.
+- Whether Kotlin's Xcode-version check runs in this build, given `maxTested = 16.0` in the source and no warning in
+  the logs.
+- When runner-images stopped shipping iOS 26.0/26.1 runtimes on macos-26.
+
+### Premises in this brief that were wrong
+- "Failing jobs ran on image version 20261112 (build 0504.1). One green ran on 20261102 (build 0473.1)": true of the
+  record, but the implied distinction does not hold. VMs of 20261102, build 0473.1 fail the same way today (replicas
+  1, 2, 3, 6). The image version is not what separates green from red.
+- "Which other Xcode on the image has an iOS platform matching an installed runtime" assumed one exists by matching;
+  in fact five do, and three of them (26.3, 26.4.1, 26.6) offer destinations without `simctl` choosing a named runtime
+  for their SDK, so "matching" is looser than an exact runtime match.
+- Kotlin's maximum Xcode: the brief points to the compatibility page; Kotlin's own source disagrees with it (above).
+
+### Decided beyond scope
+- 6 replicas rather than 4; 26.0.1 run first and last; `xcodebuild -checkFirstLaunchStatus` and per-Xcode
+  `simctl runtime match list -v` added to each Xcode's pass (read-only). `-checkFirstLaunchStatus` printed nothing and
+  no exit line, so exit 0, for every Xcode pass on every replica (48 of 48 files).
+- A platform-UUID hash was printed beside the hostname hash; it turned out to be per image, as recorded.
+- The `brouter` run the push started (44257759907, `bccce50`; foreseen in section 14) was left running and not read.
+- Section 14's first commit `4e090cb` scanned 2 (release URLs), fixed in `6127120` before push, as recorded there.
+
+### Not checked
+- No build under any other Xcode; no `-downloadPlatform` timing; no named-destination attempt.
+- Issue #13220 (named as the original of #13435) was not read.
+- The `brouter` run's result.
+- No device: every iOS statement here is simulator-checked, and most are not even that (destination listings only).
