@@ -7934,3 +7934,29 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Not shown.** Any other device or runtime; anything beyond the first frame; a release build; a phone.
 
 **Notes:** Written by the planner session by hand. Next free ID -207.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-207
+**Timestamp:** 2026-11-18T07:11:03Z
+**Continues:** -206
+**Title:** A1-3b is stopped and red: the Xcode build finds no simulator destination; the "intermittent" of -206 was wrong
+
+**State.** `app` is at `5487223`, five commits after `ed2fca8` (coder: Plumb Ledger, session 83): the gating colour check and a diagnostic step in `app.yml` (`f56cbe5`), and findings. The revert run was not pushed. The gating colour check has never executed. The coder stopped after two failures on one symptom, as Forager's rule requires, and gathered data instead of a third attempt.
+
+**Verified by the planner, in the job logs.**
+- Run 44255674662 on `f56cbe5`: `app-bundle` failed in both attempts (jobs 134636660132, 134639110582) at the unchanged build step with `xcodebuild: error: Unable to find a destination matching the provided destination specifier`.
+- The diagnostic step printed, seconds earlier in the same jobs: the runtimes iOS 26.2, 26.4 and 26.5 listed by `simctl`; and from `xcodebuild -showdestinations` only an ineligible entry, `Any iOS Device, error:iOS 26.0 is not installed. Please download and install the platform from Xcode > Settings > Components.` No available destination at all.
+- Both failing jobs ran on image `macos-26-arm64` version 20261112 (build 0504.1). The green A1-3a job 134628156762 ran on the older image 20261102 (build 0473.1). But job 134603625845, A1-2's first green, ran on the newer image too and printed `** BUILD SUCCEEDED **`.
+- Five commits, each with the project trailer only. `scan.sh` prints 0 on four and 1 on `434e288`: the runner image's version string written joined, not a coordinate (read by the planner); the next commit rewrote it. The coder left the pushed history alone, which is the right order of the two rules.
+
+**Corrections.**
+- -206 called the destination error intermittent, "1 of 5 builds", and carried the coder's guess that runtimes had not finished loading. Both are withdrawn. It has now failed 3 of the last 4 build attempts; `simctl` lists the runtimes seconds before `xcodebuild` sees none; and Xcode itself names a cause, that its iOS 26.0 platform is not installed.
+- The coder's A1-3a findings said the green rerun was on the same image. It was on a different one. Recorded in the findings' new section, not edited into the old.
+
+**What is not known.** Why the same image version built green twice earlier the same day. Whether Xcode 26.0.1's iOS platform is present on some machines and absent on others, or was removed. Which of the image's other Xcode versions has a platform matching an installed runtime. The engine's `ios-smoke` is not affected in the runs read so far: it drives `simctl` through the Kotlin plugin and never asks `xcodebuild` for a destination.
+
+**Next (the planner's):** data before any fix. Session 84 adds a diagnostic-only workflow that, on several machines at once and for every Xcode on the image, prints the SDKs, the destinations for the scheme and the runtimes. The choice that follows (which Xcode the app builds with, or how the destination is named) is the planner's and is made from that output. The build step is not changed until then.
+
+**Notes:** Written by the planner session by hand. Next free ID -208.
