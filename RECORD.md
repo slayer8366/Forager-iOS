@@ -7814,3 +7814,21 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Not verified by anyone yet.** Everything that needs a Mac: the framework link, `xcodebuild`, every `simctl` step, the screenshot's colour, the job time. Whether Kotlin/Native uses the 2.3.20 standard library from Maven or its own bundled 2.3.10. A1-1's first CI run is where these start to be answered.
 
 **Notes:** Written by the planner session by hand. Next free ID -202.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-202
+**Timestamp:** 2026-11-18T04:19:52Z
+**Continues:** -201
+**Title:** The owner's two rulings for A1: a placeholder identity, and a new branch `app`
+
+**The rulings, verbatim.** Asked what the simulator builds should use for a bundle identifier and display name, the owner chose "Placeholder for now (Recommended)": identifier `com.zynergylabs.forager.ios.dev`, name "Forager dev", recorded as a placeholder, the public identity decided later, before any signed build. Asked which branch the app's code is built on, the owner chose "New branch \"app\" (Recommended)": cut from `brouter-port` at `382204f`.
+
+**Done.** The branch `app` exists on the remote at `382204f`, the same commit as `brouter-port`. Pushes of app code go there. `main` and `brouter-port` still change only on the owner's word naming them.
+
+**Standing notes.** The identifier and the name are placeholders and must not reach a signed build; the plan's open decision 5 (the app's public identity) is still open. The pre-build report stays on `brouter-port-5b` at `4880b10`; `app` does not contain it.
+
+**Next (the planner's):** A1-1, the `:app` module and the framework link, with a new `app.yml`, on `app`.
+
+**Notes:** Written by the planner session by hand. Next free ID -203.
