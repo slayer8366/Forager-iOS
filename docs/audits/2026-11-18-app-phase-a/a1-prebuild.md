@@ -562,4 +562,86 @@ In two steps, so nothing is guessed:
   afterwards. The run, its message and the restore are reported.
 - The A1 record entry is written after 3b: what ran, the screenshot artifact's name, the counts, and section 9's list.
 
-9. What A1 will not show - pending
+## 9. What A1 will not show
+
+- **Anything on a phone.** Frame rate, memory, battery, launch time on hardware, touch, real display colour: the owner
+  has no iPhone ("3 no iPhone"), and every result is "simulator-checked".
+- **The map.** No MapLibre, no tiles, no style, no offline store: that is A2 and A3.
+- **Other devices or runtimes.** One device type (`iPhone 17`) on one runtime (iOS 26.2), built with Xcode 26.0.1.
+  Not iPad, not iOS 26.4 or 26.5, not the image's default Xcode, not older iOS versions down to the deployment
+  target.
+- **That the Xcode project opens in Xcode.** It is generated and built by command line only; nobody opens it.
+- **A signed build, an archive, or App Store validity.** Unsigned simulator builds only (-153).
+- **The engine inside the app.** `:app` does not depend on `:brouter` in A1; routing in the app is Phase C.
+- **Android.** No Android target is added; how Android consumes shared code is B1.
+- **Compose resources, fonts, images, strings, Material3, navigation, rotation, dark mode, accessibility, keyboard,
+  backgrounding.** The app is one coloured box and one log line.
+- **That the app keeps running.** The checks see it launch and draw once; they do not watch it for minutes.
+- **That the engine's numbers are unaffected by anything the app later adds.** A1 shows only that adding `:app` leaves
+  `:brouter`'s resolved inputs and its four jobs' counts as they were.
+
+## Confirmed and inferred
+
+**Confirmed today (read, run or fetched, with where):**
+- HEAD `565faa2` at start, clean, fast-forward up to date; `brouter-port` at `382204f` contains `0f9e0fd`.
+- The build as it stands: one module, Kotlin 2.3.10, Gradle 9.0.0, the catalog, `:brouter`'s targets, no framework,
+  repositories without Google's Maven (files and lines in section 1).
+- `ios-smoke`'s runner image, Xcode, runtimes, devices and step times, from run `44030325384`'s log.
+- The Compose Multiplatform release state and per-line Kotlin minimums (changelog lines in section 2); Kotlin's
+  releases; KMP's Gradle/AGP/Xcode table.
+- In scratch, on Linux: Compose Multiplatform 1.12.2 with Kotlin 2.3.10 compiles klibs for `iosArm64` and
+  `iosSimulatorArm64`; Google's Maven is required; the app graph's `kotlin-stdlib` resolves to 2.3.20 through skiko;
+  adding `:app` leaves `:brouter`'s five resolvable dependency graphs byte-identical and only adds to the root plugin
+  classpath; `:brouter` still compiles (klib and JVM) with `:app` present.
+- The runner image has no XcodeGen or Tuist; XcodeGen 2.46.0's zip, its size, SHA-256 and that it is a universal macOS
+  binary; `tools/fetch-pinned.sh` accepts and refuses it correctly.
+- The pixel-check prototype passes and fails as designed on synthetic PNGs.
+
+**Inferred (each marked where it is used):** that the framework links and the app launches and draws on the runner;
+the framework's output folder; that unsigned simulator builds need no account and accept any bundle identifier; that
+`println` reaches `simctl launch --stdout`; that a screenshot's colour may be profile-shifted; the job-time estimate;
+that a bundle identifier becomes permanent at the first signed upload; Option 4's whole design; that `:brouter`'s test
+results are unchanged (only its inputs were compared).
+
+## Could not determine
+
+- Whether Kotlin/Native links the Maven `kotlin-stdlib` 2.3.20 or only the stdlib bundled with the 2.3.10 compiler.
+- Any `xcodebuild` or `simctl` behaviour: no Mac is reachable from this container.
+- The exact flags of `simctl launch`, `simctl io` and `bootstatus` on Xcode 26.0.1, which A1-3 prints before use.
+- A stable Tuist release and whether it needs an account (the releases page's first screen showed canaries only).
+- How Forager's Android app could consume a module with no Android target (B1's question; survey `:288`).
+- The screenshot size of `iPhone 17` on the simulator.
+
+## Premises in the brief or the plan that were wrong or need a correction
+
+- **"Which Compose Multiplatform version is compatible ... per the official compatibility table."** The official
+  compatibility page has no Kotlin-per-version table (section 2); the Kotlin minimums are stated per release in the
+  changelog, and that is what section 2 cites.
+- **"The BRouter port is finished and merged into `brouter-port`."** True of the code: `brouter-port` at `382204f` is
+  the merge of `brouter-port-5b` at `0f9e0fd`. Not a wrong premise; recorded because it matters for O2.
+- **The skeleton's base line** ("`brouter-port-5b` at `0f9e0fd`") is right for the code; the file's own skeleton commit
+  is `565faa2`, now stated in the header.
+- **The plan's A1 says "an Xcode project produced on a runner".** Accurate, but it hides that `settings.gradle.kts`
+  must gain a second repository (Google's Maven), a change every module sees. Not in the plan; in section 2 and T3.
+
+## Decided beyond scope
+
+- None. Every choice above is offered as an option or a recommendation; nothing was built in the product tree, and no
+  file outside this report was changed. Scratch work (the probe project, the two repository copies, the mirror, the
+  pixel prototype, the XcodeGen zip) is under `/tmp/claude-0/-home-user/2bc41cf9-5db8-5578-a058-248445c292c6/scratchpad/s79/`
+  and is not committed.
+
+## Not checked
+
+- `:brouter`'s tests with `:app` present (CI's job, A1-1).
+- XcodeGen 2.47.0, and whether 2.46.0's output builds with Xcode 26.0.1.
+- Compose Multiplatform's iOS framework size and link time.
+- Whether `actions/upload-artifact` artifacts on this repository are public to anonymous users (O3).
+- The E1 scan's first push of this session printed 2 (section 1's commit `1f8cd53`, both hits the runner image version
+  string, not coordinates); the next commit rewrote that line, and the scan over `565faa2..HEAD` prints 0. Section 5's
+  commit `b517f30` likewise printed 2 (two fractions of a pixel check) and was rewritten in the next commit.
+
+## Process note
+
+Session 79 was lost to a container restart with only the skeleton pushed. This session pushed after each section;
+each commit is listed in `git log 565faa2..` on `brouter-port-5b`.
