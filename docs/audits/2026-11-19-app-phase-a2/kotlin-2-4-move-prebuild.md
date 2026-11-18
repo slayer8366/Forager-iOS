@@ -352,3 +352,58 @@ choice is a reading of the owner's own word.
 | **(i) This repository first on `app`, Forager after** | The pin moves here first; A2's map work can start; Forager follows on its own schedule. | Fastest for the map. For a while the two pins differ, which the catalog comment and the option's word "together" both describe as not wanted; if the port's source picked up a 2.4-only feature in that window, Forager's later intake would have to wait for Forager's move (no intake is scheduled, above). `app` is not `main`, so `main`'s record and catalog keep saying 2.3.10 until a merge on the owner's word. | Forager's work as in (iii), later. This repository's part: an iOS coder on `app`. |
 
 Each option ends with the same check (section 5) on this repository's side, and with Forager CI's own gates on its side.
+
+## 5. A check that the move changed nothing in the engine
+
+Proposed here, before any pin moves, so the standard cannot be fitted to the result. It serves the ruling's own words:
+"the routing engine's bit-for-bit tests must be rerun on the new compiler".
+
+### Before: a baseline on the exact parent commit
+
+- Run `brouter.yml` in full (all four jobs) on the commit the move will be made on, **not** on an older green run, and
+  keep every JUnit XML and log as artifacts (the jobs already upload them). Session 87's green runs are the reference
+  counts but sat on an earlier commit **[R: section 3a]**; a baseline on the parent removes "something else changed" as
+  an explanation. The production job is the long one (29 minutes in session 87's log) **[C]**.
+
+### After: the same four jobs on the move commit, compared against that baseline
+
+**Equalities that must hold (each a stop if it does not):**
+
+1. **Counts:** `jvm` 262 tests in 116 files; `jvm-production` 3 (2 + 1, both classes ran); `ios-smoke` 61 then 7, with all
+   25 `SIMULATOR_CLASSES` present; `ios-memory` 3, 1, 1. All with 0 failures, 0 errors, 0 skipped (the figures of section
+   3a). A count that changes in either direction is a stop, even if green: a test that stopped running is not a pass.
+2. **The production record, line by line:** the `production record:` lines of `RoutingEngineProductionRecordTest` and the
+   cosine rows' class are printed and only partly asserted (its hints-and-formats test "asserts only that each group ran all its cases",
+   `RoutingEngineProductionRecordTest.kt:122-123`) **[R]**, so their text is compared with `diff` against the baseline's,
+   after removing the one line that carries a duration (`... groups in %.1f s`, `:115`). Any other difference is a stop.
+3. **Every test's standard output, not only its verdict:** for each JUnit XML in both runs, the `<system-out>` and
+   `<system-err>` text compared with `diff` after removing timestamps and `time=` attributes. The engine tests already
+   compare each case's digests (node list, heights, formats) against committed expected values (`commonTest/.../tiles/*Expected.kt`,
+   `FormatDigests.kt`) **[R: file names at `8e747fa`]**, so a green run already means the digests matched; this adds
+   anything printed and not asserted.
+4. **No new compiler diagnostics:** 0 `e:`; the `commonMain` `w:` lines exactly the three known ones (section 3e); every
+   compile and link task header unsuffixed (the `SKIPPED` trap of the A2 pre-build, section 3).
+
+**Proof that the run is the run it claims to be** (Forager's rule: "before citing a check as evidence, ask what sample it
+actually ran on"):
+
+5. **The compiler that ran is 2.4.20:** the jobs record the `kotlin-stdlib` version on the test runtime classpath, the
+   `compiler_version` in `:brouter`'s iOS klib manifests, and on the Mac the Kotlin/Native distribution directory used by
+   the link. A pass on 2.3.10's cache would be green and prove nothing.
+6. **The Xcode that ran is the one the workflow names** (`xcodebuild -version`, as `app.yml` already gates at `:86`).
+
+**Stronger, and cheap:** a diff of the compiled JVM bytecode. `javap -c -p` over `:brouter`'s `jvmMain` classes from both
+builds, compared method by method. It cannot show a route difference, but it names every method whose code changed, so a
+later difference has a place to look; and it would show at once if the floating-point methods of RECORD -15's step 1
+changed at all. Not proposed as a stop: a new compiler is expected to change some bytecode.
+
+**What counts as a stop, for the owner:** any of 1 to 6 failing; on the simulator in particular, any failure in
+`MsunCosTableTest`, `MsunAtan2PairsTest`, `FloatTextCommonTest`, `FormatNumberTextTest`, `NodeHashMapTieBreakTest` or
+`PlatformInvariantsTest` (the classes that would see LLVM contraction, Native number text or hash order, section 3a). A
+difference is reported with the ruling quoted, not explained away or absorbed by updating an expected file. Identical
+routes is the bar: the record's wording of the owner's Phase 2 ruling is "identical routes stay the bar" (RECORD -4,
+`origin/main:RECORD.md:144`; the record's words, not the owner's verbatim ones).
+
+**Forager's side** has its own gates (section 2): `build`, `street-removable`, `lint`, `release-compile`, `route-cutter`
+green on the move commit, with unit-test counts read from the JUnit XML against the parent's. Those are Forager's
+planner's to set.
