@@ -598,3 +598,63 @@ recommended.
   T4's shape; recorded so it is not rediscovered.
 - **T7. Deployment target:** keep 16.0. Nothing found raises it (section 3).
 - **T8. Logging:** counts, never tile URLs (section 6).
+
+## 8. The order of work for A2, one dispatch each
+
+Written for O2 (a) (Kotlin 2.3.10, wrapper 0.14.0) with O1 decided. Under O2 (b) the steps are the same with the FFI
+wrapper and no xcframework (A2-1 shrinks to the dependency and the linker flags). Under O2 (c), go to the F steps.
+
+### The baseline every step keeps (A1's gate lines, from A1-3 section 19)
+
+Every A2 run must still print, in the same jobs:
+- `app-klibs`: `> Task :app:compileKotlinIosSimulatorArm64` and `> Task :app:compileKotlinIosArm64` with **no suffix**,
+  and `lines matching '^e: ': 0`.
+- `app-framework`: `OK: the framework was linked in this job and its binary is arm64`.
+- `app-bundle`: `OK: the selected Xcode is Xcode 26.2`; `** BUILD SUCCEEDED **`; `OK: ForagerApp.app built unsigned for
+  the simulator, com.zynergylabs.forager.ios.dev, 'Forager dev', arm64, framework linked inside xcodebuild`;
+  `OK: the control: the colour check failed on before.png (exit 1)`; `OK: the app printed 'A1: first frame drawn'`;
+  `OK: the colour check passed on after.png (E0218A, tolerance 8, threshold 0.98)`.
+
+To keep the last two literally, I propose the app keeps A1's screen when launched with no argument, and shows the map
+when launched with one (`simctl launch ... <bundle id> a2-local` or `a2-trail`; the argument is read from the process
+arguments in Kotlin). A1's launch and gate run first, unchanged; the map launches follow in the same job on the same
+booted simulator, so no second build or boot.
+
+### A2-1. The dependency, linked and embedded; nothing drawn yet
+
+Wrapper 0.14.0 in `commonMain`; MapLibre iOS 6.25.1 fetched by `fetch-pinned.sh` and linked and embedded by
+`project.yml`; `OTHER_LDFLAGS` `-framework ForagerApp -framework MapLibre`. No map composable yet.
+**CI prediction:** the baseline above, unchanged; `fetch-pinned.sh` prints its OK for the zip; the bundle listing shows
+`Frameworks/MapLibre.framework`; a new check prints `OK: MapLibre.framework is embedded and the app links it`
+(from `otool -L` on the app's debug dylib naming `@rpath/MapLibre.framework`; the exact `otool` line is a prediction).
+`app-klibs` still has no suffix (the wrapper ships its bindings, section 3). Job time +1 to 2 min.
+
+### A2-2. R1: a map with a local one-colour style
+
+The `a2-local` launch shows `MaplibreMap` with R1's style, no camera set (section 6, option 1), the Compose layer
+behind it E0218A. **CI prediction:** after the baseline, `A2: style loaded` within 120 s; `PASS: N/N pixels within 8 of
+<A2 colour>` on `after-a2-local.png`; the E0218A check on the same PNG exits 1. Then a **revert run** (one edit to the
+style's colour): red at that gate, naming the new commonest colour, on a build with `** BUILD SUCCEEDED **` and zero
+compile errors; then restored green. Needs no network.
+
+### A2-3. N, R2 and R3 observed: the project's style, not gating on pixels
+
+The `a2-trail` launch loads the Trail style by URL, no camera. Before it, the host `curl` step (N). **CI prediction:**
+N prints 200 for the style, the TileJSON and the zoom-0 tile; the app prints `A2: style loaded` and `A2: map loaded`,
+no `A2: map failed`; R3's three statistics are printed, not gated (predicted: the commonest-colour share well under 0.9,
+the `#cccccc` share small, E0218A about 0; a guess to be replaced by the run). Gating on N and the load lines only.
+Screenshots handled per O3. If `A2: map failed` appears with N green, that is trigger F3's first half (section 4).
+
+### A2-4. R3 made gating, with a revert
+
+Thresholds from A2-3's numbers. **CI prediction:** green with the printed shares inside the thresholds; then a revert
+run pointing the style at a TileJSON path the Worker answers 404 for, red at R3 with the `#cccccc` share high (and, if
+the wrapper reports it, a `failed` line), on a build shown compiled; then restored.
+
+### If a trigger fires: the fallback, F-1 to F-3
+
+- **F-1.** MapLibre iOS 6.31.0 by `fetch-pinned.sh` (10,312,052 bytes, `de3aaa43...c462a`), embedded; Swift builds an
+  `MLNMapView` with R1's style and hands it to Kotlin's `UIKitView` (section 4). CI: the baseline, then `A2: style
+  loaded` (from `didFinishLoadingStyle`), R1's gate and its revert, as A2-2.
+- **F-2.** The Trail style, N first, and the delegate's `A2: map idle`; R4's request summary line; R3 observed.
+- **F-3.** R3 gating, with its revert, as A2-4.
