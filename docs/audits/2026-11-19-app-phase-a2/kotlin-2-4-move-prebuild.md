@@ -163,3 +163,139 @@ that works with it, and its comment corrected; Room only if the probe or Forager
   (KSP hands Room its own model of the classpath) **[?]**, so a Forager type that reaches it could still differ. **What it does not show:** AGP 9.3.1 with `kotlin-android` 2.4.20 and `builtInKotlin=false`/`newDsl=false`;
   Forager's own entities, DAOs and `MigrationTestHelper` tests; the Compose compiler on Forager's screens; D8; Robolectric;
   lint. Those are Forager CI's to show (section 5).
+
+## 3. This repository's side
+
+### a. The engine: what a compiler change can do to bit-for-bit results
+
+The port is held to BRouter 1.7.10's Java release jar, the oracle, on the JVM (`brouter/build.gradle.kts:7-20`), and its
+`commonTest` re-runs on the iOS simulator (`brouter.yml`, `ios-smoke`, `ios-memory`). What a compiler can move, by
+platform **[I unless marked]**:
+
+- **On the JVM, little, and mostly through the standard library.**
+  - Double and float arithmetic is IEEE on any JVM 17+, whatever compiler emitted the bytecode; constant folding at
+    compile time uses the same IEEE operations **[I]**.
+  - The library maths the port uses is `kotlin.math` `sqrt`, `abs`, `min`, `max`, `exp` and `PI` (imports in
+    `commonMain`: `exp` once, at `router/StdPath.kt:264` and `:290`; `sqrt` at four files) **[R: grep at `8e747fa`]**.
+    On the JVM these compile to `java.lang.Math` calls, so their bits are the JDK's, pinned to Temurin 21.0.13+9 in CI and
+    to fdlibm on x86 by `-XX:-UseLibmIntrinsic` (`brouter/build.gradle.kts:161-168`) **[R]**. The two functions that reach
+    a route on Forager's calls, `cos` and `atan2` (RECORD -15's step 1, `origin/main:RECORD.md:512-516`), are the port's
+    own bit-copied msun code (`brouter/msun/MsunCos.kt`, `MsunAtan2.kt`), not the standard library's **[R]**.
+  - What could move is **pure-Kotlin standard library behaviour** the port leans on: `Regex`, `String` splitting and
+    case functions, `roundToLong`/`roundToInt`, number-to-text, and the collections' iteration order (on the JVM,
+    `HashMap` is `java.util.HashMap`, Phase 1 B row 18) **[R: Phase 1 B rows 11, 13, 15, 18]**. A new compiler also
+    brings a new stdlib (2.4.20, by the catalog's `kotlin-stdlib` resolution, seen in section 3e).
+- **On Kotlin/Native (the simulator), more.**
+  - **LLVM moves from 19 to 21.** Kotlin/Native 2.3.10's `konan.properties` names
+    `llvm.macos_arm64.dev=llvm-19-aarch64-macos-dev-79` (`:787`) and 2.4.20's names `llvm-21-aarch64-macos-dev-97` (`:787`)
+    **[C: read from both distributions in `~/.konan`]**. A new optimiser can change instruction selection; the one change
+    that would alter bits is **floating-point contraction into fused multiply-add**. Phase 1 found none on arm64 with
+    2.3.10, by disassembly with a positive control (RECORD -15 step 2, `origin/main:RECORD.md:524`) **[R]**. Whether
+    LLVM 21 keeps that is **not known** until a test that would see it runs on arm64 **[?]**.
+  - **The Apple toolchain the distribution expects moves from Xcode 26.0.1 to 26.4:**
+    `targetToolchain.macos_arm64-ios_simulator_arm64 = target-toolchain-xcode_26.0.1_17A400` in 2.3.10 against
+    `target-toolchain-xcode_26.4_17E192` in 2.4.20 (`konan.properties:216` in each) **[C]**. Its default iOS minimum moves
+    from 14.0 to 15.0 (`minVersion.ios`, `:59`) **[C]**; the app's provisional 16.0 is above both.
+  - **The Native stdlib's own implementations:** `HashMap` (insertion-ordered on Native, RECORD -15 step 3),
+    `String.toDouble()`, `Double.toString()`, `Regex`. All are Kotlin code that ships with the compiler and can change
+    between releases **[I]**. `exp` on Native calls the platform's C library, which is the simulator runtime's and not
+    the compiler's **[I]**.
+- **Which tests would show a difference** (counts from the last green runs, session 87, on `app` before `8e747fa`'s
+  docs-only commit; logs in scratch `ci87/`) **[C: JUnit totals printed by the jobs]**:
+
+| `brouter.yml` job | What runs | Counts | What it would catch |
+|---|---|---|---|
+| `jvm` | `:brouter:jvmTest`, then both iOS klib compiles | **262 tests, 116 files**, 0 failures | any JVM change in a route, cost, node list, failure kind or printed number against the oracle; a JVM-only API in `commonMain` |
+| `jvm-production` | `RoutingEngineProductionRecordTest` (2), `RoutingEngineCosRowsProductionRecordTest` (1) | **3** | the production table's per-row lines, recorded |
+| `ios-smoke` | `commonTest` on the simulator, gated on 25 named classes (`SIMULATOR_CLASSES`), then the arm64 HotSpot half | **61 tests (30 files)**, then **7** (2 files); all 25 classes ran | Native arithmetic, msun's table and pairs (`MsunCosTableTest`, `MsunAtan2PairsTest`), number text (`FloatTextCommonTest`, `FormatNumberTextTest`), hash order (`NodeHashMapTieBreakTest`), the engine groups' routes on Native |
+| `ios-memory` | MP64, ML5, PM5; R's fallback; the stack ladder | **3**, **1**, **1** | the memory-limit failure kind on Native, where hash order matters (RECORD -15 step 3) |
+
+- **What no test covers [I, from the job list]:**
+  - **the `iosArm64` (device) binary never runs anywhere.** CI compiles its klib on Linux; only `iosSimulatorArm64` code
+    executes. A code-generation difference specific to the device target would not be seen (and with "3 no iPhone" it
+    cannot be);
+  - routes outside the pinned tiles and generated cases (the corpus is what it is);
+  - on the simulator, only the subsets each job names (for example "first 12 cases of each StdModel profile" for R,
+    `brouter.yml:225`), not the full JVM corpus;
+  - speed and memory as numbers: the timing plan's measurements are not part of these gates.
+- **What the Phase 1 report said the pin protects.** Not floating point. Item C pinned Kotlin to "2.3.10 exactly, Forager's
+  pin, moved only together with Forager" (`2026-10-28-brouter-port-verify.md:428`) for **Forager's intake of the port**:
+  vendored source "must compile under Forager's 2.3.10" (`:501`, `:508`); an unpinned newer compiler "still changes
+  Forager" because its POM drags the consumer's stdlib upward (`:562-565`); and a compiler reads binaries one minor newer
+  than itself and refuses two (`:557-560`). Its recommendation was "compile the port with 2.3.10, exactly as Forager does.
+  Neither side has to move" (`:567`). The record took it as a planner's call (RECORD -24, `origin/main:RECORD.md:950-956`,
+  "technical; the owner may overrule"), not an owner ruling **[R]**. Bit-for-bit identity was never argued from the
+  compiler version; it is argued from the tests above.
+
+### b. Compose Multiplatform
+
+- **1.12.2 is the newest stable** (`compose-gradle-plugin/maven-metadata.xml`, fetched today: `1.12.0`, `1.12.1`, `1.12.2`,
+  then `1.13.0-alpha01` to `1.13.0-rc01`) **[R]**. Its klibs were built by Kotlin **2.3.20**, ABI 2.3.0
+  (`runtime-iosSimulatorArm64Main-1.12.2.klib` and `foundation-…-1.12.2.klib` manifests, `compiler_version=2.3.20`,
+  `abi_version=2.3.0`) **[C]**, which a 2.4.20 compiler reads (older ABI). The minimum the catalog cites ("Kotlin 2.3 is
+  required for native and web platforms", Compose 1.11.0's notes, `CHANGELOG.md:1149`) is met by 2.4.20 too **[R]**. The
+  compatibility page: "Compose Multiplatform requires the Compose Compiler Gradle plugin applied with the same version as
+  the Kotlin Multiplatform plugin" (`kotlinlang.org/docs/multiplatform/compose-compatibility-and-versioning.html`, fetched
+  today) **[R]**; our `kotlin-compose` is on `version.ref = "kotlin"` (`gradle/libs.versions.toml:28`), so it follows.
+- **1.13 today: `1.13.0-rc01`,** on Maven Central with `lastUpdated` 2026-11-18 10:09 UTC, still a release candidate
+  (`<release>1.13.0-rc01</release>` is Maven's newest, not a stable tag) **[R]**. The changelog on `master` tops out at
+  `1.13.0-beta02 (November 2026)` (`CHANGELOG.md:1`) **[R]**. Its alpha02 notes say "Kotlin version has been upgraded to
+  2.4.20. The minimal supported Kotlin version for k/native is 2.4.0" (`CHANGELOG.md:193`) **[R]**. Not stable, so not
+  proposed.
+- **Wrapper 0.20.0 was built against Compose 1.12.1** (`foundation` and `components-resources` `requires 1.12.1` in its
+  `.module`) **[R]**. With our 1.12.2, Gradle lifts `foundation` 1.12.1 to 1.12.2 and keeps `components-resources` at
+  1.12.1 (section 3e's dependency report) **[C]**. **No Compose move is forced by Kotlin 2.4.20** **[I, from the above
+  and the compile in 3e]**.
+
+### c. Other pins here that could move with Kotlin
+
+| Pin (`gradle/libs.versions.toml` at `8e747fa`) | Today | With 2.4.20 |
+|---|---|---|
+| `okio` 3.18.2 (`:6`) | klib built by 2.2.21, ABI 2.2.0 (`okio-iosSimulatorArm64Main-3.18.2.klib` manifest) **[C]** | read by 2.4.20 in 3e's klib compiles **[C]**; no move forced |
+| `atomicfu` 0.33.0 (`:12`) | klib built by 2.2.21, ABI 2.2.0 **[C]**; library only, no plugin | read by 2.4.20 **[C]**; the wrapper requires the same 0.33.0 **[R]** |
+| Compose compiler plugin (`:28`) | `version.ref = "kotlin"` | moves with the pin by construction |
+| Gradle 9.0.0 (`gradle/wrapper/gradle-wrapper.properties:4`) | inside 2.3.10's 7.6.3–9.0.0, at its top | inside 2.4.20's 7.6.3–9.7.0 **[R]**; no move forced. Forager is on 9.7.0; the port took 9.0.0 to stay in 2.3.10's range (RECORD -24). With 2.4.20, 9.7.0 would also be in range: an option, not a need |
+| JDK | Temurin `21.0.13+9` on every job (`brouter.yml:35`, `:100`, `:192`, `:292`; `app.yml:54`, `:76`, `:135`), JVM target 17 (`brouter/build.gradle.kts:113`) | no coupling found **[I]**; the oracle's JDK is a separate pin and stays |
+| `jacoco` 0.8.16 (`:9`) | reads `.exec` files against the oracle jar's classes, not the port's | not coupled to Kotlin **[I]** |
+
+### d. Xcode
+
+- **JetBrains' row for 2.4.20–2.4.21 says Xcode 26.4** (compatibility guide, fetched today) **[R]**. The distribution's
+  own toolchain is 26.4 (`17E192`, above) **[C]**, its `minimalXcodeVersion` is still 12.5 (`konan.properties:29`) **[C]**,
+  and **KGP 2.4.20's `XcodeVersion.maxTested` is 26.4** (`javap -c -p` of `XcodeVersion.class` in
+  `kotlin-native-utils-2.4.20.jar`: `bipush 26`, `iconst_4`, `putstatic maxTested`) **[C]**, up from 16.0 in 2.3.10
+  (RECORD -14).
+- **Ours:** the engine jobs select **Xcode 26.0.1** ("Kotlin 2.3.10's published Xcode is 26.0", `brouter.yml:107-109`,
+  `:193-195`); the app jobs select **26.2** (RECORD -208, `app.yml:77-87`, `:137-146`) **[R]**.
+- **So with 2.4.20, both are below the published 26.4 and below the toolchain the distribution was built with.** That is
+  not a refusal (the minimum is 12.5) and not a "too high" warning (both are under 26.4) **[I, from the properties and the
+  bytecode]**. Whether 2.4.20 links and runs the simulator tests with 26.0.1 or 26.2 is **only the Mac runner's to show**
+  **[?]**. `macos-26` (image `20261102.0473.1`) carries **26.4.1** (`17E202`) beside 26.0.1, 26.1.1, 26.2, 26.3, 26.5 and
+  26.6 (default) (`actions/runner-images` `images/macos/macos-26-arm64-Readme.md:159-165`, fetched today) **[R]**, so moving
+  to the published version is possible on the same label. Which Xcode each workflow selects is a technical choice
+  (section 6, T3).
+
+### e. What ran in scratch for this repository
+
+**Setup.** Two copies of `app` at `8e747fa` made by `git archive HEAD` into scratch: `s88/base` (unchanged) and `s88/k24`
+(one line changed: `kotlin = "2.3.10"` to `"2.4.20"` in `gradle/libs.versions.toml`; `diff -r` shows nothing else). In
+both, `settings.gradle.kts` points at a local retrying mirror of Maven Central, Gradle's plugin portal and Google's Maven
+(`s88/tools/mirror.py`, session 86's script, on `127.0.0.1:18088`), for the reason section 3 of the A2 pre-build gives
+(intermittent 404s through this container's proxy). No other companion had to change for anything below to build: no
+Compose, okio, atomicfu, Gradle or JDK move. Local JDK: OpenJDK 21.0.12.1 (Ubuntu), not CI's Temurin 21.0.13+9, so local
+JVM results are compared with each other, base against `k24`, not with CI's.
+
+| Run | Command | Result |
+|---|---|---|
+| `k24` | `:brouter:compileKotlinJvm :brouter:compileKotlinIosArm64 :brouter:compileKotlinIosSimulatorArm64 :app:compileKotlinIosArm64 :app:compileKotlinIosSimulatorArm64` | **`BUILD SUCCESSFUL in 4m 43s`**, **0 `e:` lines**; all five task headers printed without a suffix (not `SKIPPED`) **[C: `s88/k24-compile.log`]**. Kotlin/Native 2.4.20 for Linux was downloaded through the mirror (`kotlin-native-prebuilt-2.4.20-linux-x86_64.tar.gz`, 219,971,249 bytes) |
+| the same, `w:` lines | | three `commonMain` warnings, each printed once per compile task: `BExpressionContextWay.kt:16:10` (parameter names `ab`/`tagValueSet` conflict across supertypes) and `StdPath.kt:52:29`, `:242:37` (parameter named differently from the supertype). **The same three appear at 2.3.10** in CI's `jvm` log (session 87, 3 each) **[C]**, so 2.4.20 adds no `commonMain` warning |
+| `k24w` (`k24` with `:brouter` left out, wrapper added) | one catalog line `maplibre-compose` 0.20.0, one `implementation(libs.maplibre.compose)` in `app/build.gradle.kts`, the session 86 probe file (`@Composable fun ProbeMap() { MaplibreMap() }`); `:app:compileKotlinIosSimulatorArm64 :app:compileKotlinIosArm64` | **`BUILD SUCCESSFUL in 1m 58s`**, 0 `e:`, both task headers unsuffixed **[C: `s88/k24w.log`]**. The same probe at 2.3.10 failed with the KLIB resolver error in section 1. Resolution (`:app:dependencies --configuration iosSimulatorArm64CompileKlibraries`): `maplibre-compose:0.20.0`, `maplibre-native-ffi` and `-runtime-metal` at `202610.0` (written without the leading `0.`), `kotlin-stdlib -> 2.4.20`, `foundation:1.12.1 -> 1.12.2`, `components-resources:1.12.1` **[C: `s88/k24w-deps.txt`]** |
+
+**What this shows:** with 2.4.20 alone, the engine and the app compile for every target this repository builds on Linux,
+and the current wrapper compiles into `:app`. **What it does not show:** any link, any run, any render (only the Mac
+runner can link a framework, run `iosSimulatorArm64Test` or build the app), and anything at Xcode 26.0.1 or 26.2 against a
+26.4 distribution (section 3d).
+
+**The JVM tests, base against `k24`:** both copies run `./gradlew --no-daemon :brouter:jvmTest`, as `brouter.yml`'s `jvm`
+job does, fetching and checking the oracle and tiles through the build's own tasks. Results are written below when both
+runs finish (this section is pushed now because the container restarts often).
