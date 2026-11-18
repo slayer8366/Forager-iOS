@@ -783,3 +783,53 @@ As section 11 states them, unchanged: `A1_COLOUR` to `Color(0xFF1E6FD9)`; 0 line
 `png-region: common colour 1E6FD9: 2530188 pixels`, `png-region: FAIL: 0/2530188 pixels ... within 8 of E0218A`, then
 the step's `FAIL:` line naming exit 1. The restore edits the constant back; `git diff <step-2 commit> HEAD -- app iosApp
 .github tools` prints nothing; its run is green as in step 2.
+
+## 17. Session 85, step 2: the confirming run under Xcode 26.2 (recorded as it arrived)
+
+Commit `243f6ec` (the workflow change, `app.yml` only), run **44259385803**, **green, all four jobs**. Before the push, the
+two new select steps were extracted from the YAML (identical text in both jobs) and run locally with stub `sudo`,
+`xcode-select` and `xcodebuild`: first line `Xcode 26.0.1` printed `FAIL: the selected Xcode prints 'Xcode 26.0.1',
+expected 'Xcode 26.2'` and exit 1; `Xcode 26.2.1` likewise exit 1; `Xcode 26.2` printed the `OK:` line and exit 0; an
+`xcodebuild` exiting 3 ended the step with exit 3 (pipefail). That is a local stub control of the shell logic only; the
+check has not been seen red on a runner.
+
+- **`app-framework`, job 134648760740**, 07:30:21 to 07:35:15. Image `macos-26-arm64`, version 20261102, build 0473.1
+  (log 17-18). Select step: `Xcode 26.2`, `Build version 17C52`, `OK: the selected Xcode is Xcode 26.2` (log 176-178).
+  Link step 07:30:41 to 07:35:03 (log 191, 1368); `> Task :app:linkDebugFrameworkIosSimulatorArm64` (log 1333, plain
+  header); `Non-fat file: app/build/bin/iosSimulatorArm64/debugFramework/ForagerApp.framework/ForagerApp is
+  architecture: arm64` (log 1413), `file` prints `current ar archive` (log 1414, as in the 26.0.1 job 134636659789), and
+  `OK: the framework was linked in this job and its binary is arm64` (log 1415).
+- **`app-bundle`, job 134648760070**, 07:30:21 to 07:43:06. Image `macos-26-arm64`, version 20261112, build 0504.1 (log
+  18). Select step: `Xcode 26.2`, `Build version 17C52`, `OK: the selected Xcode is Xcode 26.2` (log 177-179).
+  - Diagnostic (log 221-282, 07:30:41 to 07:30:49): the same twelve runtimes, iOS 26.2 (23C54), 26.4 (26.4.1 - 23E254a),
+    26.5 (23F77) first; `-showdestinations` under `/Applications/Xcode_26.2.app` prints `Available destinations for the
+    "ForagerApp" scheme:` with **34** `platform:iOS Simulator` entries, among them `{ platform:iOS Simulator,
+    id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }`, and
+    `Any iOS Device` now listed as available. No "Ineligible" section.
+  - Build 07:30:49 to 07:35:38: `SDKROOT = iphonesimulator26.2` (log 304); inside `xcodebuild`, `> Task
+    :app:linkDebugFrameworkIosSimulatorArm64` (log 1054) and `> Task :app:embedAndSignAppleFrameworkForXcode SKIPPED`
+    (log 1072, as under 26.0.1 in job 134628156762); `** BUILD SUCCEEDED **` (log 1291). 0 lines matching `^e: ` or
+    ` e: ` (counted on the whole job log).
+  - Bundle check: `OK: ForagerApp.app built unsigned for the simulator, com.zynergylabs.forager.ios.dev, 'Forager dev',
+    arm64, framework linked inside xcodebuild` (log 1380). Device type and runtime: `OK: iPhone 17 and iOS 26.2 are both
+    listed` (log 1748).
+  - Create 07:35:51, booted 07:37:53 (log 1763, 2128); the `simctl list devices` line after boot came at 07:40:11, over
+    two minutes later (a slow runner; not gating, recorded).
+  - The control: `png-region: FAIL: 98/2530188 pixels (0 to four places) within 24 of E0218A, threshold 0.98` (log 2153,
+    written here without the four-place figures, which the E1 scan counts), then `OK: the control: the colour check
+    failed on before.png (exit 1)` (log 2154). `before.png` is 1206x2622, band rows 262 to 2359.
+  - Launch at 07:41:30, `pid=16657`, `waited 18 s`, app stdout `A1: first frame drawn` (log 2191), `OK: the app printed
+    'A1: first frame drawn'` (log 2193).
+  - **The gate, executed for the first time:** `png-region: common colour E0218A: 2530188 pixels` (log 2223),
+    `png-region: PASS: 2530188/2530188 pixels ... within 8 of E0218A, threshold 0.98` (log 2224; fraction 1 to four
+    places), `OK: the colour check passed on after.png (E0218A, tolerance 8, threshold 0.98)` (log 2225).
+- `app-klibs` 134648760395 (07:30:21 to 07:31:32) and `png-region` 134648760523 (07:30:21 to 07:30:26) green.
+- **Kotlin warning naming Xcode: absent** in both macOS logs. Searched every line containing "xcode" (any case) for
+  "tested", "supported", "compatib", "maximum" or "higher": no match in either, outside the step scripts. As predicted.
+- **ICU linker warning: unchanged**, `ld: warning: object file (.../app/build/xcode-frameworks/Debug/iphonesimulator26.2/
+  ForagerApp.framework/ForagerApp[1523](libicu.icudtl_dat.o)) was built for newer 'iOS-simulator' version (18.5) than
+  being linked (16.0)` (log 1250); only the SDK directory in the path differs from job 134628156762. The full set of
+  `warning` lines in the 26.2 `app-bundle` log is the same as in the 26.0.1 job 134628156762 (the ICU line, the
+  `appintentsmetadataprocessor` "Metadata extraction skipped" line, git's `hint:` line), and the same in the two
+  `app-framework` logs (git's `hint:` only). As predicted; no new linker warning.
+- Against section 16's predictions: all held. The `Build version` (17C52) was not predicted.
