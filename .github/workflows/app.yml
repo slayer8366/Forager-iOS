@@ -3,8 +3,11 @@
 # The framework link and the app bundle are "built on a macOS runner"; from A1-3a, app-bundle also launches the app on
 # a simulator, and what that shows is "simulator-checked", never "checked" (the owner: "3 no iPhone"). From A1-3b
 # (RECORD -206) the colour of after.png gates the job.
-# Both macOS jobs select Xcode 26.2 (RECORD -208): Xcode 26.0.1 has no simulator platform on the runners ("iOS 26.0 is
-# not installed"); 26.2 is the lowest Xcode offering destinations on all six machines sampled in run 44257759986.
+# Both macOS jobs select Xcode 26.2 (RECORD -208). Under Xcode 26.0.1, on 2026-11-18, xcodebuild offered no iOS Simulator
+# destination ("iOS 26.0 is not installed") in the app build at 06:31 UTC and in every sample from 07:02 on (two app
+# builds, then all six machines of run 44257759986); it did in four app builds that day (05:38, 05:43, 05:59 and 06:40,
+# the last after the first red), and why is not known. simctl still runs simulators under 26.0.1 (brouter.yml's
+# ios-smoke). 26.2 offered destinations on six of six machines in run 44257759986. Wording: review 6 S3, session 87.
 name: app
 
 on:
@@ -82,8 +85,9 @@ jobs:
           got=$(head -n 1 build/xcodebuild-version.txt)
           if [ "$got" != "$WANT" ]; then echo "FAIL: the selected Xcode prints '$got', expected '$WANT'"; exit 1; fi
           echo "OK: the selected Xcode is $WANT"
-      # --info so the Kotlin Gradle plugin prints the native link's arguments: which stdlib the link used (A1-1, brief
-      # item 6). The timing lines bracket the Gradle run only.
+      # --info was added (A1-1, brief item 6) expecting the Kotlin Gradle plugin to print the native link's arguments. It
+      # does not (a1-1-app-module.md section 6; review 6 N8), so the recorded step after the next one finds nothing on
+      # the stdlib; --info is kept for the dependency fetches it lists. The timing lines bracket the Gradle run only.
       - name: Link the debug framework for the simulator
         run: |
           set -o pipefail

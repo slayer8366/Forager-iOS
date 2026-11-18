@@ -124,3 +124,31 @@ from the copy (not git) and `cmp` equal to the copy.
 colour with alpha 0 in every pixel. Alpha is ignored by design (`png-region.py:8`). The case pins today's behaviour so
 that a change to it is seen; whether a transparent pixel should count is for the planner to rule. The four real
 screenshots are fully opaque per the review [not re-checked here].
+
+### Step 3, S3: the Xcode reason and the `--info` comment (`.github/workflows/app.yml`, comments only)
+- **The brief's sentence, and the review's, is contradicted by the record, so I did not write it as given.** Both say
+  that from 06:31 UTC on, `xcodebuild` under 26.0.1 offered no iOS Simulator destination in every sample. Read by me
+  from CI [R]: job 134617571020 (run 44249852981, attempt 1) started 06:31:31 and failed with `Unable to find a
+  destination` (its log 223); job 134628156762 (the same run, attempt 2) started 06:40:28, selected
+  `/Applications/Xcode_26.0.1.app` (log 162), printed `Xcode 26.0.1` (171), built with `-destination "generic/platform=iOS
+  Simulator"` (215) and printed `** BUILD SUCCEEDED **` at 06:46:45 (1207). The findings' own table says the same
+  (`a1-3-launch.md:383-384`, `:610-611`: "red 06:31; green 06:40; red 07:02, 07:07"), and the review itself counts the
+  06:40 build among the four greens ("between 05:38 and 06:45"). What holds: no destination at 06:31 and in every sample
+  from 07:02 on (jobs 134636660132 at 07:01:37 and 134639110582 at 07:07:32, then run 44257759986).
+- The brief's instruction was "Reword to what the evidence supports", so the comment at `app.yml:6-10` now says: no
+  destination in the app build at 06:31 and in every sample from 07:02 on (two app builds, then all six machines of run
+  44257759986); destinations in four app builds that day (05:38, 05:43, 05:59, 06:40, the last after the first red); why
+  not known; `simctl` still runs simulators under 26.0.1 (`ios-smoke`); 26.2 offered destinations on six of six
+  machines. Read for it [R]: run 44257759986's six `destinations` jobs, every `SUMMARY` line for 26.0.1 (passes 1 and 8)
+  `ios_sim_available=0` with `error:iOS 26.0 is not installed`, and for 26.2 (pass 3) `ios_sim_available=34`; `ios-smoke`
+  job 134643447456 of `brouter` run 44257759907 (`bccce50`, success): `Xcode 26.0.1` (log 226), `TOTAL: tests 61,
+  failures 0` (547), `OK on the iOS simulator: all 25 classes ran` (2213), at 07:33.
+- `app.yml:85-86` (now `:88-90`): the comment no longer says `--info` prints the link's arguments. It says the flag was
+  added expecting that, that it does not (`a1-1-app-module.md` section 6, lines 216-219), and that the recorded step
+  therefore finds nothing on the stdlib; `--info` stays for the dependency fetches it lists (review 6 N6 read 114 of them
+  in job 134660260591). The step itself is unchanged.
+- **Left stale, on the brief's instruction:** `.github/workflows/app-diagnose.yml:41`, "The runner's default is bash -e
+  -o pipefail". The review (N3) reads the default as `bash -e` without `pipefail`; I did not re-check that. Not edited,
+  because `app-diagnose.yml` is not in `brouter.yml`'s ignore list and has its own push trigger, so an edit starts six
+  macOS diagnostic machines and a full engine run. The comment sits in a printed, never-failing step after `set +e` and
+  `set +o pipefail`, so it misleads a reader, not a check.
