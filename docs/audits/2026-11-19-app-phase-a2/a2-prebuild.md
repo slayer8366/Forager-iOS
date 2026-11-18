@@ -544,3 +544,57 @@ Options that commit no coordinate in our files:
 coordinates are committed"? The scan does not catch it (above). In the ruling's sense it names a point on Earth (in the
 ocean, not a place anyone is), so it is arguable both ways. Option 1 avoids the question for A2 entirely, because our
 files would hold no position at all.
+
+## 7. What needs the owner, and which decisions are technical
+
+### The owner's
+
+Where the owner has already spoken, the first option is the owner's own word and nothing departing from it is marked
+recommended.
+
+- **O1. The tile server, and its host in this public repository.** The plan lists it as the owner's, not yet asked:
+  "The app's public identity: its name, its bundle identifier, and whether it shares Android's tile server" (plan, line
+  166). A2 as planned reads "the map from the project's own tile server and style" (plan, line 91), which means
+  committing the Worker's full URL, including the owner's Cloudflare account label (section 1), into this repository's
+  code. Options:
+  - (a) Share Android's Worker and commit its URL in A2's code (what the plan's A2 assumes).
+  - (b) Share the Worker but keep the host out of committed files: CI injects it at build time from a repository
+    variable. The built app still contains it, and the CI artifacts and logs would too unless masked.
+  - (c) Not share for now: A2 renders only R1's local style plus a third-party demo style. That is not the plan's A2.
+  The planner should also know the Worker's own code records a cost concern about extra request volume on "a
+  personal-account Cloudflare Worker" (`A/ui/map/Basemap.kt:32-34`). A2's CI would add one style, one TileJSON, a few
+  zoom-0/1 tiles, a sprite and some glyph ranges per run (inferred; R4 would count them).
+- **O2. Kotlin, which decides which wrapper can be tried at all.** The pin is "moved only together with Forager"
+  (`gradle/libs.versions.toml:3`). Section 2 showed the current wrapper (0.20.0) is refused by Kotlin 2.3.10. Options:
+  - (a) Keep Kotlin 2.3.10 (the standing rule) and try wrapper **0.14.0**, the last release built with Kotlin 2.3.x:
+    frozen, on MapLibre iOS 6.25.1, beta. If it fails its trigger (section 4), go to the fallback.
+  - (b) Move Kotlin to 2.4.20 or later, in Forager and here together, and try the current wrapper (FFI line).
+    This touches the Android app's build and is a Forager change; under Forager's rules it lands on pre-main.
+  - (c) Skip the wrapper and build the fallback first.
+  The plan says "First through the Compose wrapper" (line 92), which (a) and (b) honour and (c) does not.
+- **O3. Screenshots** (section 6 table): A, no upload; B, world view only; C, synthetic style only; D, real map
+  screenshots.
+- **O4. Whether "0, 0" or a whole-world box counts as a coordinate** under "no coordinates are committed" (section 6).
+  Not needed if A2 sets no camera (section 6, option 1).
+
+### The technical ones (each recommendation is mine, labelled so)
+
+- **T1. Which wrapper under Kotlin 2.3.10.** Mine: **0.14.0** over 0.13.1 (newer, same Kotlin 2.3.21 line, Compose
+  1.11.1 is closer to our 1.12.2 than 0.13.1's 1.10.3; both compiled in scratch, section 2). Applies only under O2 (a).
+- **T2. The failure trigger** for switching to the fallback: F1 to F4 (section 4). Mine, for the planner to adopt or
+  change before the first A2 dispatch, so the switch is ruled before anyone sees a red run.
+- **T3. How MapLibre's iOS SDK reaches the build** (wrapper 0.14.0 or the fallback): mine, **the pinned xcframework**
+  via `tools/fetch-pinned.sh` and a `framework:` dependency in `project.yml`, over SPM and CocoaPods (section 3). Version:
+  **6.25.1** with wrapper 0.14.0, because that is what its bindings were built against (`gradle.properties` at
+  `v0.14.0`); its zip is `ios-v6.25.1/MapLibre.dynamic.xcframework.zip`, **10,172,218 bytes** (Content-Length today),
+  SHA-256 `57151da6...b66d06e` (the distribution package's checksum at tag `6.25.1`, commit `40e1a0d`; the zip itself
+  was not downloaded, so the size is the server's and the hash is the package's, both to be re-checked by
+  `fetch-pinned.sh` on first use). For the fallback alone, 6.31.0 (section 3, both figures measured today).
+- **T4. The fallback's shape:** mine, **Swift makes the `MLNMapView`, Kotlin hosts it** through `UIKitView` and a
+  factory interface (section 4), so no cinterop of ours and the Linux compile keeps covering Kotlin.
+- **T5. The checks:** mine, R1 (local style, no network) first; then N, R2 and R3, observed in one run and gated in
+  the next, as A1 did; R4 only where a hook exists (native), "unsupported" otherwise (section 5).
+- **T6. `app-klibs` must fail on a skipped compile** if any cinterop of ours is ever added (section 3). Not needed for
+  T4's shape; recorded so it is not rediscovered.
+- **T7. Deployment target:** keep 16.0. Nothing found raises it (section 3).
+- **T8. Logging:** counts, never tile URLs (section 6).
