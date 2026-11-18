@@ -928,3 +928,55 @@ No `brouter` run was started by this session's pushes (`app/**`, `app.yml` and `
 - The uploaded artifacts (`a1-3-simulator`, `a1-2-xcode`) of this session's runs were not downloaded; the PNGs were
   read only through `png-region.py`'s log lines.
 - Any device: every iOS statement here is simulator-checked.
+
+## 19. A1's closing list
+
+Every iOS item is **simulator-checked** on GitHub's `macos-26` runners; the owner has no Mac and no iPhone ("3 no
+iPhone"). Run ids are `app.yml` runs on branch `app` unless named otherwise.
+
+### What A1 has shown, and the run that shows it
+
+- **The module compiles** for both iOS targets on Linux, no compile errors: A1-1 run 44237677080; most recently
+  `app-klibs` in run 44262884089 (job 134660260197).
+- **The framework links** for the simulator, arm64: A1-1 run 44237677080 (Xcode 26.0.1); under Xcode 26.2, `app-framework`
+  in runs 44259385803 (job 134648760740), 44261245328 (134654851780) and 44262884089 (134660260591).
+- **The engine's counts unchanged with `:app` in the build:** `brouter.yml` run 44237677010 on `8c8d323` (A1-1 section
+  on CI: `jvm` 262 tests, `jvm-production` 3, `ios-smoke` 61 and 7, `ios-memory` 3, 1, 1, each with no failures and no
+  compile errors), with `:brouter`'s dependency reports byte-identical with and without `:app` (A1-1, local). That run
+  used Xcode 26.0.1, which `brouter.yml` still selects.
+- **The Xcode project is generated and the unsigned app builds:** A1-2 run 44245585616 (job 134603625845, 26.0.1); under
+  26.2 runs 44259385803, 44261245328, 44262884089 (`Created project at ...`, `** BUILD SUCCEEDED **`, the bundle check's
+  `OK:` line; sections 17 and 18).
+- **The bundle check seen red:** A1-2 run 44246226134 (job 134605728656), the identifier branch only, with the build
+  shown green in that job; restored green in run 44246914973.
+- **The app launches, prints its line, and its screenshot is its colour:** A1-3a run 44249852981 attempt 2 (job
+  134628156762; screenshot read by the printed tolerance-24 check then); under 26.2 with the gate, runs 44259385803
+  (job 134648760070) and 44262884089 (job 134660261407): `A1: first frame drawn`, then `PASS: 2530188/2530188 pixels
+  within 8 of E0218A`.
+- **The colour gate seen red and green:** red in run 44261245328 (job 134654851453), `png-region: FAIL: 0/2530188 pixels
+  within 8 of E0218A` with `common colour 1E6FD9`, on a build with 0 compile-error lines and `** BUILD SUCCEEDED **`;
+  green in runs 44259385803 and 44262884089. The control (the check failing on the home screen's `before.png`) held in
+  all three.
+
+### What A1 has NOT shown
+
+- A real iPhone. Nothing has run on a device.
+- Any other device or runtime: only an iPhone 17 simulator on iOS 26.2.
+- Anything after the first frame: no interaction, no lifecycle, no second frame checked.
+- A release or signed build: Debug, unsigned (`CODE_SIGNING_ALLOWED=NO`), simulator SDK only.
+- That the generated project opens in Xcode: it is only built by `xcodebuild` on a runner.
+- The engine inside the app: `:app` does not depend on `:brouter`.
+- The Debug stub executable: the app's code is in `ForagerApp.debug.dylib`; the `ForagerApp` executable checked by
+  `lipo` is the stub that loads it (A1-2 section 3).
+- The ICU linker warning against deployment target 16.0: an object in the Compose framework was built for iOS 18.5; its
+  effect on an iOS 16 or 17 device is untested (no such runtime on the runners).
+- Only some branches of the bundle check seen red: the identifier branch only; display name, arm64, missing bundle and
+  missing Gradle header have not been seen red. Likewise the new Xcode-version check has been seen red only with local
+  stubs, not on a runner.
+- Why Xcode 26.0.1 built green three times on 2026-11-18 (05:38, 05:59, 06:40 UTC) before failing on every later
+  attempt and every diagnostic pass (sections 12 and 15).
+- That Xcode 26.2 is supported by Kotlin 2.3.10: it is past what Kotlin's compatibility page lists for 2.3.10 (Xcode
+  26.0). No warning was printed and every check passed, which is evidence of this build working, not of support.
+- That the runner will keep 26.2: runner-images keeps "only three major.minor versions" of simulator runtimes, so the
+  iOS 26.2 runtime, and with it 26.2's destinations, will in time be dropped. The diagnostic step before the build and
+  the version check are what will show it.
