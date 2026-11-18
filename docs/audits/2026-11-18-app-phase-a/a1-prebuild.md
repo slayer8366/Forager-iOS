@@ -512,8 +512,54 @@ The planner's to make (the plan puts "the module layout" among them, plan `:170-
 | T8 | Caching `~/.konan` and `~/.gradle` | none; `actions/cache` | **None in A1.** The first runs should show the cold time and cannot be fooled by a stale cache; a pinned `actions/cache` can follow with numbers to justify it. |
 | T9 | How "it launched and drew" is shown | screenshot only; log line; pixel check; control | **All three of section 5**: a line printed from the draw phase, a pixel check of the colour, and the same check required to fail on the screenshot taken before install. The tolerance is set from the first run's observed colour, not guessed. |
 | T10 | iOS entry | SwiftUI `App` hosting `MainViewController()`; UIKit `AppDelegate`; Kotlin-only | **SwiftUI**, about 20 lines, the shape JetBrains' wizard uses (not fetched today). |
-| T11 | Deployment target | Compose Multiplatform's minimum, iOS 14 (compatibility page); something higher | **Open, and cheap to change before any release.** A2's map library will set a floor of its own (unknown today), so A1 takes a provisional value recorded as provisional; I would use 16.0, since the 1.12 and 1.13 changelogs carry fixes and workarounds for iOS 14, 15 and "iOS 16 or older" (`:327`, `:420`, `:616`, `:1264`), which a higher floor avoids. |
+| T11 | Deployment target | Compose Multiplatform's minimum, iOS 14 (compatibility page); something higher | **Open, and cheap to change before any release.** A2's map library will set a floor of its own (unknown today), so A1 takes a provisional value recorded as provisional; I would use 16.0, since the 1.11 to 1.13 changelogs carry fixes and workarounds for iOS 14, 15 and "iOS 16 or older" (`:327`, `:420`, `:616`, `:1264`), which a higher floor avoids. |
 | T12 | Kotlin package of the app code | `com.zynergylabs.forager.app`; `...ios` | **`com.zynergylabs.forager.app`**, Android's `namespace` (Forager `app/build.gradle.kts:242`), so code shared later keeps its package. Internal; not the bundle identifier (O1). |
 
-8. The order of work for A1 - pending
+## 8. The order of work for A1
+
+Three dispatches, each on the branch O2 names, each ending in a CI run whose output is predicted here, so a different
+output is a finding, not a pass. All macOS results are "simulator-checked". None starts before O1 and O2 are answered.
+
+**Baseline for every dispatch:** the four `brouter.yml` jobs must print the counts they printed on `7d4d721`: `jvm`
+TOTAL 262, 0 failures; `jvm-production` 3, "OK: all 2 classes ran"; simulator 61 and 7, "OK on the iOS simulator: all
+25 classes ran" and "OK: all 2 classes ran"; memory 3, 1, 1 (RECORD -197, `RECORD.md:7704` on `origin/main`
+`d127d66`). A different count in any of them is a stop.
+
+**A1-1. The build: `:app` and the framework.** Catalog entries, the two root plugin declarations, Google's Maven
+filtered, `include(":app")`, `app/` with `App()` (one colour, one draw-phase line) and `MainViewController()`. A new
+`app.yml` with two jobs: `app-klibs` on `ubuntu-24.04` and `app-framework` on `macos-26` with Xcode 26.0.1.
+- Predicted, `app-klibs`: `:app:compileKotlinIosSimulatorArm64` and `:app:compileKotlinIosArm64` run, 0 lines matching
+  `^e: `, `BUILD SUCCESSFUL` (seen in scratch, section 2).
+- Predicted, `app-framework`: `:app:linkDebugFrameworkIosSimulatorArm64` runs (not `SKIPPED`), `BUILD SUCCESSFUL`, and
+  a listing step prints a `ForagerApp.framework` directory with a `ForagerApp` binary for which `lipo -info` says
+  `arm64` (the folder, under `app/build/bin/iosSimulatorArm64/debugFramework/`, is inferred from the plugin's layout and
+  is printed, not assumed). This is the first link of Compose Multiplatform anywhere in this project; its time is
+  recorded.
+- And the baseline above, unchanged.
+
+**A1-2. The Xcode project and the app bundle.** `iosApp/project.yml`, the Swift entry, Info.plist with O1's identifier
+and name; `app.yml`'s macOS job gains the pinned XcodeGen fetch, `xcodegen generate`, and the `xcodebuild` line of
+section 5; the generated `.xcodeproj` uploaded.
+- Predicted: `fetch-pinned.sh` prints "matches its pins (4278764 bytes, ...)" for the XcodeGen zip; `xcodegen` prints
+  that it created the project; `xcodebuild` ends `** BUILD SUCCEEDED **`; the Run Script phase's Gradle output appears
+  inside the `xcodebuild` log; `plutil -p` on the built app's Info.plist prints O1's `CFBundleIdentifier`; `file` on
+  the executable says arm64. If the Run Script phase cannot run Gradle inside `xcodebuild` on the runner, the fallback
+  is section 4's: Gradle first, then `xcodebuild` with the framework's search path; that would be reported, not
+  silently switched.
+
+**A1-3. Launch, screenshot, and checks that can fail.** The rest of section 5: create and boot the device, the
+`before.png` control, install, launch with stdout captured, the draw-phase line, `after.png`, `tools/png-region.py`
+(committed with a self-test on synthetic PNGs that runs on Linux, as the scratch prototype did), and the artifact.
+In two steps, so nothing is guessed:
+- **A1-3a, observe.** Gating: the line `A1: first frame drawn` within 120 s; the colour check **fails** on
+  `before.png`. Printed, not gating: the commonest colours of `after.png` and the fraction matching the app's colour
+  at a wide tolerance. Predicted: the line appears; `before.png` fails the check with home-screen colours; `after.png`'s
+  commonest colour in the middle band is the app's colour or a profile-shifted version of it, at well above 98 %.
+- **A1-3b, gate.** The tolerance is set from 3a's printed colour and recorded with it, and the colour check on
+  `after.png` becomes gating. Proof the check bites, by this project's revert rule (Forager's `CLAUDE.md`, Testing):
+  one run with `App()` drawing a different colour, in which the colour check must go red with a message naming the
+  colour it saw, with the build log checked for compile errors first and the forward change confirmed present
+  afterwards. The run, its message and the restore are reported.
+- The A1 record entry is written after 3b: what ran, the screenshot artifact's name, the counts, and section 9's list.
+
 9. What A1 will not show - pending
