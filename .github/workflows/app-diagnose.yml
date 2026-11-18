@@ -1,0 +1,133 @@
+# A1-3b diagnosis (session 84): data on app-bundle's "Unable to find a destination matching ... generic ... iOS Simulator"
+# under Xcode 26.0.1 (docs/audits/2026-11-18-app-phase-a/a1-3-launch.md, sections 12 to 14). It builds nothing and
+# changes nothing on the runner: it prints, for several VMs of the macos-26 image at once, what each installed Xcode
+# sees. No command can fail a replica (each ends in `|| echo`); a hang is cut by a per-command alarm. Every iOS result
+# here is "simulator-checked".
+name: app-diagnose
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [app]
+    paths:
+      - '.github/workflows/app-diagnose.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  destinations:
+    runs-on: macos-26 # arm64; the label app-bundle uses
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        replica: [1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # The same pinned XcodeGen as app-bundle, so the scheme exists for -showdestinations.
+      - name: XcodeGen 2.46.0, pinned, and the Xcode project
+        run: |
+          bash tools/fetch-pinned.sh build/xcodegen/xcodegen-2.46.0.zip \
+            https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip \
+            4278764 4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806 || echo "(fetch-pinned exit $?)"
+          unzip -q -o build/xcodegen/xcodegen-2.46.0.zip -d build/xcodegen || echo "(unzip exit $?)"
+          build/xcodegen/xcodegen/bin/xcodegen --version || echo "(xcodegen --version exit $?)"
+          build/xcodegen/xcodegen/bin/xcodegen generate --spec iosApp/project.yml || echo "(xcodegen generate exit $?)"
+      - name: Diagnose (printed, never failing)
+        env:
+          REPLICA: ${{ matrix.replica }}
+        run: |
+          # The runner's default is bash -e -o pipefail; this step must not stop on any one command's status.
+          set +e
+          set +o pipefail
+          D="$PWD/build/diag"
+          mkdir -p "$D"
+          # Runs a command with a time limit (no GNU timeout on the image; perl's alarm kills it with SIGALRM, exit 142),
+          # output to the log and appended to a file.
+          run() { # run <file> <seconds> <command...>
+            local out="$D/$1" secs="$2" tmp="$D/.run.tmp"; shift 2
+            {
+              echo "===== $* ($(date -u +%H:%M:%S))"
+              perl -e 'alarm shift; exec @ARGV or die "exec: $!"' "$secs" "$@" 2>&1 || echo "(exit $?)"
+              echo "----- ended $(date -u +%H:%M:%S)"
+            } > "$tmp"
+            tee -a "$out" < "$tmp" || echo "(tee exit $?)"
+          }
+          {
+            echo "replica=$REPLICA"
+            echo "ImageOS=${ImageOS:-unset} ImageVersion=${ImageVersion:-unset} RUNNER_ARCH=${RUNNER_ARCH:-unset}"
+            echo "hostname_sha12=$(hostname | shasum -a 256 | cut -c1-12)" || echo "(hostname hash failed)"
+            echo "platform_uuid_sha12=$(ioreg -rd1 -c IOPlatformExpertDevice | awk -F'"' '/IOPlatformUUID/{print $4}' | shasum -a 256 | cut -c1-12)" || echo "(uuid hash failed)"
+            echo "hw.model=$(sysctl -n hw.model)" || echo "(hw.model failed)"
+            echo "hw.ncpu=$(sysctl -n hw.ncpu) hw.memsize=$(sysctl -n hw.memsize)" || echo "(sysctl failed)"
+            sw_vers || echo "(sw_vers exit $?)"
+            echo "date -u: $(date -u)"
+            echo "uptime: $(uptime)" || echo "(uptime failed)"
+            echo "CoreSimulator: $(defaults read /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/Info.plist CFBundleVersion 2>&1)" || echo "(CoreSimulator version failed)"
+          } 2>&1 | tee "$D/00-machine.txt"
+          {
+            echo "===== ls -ld /Applications/Xcode*.app"; ls -ld /Applications/Xcode*.app || echo "(ls exit $?)"
+            echo "===== xcode-select -p"; xcode-select -p || echo "(xcode-select exit $?)"
+            echo "===== df -h /"; df -h / || echo "(df exit $?)"
+          } 2>&1 | tee "$D/01-xcodes.txt"
+          run 02-simctl-runtimes.txt 300 xcrun simctl list runtimes
+          run 03-simctl-help-runtime.txt 120 xcrun simctl help runtime
+          run 04-simctl-runtime-list.txt 300 xcrun simctl runtime list -v
+          run 05-simctl-runtime-match.txt 300 xcrun simctl runtime match list -v
+          # Where runtimes and platform components may live: listed, not assumed (section 14). Missing ones say so.
+          {
+            for p in /Library/Developer/CoreSimulator/Images /Library/Developer/CoreSimulator/Volumes \
+                     /Library/Developer/CoreSimulator/Cryptex /Library/Developer/CoreSimulator/Profiles/Runtimes \
+                     "$HOME/Library/Developer/Packages" "$HOME/Library/Developer/CoreSimulator" \
+                     "$HOME/Library/Developer/Xcode" /System/Library/AssetsV2; do
+              echo "===== $p"
+              if [ -e "$p" ]; then ls -la "$p" || echo "(ls exit $?)"; else echo "(absent)"; fi
+            done
+            echo "===== /System/Library/AssetsV2/*Simulator* (two levels)"
+            for p in /System/Library/AssetsV2/*Simulator*; do
+              [ -e "$p" ] || { echo "(none)"; break; }
+              echo "--- $p"; ls -la "$p" || echo "(ls exit $?)"
+              for q in "$p"/*; do [ -d "$q" ] && { echo "--- $q"; ls -la "$q" || echo "(ls exit $?)"; }; done
+            done
+            echo "===== /Library/Developer/CoreSimulator/Volumes/* (two levels)"
+            for p in /Library/Developer/CoreSimulator/Volumes/*; do
+              [ -e "$p" ] || { echo "(none)"; break; }
+              echo "--- $p"; ls -la "$p" || echo "(ls exit $?)"
+              ls -la "$p"/Library/Developer/CoreSimulator/Profiles/Runtimes 2>&1 || echo "(no Profiles/Runtimes under $p)"
+            done
+            echo "===== mount | grep -i simulator"; mount | grep -i -E 'simulator|coresim' || echo "(none mounted)"
+            echo "===== /Library/Developer/CoreSimulator/Images/images.plist"
+            plutil -p /Library/Developer/CoreSimulator/Images/images.plist 2>&1 | head -200 || echo "(plutil exit $?)"
+          } 2>&1 | tee "$D/06-disk.txt"
+          # Every real Xcode once (symlinks resolved), 26.0.1 first and again last: if a newer Xcode's first xcodebuild
+          # changes CoreSimulator's state, the pair for 26.0.1 shows it.
+          ALL=$(for a in /Applications/Xcode*.app; do python3 -I -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$a"; done | sort -u)
+          FIRST=/Applications/Xcode_26.0.1.app
+          ORDER="$FIRST $(printf '%s\n' $ALL | grep -vxF "$FIRST" | tr '\n' ' ') $FIRST"
+          echo "order: $ORDER" | tee "$D/07-order.txt"
+          n=0
+          for app in $ORDER; do
+            n=$((n+1))
+            [ -d "$app" ] || { echo "SUMMARY replica=$REPLICA pass=$n xcode=$app missing" | tee -a "$D/99-summary.txt"; continue; }
+            tag="$(printf '%02d' $n)-$(basename "$app" .app)"
+            export DEVELOPER_DIR="$app/Contents/Developer"
+            run "x$tag-version.txt" 120 xcodebuild -version
+            run "x$tag-firstlaunch.txt" 120 xcodebuild -checkFirstLaunchStatus
+            run "x$tag-sdks.txt" 180 xcodebuild -showsdks
+            run "x$tag-match.txt" 180 xcrun simctl runtime match list -v
+            run "x$tag-destinations.txt" 300 xcodebuild -project iosApp/ForagerApp.xcodeproj -scheme ForagerApp -showdestinations
+            f="$D/x$tag-destinations.txt"
+            ver=$(xcodebuild -version 2>/dev/null | tr '\n' ' ' || echo "?")
+            if grep -q 'Available destinations' "$f"; then avail=yes; else avail=no; fi
+            sim=$(awk '/Available destinations/{a=1;next} /Ineligible destinations/{a=0} a && /platform:iOS Simulator/{c++} END{print c+0}' "$f")
+            err=$(grep -o 'error:[^}]*' "$f" | head -1)
+            echo "SUMMARY replica=$REPLICA pass=$n xcode=$(basename "$app") version=[$ver] available_section=$avail ios_sim_available=$sim first_error=[${err:-none}]" | tee -a "$D/99-summary.txt"
+            unset DEVELOPER_DIR
+          done
+          echo "===== summary"; cat "$D/99-summary.txt" || echo "(no summary)"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: app-diagnose-replica-${{ matrix.replica }}
+          path: build/diag/
