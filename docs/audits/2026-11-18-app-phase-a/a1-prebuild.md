@@ -415,8 +415,8 @@ on its own:
    the app's colour, and prints the three commonest colours it saw. I wrote it as a prototype in scratch
    (`scratchpad/s79/png/png_region.py`, stdlib `zlib` only, 8-bit RGB and RGBA, no interlace) and ran it today on
    synthetic PNGs: a one-colour image passes (`24960/24960`); a white one fails (`0/24960`, exit 1); a half-coloured one
-   fails (`0.5000`, exit 1); a colour two units off passes at tolerance 4 and fails at tolerance 1. On a 1206 × 2622
-   PNG saved by Pillow 12.3.0 with filter types 1, 2 and 4 in its rows, it read `0.9998` and passed, and a grey "home
+   fails (half the pixels, exit 1); a colour two units off passes at tolerance 4 and fails at tolerance 1. On a 1206 × 2622
+   PNG saved by Pillow 12.3.0 with filter types 1, 2 and 4 in its rows, it read 99.98 % and passed, and a grey "home
    screen" of the same size failed. Filter type 3 was not exercised, and 1206 × 2622 is a test size of my choosing,
    not a measured screenshot size. **The colour**: a saturated, non-system colour, chosen so neither the home screen nor
    a blank window can match it. **The tolerance is not guessed**: a simulator screenshot may be tagged with a display
