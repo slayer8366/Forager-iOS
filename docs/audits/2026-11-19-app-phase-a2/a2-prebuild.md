@@ -331,3 +331,61 @@ CocoaPods plugin for one dependency. **Not recommended** (mine).
   from Maven Central directly and have been green).
 - Kotlin/Native 2.3.10 for Linux came from the existing `~/.konan` cache. Compile only: no link, no `xcodebuild`, no
   simulator.
+
+## 4. The fallback: MapLibre's own iOS SDK in a native view
+
+### What it takes with our build
+
+Two shapes; the second is my recommendation (section 7, T4):
+
+1. **Kotlin calls MapLibre directly** (`UIKitView { MLNMapView(...) }` written in Kotlin). Kotlin then needs bindings for
+   `MapLibre.framework`: our own cinterop `.def` over its headers. Section 3 showed what that does to CI: the Linux
+   `app-klibs` compile is **skipped**, exit 0, for both iOS targets. And cinterop needs the framework's headers at build
+   time, so the pinned xcframework would have to be fetched before Gradle runs on macOS too. Workable, but it changes
+   what the Linux job proves.
+2. **Swift makes the map view; Kotlin only hosts it.** The SwiftUI side already exists
+   (`iosApp/ForagerApp/ForagerApp.swift`: a `UIViewControllerRepresentable` around `MainViewControllerKt.MainViewController()`).
+   Swift `import MapLibre`, builds an `MLNMapView` and hands Kotlin a factory through a Kotlin interface the Swift side
+   implements; Kotlin places it with Compose's `UIKitView`. Kotlin never names a MapLibre type, so there is no cinterop
+   and the Linux job keeps compiling everything. Shown in scratch today: an `iosMain` file with
+   `fun interface NativeMapFactory { fun make(): UIView }` and
+   `UIKitView(factory = { factory.make() }, modifier = Modifier.fillMaxSize())` (`androidx.compose.ui.viewinterop.UIKitView`,
+   `@OptIn(ExperimentalForeignApi::class)`) compiled with our pins: `:app:compileKotlinIosSimulatorArm64` **BUILD
+   SUCCESSFUL in 14s**, no `e:` or `w:`. Not linked, not run.
+
+The MapLibre API the Swift side would use, read today from the 6.31.0 headers (simulator slice):
+`initWithFrame:styleURL:` (`MLNMapView.h:210`); delegate methods `mapView:didFinishLoadingStyle:`
+(`MLNMapViewDelegate.h:321`), `mapViewDidFinishLoadingMap:` (`:206`), `mapViewDidFailLoadingMap:withError:` (`:219`,
+"including a network connection failure or a failure to fetch the style"), `mapViewDidFinishRenderingMap:fullyRendered:`
+(`:225`, documented only as `// TODO`), and `mapViewDidBecomeIdle:` (`:299`: "No camera transitions are in progress / All
+currently requested tiles have loaded / All fade/transition animations have completed"). Request hooks:
+`MLNNetworkConfigurationDelegate`'s `willSendRequest:` and `didReceiveResponse:` (`MLNNetworkConfiguration.h:29-31`).
+
+Build changes for this shape: the pinned xcframework (section 3c) in `project.yml` as a framework dependency, embedded;
+the Swift file grows a map view and its delegate; `MainViewController` takes the factory. Nothing in Gradle.
+
+What is lost against the wrapper: the map is not a Compose API, so everything a later screen puts on the map (Android's
+39 files of layers and camera code, survey line 202) is written against MapLibre's Objective-C API in Swift, or bridged
+to Kotlin by hand. That is the survey's "a second implementation of 39 files' worth" (survey line 384-385), and it is why
+the plan tries the wrapper first.
+
+### What counts as "the wrapper failed": a stated trigger
+
+Proposed (mine, for the planner to rule on; section 7, T2). The wrapper is declared failed for A2, and the fallback
+dispatched, when **any one** of these is seen in CI, each on a build shown to have compiled (A1's discipline: the
+`BUILD SUCCEEDED` line and zero compile-error lines in the same job):
+
+- **F1. It cannot be built with our pins.** Already true of the current wrapper line (0.15.0 to 0.20.0) under Kotlin
+  2.3.10 (section 2). If the owner does not move Kotlin, F1 applies to that line now, and only 0.14.0 (or 0.13.1) is
+  left to try.
+- **F2. It links but does not launch:** no drawn-frame line within the launch step's limit, or a crash report naming
+  the app, on two runs.
+- **F3. It launches but the map does not render the project's style:** the wrapper's load-failed callback fires with the
+  network shown healthy (section 5, check N), or the map-rendered check (section 5, R2 and R3) fails while the same
+  style renders in the fallback's own spike. The last clause matters: a failure the fallback shares is the style's or
+  the network's, not the wrapper's.
+- **F4. Compose breaks around it:** the HarfBuzz text issue the wrapper's docs warn of, seen as a failed text check, if
+  one is added (none is proposed for A2).
+
+Not triggers: "beta" labels, API churn, or a slow job. Each trigger is a CI line, so the switch is a decision with a
+cause on record, not drift.
