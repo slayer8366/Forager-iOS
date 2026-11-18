@@ -8093,3 +8093,29 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next.** Session 87 (running): the fixes for review 6. Then A2-1, once the owner has answered.
 
 **Notes:** Written by the planner session by hand. Next free ID -212.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-212
+**Timestamp:** 2026-11-18T11:47:26Z
+**Continues:** -211, -210
+**Title:** Three rulings for the map: Kotlin moves to 2.4.20, the tile server is shared with its address kept out of the repository, world-view pictures only; review 6's fixes are in
+
+**The rulings, verbatim.**
+- Asked how the map should be tried, given that the current wrapper needs Kotlin 2.4.20 and the plan says wrapper first, the owner chose "Move Kotlin to 2.4.20". The planner had recommended keeping Kotlin and trying the frozen wrapper 0.14.0; that recommendation is set aside. The option's text as shown to the owner: "Follows the plan with the current wrapper. Kotlin changes in Forager's Android app and here together, and the routing engine's bit-for-bit tests must be rerun on the new compiler."
+- Asked whether iOS shares Android's tile server and whether its address may be committed here, the owner chose "Share it, keep address out of the repo": CI injects the address at build time from a repository variable; it is not in committed files; the built app still contains it; logs must be kept from printing it.
+- Asked what CI may upload from the map step, the owner chose "World view only (Recommended)": the map step sets no camera, the whole-world picture is uploaded, anything zoomed in is checked by numbers only.
+
+**What the first ruling sets in motion, and what is not yet decided.** The catalog's rule is that Kotlin moves "only together with Forager" (`gradle/libs.versions.toml:3`), and the owner's choice names both. This repository's `CLAUDE.md` says nothing for the iOS app is written to slayer8366/Forager, and the plan's B1 leaves "who dispatches the Android side" as a proposal to the owner. So the planner does not write to Forager on this ruling alone. Next is a read-only pre-build, written here, that says what the move takes on each side: Forager's build (its Android Gradle plugin, annotation processing, Compose compiler and libraries against Kotlin 2.4.20) and this repository (the engine's tests against the Java oracle on the new compiler, Compose Multiplatform's version for Kotlin 2.4, Xcode support, the wrapper 0.20.0). Who makes the Forager change, on which branch, and in which order the two repositories move then goes to the owner.
+
+**What the second ruling needs from the owner later.** A repository variable holding the server's address, which only the owner can create in GitHub's settings. The planner will give the steps when the step that needs it is dispatched. The local one-colour style step does not need it.
+
+**Review 6's fixes, session 87 (coder: Plumb Ledger).** `app` moved from `8bce937` to `8e747fa`, seven commits. The session finished during a container restart and its hand-back was lost; the planner verified from the remote.
+- Verified by the planner: `git ls-remote origin app` gives `8e747fa`; clean tree; seven commits with the project trailer only; `scan.sh` 0 on each; 6 files, 373 insertions, 14 deletions. `brouter.yml` now ignores `app/src/**` in place of `app/**` (S4), one path and its comment. The self-test run by the planner locally: `59 cases, 0 failed` (was 37), including a case recording that alpha is ignored.
+- `app.yml` run 44269898886 on `5de22c2`: four jobs successful; `png-region` 59 cases, 0 failed; in `app-bundle`, simulator-checked, the control `FAIL: 98/2530188 ... within 24 of E0218A` with its OK line, the drawn-frame line, and the gate `PASS: 2530188/2530188 ... within 8 of E0218A`, all as before the fixes.
+- `app.yml` run 44269684940 on `65bed14` failed in `app-klibs` only, at Gradle's `Could not resolve org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.10`, before any compile: an outside resolution failure. The next push's run was green.
+- `brouter.yml` run 44269945505 on `47e25f2`, the first full engine run with the narrowed ignore list: four jobs successful, 0 compile-error lines, `jvm` 262, `jvm-production` 3 with its gate line, simulator-checked 61 and 7 with 25 classes, memory 3, 1, 1. This closes review 6's S5: the edited `brouter.yml` has now completed a run.
+- Not rerun by the planner: the three mutations against the new self-test (the coder's findings, `docs/audits/2026-11-18-app-phase-a/review-6-fixes.md`). Left stale on purpose: a wrong comment in `app-diagnose.yml`, because editing that file starts the engine's run.
+
+**Notes:** Written by the planner session by hand. Next free ID -213.
