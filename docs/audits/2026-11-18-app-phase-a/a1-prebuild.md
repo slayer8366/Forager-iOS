@@ -289,7 +289,77 @@ repository URLs were pointed at the local retrying mirror (section 2). `scratchp
   job on A1's first push). So "A1 leaves the engine's resolved inputs as they were" is shown; "the engine's results are
   unchanged" is predicted, and A1's first CI run on the four existing jobs is what shows it.
 
-4. An Xcode project with no Mac - pending
+## 4. An Xcode project with no Mac
+
+Nobody can open Xcode, so whatever is committed is edited as text and judged only by what the runner does with it.
+Unsigned simulator builds only (the owner: "When a signed build is wanted (Recommended)", -153).
+
+**What the runner has** (Readme of `macos-26-arm64`, fetched today, section 2): Xcode 26.0.1 to 26.6, Ruby 3.4.12,
+CocoaPods 1.17.0, Homebrew 7.0.11. **Neither XcodeGen nor Tuist is on the image**: `grep -ciE "xcodegen|tuist"` over the
+Readme prints `0`. Either would be installed by the job.
+
+**What Kotlin documents for joining the framework to an Xcode project** ("direct integration",
+`https://kotlinlang.org/docs/multiplatform/multiplatform-direct-integration.html`, fetched today): a Run Script build
+phase, placed before Compile Sources, running `cd "<root>"` then `./gradlew :<module>:embedAndSignAppleFrameworkForXcode`;
+User Script Sandboxing disabled; "Based on dependency analysis" off for that phase. Every option below can use it, or
+can instead have the job run Gradle's `linkDebugFrameworkIosSimulatorArm64` first and point the Xcode build at the
+framework with `FRAMEWORK_SEARCH_PATHS` and `OTHER_LDFLAGS` (the second way is not on that page; inferred from how
+Xcode links a framework).
+
+**Option 1: a `project.pbxproj` written by hand and committed** (`iosApp/ForagerApp.xcodeproj/project.pbxproj`, plus
+Info.plist and the Swift entry).
+- Committed: an old-style plist of a few hundred lines with 24-hex-digit object IDs that cross-reference each other
+  (inferred size; a starting point could be copied from JetBrains' project wizard, which ships one, not fetched today).
+- Runs on the runner: `xcodebuild` only. Pinned: by itself; nothing to install.
+- Fragile: every later change (a file, a resource, a build setting, a capability for location in Phase F) is a
+  hand edit of cross-referenced IDs that nobody can check in Xcode; a wrong ID shows up only as an `xcodebuild` parse
+  or "missing file" error on the runner, about 10 minutes per try (section 5). Reviewers read a diff of IDs, not intent.
+
+**Option 2: a spec committed, the project generated on the runner by XcodeGen.**
+- Committed: `iosApp/project.yml` (readable YAML: target, sources, Info.plist keys, build settings, the Run Script
+  phase), the Swift entry, and a pinned install line. The generated `.xcodeproj` is not committed (or is uploaded as
+  an artifact so a reviewer can read it).
+- Runs on the runner: download the release zip, check it, `xcodegen generate --spec iosApp/project.yml`, then
+  `xcodebuild`.
+- Pinned how: XcodeGen's releases page (`https://github.com/yonaskolb/XcodeGen/releases`, fetched today) shows
+  **2.47.0 released 17 Nov 2026** (yesterday, "Latest") and **2.46.0 released 16 Jul 2026**. I downloaded
+  `https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip` today: 4,278,764 bytes, SHA-256
+  `4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806`, containing `xcodegen/bin/xcodegen`, which `file`
+  reports as a "Mach-O universal binary with 2 architectures" (x86_64 and arm64). It cannot run here (Linux). The
+  job would fetch that URL and refuse it unless size and SHA-256 match, as the repo's `tools/fetch-pinned.sh` already
+  does for every other fetched input. `brew install xcodegen` is not pinnable to a version and is not proposed.
+  The README (`https://github.com/yonaskolb/XcodeGen`, fetched today) asks for "the latest stable (non-beta) version of
+  Xcode"; the job selects 26.0.1, not the image's newest (26.6). Whether 2.46.0 generates a project 26.0.1 opens is
+  shown only on the runner.
+- Fragile: one more tool and a download from github.com per job; a new XcodeGen version is a pin change, by choice.
+  The spec is short and its errors are XcodeGen's validation messages, before `xcodebuild` runs (inferred from the tool's
+  purpose, not seen).
+
+**Option 3: a spec committed, the project generated on the runner by Tuist.**
+- Committed: `Project.swift` (a Swift manifest) and a pinned Tuist version.
+- Runs on the runner: install Tuist, `tuist generate` (it compiles the Swift manifest first), then `xcodebuild`.
+- Pinned how: Tuist's releases page (`https://github.com/tuist/tuist/releases`, fetched today) shows only
+  `4.219.0-canary.15` to `.21`, all "Pre-release", all 17 Nov; a stable tag was not on the first page and was not
+  looked for further. Whether `generate` needs an account was not stated on the page fetched.
+- Fragile: a larger tool, a fast-moving release stream, and a Swift manifest a no-Xcode team edits blind. Nothing it
+  does is needed by A1 that Option 2 does not do.
+
+**Option 4: no Xcode project; the `.app` bundle assembled by hand.**
+- Kotlin/Native can link an iOS executable itself (`binaries.executable()`), and a simulator `.app` is a directory
+  holding the executable and an `Info.plist` (plus an ad-hoc signature, which `codesign -s -` gives without an account).
+  The entry point would be Kotlin: a `main` calling `UIApplicationMain` with an app delegate class written in Kotlin.
+- Committed: Info.plist and a few Gradle tasks; nothing for Xcode. Runs on the runner: Gradle, `codesign`, `simctl`.
+- Fragile: off every path JetBrains documents for Compose Multiplatform, so each later need (Compose resources
+  bundled into the app, asset catalogs, launch screen, entitlements, and the signed build the owner will one day want)
+  is solved by this project alone. None of this was tried; all of it is inferred. Not recommended.
+
+**Recommendation (mine): Option 2, XcodeGen 2.46.0, pinned by URL, size and SHA-256 as above,** with the documented
+Run Script phase (`embedAndSignAppleFrameworkForXcode`) so the build follows the path Kotlin documents, and
+`ENABLE_USER_SCRIPT_SANDBOXING = NO`, `CODE_SIGNING_ALLOWED = NO` in the spec. Why 2.46.0 and not 2.47.0: 2.47.0 is one
+day old today; 2.46.0 has had four months. Either is a one-line pin change. The spec and the Swift entry (a SwiftUI
+`App` hosting `MainViewController()` through `UIViewControllerRepresentable`, about 20 lines, the wizard's shape; not
+fetched today) are the only iOS-side files A1 commits.
+
 5. Launch and screenshot on the simulator in CI - pending
 6. What needs the owner - pending
 7. Which decisions are technical - pending
