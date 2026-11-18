@@ -496,6 +496,24 @@ owner's other repository. A1 stays on 1.12.2 and 2.3.10, so nothing is asked now
 **Not the owner's, though it costs money elsewhere:** runner minutes. The survey cites GitHub: "Use of the standard
 GitHub-hosted runners is free and unlimited on public repositories" (survey `:294`, on `origin/research/app-port-survey`, not re-fetched today).
 
-7. Which decisions are technical - pending
+## 7. Which decisions are technical
+
+The planner's to make (the plan puts "the module layout" among them, plan `:170-175`). Each recommendation is mine.
+
+| # | Decision | Options | My recommendation, and why |
+|---|---|---|---|
+| T1 | Module layout | A to D, section 3 | **A**: `:app` beside `:brouter`, Xcode side in `iosApp/`, no `:domain` until B1, no `:app` → `:brouter` dependency until Phase C. `:brouter`'s resolved graphs were byte-identical with it in scratch. |
+| T2 | Versions | 1.12.2 on Kotlin 2.3.10; or 1.13 beta with Kotlin 2.4 | **1.12.2, Compose compiler plugin `version.ref = "kotlin"`, Kotlin and Gradle unchanged**, Compose `runtime`, `foundation`, `ui` only (no Material3 alpha). Compiled for both iOS targets in scratch. |
+| T3 | Google's Maven | unfiltered `google()`; filtered to `androidx.*`; none | **Filtered** (`content { includeGroupByRegex("androidx\\..*") }`). Required (section 2); the filter keeps every other group resolving from Maven Central as today. |
+| T4 | Xcode project | options 1 to 4, section 4 | **XcodeGen 2.46.0**, fetched by `tools/fetch-pinned.sh` with the size and SHA-256 in section 4; the documented `embedAndSignAppleFrameworkForXcode` Run Script phase. |
+| T5 | Where A1's CI lives | a job in `brouter.yml`; a new `app.yml` | **A new `.github/workflows/app.yml`**, path-filtered to `app/**`, `iosApp/**`, `gradle/**`, `settings.gradle.kts`, `build.gradle.kts`, `gradle.properties`, `tools/fetch-pinned.sh`, `tools/png-region.py` and itself. `brouter.yml` **left unchanged in A1**: A1 edits the root build, so the engine's four jobs must run on it and show their counts unchanged. Narrowing `brouter.yml` with `paths-ignore: app/**, iosApp/**` is worth doing after A1, as its own change (it is the owner-visible cost in O2). |
+| T6 | Runner, Xcode, simulator | `macos-latest` or `macos-26`; default Xcode or a named one; default device or a created one | **`macos-26`, Xcode 26.0.1, a device created by name (`iPhone 17`) on runtime iOS 26.2**, all as `brouter.yml` already does or as its log shows exist. |
+| T7 | Framework kind | static or dynamic | **Static**, `baseName = "ForagerApp"` (technical, not the display name). Nothing to embed or sign at run time. |
+| T8 | Caching `~/.konan` and `~/.gradle` | none; `actions/cache` | **None in A1.** The first runs should show the cold time and cannot be fooled by a stale cache; a pinned `actions/cache` can follow with numbers to justify it. |
+| T9 | How "it launched and drew" is shown | screenshot only; log line; pixel check; control | **All three of section 5**: a line printed from the draw phase, a pixel check of the colour, and the same check required to fail on the screenshot taken before install. The tolerance is set from the first run's observed colour, not guessed. |
+| T10 | iOS entry | SwiftUI `App` hosting `MainViewController()`; UIKit `AppDelegate`; Kotlin-only | **SwiftUI**, about 20 lines, the shape JetBrains' wizard uses (not fetched today). |
+| T11 | Deployment target | Compose Multiplatform's minimum, iOS 14 (compatibility page); something higher | **Open, and cheap to change before any release.** A2's map library will set a floor of its own (unknown today), so A1 takes a provisional value recorded as provisional; I would use 16.0, since the 1.12 and 1.13 changelogs carry fixes and workarounds for iOS 14, 15 and "iOS 16 or older" (`:327`, `:420`, `:616`, `:1264`), which a higher floor avoids. |
+| T12 | Kotlin package of the app code | `com.zynergylabs.forager.app`; `...ios` | **`com.zynergylabs.forager.app`**, Android's `namespace` (Forager `app/build.gradle.kts:242`), so code shared later keeps its package. Internal; not the bundle identifier (O1). |
+
 8. The order of work for A1 - pending
 9. What A1 will not show - pending
