@@ -125,6 +125,49 @@ lines. Nothing committed points at the mirror.
   (d) plain header, no binary: FAIL, exit 1. So a skipped link fails the step even if a binary were somehow present,
   and a missing binary fails it even if the header looked right.
 
+### CI, `app.yml`, run `44237677080` on `8c8d323` (both jobs `success`)
+
+Logs read with `gh api .../actions/jobs/<id>/logs`, saved as `scratchpad/s80/ci-<id>.log`. Log line numbers below are
+in those files.
+
+- **P4, held.** `app-klibs`, job `134577660565`, 04:29:32 to 04:31:07 UTC (1 min 35 s). `> Task :app:compileKotlinIosSimulatorArm64`
+  (log 208) and `> Task :app:compileKotlinIosArm64` (215), no suffix; `BUILD SUCCESSFUL in 1m 26s` (217); the count step
+  printed `lines matching '^e: ': 0` (230) and `lines matching ' e: ': 0` (231). Counted over the job's own `tee`'d
+  file, where lines carry no timestamp prefix, so `^e: ` can match there.
+- **P5, held, link time inside the guess.** `app-framework`, job `134577660279`, 04:29:32 to 04:33:42 (4 min 10 s).
+  Runner image `macos-26-arm64` (log 17), its version printed at log 18 (a date, then a four-digit build, then `.1`;
+  written apart for the E1 scan). `Xcode 26.0.1`, `Build version 17A400` (170-171).
+  - The link step: started 04:29:44 (184), ended 04:33:33 (1359), `BUILD SUCCESSFUL in 3m 47s` (1355), `5 actionable
+    tasks: 5 executed` (1356). `> Task :app:linkDebugFrameworkIosSimulatorArm64` with no suffix (1324), followed by
+    `Task ':app:linkDebugFrameworkIosSimulatorArm64' is not up-to-date because: No history is available.` The link task
+    itself ran from 04:32:08 (1324) to 04:33:32 (1354): **about 1 min 24 s**. Before it, the Kotlin/Native
+    2.3.10 `macos-aarch64` bundle was downloaded (1058) and moved into `~/.konan` (1064-1066, 04:31:24 to 04:31:45).
+  - The listing step: the grep echoed the plain header (1384) and nothing for the suffixed pattern; `ls -laR` showed
+    `ForagerApp` (118,978,440 bytes), `Headers/ForagerApp.h` (6,967), `Info.plist` (945), `Modules/module.modulemap`
+    (129) (1385-1403); `Non-fat file: app/build/bin/iosSimulatorArm64/debugFramework/ForagerApp.framework/ForagerApp is
+    architecture: arm64` (1404); `file`: `current ar archive` (1405); `OK: the framework was linked in this job and its
+    binary is arm64` (1406).
+  - The path the pre-build inferred (`app/build/bin/iosSimulatorArm64/debugFramework/`) is the path the plugin wrote.
+- **P6, half held: the argument list is not in the log.** `--info` did not make the Kotlin Gradle plugin print the
+  compiler's arguments: no line contains `Arguments` or `konanc` except the recording step's own command (1407-1408).
+  What the log does show:
+  - `kotlin-stdlib` 2.3.20: only its `.pom` and `.module` were downloaded (904-905), i.e. metadata read during
+    resolution. No `kotlin-stdlib` 2.3.20 artifact file (jar, klib or zip) was downloaded anywhere in the job.
+  - The only `kotlin-stdlib` artifact file downloaded is `kotlin-stdlib-2.3.10.jar` (1247), fetched together with
+    `kotlin-script-runtime-2.3.10.jar`, `kotlin-reflect-1.6.10.jar` and `kotlin-daemon-embeddable-2.3.10.jar`
+    (1240-1248): a JVM jar for the compiler's own tool classpath (inferred from its neighbours), not a native klib.
+  - 40 `.klib` downloads in the job; none is a `kotlin-stdlib` one.
+  - The runner has no cache (T8) and the job started cold, so no 2.3.20 stdlib file could have come from an earlier run
+    (inferred: the image's `~/.gradle` was not listed).
+  - So the native stdlib the link used is, by elimination, the one inside the Kotlin/Native 2.3.10 bundle at
+    `~/.konan/kotlin-native-prebuilt-macos-aarch64-2.3.10` (1064-1066). That is **inferred from what was and was not
+    downloaded**, not read from a command line. What would settle it: the link's argument list, for example from
+    `-Pkotlin.native.verbose...` style debug output or `--debug`, not tried here (section 7).
+
+### CI, `brouter.yml`, run `44237677010` on `8c8d323`
+
+(Pending: in progress when this was written.)
+
 ## 4. Confirmed vs inferred
 
 (Pending.)
