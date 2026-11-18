@@ -6,11 +6,13 @@ name: brouter
 on:
   push:
     # app/**, iosApp/** and app.yml added by RECORD -205 (the planner's decision): A1-1 showed the engine's counts
-    # unchanged with :app in the build (RECORD -204). The engine still runs on any change to the root build, the catalog,
-    # brouter/, tools/ or this file; a push runs this workflow unless every one of its changed files matches below.
+    # unchanged with :app in the build (RECORD -204). app/** narrowed to app/src/** by RECORD -210 (review 6 S4):
+    # app/build.gradle.kts is a script of the engine's own Gradle build (settings.gradle.kts), so a change to it runs the
+    # engine. The engine still runs on any change to the root build, the catalog, brouter/, tools/, app/ outside src/ or
+    # this file; a push runs this workflow unless every one of its changed files matches below.
     paths-ignore:
       - 'docs/**'
-      - 'app/**'
+      - 'app/src/**'
       - 'iosApp/**'
       - '.github/workflows/app.yml'
   pull_request:

@@ -152,3 +152,14 @@ screenshots are fully opaque per the review [not re-checked here].
   because `app-diagnose.yml` is not in `brouter.yml`'s ignore list and has its own push trigger, so an edit starts six
   macOS diagnostic machines and a full engine run. The comment sits in a printed, never-failing step after `set +e` and
   `set +o pipefail`, so it misleads a reader, not a check.
+
+### Step 4, S4: `brouter.yml` ignores `app/src/**`, not `app/**`
+- `.github/workflows/brouter.yml:15` (was `:13`): `'app/**'` is now `'app/src/**'`. The comment above it (`:8-12`) cites
+  RECORD -210 and review 6 S4 and adds `app/` outside `src/` to the list of what runs the engine. Nothing else in the
+  file changed (`git diff` of the commit: the comment and that one line). The parsed `paths-ignore` is `docs/**`,
+  `app/src/**`, `iosApp/**`, `.github/workflows/app.yml` [run: `yaml.safe_load`].
+- Tracked files under `app/` outside `src/` at this commit: `app/build.gradle.kts` only (`git ls-files app`), so this
+  change now runs the engine on that one file and on any build file added under `app/` later (review 6 S4 items 1 to 3).
+- RECORD -210 is cited because the brief says to; RECORD.md on `origin/main` has no entry past -199 that I could find,
+  so -205 to -210 are not checked by me.
+- This push starts one full `brouter` run. Not waited for; the planner reads it.
