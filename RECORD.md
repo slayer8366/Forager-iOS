@@ -8023,3 +8023,37 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **Next (the planner's).** An independent review of A1 by the reviewer. A pre-build report for A2, the map through MapLibre. And one question to the owner before A2 builds: whether a screenshot of a map may be uploaded as a CI artifact, given "no coordinates are committed".
 
 **Notes:** Written by the planner session by hand. Next free ID -210.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-210
+**Timestamp:** 2026-11-18T08:28:43Z
+**Continues:** -209, -208, -205
+**Title:** Review 6 (A1): the claims hold, nothing blocking, six should-fix items; corrections to -205, -208 and -209
+
+**The review.** Samphire Witness, read-only, at `app` `df49ee5`, range `382204f..df49ee5`. Report: `docs/reviews/2026-11-18-review-6-a1-app-shell.md` on `review/changed-comparisons`, remote head `642e593` (checked by the planner). The reviewer ran the pixel script and its self-test, mutated copies of both, twelve hand-made PNGs, Pillow as a second decoder on four downloaded screenshots, and read the CI logs. No Xcode, simulator or Gradle build was run.
+
+**Verdict, the reviewer's.** The six claims of A1 hold; the gate on `after.png` is sound: no way was found for it to pass without the app's colour on the screen of the device this run created, after the app this run built was launched on it. The revert check is sound. The engine's counts on `8c8d323` were read again and equal the baseline.
+
+**Should fix.**
+- **S1.** `tools/png-region.py` exits 1, the same code as an ordinary "colour not found", on three kinds of broken PNG (a file cut inside a chunk's CRC, a short header chunk, zero width or height), and the control reads exit 1 as its pass. Confirmed by the planner in the code: `struct.unpack` on short data at `:40` raises an exception `main` does not catch (`:164` catches two kinds only), and `:175-179` returns 1 when the band holds no pixels. Nothing wrong was measured in any real run; the risk is in what A2 adds.
+- **S2.** The self-test prints `37 cases, 0 failed` unchanged with three parts of the check broken: the per-channel tolerance (`and` made `or`), the threshold (made 0.5), and Paeth's tie rule (the test's encoder calls the tool's own function). Fewer refusals are tested than `app.yml` says. `--band` is not validated.
+- **S3.** "Xcode 26.0.1 has no simulator platform on the runners" (`app.yml:6-7`, and this record's -208 title) is stated without time or scope. See the corrections below.
+- **S4.** `brouter.yml` ignores `app/**`, which includes `app/build.gradle.kts`, a build script of the same Gradle build as the engine. A script there that fails to configure, or configures across projects, would reach the engine and skip its CI; the engine would go red at the next unrelated push. Confirmed by the planner in `brouter.yml:11-15`. The fix is to ignore `app/src/**`, not `app/**`.
+- **S5.** The edited `brouter.yml` had not completed a run, and the findings files do not say who cancelled five engine runs. See below.
+- **S6.** A1's closing list misses eight "not shown" items: the drawn-frame gate, the control's failing branch and the device check have never been seen red on a runner; the gate reads the middle 80% only, so edge-to-edge fill is not gated; tolerance 8 and threshold 0.98 have never been exercised (every real picture is all or nothing); the drawn-frame line shows the draw call ran, not the size drawn or that the frame was presented; `app.yml` runs only on pushes to `app`; the engine has not been tested under the app's Xcode.
+
+**Corrections to this record.**
+- **-208's title and reason.** Supported wording, from the reviewer and confirmed against the logs the planner had read: from 06:31 UTC on 2026-11-18, `xcodebuild` under 26.0.1 offered no iOS Simulator destination in every sample taken; it did in four app builds earlier that day, and why is not known; `simctl` still runs simulators under 26.0.1. The decision for 26.2 stands on its own evidence (destinations on six of six machines). Nothing shows 26.2 is safe from whatever changed for 26.0.1.
+- **-208 and -209 say Xcode 26.0.1 built green "three times".** It was four: the build inside the deliberately red run on `a393570` also succeeded.
+- **-205's choice of `app/**`** for the engine's `paths-ignore` was the planner's and was too wide (S4).
+- **S5, the cancelled runs.** The planner cancelled them and recorded each: 44246226126 and 44246914935 in -205; 44249298838 and 44249664086 in -206; 44249712556 in -208. The coders' findings do not carry this, and the reviewer did not read this record. The gap the reviewer names is real all the same: since `4b01c3b`, no engine run on `app` had finished.
+
+**The engine run on `bccce50`, 44257759907, read by the planner while still in progress.** `jvm` 262, 0 failures; `jvm-production` 3 with `OK: all 2 classes ran`; `ios-smoke`, simulator-checked under `Xcode 26.0.1`: 61 and 7 with `OK on the iOS simulator: all 25 classes ran`. 0 compile-error lines in each. `ios-memory` had not finished. So the engine's simulator job still passes under Xcode 26.0.1 after the hour at which the app's build stopped finding destinations.
+
+**Notes worth carrying to A2,** the reviewer's: decide what a map screenshot asserts before writing its check; use a fixture or a pinned download for tiles, not a live server in the gate; retire A1's colour gate on purpose and in words, given the rule on silencing tests; pin MapLibre's binary by content; the home screen was undrawn a minute after boot in one run and one launch took 85 s.
+
+**Next (the planner's).** A fix session for S1 to S4 and S6 once the A2 pre-build (session 86, same clone) has finished. `ios-memory` of 44257759907 to be read.
+
+**Notes:** Written by the planner session by hand. Next free ID -211.
