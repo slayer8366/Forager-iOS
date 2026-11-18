@@ -134,7 +134,7 @@ jobs:
       - name: The app bundle, its Info.plist and its executable
         run: |
           APP=build/xcode/Build/Products/Debug-iphonesimulator/ForagerApp.app
-          WANT_ID=com.zynergylabs.forager.ios.dex
+          WANT_ID=com.zynergylabs.forager.ios.dev
           WANT_NAME="Forager dev"
           fail=0
           if [ -d "$APP" ]; then ls -la "$APP"; else echo "FAIL: no directory $APP"; fail=1; fi
