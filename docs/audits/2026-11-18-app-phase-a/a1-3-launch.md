@@ -726,3 +726,60 @@ at a cost I have not measured.
 - Issue #13220 (named as the original of #13435) was not read.
 - The `brouter` run's result.
 - No device: every iOS statement here is simulator-checked, and most are not even that (destination listings only).
+
+## 16. Session 85 (A1-3b, the fix of RECORD -208, then the gate): predictions, written before the workflow changes
+
+Coder "Plumb Ledger", session 85. Base, confirmed at start: `git fetch origin`; branch `app`; `git rev-parse HEAD` and
+`git rev-parse origin/app` both printed `f0cd4662bedcb9d78f0fac5a59968a20419583a8`; `git status -sb` printed only
+`## app...origin/app`. Governing rules: Forager's `CLAUDE.md` (Testing: the revert-check rules), read today from
+`/home/user/Forager/CLAUDE.md`. Every iOS result is **simulator-checked**.
+
+The planner's decision (RECORD -208), as briefed: "Both macOS jobs of `app.yml`, `app-framework` and `app-bundle`, select
+Xcode 26.2 (`/Applications/Xcode_26.2.app`) instead of 26.0.1. `brouter.yml` stays on 26.0.1."
+
+### The workflow change (one commit, `app.yml` only)
+
+- Both "Select Xcode" steps: `sudo xcode-select -s /Applications/Xcode_26.2.app`, then `xcodebuild -version` into a file
+  and the log; the step **fails** unless the file's first line is exactly `Xcode 26.2` (the version the workflow names,
+  held in one variable per step). The step name and the header comment cite RECORD -208 and the reason in one line.
+- Nothing else changes: the diagnostic step before the build stays, the build, the bundle check, the control, the
+  launch, the gate and the printed steps are as they are.
+- `brouter.yml` ignores pushes that touch only `app.yml` (its `paths-ignore`, lines 11-15), so this push starts `app`
+  only.
+
+### Predictions for the confirming run (step 2)
+
+- **Both macOS jobs, the select step:** `Xcode 26.2` then `Build version ...` (the build number is not predicted; read
+  from the log), then the step's `OK:` line. Section 15's diagnostic printed `-version` for 26.2 on all six VMs, so a
+  missing `Xcode_26.2.app` is not expected.
+- **`app-framework`:** the link task runs (`> Task :app:linkDebugFrameworkIosSimulatorArm64` with no outcome suffix), the
+  listing shows `ForagerApp.framework` with its binary, `lipo -info` prints `Non-fat file: ... is architecture: arm64`
+  (the same shape as under 26.0.1), and the step's `OK:` line. The link uses the 26.2 SDK (inferred; the KGP passes the
+  selected Xcode's SDK path, which the `--info` arguments would show if printed).
+- **`app-bundle`, the diagnostic:** `simctl list runtimes` lists the same twelve runtimes (iOS 26.2, 26.4.1, 26.5 and the
+  others); `-showdestinations` now prints an "Available destinations" section with iOS Simulator entries, including
+  `{ platform:iOS Simulator, ... name:Any iOS Simulator Device }`; 34 such entries, as in section 15 for 26.2.
+- **`app-bundle`, the build:** `SDKROOT = iphonesimulator26.2`; Gradle's framework link runs inside `xcodebuild`
+  (`> Task :app:linkDebugFrameworkIosSimulatorArm64` plain header); `** BUILD SUCCEEDED **`; the bundle check's `OK:` line.
+- **The control:** `OK: the control: the colour check failed on before.png (exit 1)` (the home screen; iOS 26.2 runtime as
+  before, so the same shape as in A1-3a).
+- **The drawn-frame line:** `OK: the app printed 'A1: first frame drawn'`.
+- **The gate (never yet executed):** `png-region: common colour E0218A: 2530188 pixels`, `png-region: PASS:
+  2530188/2530188 pixels ... within 8 of E0218A`, then the step's `OK:` line. The pixel count assumes the same device
+  (iPhone 17) and screenshot size as A1-3a.
+- **A Kotlin warning naming Xcode:** predicted **absent** in both jobs. Section 15 found `maxTested = 16.0` in Kotlin's
+  source at `v2.3.10`, so 26.0.1 was already "above" it, and no warning appeared under 26.0.1; whatever kept it silent is
+  not tied to the Xcode's version number (inferred), so 26.2 should be equally silent. If it does appear, it is the
+  WARNING-severity "higher than the maximum known to the Kotlin Gradle Plugin" text, not a failure.
+- **The ICU linker warning:** predicted **unchanged**, `ld: warning: object file (...libicu.icudtl_dat.o) was built for
+  newer 'iOS-simulator' version (18.5) than being linked (16.0)` inside the `xcodebuild` log. It compares the object's
+  build version with the deployment target 16.0, neither of which the Xcode version changes. A newer linker may print
+  other warnings as well; none is predicted.
+
+### Predictions for the revert and the restore (step 3)
+
+As section 11 states them, unchanged: `A1_COLOUR` to `Color(0xFF1E6FD9)`; 0 lines under `^e: ` and ` e: `;
+`** BUILD SUCCEEDED **`; the control fails on `before.png`; the drawn-frame line appears; the gate fails with
+`png-region: common colour 1E6FD9: 2530188 pixels`, `png-region: FAIL: 0/2530188 pixels ... within 8 of E0218A`, then
+the step's `FAIL:` line naming exit 1. The restore edits the constant back; `git diff <step-2 commit> HEAD -- app iosApp
+.github tools` prints nothing; its run is green as in step 2.
