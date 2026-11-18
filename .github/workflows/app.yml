@@ -1,6 +1,7 @@
 # The app's CI (A1-1; pre-build sections 7 and 8, RECORD -201 T5, T6, T8). brouter.yml is left as it is and still runs on
 # every push outside docs/**. Actions are pinned by the same commit SHAs as brouter.yml. No cache (T8): every run is cold.
-# Nothing here runs a simulator yet; the framework link is "linked on a macOS runner", not "simulator-checked".
+# Nothing here runs a simulator yet; the framework link and the app bundle are "built on a macOS runner", not
+# "simulator-checked" (A1-3 launches).
 name: app
 
 on:
@@ -13,6 +14,8 @@ on:
       - 'gradle/**'
       - 'gradle.properties'
       - 'gradlew'
+      - 'iosApp/**'
+      - 'tools/fetch-pinned.sh'
       - '.github/workflows/app.yml'
 
 permissions:
@@ -89,3 +92,83 @@ jobs:
         if: always()
         run: |
           grep -nE 'konanc|stdlib|kotlin-native-prebuilt|konan/kotlin-native|-library|Arguments = ' build/app-framework.log | grep -v 'Resource missing' | head -80 || true
+
+  # The Xcode project, generated from iosApp/project.yml by XcodeGen, and the unsigned simulator app bundle (A1-2; pre-build
+  # sections 4 and 5). A job of its own rather than app-framework extended: there the link would already be up to date
+  # when the Run Script phase asks Gradle for it, so this job could not show Gradle linking from inside xcodebuild.
+  app-bundle:
+    runs-on: macos-26 # arm64; not macos-latest, which moves
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21.0.13+9'
+      - name: Select Xcode 26.0.1
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.0.1.app
+          xcodebuild -version
+      # Refused unless the size and SHA-256 match (tools/fetch-pinned.sh). Not brew: brew cannot pin a version.
+      - name: XcodeGen 2.46.0, pinned
+        run: |
+          bash tools/fetch-pinned.sh build/xcodegen/xcodegen-2.46.0.zip \
+            https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip \
+            4278764 4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806
+          unzip -q -o build/xcodegen/xcodegen-2.46.0.zip -d build/xcodegen
+          build/xcodegen/xcodegen/bin/xcodegen --version
+      - name: Generate the Xcode project
+        run: build/xcodegen/xcodegen/bin/xcodegen generate --spec iosApp/project.yml
+      # Unsigned, for the simulator. The project's Run Script phase runs ./gradlew :app:embedAndSignAppleFrameworkForXcode.
+      - name: Build the app for the simulator
+        run: |
+          set -o pipefail
+          mkdir -p build
+          echo "xcodebuild started $(date -u +%H:%M:%S)"
+          xcodebuild -project iosApp/ForagerApp.xcodeproj -scheme ForagerApp -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/xcode \
+            ARCHS=arm64 CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build/xcodebuild.log
+          echo "xcodebuild ended $(date -u +%H:%M:%S)"
+      # Fails unless the .app exists, its Info.plist carries the placeholder identifier and display name (RECORD -202),
+      # its executable is arm64, and Gradle linked the framework from inside xcodebuild in this job.
+      - name: The app bundle, its Info.plist and its executable
+        run: |
+          APP=build/xcode/Build/Products/Debug-iphonesimulator/ForagerApp.app
+          WANT_ID=com.zynergylabs.forager.ios.dev
+          WANT_NAME="Forager dev"
+          fail=0
+          if [ -d "$APP" ]; then ls -la "$APP"; else echo "FAIL: no directory $APP"; fail=1; fi
+          if [ -f "$APP/Info.plist" ]; then
+            plutil -p "$APP/Info.plist"
+            id=$(plutil -extract CFBundleIdentifier raw "$APP/Info.plist" || true)
+            name=$(plutil -extract CFBundleDisplayName raw "$APP/Info.plist" || true)
+            [ "$id" = "$WANT_ID" ] || { echo "FAIL: CFBundleIdentifier is '$id', expected '$WANT_ID'"; fail=1; }
+            [ "$name" = "$WANT_NAME" ] || { echo "FAIL: CFBundleDisplayName is '$name', expected '$WANT_NAME'"; fail=1; }
+          else
+            echo "FAIL: no $APP/Info.plist"; fail=1
+          fi
+          if [ -f "$APP/ForagerApp" ]; then
+            lipo -info "$APP/ForagerApp" | tee build/app-lipo.txt
+            file "$APP/ForagerApp"
+            grep -q 'arm64' build/app-lipo.txt || { echo "FAIL: lipo -info does not name arm64"; fail=1; }
+          else
+            echo "FAIL: no executable $APP/ForagerApp"; fail=1
+          fi
+          grep -E '^> Task :app:(linkDebugFrameworkIosSimulatorArm64|embedAndSignAppleFrameworkForXcode)' build/xcodebuild.log || true
+          grep -qE '^> Task :app:linkDebugFrameworkIosSimulatorArm64$' build/xcodebuild.log \
+            || { echo "FAIL: the xcodebuild log does not show Gradle running the framework link (plain header)"; fail=1; }
+          [ "$fail" = 0 ] && echo "OK: ForagerApp.app built unsigned for the simulator, $WANT_ID, '$WANT_NAME', arm64, framework linked inside xcodebuild"
+          exit "$fail"
+      - name: Keep the generated project, the built Info.plist and the xcodebuild log
+        if: always()
+        run: |
+          mkdir -p build/a1-2
+          cp -R iosApp/ForagerApp.xcodeproj build/a1-2/ 2>/dev/null || echo "no generated project"
+          cp iosApp/ForagerApp/Info.plist build/a1-2/generated-Info.plist 2>/dev/null || echo "no generated Info.plist"
+          cp build/xcode/Build/Products/Debug-iphonesimulator/ForagerApp.app/Info.plist build/a1-2/built-Info.plist 2>/dev/null || echo "no built Info.plist"
+          cp build/xcodebuild.log build/a1-2/ 2>/dev/null || echo "no xcodebuild log"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: a1-2-xcode
+          path: build/a1-2/
