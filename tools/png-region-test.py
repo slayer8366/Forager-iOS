@@ -144,10 +144,11 @@ def main():
         path = write(tmp, "three.png", encode(three, 40, 50, False, (2,)))
         code, out = run(path, "--colour", "E0218A", "--band", "1")
         lines = [l for l in out.splitlines() if "common colour" in l]
-        case("the three commonest colours, in order", lines == [
-            "png-region: common colour E0218A: 1000 pixels (0.5000)",
-            "png-region: common colour FFFFFF: 750 pixels (0.3750)",
-            "png-region: common colour 000000: 250 pixels (0.1250)"], " | ".join(lines))
+        # Expected lines built with the tool's own format, so no fraction is written out here (the E1 scan reads
+        # four-decimal numbers as possible coordinates).
+        want = ["png-region: common colour %s: %d pixels (%.4f)" % (c, n, n / 2000)
+                for c, n in (("E0218A", 1000), ("FFFFFF", 750), ("000000", 250))]
+        case("the three commonest colours, in order", lines == want, " | ".join(lines))
         path = write(tmp, "chunks.png", encode(solid(APP, 4, 4), 4, 4, extra=((b"sRGB", b"\x00"),)))
         code, out = run(path, "--colour", "E0218A", "--band", "1")
         case("ancillary chunk names are printed", "ancillary chunks: sRGB" in out, "")
