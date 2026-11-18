@@ -112,30 +112,134 @@ are not waited for, as the dispatch directs, and are left to the planner.
 
 ## 3. Results against predictions
 
-(Interim, written straight after the first green run so it survives a container restart; completed in step 4.)
-Run `44245585616` on `4b01c3b`: `app-bundle` (job `134603625845`), `app-framework` (`134603625613`) and `app-klibs`
-(`134603625970`) all `success`, first run, no iteration needed. Log saved as `scratchpad/s81/ci-134603625845.log`.
+Code commit `4b01c3b`. Scan (`scan.sh HEAD^ HEAD`) printed 0 after every commit of this step. Logs read with
+`gh api -X GET repos/slayer8366/Forager-iOS/actions/jobs/<id>/logs`, saved as `scratchpad/s81/ci-<id>.log`; line numbers
+below are in those files. The generated project and log were also read from the uploaded artifact `a1-2-xcode`
+(artifact `14401761642`, 21,228 bytes, log 1333 of job `134603625845`).
+
+**Iterations: none.** The first run of `app-bundle`, run `44245585616` on `4b01c3b`, job `134603625845`, was green. The
+Run Script phase is in use; the fallback (Gradle first, then `xcodebuild` with a search path) was not needed and is not
+in the workflow.
+
+- **Q1, held.** `xcodegen-2.46.0.zip: fetched from https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip, matches its pins (4278764 bytes, SHA-256 4d9e34b6...)` (log 185).
+- **Q2, held.** `Version: 2.46.0` (186); `Created project at /Users/runner/work/Forager-iOS/Forager-iOS/iosApp/ForagerApp.xcodeproj` (198).
+  The generated `project.pbxproj` (artifact) has `objectVersion = 77`, build phases in the order `Compile Kotlin Framework`
+  then `Sources`, `alwaysOutOfDate = 1` on the script phase (that is "Based on dependency analysis" off),
+  `CODE_SIGNING_ALLOWED = NO`, `ENABLE_USER_SCRIPT_SANDBOXING = NO`, `PRODUCT_MODULE_NAME = ForagerIOS` in both configs,
+  `IPHONEOS_DEPLOYMENT_TARGET = 16.0`; a shared scheme under `xcshareddata/xcschemes`.
+- **Q3, held.** `Xcode 26.0.1` (171), `Build version 17A400` (172). Runner image `macos-26-arm64` (17).
+- **Q4, held in part; one prediction wrong.** `** BUILD SUCCEEDED **` (1207). The phase `PhaseScriptExecution Compile\ Kotlin\ Framework`
+  starts at 05:38:28 (349); inside it, Gradle's `> Task :app:checkSandboxAndWriteProtection` (932),
+  `> Task :app:linkDebugFrameworkIosSimulatorArm64` with no suffix (970), `assembleDebugAppleFrameworkForXcodeIosSimulatorArm64` (971),
+  `symbolicLinkToAssembleDebugAppleFrameworkForXcodeIosSimulatorArm64` (973), and `BUILD SUCCESSFUL in 3m 55s` (990).
+  Swift compilation (`SwiftDriver ForagerApp`, 1002) comes after it. **Wrong:** I predicted
+  `> Task :app:embedAndSignAppleFrameworkForXcode` with no suffix; it printed `SKIPPED` (988). That is by design for a
+  static framework, in the very source I had cited (`AppleXcodeTasks.kt:270`, the embed task enabled only when
+  `!framework.isStatic`): I read it and did not carry it into the prediction. The work Xcode needs (link, assemble into
+  `app/build/xcode-frameworks/Debug/iphonesimulator26.0/`, symlink into `BUILT_PRODUCTS_DIR`) is done by the tasks it
+  depends on.
+  Every Gradle line in the `xcodebuild` log carries the timestamp 05:42:21: `xcodebuild` prints a script phase's output
+  when the phase ends, so the log cannot time Gradle's tasks individually (seen; the reason is inferred).
+- **Q5, held.** `plutil -p` printed `"CFBundleDisplayName" => "Forager dev"` (1256), `"CFBundleIdentifier" =>
+  "com.zynergylabs.forager.ios.dev"` (1258), and `"CFBundleExecutable" => "ForagerApp"`, `"CFBundleName" => "ForagerApp"`;
+  `Non-fat file: build/xcode/Build/Products/Debug-iphonesimulator/ForagerApp.app/ForagerApp is architecture: arm64` (1292);
+  `file`: `Mach-O 64-bit executable arm64` (1293); the OK line (1296).
+  **Not predicted:** the bundle (listing, 1240-1252) holds `ForagerApp` at **39,640 bytes**, `ForagerApp.debug.dylib` at
+  38,876,776 bytes, `__preview.dylib`, `compose-resources/`, `Info.plist`, `PkgInfo`. So in a Debug build Xcode 26 puts
+  the app's code in `ForagerApp.debug.dylib` and the `ForagerApp` executable is a small stub that loads it (inferred from
+  the names and sizes; the build setting behind it was not read). The check's arm64 test is true of the stub; it says
+  nothing about the dylib. Recorded for A1-3, which launches it.
+  **Not predicted, a warning:** `ld: warning: object file (.../ForagerApp.framework/ForagerApp[1523](libicu.icudtl_dat.o))
+  was built for newer 'iOS-simulator' version (18.5) than being linked (16.0)` (1166), the build's only `ld:` warning.
+  An object inside the Compose framework (ICU data) was built for iOS 18.5, above the provisional deployment target 16.0.
+  What it means at run time on an iOS 16 or 17 device is not known; it is an input to T11, not something this step
+  changes (see section 7).
+- **Q6, held, at the low end.** `xcodebuild` 05:38:14 to 05:42:37 (213, 1209): **4 min 23 s**, of which the Run Script
+  phase is 05:38:28 to 05:42:21, about 3 min 53 s (Gradle says 3 m 55 s). Job 05:37:58 to 05:42:47: **4 min 49 s**. On the
+  restore run (job `134607971756`) `xcodebuild` took 5 min 22 s (05:59:27 to 06:04:49) and the job 5 min 50 s; Gradle
+  said 4 m 49 s (990). The cold Kotlin/Native toolchain and dependencies were downloaded inside the phase (937-944).
+- **Q7, wrong.** I predicted a red run before green as more likely than not; there was none. The explicit-module guess
+  did not happen: `SwiftExplicitDependencyGeneratePcm` ran (1006 on) after the script phase and found the framework.
+- **Q8, held.** Run `44245585616`: `app-klibs` (job `134603625970`) `BUILD SUCCESSFUL in 1m 12s` (217), `^e: ` 0, ` e: ` 0
+  (230-231); `app-framework` (job `134603625613`) `BUILD SUCCESSFUL in 3m 28s` (1355), `Non-fat file: ... is architecture: arm64`
+  (1404), `OK: the framework was linked in this job and its binary is arm64` (1406).
 
 ## 4. Show the check can fail
 
-(Pending.)
+- **Red:** commit `a393570` changed only the check's `WANT_ID` to `com.zynergylabs.forager.ios.dex` (`git diff --stat`:
+  one file, one line). Run `44246226134`, `app-bundle` job `134605728656`, `failure`. The build itself ran and passed in
+  that job (`** BUILD SUCCEEDED **`, log 1207; step 7 "Build the app for the simulator" `success`), so the red is not a
+  build failure or a stale result. Step 8 failed with exactly one FAIL line, specific to this edit:
+  `FAIL: CFBundleIdentifier is 'com.zynergylabs.forager.ios.dev', expected 'com.zynergylabs.forager.ios.dex'` (1292),
+  then `##[error]Process completed with exit code 1.` (1297); no OK line. The upload steps still ran (`if: always()`).
+- **Restore:** commit `93f8d47`, by editing the one line back (not `git checkout`). `git diff 4b01c3b -- .github/workflows/app.yml iosApp`
+  printed nothing afterwards, so the forward change is intact. Run `44246914973`, `app-bundle` job `134607971756`,
+  `success`: `"CFBundleIdentifier" => "com.zynergylabs.forager.ios.dev"` (1258) and the OK line (1296).
+  In that run `app-klibs` was `success`; `app-framework` was still `queued` at 06:05 UTC when this was written and
+  was not waited for (it is unchanged since A1-1 and green in the two runs before).
+- Only the identifier branch was shown to fail. The display-name, arm64, missing-bundle and Gradle-header branches have
+  not been seen red (section 9).
 
 ## 5. Confirmed vs inferred
 
-(Pending.)
+Confirmed (log lines above):
+- XcodeGen 2.46.0, fetched and checked against its pins, generates a project from `iosApp/project.yml` that Xcode 26.0.1
+  builds, unsigned, for the simulator, on `macos-26`.
+- The documented Run Script phase runs Gradle inside `xcodebuild`, before Swift compilation, and links the framework
+  there; the fallback is not used.
+- The built bundle's Info.plist carries the placeholder identifier and display name; its `ForagerApp` executable is arm64.
+- The identifier check fails, with a message naming both values, when it expects a different identifier.
+
+Inferred:
+- That the Debug app's code lives in `ForagerApp.debug.dylib` and `ForagerApp` is a stub (names and sizes only).
+- That `xcodebuild` buffers a script phase's output until the phase ends (all Gradle lines share one timestamp).
+- That `UILaunchScreen` is what keeps the app from running letterboxed, and that Compose Multiplatform checks for
+  `CADisableMinimumFrameDurationOnPhone` (both carried from JetBrains' templates; neither seen at run time; A1-3 launches).
+- That `PRODUCT_MODULE_NAME` had to differ from the framework's module name: written before the first run from how Swift
+  resolves `import`, never tried the other way, so it is not shown that the default would have failed.
 
 ## 6. Could not determine
 
-(Pending.)
+- Whether the ICU object built for iOS 18.5 matters for an iOS 16 or 17 device: needs a run on such a simulator runtime
+  (or reading Compose's or Skiko's stated minimum), not done.
+- Whether the app launches and draws: A1-3.
+- The build setting that produces the debug dylib (likely `ENABLE_DEBUG_DYLIB`; not in the generated project, so an
+  Xcode default; not read).
 
-## 7. Premises in the brief or the pre-build that were wrong
+## 7. Premises in this brief or the pre-build that were wrong
 
-(Pending.)
+- Pre-build section 8 (A1-2) predicted "`file` on the executable says arm64" as evidence of the app: true, but the
+  executable in a Debug build is a 39,640-byte stub, so the check says less about the app's code than it reads as.
+- My own prediction Q4 (`embedAndSignAppleFrameworkForXcode` running plain) was wrong, against a source I had cited.
+- The deployment target 16.0 (RECORD -201 T11, "provisional") is below what one object in the Compose framework was
+  built for (18.5, log 1166). Not wrong as a provisional value, but T11 now has a data point it did not have.
+- The brief and pre-build give no `PRODUCT_MODULE_NAME`; with the framework named `ForagerApp` (T7) and the target named
+  `ForagerApp`, the default would make both Swift modules `ForagerApp` (see section 8).
+- The A1-1 comment that `--info` prints the link's arguments (`.github/workflows/app.yml:58`) is still in the file,
+  stale, as recorded in A1-1's section 6. Not changed here.
 
 ## 8. Decided beyond scope
 
-(Pending.)
+- **A new job `app-bundle`**, not `app-framework` extended (reason in section 1).
+- **`PRODUCT_MODULE_NAME: ForagerIOS`** for the app target, so `import ForagerApp` in Swift names the Kotlin framework,
+  not the app itself; product, bundle and executable stay `ForagerApp`. A one-line, internal setting; any other name works.
+- **Gate (d)**, the plain `linkDebugFrameworkIosSimulatorArm64` header in the `xcodebuild` log, beyond the brief's three.
+- **`--console=plain`** added to Kotlin's documented `./gradlew` line in the Run Script.
+- **`OTHER_LDFLAGS: -framework ForagerApp`** and the framework search path, which Kotlin's page does not mention, taken
+  from JetBrains' templates. Not shown to be needed (the symlink in `BUILT_PRODUCTS_DIR` might suffice alone).
+- **Info.plist keys** beyond identifier and name: `CFBundleShortVersionString "0.0.1"`, `CFBundleVersion "1"`,
+  `LSRequiresIPhoneOS`, `UILaunchScreen`, `UIApplicationSceneManifest`, `CADisableMinimumFrameDurationOnPhone`, three
+  orientations. The version strings are placeholders like the identity.
+- **Path triggers** gain `tools/fetch-pinned.sh` as well as `iosApp/**` (pre-build T5 lists both).
+- `iosApp/.gitignore` for the generated project and Info.plist.
 
 ## 9. Not checked
 
-(Pending.)
+- No launch, no simulator, no screenshot (A1-3). Nothing here is "simulator-checked".
+- The check's other branches red: display name, arm64, missing `.app`, missing Gradle header.
+- The `brouter.yml` runs on `4b01c3b`, `a393570` and `93f8d47` (this step changes no file they build; not waited for, as
+  the dispatch directs).
+- `app-framework` in run `44246914973` (queued when written).
+- The ICU deployment warning's consequences (section 6).
+- Release configuration, device (`iphoneos`) builds, signing: none attempted (owner: unsigned simulator builds only).
+- Swift was never compiled locally (Linux); every Swift and Xcode result is from the runner.
