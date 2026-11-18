@@ -170,6 +170,23 @@ def main():
         code, out = run(os.path.join(tmp, "missing.png"), "--colour", "E0218A")
         case("a missing file is refused with exit 2", code == 2, out.strip())
 
+        # 4. Review 6 S1: broken files that used to raise (a traceback, exit 1) or measure nothing (FAIL: 0/0, exit 1).
+        # Exit 1 is what the control in app.yml reads as "the check failed on the colour", so each must be exit 2.
+        short_ihdr = png_region.SIGNATURE + chunk(b"IHDR", struct.pack(">IIBBBB", 4, 4, 8, 2, 0, 0))  # 12 bytes
+        short_ihdr += chunk(b"IDAT", zlib.compress(b"\x00" * 13 * 4)) + chunk(b"IEND", b"")
+        for name, data, args in (
+            ("a file cut inside IEND's CRC", good[:-2], ()),
+            ("a 12-byte header chunk", short_ihdr, ()),
+            ("width 0", encode(solid(APP, 0, 4), 0, 4), ()),
+            ("height 0", encode([], 4, 0), ()),
+            ("a band that holds no pixels", encode(solid(APP, 4, 2), 4, 2), ("--band", "0.01")),
+        ):
+            path = write(tmp, "s1.png", data)
+            code, out = run(path, "--colour", "E0218A", *args)
+            lines = out.strip().splitlines()
+            case("%s is refused with exit 2" % name, code == 2 and "UNSUPPORTED" in out,
+                 "exit %d: %s" % (code, lines[-1] if lines else "(no output)"))
+
     failed = results.count(False)
     print("png-region-test: %d cases, %d failed" % (len(results), failed))
     return 1 if failed else 0

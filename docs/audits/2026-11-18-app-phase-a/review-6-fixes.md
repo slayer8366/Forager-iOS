@@ -60,3 +60,20 @@ No behaviour change. The `app` run on that push is green with the same gate and 
 - A finding about the brief, made before pushing: `brouter.yml` ignores only `docs/**`, `app/**`, `iosApp/**` and
   `app.yml` (`brouter.yml:11-15`), so the pushes of steps 1 and 2 (`tools/`) each start a full engine run as well,
   not only step 4. Three engine runs in all, none waited for.
+
+## 2. Results
+
+### Step 1, S1: a broken PNG exits 2
+- Red first, as predicted [run locally, Python 3 in this container]: the five new cases against the unfixed script
+  printed `png-region-test: 42 cases, 5 failed`. The cut CRC and the 12-byte header each exited 1 with
+  `struct.error: unpack requires a buffer of 4 bytes` and `... of 13 bytes`; their tracebacks name `line 40, in
+  read_chunks` and `line 104, in read_png` of the unfixed copy. Width 0, height 0 and the empty band each exited 1 with
+  `FAIL: 0/0 pixels`. Each failure is the one its case was built for; none belongs to another case.
+- The fix (`tools/png-region.py`, `main` and the new `check`): `main` returns 2 on `Unsupported` and `OSError` as before,
+  and now on any other exception, printing its type (`UNSUPPORTED or unreadable FILE: error: unpack requires ...`). A
+  band with no pixels raises `Unsupported("the band holds no pixels (width W, height H, band B)")`, so it exits 2 with the
+  `UNSUPPORTED` line. The module docstring's exit-status paragraph says so.
+- Green: `png-region-test: 42 cases, 0 failed`. The 37 earlier cases unchanged.
+- Decided: the catch-all covers the whole measurement, not only the read (the brief says "from reading"; the review says
+  "catch every exception in `main`"). Anything that raises after the read is equally a file not measured, and A2 will add
+  code after the read. Exit 1 now comes only from the `FAIL` verdict line.
