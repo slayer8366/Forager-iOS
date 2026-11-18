@@ -442,3 +442,100 @@ record; see "Decided beyond scope"), and this section's commit. No commit touche
   `f56cbe5`); not read further.
 - The A1 closing list is not written: A1's last gate has not run, so what A1 shows is still A1-3a's section 6 plus
   the two facts above.
+
+## 14. Session 84 (A1-3b diagnosis): predictions, written before the diagnostic workflow exists
+
+Coder "Plumb Ledger", session 84. This session gathers data on the `app-bundle` destination error of sections 12 and 13;
+it fixes nothing and changes no existing workflow step. Base, confirmed at start: `git fetch origin`; branch `app`;
+`git rev-parse --short HEAD` and `git rev-parse --short origin/app` both printed `5487223`; `git status --porcelain`
+printed nothing. Governing rules: Forager's `CLAUDE.md` (Bug fixing: two failed attempts on one symptom means more
+data, not a third hypothesis), read today from `/home/user/Forager/CLAUDE.md`. Every iOS result is **simulator-checked**.
+Image versions are written as "version V, build B", never joined (the E1 scan, section 13).
+
+### What was read before predicting (fetched today, 2026-11-18)
+
+- **The image's software list on runner-images `main`**,
+  https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md: it still names image
+  version 20261102, build 0473.1 (not 20261112). Xcode table: 26.6 (default, 17F113, also `/Applications/Xcode.app`),
+  26.5, 26.4.1 (symlink `Xcode_26.4.app`), 26.3, 26.2, 26.1.1 (symlink `Xcode_26.1.app`), 26.0.1 (17A400, symlink
+  `Xcode_26.0.app`). Installed simulators: iOS 26.2, 26.4 and 26.5 only (likewise tvOS, watchOS, visionOS). SDK
+  table: the 26.0 SDKs belong to Xcode 26.0.1, 26.1 to 26.1.1, 26.2 to 26.2 and 26.3, 26.4 to 26.4.1, 26.5 to 26.5
+  and 26.6 (as summarised by the fetch; not read cell by cell).
+- **The image's toolset on runner-images `main`**,
+  https://raw.githubusercontent.com/actions/runner-images/main/images/macos/toolsets/toolset-26.json: per Xcode,
+  `install_runtimes` is `"none"` for 26.6, 26.3, 26.1.1 and **26.0.1**; `"default"` for 26.5 and 26.4.1; and for
+  26.2 `iOS: ["26.2"]` plus the default watchOS, tvOS, visionOS. Runtimes are installed by `xcodebuild
+  -downloadPlatform <platform> [-buildVersion <v>]` (`images/macos/scripts/helpers/Xcode.Installer.psm1:209,216`, same
+  date). So no image of this toolset installs the iOS 26.0 platform that Xcode 26.0.1 names as missing.
+- **runner-images policy**, https://github.com/actions/runner-images/blob/main/README.md line 136: "only three
+  major.minor versions of platform tools and simulator runtimes will be available for installed Xcode".
+- **The two release notes.** https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261112.0504
+  (released 13 Nov 02:12): its Added, Updated and Deleted lists name no Xcode, simulator runtime or Apple SDK (only
+  the `Xcodes` utility, 2.1.0 to 2.2.0, OpenSSL, .NET, browsers and the like).
+  https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261102.0473 (03 Nov) likewise names none.
+- **Issue #13570**, https://github.com/actions/runner-images/issues/13570, "[macOS] Deprecation of simulator runtimes
+  for Xcode 26.0.1 on macOS 15 on January 26th" (closed 2026-02-18). It is about **macOS 15**, not macos-26; it gives
+  the workaround `xcodebuild -downloadPlatform <iOS|...> -buildVersion <v>`, and a user (not a maintainer) reports the
+  download as about 10 GB and 14 minutes.
+- **Apple**, "Downloading and installing additional Xcode components" (read from its JSON form,
+  https://developer.apple.com/tutorials/data/documentation/xcode/downloading-and-installing-additional-xcode-components.json):
+  platform support and simulator runtimes are optional components; command line `xcodebuild -downloadPlatform
+  <iOS|watchOS|tvOS|visionOS> [-exportPath <p> -buildVersion <v> -architectureVariant <universal|arm64>]`,
+  `-downloadAllPlatforms`, `-importPlatform <dmg>`; newer components found by `-checkForNewerComponents` are stored in
+  `~/Library/Developer/Packages/`. **The page names no on-disk location for installed runtimes or platform support.**
+  So the diagnostic does not guess one: it prints `xcrun simctl runtime list -v` (which prints each runtime's own
+  path), `xcrun simctl runtime match list -v` (which SDK maps to which runtime), and lists the directories those
+  outputs and common practice point at (`/Library/Developer/CoreSimulator/Images`, `/Library/Developer/CoreSimulator/Volumes`,
+  `/Library/Developer/CoreSimulator/Cryptex`, `/System/Library/AssetsV2/com_apple_MobileAsset_*Simulator*`,
+  `~/Library/Developer/Packages`, `~/Library/Developer/CoreSimulator`, each Xcode's `Contents/Developer/Platforms`).
+  Which of these exist is a result, not a premise.
+
+### The diagnostic's design
+
+- `.github/workflows/app-diagnose.yml`, new; nothing else in `.github/` changes. `workflow_dispatch`, and push to `app`
+  when that file changes. `permissions: contents: read`. `runs-on: macos-26`, a matrix of 6 replicas
+  (`fail-fast: false`) so 6 separate VMs are sampled in one run, 25-minute timeout. Actions pinned by the SHAs
+  `app.yml` uses.
+- Each replica, every command ending `|| echo`: image (`$ImageOS`, `$ImageVersion`, and the job header's own lines),
+  a machine identifier (the first 12 hex of the SHA-256 of `hostname` and of the IOPlatformUUID; neither printed
+  raw), `sysctl hw.model`, `sw_vers`, `date -u`; `ls -d /Applications/Xcode*.app` and `xcode-select -p`; CoreSimulator's
+  version; `xcrun simctl list runtimes`, `xcrun simctl help runtime`, `xcrun simctl runtime list -v`, `xcrun simctl
+  runtime match list -v`; the directory listings above; XcodeGen fetched with `tools/fetch-pinned.sh` exactly as
+  `app-bundle` does and `xcodegen generate`; then **for each installed Xcode** (real directories, symlinks resolved and
+  de-duplicated), with `DEVELOPER_DIR=<app>/Contents/Developer` and no `xcode-select -s`: `xcodebuild -version`,
+  `-showsdks`, `-showdestinations` for the scheme, and one summary line ("Available destinations" section yes/no;
+  any `platform:iOS Simulator` entry in it yes/no; the first `error:` text). **Xcode 26.0.1 runs first and again last**,
+  so that if a newer Xcode's first `xcodebuild` changes CoreSimulator's state, the before/after pair for 26.0.1 shows
+  it (an order effect is a possibility, not a hypothesis I hold). Nothing is built. Everything is uploaded as one
+  artifact per replica.
+- Side effect, recorded in advance: `brouter.yml` runs on any push whose changed files are not all in its
+  `paths-ignore` (`docs/**`, `app/**`, `iosApp/**`, `app.yml`), so the push adding `app-diagnose.yml` will also start
+  a `brouter` run. `brouter.yml` may not be edited, so this is accepted, not avoided.
+
+### Predictions
+
+1. **Image**: every replica `macos-26-arm64`, version 20261112, build 0504.1 (the release has been out since 13 Nov),
+   macOS 26.7.2 (25G332). Possibly an odd replica on version 20261102, build 0473.1 if the rollout is mixed, as
+   job 134628156762 was at 06:40 today.
+2. **Machine identifiers**: all 6 different (each job is a fresh VM). That makes "the same machine" untestable from
+   inside a job; what the matrix samples is VMs of one image, not physical hosts.
+3. **Xcodes**: `Xcode_26.0.1`, `26.1.1`, `26.2`, `26.3`, `26.4.1`, `26.5`, `26.6` plus the symlinks `Xcode_26.0`,
+   `26.1`, `26.4`, `26.5.0`-style aliases and `Xcode.app`; `xcode-select -p` the default, Xcode 26.6 (or its
+   `Xcode.app` alias).
+4. **Runtimes**: `simctl list runtimes` lists iOS 26.2, 26.4, 26.5 and the tvOS, watchOS, visionOS 26.2/26.4/26.5, as
+   in jobs 134636660132 and 134639110582. No iOS 26.0 or 26.1 runtime on any replica.
+5. **Per Xcode `-showdestinations`** (the core prediction; inferred from the toolset, not seen):
+   - **26.0.1**: no "Available destinations" section, the ineligible "Any iOS Device, error:iOS 26.0 is not
+     installed" line, no `platform:iOS Simulator` entry, on **every** replica, first and last pass alike.
+   - **26.1.1**: the same shape, naming iOS 26.1.
+   - **26.2 and 26.3** (iOS SDK 26.2; runtime 26.2 installed): an available section with `platform:iOS Simulator`
+     entries.
+   - **26.4.1** (SDK 26.4; runtime 26.4): available, with iOS Simulator entries.
+   - **26.5 and 26.6** (SDK 26.5; runtime 26.5): available, with iOS Simulator entries.
+6. **What this prediction cannot explain**: two `app-bundle` builds under Xcode 26.0.1 went green on version
+   20261112, build 0504.1 earlier today (jobs 134603625845 and 134607971756, section 12's table). If prediction 5
+   holds on every replica, those greens stay unexplained by this data. If **any** replica shows an available iOS
+   Simulator destination under 26.0.1, the finding is that VMs of one image differ, and the per-replica outputs
+   (runtime match list, directory listings) are where the difference would be read.
+7. If every replica shows an available iOS Simulator destination under 26.0.1, the failure has gone away for now, and
+   I say so and rerun nothing.
