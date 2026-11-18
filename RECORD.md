@@ -7710,3 +7710,26 @@ committed test; what changed in row 675's 4 cells beyond node ids.
 **Also open.** PR #8 (record entries -190 to -196; this entry joins it when pushed) waits for the owner to name it.
 
 **Notes:** Written by the planner session by hand. Next free ID -198.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-198
+**Timestamp:** 2026-11-18T03:31:35Z
+**Continues:** -197, -196
+**Title:** Three rulings from the owner; and a correction: the `publish-tiles` copy that refused on the push is `brouter-port`'s, not `main`'s
+
+**The rulings, verbatim.** To the three items put to them after -197, the owner answered: "1 merge pr 8", "2 update it", "3 begin map-first work".
+
+**On 1.** PR #8 is merged after this entry is pushed, so it carries -190 to -198, with a merge commit.
+
+**On 2, a correction to the planner's own account before acting.** -197 and the message to the owner said the old `publish-tiles` workflow "lives on `main`" and that moving its pin "changes one file on `main`". That was wrong for the run that went red. Run 44071829688 has event `push`, branch `brouter-port`, and GitHub runs a push-triggered workflow from the pushed branch's own tree. `publish-tiles.yml` exists on `main`, `brouter-port` and `brouter-port-5b`, and the three copies are identical today (`git diff --stat origin/main origin/brouter-port` over the file prints nothing). So:
+- the red on a push to `brouter-port` stops only if `brouter-port`'s copy changes;
+- `main`'s copy decides only what a release run started by the owner executes.
+The owner's "update it" answered a question that named `main` only. Changing `brouter-port`'s copy is a push to `brouter-port`, which needs its own word, so it is put to the owner again with the first option being what they said, applied to every copy. Nothing was changed.
+
+**What the update would be (read, not yet done).** `TOOLS_SHA` from `5d00761` to `4dc6c23`, the last commit on `brouter-port` that touches the guarded tool paths, and the same pin `publish-cos-tiles.yml` uses. Between the two pins the guarded paths differ in four files: three new cosine-tile files that `capture.sh` does not run, and `tools/fetch-tiles.sh`, whose diff is comment lines only (15 changed, read in full). Not known: whether the dry run that then runs on the push passes today, since it captures brouter.de's live tiles.
+
+**On 3.** The map-first phase of `docs/plans/2026-11-12-app-port-plan.md` begins.
+
+**Notes:** Written by the planner session by hand. Next free ID -199.
