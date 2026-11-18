@@ -310,9 +310,32 @@ runner can link a framework, run `iosSimulatorArm64Test` or build the app), and 
   fp sequences differing: 0"). The msun and `CheapRuler` classes are among the 109 identical ones. This is the JVM only;
   it says nothing of Kotlin/Native's LLVM output.
 
-**The JVM tests, base against `k24`:** both copies run `./gradlew --no-daemon :brouter:jvmTest`, as `brouter.yml`'s `jvm`
-job does, fetching and checking the oracle and tiles through the build's own tasks. Results are written below when both
-runs finish (this section is pushed now because the container restarts often).
+**The JVM tests, base against `k24`** **[C: `s88/base-jvm.log`, `s88/k24-jvm.log`; XML copied to `s88/results/`]**. Both
+copies ran `./gradlew --no-daemon :brouter:jvmTest`, as `brouter.yml`'s `jvm` job does, at the same time on this
+container, with the oracle, msun reference and tiles fetched and checked by the build's own tasks.
+`BROUTER_PRODUCTION_RECORD` was not set, so the two production-record classes ran their "not run" branch, as in the `jvm`
+job.
+
+| | base (2.3.10) | `k24` (2.4.20) |
+|---|---|---|
+| Result | `BUILD SUCCESSFUL in 1h 7m 46s` | `BUILD SUCCESSFUL in 1h 8m 11s` |
+| JUnit totals (116 XML files each) | 262 tests, 0 failures, 0 errors, 0 skipped | 262 tests, 0 failures, 0 errors, 0 skipped |
+| `e:` lines | 0 | 0 |
+| The compiler that built what ran | `@Metadata mv=[2,3,0]` on main and test classes (`javap -v`, `CheapRuler`, `OraclePinTest`) | `mv=[2,4,0]` on both; `jvmTestRuntimeClasspath` resolves `kotlin-stdlib` to 2.4.20 |
+
+- **Test by test** (a scratch script, `s88/tools/compare.py`, reading every XML): the same 262 test cases in both, 0 only
+  in one run, **0 verdict differences** **[C]**.
+- **Standard output, all 116 files:** after replacing the copy's folder name (`s88/base/`, `s88/k24/`) with one token,
+  **112 files are byte-identical** and 4 differ. **Every differing token in those 4 is a measured time or a clock count:**
+  `GraphDecodeTest` (a decode time in ms after each tile's digest; the digests themselves are equal),
+  `RoutingEngineMemoryTest` ("the port's runs ... ms"), `RoutingEngineStopTest` (FK9's clock reads per case, which count
+  how often the clock was read in a fixed 51 ms), and `HintsFormatsLogicTest` (each group's seconds, and "all routed;
+  ... s") **[C: a token-level diff of each differing line]**. Every route count, equal/differ count and digest printed in
+  those lines is the same.
+- **What this shows:** on the JVM, with this container's JDK, the 2.4.20 build of the port gives the same verdicts and the
+  same printed results as the 2.3.10 build on every test `jvm` runs. It agrees with the bytecode comparison above (no
+  floating-point instruction changed). **What it does not show:** CI's Temurin JDK, the production record's lines (not
+  run here), and anything on Kotlin/Native.
 
 ## 4. The order and the coupling
 
@@ -544,6 +567,8 @@ counts and lines.
 - Kotlin/Native 2.3.10 to 2.4.20: LLVM 19 to 21, toolchain Xcode 26.0.1 to 26.4, iOS minimum 14.0 to 15.0,
   `minimalXcodeVersion` 12.5 in both; KGP 2.4.20's `maxTested` Xcode is 26.4.
 - JVM bytecode of `:brouter`'s 147 main classes, 2.3.10 against 2.4.20 (`javap -c -p`, section 3e).
+- `:brouter:jvmTest` in scratch at 2.3.10 and at 2.4.20: 262 tests each, 0 failures, the same verdicts, and printed
+  output equal except durations and clock counts (section 3e).
 - Compose 1.12.2 is the newest stable; 1.13.0-rc01 is the newest published (today); 1.12.2's klibs were built by 2.3.20.
 - `macos-26` carries Xcode 26.4.1.
 
