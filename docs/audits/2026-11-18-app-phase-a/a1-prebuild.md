@@ -360,7 +360,88 @@ day old today; 2.46.0 has had four months. Either is a one-line pin change. The 
 `App` hosting `MainViewController()` through `UIViewControllerRepresentable`, about 20 lines, the wizard's shape; not
 fetched today) are the only iOS-side files A1 commits.
 
-5. Launch and screenshot on the simulator in CI - pending
+## 5. Launch and screenshot on the simulator in CI
+
+Nothing in this section has run on a Mac. The command names are Apple's (`xcodebuild`, `xcrun simctl`); their exact
+flags are written from the tools' usage as I know it and were **not** checked against a `--help` on a runner today
+(none is reachable from here), so the first dispatch prints `xcrun simctl help` for each subcommand it uses before
+relying on it. Every result is "simulator-checked".
+
+**The job, in order** (a new workflow file, section 7, decision T5; same runner label and Xcode as `ios-smoke`):
+```
+# 0. checkout, setup-java (Temurin 21.0.13+9, as brouter.yml), select Xcode 26.0.1, print xcodebuild -version
+sudo xcode-select -s /Applications/Xcode_26.0.1.app
+# 1. XcodeGen, pinned (section 4); refuse unless size and SHA-256 match
+bash tools/fetch-pinned.sh build/xcodegen/xcodegen-2.46.0.zip \
+  https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip 4278764 <the SHA-256 in section 4>
+unzip -q -o build/xcodegen/xcodegen-2.46.0.zip -d build/xcodegen
+build/xcodegen/xcodegen/bin/xcodegen generate --spec iosApp/project.yml
+# 2. build the app for the simulator, unsigned; the Run Script phase runs :app:embedAndSignAppleFrameworkForXcode
+xcodebuild -project iosApp/ForagerApp.xcodeproj -scheme ForagerApp -configuration Debug \
+  -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/xcode \
+  ARCHS=arm64 CODE_SIGNING_ALLOWED=NO build
+APP=build/xcode/Build/Products/Debug-iphonesimulator/ForagerApp.app
+# 3. a device of our own, named runtime and device type, so the image's defaults cannot move it
+UDID=$(xcrun simctl create a1-sim "iPhone 17" com.apple.CoreSimulator.SimRuntime.iOS-26-2)
+xcrun simctl boot "$UDID"; xcrun simctl bootstatus "$UDID" -b
+# 4. the control: a screenshot before the app is installed must FAIL the colour check
+xcrun simctl io "$UDID" screenshot build/a1/before.png
+# 5. install, launch with the app's stdout captured, wait for the app's own line (bounded)
+xcrun simctl install "$UDID" "$APP"
+xcrun simctl launch --terminate-running-process --stdout=build/a1/app-stdout.txt "$UDID" <bundle id>
+timeout 120 bash -c 'until grep -q "^A1: first frame drawn" build/a1/app-stdout.txt; do sleep 1; done'
+# 6. the screenshot, and the checks that can fail
+xcrun simctl io "$UDID" screenshot build/a1/after.png
+```
+`tools/fetch-pinned.sh` takes `<dest> <url> <size> <sha256>` (its usage line, `tools/fetch-pinned.sh:6`). I ran it
+here today on the zip downloaded in section 4, through a `file://` URL: with the pins above it printed "matches its
+pins (4278764 bytes, SHA-256 4d9e34b6...6806)" and exited 0; with a SHA-256 of zeros it printed "REFUSED ... has
+SHA-256 4d9e34b6...6806, pinned 0000..." and exited 1, leaving no file at the destination. The runtime
+identifier `com.apple.CoreSimulator.SimRuntime.iOS-26-2` and the device name `iPhone 17` are both printed
+in the `ios-smoke` log of section 1 (log 229 and 246), so they exist on today's image.
+
+**How the check is made able to fail.** A screenshot alone is a check that cannot fail: a crashed app leaves the home
+screen, and a blank app leaves a white or black window, and both are valid PNGs. Three things, each of which turns red
+on its own:
+1. **A line the app logs only after drawing.** `App()` draws a full-screen `Box` in one fixed colour and, from the
+   draw phase (a `drawBehind` on that box, guarded so it prints once), prints `A1: first frame drawn`. Printing from
+   the draw phase, not from composition, means the line exists only if Compose reached the GPU-backed draw (inferred
+   from Compose's phases; the A1 run shows whether stdout from `println` in a Kotlin/Native app reaches
+   `simctl launch --stdout`, which is **not verified**; if it does not, `NSLog` through `platform.Foundation` and
+   `xcrun simctl spawn "$UDID" log show --predicate ...` is the fallback). Step 5 fails if the line does not come within
+   120 s.
+2. **The colour, read from the PNG's pixels.** A check reads `after.png` and requires that at least 98 % of the pixels
+   in the middle 80 % of the screen's height (clear of the status bar and the home indicator) are within a tolerance of
+   the app's colour, and prints the three commonest colours it saw. I wrote it as a prototype in scratch
+   (`scratchpad/s79/png/png_region.py`, stdlib `zlib` only, 8-bit RGB and RGBA, no interlace) and ran it today on
+   synthetic PNGs: a one-colour image passes (`24960/24960`); a white one fails (`0/24960`, exit 1); a half-coloured one
+   fails (`0.5000`, exit 1); a colour two units off passes at tolerance 4 and fails at tolerance 1. On a 1206 × 2622
+   PNG saved by Pillow 12.3.0 with filter types 1, 2 and 4 in its rows, it read `0.9998` and passed, and a grey "home
+   screen" of the same size failed. Filter type 3 was not exercised, and 1206 × 2622 is a test size of my choosing,
+   not a measured screenshot size. **The colour**: a saturated, non-system colour, chosen so neither the home screen nor
+   a blank window can match it. **The tolerance is not guessed**: a simulator screenshot may be tagged with a display
+   colour profile and its stored values may differ from the sRGB value the app asked for (inferred, not seen), so the
+   first run prints the commonest colour it read, and the tolerance is set from that one observed value, recorded with
+   it.
+3. **The control in the same job.** Step 4's `before.png` (the home screen, no app) is run through the same check and
+   the job fails unless that check fails. So a checker that passes everything turns the job red, every run.
+Also printed, not gating: `xcrun simctl listapps` (or `get_app_container`) showing the bundle installed, and whether a
+crash report for the app's process exists under the runner's `~/Library/Logs/DiagnosticReports`.
+
+**Where the screenshot goes.** `actions/upload-artifact`, pinned to the SHA `brouter.yml` already uses
+(`cf430e030ddbb5b0abf93d22962f4752f3646cd9`, v7.0.2), artifact `a1-simulator`, holding `before.png`, `after.png`,
+`app-stdout.txt` and the generated `.xcodeproj` (so the project nobody can open can at least be read), with `if:
+always()`. Nothing there is committed. E1 ("no coordinates are committed") is not touched by an empty app's
+screenshot; it will be by A2's map screenshots, which show places (flagged in section 6).
+
+**Expected job time** (inferred from section 1's measured steps, not measured on an app): checkout, Java and Xcode
+select about 25 s; XcodeGen fetch and generate under 10 s; Kotlin/Native download about 70 s, plus compiling and linking
+Compose Multiplatform into a framework, not measured (the Linux klib compile alone took 1 min 19 s in scratch, and
+linking with Skia is the slow part; my estimate 2 to 5 min); the Xcode build of a 20-line Swift app about 1 min;
+`simctl create`, `boot` and `bootstatus` 30 to 90 s; install, launch and screenshots under 30 s. **About 6 to 10
+minutes in all**, timeout proposed at 30. A cache of `~/.konan` and `~/.gradle` would cut the first two items; it is a
+decision (section 7), not a default.
+
 6. What needs the owner - pending
 7. Which decisions are technical - pending
 8. The order of work for A1 - pending
