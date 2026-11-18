@@ -7469,3 +7469,267 @@ in scratch.
 seen failing first, and the per-row counts re-measured on the release's bytes.
 
 **Notes:** Written by the planner session by hand. Next free ID -190.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-190
+**Timestamp:** 2026-11-17T00:16:18Z
+**Continues:** 2026-10-28-180, 2026-10-28-189
+**Title:** PR #7 merged into `main` on the owner's word; the record on `main` now runs to -189
+
+**The owner's word, verbatim:** "Merge PR #7".
+
+**Done by the planner:** PR #7 (`ccr-8ee6e614-32enzt` at `4dff579` into `main` at `e205d96`) merged as a merge
+commit, `cf1ce0b`, with the head held to `4dff579` so nothing unseen could ride in. Checked before merging: 27
+commits, two files (`RECORD.md` and `docs/audits/2026-11-13-brouter-port-closing-list.md`), 1,373 lines added, a clean
+merge, the widened scan over the PR's range 0. -180 had said 16 commits and -181 19; the PR grew with each entry
+pushed to its branch, and what merged is -164 to -189.
+
+**The session branch** was fast-forwarded to `cf1ce0b` and carries on from `main`; this entry and later ones are on
+it and not yet on `main`.
+
+**In flight when this was written:** session 75 (pinning the release `brouter-cos-tiles-2026-11-17`), with
+uncommitted work of its own in its clone, left to it.
+
+**Notes:** Written by the planner session by hand. Next free ID -191.
+
+---
+
+**Kind:** outcome
+**ID:** 2026-10-28-191
+**Timestamp:** 2026-11-17T03:06:29Z
+**Continues:** 2026-10-28-189, 2026-10-28-190
+**Title:** Sessions 75 and 75b: the release is pinned and its eight row counts hold by the port's own reader; the rebuilt-bytes question of -189 is answered; two outside CI failures
+
+**Two more container restarts.** Session 75 was cut off waiting on its red run; session 75b, sent to finish it, was
+cut off waiting on the green run. Both had pushed their work. The last step, reading the green run, was done by the
+planner. Neither session's final report was delivered.
+
+**On `brouter-port-5b`, head `cd9d1c5` (`git ls-remote`; tree clean; six commits on `27cb05a`, project trailer on
+each, each 0 on the widened scan; read by the planner).** Added: `tools/tile-pins-cos.tsv` (the release's pin file),
+`jvmTest/.../tiles/CosTilePinsTest.kt` (3 tests) and `CosRowCountsTest.kt` (1 test), the findings
+`docs/audits/2026-11-13-brouter-port-closing/s75-cos-tiles-pins.md`. Changed: `brouter/build.gradle.kts`
+(`fetchCosTiles`), `TestTiles.kt` (`cosRows`), `.github/workflows/brouter.yml` (15 lines, the simulator jobs told the
+new folder; no simulator test added). No engine class changed.
+
+**Red first, as predicted:** run 43986425514 on `bd2801d`, which pins `E145_S45.rd5` one byte too large in the test:
+`jvm` `failure`, 255 tests, 2 failures, both `CosTilePinsTest`, "E145_S45.rd5: bytes expected:<6316105> but
+was:<6316104>"; the other three jobs `success` (read by the planner). The fix, `22092e7`, changes that one number.
+
+**Green, run 43995165286 on `22092e7`, attempt 2 (read by the planner):** four jobs `success`, 0 compile-error lines
+in each log (both forms counted).
+- `jvm`: 255 tests, 0 failures (was 251). `CosTilePinsTest` 3 of 3, among them `existingSegmentsFolderIsUnchanged`;
+  `CosRowCountsTest` 1 of 1, printing for each row "port reader N | release N": 5,159; 16,239; 1,124; 2,523; 7,788;
+  96,104; 10,205; 2,461, each pair equal. `fetchCosTiles` ran.
+- `ios-smoke`: 60 and 7, "OK on the iOS simulator: all 24 classes ran"; `ios-memory`: 3, 1, 1 with both gate lines;
+  `jvm-production`: 2. Simulator-checked.
+- **Attempt 1's `jvm` job failed before any test:** the runner could not download Gradle ("gradle-9.0.0-bin.zip
+  failed: timeout"); no compile error, no test result. The planner reran the failed job on the same commit through
+  GitHub's rerun; no commit was pushed to kick it.
+
+**-189's open observation, answered by session 75 (its runs, in its findings section 5; read by the planner, not
+rerun):**
+- The check read the new bytes: the release log's per-tile node totals (231,962; 554,495; 127,490; 414,290; 174,367)
+  differ from the dry run's and equal the port reader's on the release's files. The planner sees the same five totals
+  in the green run's log.
+- Seven of the 8 rows did not change: every cell overlapping them is byte-equal between the 14 November copies and
+  the release, and their node-id sets have equal digests. The rebuild changed 6 to 27 cells per tile elsewhere.
+- **Row 675 changed and its count did not show it:** 2 ids left and 2 came in, 7,788 both times, in 4 changed cells.
+  A count cannot see an equal-count change; a digest of each row's id set would. Not added: the pins hold the
+  published bytes from now on, so the capture is not rerun on them. Named in case a later release wants it.
+
+**The plants and the R sequence pin (coder's, in the findings; not rerun by the planner):** plants on the row rule and
+on an expected count each named the row; `E3RSequenceTest` run on the pinned Temurin with its control.
+
+**Another outside failure, the same day:** the owner's rerun of the ordinary `brouter` run on `7776da9` (attempt 2 of
+run 43573090515) ended `failure` in `jvm` after 35 seconds, Maven Central answering "429 Too Many Requests" for the
+Kotlin plugin; attempt 1 had passed on all four jobs.
+
+**Not shown:** the tiles read on the simulator (no simulator test yet); anything about routes on the new tiles in a
+committed test; what changed in row 675's 4 cells beyond node ids.
+
+**Next (the planner's):** session 76, the per-row generator and its expected rows (session 72's dispatch 6).
+
+**Notes:** Written by the planner session by hand. Next free ID -192.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-192
+**Timestamp:** 2026-11-17T04:41:31Z
+**Continues:** -191, -184, -182
+**Title:** Session 76: the cosine rows' group is selected, 472 cases at 59 per row, stable on the pinned Java, with its expected rows in a file of their own
+
+**What landed.** `brouter-port-5b` moved from `cd9d1c5` to `cf83cf3`, eight commits (coder: Plumb Ledger, session 76). Code commits are `a974603` (generator, seeds, counting seam, stratum test, writer; pushed before any run) and `5f280f7` (the resource and its file test). The other six are findings only. Findings file: `docs/audits/2026-11-13-brouter-port-closing/s76-cos-rows-selection.md`, tables under `s76/`.
+
+**Verified by the planner, from the remote and CI, not from the hand-back:**
+- `git ls-remote` gives `cf83cf3` for `brouter-port-5b`; the tree is clean; every one of the eight commits ends with the project trailer only.
+- `git diff --stat cd9d1c5 cf83cf3` is 25 files, all added, 3,236 insertions. Over `brouter/src/commonMain`, `expected-1b.tsv`, `.github`, `brouter/build.gradle.kts` and `tools` it prints nothing.
+- `scan.sh` (4+ decimals) prints 0 on each of the eight commits.
+- `brouter/src/jvmTest/resources/e3/expected-cosrows.tsv`: 477 lines, 472 rows, 59 for each of COS474, COS488, COS502, COS663, COS675, COS1046, COS1053, COS1079; SHA-256 `405e15ad...1ea419`, equal to the hand-back's; its head names Eclipse Adoptium 21.0.13+9-LTS, amd64.
+- CI run 44010575381 on `5f280f7`, attempt 1, four jobs successful, 0 compile-error lines in each log under both patterns (`^e: ` and ` e: `). `jvm`: TOTAL 257, 0 failures (was 255), with `E3CosRowsExpectedFileTest` 2 of 2 passed. `jvm-production`: 2. Simulator-checked: 60 and 7, with `OK on the iOS simulator: all 24 classes ran`; memory 3, 1, 1 with its two gate lines.
+- Read in the source: `CountingLibm` wraps any `LibmSeam` and counts rows passed to `scales`; `E3CosRowsTest` keeps a case only if its route stays in the row's band and the counted run read its own row, then asserts 59 kept per row and that the group's (c) rows read are exactly the 8, before any stability run.
+
+**Reported by the coder, not rerun by the planner** (the run is in `e3Strata`, which no CI job runs; about 12 minutes locally on the pinned Java):
+- Draws to the 59th kept case: 178, 120, 120, 117, 132, 89, 106, 86 for rows 474, 488, 502, 663, 675, 1046, 1053, 1079.
+- Stable 59 of 59 in every row, 472 of 472, under the existing rule at `E3Stability.kt:32-34`; the writer's seventh R1 equal in 472 of 472.
+- Plant: with the counter never recording row 474, the test failed before stability with `row 474: 0 of 59 kept after 1180 draws (cap 1180)` and the group line naming 474 missing; 0 compile errors, fresh XML, file restored from a saved copy and `cmp`-equal. Two plants on the file test failed for their own reasons.
+
+**What this does not show.** No port outcome has been compared with the Java's on these 472 cases. That is session 77. The rows were counted in the port running on the oracle's table; the Java's own reads were not counted, and reads on the production (msun) table were not counted. `E3CosRowsTest` and its writer are held by no CI job, as with the other `e3Strata` classes.
+
+**Premises of the brief that were wrong.** `revert.sh` runs `jvmTest` only and cannot run a plant in `e3Strata`; the coder used a scratch copy that keeps the same guards. The per-case row check is the keep rule itself, so on kept cases it cannot fail alone; the plant is what shows it bites. The coder's draw-count prediction missed in 7 of 8 rows (by up to 13 draws against session 72's scratch counts) and the cause was not traced.
+
+**Decisions.** The planner's, from the brief: the expected rows go in a resource of their own so `expected-1b.tsv` and its digest do not move. The coder's, beyond scope and accepted: seeds live in `CosRowsGenerator.SEEDS` (20261207 plus the row), one stratum per row named `COS<row>`, the draw limit is the existing `E3Targeted.CAP` of 1,180, a separate writer class.
+
+**Next (the planner's):** session 77, the runs (session 72's dispatch 7): the logic comparison in `jvm`, the production group in `jvm-production`, the simulator class with its `SIMULATOR_CLASSES` entry, the counting assertions on both tables, and a planted table error seen to bite.
+
+**Notes:** Written by the planner session by hand. Next free ID -193.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-193
+**Timestamp:** 2026-11-17T05:59:22Z
+**Continues:** -192, -182
+**Title:** Session 77: on 472 cases across the 8 cosine rows, the production table gives the Java's result every time, on the JVM and on the simulator
+
+**The ruling this answers.** Asked whether to cover the 8 cosine rows before the app's map-first phase, the owner chose "Cover them now" (-182).
+
+**The answer.** 472 cases, 59 in each of rows 474, 488, 502, 663, 675, 1046, 1053 and 1079. Every case read its own row of the scale table. The port on the production (msun) table equalled the Java oracle on all six fields in 472 of 472, in `jvm-production` and on the iOS simulator (simulator-checked, debug build). On these cases the 1-ulp `kx` difference changed no route. This is a sample of 59 routes per row on `hiking-mountain`. It is not a proof for every route through those rows.
+
+**What landed.** `brouter-port-5b` moved from `cf83cf3` to `e703277`, six commits (coder: Plumb Ledger, session 77). Code commits: `3c924cd` (logic run), `72a9826` (production run), `31939ed` (simulator). Findings: `docs/audits/2026-11-13-brouter-port-closing/s77-cos-rows-runs.md`.
+
+**Verified by the planner, from the remote and CI:**
+- `git ls-remote` gives `e703277`; clean tree; all six commits end with the project trailer only; `scan.sh` prints 0 on each.
+- `git diff --stat cf83cf3 e703277`: 13 files, 1,206 insertions, 3 deletions. Nothing under `commonMain`, `jvmTest/resources`, `tools`, `build.gradle.kts` or the two publish workflows. `brouter.yml` changed in three places, read in the diff: one `SIMULATOR_CLASSES` entry, a second `--tests` filter in `jvm-production`, one comment.
+- CI run 44020606098 on `31939ed`, attempt 1, four jobs successful, 0 compile-error lines under both patterns in each.
+  - `jvm`: TOTAL 262, 0 failures (was 257). Eight lines `cosrows logic COS<row>: 59 cases; equal to expected-cosrows on the whole tuple 59; differing 0`; eight lines with `own row read by 59` and each row reading only its own (c) row; group line listing exactly the 8.
+  - `jvm-production`: TOTAL 3 (was 2). Eight lines `cosrows production record: COS<row> | 59 | 59 | 0 | ...` with every difference column 0; the same row lines on msun's table.
+  - `ios-smoke`, simulator-checked: TOTAL 61 (was 60) and 7; `OK on the iOS simulator: all 25 classes ran` (was 24). The class's line: `472 cases in the file; 472 of 472 stored ids; ... equal on all six fields and the tuple digest 472; mismatches 0; missing 0; 159 s`, with the row lines as above.
+  - `ios-memory`: 3, 1, 1 with its two gate lines.
+
+**Reported by the coder, not rerun by the planner.** Plants, each restored from a saved copy with 0 compile errors and fresh XML: `kx` times 1.001 at row 474 in the oracle's table made the logic run fail with 52 mismatches, all COS474; the same change in the production table moved the COS474 record line to 7 equal, 52 differing while the test still passed; one changed digest in the simulator's constant failed its digest test naming COS474-0001; hiding row 474 from either counter failed by row. The plants used a 0.1% change, so they show the comparisons work and say nothing about what 1 ulp does.
+
+**Points to carry.**
+- The production record class only records a difference; it never fails one (`RoutingEngineProductionRecordTest.kt:264-266`, and the new class the same). The simulator class is stricter: it holds a production run to the oracle's tuples, so a real production difference would turn it red. That is consistent today because there is none.
+- `CosRowsEngineCommonTest` on the JVM prints `BROUTER_STEP10_NT_CASES is unset; not run` and passes without running, as the other step-10 common classes do there. Its evidence is the simulator run only.
+- `Step10Cases.check` gained one parameter (`libm`, defaulting to `MsunLibm`), a change to shared test code.
+- Not checked: the production-table plant on the simulator; routes beyond these 472; why 7 of COS474's cases survived the 0.1% plant; a full local `jvmTest`.
+
+**Premises that were wrong (the planner's brief, from session 72's pre-build).** The production group could not be "added to" the existing record class without threading through it, so it is a class of its own with its own job filter. `Step10Cases.check` passed no seam. Names in the pre-build (`tiles-cosrows` and others) are not the tree's (`tiles-cos`).
+
+**Closing list.** Section E of `docs/audits/2026-11-13-brouter-port-closing-list.md` updated in this commit.
+
+**Next (the planner's):** a reviewer look at sessions 72 to 77's test code since review 4. Then, on the owner's word only: merging `brouter-port-5b` into `brouter-port`, and a record PR for -190 onward.
+
+**Notes:** Written by the planner session by hand. Next free ID -194.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-194
+**Timestamp:** 2026-11-17T06:08:46Z
+**Continues:** -193, -192
+**Title:** Review 5 (sessions 75 to 77): the claim holds, nothing blocking, three should-fix items; one sentence of -193 corrected
+
+**The review.** Samphire Witness, read-only, at `brouter-port-5b` `e703277`. Report: `docs/reviews/2026-11-17-review-5-cosine-rows.md` on `review/changed-comparisons`, remote head `d89108f` (checked by the planner with `git ls-remote`). The reviewer read every code file in the range and the four CI logs of run 44020606098, cross-checked `expected-cosrows.tsv` against the 16 committed tables by script, and ran no Gradle and no plant.
+
+**Verdict, the reviewer's:** the claim of -193 holds on the evidence; the oracle's and the port's values are computed independently and compared on six fields; the 472 stored tuples are all distinct, so equality is not by construction.
+
+**Should fix, each confirmed by the planner in the code at `e703277`:**
+- **S1.** `RoutingEngineCosRowsProductionRecordTest.kt:57` counts cases whose oracle result is off the stored row (`offRow`), `:82` prints it, and no assertion reads it (assertions at `:78-80`, `:93-94`). `CosRowsRun.kt:26-28` says both runs "hold" the oracle to the stored digest; only the logic run does. Today the column is 0 in all 8 rows.
+- **S2.** The `jvm-production` job (`brouter.yml:287-295`) runs two `--tests` filters and has no class-ran step, so a renamed class would leave it green with fewer tests. The class records a difference and never fails one, so the JVM half of the claim is a reading of one run's log lines. The simulator half is asserted and gated on every push.
+- **S3.** "Every case read its own row" follows from the selection (a case is kept only if its route lies inside its row's band), so it is not an independent finding. What the counter shows is that the engine fetched that row from the table it was handed. It does not show how often, or that the value moved a number.
+
+**Correction to -193 and to what the owner was told.** -193 says "Every case read its own row of the scale table" beside the result, as if it were a separate observation. Read it as: each case's route lies inside its row's band, and the port fetched that row from the table under test. The result itself (472 of 472 equal) is unchanged.
+
+**Notes worth carrying.** N1: the untraced direct use of `MsunLibm` at `FormatJson.kt:330` cannot reach these runs; no formatter is constructed by the engine or the test runs (the reviewer's read). N2: link distances are rounded to whole metres, so 1 ulp can move a result only at a rounding boundary (inferred; the cost path was not traced); the coder's 0.1% plant left 7 of 59 unchanged. N3: "1 ulp in `kx`" is a carried figure, not re-measured in this range. N4: two failure messages reached by this group name `expected-1b` (`Step10Cases.kt:109`, `NtCasesWriteTest.kt:149`), confirmed. N9: `jvm-production` ran 35 of its 45 minutes.
+
+**Next (the planner's):** session 78, small: assert `offRow == 0` and correct the comment (S1), add the class-ran step to `jvm-production` (S2), correct the two sentences in the session 77 findings (S3), make the two messages name the right file (N4). Whether the JVM production class should also fail on a difference is a design question left as it is: it records by design, as the class it sits beside.
+
+**Notes:** Written by the planner session by hand. Next free ID -195.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-195
+**Timestamp:** 2026-11-17T07:52:44Z
+**Continues:** -194, -193
+**Title:** Session 78: review 5's three should-fix items and one note are closed; the cosine-row work is finished on `brouter-port-5b`
+
+**What landed.** `brouter-port-5b` moved from `e703277` to `8475832`, six commits (coder: Plumb Ledger, session 78): `1f5e5da` (S1), `ad66112` (S2), `66b053b` (S3), `dee43df` (N4), and two findings commits. Findings: `docs/audits/2026-11-13-brouter-port-closing/s78-review-5-fixes.md`.
+
+**Verified by the planner, from the remote and CI:**
+- `git ls-remote` gives `8475832`; clean tree; six commits, each with the project trailer only; `scan.sh` 0 on each; 9 files, 133 insertions, 12 deletions.
+- **S1:** `RoutingEngineCosRowsProductionRecordTest.kt:87` now asserts `offRow` is 0 per row. A production difference is still recorded, not failed.
+- **S2:** `brouter.yml`'s `jvm-production` job has a new step running `tools/junit-ran.py` on both production classes; `junit-ran.py` is unchanged.
+- **S3:** `s77-cos-rows-runs.md` has an appended dated correction (19 lines added, none removed).
+- CI run 44030325384 on `dee43df`, attempt 1, four jobs successful, 0 compile-error lines under both patterns in each. `jvm` 262; `jvm-production` 3 with the new line `OK: all 2 classes ran` and all 8 record lines `59 | 59 | 0` with last column 0; simulator-checked: 61 and 7, `OK on the iOS simulator: all 25 classes ran`, `step10 COS engine ... 472; mismatches 0 ... 168 s`; memory 3, 1, 1. Counts unchanged from -193, as the coder predicted before pushing.
+
+**Reported by the coder, not rerun by the planner.** The S1 plant failed on the planted row only with `expected:<0> but was:<59>`; the gate script failed by class name with either XML removed; the two corrected messages were seen on the JVM.
+
+**Left open, named by the coder.**
+- The new `jvm-production` gate counts a class that returned early at its gate variable as having run. It would matter only if the job's `BROUTER_PRODUCTION_RECORD` were removed. Not fixed.
+- One more line in `s77` section 6 carries the same reading as the two corrected sentences and was not corrected, because the brief named two. The correction section in that file and -194 give the right reading.
+
+**State.** The cosine-row work the owner chose with "Cover them now" (-182) is finished and reviewed on `brouter-port-5b`. `brouter-port` is still at `a014100` and `main` holds the record only to -189. Merging `brouter-port-5b` into `brouter-port`, and a record PR for -190 onward, each wait for the owner's word. After that, the app's map-first phase of `docs/plans/2026-11-12-app-port-plan.md`.
+
+**Notes:** Written by the planner session by hand. Next free ID -196.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-196
+**Timestamp:** 2026-11-17T11:12:09Z
+**Continues:** -195, -180
+**Title:** The owner's two rulings: merge `brouter-port-5b` into `brouter-port`, and open a record PR for -190 onward
+
+**The rulings, verbatim.** Asked "Merge brouter-port-5b into brouter-port?" (head `8475832`, CI green), the owner answered "Yes, merge it". Asked "Open a pull request to main for them, as you did with PR #7?" (entries -190 to -195), the owner answered "Yes, open the PR".
+
+**Done on the first.** `brouter-port` moved from `a014100` to `7d4d721`, a merge commit of `brouter-port-5b` at `8475832`, pushed plainly (no rebase, no force). The merged tree is identical to `8475832`'s (`git diff --stat` between them prints nothing). CI on `7d4d721` had not been read when this was written.
+
+**Done on the second.** The PR is opened from `ccr-8ee6e614-32enzt` to `main` after this entry is pushed, so it carries -190 to -196. It is merged only when the owner names it. The "Yes, open the PR" above is a word to open it, not to merge it.
+
+**Notes:** Written by the planner session by hand. Next free ID -197.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-197
+**Timestamp:** 2026-11-17T12:24:01Z
+**Continues:** -196
+**Title:** CI on the `brouter-port` merge `7d4d721` is green; the old `publish-tiles` workflow refused at its guard on that push
+
+**CI, read by the planner.** Run 44071829607 on `7d4d721`, attempt 1, four jobs successful, 0 compile-error lines under both patterns (`^e: ` and ` e: `) in each log. `jvm`: TOTAL 262, 0 failures. `jvm-production`: 3, with `OK: all 2 classes ran`. Simulator-checked: 61 and 7, with `OK on the iOS simulator: all 25 classes ran` and `OK: all 2 classes ran`. Memory: 3, 1, 1 with its two gate lines. These equal the counts on `dee43df` (-195).
+
+**The red run on the same push.** `publish-tiles` run 44071829688 failed in its `capture` job at the step "On a push, refuse if the branch's tools differ from TOOLS_SHA's, which this run would test instead". Its `TOOLS_SHA` is `5d00761`, and the step printed four differing files: `tools/fetch-tiles.sh`, `tools/tile-check/CosTileCheck.java`, `tools/tile-check/capture-cos.sh`, `tools/tile-check/cos-tiles.tsv`. The `publish` job was skipped. The releases list still shows the same two releases, `brouter-tiles-2026-10-30` and `brouter-cos-tiles-2026-11-17`. So the guard did what it is for; nothing was published or changed.
+
+**What follows.** This workflow will refuse the same way on each push to `brouter-port` that carries those tool files, until its pin is moved. It lives on `main`. For that file the owner ruled "Leave it, recorded" (-188), which was about its weak tag check; whether to move its pin is put to the owner as a new question and nothing was changed.
+
+**Also open.** PR #8 (record entries -190 to -196; this entry joins it when pushed) waits for the owner to name it.
+
+**Notes:** Written by the planner session by hand. Next free ID -198.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-198
+**Timestamp:** 2026-11-18T03:31:35Z
+**Continues:** -197, -196
+**Title:** Three rulings from the owner; and a correction: the `publish-tiles` copy that refused on the push is `brouter-port`'s, not `main`'s
+
+**The rulings, verbatim.** To the three items put to them after -197, the owner answered: "1 merge pr 8", "2 update it", "3 begin map-first work".
+
+**On 1.** PR #8 is merged after this entry is pushed, so it carries -190 to -198, with a merge commit.
+
+**On 2, a correction to the planner's own account before acting.** -197 and the message to the owner said the old `publish-tiles` workflow "lives on `main`" and that moving its pin "changes one file on `main`". That was wrong for the run that went red. Run 44071829688 has event `push`, branch `brouter-port`, and GitHub runs a push-triggered workflow from the pushed branch's own tree. `publish-tiles.yml` exists on `main`, `brouter-port` and `brouter-port-5b`, and the three copies are identical today (`git diff --stat origin/main origin/brouter-port` over the file prints nothing). So:
+- the red on a push to `brouter-port` stops only if `brouter-port`'s copy changes;
+- `main`'s copy decides only what a release run started by the owner executes.
+The owner's "update it" answered a question that named `main` only. Changing `brouter-port`'s copy is a push to `brouter-port`, which needs its own word, so it is put to the owner again with the first option being what they said, applied to every copy. Nothing was changed.
+
+**What the update would be (read, not yet done).** `TOOLS_SHA` from `5d00761` to `4dc6c23`, the last commit on `brouter-port` that touches the guarded tool paths, and the same pin `publish-cos-tiles.yml` uses. Between the two pins the guarded paths differ in four files: three new cosine-tile files that `capture.sh` does not run, and `tools/fetch-tiles.sh`, whose diff is comment lines only (15 changed, read in full). Not known: whether the dry run that then runs on the push passes today, since it captures brouter.de's live tiles.
+
+**On 3.** The map-first phase of `docs/plans/2026-11-12-app-port-plan.md` begins.
+
+**Notes:** Written by the planner session by hand. Next free ID -199.
