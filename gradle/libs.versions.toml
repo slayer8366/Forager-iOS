@@ -1,6 +1,8 @@
 # Exact versions only (Forager's CLAUDE.md, "Pin dependency versions").
 [versions]
-# Kotlin 2.3.10 exactly, Forager's pin, moved only together with Forager (Phase 1 report, item C, Amendment 1).
+# Kotlin exactly, Forager's pin, moved only together with Forager (Phase 1 report, item C, Amendment 1). The move to the
+# 2.4 line's patch 21 is the owner's ruling, made on branches in this repository and Forager's and merged on one word
+# (RECORD -214).
 kotlin = "2.3.10"
 # okio carries the file reads in common code (Phase 1 report, item B rows 1 to 3); item I's version.
 okio = "3.18.2"

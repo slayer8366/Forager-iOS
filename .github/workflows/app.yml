@@ -12,7 +12,8 @@ name: app
 
 on:
   push:
-    branches: [app]
+    # app-kotlin added for the Kotlin move's branch (RECORD -214: "Both on branches, one merge word"), session 89.
+    branches: [app, app-kotlin]
     paths:
       - 'app/**'
       - 'build.gradle.kts'
