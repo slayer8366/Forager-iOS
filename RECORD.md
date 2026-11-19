@@ -8172,3 +8172,32 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 - A2's map steps wait on the one merge word.
 
 **Notes:** Written by the planner session by hand. Next free ID -215.
+
+---
+
+**Kind:** finding
+**ID:** 2026-10-28-215
+**Timestamp:** 2026-11-19T07:37Z
+**Continues:** 2026-10-28-214
+**Title:** This repository's Kotlin move is on `app-kotlin`, green, and matches its baseline on every count and case; merged nowhere; Forager's side not started from here
+
+**The rulings this serves, verbatim:** "2.4.21"; "Both on branches, one merge word".
+
+**What came back (coder: Plumb Ledger, session 89).** Branch `app-kotlin` from `app` at `820224b`, head `e427d84`. Baseline commit B `35a8223` (no version change: `app.yml` also runs on `app-kotlin`; the catalog comment cites -214). Move commit M `6cdab88`: the one pin line. Four docs commits. Findings at `docs/audits/2026-11-19-app-phase-a2/kotlin-2-4-move.md` on that branch.
+
+**Verified by the planner.**
+- `git ls-remote`: `app-kotlin` at `e427d84`, `app` still at `820224b`. Outside `docs/` the branch changes two files: `.github/workflows/app.yml` (the branch list and a comment) and `gradle/libs.versions.toml` (the comment and the pin). Six commits, the project trailer on each, no model or session named, `scan.sh` 0 on each.
+- Runs, read from the API: on B, `brouter` 44465935981 success and `app` 44465935991 success on attempt 2; on M, `brouter` 44473167850 success and `app` 44473167855 success on attempt 2.
+- From the sixteen job logs, downloaded by the planner: 0 lines matching `e: ` as compiler output in any job. Suites and tests summed from the JUnit XML in the logs are the same on B and M: `jvm` 116 suites and 262 tests; `jvm-production` 2 and 3; simulator-checked `ios-smoke` 32 and 68; simulator-checked `ios-memory` 5 and 5; 0 failures, errors or skips. The sorted list of test case names and classes diffs to 0 lines in each of the four jobs, with 262, 3, 68 and 5 cases on each side. The gate lines are present on both: `OK: all 2 classes ran`, `OK on the iOS simulator: all 25 classes ran`, and in `app-bundle`, simulator-checked, the control FAIL at tolerance 24, `A1: first frame drawn`, and the colour gate PASS on all pixels.
+- The compiler that ran, from each run's own log: every job that downloads Kotlin/Native names the 2.3 pin on B and the ruled 2.4 patch on M, on Linux and on macOS. Xcode is 26.0.1 in the engine's jobs and 26.2 in the app's on both. Neither moved.
+- Warnings, B against M: the same source warnings at the same files, lines and columns, four with new wording from the compiler; two new lines that name no source file (the Linux notice that the simulator test task is disabled, and a thread-count notice at a link step).
+
+**Not verified by the planner, the coder's findings as reported.** The line-by-line diff of every test's standard output and of the production record (72 lines a side, 13 differing only in a duration); the scratch repeat at the ruled patch (5 compiles, 262 JVM tests); that each `app` run's first attempt failed on a download before any compile.
+
+**What this does not show.** No job prints the JVM compiler's version, so the JVM side is inferred from the changed diagnostic wording and the plugin line. The `iosArm64` device binary runs nowhere. Nothing here speaks for Forager's Android build. The comparison shows equal test results on the tested cases, which is what the tests can see and no more.
+
+**Corrections.** Session 88's pre-build said the production record has one duration line; it has 13. The brief limited `gh` to reads; the coder reran the two failed jobs with a `gh` POST. The effect is the permitted rerun of a failed job, and no empty commit was pushed, but it departed from the brief's wording and is recorded as such.
+
+**State.** Nothing is merged. Forager's part waits on the owner handing the request (`docs/requests/2026-11-19-forager-kotlin-move-request.md`) to Forager's planner. A2 waits on the one merge word.
+
+**Notes:** Written by the planner session by hand. Next free ID -216.
