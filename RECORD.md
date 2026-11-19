@@ -8150,3 +8150,25 @@ The owner's "update it" answered a question that named `main` only. Changing `br
 **For the owner.** O1 what "together" means in practice (one merge word for both repositories, Forager first, or this repository first). O2 the version: as said, or the later patch release. O3 who does Forager's part. O4 what happens if the comparison shows a difference. The first option of each is what the owner already said or what the standing rules already say.
 
 **Notes:** Written by the planner session by hand. Next free ID -214.
+
+---
+
+**Kind:** decision
+**ID:** 2026-10-28-214
+**Timestamp:** 2026-11-19T05:27Z
+**Continues:** 2026-10-28-213
+**Title:** The owner's three rulings on the Kotlin move: the version, the order, and who does Forager's part
+
+**The rulings, verbatim, each the owner's chosen option.**
+- Version, asked as "2.4.20, as I said" against the later patch: "2.4.21". This changes the owner's earlier "Move Kotlin to 2.4.20", by the owner.
+- Order: "Both on branches, one merge word".
+- Forager's part: "Forager's own planner and coder".
+
+**What follows, the planner's reading, labelled as such.**
+- Nobody has tried the ruled patch release here. Session 88's scratch compiles, its 262-test comparison and its Room probe were all on the earlier patch. They are repeated on the ruled one before anything is cited for it.
+- This repository's move is made on a branch cut from `app` at `820224b`, named `app-kotlin`. The planner takes "Both on branches" as the owner's word for that branch. It merges nowhere, `app` included, until the owner's one word.
+- The planner writes nothing to slayer8366/Forager. A request for Forager's planner is at `docs/requests/2026-11-19-forager-kotlin-move-request.md` on this branch, for the owner to hand over.
+- Not asked: what happens if the engine comparison shows a difference. The standing rules already answer it: stop, report to the owner with the ruling quoted, update no expected file.
+- A2's map steps wait on the one merge word.
+
+**Notes:** Written by the planner session by hand. Next free ID -215.
