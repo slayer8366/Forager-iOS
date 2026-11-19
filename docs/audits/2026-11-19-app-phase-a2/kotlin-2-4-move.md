@@ -44,4 +44,17 @@ archive of `820224b` shows those two files only. Local JDK: OpenJDK 21.0.12.1 (U
   read `compiler_version=2.4.21`, `abi_version=2.4.0`; `CheapRuler.class` from the JVM compile carries
   `@Metadata mv=[2,4,0]`.
 
-**`:brouter:jvmTest`:** see below (filled in when it finishes).
+**`:brouter:jvmTest` [C: scratch `s89/jvm.log`, XML in `s89/k2421t/brouter/build/test-results/jvmTest`].**
+`./gradlew --no-daemon :brouter:jvmTest`, as `brouter.yml`'s `jvm` job runs it, with `BROUTER_PRODUCTION_RECORD` unset:
+
+- `BUILD SUCCESSFUL in 54m 34s`, exit 0; `compileKotlinJvm`, `compileTestKotlinJvm` and `jvmTest` headers unsuffixed.
+- `tools/junit-counts.py` over the results: `TOTAL: tests 262, failures 0, errors 0, skipped 0 in 116 files`; 116 XML
+  files on disk.
+- 0 lines `^e: `, 0 lines ` e: `.
+- The compiler and library that ran: `OraclePinTest.class` (test source set) carries `mv=[2,4,0]`, and
+  `:brouter:dependencies --configuration jvmTestRuntimeClasspath` resolves `kotlin-stdlib:2.4.21`.
+
+**What step 1 shows:** at the ruled version, on this container's JDK, everything this repository builds on Linux
+compiles with no error line, and the JVM suite runs 262 tests green. **What it does not show:** CI's Temurin JDK, any
+link or run on the Mac, and any comparison of output; that is CI's job, below. It is not compared with session 88's
+scratch results, which were on patch 20.
